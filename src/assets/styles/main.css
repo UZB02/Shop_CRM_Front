@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-content: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  width: 100%;
+}
+
+@theme {
+  --color-primary: #10b981;
+  --color-primary-dark: #059669;
+  --color-secondary: #3b82f6;
+}
+
+/* ============================================================
+   Professional Worker Dialog — Global override
+   PrimeVue Dialog'ning standart oq fon va ramkalarini o'chirish
+   ============================================================ */
+.professional-worker-dialog {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.professional-worker-dialog .p-dialog-content {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+}
+
+.professional-worker-dialog .p-dialog-header {
+  display: none !important;
+}
+
+.professional-worker-dialog .p-dialog-footer {
+  display: none !important;
+}
