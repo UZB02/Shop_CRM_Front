@@ -26,7 +26,7 @@
           <i class="pi pi-map-pin mr-1"></i> {{ warehouse.store.name }}
         </div>
       </div>
-      <Button label="Skladga kirish" icon="pi pi-arrow-right" iconPos="right" text class="w-full mt-4" />
+      <Button label="omborga kirish" icon="pi pi-arrow-right" iconPos="right" text class="w-full mt-4" />
     </template>
   </Card>
 </template>

@@ -33,7 +33,7 @@ const allSections = [
   { key: 'dashboard', label: 'Boshqaruv', icon: 'pi pi-home' },
   { key: 'pos', label: 'Sotuv (POS)', icon: 'pi pi-calculator' },
   { key: 'stores', label: 'Do\'konlar', icon: 'pi pi-shop' },
-  { key: 'warehouse', label: 'Sklad', icon: 'pi pi-database' },
+  { key: 'warehouse', label: 'Ombor', icon: 'pi pi-database' },
   { key: 'products', label: 'Mahsulotlar', icon: 'pi pi-tag' },
   { key: 'workers', label: 'Xodimlar', icon: 'pi pi-users' },
   { key: 'trades', label: 'Savdolar', icon: 'pi pi-shopping-cart' },

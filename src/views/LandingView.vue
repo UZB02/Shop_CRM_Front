@@ -162,7 +162,7 @@ const navLinks = [
 ]
 
 const features = [
-  { title: "Sklad Boshqaruvi", icon: "pi pi-box", desc: "Mahsulotlar qoldig'ini real vaqtda kuzating. Avtomatik inventarizatsiya va ogohlantirishlar tizimi." },
+  { title: "Ombor Boshqaruvi", icon: "pi pi-box", desc: "Mahsulotlar qoldig'ini real vaqtda kuzating. Avtomatik inventarizatsiya va ogohlantirishlar tizimi." },
   { title: "Savdo Taxlili", icon: "pi pi-chart-line", desc: "Murakkab grafiklar va chuqur tahlillar. Daromad va xarajatlarni hisoblash endi oson." },
   { title: "Filiallar", icon: "pi pi-map-marker", desc: "Dunyoning istalgan nuqtasidan barcha filiallar savdosini real vaqt rejimida boshqaring." }
 ]

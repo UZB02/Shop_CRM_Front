@@ -11,25 +11,23 @@
       <InputSwitch
         :modelValue="createLogin"
         @update:modelValue="$emit('update:createLogin', $event)"
-        :disabled="isDisabled"
         class="scale-90"
       />
     </div>
 
     <!-- Login form (visible when enabled) -->
     <Transition name="fade-slide">
-      <div v-if="createLogin || hasExistingUser" class="flex-1 flex flex-col">
+      <div v-if="createLogin" class="flex-1 flex flex-col">
         <div class="space-y-5">
           <FormField label="Foydalanuvchi nomi">
             <div class="p-input-icon-left w-full">
               <InputText v-model="worker.username"
-                         :disabled="hasExistingUser"
                          class="w-full !bg-white dark:!bg-slate-900 !border-slate-100 dark:!border-slate-800 !h-10 !rounded-xl"
                          placeholder="username" />
             </div>
           </FormField>
 
-          <FormField v-if="!hasExistingUser" label="Tizim paroli">
+          <FormField v-if="!worker.id" label="Tizim paroli">
             <div class="p-input-icon-left w-full">
               <Password v-model="worker.password"
                         toggleMask
@@ -54,7 +52,7 @@
 
     <!-- Lock State (login disabled) -->
     <Transition name="fade">
-      <div v-if="!createLogin && !hasExistingUser"
+      <div v-if="!createLogin"
            class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4 opacity-40">
         <div class="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shadow-inner">
           <i class="pi pi-lock text-3xl text-slate-400"></i>
@@ -85,9 +83,6 @@ const props = defineProps({
 })
 
 defineEmits(['update:createLogin'])
-
-const hasExistingUser = computed(() => !!(props.worker.id && props.worker.username))
-const isDisabled      = computed(() => hasExistingUser.value)
 
 const { allSelected, selectedCount, togglePermission, toggleAll } = useWorkerPermissions(props.worker)
 </script>

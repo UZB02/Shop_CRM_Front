@@ -279,7 +279,7 @@ const menuItems = [
   { label: 'Boshqaruv',    icon: 'pi pi-home',          to: '/dashboard',            key: 'dashboard' },
   { label: 'Sotuv (POS)',  icon: 'pi pi-calculator',    to: '/dashboard/pos',        key: 'pos'       },
   { label: "Do'konlar",    icon: 'pi pi-shop',          to: '/dashboard/stores',     key: 'stores'    },
-  { label: 'Sklad',        icon: 'pi pi-database',      to: '/dashboard/warehouse',  key: 'warehouse' },
+  { label: 'Ombor',        icon: 'pi pi-database',      to: '/dashboard/warehouse',  key: 'warehouse' },
   { label: 'Mahsulotlar',  icon: 'pi pi-tag',           to: '/dashboard/products',   key: 'products'  },
   { label: 'Xodimlar',     icon: 'pi pi-users',         to: '/dashboard/workers',    key: 'workers'   },
   { label: 'Savdolar',     icon: 'pi pi-shopping-cart', to: '/dashboard/trades',     key: 'trades'    },

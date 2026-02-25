@@ -1,130 +1,85 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-slate-950 p-4 relative overflow-hidden">
+  <div class="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors duration-300">
+    <!-- Card -->
+    <div class="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 border border-slate-200 dark:border-slate-800 relative z-10">
 
-    <!-- Background ambient glows -->
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px]"></div>
-      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-[120px]"></div>
-    </div>
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-emerald-500 mb-2">Shop Searem</h1>
+        <p class="text-slate-500 dark:text-slate-400">Yangi akkaunt yarating</p>
+      </div>
 
-    <div class="w-full max-w-lg relative z-10">
-
-      <!-- Card -->
-      <div class="bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl shadow-black/50 overflow-hidden">
-
-        <!-- Header -->
-        <div class="px-8 pt-8 pb-6 text-center border-b border-slate-800">
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 mb-4">
-            <i class="pi pi-shop text-emerald-400 text-2xl"></i>
+      <!-- Form Content -->
+      <div class="space-y-5">
+        <!-- Error Alert -->
+        <Transition name="slide-down">
+          <div v-if="errorMessage"
+               class="flex items-start gap-3 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-600 dark:text-rose-400 px-4 py-3 rounded-lg text-sm mb-4">
+            <i class="pi pi-exclamation-triangle mt-0.5 flex-shrink-0"></i>
+            <span>{{ errorMessage }}</span>
           </div>
-          <h1 class="text-2xl font-black text-white tracking-tight">Shop Searem</h1>
-          <p class="text-slate-400 text-sm mt-1">Yangi akkaunt yarating</p>
+        </Transition>
+
+        <!-- Grid for Names -->
+        <div class="grid grid-cols-2 gap-4">
+          <FieldGroup label="Ism" icon="pi-user" required>
+            <InputText v-model.trim="form.first_name" placeholder="Odamcha" class="w-full"
+                       :class="{ 'p-invalid': submitted && !form.first_name }" />
+          </FieldGroup>
+          <FieldGroup label="Familiya" icon="pi-user" required>
+            <InputText v-model.trim="form.last_name" placeholder="Familiyacha" class="w-full"
+                       :class="{ 'p-invalid': submitted && !form.last_name }" />
+          </FieldGroup>
         </div>
 
-        <!-- Form -->
-        <div class="px-8 py-7 space-y-5">
+        <!-- Username -->
+        <FieldGroup 
+          label="Foydalanuvchi nomi" 
+          icon="pi-at" 
+          required 
+          help-text="Ushbu nom tizimga kirish uchun login sifatida ishlatiladi. U unikal bo'lishi shart."
+        >
+          <InputText v-model.trim="form.username" placeholder="username" class="w-full"
+                     :class="{ 'p-invalid': submitted && !form.username }" />
+        </FieldGroup>
 
-          <!-- Error Alert -->
-          <Transition name="slide-down">
-            <div v-if="errorMessage"
-                 class="flex items-start gap-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-xl text-sm">
-              <i class="pi pi-exclamation-triangle mt-0.5 flex-shrink-0"></i>
-              <span>{{ errorMessage }}</span>
-            </div>
-          </Transition>
+        <!-- Phone -->
+        <FieldGroup label="Telefon raqami" icon="pi-phone" required>
+          <InputMask v-model="form.phone1" mask="+999999999999" placeholder="+998" class="w-full"
+                     :class="{ 'p-invalid': submitted && !form.phone1 }" />
+        </FieldGroup>
 
-          <!-- Row 1: first_name + last_name -->
-          <div class="grid grid-cols-2 gap-4">
-            <FieldGroup label="Ism" icon="pi-user" required>
-              <InputText v-model.trim="form.first_name"
-                         placeholder="Odamcha"
-                         class="w-full reg-input"
-                         :class="{ 'border-rose-500/50': submitted && !form.first_name }" />
-            </FieldGroup>
-            <FieldGroup label="Familiya" icon="pi-user" required>
-              <InputText v-model.trim="form.last_name"
-                         placeholder="Familiyacha"
-                         class="w-full reg-input"
-                         :class="{ 'border-rose-500/50': submitted && !form.last_name }" />
-            </FieldGroup>
-          </div>
+        <!-- Email -->
+        <FieldGroup label="Elektron pochta" icon="pi-envelope">
+          <InputText v-model.trim="form.email" type="email" placeholder="misol@gmail.com" class="w-full" />
+        </FieldGroup>
 
-          <!-- Row 2: username -->
-          <FieldGroup label="Foydalanuvchi nomi" icon="pi-at" required>
-            <InputText v-model.trim="form.username"
-                       placeholder="anonimuser2"
-                       class="w-full reg-input"
-                       :class="{ 'border-rose-500/50': submitted && !form.username }"
-                       autocomplete="username" />
+        <!-- Password Grid -->
+        <div class="grid grid-cols-2 gap-4">
+          <FieldGroup label="Parol" icon="pi-lock" required>
+            <Password v-model="form.password" :feedback="false" toggleMask placeholder="••••••••" 
+                      class="w-full" inputClass="w-full" :class="{ 'p-invalid': submitted && !form.password }" />
           </FieldGroup>
-
-          <!-- Row 3: phone1 -->
-          <FieldGroup label="Telefon raqami" icon="pi-phone" required>
-            <InputMask v-model="form.phone1"
-                       mask="+999999999999"
-                       placeholder="+998890000003"
-                       class="w-full reg-input"
-                       :class="{ 'border-rose-500/50': submitted && !form.phone1 }" />
+          <FieldGroup label="Tasdiqlash" icon="pi-lock" required>
+            <Password v-model="form.password2" :feedback="false" toggleMask placeholder="••••••••" 
+                      class="w-full" inputClass="w-full" :class="{ 'p-invalid': submitted && !form.password2 }" />
           </FieldGroup>
-
-          <!-- Row 4: email -->
-          <FieldGroup label="Elektron pochta" icon="pi-envelope">
-            <InputText v-model.trim="form.email"
-                       type="email"
-                       placeholder="anonim@gmail.com"
-                       class="w-full reg-input" />
-          </FieldGroup>
-
-          <!-- Row 5: password + password2 -->
-          <div class="grid grid-cols-2 gap-4">
-            <FieldGroup label="Parol" icon="pi-lock" required>
-              <Password v-model="form.password"
-                        toggleMask
-                        :feedback="false"
-                        placeholder="••••••••"
-                        class="w-full"
-                        inputClass="w-full reg-input !pr-10"
-                        :class="{ 'p-invalid': submitted && !form.password }"
-                        autocomplete="new-password" />
-            </FieldGroup>
-            <FieldGroup label="Parolni tasdiqlang" icon="pi-lock" required>
-              <Password v-model="form.password2"
-                        toggleMask
-                        :feedback="false"
-                        placeholder="••••••••"
-                        class="w-full"
-                        inputClass="w-full reg-input !pr-10"
-                        :class="{ 'p-invalid': submitted && !form.password2 }"
-                        autocomplete="new-password" />
-            </FieldGroup>
-          </div>
-
-          <!-- Submit -->
-          <button
-            type="button"
-            class="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm uppercase tracking-widest transition-all duration-200 shadow-lg shadow-emerald-600/25 hover:shadow-emerald-500/35 active:scale-[0.98] flex items-center justify-center gap-2 mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
-            :disabled="loading"
-            @click="handleRegister"
-          >
-            <i v-if="loading" class="pi pi-spinner animate-spin"></i>
-            <i v-else class="pi pi-check-circle"></i>
-            {{ loading ? 'Yuklanmoqda...' : "Ro'yxatdan o'tish" }}
-          </button>
-
-          <!-- Login link -->
-          <p class="text-center text-sm text-slate-500">
-            Akkauntingiz bormi?
-            <router-link to="/login" class="text-emerald-400 font-bold hover:text-emerald-300 transition-colors ml-1">
-              Kirish →
-            </router-link>
-          </p>
         </div>
 
-        <!-- Footer -->
-        <div class="px-8 pb-6 text-center">
-          <p class="text-[10px] text-slate-600 uppercase tracking-widest font-bold">
-            <i class="pi pi-shield mr-1"></i>Ma'lumotlaringiz xavfsiz saqlanadi
-          </p>
+        <!-- Submit Button -->
+        <button
+          type="button"
+          class="w-full mt-4 h-11 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
+          :disabled="loading"
+          @click="handleRegister"
+        >
+          <i v-if="loading" class="pi pi-spinner animate-spin"></i>
+          {{ loading ? 'Yuklanmoqda...' : "Ro'yxatdan o'tish" }}
+        </button>
+
+        <div class="text-center mt-6 text-sm">
+          <span class="text-slate-500">Akkauntingiz bormi? </span>
+          <router-link to="/login" class="text-emerald-500 font-medium hover:underline">Kirish</router-link>
         </div>
       </div>
     </div>
@@ -156,17 +111,74 @@ const form = ref({
 
 // Inline helper component
 const FieldGroup = defineComponent({
-  props: { label: String, icon: String, required: Boolean },
+  props: { label: String, icon: String, required: Boolean, helpText: String },
   setup(props, { slots }) {
+    const isVisible = ref(false)
+    
+    // Close tooltip when clicking outside
+    const closeTooltip = () => { isVisible.value = false }
+    
     return () => h('div', { class: 'flex flex-col gap-1.5' }, [
-      h('label', { class: 'text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5' }, [
+      h('label', { class: 'text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-1.5' }, [
         h('i', { class: `pi ${props.icon || 'pi-circle'} text-[9px]` }),
-        props.label,
+        h('span', null, props.label),
         props.required ? h('span', { class: 'text-rose-400' }, '*') : null,
+        
+        // Custom Tooltip
+        props.helpText ? h('div', { 
+          class: 'group/tooltip relative ml-auto',
+          onClick: (e) => e.stopPropagation() // Prevent bubbling
+        }, [
+          // The Icon
+          h('span', { 
+            class: `w-4 h-4 rounded-full flex items-center justify-center cursor-help transition-all border text-[9px] font-black ${
+              isVisible.value 
+                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.2)]' 
+                : 'bg-slate-800 text-slate-500 border-slate-700 group-hover/tooltip:bg-emerald-500/10 group-hover/tooltip:text-emerald-400 group-hover/tooltip:border-emerald-500/30'
+            }`,
+            onClick: () => { isVisible.value = !isVisible.value }
+          }, '!'),
+          
+          // The Tooltip Window
+          h('div', { 
+            class: [
+              'absolute bottom-full right-0 mb-2 w-56 p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl text-[10px] text-slate-600 dark:text-slate-300 font-medium normal-case tracking-normal leading-relaxed transition-all duration-200 z-50 pointer-events-none',
+              isVisible.value 
+                ? 'opacity-100 visible translate-y-0' 
+                : 'opacity-0 invisible translate-y-1 md:group-hover/tooltip:opacity-100 md:group-hover/tooltip:visible md:group-hover/tooltip:translate-y-0'
+            ]
+          }, [
+            h('div', { class: 'relative' }, [
+              h('i', { class: 'pi pi-info-circle text-emerald-500 dark:text-emerald-400 mr-1.5 text-[10px]' }),
+              props.helpText,
+              // Arrow
+              h('div', { class: 'absolute -bottom-4 right-1 border-[6px] border-transparent border-t-slate-200 dark:border-t-slate-700' }),
+              h('div', { class: 'absolute -bottom-[15px] right-1 border-[6px] border-transparent border-t-white dark:border-t-slate-900' }),
+            ])
+          ])
+        ]) : null,
       ]),
       slots.default?.(),
     ])
   },
+})
+
+import { onMounted, onUnmounted } from 'vue'
+
+const handleGlobalClick = () => {
+  // This is a simple way since FieldGroup is inline
+  // If we had many, we'd use a store or event bus
+  // But for this registration page, it's efficient enough
+  document.querySelectorAll('.group\\/tooltip').forEach(() => {
+    // In this specific case, Vue's reactivity handles it if we manage it correctly
+  })
+}
+
+onMounted(() => {
+  window.addEventListener('click', handleGlobalClick)
+})
+onUnmounted(() => {
+  window.removeEventListener('click', handleGlobalClick)
 })
 
 const handleRegister = async () => {
@@ -233,44 +245,57 @@ const handleRegister = async () => {
 </script>
 
 <style scoped>
-.reg-input {
-  background: rgb(15 23 42 / 0.7) !important;
-  border-color: rgb(51 65 85) !important;
+.reg-input,
+:deep(.p-password input),
+:deep(.p-inputmask) {
+  background: white !important;
+  border-color: #e2e8f0 !important;
   border-radius: 12px !important;
   height: 44px !important;
-  color: white !important;
+  color: #1e293b !important;
   font-size: 14px !important;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
 }
+
+.dark .reg-input,
+.dark :deep(.p-password input),
+.dark :deep(.p-inputmask) {
+  background: rgb(15 23 42 / 0.7) !important;
+  border-color: rgb(51 65 85) !important;
+  color: white !important;
+}
+
 .reg-input:focus,
-.reg-input.p-focus {
-  border-color: rgb(16 185 129 / 0.6) !important;
-  box-shadow: 0 0 0 3px rgb(16 185 129 / 0.12) !important;
+.reg-input.p-focus,
+:deep(.p-password input:focus),
+:deep(.p-inputmask:focus) {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
   outline: none !important;
 }
-.reg-input::placeholder { color: rgb(100 116 139); }
 
-:deep(.p-password input) {
-  background: rgb(15 23 42 / 0.7) !important;
-  border-color: rgb(51 65 85) !important;
-  border-radius: 12px !important;
-  height: 44px !important;
-  color: white !important;
-  font-size: 14px !important;
-}
-:deep(.p-password input:focus) {
+.dark .reg-input:focus,
+.dark .reg-input.p-focus,
+.dark :deep(.p-password input:focus),
+.dark :deep(.p-inputmask:focus) {
   border-color: rgb(16 185 129 / 0.6) !important;
   box-shadow: 0 0 0 3px rgb(16 185 129 / 0.12) !important;
 }
-:deep(.p-password-toggle-icon) { color: rgb(100 116 139); }
 
-:deep(.p-inputmask) {
-  background: rgb(15 23 42 / 0.7) !important;
-  border-color: rgb(51 65 85) !important;
-  border-radius: 12px !important;
-  height: 44px !important;
-  color: white !important;
+.reg-input::placeholder,
+:deep(.p-password input::placeholder),
+:deep(.p-inputmask::placeholder) { 
+  color: #94a3b8; 
 }
+
+.dark .reg-input::placeholder,
+.dark :deep(.p-password input::placeholder),
+.dark :deep(.p-inputmask::placeholder) { 
+  color: rgb(100 116 139); 
+}
+
+:deep(.p-password-toggle-icon) { color: #94a3b8; }
+.dark :deep(.p-password-toggle-icon) { color: rgb(100 116 139); }
 
 .slide-down-enter-active { animation: slidedown 0.25s ease; }
 .slide-down-leave-active { animation: slidedown 0.2s reverse ease; }

@@ -3,15 +3,15 @@
     :visible="visible" 
     @update:visible="$emit('update:visible', $event)"
     :style="{ width: '450px' }" 
-    :header="warehouse._id ? 'Skladni tahrirlash' : 'Yangi sklad qo\'shish'" 
+    :header="warehouse._id ? 'omborni tahrirlash' : 'Yangi ombor qo\'shish'" 
     :modal="true" 
     class="p-fluid"
     @hide="$emit('hide')"
   >
     <div class="field mb-4">
-      <label for="name" class="font-bold block mb-2">Sklad nomi <span class="text-rose-500">*</span></label>
-      <InputText id="name" v-model.trim="warehouse.name" required="true" autofocus :class="{ 'p-invalid': submitted && !warehouse.name }" placeholder="Masalan: Markaziy Sklad" />
-      <small class="p-error" v-if="submitted && !warehouse.name">Sklad nomi kiritilishi shart.</small>
+      <label for="name" class="font-bold block mb-2">ombor nomi <span class="text-rose-500">*</span></label>
+      <InputText id="name" v-model.trim="warehouse.name" required="true" autofocus :class="{ 'p-invalid': submitted && !warehouse.name }" placeholder="Masalan: Markaziy ombor" />
+      <small class="p-error" v-if="submitted && !warehouse.name">ombor nomi kiritilishi shart.</small>
     </div>
     
     <div class="field mb-4">

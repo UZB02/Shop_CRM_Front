@@ -3,7 +3,7 @@
     <!-- Header: sarlavha + count + select-all -->
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-2">
-        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Ruxsatlar</span>
+        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Ruxsatlar</span>
         <span class="px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 text-[9px] font-black">
           {{ selectedCount }}/{{ total }}
         </span>
@@ -48,7 +48,10 @@ defineEmits(['toggle', 'toggle-all'])
 <style scoped>
 .custom-scrollbar-thin::-webkit-scrollbar { width: 3px; }
 .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #cbd5e1;
   border-radius: 4px;
+}
+.dark .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #1e293b;
 }
 </style>

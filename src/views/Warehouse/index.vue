@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-6">
     <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Skladlar</h1>
-      <Button label="Yangi sklad" icon="pi pi-plus" severity="success" @click="openNewWarehouseDialog" />
+      <h1 class="text-2xl font-bold">omborlar</h1>
+      <Button label="Yangi ombor" icon="pi pi-plus" severity="success" @click="openNewWarehouseDialog" />
     </div>
 
     <div v-if="loading && !warehouses.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -19,8 +19,8 @@
 
     <div v-else-if="!warehouses.length" class="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
       <i class="pi pi-box text-5xl text-slate-300 mb-4"></i>
-      <p class="text-slate-500 text-lg">Skladlar mavjud emas</p>
-      <Button label="Birinchi skladni qo'shing" icon="pi pi-plus" text class="mt-2" @click="openNewWarehouseDialog" />
+      <p class="text-slate-500 text-lg">omborlar mavjud emas</p>
+      <Button label="Birinchi omborni qo'shing" icon="pi pi-plus" text class="mt-2" @click="openNewWarehouseDialog" />
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -122,10 +122,10 @@ const saveWarehouse = async () => {
 
       if (warehouse.value.id || warehouse.value._id) {
         await warehousesAPI.update(warehouse.value.id || warehouse.value._id, payload)
-        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: "Sklad ma'lumotlari yangilandi", life: 3000 })
+        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: "ombor ma'lumotlari yangilandi", life: 3000 })
       } else {
         await warehousesAPI.create(payload)
-        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: "Yangi sklad qo'shildi", life: 3000 })
+        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: "Yangi ombor qo'shildi", life: 3000 })
       }
       warehouseDialog.value = false
       loadData()
@@ -144,14 +144,14 @@ const editWarehouse = (data) => {
 
 const confirmDeleteWarehouse = (data) => {
   confirm.require({
-    message: `"${data.name}" skladini o'chirishni tasdiqlaysizmi?`,
+    message: `"${data.name}" omborini o'chirishni tasdiqlaysizmi?`,
     header: 'Tasdiqlash',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: async () => {
       try {
         await warehousesAPI.delete(data.id || data._id)
-        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: "Sklad o'chirildi", life: 3000 })
+        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: "ombor o'chirildi", life: 3000 })
         loadData()
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Xatolik', detail: "O'chirishda xatolik yuz berdi", life: 3000 })

@@ -17,7 +17,7 @@
               <i class="pi pi-search" />
               <InputText v-model="searchQuery" placeholder="Qidiruv (Nomi, Barcode...)" class="w-full" @input="handleSearch" />
             </span>
-            <Dropdown v-model="selectedWarehouse" placeholder="Skladni tanlang" :options="warehouses" optionLabel="name" optionValue="_id" class="w-48" showClear @change="loadProducts" />
+            <Dropdown v-model="selectedWarehouse" placeholder="omborni tanlang" :options="warehouses" optionLabel="name" optionValue="_id" class="w-48" showClear @change="loadProducts" />
             <Dropdown v-model="selectedCategory" placeholder="Kategoriyani tanlang" :options="categories" optionLabel="name" optionValue="name" class="w-48" showClear @change="loadProducts" />
           </div>
           <Button icon="pi pi-filter" text severity="secondary" label="Filtrlar" />

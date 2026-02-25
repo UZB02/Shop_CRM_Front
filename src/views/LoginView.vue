@@ -16,12 +16,12 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium">Username</label>
+          <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Username</label>
           <InputText v-model="form.username" placeholder="admin" class="w-full" @keyup.enter="handleLogin" />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium">Parol</label>
+          <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Parol</label>
           <Password v-model="form.password" :feedback="false" toggleMask placeholder="••••••••" class="w-full" inputClass="w-full" @keyup.enter="handleLogin" />
         </div>
 
@@ -76,7 +76,6 @@ const handleLogin = async () => {
     username: form.value.username,
     password: form.value.password
   })
-
   loading.value = false
 
   if (result.success) {

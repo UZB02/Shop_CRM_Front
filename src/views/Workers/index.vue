@@ -35,6 +35,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { workersAPI, storesAPI, branchesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
@@ -44,6 +45,7 @@ import ConfirmDialog from 'primevue/confirmdialog'
 import WorkerTable from './components/WorkerTable.vue'
 import WorkerDialog from './components/WorkerDialog.vue'
 
+const route = useRoute()
 const toast = useToast()
 const confirm = useConfirm()
 
@@ -74,23 +76,6 @@ const loadWorkers = async () => {
         const response = await workersAPI.getAll()
         const data = response.data
 
-        // ✅ Backend ma'lumotlarini consol'ga chiqarish
-        console.group('📦 Workers API Response')
-        console.log('📌 Full response.data:', data)
-        console.log('🔢 Type:', Array.isArray(data) ? 'Array' : typeof data)
-        if (data?.results) {
-            console.log('📋 Results (pagination):', data.results)
-            console.log('🔢 Count:', data.count)
-            if (data.results.length > 0) {
-                console.log('👤 First worker object keys:', Object.keys(data.results[0]))
-                console.log('👤 First worker full data:', data.results[0])
-            }
-        } else if (Array.isArray(data) && data.length > 0) {
-            console.log('👤 First worker object keys:', Object.keys(data[0]))
-            console.log('👤 First worker full data:', data[0])
-        }
-        console.groupEnd()
-
         if (data && data.results && Array.isArray(data.results)) {
             workers.value = data.results
         } else if (Array.isArray(data)) {
@@ -109,7 +94,6 @@ const loadWorkers = async () => {
 const loadStores = async () => {
     storesLoading.value = true
     try {
-        // /stores/ yoki /branches/ — qaysi biri ishlasa
         let response
         try {
             response = await storesAPI.getAll()
@@ -117,10 +101,9 @@ const loadStores = async () => {
             response = await branchesAPI.getAll()
         }
         const data = response.data
-        // Paginatsiya yoki oddiy array
         stores.value = data?.results ?? (Array.isArray(data) ? data : [])
     } catch (error) {
-        console.warn('Filiallarni yuklashda xatolik (stores/branches):', error?.response?.status)
+        console.warn('Filiallarni yuklashda xatolik:', error)
         stores.value = []
     } finally {
         storesLoading.value = false
@@ -151,22 +134,14 @@ const hideDialog = () => {
 }
 
 const editWorker = async (data) => {
-    console.group('✏️ Edit Worker — Raw Backend Data')
-    console.log('📌 Full data:', data)
-    console.log('🔑 Keys:', Object.keys(data))
-    console.groupEnd()
-
-    // Backend'dan to'liq ma'lumot olish (detail endpoint)
     let fullData = data
     try {
         const res = await workersAPI.getById(data.id || data._id)
         fullData = res.data
-        console.log('📋 Detail endpoint data:', fullData)
     } catch (e) {
         console.warn('Detail endpoint failed, using list data:', e)
     }
 
-    // full_name → first_name + last_name
     let firstName = fullData.first_name || ''
     let lastName = fullData.last_name || ''
     if (!firstName && !lastName && fullData.full_name) {
@@ -206,23 +181,16 @@ const saveWorker = async () => {
             role: worker.value.role,
         }
 
-        // Optional maydonlar — bo'sh bo'lsa yubormaymiz
         if (worker.value.email) payload.email = worker.value.email
         if (worker.value.phone1) payload.phone1 = worker.value.phone1
         if (worker.value.branch) payload.branch = worker.value.branch
         if (worker.value.salary) payload.salary = worker.value.salary
 
-        // Tizimga kirish — faqat yangi worker yoki login yoqilganda
         if (createLogin.value) {
             if (worker.value.username) payload.username = worker.value.username
             if (worker.value.password) payload.password = worker.value.password
             if (worker.value.permissions?.length) payload.permissions = worker.value.permissions
         }
-
-        console.group('💾 Save Worker — Payload')
-        console.log('🆔 ID:', worker.value.id)
-        console.log('📤 Payload:', payload)
-        console.groupEnd()
 
         if (worker.value.id) {
             await workersAPI.update(worker.value.id, payload)
@@ -234,14 +202,8 @@ const saveWorker = async () => {
         workerDialog.value = false
         loadWorkers()
     } catch (error) {
-        console.error('❌ Error saving worker:', error.response?.data || error)
-        const errData = error.response?.data
-        let msg = 'Saqlashda xatolik yuz berdi'
-        if (typeof errData === 'string') msg = errData
-        else if (errData?.detail) msg = errData.detail
-        else if (errData?.message) msg = errData.message
-        else if (typeof errData === 'object') msg = Object.entries(errData).map(([k, v]) => `${k}: ${v}`).join(' | ')
-        toast.add({ severity: 'error', summary: 'Xatolik ❌', detail: msg, life: 6000 })
+        console.error('❌ Error saving worker:', error)
+        toast.add({ severity: 'error', summary: 'Xatolik ❌', detail: 'Saqlashda xatolik yuz berdi', life: 3000 })
     } finally {
         saving.value = false
     }
@@ -262,15 +224,27 @@ const confirmDeleteWorker = (data) => {
                 toast.add({ severity: 'success', summary: 'O\'chirildi ✅', detail: `"${name}" tizimdan o'chirildi`, life: 3000 })
                 loadWorkers()
             } catch (error) {
-                console.error('Delete error:', error.response?.data || error)
                 toast.add({ severity: 'error', summary: 'Xatolik ❌', detail: 'Xodimni o\'chirishda xatolik yuz berdi', life: 3000 })
             }
         }
     })
 }
 
-onMounted(() => {
-    loadWorkers()
-    loadStores()
+onMounted(async () => {
+    await Promise.all([loadWorkers(), loadStores()])
+    
+    if (route.query.edit) {
+        const workerToEdit = workers.value.find(w => (w.id || w._id).toString() === route.query.edit.toString())
+        if (workerToEdit) {
+            editWorker(workerToEdit)
+        } else {
+            try {
+                const res = await workersAPI.getById(route.query.edit)
+                if (res.data) editWorker(res.data)
+            } catch (e) {
+                console.error('Could not find worker to edit from query', e)
+            }
+        }
+    }
 })
 </script>

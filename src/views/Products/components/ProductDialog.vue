@@ -51,8 +51,8 @@
           </div>
 
           <div class="field">
-            <label for="p_warehouse" class="font-bold block mb-2 text-slate-600 font-sm">Sklad</label>
-            <Dropdown id="p_warehouse" v-model="product.warehouse" :options="warehouses" optionLabel="name" optionValue="_id" placeholder="Skladni tanlang" />
+            <label for="p_warehouse" class="font-bold block mb-2 text-slate-600 font-sm">ombor</label>
+            <Dropdown id="p_warehouse" v-model="product.warehouse" :options="warehouses" optionLabel="name" optionValue="_id" placeholder="omborni tanlang" />
           </div>
 
           <div class="field">

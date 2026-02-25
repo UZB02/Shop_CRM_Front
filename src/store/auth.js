@@ -35,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
                     'mahsulotlar': 'products',
                     'mijozlar': 'customers',
                     'savdolar': 'trades',
-                    'sklad': 'warehouse',
+                    'ombor': 'warehouse',
                     'sotuv': 'pos',
                     'sozlamalar': 'settings',
                     'xarajatlar': 'expenses',

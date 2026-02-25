@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center gap-3 mb-5">
     <span class="w-1.5 h-6 rounded-full" :class="barColor"></span>
-    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">{{ label }}</h3>
+    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">{{ label }}</h3>
   </div>
 </template>
 

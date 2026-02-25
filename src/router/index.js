@@ -67,6 +67,12 @@ const routes = [
                 meta: { permission: 'workers' }
             },
             {
+                path: 'workers/:id',
+                name: 'worker-detail',
+                component: () => import('@/views/Workers/Detail.vue'),
+                meta: { permission: 'workers' }
+            },
+            {
                 path: 'trades',
                 name: 'trades',
                 component: () => import('@/views/Trades/index.vue'),
