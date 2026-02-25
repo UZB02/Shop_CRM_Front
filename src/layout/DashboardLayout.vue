@@ -185,9 +185,24 @@
         </div>
 
         <!-- Right icons -->
-        <div class="flex items-center gap-1.5 ml-auto flex-shrink-0">
-          <Button icon="pi pi-bell" text rounded severity="secondary" class="!w-9 !h-9" />
-          <Button icon="pi pi-cog" text rounded severity="secondary" class="!w-9 !h-9" />
+        <div class="flex items-center gap-3 ml-auto flex-shrink-0">
+          <!-- Language Switcher -->
+          <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-inner">
+            <button 
+              v-for="l in [{c:'uz', n:'LOT'}, {c:'uz_cy', n:'КРИ'}]" 
+              :key="l.c"
+              @click="setLang(l.c)"
+              class="px-2 py-1 rounded-md text-[9px] font-black transition-all duration-300 border-none cursor-pointer"
+              :class="locale === l.c ? 'bg-white dark:bg-slate-700 text-emerald-500 shadow-sm scale-105' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 bg-transparent'"
+            >
+              {{ l.n }}
+            </button>
+          </div>
+
+          <div class="flex items-center gap-1.5 border-l border-slate-200 dark:border-slate-800 pl-3">
+            <Button icon="pi pi-bell" text rounded severity="secondary" class="!w-9 !h-9" />
+            <Button icon="pi pi-cog" text rounded severity="secondary" class="!w-9 !h-9" />
+          </div>
         </div>
       </header>
 
@@ -225,6 +240,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { RouterLink, RouterView } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import Avatar   from 'primevue/avatar'
 import Button   from 'primevue/button'
 import Toast    from 'primevue/toast'
@@ -236,12 +252,19 @@ const router    = useRouter()
 const route     = useRoute()
 const authStore = useAuthStore()
 const toast     = useToast()
+const { t, locale } = useI18n()
 
 /* --- UI state --- */
 const sidebarOpen       = ref(false)   // mobile drawer
 const desktopCollapsed  = ref(false)   // desktop icon-only mode
 const showProfileDialog = ref(false)
 const subscriptionWarning = ref('')
+
+/* --- Language --- */
+const setLang = (lang) => {
+  locale.value = lang
+  localStorage.setItem('lang', lang)
+}
 
 /* --- User --- */
 const user = computed(() => authStore.user)
@@ -255,12 +278,17 @@ const closeOnNav = () => { sidebarOpen.value = false }
 /* --- Subscription --- */
 const checkSubscriptionStatus = () => {
   if (authStore.user?.subscription?.status === 'warning') {
-    subscriptionWarning.value = "Obuna muddati tugagan. 3 kun ichida to'lov qiling."
+    subscriptionWarning.value = t('common.subscription_warning') || "Obuna muddati tugagan. 3 kun ichida to'lov qiling."
   }
 }
 const handleSubscriptionWarning = (e) => {
   subscriptionWarning.value = e.detail
-  toast.add({ severity: 'warn', summary: 'Obuna Ogohlantirishi', detail: e.detail, life: 10000 })
+  toast.add({ 
+    severity: 'warn', 
+    summary: t('common.subscription_warning_title') || 'Obuna Ogohlantirishi', 
+    detail: e.detail || t('common.subscription_warning'), 
+    life: 10000 
+  })
   if (authStore.user?.subscription) authStore.user.subscription.status = 'warning'
 }
 
@@ -278,25 +306,25 @@ onUnmounted(() => {
 })
 
 /* --- Menu --- */
-const menuItems = [
-  { label: 'Boshqaruv',    icon: 'pi pi-home',          to: '/dashboard',            key: 'dashboard' },
-  { label: 'Sotuv (POS)',  icon: 'pi pi-calculator',    to: '/dashboard/pos',        key: 'pos'       },
-  { label: "Do'konlar",    icon: 'pi pi-shop',          to: '/dashboard/stores',     key: 'stores'    },
-  { label: 'Ombor',        icon: 'pi pi-database',      to: '/dashboard/warehouse',  key: 'warehouse' },
-  { label: 'Mahsulotlar',  icon: 'pi pi-tag',           to: '/dashboard/products',   key: 'products'  },
-  { label: 'Xodimlar',     icon: 'pi pi-users',         to: '/dashboard/workers',    key: 'workers'   },
-  { label: 'Savdolar',     icon: 'pi pi-shopping-cart', to: '/dashboard/trades',     key: 'trades'    },
-  { label: 'Xarajatlar',   icon: 'pi pi-wallet',        to: '/dashboard/expenses',   key: 'expenses'  },
-  { label: 'Mijozlar',     icon: 'pi pi-id-card',       to: '/dashboard/customers',  key: 'customers' },
-  { label: 'Sozlamalar',   icon: 'pi pi-cog',           to: '/dashboard/settings',   key: 'settings'  },
-]
+const menuItems = computed(() => [
+  { label: t('menu.dashboard'),    icon: 'pi pi-home',          to: '/dashboard',            key: 'dashboard' },
+  { label: t('menu.sales'),        icon: 'pi pi-calculator',    to: '/dashboard/pos',        key: 'pos'       },
+  { label: t('menu.stores'),       icon: 'pi pi-shop',          to: '/dashboard/stores',     key: 'stores'    },
+  { label: t('menu.inventory'),    icon: 'pi pi-database',      to: '/dashboard/warehouse',  key: 'warehouse' },
+  { label: t('menu.products'),     icon: 'pi pi-tag',           to: '/dashboard/products',   key: 'products'  },
+  { label: t('menu.workers'),      icon: 'pi pi-users',         to: '/dashboard/workers',    key: 'workers'   },
+  { label: t('menu.trades') || 'Savdolar',     icon: 'pi pi-shopping-cart', to: '/dashboard/trades',     key: 'trades'    },
+  { label: t('menu.reports') || 'Xarajatlar',   icon: 'pi pi-wallet',        to: '/dashboard/expenses',   key: 'expenses'  },
+  { label: t('menu.customers'),    icon: 'pi pi-id-card',       to: '/dashboard/customers',  key: 'customers' },
+  { label: t('menu.settings'),     icon: 'pi pi-cog',           to: '/dashboard/settings',   key: 'settings'  },
+])
 
-const filteredMenu = computed(() => menuItems.filter(i => authStore.hasAccess(i.key)))
+const filteredMenu = computed(() => menuItems.value.filter(i => authStore.hasAccess(i.key)))
 
 const currentPageTitle = computed(() => {
-  const item = menuItems.find(i => route.path.startsWith(i.to) && i.to !== '/dashboard')
-             ?? menuItems.find(i => i.to === '/dashboard')
-  return item?.label ?? 'Boshqaruv'
+  const item = menuItems.value.find(i => route.path.startsWith(i.to) && i.to !== '/dashboard')
+             ?? menuItems.value.find(i => i.to === '/dashboard')
+  return item?.label ?? t('menu.dashboard')
 })
 
 const handleLogout = () => {

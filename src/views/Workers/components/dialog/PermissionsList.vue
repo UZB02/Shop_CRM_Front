@@ -3,7 +3,7 @@
     <!-- Header: sarlavha + count + select-all -->
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-2">
-        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Ruxsatlar</span>
+        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('workers.form.permissions') }}</span>
         <span class="px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 text-[9px] font-black">
           {{ selectedCount }}/{{ total }}
         </span>
@@ -13,7 +13,7 @@
         :class="allSelected ? 'text-rose-400 hover:text-rose-300' : 'text-emerald-400 hover:text-emerald-300'"
         @click="$emit('toggle-all')"
       >
-        {{ allSelected ? 'Hammasini olib tashlash' : 'Hammasini tanlash' }}
+        {{ allSelected ? $t('workers.form.unselect_all') : $t('workers.form.select_all') }}
       </button>
     </div>
 

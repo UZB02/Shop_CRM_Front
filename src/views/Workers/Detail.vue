@@ -42,11 +42,11 @@
       <!-- Quick Stats Integrated (Visible from Medium screens) -->
       <div class="hidden md:flex items-center gap-6 lg:gap-10 border-slate-100 dark:border-slate-800 md:border-x md:px-6 lg:px-10 h-12">
         <div class="text-center">
-          <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Oylik Maosh</p>
+          <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('workers.salary') }}</p>
           <p class="text-xs lg:text-sm font-black text-emerald-500 tracking-tight">{{ formatCurrency(worker?.salary) }} <span class="text-[10px] text-slate-400 font-medium ml-1">UZS</span></p>
         </div>
         <div class="text-center">
-          <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Xodim ID</p>
+          <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('common.status') }} ID</p>
           <p class="text-xs lg:text-sm font-black text-slate-700 dark:text-slate-300 tracking-widest">#00{{ worker?.id }}</p>
         </div>
       </div>
@@ -54,12 +54,12 @@
       <!-- Actions -->
       <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-end border-t sm:border-t-0 pt-4 sm:pt-0 mt-2 sm:mt-0 border-slate-100 dark:border-slate-800">
         <Button icon="pi pi-arrow-left" 
-                label="Qaytish" 
+                :label="$t('common.back')" 
                 text 
                 class="!text-slate-400 hover:!text-emerald-500 !font-bold !text-[10px] uppercase tracking-widest"
                 @click="$router.back()" />
         <Button icon="pi pi-pencil" 
-                label="Tahrirlash" 
+                :label="$t('common.edit')" 
                 class="!rounded-xl !px-5 !py-2.5 !bg-emerald-500 hover:!bg-emerald-600 !border-none !text-white !font-black !text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5" 
                 @click="handleEdit" />
       </div>
@@ -76,7 +76,7 @@
               <i class="pi pi-phone text-sm"></i>
             </div>
             <div class="min-w-0">
-              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Telefon</p>
+              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.phone') }}</p>
               <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.phone1 || '—' }}</p>
             </div>
           </div>
@@ -86,7 +86,7 @@
               <i class="pi pi-envelope text-sm"></i>
             </div>
             <div class="min-w-0">
-              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Pochta manzili</p>
+              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.email') }}</p>
               <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.email || '—' }}</p>
             </div>
           </div>
@@ -96,7 +96,7 @@
               <i class="pi pi-briefcase text-sm"></i>
             </div>
             <div class="min-w-0">
-              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Lavozimi</p>
+              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.role') }}</p>
               <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.role_display || '—' }}</p>
             </div>
           </div>
@@ -106,7 +106,7 @@
               <i class="pi pi-calendar text-sm"></i>
             </div>
             <div class="min-w-0">
-              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Qushilgan sana</p>
+              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.created_at') }}</p>
               <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ formatDate(worker?.created_on) }}</p>
             </div>
           </div>
@@ -125,8 +125,8 @@
                   <i class="pi pi-id-card text-lg"></i>
                 </div>
                 <div class="text-left">
-                  <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Xodim Tafsilotlari</h2>
-                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">Batafsil shaxsiy ma'lumotlar</p>
+                  <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">{{ $t('workers.details') }}</h2>
+                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">{{ $t('workers.personal_info') }}</p>
                 </div>
               </div>
             </AccordionHeader>
@@ -155,8 +155,8 @@
                   <i class="pi pi-shield text-lg"></i>
                 </div>
                 <div class="text-left">
-                  <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Tizim Kirish Huquqlari</h2>
-                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">Foydalanuvchiga biriktirilgan ruxsatlar</p>
+                  <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">{{ $t('workers.permissions') }}</h2>
+                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">{{ $t('workers.user_permissions') }}</p>
                 </div>
               </div>
             </AccordionHeader>
@@ -173,7 +173,7 @@
                   
                   <div v-if="!worker?.permissions?.length" class="w-full py-8 text-center">
                     <i class="pi pi-lock text-xl text-slate-300 dark:text-slate-600 block mb-1"></i>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">Ruxsatlar mavjud emas</p>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">{{ $t('workers.no_permissions') }}</p>
                   </div>
                 </div>
               </div>
@@ -188,6 +188,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { workersAPI } from '@/services/api'
 import Button from 'primevue/button'
 import Accordion from 'primevue/accordion';
@@ -214,15 +215,16 @@ const loadWorker = async () => {
 
 onMounted(loadWorker)
 
+const { t } = useI18n()
+
 const detailItems = computed(() => [
-  { label: 'To\'liq ism', value: worker.value?.full_name, icon: 'pi-user' },
-  { label: 'Username', value: worker.value?.username, icon: 'pi-at' },
-  { label: 'Pochta manzili', value: worker.value?.email, icon: 'pi-envelope' },
-  { label: 'Asosiy telefon', value: worker.value?.phone1, icon: 'pi-phone' },
-  { label: 'Qo\'shimcha telefon', value: worker.value?.phone2 || 'Kiritilmagan', icon: 'pi-phone' },
-  { label: 'Filial / Do\'kon', value: worker.value?.branch_name, icon: 'pi-map-marker' },
-  { label: 'Holati', value: worker.value?.status === 'active' ? 'Faol ishga qabul qilingan' : 'Nofaol', icon: 'pi-info-circle' },
-  { label: 'Lavozim', value: worker.value?.role_display, icon: 'pi-briefcase' },
+  { label: t('workers.full_name'), value: worker.value?.full_name, icon: 'pi-user' },
+  { label: t('workers.username'), value: worker.value?.username, icon: 'pi-at' },
+  { label: t('workers.email'), value: worker.value?.email, icon: 'pi-envelope' },
+  { label: t('workers.phone'), value: worker.value?.phone1, icon: 'pi-phone' },
+  { label: t('common.status'), value: worker.value?.status === 'active' ? t('common.active') : t('common.inactive'), icon: 'pi-info-circle' },
+  { label: t('workers.role'), value: worker.value?.role_display, icon: 'pi-briefcase' },
+  { label: t('workers.branch'), value: worker.value?.branch_name, icon: 'pi-map-marker' },
 ])
 
 const isActive = computed(() => worker.value?.status === 'active' || worker.value?.is_active)

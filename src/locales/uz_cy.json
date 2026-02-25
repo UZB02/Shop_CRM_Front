@@ -1,0 +1,164 @@
+{
+    "common": {
+        "save": "Сақлаш",
+        "save_worker": "Ходимни Сақлаш",
+        "cancel": "Бекор қилиش",
+        "choose": "Танланг",
+        "edit": "Таҳрирлаш",
+        "delete": "Ўчириш",
+        "view": "Кўриш",
+        "back": "Қайтиш",
+        "search": "Қидириш",
+        "actions": "Амаллар",
+        "status": "Ҳолати",
+        "active": "Фаол",
+        "vacation": "Таътилда",
+        "fired": "Ишдан бўшатилган",
+        "inactive": "Нофаол",
+        "not_specified": "Киритилмаган",
+        "updated": "Янгиланди ✅",
+        "added": "Қўшилди ✅",
+        "deleted": "Ўчирилди ✅",
+        "error": "Хатолик ❌",
+        "yes_delete": "Ҳа, ўчир",
+        "subscription_warning": "Обуна муддати тугаган. 3 кун ичида тўлов қилинг.",
+        "subscription_warning_title": "Обуна Огоҳлантириши"
+    },
+    "workers": {
+        "title": "Ходимлар",
+        "details": "Ходим Тафсилотлари",
+        "permissions": "Тизим Кириsh Ҳуқуқлari",
+        "logs": "Тизим Журнали",
+        "full_name": "Тўлиқ Исм",
+        "role": "Лавозими",
+        "salary": "Маош",
+        "branch": "Филиал",
+        "username": "Юзернейм",
+        "email": "Почта манзили",
+        "phone": "Асосий Телефон",
+        "created_at": "Қўшилган вақти",
+        "personal_info": "Шахсий ва ишга оид маълумотлар",
+        "user_permissions": "Фойдаланувчи рухсатлари",
+        "timeline": "Хронология ва қўшимча маълумотлар",
+        "identity": "Шахсий маълумотлар",
+        "stats": "Статистика",
+        "back_to_list": "Ходимлар рўйхатига қайтиш",
+        "no_permissions": "Рухсатлар мавжуд эмас",
+        "last_login_ip": "Охирги кириш IP",
+        "unknown": "Номаълум",
+        "management_title": "Ходимлар Бошқаруви",
+        "management_subtitle": "Сизнинг жамоангиз ва уларнинг рухсатлари",
+        "new_worker": "Янги ходим",
+        "list_title": "Ходимлар Рўйхати",
+        "worker_count": "{count} та ходим",
+        "active_status": "Фаол",
+        "table_col_worker": "Ходим",
+        "table_col_salary": "Ойлик Маош",
+        "table_col_branch": "Филиал",
+        "table_col_phone": "Телефон",
+        "table_col_status": "Статус",
+        "table_col_actions": "Амаллар",
+        "not_found": "Ходимлар топилмади",
+        "no_data_desc": "Ҳозиргача ҳеч қандай маълумот мавжуд эмас.",
+        "salary_unit": "UZS / ой",
+        "page_info": "Саҳифа {current} / {total}",
+        "roles": {
+            "owner": "Дўкон эгаси",
+            "admin": "Администратор",
+            "manager": "Менежер",
+            "seller": "Сотувчи"
+        },
+        "statuses": {
+            "active": "Фаол",
+            "tatil": "Таътилда",
+            "ishdan_ketgan": "Ишдан бўшатилган"
+        },
+        "actions": {
+            "edit": "Ходимни Таҳрирлаш",
+            "add": "Янги Ходим Қўшиш",
+            "update_desc": "Ходим маълумотларини янгилаш",
+            "add_desc": "Тизимга янги мутахассисни бириктириш"
+        },
+        "form": {
+            "personal_info": "Шахсий маълумотлар",
+            "first_name": "Исм",
+            "last_name": "Фамилия",
+            "email": "Электрон почта",
+            "phone": "Телефон рақами",
+            "role": "Лавозим",
+            "work_info": "Иш фаолияти",
+            "branch": "Филиал / Дўкон",
+            "salary": "Ойлик Маош (UZS)",
+            "status": "Статус",
+            "system_access": "Тизимга кириш",
+            "username": "Фойдаланувчи номи",
+            "password": "Тизим пароли",
+            "access_denied": "Кириш чекланган",
+            "access_enable_desc": "Тизимга кириш имкониятини ёқиш учун тепани босинг.",
+            "placeholder_branch": "Филиални танланг",
+            "permissions": "Рухсатлар",
+            "unselect_all": "Ҳаммасини олиб ташлаш",
+            "select_all": "Ҳаммасини танлаш"
+        },
+        "permissions_list": {
+            "boshqaruv": {
+                "label": "Бошқарув",
+                "desc": "Дашборд ва статистикага кириш"
+            },
+            "dokonlar": {
+                "label": "Дўконлар",
+                "desc": "Филиал ва дўконлар бошқаруви"
+            },
+            "mahsulotlar": {
+                "label": "Маҳсулотлар",
+                "desc": "Товарлар ва омбор бошқаруви"
+            },
+            "mijozlar": {
+                "label": "Мижозлар",
+                "desc": "Мижозлар базаси билан ишлаш"
+            },
+            "savdolar": {
+                "label": "Савдолар",
+                "desc": "Савдолар тарихини кўриш"
+            },
+            "ombor": {
+                "label": "Омбор",
+                "desc": "Омборхона бошқаруви"
+            },
+            "sotuv": {
+                "label": "Сотув (POS)",
+                "desc": "Касса ва сотув ойнасига кириш"
+            },
+            "xarajatlar": {
+                "label": "Харажатлар",
+                "desc": "Харажатлар ва молия"
+            },
+            "xodimlar": {
+                "label": "Ходимлар",
+                "desc": "Ходимларни бошқариш"
+            }
+        },
+        "messages": {
+            "updated": "{name} маълумотлари янгиланди",
+            "added": "Янги ходим муваффақиятли қўшилди",
+            "deleted": "\"{name}\" тизимдан ўчирилди",
+            "delete_confirm": "\"{name}\" ходимини тизимдан ўчиришни тасдиқлайсизми?",
+            "delete_header": "Ўчиришни тасдиқлаш",
+            "load_error": "Ходимларни юклашда хатолик",
+            "save_error": "Сақлашда хатолик юз берди",
+            "delete_error": "Ходимни ўчиришда хатолик юз берди"
+        }
+    },
+    "menu": {
+        "dashboard": "Бошқарув",
+        "sales": "Сотув (POS)",
+        "stores": "Дўконлар",
+        "inventory": "Омбор",
+        "products": "Маҳсулотлар",
+        "workers": "Ходимлар",
+        "trades": "Савдолар",
+        "reports": "Харажатлар",
+        "customers": "Мижозлар",
+        "settings": "Созламалар"
+    }
+}

@@ -10,14 +10,14 @@
             <i class="pi pi-users text-emerald-500 text-sm"></i>
           </div>
           <div>
-            <h3 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Xodimlar Ro'yxati</h3>
-            <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{{ workers?.length || 0 }} ta xodim</p>
+            <h3 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">{{ $t('workers.list_title') }}</h3>
+            <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{{ $t('workers.worker_count', { count: workers?.length || 0 }) }}</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
           <div class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
             <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-            <span class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Aktiv</span>
+            <span class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{{ $t('workers.active_status') }}</span>
           </div>
         </div>
       </div>
@@ -27,12 +27,12 @@
         <table class="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr class="bg-slate-50/50 dark:bg-slate-900/50">
-              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">Xodim</th>
-              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">Oylik Maosh</th>
-              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">Filial</th>
-              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">Telefon</th>
-              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">Status</th>
-              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800 text-right">Amallar</th>
+              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_worker') }}</th>
+              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_salary') }}</th>
+              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_branch') }}</th>
+              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_phone') }}</th>
+              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_status') }}</th>
+              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800 text-right">{{ $t('workers.table_col_actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -64,8 +64,8 @@
                     <i class="pi pi-users text-4xl text-slate-300 dark:text-slate-700"></i>
                   </div>
                   <div class="max-w-[200px]">
-                    <p class="text-sm font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-tight">Xodimlar topilmadi</p>
-                    <p class="text-[10px] text-slate-400 dark:text-slate-600 mt-1 font-medium">Hozircha hech qanday ma'lumot mavjud emas.</p>
+                    <p class="text-sm font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-tight">{{ $t('workers.not_found') }}</p>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-600 mt-1 font-medium">{{ $t('workers.no_data_desc') }}</p>
                   </div>
                 </div>
               </td>
@@ -105,7 +105,7 @@
                   <span class="font-black text-emerald-600 dark:text-emerald-400 text-sm leading-none">
                     {{ formatFullCurrency(data.salary) }}
                   </span>
-                  <span class="text-[10px] text-slate-500 dark:text-slate-500 font-medium mt-0.5 uppercase tracking-tighter">UZS / oy</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-500 font-medium mt-0.5 uppercase tracking-tighter">{{ $t('workers.salary_unit') }}</span>
                 </div>
               </td>
 
@@ -144,19 +144,19 @@
                 <div class="flex gap-1.5 justify-end items-center group-hover:opacity-100 transition-opacity">
                   <button
                     class="w-8 h-8 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center transition-all duration-200"
-                    title="Ko'rish"
+                    :title="$t('common.view')"
                     @click="router.push({ name: 'worker-detail', params: { id: data.id || data._id } })">
                     <i class="pi pi-eye text-xs"></i>
                   </button>
                   <button
                     class="w-8 h-8 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-all duration-200"
-                    title="Tahrirlash"
+                    :title="$t('common.edit')"
                     @click="$emit('edit', data)">
                     <i class="pi pi-pencil text-xs"></i>
                   </button>
                   <button
                     class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 hover:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center transition-all duration-200"
-                    title="O'chirish"
+                    :title="$t('common.delete')"
                     @click="$emit('delete', data)">
                     <i class="pi pi-trash text-xs"></i>
                   </button>
@@ -171,7 +171,7 @@
       <div v-if="totalPages > 1" 
            class="px-6 py-4 bg-slate-50/50 dark:bg-slate-950/20 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <div class="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">
-          Sahifa {{ currentPage }} / {{ totalPages }}
+          {{ $t('workers.page_info', { current: currentPage, total: totalPages }) }}
         </div>
         <div class="flex items-center gap-1">
           <button @click="currentPage = 1" :disabled="currentPage === 1"
@@ -217,7 +217,9 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
 
 const props = defineProps({
@@ -288,8 +290,7 @@ const getDisplayName = (data) => {
 }
 
 const getRoleDisplay = (data) => {
-  const roleMap = { 'owner': 'Egasi', 'admin': 'Admin', 'manager': 'Menejer', 'seller': 'Sotuvchi' }
-  return data.role_display || roleMap[data.role] || data.role || '—'
+  return t(`workers.roles.${data.role || 'seller'}`)
 }
 
 const getRoleBadgeClass = (role) => {
@@ -303,12 +304,7 @@ const getRoleBadgeClass = (role) => {
 }
 
 const getStatusLabel = (data) => {
-  const statusMap = {
-    'active': 'Faol',
-    'tatil': "Ta'tilda",
-    'ishdan_ketgan': "Ishdan bo'shagan"
-  }
-  return statusMap[data.status] || data.status || 'Faol'
+  return t(`workers.statuses.${data.status || 'active'}`)
 }
 
 const getStatusDotClass = (data) => {

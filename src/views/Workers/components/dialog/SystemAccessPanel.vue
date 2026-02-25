@@ -6,7 +6,7 @@
         <div class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400">
           <i class="pi pi-key text-sm"></i>
         </div>
-        <h3 class="text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Tizimga kirish</h3>
+        <h3 class="text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">{{ $t('workers.form.system_access') }}</h3>
       </div>
       <InputSwitch
         :modelValue="createLogin"
@@ -19,7 +19,7 @@
     <Transition name="fade-slide">
       <div v-if="createLogin" class="flex-1 flex flex-col">
         <div class="space-y-5">
-          <FormField label="Foydalanuvchi nomi">
+          <FormField :label="$t('workers.form.username')">
             <div class="p-input-icon-left w-full">
               <InputText v-model="worker.username"
                          class="w-full !bg-white dark:!bg-slate-900 !border-slate-100 dark:!border-slate-800 !h-10 !rounded-xl"
@@ -27,7 +27,7 @@
             </div>
           </FormField>
 
-          <FormField v-if="!worker.id" label="Tizim paroli">
+          <FormField v-if="!worker.id" :label="$t('workers.form.password')">
             <div class="p-input-icon-left w-full">
               <Password v-model="worker.password"
                         toggleMask
@@ -58,9 +58,9 @@
           <i class="pi pi-lock text-3xl text-slate-400"></i>
         </div>
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Kirish cheklangan</p>
+          <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">{{ $t('workers.form.access_denied') }}</p>
           <p class="text-xs text-slate-400 mt-1 max-w-[160px]">
-            Tizimga kirish imkoniyatini yoqish uchun tepani bosing.
+            {{ $t('workers.form.access_enable_desc') }}
           </p>
         </div>
       </div>

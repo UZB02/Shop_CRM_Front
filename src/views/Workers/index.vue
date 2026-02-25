@@ -2,10 +2,10 @@
   <div class="space-y-4 md:space-y-6">
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
       <div>
-        <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Xodimlar Boshqaruvi</h1>
-        <p class="text-slate-500 text-sm mt-1">Sizning jamoangiz va ularning ruxsatlari</p>
+        <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{{ $t('workers.management_title') }}</h1>
+        <p class="text-slate-500 text-sm mt-1">{{ $t('workers.management_subtitle') }}</p>
       </div>
-      <Button label="Yangi xodim" icon="pi pi-user-plus" severity="success" class="shadow-sm w-full sm:w-auto" @click="openNew" />
+      <Button :label="$t('workers.new_worker')" icon="pi pi-user-plus" severity="success" class="shadow-sm w-full sm:w-auto" @click="openNew" />
     </div>
 
     <!-- Workers Table Component -->
@@ -36,6 +36,7 @@
 <script setup>
 import { ref, onMounted, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { workersAPI, storesAPI, branchesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
@@ -45,6 +46,7 @@ import ConfirmDialog from 'primevue/confirmdialog'
 import WorkerTable from './components/WorkerTable.vue'
 import WorkerDialog from './components/WorkerDialog.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const toast = useToast()
 const confirm = useConfirm()
@@ -85,7 +87,7 @@ const loadWorkers = async () => {
         }
     } catch (error) {
         console.error('❌ Error loading workers:', error)
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Xodimlarni yuklashda xatolik', life: 3000 })
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('workers.messages.load_error'), life: 3000 })
     } finally {
         loading.value = false
     }
@@ -204,16 +206,26 @@ const saveWorker = async () => {
 
         if (worker.value.id) {
             await workersAPI.update(worker.value.id, payload)
-            toast.add({ severity: 'success', summary: 'Yangilandi ✅', detail: `${worker.value.first_name} ${worker.value.last_name} ma'lumotlari yangilandi`, life: 3000 })
+            toast.add({ 
+              severity: 'success', 
+              summary: t('common.updated'), 
+              detail: t('workers.messages.updated', { name: `${worker.value.first_name} ${worker.value.last_name}` }), 
+              life: 3000 
+            })
         } else {
             await workersAPI.create(payload)
-            toast.add({ severity: 'success', summary: 'Qo\'shildi ✅', detail: 'Yangi xodim muvaffaqiyatli qo\'shildi', life: 3000 })
+            toast.add({ 
+              severity: 'success', 
+              summary: t('common.added'), 
+              detail: t('workers.messages.added'), 
+              life: 3000 
+            })
         }
         workerDialog.value = false
         loadWorkers()
     } catch (error) {
         console.error('❌ Error saving worker:', error)
-        toast.add({ severity: 'error', summary: 'Xatolik ❌', detail: 'Saqlashda xatolik yuz berdi', life: 3000 })
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('workers.messages.save_error'), life: 3000 })
     } finally {
         saving.value = false
     }
@@ -222,19 +234,29 @@ const saveWorker = async () => {
 const confirmDeleteWorker = (data) => {
     const name = data.full_name || `${data.first_name || ''} ${data.last_name || ''}`.trim() || 'Xodim'
     confirm.require({
-        message: `"${name}" xodimini tizimdan o'chirishni tasdiqlaysizmi?`,
-        header: 'O\'chirishni tasdiqlash',
+        message: t('workers.messages.delete_confirm', { name }),
+        header: t('workers.messages.delete_header'),
         icon: 'pi pi-exclamation-triangle',
-        acceptLabel: 'Ha, o\'chir',
-        rejectLabel: 'Bekor qilish',
+        acceptLabel: t('common.yes_delete'),
+        rejectLabel: t('common.cancel'),
         acceptClass: 'p-button-danger',
         accept: async () => {
             try {
                 await workersAPI.delete(data.id || data._id)
-                toast.add({ severity: 'success', summary: 'O\'chirildi ✅', detail: `"${name}" tizimdan o'chirildi`, life: 3000 })
+                toast.add({ 
+                  severity: 'success', 
+                  summary: t('common.deleted'), 
+                  detail: t('workers.messages.deleted', { name }), 
+                  life: 3000 
+                })
                 loadWorkers()
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Xatolik ❌', detail: 'Xodimni o\'chirishda xatolik yuz berdi', life: 3000 })
+                toast.add({ 
+                  severity: 'error', 
+                  summary: t('common.error'), 
+                  detail: t('workers.messages.delete_error'), 
+                  life: 3000 
+                })
             }
         }
     })

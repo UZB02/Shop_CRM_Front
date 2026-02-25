@@ -27,7 +27,7 @@
     <span
       class="flex-1 text-[11px] font-black leading-none transition-colors"
       :class="active ? 'text-emerald-500 dark:text-emerald-300' : 'text-slate-600 dark:text-slate-400'"
-    >{{ perm.label }}</span>
+    >{{ $t(`workers.permissions_list.${perm.value}.label`) }}</span>
   </div>
 </template>
 

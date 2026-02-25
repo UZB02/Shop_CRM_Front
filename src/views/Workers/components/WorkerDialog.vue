@@ -36,11 +36,11 @@
 
       <!-- Footer -->
       <div class="px-8 py-5 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
-        <Button label="Bekor qilish"
+        <Button :label="$t('common.cancel')"
                 text
                 class="!px-6 !text-slate-500 hover:!bg-slate-200/50"
                 @click="$emit('update:visible', false)" />
-        <Button label="Xodimni Saqlash"
+        <Button :label="$t('common.save_worker')"
                 icon="pi pi-check"
                 :loading="saving"
                 class="!rounded-xl !px-8 !bg-emerald-600 !border-emerald-600 shadow-lg shadow-emerald-600/20 hover:!bg-emerald-700 hover:!border-emerald-700 transition-all font-black text-sm"

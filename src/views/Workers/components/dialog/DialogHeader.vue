@@ -6,10 +6,10 @@
       </div>
       <div>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tight leading-none">
-          {{ isEdit ? 'Xodimni Tahrirlash' : "Yangi Xodim Qo'shish" }}
+          {{ isEdit ? $t('workers.actions.edit') : $t('workers.actions.add') }}
         </h2>
         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">
-          {{ isEdit ? "Xodim ma'lumotlarini yangilash" : 'Tizimga yangi mutaxassisni biriktirish' }}
+          {{ isEdit ? $t('workers.actions.update_desc') : $t('workers.actions.add_desc') }}
         </p>
       </div>
     </div>

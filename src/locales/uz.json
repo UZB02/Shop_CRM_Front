@@ -1,0 +1,164 @@
+{
+    "common": {
+        "save": "Saqlash",
+        "save_worker": "Xodimni Saqlash",
+        "cancel": "Bekor qilish",
+        "choose": "Tanlang",
+        "edit": "Tahrirlash",
+        "delete": "O'chirish",
+        "view": "Ko'rish",
+        "back": "Qaytish",
+        "search": "Qidirish",
+        "actions": "Amallar",
+        "status": "Holati",
+        "active": "Faol",
+        "vacation": "Ta'tilda",
+        "fired": "Ishdan bo'shatilgan",
+        "inactive": "Nofaol",
+        "not_specified": "Kiritilmagan",
+        "updated": "Yangilandi ✅",
+        "added": "Qo'shildi ✅",
+        "deleted": "O'chirildi ✅",
+        "error": "Xatolik ❌",
+        "yes_delete": "Ha, o'chir",
+        "subscription_warning": "Obuna muddati tugagan. 3 kun ichida to'lov qiling.",
+        "subscription_warning_title": "Obuna Ogohlantirishi"
+    },
+    "workers": {
+        "title": "Xodimlar",
+        "details": "Xodim Tafsilotlari",
+        "permissions": "Tizim Kirish Huquqlari",
+        "logs": "Tizim Jurnali",
+        "full_name": "To'liq Ism",
+        "role": "Lavozimi",
+        "salary": "Maosh",
+        "branch": "Filial",
+        "username": "Username",
+        "email": "Pochta manzili",
+        "phone": "Asosiy Telefon",
+        "created_at": "Qo'shilgan vaqti",
+        "personal_info": "Shaxsiy va ishga oid ma'lumotlar",
+        "user_permissions": "Foydalanuvchi ruxsatlari",
+        "timeline": "Xronologiya va qo'shimcha ma'lumotlar",
+        "identity": "Shaxsiy ma'lumotlar",
+        "stats": "Statistika",
+        "back_to_list": "Xodimlar ro'yxatiga qaytish",
+        "no_permissions": "Ruxsatlar mavjud emas",
+        "last_login_ip": "Oxirgi kirish IP",
+        "unknown": "Noma'lum",
+        "management_title": "Xodimlar Boshqaruvi",
+        "management_subtitle": "Sizning jamoangiz va ularning ruxsatlari",
+        "new_worker": "Yangi xodim",
+        "list_title": "Xodimlar Ro'yxati",
+        "worker_count": "{count} ta xodim",
+        "active_status": "Faol",
+        "table_col_worker": "Xodim",
+        "table_col_salary": "Oylik Maosh",
+        "table_col_branch": "Filial",
+        "table_col_phone": "Telefon",
+        "table_col_status": "Status",
+        "table_col_actions": "Amallar",
+        "not_found": "Xodimlar topilmadi",
+        "no_data_desc": "Hozircha hech qanday ma'lumot mavjud emas.",
+        "salary_unit": "UZS / oy",
+        "page_info": "Sahifa {current} / {total}",
+        "roles": {
+            "owner": "Do'kon egasi",
+            "admin": "Administrator",
+            "manager": "Menejer",
+            "seller": "Sotuvchi"
+        },
+        "statuses": {
+            "active": "Faol",
+            "tatil": "Ta'tilda",
+            "ishdan_ketgan": "Ishdan bo'shatilgan"
+        },
+        "actions": {
+            "edit": "Xodimni Tahrirlash",
+            "add": "Yangi Xodim Qo'shish",
+            "update_desc": "Xodim ma'lumotlarini yangilash",
+            "add_desc": "Tizimga yangi mutaxassisni biriktirish"
+        },
+        "form": {
+            "personal_info": "Shaxsiy ma'lumotlar",
+            "first_name": "Ism",
+            "last_name": "Familiya",
+            "email": "Elektron pochta",
+            "phone": "Telefon raqami",
+            "role": "Lavozim",
+            "work_info": "Ish faoliyati",
+            "branch": "Filial / Do'kon",
+            "salary": "Oylik Maosh (UZS)",
+            "status": "Status",
+            "system_access": "Tizimga kirish",
+            "username": "Foydalanuvchi nomi",
+            "password": "Tizim paroli",
+            "access_denied": "Kirish cheklangan",
+            "access_enable_desc": "Tizimga kirish imkoniyatini yoqish uchun tepani bosing.",
+            "placeholder_branch": "Filialni tanlang",
+            "permissions": "Ruxsatlar",
+            "unselect_all": "Hammasini olib tashlash",
+            "select_all": "Hammasini tanlash"
+        },
+        "permissions_list": {
+            "boshqaruv": {
+                "label": "Boshqaruv",
+                "desc": "Dashboard va statistikaga kirish"
+            },
+            "dokonlar": {
+                "label": "Do'konlar",
+                "desc": "Filial va do'konlar boshqaruvi"
+            },
+            "mahsulotlar": {
+                "label": "Mahsulotlar",
+                "desc": "Tovarlar va ombor boshqaruvi"
+            },
+            "mijozlar": {
+                "label": "Mijozlar",
+                "desc": "Mijozlar bazasi bilan ishlash"
+            },
+            "savdolar": {
+                "label": "Savdolar",
+                "desc": "Savdolar tarixini ko'rish"
+            },
+            "ombor": {
+                "label": "Ombor",
+                "desc": "Omborxona boshqaruvi"
+            },
+            "sotuv": {
+                "label": "Sotuv (POS)",
+                "desc": "Kassa va sotuv oynasiga kirish"
+            },
+            "xarajatlar": {
+                "label": "Xarajatlar",
+                "desc": "Xarajatlar va moliya"
+            },
+            "xodimlar": {
+                "label": "Xodimlar",
+                "desc": "Xodimlarni boshqarish"
+            }
+        },
+        "messages": {
+            "updated": "{name} ma'lumotlari yangilandi",
+            "added": "Yangi xodim muvaffaqiyatli qo'shildi",
+            "deleted": "\"{name}\" tizimdan o'chirildi",
+            "delete_confirm": "\"{name}\" xodimini tizimdan o'chirishni tasdiqlaysizmi?",
+            "delete_header": "O'chirishni tasdiqlash",
+            "load_error": "Xodimlarni yuklashda xatolik",
+            "save_error": "Saqlashda xatolik yuz berdi",
+            "delete_error": "Xodimni o'chirishda xatolik yuz berdi"
+        }
+    },
+    "menu": {
+        "dashboard": "Boshqaruv",
+        "sales": "Sotuv (POS)",
+        "stores": "Do'konlar",
+        "inventory": "Ombor",
+        "products": "Mahsulotlar",
+        "workers": "Xodimlar",
+        "trades": "Savdolar",
+        "reports": "Xarajatlar",
+        "customers": "Mijozlar",
+        "settings": "Sozlamalar"
+    }
+}
