@@ -68,11 +68,14 @@
           :key="item.key"
           :to="item.to"
           :title="desktopCollapsed ? item.label : ''"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-xl
+          class="flex items-center px-3 py-2.5 rounded-xl
                  text-slate-600 dark:text-slate-400
                  hover:bg-emerald-50 hover:text-emerald-600
                  dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400
                  transition-all duration-200 group overflow-hidden"
+          :class="[
+            desktopCollapsed ? 'lg:justify-center lg:px-0' : 'gap-3',
+          ]"
           active-class="bg-emerald-50 text-emerald-600
                         dark:bg-emerald-900/40 dark:text-emerald-400
                         font-semibold shadow-sm"
@@ -138,7 +141,7 @@
     <div
       class="flex flex-col flex-1 min-h-screen min-w-0
              transition-[margin] duration-300 ease-in-out
-             ml-0 lg:ml-64"
+             ml-0"
       :class="{ 'lg:ml-16': desktopCollapsed, 'lg:ml-64': !desktopCollapsed }"
     >
       <!-- TOP HEADER -->

@@ -25,6 +25,8 @@
       <FormField label="Status">
         <Dropdown v-model="worker.status"
                   :options="statuses"
+                  optionLabel="label"
+                  optionValue="value"
                   class="w-full field-input flex items-center"
                   placeholder="Tanlang" />
       </FormField>

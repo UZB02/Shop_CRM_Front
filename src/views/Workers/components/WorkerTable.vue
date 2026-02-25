@@ -103,7 +103,7 @@
               <td class="px-6 py-4">
                 <div class="flex flex-col">
                   <span class="font-black text-emerald-600 dark:text-emerald-400 text-sm leading-none">
-                    {{ formatShortCurrency(data.salary) }}
+                    {{ formatFullCurrency(data.salary) }}
                   </span>
                   <span class="text-[10px] text-slate-500 dark:text-slate-500 font-medium mt-0.5 uppercase tracking-tighter">UZS / oy</span>
                 </div>
@@ -132,11 +132,11 @@
               </td>
 
               <td class="px-6 py-4">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm transition-all"
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm transition-all border"
                       :class="getStatusClass(data)">
                   <span class="w-1.5 h-1.5 rounded-full shadow-sm"
-                        :class="isActive(data) ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'"></span>
-                  {{ isActive(data) ? 'Faol' : 'Nofaol' }}
+                        :class="getStatusDotClass(data)"></span>
+                  {{ getStatusLabel(data) }}
                 </span>
               </td>
 
@@ -302,23 +302,40 @@ const getRoleBadgeClass = (role) => {
   }
 }
 
-const isActive = (data) => {
-  if (typeof data.is_active === 'boolean') return data.is_active
-  if (typeof data.status === 'string') return data.status === 'active'
-  return true
+const getStatusLabel = (data) => {
+  const statusMap = {
+    'active': 'Faol',
+    'tatil': "Ta'tilda",
+    'ishdan_ketgan': "Ishdan bo'shagan"
+  }
+  return statusMap[data.status] || data.status || 'Faol'
+}
+
+const getStatusDotClass = (data) => {
+  switch (data.status) {
+    case 'active': return 'bg-emerald-500 animate-pulse'
+    case 'tatil': return 'bg-amber-500'
+    case 'ishdan_ketgan': return 'bg-rose-500'
+    default: return 'bg-emerald-500 animate-pulse'
+  }
 }
 
 const getStatusClass = (data) => {
-  return isActive(data)
-    ? 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border-emerald-500/20'
-    : 'bg-rose-500/10 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400 border-rose-500/20'
+  switch (data.status) {
+    case 'active': 
+      return 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border-emerald-500/20'
+    case 'tatil': 
+      return 'bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 border-amber-500/20'
+    case 'ishdan_ketgan': 
+      return 'bg-rose-500/10 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400 border-rose-500/20'
+    default: 
+      return 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border-emerald-500/20'
+  }
 }
 
-const formatShortCurrency = (val) => {
+const formatFullCurrency = (val) => {
   const num = parseFloat(val) || 0
-  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1).replace('.0', '') + ' mln'
-  if (num >= 1_000)     return (num / 1_000).toFixed(0) + ' ming'
-  return num.toFixed(0)
+  return num.toLocaleString('fr-FR').replace(/,/g, ' ')
 }
 
 const getBranchName = (data) => data.branch_name || data.branch?.name || data.branch || '—'

@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import { workersAPI, storesAPI, branchesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
@@ -63,7 +63,7 @@ const worker = ref({
     last_name: '',
     role: 'seller',
     branch: null,
-    status: 'Faol',
+    status: 'active',
     salary: 0,
     phone1: '',
     email: '',
@@ -75,7 +75,7 @@ const loadWorkers = async () => {
     try {
         const response = await workersAPI.getAll()
         const data = response.data
-
+        console.log("API dan kelayotgan workers ma'lumotlari:", data)
         if (data && data.results && Array.isArray(data.results)) {
             workers.value = data.results
         } else if (Array.isArray(data)) {
@@ -116,7 +116,7 @@ const openNew = () => {
         last_name: '',
         role: 'seller',
         branch: stores.value.length > 0 ? (stores.value[0]._id || stores.value[0].id) : null,
-        status: 'Faol',
+        status: 'active',
         salary: 0,
         phone1: '',
         email: '',
@@ -138,6 +138,7 @@ const editWorker = async (data) => {
     try {
         const res = await workersAPI.getById(data.id || data._id)
         fullData = res.data
+        console.log("Tanlangan xodim ma'lumotlari:", fullData)
     } catch (e) {
         console.warn('Detail endpoint failed, using list data:', e)
     }
@@ -158,6 +159,7 @@ const editWorker = async (data) => {
         phone1: fullData.phone1 || fullData.phone || '',
         role: fullData.role || 'seller',
         branch: fullData.branch?.id || fullData.branch?._id || fullData.branch || null,
+        status: fullData.status || 'active',
         salary: parseFloat(fullData.salary) || 0,
         username: fullData.username || '',
         password: '',
@@ -179,18 +181,26 @@ const saveWorker = async () => {
             first_name: worker.value.first_name.trim(),
             last_name: worker.value.last_name.trim(),
             role: worker.value.role,
+            status: worker.value.status,
         }
 
         if (worker.value.email) payload.email = worker.value.email
-        if (worker.value.phone1) payload.phone1 = worker.value.phone1
+        if (worker.value.phone1) {
+            payload.phone1 = worker.value.phone1.startsWith('+') 
+                ? worker.value.phone1 
+                : '+' + worker.value.phone1
+        }
         if (worker.value.branch) payload.branch = worker.value.branch
         if (worker.value.salary) payload.salary = worker.value.salary
 
         if (createLogin.value) {
             if (worker.value.username) payload.username = worker.value.username
             if (worker.value.password) payload.password = worker.value.password
-            if (worker.value.permissions?.length) payload.permissions = worker.value.permissions
+            // permissionsni Proxy’dan oddiy Array’ga o'tkazib yuboramiz
+            payload.permissions = [...toRaw(worker.value.permissions || [])]
         }
+
+        console.log("API ga yuborilayotgan worker payload:", payload)
 
         if (worker.value.id) {
             await workersAPI.update(worker.value.id, payload)

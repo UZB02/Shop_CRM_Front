@@ -1,166 +1,185 @@
 <template>
-  <div class="space-y-6 max-w-5xl mx-auto pb-12">
-    <!-- Header / Quick Info -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800 transition-colors duration-300">
-      <div class="flex flex-col md:flex-row items-center gap-6">
+  <div class="max-w-[1600px] mx-auto pb-8 px-4 sm:px-6 lg:px-8 space-y-6 transition-all duration-300">
+    
+    <!-- HEADER: Compact Horizontal Identity Bar -->
+    <div class="bg-white dark:bg-slate-900 rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group">
+      <!-- Decorative element -->
+      <div class="absolute inset-y-0 left-0 w-1.5 bg-emerald-500 hidden sm:block"></div>
+
+      <div class="flex flex-col sm:flex-row items-center gap-4 md:gap-6 text-center sm:text-left">
         <!-- Avatar -->
-        <div class="relative">
-          <div class="w-32 h-32 rounded-[2.5rem] flex items-center justify-center text-4xl text-white font-black shadow-2xl ring-4 ring-slate-50 dark:ring-slate-800"
+        <div class="relative flex-shrink-0">
+          <div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center text-2xl md:text-3xl text-white font-black shadow-lg ring-4 ring-slate-50 dark:ring-slate-800 transition-transform duration-500 group-hover:scale-105"
                :style="getAvatarGradient(worker?.full_name)">
             {{ getInitials(worker) }}
           </div>
-          <span class="absolute bottom-1 right-1 w-8 h-8 rounded-2xl border-4 border-white dark:border-slate-900 shadow-lg"
-                :class="isActive ? 'bg-emerald-500' : 'bg-rose-500'"></span>
+          <div class="absolute -bottom-1 -right-1 w-6 h-6 md:w-7 md:h-7 rounded-lg border-2 border-white dark:border-slate-900 shadow-lg flex items-center justify-center transition-colors duration-300"
+               :class="isActive ? 'bg-emerald-500' : 'bg-rose-500'">
+            <i :class="['pi', isActive ? 'pi-check' : 'pi-times', 'text-white text-[8px] md:text-[10px] font-black']"></i>
+          </div>
         </div>
 
-        <div class="flex-1 text-center md:text-left">
-          <div class="flex flex-col md:flex-row md:items-center gap-2 mb-2">
-            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+        <div class="space-y-1.5 mt-2 sm:mt-0">
+          <div class="flex flex-col sm:flex-row items-center gap-2 md:gap-3">
+            <h1 class="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               {{ worker?.full_name }}
             </h1>
-            <span class="inline-flex px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest border w-fit mx-auto md:mx-0"
-                  :class="getRoleBadgeClass(worker?.role)">
+            <span class="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-[9px] font-black uppercase tracking-widest border border-emerald-500/20">
               {{ worker?.role_display || worker?.role }}
             </span>
           </div>
-          
-          <div class="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-slate-500 dark:text-slate-400">
-            <div class="flex items-center gap-1.5">
-              <i class="pi pi-at text-emerald-500"></i>
-              <span class="font-bold">{{ worker?.username }}</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <i class="pi pi-map-marker text-emerald-500"></i>
-              <span>{{ worker?.branch_name || 'Filial biriktirilmagan' }}</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <i class="pi pi-calendar text-emerald-500"></i>
-              <span>Ro'yxatdan o'tgan: {{ formatDate(worker?.created_on) }}</span>
-            </div>
+          <div class="flex flex-wrap justify-center sm:justify-start items-center gap-3 md:gap-4">
+             <span class="text-[11px] font-bold text-slate-400">@{{ worker?.username }}</span>
+             <span class="w-1 h-1 rounded-full bg-slate-300 hidden sm:block"></span>
+             <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+               <i class="pi pi-map-marker text-emerald-500"></i>
+               <span>{{ worker?.branch_name || '—' }}</span>
+             </div>
           </div>
         </div>
+      </div>
 
-        <div class="flex gap-2">
-          <Button icon="pi pi-chevron-left" label="Orqaga" severity="secondary" text class="rounded-xl font-bold" @click="$router.back()" />
-          <Button icon="pi pi-pencil" label="Tahrirlash" severity="success" class="rounded-xl font-bold px-6 shadow-lg shadow-emerald-500/20" @click="handleEdit" />
+      <!-- Quick Stats Integrated (Visible from Medium screens) -->
+      <div class="hidden md:flex items-center gap-6 lg:gap-10 border-slate-100 dark:border-slate-800 md:border-x md:px-6 lg:px-10 h-12">
+        <div class="text-center">
+          <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Oylik Maosh</p>
+          <p class="text-xs lg:text-sm font-black text-emerald-500 tracking-tight">{{ formatCurrency(worker?.salary) }} <span class="text-[10px] text-slate-400 font-medium ml-1">UZS</span></p>
         </div>
+        <div class="text-center">
+          <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Xodim ID</p>
+          <p class="text-xs lg:text-sm font-black text-slate-700 dark:text-slate-300 tracking-widest">#00{{ worker?.id }}</p>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-end border-t sm:border-t-0 pt-4 sm:pt-0 mt-2 sm:mt-0 border-slate-100 dark:border-slate-800">
+        <Button icon="pi pi-arrow-left" 
+                label="Qaytish" 
+                text 
+                class="!text-slate-400 hover:!text-emerald-500 !font-bold !text-[10px] uppercase tracking-widest"
+                @click="$router.back()" />
+        <Button icon="pi pi-pencil" 
+                label="Tahrirlash" 
+                class="!rounded-xl !px-5 !py-2.5 !bg-emerald-500 hover:!bg-emerald-600 !border-none !text-white !font-black !text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5" 
+                @click="handleEdit" />
       </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Left Column: Details -->
-      <div class="lg:col-span-2 space-y-6">
-        
-        <!-- Detailed Information -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-sm border border-slate-200 dark:border-slate-800 space-y-8">
-          <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-              <i class="pi pi-info-circle text-blue-500"></i>
+    <!-- MAIN COMPACT CONTENT GRID -->
+    <div class="space-y-6">
+      
+      <!-- Contact Info Section (Responsive Grid) -->
+      <div class="bg-white dark:bg-slate-900 rounded-[1.5rem] md:rounded-[2rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="flex items-center gap-4 px-2">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 flex-shrink-0">
+              <i class="pi pi-phone text-sm"></i>
             </div>
-            <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Umumiy ma'lumotlar</h2>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
-            <div v-for="item in detailItems" :key="item.label" class="space-y-1">
-              <span class="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">
-                {{ item.label }}
-              </span>
-              <p class="text-slate-700 dark:text-slate-200 font-bold flex items-center gap-2">
-                <i v-if="item.icon" :class="['pi', item.icon, 'text-xs text-slate-400']"></i>
-                {{ item.value || '—' }}
-              </p>
+            <div class="min-w-0">
+              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Telefon</p>
+              <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.phone1 || '—' }}</p>
             </div>
           </div>
-        </div>
 
-        <!-- Permissions Section -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-sm border border-slate-200 dark:border-slate-800">
-          <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                <i class="pi pi-shield text-emerald-500"></i>
-              </div>
-              <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Ruxsatlar va Huquqlar</h2>
+          <div class="flex items-center gap-4 px-2">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500 flex-shrink-0">
+              <i class="pi pi-envelope text-sm"></i>
             </div>
-            <span class="px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">
-              {{ worker?.permissions?.length || 0 }} faol
-            </span>
+            <div class="min-w-0">
+              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Pochta manzili</p>
+              <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.email || '—' }}</p>
+            </div>
           </div>
 
-          <div class="flex flex-wrap gap-3">
-            <div v-for="perm in worker?.permissions" :key="perm" 
-                 class="group relative flex items-center gap-2 px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 hover:bg-emerald-500/5 border border-slate-200/50 dark:border-slate-700/50 hover:border-emerald-500/20 rounded-2xl transition-all duration-300">
-              <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]"></div>
-              <span class="text-sm font-bold text-slate-700 dark:text-slate-300 capitalize">{{ perm }}</span>
+          <div class="flex items-center gap-4 px-2">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 flex-shrink-0">
+              <i class="pi pi-briefcase text-sm"></i>
             </div>
-            
-            <div v-if="!worker?.permissions?.length" class="w-full py-12 text-center text-slate-400">
-              <i class="pi pi-lock text-4xl mb-3 opacity-20 block"></i>
-              <p class="font-bold uppercase tracking-widest text-[10px]">Hech qanday ruxsatlar biriktirilmagan</p>
+            <div class="min-w-0">
+              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Lavozimi</p>
+              <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.role_display || '—' }}</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 px-2">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 flex-shrink-0">
+              <i class="pi pi-calendar text-sm"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Qushilgan sana</p>
+              <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ formatDate(worker?.created_on) }}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Column: Sidebar Stats -->
-      <div class="space-y-6">
-        
-        <!-- Status & Salary Card -->
-        <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white shadow-2xl relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+      <!-- Accordion Grid Containers -->
+      <div class="w-full">
+        <Accordion :value="['0', '1']" multiple class="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
           
-          <div class="relative space-y-6 text-center">
-             <div class="space-y-1">
-               <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Ish Faoliyati</span>
-               <div class="flex justify-center">
-                 <div class="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md inline-flex items-center gap-2">
-                   <span class="w-2 h-2 rounded-full" :class="isActive ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'"></span>
-                   <span class="text-xs font-black uppercase tracking-widest">{{ isActive ? 'Faol Xodim' : 'Nofaol' }}</span>
-                 </div>
-               </div>
-             </div>
+          <!-- Detailed Information Panel -->
+          <AccordionPanel value="0" class="!border-none !bg-transparent">
+            <AccordionHeader class="!bg-white dark:!bg-slate-900 !rounded-[1.5rem] !p-5 !border !border-slate-200 dark:!border-slate-800 shadow-sm transition-all group">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 shadow-inner group-hover:scale-110 transition-transform">
+                  <i class="pi pi-id-card text-lg"></i>
+                </div>
+                <div class="text-left">
+                  <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Xodim Tafsilotlari</h2>
+                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">Batafsil shaxsiy ma'lumotlar</p>
+                </div>
+              </div>
+            </AccordionHeader>
+            <AccordionContent class="!bg-transparent !pt-4">
+              <div class="bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 border border-slate-200 dark:border-slate-800 shadow-inner">
+                <div class="grid grid-cols-2 gap-y-6 gap-x-8">
+                  <div v-for="item in detailItems" :key="item.label" class="group">
+                    <div class="flex items-center gap-1.5 mb-1.5">
+                      <i v-if="item.icon" :class="['pi', item.icon, 'text-[8px] text-indigo-400']"></i>
+                      <span class="text-[9px] font-black uppercase tracking-[0.1em] text-slate-400">{{ item.label }}</span>
+                    </div>
+                    <p class="text-[11px] font-bold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/40 px-3 py-2 rounded-xl border border-transparent shadow-sm truncate">
+                      {{ item.value || '—' }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionPanel>
 
-             <div class="py-4 border-y border-white/5 space-y-1">
-               <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Oylik Maosh</span>
-               <p class="text-3xl font-black text-emerald-400 tracking-tight">{{ formatCurrency(worker?.salary) }}</p>
-               <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">UZS / OY</span>
-             </div>
-
-             <div class="space-y-1">
-               <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Xodim ID</span>
-               <p class="text-xl font-bold font-mono tracking-widest text-slate-300">#00{{ worker?.id }}</p>
-             </div>
-          </div>
-        </div>
-
-        <!-- Extra Permissions / Notes -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
-           <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 block mb-4">Qo'shimcha sozlamalar</span>
-           
-           <div class="space-y-4">
-             <div v-if="hasExtraPerms" v-for="(val, key) in worker?.extra_permissions" :key="key" class="flex justify-between items-center bg-slate-50 dark:bg-slate-800/30 p-3 rounded-2xl">
-                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 capitalize">{{ key }}</span>
-                <span :class="val ? 'text-emerald-500' : 'text-slate-400'">
-                  <i :class="val ? 'pi pi-check-circle' : 'pi pi-times-circle'"></i>
-                </span>
-             </div>
-             <div v-else class="text-center py-6 border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-2xl">
-               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Maxsus ruxsatlar<br>mavjud emas</p>
-             </div>
-           </div>
-        </div>
-
-        <!-- System Logs / Metadata -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-3">
-           <div class="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
-             <i class="pi pi-history text-slate-400"></i>
-           </div>
-           <div>
-             <p class="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Oxirgi yangilanish</p>
-             <p class="text-[11px] font-medium text-slate-500">{{ formatDate(worker?.created_on) }}</p>
-           </div>
-        </div>
+          <!-- Permissions Panel -->
+          <AccordionPanel value="1" class="!border-none !bg-transparent">
+            <AccordionHeader class="!bg-white dark:!bg-slate-900 !rounded-[1.5rem] !p-5 !border !border-slate-200 dark:!border-slate-800 shadow-sm transition-all group">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shadow-inner group-hover:scale-110 transition-transform">
+                  <i class="pi pi-shield text-lg"></i>
+                </div>
+                <div class="text-left">
+                  <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Tizim Kirish Huquqlari</h2>
+                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">Foydalanuvchiga biriktirilgan ruxsatlar</p>
+                </div>
+              </div>
+            </AccordionHeader>
+            <AccordionContent class="!bg-transparent !pt-4">
+              <div class="bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 border border-slate-200 dark:border-slate-800 shadow-inner">
+                <div class="flex flex-wrap gap-2">
+                  <div v-for="perm in worker?.permissions" :key="perm" 
+                       class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800/50 hover:bg-emerald-500/5 border border-slate-200/50 dark:border-slate-700/50 rounded-xl transition-all duration-300 group">
+                    <div class="w-5 h-5 rounded-lg bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-emerald-500">
+                      <i class="pi pi-check text-[8px]"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-700 dark:text-slate-300 capitalize tracking-wide">{{ perm }}</span>
+                  </div>
+                  
+                  <div v-if="!worker?.permissions?.length" class="w-full py-8 text-center">
+                    <i class="pi pi-lock text-xl text-slate-300 dark:text-slate-600 block mb-1"></i>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">Ruxsatlar mavjud emas</p>
+                  </div>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionPanel>
+        </Accordion>
       </div>
     </div>
   </div>
@@ -171,6 +190,10 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { workersAPI } from '@/services/api'
 import Button from 'primevue/button'
+import Accordion from 'primevue/accordion';
+import AccordionPanel from 'primevue/accordionpanel';
+import AccordionHeader from 'primevue/accordionheader';
+import AccordionContent from 'primevue/accordioncontent';
 
 const route = useRoute()
 const router = useRouter()
@@ -253,3 +276,25 @@ const handleEdit = () => {
     router.push({ name: 'workers', query: { edit: route.params.id } })
 }
 </script>
+
+<style scoped>
+:deep(.p-accordionpanel) {
+  background: transparent !important;
+  border: none !important;
+}
+
+:deep(.p-accordionheader) {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Accordion ichidagi default oq backgroundni olib tashlaymiz */
+:deep(.p-accordioncontent-content) {
+  background: transparent !important;
+  border: none !important;
+}
+
+:deep(.p-accordionheader-toggle-icon) {
+  color: #94a3b8; /* slate-400 */
+}
+</style>

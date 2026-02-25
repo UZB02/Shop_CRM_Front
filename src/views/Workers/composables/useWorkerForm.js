@@ -7,10 +7,9 @@ export const WORKER_ROLES = [
 ]
 
 export const WORKER_STATUSES = [
-    'Faol',
-    "Ta'tilda",
-    'Kasallik',
-    "Ishdan bo'shagan",
+    { label: 'Faol', value: 'active' },
+    { label: "Ta'tilda", value: 'tatil' },
+    { label: "Ishdan bo'shagan", value: 'ishdan_ketgan' },
 ]
 
 // Backend'dagi permission qiymatlari bilan to'liq mos
