@@ -13,9 +13,9 @@
                :style="getAvatarGradient(worker?.full_name)">
             {{ getInitials(worker) }}
           </div>
-          <div class="absolute -bottom-1 -right-1 w-6 h-6 md:w-7 md:h-7 rounded-lg border-2 border-white dark:border-slate-900 shadow-lg flex items-center justify-center transition-colors duration-300"
-               :class="isActive ? 'bg-emerald-500' : 'bg-rose-500'">
-            <i :class="['pi', isActive ? 'pi-check' : 'pi-times', 'text-white text-[8px] md:text-[10px] font-black']"></i>
+          <div class="absolute -bottom-1 -right-1 w-6 h-6 md:w-7 md:h-7 rounded-lg border-2 border-white dark:border-slate-900 shadow-lg flex items-center justify-center transition-all duration-300"
+               :class="statusStyles.bg">
+            <i :class="['pi', statusStyles.icon, 'text-white text-[8px] md:text-[10px] font-black']"></i>
           </div>
         </div>
 
@@ -222,12 +222,20 @@ const detailItems = computed(() => [
   { label: t('workers.username'), value: worker.value?.username, icon: 'pi-at' },
   { label: t('workers.email'), value: worker.value?.email, icon: 'pi-envelope' },
   { label: t('workers.phone'), value: worker.value?.phone1, icon: 'pi-phone' },
-  { label: t('common.status'), value: worker.value?.status === 'active' ? t('common.active') : t('common.inactive'), icon: 'pi-info-circle' },
+  { label: t('common.status'), value: worker.value?.status ? t(`workers.statuses.${worker.value.status}`) : '—', icon: 'pi-info-circle' },
   { label: t('workers.role'), value: worker.value?.role_display, icon: 'pi-briefcase' },
   { label: t('workers.branch'), value: worker.value?.branch_name, icon: 'pi-map-marker' },
 ])
 
-const isActive = computed(() => worker.value?.status === 'active' || worker.value?.is_active)
+const statusStyles = computed(() => {
+  const s = worker.value?.status
+  if (s === 'active') return { bg: 'bg-emerald-500', icon: 'pi-check' }
+  if (s === 'tatil') return { bg: 'bg-amber-500', icon: 'pi-clock' }
+  if (s === 'ishdan_ketgan') return { bg: 'bg-rose-500', icon: 'pi-times' }
+  return { bg: 'bg-slate-400', icon: 'pi-question' }
+})
+
+const isActive = computed(() => worker.value?.status === 'active')
 const hasExtraPerms = computed(() => worker.value?.extra_permissions && Object.keys(worker.value.extra_permissions).length > 0)
 
 const formatCurrency = (val) => {

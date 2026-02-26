@@ -8,12 +8,67 @@
       <Button :label="$t('workers.new_worker')" icon="pi pi-user-plus" severity="success" class="shadow-sm w-full sm:w-auto" @click="openNew" />
     </div>
 
+    <!-- Filters Section -->
+    <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Search -->
+        <div class="relative w-full">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+            <i class="pi pi-search"></i>
+          </span>
+          <InputText 
+            v-model="filters.search" 
+            :placeholder="$t('common.search') + '...'" 
+            class="w-full !pl-11 !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 focus:!ring-2 focus:!ring-emerald-500/20 transition-all text-sm"
+          />
+        </div>
+
+        <!-- Role Filter -->
+        <Dropdown 
+          v-model="filters.role" 
+          :options="roleOptions" 
+          optionLabel="label" 
+          optionValue="value" 
+          showClear 
+          :placeholder="$t('workers.role')" 
+          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm"
+        />
+
+        <!-- Status Filter -->
+        <Dropdown 
+          v-model="filters.status" 
+          :options="statusOptions" 
+          optionLabel="label" 
+          optionValue="value" 
+          showClear 
+          :placeholder="$t('common.status')" 
+          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm"
+        />
+
+        <!-- Branch Filter -->
+        <Dropdown 
+          v-model="filters.branch" 
+          :options="stores" 
+          optionLabel="name" 
+          optionValue="id" 
+          showClear 
+          :placeholder="$t('workers.branch')" 
+          :loading="storesLoading"
+          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm"
+        />
+      </div>
+    </div>
+
     <!-- Workers Table Component -->
     <WorkerTable 
       :workers="workers" 
       :loading="loading" 
+      :total-records="totalRecords"
+      v-model:page="page"
+      v-model:page-size="pageSize"
       @edit="editWorker" 
       @delete="confirmDeleteWorker" 
+      @page-change="loadWorkers"
     />
 
     <!-- Worker Dialog Component -->
@@ -34,7 +89,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, toRaw } from 'vue'
+import { ref, computed, watch, onMounted, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { workersAPI, storesAPI, branchesAPI } from '@/services/api'
@@ -45,6 +100,9 @@ import ConfirmDialog from 'primevue/confirmdialog'
 
 import WorkerTable from './components/WorkerTable.vue'
 import WorkerDialog from './components/WorkerDialog.vue'
+import InputText from 'primevue/inputtext'
+import Dropdown from 'primevue/dropdown'
+import { WORKER_ROLES, WORKER_STATUSES } from './composables/useWorkerForm'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -52,13 +110,37 @@ const toast = useToast()
 const confirm = useConfirm()
 
 const workers = ref([])
+const totalRecords = ref(0)
+const page = ref(1)
+const pageSize = ref(10)
 const stores = ref([])
 const loading = ref(false)
 const storesLoading = ref(false)
 const saving = ref(false)
 const workerDialog = ref(false)
 const submitted = ref(false)
-const createLogin = ref(false)
+const createLogin = ref(true)
+
+const filters = ref({
+    search: '',
+    status: null,
+    role: null,
+    branch: null
+})
+
+const roleOptions = computed(() => [
+    ...WORKER_ROLES.map(r => ({
+        ...r,
+        label: t(`workers.roles.${r.value}`)
+    }))
+])
+
+const statusOptions = computed(() => [
+    ...WORKER_STATUSES.map(s => ({
+        ...s,
+        label: t(`workers.statuses.${s.value}`)
+    }))
+])
 
 const worker = ref({
     first_name: '',
@@ -75,15 +157,30 @@ const worker = ref({
 const loadWorkers = async () => {
     loading.value = true
     try {
-        const response = await workersAPI.getAll()
+        const params = {
+            page: page.value,
+            page_size: pageSize.value
+        }
+
+        // Add filters if they have values
+        if (filters.value.search) params.search = filters.value.search
+        if (filters.value.status) params.status = filters.value.status
+        if (filters.value.role) params.role = filters.value.role
+        if (filters.value.branch) params.branch = filters.value.branch
+
+        const response = await workersAPI.getAll(params)
         const data = response.data
         console.log("API dan kelayotgan workers ma'lumotlari:", data)
+        
         if (data && data.results && Array.isArray(data.results)) {
             workers.value = data.results
+            totalRecords.value = data.count || data.results.length
         } else if (Array.isArray(data)) {
             workers.value = data
+            totalRecords.value = data.length
         } else {
             workers.value = []
+            totalRecords.value = 0
         }
     } catch (error) {
         console.error('❌ Error loading workers:', error)
@@ -92,6 +189,16 @@ const loadWorkers = async () => {
         loading.value = false
     }
 }
+
+// Manual Debounce Implementation
+let debounceTimer = null
+watch(() => filters.value, () => {
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => {
+        page.value = 1
+        loadWorkers()
+    }, 500)
+}, { deep: true })
 
 const loadStores = async () => {
     storesLoading.value = true
@@ -125,7 +232,7 @@ const openNew = () => {
         password: '',
         permissions: [] 
     }
-    createLogin.value = false
+    createLogin.value = true
     submitted.value = false
     workerDialog.value = true
 }
@@ -202,7 +309,11 @@ const saveWorker = async () => {
             payload.permissions = [...toRaw(worker.value.permissions || [])]
         }
 
-        console.log("API ga yuborilayotgan worker payload:", payload)
+        console.group("🚀 Xodim ma'lumotlarini yuborish");
+        console.log("Status:", worker.value.id ? "Tahrirlash (Edit)" : "Yangi qo'shish (Create)");
+        console.log("Raw Worker Data:", toRaw(worker.value));
+        console.log("Final API Payload:", payload);
+        console.groupEnd();
 
         if (worker.value.id) {
             await workersAPI.update(worker.value.id, payload)

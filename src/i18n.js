@@ -9,7 +9,8 @@ const i18n = createI18n({
     messages: {
         uz,
         uz_cy
-    }
+    },
+    returnObjects: true
 })
 
 export default i18n

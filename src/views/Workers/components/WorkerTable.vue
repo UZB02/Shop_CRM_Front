@@ -11,7 +11,7 @@
           </div>
           <div>
             <h3 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">{{ $t('workers.list_title') }}</h3>
-            <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{{ $t('workers.worker_count', { count: workers?.length || 0 }) }}</p>
+            <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{{ $t('workers.worker_count', { count: totalRecords || 0 }) }}</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -57,7 +57,7 @@
             </template>
 
             <!-- EMPTY STATE -->
-            <tr v-else-if="!paginatedWorkers.length">
+            <tr v-else-if="!workers.length">
               <td colspan="6" class="px-6 py-16 text-center bg-white dark:bg-slate-900">
                 <div class="flex flex-col items-center justify-center space-y-4">
                   <div class="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shadow-inner">
@@ -72,7 +72,7 @@
             </tr>
 
             <!-- DATA ROWS -->
-            <tr v-else v-for="data in paginatedWorkers" :key="data.id" 
+            <tr v-else v-for="data in workers" :key="data.id" 
                 class="group bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200">
               <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
@@ -168,7 +168,7 @@
       </div>
 
       <!-- PAGINATION PART -->
-      <div v-if="totalPages > 1" 
+      <div v-if="totalRecords > 0" 
            class="px-6 py-4 bg-slate-50/50 dark:bg-slate-950/20 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <div class="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">
           {{ $t('workers.page_info', { current: currentPage, total: totalPages }) }}
@@ -224,41 +224,35 @@ const router = useRouter()
 
 const props = defineProps({
   workers: Array,
-  loading: Boolean
+  loading: Boolean,
+  totalRecords: Number,
+  page: Number,
+  pageSize: Number
 })
 
-const emit = defineEmits(['edit', 'delete'])
+const emit = defineEmits(['edit', 'delete', 'update:page', 'update:pageSize', 'page-change'])
 
-// PAGINATION LOGIC
-const currentPage = ref(1)
-const rowsPerPage = ref(10)
+const currentPage = computed({
+  get: () => props.page,
+  set: (val) => {
+    emit('update:page', val)
+    emit('page-change')
+  }
+})
 
 const totalPages = computed(() => {
-  if (!props.workers?.length) return 0
-  return Math.ceil(props.workers.length / rowsPerPage.value)
-})
-
-const paginatedWorkers = computed(() => {
-  if (!props.workers?.length) return []
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-  return props.workers.slice(start, end)
+  return Math.ceil((props.totalRecords || 0) / (props.pageSize || 10))
 })
 
 const displayedPages = computed(() => {
   const total = totalPages.value
-  if (total <= 5) return Array.from({length: total}, (_, i) => i + 1)
+  if (total <= 5) return Array.from({length: Math.max(0, total)}, (_, i) => i + 1)
   
   if (currentPage.value <= 3) return [1, 2, 3, 4, 5]
   if (currentPage.value >= total - 2) return [total - 4, total - 3, total - 2, total - 1, total]
   
   return [currentPage.value - 2, currentPage.value - 1, currentPage.value, currentPage.value + 1, currentPage.value + 2]
 })
-
-// Reset to first page when data changes
-watch(() => props.workers, () => {
-  currentPage.value = 1
-}, { deep: true })
 
 // UTILS
 const gradients = [

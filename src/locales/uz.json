@@ -70,8 +70,8 @@
         },
         "statuses": {
             "active": "Faol",
-            "tatil": "Ta'tilda",
-            "ishdan_ketgan": "Ishdan bo'shatilgan"
+            "tatil": "Tatilda",
+            "ishdan_ketgan": "Ishdan ketgan"
         },
         "actions": {
             "edit": "Xodimni Tahrirlash",
@@ -160,5 +160,83 @@
         "reports": "Xarajatlar",
         "customers": "Mijozlar",
         "settings": "Sozlamalar"
+    },
+    "landing": {
+        "nav": {
+            "features": "Xususiyatlar",
+            "pricing": "Tariflar",
+            "about": "Biz haqimizda",
+            "login": "Kirish"
+        },
+        "hero": {
+            "title_part1": "Savdo Biznesingizni",
+            "title_highlight": "Professional Darajada",
+            "title_part2": "Avtomatlashtiring",
+            "description": "Kompyuter, oziq-ovqat, texnika do'konlari va boshqa barcha turdagi savdo markazlari uchun yagona boshqaruv tizimi.",
+            "start_free": "Bepul Boshlash",
+            "pricing": "Tariflar"
+        },
+        "features": {
+            "title": "Nega aynan Shop Searem?",
+            "subtitle": "Biznesingiz samaradorligini oshirish uchun kerakli barcha vositalar",
+            "items": {
+                "warehouse": {
+                    "title": "Ombor Boshqaruvi",
+                    "desc": "Mahsulotlar qoldig'ini real vaqtda kuzating. Avtomatik inventarizatsiya va ogohlantirishlar tizimi."
+                },
+                "analytics": {
+                    "title": "Savdo Taxlili",
+                    "desc": "Murakkab grafiklar va chuqur tahlillar. Daromad va xarajatlarni hisoblash endi oson."
+                },
+                "branches": {
+                    "title": "Filiallar",
+                    "desc": "Dunyoning istalgan nuqtasidan barcha filiallar savdosini real vaqt rejimida boshqaring."
+                }
+            }
+        },
+        "pricing": {
+            "title": "Qulay Tariflar",
+            "subtitle": "Biznesingiz hajmiga mos keladigan tarifni tanlang",
+            "popular": "Mashhur",
+            "unit_month": "oy",
+            "unit_year": "yil",
+            "buy": "Sotib olish",
+            "plans": {
+                "startup": {
+                    "name": "Startap",
+                    "desc": "Kichik va yangi boshlangan bizneslar uchun ideal tanlov.",
+                    "features": [
+                        "1 ta filial",
+                        "3 ta foydalanuvchi",
+                        "Asosiy hisobotlar",
+                        "Telegram bot integratsiyasi"
+                    ]
+                },
+                "business": {
+                    "name": "Biznes",
+                    "desc": "O'sishda davom etayotgan o'rta va yirik tadbirkorlar uchun.",
+                    "features": [
+                        "Cheksiz filiallar",
+                        "10 tagacha foydalanuvchi",
+                        "Kengaytirilgan tahlillar",
+                        "24/7 Priority support",
+                        "API kirish"
+                    ]
+                },
+                "annual": {
+                    "name": "Yillik",
+                    "desc": "Katta tejash va uzoq muddatli barqarorlikni xohlovchilar uchun.",
+                    "features": [
+                        "Cheksiz filiallar",
+                        "Cheksiz foydalanuvchilar",
+                        "Barcha VIP funksiyalar",
+                        "2 oy mutlaqo bepul"
+                    ]
+                }
+            }
+        },
+        "footer": {
+            "rights": "Barcha huquqlar himoyalangan."
+        }
     }
 }
