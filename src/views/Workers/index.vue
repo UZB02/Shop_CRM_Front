@@ -13,13 +13,13 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Search -->
         <div class="relative w-full">
-          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-300">
             <i class="pi pi-search"></i>
           </span>
           <InputText 
             v-model="filters.search" 
             :placeholder="$t('common.search') + '...'" 
-            class="w-full !pl-11 !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 focus:!ring-2 focus:!ring-emerald-500/20 transition-all text-sm"
+            class="w-full !pl-11 !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 focus:!ring-2 focus:!ring-emerald-500/20 transition-all text-sm !text-slate-700 dark:!text-white"
           />
         </div>
 
@@ -31,7 +31,7 @@
           optionValue="value" 
           showClear 
           :placeholder="$t('workers.role')" 
-          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm"
+          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm !text-slate-700 dark:!text-white"
         />
 
         <!-- Status Filter -->
@@ -42,7 +42,7 @@
           optionValue="value" 
           showClear 
           :placeholder="$t('common.status')" 
-          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm"
+          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm !text-slate-700 dark:!text-white"
         />
 
         <!-- Branch Filter -->
@@ -54,7 +54,7 @@
           showClear 
           :placeholder="$t('workers.branch')" 
           :loading="storesLoading"
-          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm"
+          class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm !text-slate-700 dark:!text-white"
         />
       </div>
     </div>
@@ -205,12 +205,17 @@ const loadStores = async () => {
     try {
         let response
         try {
+            console.log("🔍 Fetching from storesAPI.getAll()...")
             response = await storesAPI.getAll()
-        } catch {
+            console.log("✅ storesAPI response data:", response.data)
+        } catch (e) {
+            console.warn("⚠️ storesAPI failed, trying branchesAPI.getAll()... Error:", e)
             response = await branchesAPI.getAll()
+            console.log("✅ branchesAPI response data:", response.data)
         }
         const data = response.data
         stores.value = data?.results ?? (Array.isArray(data) ? data : [])
+        console.log("📦 Processed stores list for dropdown:", stores.value)
     } catch (error) {
         console.warn('Filiallarni yuklashda xatolik:', error)
         stores.value = []
@@ -265,9 +270,9 @@ const editWorker = async (data) => {
         first_name: firstName,
         last_name: lastName,
         email: fullData.email || '',
-        phone1: fullData.phone1 || fullData.phone || '',
+        phone1: (fullData.phone1 || fullData.phone || '').replace(/\D/g, '').slice(-9),
         role: fullData.role || 'seller',
-        branch: fullData.branch?.id || fullData.branch?._id || fullData.branch || null,
+        branch: fullData.branch?.id || fullData.branch?._id || (typeof fullData.branch === 'object' ? null : fullData.branch) || null,
         status: fullData.status || 'active',
         salary: parseFloat(fullData.salary) || 0,
         username: fullData.username || '',
@@ -295,9 +300,11 @@ const saveWorker = async () => {
 
         if (worker.value.email) payload.email = worker.value.email
         if (worker.value.phone1) {
-            payload.phone1 = worker.value.phone1.startsWith('+') 
-                ? worker.value.phone1 
-                : '+' + worker.value.phone1
+            let digits = String(worker.value.phone1).replace(/\D/g, '')
+            // Faqat oxirgi 9 ta raqamni olamiz (operator kodi + raqam)
+            // Chunki muloqot oynasida +998 har doim bor
+            const cleanNumber = digits.length >= 9 ? digits.slice(-9) : digits
+            payload.phone1 = '+998' + cleanNumber
         }
         if (worker.value.branch) payload.branch = worker.value.branch
         if (worker.value.salary) payload.salary = worker.value.salary
@@ -336,7 +343,30 @@ const saveWorker = async () => {
         loadWorkers()
     } catch (error) {
         console.error('❌ Error saving worker:', error)
-        toast.add({ severity: 'error', summary: t('common.error'), detail: t('workers.messages.save_error'), life: 3000 })
+        
+        let errorDetail = t('workers.messages.save_error')
+        
+        // Backenddan kelgan aniq xatolik xabarini chiqarish
+        if (error.response?.data) {
+            const data = error.response.data
+            if (typeof data === 'string') {
+                errorDetail = data
+            } else {
+                // Birinchi xatolik mazmunini ajratib olish
+                const firstKey = Object.keys(data)[0]
+                if (firstKey) {
+                    const message = data[firstKey]
+                    errorDetail = Array.isArray(message) ? message[0] : message
+                }
+            }
+        }
+
+        toast.add({ 
+            severity: 'error', 
+            summary: t('common.error'), 
+            detail: errorDetail, 
+            life: 5000 
+        })
     } finally {
         saving.value = false
     }
@@ -391,3 +421,62 @@ onMounted(async () => {
     }
 })
 </script>
+
+<style scoped>
+/* LIGHT MODE */
+:deep(.p-inputtext::placeholder),
+:deep(.p-dropdown-label.p-placeholder) {
+  color: #64748b !important;
+}
+
+:deep(.p-inputtext),
+:deep(.p-dropdown-label) {
+  color: #1e293b !important;
+  font-weight: 500;
+}
+
+/* DARK MODE - DEEP WHITE ENFORCEMENT */
+.dark :deep(.p-inputtext),
+.dark :deep(.p-inputtext::placeholder),
+.dark :deep(.p-dropdown-label),
+.dark :deep(.p-dropdown-label.p-placeholder),
+.dark :deep(.p-dropdown-clear-icon),
+.dark :deep(.p-dropdown-trigger),
+.dark :deep(.p-dropdown-trigger-icon) {
+  color: #ffffff !important; /* PURE WHITE */
+  opacity: 1 !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Lighten the filter boxes for better contrast */
+.dark .p-inputtext,
+.dark .p-dropdown {
+  background: #334155 !important; /* solid slate-700 */
+  border-color: #475569 !important; /* slate-600 */
+}
+
+/* Ensure selected label is white */
+.dark :deep(.p-dropdown .p-dropdown-label:not(.p-placeholder)) {
+  color: #ffffff !important;
+}
+
+/* Panel/Overlay Styling */
+.dark :deep(.p-dropdown-panel) {
+  background: #1e293b !important; /* slate-800 */
+  border: 1px solid #475569 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark :deep(.p-dropdown-item) {
+  color: #f8fafc !important; /* slate-50 */
+}
+
+.dark :deep(.p-dropdown-item.p-highlight) {
+  background: #10b981 !important; /* emerald-500 */
+  color: #ffffff !important;
+}
+
+.dark :deep(.p-dropdown-item:not(.p-highlight):not(.p-disabled):hover) {
+  background: #334155 !important;
+}
+</style>

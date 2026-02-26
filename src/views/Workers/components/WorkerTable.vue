@@ -86,7 +86,8 @@
                          :style="getAvatarGradient(data.full_name || data.first_name)">
                       {{ getInitials(data) }}
                     </div>
-                    <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full shadow-sm"></span>
+                    <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 border-2 border-white dark:border-slate-900 rounded-full shadow-sm transition-colors duration-300"
+                          :class="getStatusDotClass(data)"></span>
                   </div>
                   <div class="min-w-0">
                     <p class="font-black text-sm text-slate-900 dark:text-white leading-none truncate">

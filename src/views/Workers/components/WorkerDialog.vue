@@ -16,8 +16,8 @@
       <DialogHeader :isEdit="!!worker.id" @close="$emit('update:visible', false)" />
 
       <!-- Body -->
-      <div class="flex-1 p-4 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 overflow-y-auto custom-scrollbar">
-
+      <div class="flex-1 p-4 md:px-8 md:py-6 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 overflow-y-auto custom-scrollbar">
+        
         <!-- Left: Personal + Work (7 cols on md+, full on mobile) -->
         <div class="col-span-1 md:col-span-7 space-y-6 md:space-y-8">
           <PersonalInfoSection :worker="worker" :submitted="submitted" />
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Right: System Access (5 cols on md+, full on mobile) -->
-        <div class="col-span-1 md:col-span-5 flex flex-col md:pt-9">
+        <div class="col-span-1 md:col-span-5 flex flex-col">
           <SystemAccessPanel
             :worker="worker"
             v-model:createLogin="createLoginLocal"
@@ -35,15 +35,15 @@
       </div>
 
       <!-- Footer -->
-      <div class="px-8 py-5 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
+      <div class="px-6 md:px-8 py-4 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-end gap-3">
         <Button :label="$t('common.cancel')"
                 text
-                class="!px-6 !text-slate-500 hover:!bg-slate-200/50"
+                class="w-full sm:w-auto !px-6 !text-slate-500 hover:!bg-slate-200/50"
                 @click="$emit('update:visible', false)" />
         <Button :label="$t('common.save_worker')"
                 icon="pi pi-check"
                 :loading="saving"
-                class="!rounded-xl !px-8 !bg-emerald-600 !border-emerald-600 shadow-lg shadow-emerald-600/20 hover:!bg-emerald-700 hover:!border-emerald-700 transition-all font-black text-sm"
+                class="w-full sm:w-auto !rounded-xl !px-8 !bg-emerald-600 !border-emerald-600 shadow-lg shadow-emerald-600/20 hover:!bg-emerald-700 hover:!border-emerald-700 transition-all font-black text-sm"
                 @click="$emit('save')" />
       </div>
     </div>

@@ -1,7 +1,7 @@
 <template>
-  <div class="flex-1 rounded-3xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 p-6 flex flex-col">
+  <div class="rounded-3xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 p-5 flex flex-col min-h-0">
     <!-- Toggle Header -->
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400">
           <i class="pi pi-key text-sm"></i>
@@ -17,12 +17,12 @@
 
     <!-- Login form (visible when enabled) -->
     <Transition name="fade-slide">
-      <div v-if="createLogin" class="flex-1 flex flex-col">
-        <div class="space-y-5">
+      <div v-if="createLogin" class="flex-1 flex flex-col min-h-0">
+        <div class="space-y-4">
           <FormField :label="$t('workers.form.username')">
             <div class="p-input-icon-left w-full">
               <InputText v-model="worker.username"
-                         class="w-full !bg-white dark:!bg-slate-900 !border-slate-100 dark:!border-slate-800 !h-10 !rounded-xl"
+                         class="w-full !bg-white !border-slate-200 !h-10 !rounded-xl"
                          placeholder="username" />
             </div>
           </FormField>
@@ -32,7 +32,7 @@
               <Password v-model="worker.password"
                         toggleMask
                         :feedback="false"
-                        inputClass="w-full !bg-white dark:!bg-slate-900 !border-slate-100 dark:!border-slate-800 !h-10 !rounded-xl !pl-10"
+                        inputClass="w-full !bg-white !border-slate-200 !h-10 !rounded-xl !pl-10"
                         class="w-full"
                         placeholder="••••••••" />
             </div>

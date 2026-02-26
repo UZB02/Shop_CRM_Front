@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-6 flex flex-col min-h-0">
+  <div class="mt-4 flex flex-col min-h-0 overflow-hidden">
     <!-- Header: sarlavha + count + select-all -->
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-2">
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Permissions list -->
-    <div class="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar-thin pr-1">
+    <div class="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar-thin pr-1 max-h-[300px]">
       <PermissionItem
         v-for="perm in permissionsList"
         :key="perm.value"
