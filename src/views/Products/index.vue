@@ -56,7 +56,7 @@
       @delete="confirmDeleteCategory"
     />
 
-    <ConfirmDialog />
+
   </div>
 </template>
 

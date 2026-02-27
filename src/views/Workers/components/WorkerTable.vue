@@ -28,7 +28,15 @@
           <thead>
             <tr class="bg-slate-50/50 dark:bg-slate-900/50">
               <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_worker') }}</th>
-              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_salary') }}</th>
+              <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-2">
+                  {{ $t('workers.table_col_salary') }}
+                  <button @click="showSalaries = !showSalaries" 
+                          class="w-5 h-5 flex items-center justify-center rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                    <i :class="['pi', showSalaries ? 'pi-eye-slash' : 'pi-eye', 'text-[10px]']"></i>
+                  </button>
+                </div>
+              </th>
               <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_branch') }}</th>
               <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_phone') }}</th>
               <th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_status') }}</th>
@@ -103,7 +111,8 @@
 
               <td class="px-6 py-4">
                 <div class="flex flex-col">
-                  <span class="font-black text-emerald-600 dark:text-emerald-400 text-sm leading-none">
+                  <span class="font-black text-emerald-600 dark:text-emerald-400 text-sm leading-none transition-all duration-300"
+                        :class="{ 'blur-[4px] select-none': !showSalaries }">
                     {{ formatFullCurrency(data.salary) }}
                   </span>
                   <span class="text-[10px] text-slate-500 dark:text-slate-500 font-medium mt-0.5 uppercase tracking-tighter">{{ $t('workers.salary_unit') }}</span>
@@ -122,14 +131,15 @@
               </td>
 
               <td class="px-6 py-4">
-                <div class="flex items-center gap-2 group/phone">
+                <a :href="'tel:' + getPhone(data)" 
+                   class="flex items-center gap-2 group/phone hover:opacity-80 transition-opacity cursor-pointer">
                   <div class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center flex-shrink-0 border border-slate-200/50 dark:border-slate-700/50 transition-colors group-hover/phone:bg-blue-500/10 group-hover/phone:border-blue-500/20">
                     <i class="pi pi-phone text-[10px] text-slate-500 dark:text-slate-400 group-hover/phone:text-blue-500"></i>
                   </div>
                   <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 tracking-wide group-hover/phone:text-slate-700 dark:group-hover/phone:text-slate-200 transition-colors">
                     {{ getPhone(data) || '—' }}
                   </span>
-                </div>
+                </a>
               </td>
 
               <td class="px-6 py-4">
@@ -222,6 +232,8 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const router = useRouter()
+
+const showSalaries = ref(false)
 
 const props = defineProps({
   workers: Array,

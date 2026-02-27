@@ -24,6 +24,8 @@
           <InputText v-model="worker.phone1"
                      class="w-full field-input !pl-14 !h-10"
                      :class="{ '!border-rose-500': submitted && !worker.phone1 }"
+                     maxlength="9"
+                     @input="worker.phone1 = worker.phone1.replace(/\D/g, '')"
                      placeholder="901234567" />
         </div>
       </FormField>

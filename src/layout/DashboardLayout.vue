@@ -133,6 +133,9 @@
       <UserProfileDialog v-model:visible="showProfileDialog" :user="user" @logout="handleLogout" />
     </aside>
 
+    <!-- Global Confirmation Dialog -->
+    <ConfirmDialog />
+
     <!-- ===== MAIN AREA ===== -->
     <!--
       Mobile: ml-0 (sidebar overlays)
@@ -244,7 +247,9 @@ import { useI18n } from 'vue-i18n'
 import Avatar   from 'primevue/avatar'
 import Button   from 'primevue/button'
 import Toast    from 'primevue/toast'
+import ConfirmDialog from 'primevue/confirmdialog'
 import { useToast }    from 'primevue/usetoast'
+import { useConfirm }  from 'primevue/useconfirm'
 import { useAuthStore } from '@/store/auth'
 import UserProfileDialog from '@/components/UserProfileDialog.vue'
 
@@ -252,6 +257,7 @@ const router    = useRouter()
 const route     = useRoute()
 const authStore = useAuthStore()
 const toast     = useToast()
+const confirm   = useConfirm()
 const { t, locale } = useI18n()
 
 /* --- UI state --- */
@@ -327,9 +333,29 @@ const currentPageTitle = computed(() => {
   return item?.label ?? t('menu.dashboard')
 })
 
+const isConfirmingLogout = ref(false)
 const handleLogout = () => {
-  authStore.logout()
-  router.push('/')
+  if (isConfirmingLogout.value) return
+  isConfirmingLogout.value = true
+  
+  showProfileDialog.value = false
+  
+  confirm.require({
+    message: t('common.logout_confirm') || 'Tizimdan chiqishni tasdiqlaysizmi?',
+    header: t('common.logout_title') || 'Chiqish',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: t('common.logout_yes') || 'Ha, chiqish',
+    rejectLabel: t('common.cancel') || 'Bekor qilish',
+    acceptClass: 'p-button-danger',
+    accept: () => {
+      isConfirmingLogout.value = false
+      authStore.logout()
+      router.push('/')
+    },
+    reject: () => {
+      isConfirmingLogout.value = false
+    }
+  })
 }
 </script>
 

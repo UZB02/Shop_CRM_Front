@@ -84,7 +84,7 @@
       @hide="hideDialog"
     />
 
-    <ConfirmDialog />
+
   </div>
 </template>
 
@@ -158,8 +158,7 @@ const loadWorkers = async () => {
     loading.value = true
     try {
         const params = {
-            page: page.value,
-            page_size: pageSize.value
+            page: page.value
         }
 
         // Add filters if they have values
@@ -288,6 +287,17 @@ const editWorker = async (data) => {
 const saveWorker = async () => {
     submitted.value = true
     if (!worker.value.first_name?.trim() || !worker.value.last_name?.trim()) return
+
+    // Username length validation
+    if (createLogin.value && worker.value.username?.trim().length < 5) {
+        toast.add({ 
+            severity: 'error', 
+            summary: t('common.error'), 
+            detail: t('workers.messages.username_min_length'), 
+            life: 3000 
+        })
+        return
+    }
 
     saving.value = true
     try {

@@ -45,7 +45,7 @@
       @hide="hideBranchDialog"
     />
 
-    <ConfirmDialog />
+
   </div>
 </template>
 

@@ -21,6 +21,9 @@
         "deleted": "O'chirildi ✅",
         "error": "Xatolik ❌",
         "yes_delete": "Ha, o'chir",
+        "logout_confirm": "Tizimdan chiqishni tasdiqlaysizmi?",
+        "logout_title": "Chiqish",
+        "logout_yes": "Ha, chiqish",
         "subscription_warning": "Obuna muddati tugagan. 3 kun ichida to'lov qiling.",
         "subscription_warning_title": "Obuna Ogohlantirishi"
     },
@@ -146,7 +149,8 @@
             "delete_header": "O'chirishni tasdiqlash",
             "load_error": "Xodimlarni yuklashda xatolik",
             "save_error": "Saqlashda xatolik yuz berdi",
-            "delete_error": "Xodimni o'chirishda xatolik yuz berdi"
+            "delete_error": "Xodimni o'chirishda xatolik yuz berdi",
+            "username_min_length": "Foydalanuvchi nomi kamida 5 ta belgi bo'lishi kerak"
         }
     },
     "menu": {

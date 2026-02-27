@@ -75,7 +75,7 @@
         @hide="hideDialog"
     />
 
-    <ConfirmDialog />
+
   </div>
 </template>
 

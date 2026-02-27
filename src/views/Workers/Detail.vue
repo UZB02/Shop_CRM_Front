@@ -1,205 +1,69 @@
 <template>
   <div class="max-w-[1600px] mx-auto pb-8 px-4 sm:px-6 lg:px-8 space-y-6 transition-all duration-300">
     
-    <!-- HEADER: Compact Horizontal Identity Bar -->
-    <div class="bg-white dark:bg-slate-900 rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group">
-      <!-- Decorative element -->
-      <div class="absolute inset-y-0 left-0 w-1.5 bg-emerald-500 hidden sm:block"></div>
+    <!-- HEADER -->
+    <DetailHeader :worker="worker" @edit="handleEdit" />
 
-      <div class="flex flex-col sm:flex-row items-center gap-4 md:gap-6 text-center sm:text-left">
-        <!-- Avatar -->
-        <div class="relative flex-shrink-0">
-          <div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center text-2xl md:text-3xl text-white font-black shadow-lg ring-4 ring-slate-50 dark:ring-slate-800 transition-transform duration-500 group-hover:scale-105"
-               :style="getAvatarGradient(worker?.full_name)">
-            {{ getInitials(worker) }}
-          </div>
-          <div class="absolute -bottom-1 -right-1 w-6 h-6 md:w-7 md:h-7 rounded-lg border-2 border-white dark:border-slate-900 shadow-lg flex items-center justify-center transition-all duration-300"
-               :class="statusStyles.bg">
-            <i :class="['pi', statusStyles.icon, 'text-white text-[8px] md:text-[10px] font-black']"></i>
-          </div>
-        </div>
-
-        <div class="space-y-1.5 mt-2 sm:mt-0">
-          <div class="flex flex-col sm:flex-row items-center gap-2 md:gap-3">
-            <h1 class="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-              {{ worker?.full_name }}
-            </h1>
-            <span class="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-[9px] font-black uppercase tracking-widest border border-emerald-500/20">
-              {{ worker?.role_display || worker?.role }}
-            </span>
-          </div>
-          <div class="flex flex-wrap justify-center sm:justify-start items-center gap-3 md:gap-4">
-             <span class="text-[11px] font-bold text-slate-400">@{{ worker?.username }}</span>
-             <span class="w-1 h-1 rounded-full bg-slate-300 hidden sm:block"></span>
-             <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
-               <i class="pi pi-map-marker text-emerald-500"></i>
-               <span>{{ worker?.branch_name || '—' }}</span>
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Stats Integrated (Visible from Medium screens) -->
-      <div class="hidden md:flex items-center gap-6 lg:gap-10 border-slate-100 dark:border-slate-800 md:border-x md:px-6 lg:px-10 h-12">
-        <div class="text-center">
-          <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('workers.salary') }}</p>
-          <p class="text-xs lg:text-sm font-black text-emerald-500 tracking-tight">{{ formatCurrency(worker?.salary) }} <span class="text-[10px] text-slate-400 font-medium ml-1">UZS</span></p>
-        </div>
-        <div class="text-center">
-          <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('common.status') }} ID</p>
-          <p class="text-xs lg:text-sm font-black text-slate-700 dark:text-slate-300 tracking-widest">#00{{ worker?.id }}</p>
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-end border-t sm:border-t-0 pt-4 sm:pt-0 mt-2 sm:mt-0 border-slate-100 dark:border-slate-800">
-        <Button icon="pi pi-arrow-left" 
-                :label="$t('common.back')" 
-                text 
-                class="!text-slate-400 hover:!text-emerald-500 !font-bold !text-[10px] uppercase tracking-widest"
-                @click="$router.back()" />
-        <Button icon="pi pi-pencil" 
-                :label="$t('common.edit')" 
-                class="!rounded-xl !px-5 !py-2.5 !bg-emerald-500 hover:!bg-emerald-600 !border-none !text-white !font-black !text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5" 
-                @click="handleEdit" />
-      </div>
-    </div>
-
-    <!-- MAIN COMPACT CONTENT GRID -->
     <div class="space-y-6">
-      
-      <!-- Contact Info Section (Responsive Grid) -->
-      <div class="bg-white dark:bg-slate-900 rounded-[1.5rem] md:rounded-[2rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="flex items-center gap-4 px-2">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 flex-shrink-0">
-              <i class="pi pi-phone text-sm"></i>
-            </div>
-            <div class="min-w-0">
-              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.phone') }}</p>
-              <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.phone1 || '—' }}</p>
-            </div>
-          </div>
+      <!-- INFO GRID -->
+      <DetailInfoGrid :worker="worker" />
 
-          <div class="flex items-center gap-4 px-2">
-            <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500 flex-shrink-0">
-              <i class="pi pi-envelope text-sm"></i>
-            </div>
-            <div class="min-w-0">
-              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.email') }}</p>
-              <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.email || '—' }}</p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4 px-2">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 flex-shrink-0">
-              <i class="pi pi-briefcase text-sm"></i>
-            </div>
-            <div class="min-w-0">
-              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.role') }}</p>
-              <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ worker?.role_display || '—' }}</p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4 px-2">
-            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 flex-shrink-0">
-              <i class="pi pi-calendar text-sm"></i>
-            </div>
-            <div class="min-w-0">
-              <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.created_at') }}</p>
-              <p class="text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ formatDate(worker?.created_on) }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Accordion Grid Containers -->
-      <div class="w-full">
-        <Accordion :value="['0', '1']" multiple class="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
-          
-          <!-- Detailed Information Panel -->
-          <AccordionPanel value="0" class="!border-none !bg-transparent">
-            <AccordionHeader class="!bg-white dark:!bg-slate-900 !rounded-[1.5rem] !p-5 !border !border-slate-200 dark:!border-slate-800 shadow-sm transition-all group">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 shadow-inner group-hover:scale-110 transition-transform">
-                  <i class="pi pi-id-card text-lg"></i>
-                </div>
-                <div class="text-left">
-                  <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">{{ $t('workers.details') }}</h2>
-                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">{{ $t('workers.personal_info') }}</p>
-                </div>
-              </div>
-            </AccordionHeader>
-            <AccordionContent class="!bg-transparent !pt-4">
-              <div class="bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 border border-slate-200 dark:border-slate-800 shadow-inner">
-                <div class="grid grid-cols-2 gap-y-6 gap-x-8">
-                  <div v-for="item in detailItems" :key="item.label" class="group">
-                    <div class="flex items-center gap-1.5 mb-1.5">
-                      <i v-if="item.icon" :class="['pi', item.icon, 'text-[8px] text-indigo-400']"></i>
-                      <span class="text-[9px] font-black uppercase tracking-[0.1em] text-slate-400">{{ item.label }}</span>
-                    </div>
-                    <p class="text-[11px] font-bold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/40 px-3 py-2 rounded-xl border border-transparent shadow-sm truncate">
-                      {{ item.value || '—' }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionPanel>
-
-          <!-- Permissions Panel -->
-          <AccordionPanel value="1" class="!border-none !bg-transparent">
-            <AccordionHeader class="!bg-white dark:!bg-slate-900 !rounded-[1.5rem] !p-5 !border !border-slate-200 dark:!border-slate-800 shadow-sm transition-all group">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shadow-inner group-hover:scale-110 transition-transform">
-                  <i class="pi pi-shield text-lg"></i>
-                </div>
-                <div class="text-left">
-                  <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">{{ $t('workers.permissions') }}</h2>
-                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">{{ $t('workers.user_permissions') }}</p>
-                </div>
-              </div>
-            </AccordionHeader>
-            <AccordionContent class="!bg-transparent !pt-4">
-              <div class="bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 border border-slate-200 dark:border-slate-800 shadow-inner">
-                <div class="flex flex-wrap gap-2">
-                  <div v-for="perm in worker?.permissions" :key="perm" 
-                       class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800/50 hover:bg-emerald-500/5 border border-slate-200/50 dark:border-slate-700/50 rounded-xl transition-all duration-300 group">
-                    <div class="w-5 h-5 rounded-lg bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-emerald-500">
-                      <i class="pi pi-check text-[8px]"></i>
-                    </div>
-                    <span class="text-[10px] font-black text-slate-700 dark:text-slate-300 capitalize tracking-wide">{{ perm }}</span>
-                  </div>
-                  
-                  <div v-if="!worker?.permissions?.length" class="w-full py-8 text-center">
-                    <i class="pi pi-lock text-xl text-slate-300 dark:text-slate-600 block mb-1"></i>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">{{ $t('workers.no_permissions') }}</p>
-                  </div>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionPanel>
-        </Accordion>
-      </div>
+      <!-- ACCORDION (Details & Permissions) -->
+      <DetailAccordion :worker="worker" />
     </div>
+
+    <!-- Worker Dialog Component -->
+    <WorkerDialog 
+      v-model:visible="workerDialog"
+      v-model:createLogin="createLogin"
+      :worker="workerToEdit"
+      :stores="stores"
+      :storesLoading="storesLoading"
+      :saving="saving"
+      :submitted="submitted"
+      @save="saveWorker"
+      @hide="hideDialog"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, onMounted, toRaw } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { workersAPI } from '@/services/api'
-import Button from 'primevue/button'
-import Accordion from 'primevue/accordion';
-import AccordionPanel from 'primevue/accordionpanel';
-import AccordionHeader from 'primevue/accordionheader';
-import AccordionContent from 'primevue/accordioncontent';
+import { workersAPI, storesAPI, branchesAPI } from '@/services/api'
+import { useToast } from 'primevue/usetoast'
+
+// Components
+import WorkerDialog from './components/WorkerDialog.vue'
+import DetailHeader from './components/detail/DetailHeader.vue'
+import DetailInfoGrid from './components/detail/DetailInfoGrid.vue'
+import DetailAccordion from './components/detail/DetailAccordion.vue'
 
 const route = useRoute()
-const router = useRouter()
+const { t } = useI18n()
+const toast = useToast()
 const worker = ref(null)
 const loading = ref(false)
+
+// Dialog states
+const workerDialog = ref(false)
+const saving = ref(false)
+const submitted = ref(false)
+const createLogin = ref(true)
+const stores = ref([])
+const storesLoading = ref(false)
+const workerToEdit = ref({
+    first_name: '',
+    last_name: '',
+    role: 'seller',
+    branch: null,
+    status: 'active',
+    salary: 0,
+    phone1: '',
+    email: '',
+    permissions: []
+})
 
 const loadWorker = async () => {
     loading.value = true
@@ -213,98 +77,131 @@ const loadWorker = async () => {
     }
 }
 
-onMounted(loadWorker)
+const loadStores = async () => {
+    storesLoading.value = true
+    try {
+        let response
+        try {
+            response = await storesAPI.getAll()
+        } catch (e) {
+            response = await branchesAPI.getAll()
+        }
+        const data = response.data
+        stores.value = data?.results ?? (Array.isArray(data) ? data : [])
+    } catch (error) {
+        console.warn('Filiallarni yuklashda xatolik:', error)
+        stores.value = []
+    } finally {
+        storesLoading.value = false
+    }
+}
 
-const { t } = useI18n()
-
-const detailItems = computed(() => [
-  { label: t('workers.full_name'), value: worker.value?.full_name, icon: 'pi-user' },
-  { label: t('workers.username'), value: worker.value?.username, icon: 'pi-at' },
-  { label: t('workers.email'), value: worker.value?.email, icon: 'pi-envelope' },
-  { label: t('workers.phone'), value: worker.value?.phone1, icon: 'pi-phone' },
-  { label: t('common.status'), value: worker.value?.status ? t(`workers.statuses.${worker.value.status}`) : '—', icon: 'pi-info-circle' },
-  { label: t('workers.role'), value: worker.value?.role_display, icon: 'pi-briefcase' },
-  { label: t('workers.branch'), value: worker.value?.branch_name, icon: 'pi-map-marker' },
-])
-
-const statusStyles = computed(() => {
-  const s = worker.value?.status
-  if (s === 'active') return { bg: 'bg-emerald-500', icon: 'pi-check' }
-  if (s === 'tatil') return { bg: 'bg-amber-500', icon: 'pi-clock' }
-  if (s === 'ishdan_ketgan') return { bg: 'bg-rose-500', icon: 'pi-times' }
-  return { bg: 'bg-slate-400', icon: 'pi-question' }
+onMounted(() => {
+    loadWorker()
+    loadStores()
 })
 
-const isActive = computed(() => worker.value?.status === 'active')
-const hasExtraPerms = computed(() => worker.value?.extra_permissions && Object.keys(worker.value.extra_permissions).length > 0)
-
-const formatCurrency = (val) => {
-  return new Intl.NumberFormat('uz-UZ').format(val || 0)
-}
-
-const formatDate = (dateStr) => {
-  if (!dateStr) return '—'
-  return new Date(dateStr).toLocaleDateString('uz-UZ', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
-
-const getInitials = (data) => {
-  if (!data?.full_name) return '?'
-  const parts = data.full_name.trim().split(' ')
-  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase()
-  return parts[0].slice(0, 2).toUpperCase()
-}
-
-const gradients = [
-  'linear-gradient(135deg, #10b981, #059669)',
-  'linear-gradient(135deg, #3b82f6, #2563eb)',
-  'linear-gradient(135deg, #8b5cf6, #7c3aed)',
-  'linear-gradient(135deg, #f59e0b, #d97706)',
-]
-
-const getAvatarGradient = (name) => {
-  const index = (name?.charCodeAt(0) || 0) % gradients.length
-  return { background: gradients[index] }
-}
-
-const getRoleBadgeClass = (role) => {
-  switch (role) {
-    case 'owner':   return 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20'
-    case 'admin':   return 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20'
-    case 'manager': return 'bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20'
-    default:        return 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20'
-  }
-}
-
 const handleEdit = () => {
-    // Navigate back to list with edit trigger or just handle it here
-    router.push({ name: 'workers', query: { edit: route.params.id } })
+    if (!worker.value) return
+
+    let firstName = worker.value.first_name || ''
+    let lastName = worker.value.last_name || ''
+    if (!firstName && !lastName && worker.value.full_name) {
+        const parts = worker.value.full_name.trim().split(' ')
+        firstName = parts[0] || ''
+        lastName = parts.slice(1).join(' ') || ''
+    }
+
+    workerToEdit.value = {
+        id: worker.value.id || worker.value._id,
+        first_name: firstName,
+        last_name: lastName,
+        email: worker.value.email || '',
+        phone1: (worker.value.phone1 || worker.value.phone || '').replace(/\D/g, '').slice(-9),
+        role: worker.value.role || 'seller',
+        branch: worker.value.branch?.id || worker.value.branch?._id || (typeof worker.value.branch === 'object' ? null : worker.value.branch) || null,
+        status: worker.value.status || 'active',
+        salary: parseFloat(worker.value.salary) || 0,
+        username: worker.value.username || '',
+        password: '',
+        permissions: worker.value.permissions || [],
+    }
+
+    createLogin.value = !!(worker.value.user || worker.value.userId || worker.value.username)
+    submitted.value = false
+    workerDialog.value = true
+}
+
+const hideDialog = () => {
+    workerDialog.value = false
+    submitted.value = false
+}
+
+const saveWorker = async () => {
+    submitted.value = true
+    if (!workerToEdit.value.first_name?.trim() || !workerToEdit.value.last_name?.trim()) return
+
+    saving.value = true
+    try {
+        const payload = {
+            first_name: workerToEdit.value.first_name.trim(),
+            last_name: workerToEdit.value.last_name.trim(),
+            role: workerToEdit.value.role,
+            status: workerToEdit.value.status,
+        }
+
+        if (workerToEdit.value.email) payload.email = workerToEdit.value.email
+        if (workerToEdit.value.phone1) {
+            let digits = String(workerToEdit.value.phone1).replace(/\D/g, '')
+            const cleanNumber = digits.length >= 9 ? digits.slice(-9) : digits
+            payload.phone1 = '+998' + cleanNumber
+        }
+        if (workerToEdit.value.branch) payload.branch = workerToEdit.value.branch
+        if (workerToEdit.value.salary) payload.salary = workerToEdit.value.salary
+
+        if (createLogin.value) {
+            if (workerToEdit.value.username) payload.username = workerToEdit.value.username
+            if (workerToEdit.value.password) payload.password = workerToEdit.value.password
+            payload.permissions = [...toRaw(workerToEdit.value.permissions || [])]
+        }
+
+        await workersAPI.update(workerToEdit.value.id, payload)
+        toast.add({ 
+            severity: 'success', 
+            summary: t('common.updated'), 
+            detail: t('workers.messages.updated', { name: `${workerToEdit.value.first_name} ${workerToEdit.value.last_name}` }), 
+            life: 3000 
+        })
+        
+        workerDialog.value = false
+        loadWorker() 
+    } catch (error) {
+        console.error('❌ Error saving worker:', error)
+        let errorDetail = t('workers.messages.save_error')
+        if (error.response?.data) {
+            const data = error.response.data
+            if (typeof data === 'string') {
+                errorDetail = data
+            } else {
+                const firstKey = Object.keys(data)[0]
+                if (firstKey) {
+                    const message = data[firstKey]
+                    errorDetail = Array.isArray(message) ? message[0] : message
+                }
+            }
+        }
+        toast.add({ 
+            severity: 'error', 
+            summary: t('common.error'), 
+            detail: errorDetail, 
+            life: 5000 
+        })
+    } finally {
+        saving.value = false
+    }
 }
 </script>
 
 <style scoped>
-:deep(.p-accordionpanel) {
-  background: transparent !important;
-  border: none !important;
-}
-
-:deep(.p-accordionheader) {
-  background: transparent !important;
-  border: none !important;
-}
-
-/* Accordion ichidagi default oq backgroundni olib tashlaymiz */
-:deep(.p-accordioncontent-content) {
-  background: transparent !important;
-  border: none !important;
-}
-
-:deep(.p-accordionheader-toggle-icon) {
-  color: #94a3b8; /* slate-400 */
-}
+/* Any view-specific styles can remain here, but most were moved to components */
 </style>
