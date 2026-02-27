@@ -36,7 +36,7 @@
         "role": "Lavozimi",
         "salary": "Maosh",
         "branch": "Filial",
-        "username": "Username",
+        "username": "Foydalanuvchi nomi",
         "email": "Pochta manzili",
         "phone": "Asosiy Telefon",
         "created_at": "Qo'shilgan vaqti",
@@ -242,5 +242,35 @@
         "footer": {
             "rights": "Barcha huquqlar himoyalangan."
         }
+    },
+    "profile": {
+        "title": "Foydalanuvchi profili",
+        "username": "Foydalanuvchi nomi",
+        "email": "Elektron pochta",
+        "contact": "Aloqa",
+        "workplace": "Ish joyi",
+        "change_password": "Parolni yangilash",
+        "logout": "Chiqish",
+        "close": "Yopish"
+    },
+    "password_change": {
+        "title": "Parolni yangilash",
+        "subtitle": "Xavfsizlik sozlamalari",
+        "current_password": "Joriy parol",
+        "new_password": "Yangi parol",
+        "confirm_password": "Parolni tasdiqlash",
+        "current_required": "Joriy parolni kiritish shart",
+        "new_required": "Yangi parolni kiritish shart",
+        "confirm_required": "Tasdiqlash shart",
+        "mismatch": "Parollar mos kelmadi",
+        "update": "Yangilash",
+        "success_title": "Muvaffaqiyatli",
+        "success_message": "Parolingiz muvaffaqiyatli yangilandi",
+        "error_title": "Xatolik",
+        "error_message": "Parolni yangilashda xatolik yuz berdi",
+        "prompt": "Parolni kiriting",
+        "weak": "Zaif",
+        "medium": "O'rtacha",
+        "strong": "Kuchli"
     }
 }

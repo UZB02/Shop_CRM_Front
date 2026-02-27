@@ -43,7 +43,7 @@
                 </h3>
                 <div class="flex items-center justify-center gap-2 mt-1">
                   <span class="px-2 py-0.5 bg-emerald-50 dark:bg-[#064E3B] text-emerald-600 dark:text-[#10B981] text-[8px] font-black uppercase rounded tracking-widest border border-emerald-500/20">
-                    {{ user.worker?.role_display || 'USER' }}
+                    {{ user.worker?.role_display || $t('workers.unknown') }}
                   </span>
                   <span class="text-slate-400 dark:text-slate-500 text-[9px] font-medium">• ID: #{{ user.id }}</span>
                 </div>
@@ -55,7 +55,7 @@
                     <i class="pi pi-user text-xs"></i>
                   </div>
                   <div class="flex flex-col border-b border-slate-100 dark:border-slate-800/50 pb-1.5 flex-1 transition-all group-hover:border-emerald-500/30">
-                    <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Username</span>
+                    <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('profile.username') }}</span>
                     <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">@{{ user.username }}</span>
                   </div>
                 </div>
@@ -65,7 +65,7 @@
                     <i class="pi pi-envelope text-xs"></i>
                   </div>
                   <div class="flex flex-col border-b border-slate-100 dark:border-slate-800/50 pb-1.5 flex-1 transition-all group-hover:border-emerald-500/30">
-                    <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Email</span>
+                    <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('profile.email') }}</span>
                     <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{{ user.email }}</span>
                   </div>
                 </div>
@@ -75,7 +75,7 @@
                     <i class="pi pi-phone text-xs"></i>
                   </div>
                   <div class="flex flex-col border-b border-slate-100 dark:border-slate-800/50 pb-1.5 flex-1 transition-all group-hover:border-emerald-500/30">
-                    <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Aloqa</span>
+                    <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('profile.contact') }}</span>
                     <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ user.phone1 }}</span>
                     <span v-if="user.phone2" class="text-[10px] text-slate-400 dark:text-slate-500">{{ user.phone2 }}</span>
                   </div>
@@ -88,7 +88,7 @@
                   <i class="pi pi-briefcase text-base"></i>
                 </div>
                 <div class="flex flex-col overflow-hidden">
-                  <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Ish joyi</span>
+                  <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('profile.workplace') }}</span>
                   <div class="flex items-baseline gap-1.5">
                     <span class="text-[13px] text-slate-800 dark:text-white font-bold truncate">{{ user.worker?.store_name }}</span>
                     <span class="text-emerald-500 text-[9px] font-medium">{{ user.worker?.branch_name }}</span>
@@ -102,20 +102,20 @@
                 @click="showChangePassword = true" 
               >
                 <i class="pi pi-key text-[9px]"></i>
-                Parolni yangilash
+                {{ $t('profile.change_password') }}
               </button>
 
               <!-- Professional Action Footer -->
               <div class="mt-5 pt-3.5 flex items-center gap-3 border-t border-slate-100 dark:border-slate-800/50">
                 <Button 
-                  label="Chiqish" 
+                  :label="$t('profile.logout')" 
                   severity="danger" 
                   text
                   class="flex-1 font-black text-[10px] uppercase tracking-widest bg-rose-50 dark:bg-rose-500/5 hover:bg-rose-100 dark:hover:bg-rose-500/10 text-rose-500 border border-rose-200 dark:border-rose-500/10 h-9 transition-all rounded-xl"
                   @click="$emit('logout')" 
                 />
                 <Button 
-                  label="Yopish" 
+                  :label="$t('profile.close')" 
                   text 
                   class="flex-1 font-black text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:text-white h-9 transition-all border border-slate-200 dark:border-slate-800 rounded-xl" 
                   @click="$emit('update:visible', false)" 
@@ -136,6 +136,9 @@ import Avatar from 'primevue/avatar'
 import Button from 'primevue/button'
 import ChangePasswordDialog from './ChangePasswordDialog.vue'
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   visible: { type: Boolean, default: false },

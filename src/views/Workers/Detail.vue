@@ -2,7 +2,7 @@
   <div class="max-w-[1600px] mx-auto pb-8 px-4 sm:px-6 lg:px-8 space-y-6 transition-all duration-300">
     
     <!-- HEADER -->
-    <DetailHeader :worker="worker" @edit="handleEdit" />
+    <DetailHeader :worker="worker" @edit="handleEdit" @change-password="passwordDialog = true" />
 
     <div class="space-y-6">
       <!-- INFO GRID -->
@@ -24,6 +24,14 @@
       @save="saveWorker"
       @hide="hideDialog"
     />
+
+    <!-- Password Reset Dialog -->
+    <WorkerPasswordDialog 
+      v-if="worker"
+      v-model:visible="passwordDialog"
+      :workerId="worker.id || worker._id"
+      :workerName="worker.full_name"
+    />
   </div>
 </template>
 
@@ -39,6 +47,7 @@ import WorkerDialog from './components/WorkerDialog.vue'
 import DetailHeader from './components/detail/DetailHeader.vue'
 import DetailInfoGrid from './components/detail/DetailInfoGrid.vue'
 import DetailAccordion from './components/detail/DetailAccordion.vue'
+import WorkerPasswordDialog from './components/detail/WorkerPasswordDialog.vue'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -48,6 +57,7 @@ const loading = ref(false)
 
 // Dialog states
 const workerDialog = ref(false)
+const passwordDialog = ref(false)
 const saving = ref(false)
 const submitted = ref(false)
 const createLogin = ref(true)

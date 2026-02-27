@@ -12,7 +12,7 @@
             <div class="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800/50">
               <div class="flex flex-col">
                 <h3 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">{{ $t('password_change.title') }}</h3>
-                <p class="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">{{ $t('password_change.subtitle') }}</p>
+                <p class="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">{{ workerName }}</p>
               </div>
               <button 
                 class="flex items-center justify-center text-slate-400 hover:!text-slate-600 dark:hover:!text-white hover:bg-slate-100 dark:hover:bg-slate-800 w-8 h-8 rounded-full transition-all border-none bg-transparent cursor-pointer" 
@@ -102,17 +102,19 @@
 import { ref, reactive, watch } from 'vue'
 import Password from 'primevue/password'
 import Button from 'primevue/button'
-import { authAPI } from '@/services/api'
+import { workersAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
 const props = defineProps({
-  visible: { type: Boolean, default: false }
+  visible: { type: Boolean, default: false },
+  workerId: { type: [String, Number], required: true },
+  workerName: { type: String, default: '' }
 })
 
-const emit = defineEmits(['update:visible'])
+const emit = defineEmits(['update:visible', 'success'])
 
 const toast = useToast()
 const loading = ref(false)
@@ -145,7 +147,7 @@ const handleSubmit = async () => {
 
   loading.value = true
   try {
-    await authAPI.changePassword({
+    await workersAPI.update(props.workerId, {
       current_password: form.current_password,
       password: form.password,
       password2: form.password2
@@ -158,9 +160,10 @@ const handleSubmit = async () => {
       life: 3000
     })
     
+    emit('success')
     close()
   } catch (error) {
-    console.error('Password change error:', error)
+    console.error('Worker password update error:', error)
     toast.add({
       severity: 'error',
       summary: t('password_change.error_title'),
