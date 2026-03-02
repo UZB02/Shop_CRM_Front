@@ -67,7 +67,7 @@
                   ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
               ]">
-                {{ data.status_display || (data.status === 'active' ? $t('stores.status_active') : $t('stores.status_inactive')) }}
+                {{ data.status === 'active' ? $t('stores.status_active') : $t('stores.status_inactive') }}
               </span>
             </td>
             <td class="px-6 py-4 text-right">

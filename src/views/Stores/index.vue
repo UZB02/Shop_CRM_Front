@@ -52,11 +52,11 @@
             <div class="flex items-center gap-2 flex-shrink-0">
               <span :class="[
                 'px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest',
-                store.status === 'Active'
+                store.status === 'active'
                   ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
               ]">
-                {{ store.status === 'Active' ? $t('stores.status_active') : $t('stores.status_inactive') }}
+                {{ store.status === 'active' ? $t('stores.status_active') : $t('stores.status_inactive') }}
               </span>
               <button
                 @click="openEditStoreDialog"
@@ -97,7 +97,7 @@
           <div>
             <h2 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">{{ $t('stores.branches_title') }}</h2>
             <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-              {{ filteredBranches.length }}<template v-if="branchSearch"> / {{ branches.length }}</template> ta filial
+              {{ filteredBranches.length }}<template v-if="branchSearch"> / {{ branches.length }}</template> {{ $t('stores.count_suffix') }}
             </p>
           </div>
         </div>
@@ -111,9 +111,9 @@
         </button>
       </div>
 
-      <!-- Search -->
-      <div class="mb-4">
-        <div class="relative">
+      <!-- Search & Filter -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-4">
+        <div class="flex-1 relative">
           <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"></i>
           <input
             v-model="branchSearch"
@@ -128,6 +128,17 @@
           >
             <i class="pi pi-times text-[10px]"></i>
           </button>
+        </div>
+        
+        <!-- Status Filter -->
+        <div class="w-full sm:w-48">
+          <Dropdown
+            v-model="branchStatusFilter"
+            :options="statusFilterOptions"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full !rounded-2xl !bg-white dark:!bg-slate-900 !border-slate-200 dark:!border-slate-800 !shadow-sm custom-filter-dropdown"
+          />
         </div>
       </div>
 
@@ -166,6 +177,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
+import Dropdown from 'primevue/dropdown'
 
 import BranchTable from './components/BranchTable.vue'
 import StoreDialog from './components/StoreDialog.vue'
@@ -186,17 +198,35 @@ const branchDialog = ref(false)
 const submitted = ref(false)
 const branchSubmitted = ref(false)
 const branchSearch = ref('')
+const branchStatusFilter = ref('all')
 
-const branch = ref({ name: '', address: '', phone: '' })
+const statusFilterOptions = computed(() => [
+  { label: t('common.all'), value: 'all' },
+  { label: t('stores.status_active'), value: 'active' },
+  { label: t('stores.status_inactive'), value: 'inactive' }
+])
+
+const branch = ref({ name: '', address: '', phone: '', status: 'active' })
 
 const filteredBranches = computed(() => {
+  let result = branches.value
+  
+  // Filter by status
+  if (branchStatusFilter.value !== 'all') {
+    result = result.filter(b => b.status === branchStatusFilter.value)
+  }
+  
+  // Filter by search query
   const q = branchSearch.value.trim().toLowerCase()
-  if (!q) return branches.value
-  return branches.value.filter(b =>
-    (b.name || '').toLowerCase().includes(q) ||
-    (b.phone || '').toLowerCase().includes(q) ||
-    (b.address || '').toLowerCase().includes(q)
-  )
+  if (q) {
+    result = result.filter(b =>
+      (b.name || '').toLowerCase().includes(q) ||
+      (b.phone || '').toLowerCase().includes(q) ||
+      (b.address || '').toLowerCase().includes(q)
+    )
+  }
+  
+  return result
 })
 
 // ─── Load ─────────────────────────────────────────────────
@@ -221,7 +251,7 @@ onMounted(() => loadData())
 
 // ─── Store ─────────────────────────────────────────────────
 const openNewStoreDialog = () => {
-  storeForm.value = { name: '', location: '', address: '', phone: '', openingHours: '09:00 - 21:00', status: 'Active' }
+  storeForm.value = { name: '', location: '', phone: '', status: 'active' }
   submitted.value = false
   storeDialog.value = true
 }
@@ -261,7 +291,7 @@ const saveStore = async () => {
 
 // ─── Branch ────────────────────────────────────────────────
 const openNewBranchDialog = () => {
-  branch.value = { name: '', address: '', phone: '' }
+  branch.value = { name: '', address: '', phone: '', status: 'active' }
   branchSubmitted.value = false
   branchDialog.value = true
 }
@@ -277,7 +307,12 @@ const saveBranch = async () => {
   saving.value = true
   try {
     const id = branch.value.id || branch.value._id
-    const payload = { name: branch.value.name, address: branch.value.address, phone: branch.value.phone }
+    const payload = { 
+      name: branch.value.name, 
+      address: branch.value.address, 
+      phone: branch.value.phone,
+      status: branch.value.status 
+    }
     if (id) {
       await branchesAPI.update(id, payload)
       toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_updated'), life: 3000 })

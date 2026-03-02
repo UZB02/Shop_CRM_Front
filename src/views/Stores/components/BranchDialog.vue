@@ -53,20 +53,38 @@
                 </div>
               </div>
 
-              <!-- Phone -->
-              <div class="space-y-1">
-                <label for="b_phone" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
-                  {{ $t('stores.form.branch_phone') }}
-                </label>
-                <div class="flex items-stretch group">
-                  <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-blue-500 transition-all rounded-l-xl">
-                    <i class="pi pi-phone text-slate-400 group-focus-within:text-blue-500 text-xs"></i>
+              <!-- Phone & Status Row -->
+              <div class="flex flex-col sm:flex-row gap-3">
+                <!-- Phone -->
+                <div class="space-y-1 sm:flex-[3] min-w-0">
+                  <label for="b_phone" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
+                    {{ $t('stores.form.branch_phone') }}
+                  </label>
+                  <div class="flex items-stretch group">
+                    <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-blue-500 transition-all rounded-l-xl">
+                      <i class="pi pi-phone text-slate-400 group-focus-within:text-blue-500 text-xs"></i>
+                    </div>
+                    <InputText
+                      id="b_phone"
+                      v-model="branch.phone"
+                      :placeholder="$t('stores.form.phone_ph')"
+                      class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
+                    />
                   </div>
-                  <InputText
-                    id="b_phone"
-                    v-model="branch.phone"
-                    :placeholder="$t('stores.form.phone_ph')"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
+                </div>
+                <!-- Status -->
+                <div class="space-y-1 sm:flex-[2] min-w-0">
+                  <label for="b_status" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
+                    {{ $t('stores.form.status') }}
+                  </label>
+                  <Dropdown
+                    id="b_status"
+                    v-model="branch.status"
+                    :options="statuses"
+                    optionLabel="label"
+                    optionValue="value"
+                    :placeholder="$t('common.choose')"
+                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
                   />
                 </div>
               </div>
@@ -120,6 +138,11 @@
 
 <script setup>
 import InputText from 'primevue/inputtext'
+import Dropdown from 'primevue/dropdown'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 defineProps({
   visible: Boolean,
@@ -127,6 +150,11 @@ defineProps({
   submitted: Boolean,
   saving: Boolean
 })
+
+const statuses = computed(() => [
+  { label: t('stores.status_active'), value: 'active' },
+  { label: t('stores.status_inactive'), value: 'inactive' }
+])
 
 defineEmits(['update:visible', 'save', 'hide'])
 </script>
@@ -141,4 +169,27 @@ defineEmits(['update:visible', 'save', 'hide'])
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+.dark :deep(.p-dropdown-panel) {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+/* Override PrimeVue components internal spacing in custom modal */
+:deep(.custom-premium-dropdown) {
+  height: 42px;
+}
+:deep(.custom-premium-dropdown .p-dropdown-label) {
+  display: flex !important;
+  align-items: center !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 0 1rem !important;
+}
+:deep(.p-dropdown-panel) {
+  border-radius: 1.25rem !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1) !important;
+}
 </style>

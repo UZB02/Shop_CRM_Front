@@ -89,23 +89,6 @@
                 </div>
               </div>
 
-              <!-- Opening Hours -->
-              <div class="space-y-1">
-                <label for="openingHours" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">{{ $t('stores.form.opening_hours') }}</label>
-                <div class="flex items-stretch group">
-                  <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
-                    <i class="pi pi-clock text-slate-400 text-xs group-focus-within:text-emerald-500"></i>
-                  </div>
-                  <InputText id="openingHours" v-model="store.openingHours" :placeholder="$t('stores.form.opening_hours_ph')" class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none" />
-                </div>
-              </div>
-
-              <!-- Full Address -->
-              <div class="space-y-1">
-                <label for="address" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">{{ $t('stores.form.address') }}</label>
-                <Textarea id="address" v-model="store.address" rows="2" :placeholder="$t('stores.form.address_ph')" class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none leading-relaxed resize-none" />
-              </div>
-
             </div>
           </div>
 
@@ -154,8 +137,8 @@ const props = defineProps({
 defineEmits(['update:visible', 'save', 'hide'])
 
 const statuses = computed(() => [
-  { label: t('stores.status_active'), value: 'Active' },
-  { label: t('stores.status_inactive'), value: 'Inactive' }
+  { label: t('stores.status_active'), value: 'active' },
+  { label: t('stores.status_inactive'), value: 'inactive' }
 ])
 </script>
 

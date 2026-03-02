@@ -1,5 +1,6 @@
 {
     "common": {
+        "all": "Barchasi",
         "save": "Saqlash",
         "save_worker": "Xodimni Saqlash",
         "cancel": "Bekor qilish",
@@ -283,6 +284,7 @@
         "store_updated": "Do'kon yangilandi",
         "store_added": "Do'kon qo'shildi",
         "branches_title": "Filiallar",
+        "count_suffix": "ta filial",
         "new_branch": "Yangi filial",
         "add_branch": "Qo'shish",
         "search_placeholder": "Filial nomi, telefon yoki manzil bo'yicha qidirish...",
@@ -307,8 +309,8 @@
         "form": {
             "store_name": "Do'kon nomi",
             "store_name_ph": "Masalan: Bosh Do'kon",
-            "city": "Shahar / Tuman",
-            "city_ph": "Masalan: Toshkent, Chilonzor",
+            "city": "Manzil",
+            "city_ph": "Masalan: Toshkent, Chilonzor, 3-mavze",
             "phone": "Telefon raqami",
             "phone_ph": "+998 90 123 45 67",
             "status": "Status",

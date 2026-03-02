@@ -1,5 +1,6 @@
 {
     "common": {
+        "all": "Барчаси",
         "save": "Сақлаш",
         "save_worker": "Ходимни Сақлаш",
         "cancel": "Бекор қилиш",
@@ -282,6 +283,7 @@
         "store_updated": "Дўкон янгиланди",
         "store_added": "Дўкон қўшилди",
         "branches_title": "Филиаллар",
+        "count_suffix": "ТА ФИЛИАЛ",
         "new_branch": "Янги филиал",
         "add_branch": "Қўшиш",
         "search_placeholder": "Филиал номи, телефон ёки манзил бўйича қидириш...",
@@ -295,8 +297,8 @@
         "branch_updated": "Филиал янгиланди",
         "branch_deleted": "Филиал ўчирилди",
         "branch_delete_confirm": "\"{name}\" филиалини ўчиришни тасдиқлайсизми?",
-        "status_active": "Фаол",
-        "status_inactive": "НоФаол",
+        "status_active": "ФАОЛ",
+        "status_inactive": "НОФАОЛ",
         "save_error": "Сақлашда хатолик",
         "delete_error": "Ўчиришда хатолик",
         "load_error": "Маълумотларни юклашда хатолик",
@@ -306,8 +308,8 @@
         "form": {
             "store_name": "Дўкон номи",
             "store_name_ph": "Масалан: Бош Дўкон",
-            "city": "Шаҳар / Туман",
-            "city_ph": "Масалан: Тошкент, Чилонзор",
+            "city": "Манзил",
+            "city_ph": "Масалан: Тошкент, Чилонзор, 3-мавзе",
             "phone": "Телефон рақами",
             "phone_ph": "+998 90 123 45 67",
             "status": "Статус",
