@@ -17,8 +17,8 @@
     <div>
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-            <i class="pi pi-sitemap text-sm text-blue-500"></i>
+          <div class="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+            <i class="pi pi-sitemap text-sm text-emerald-500"></i>
           </div>
           <div>
             <h2 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">{{ $t('stores.branches_title') }}</h2>
@@ -29,7 +29,7 @@
         </div>
         <button
           @click="openNewBranchDialog"
-          class="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
+          class="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/20"
         >
           <i class="pi pi-plus text-[10px]"></i>
           <span class="hidden sm:inline">{{ $t('stores.new_branch') }}</span>

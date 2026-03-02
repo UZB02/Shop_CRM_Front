@@ -67,23 +67,23 @@
           v-for="item in filteredMenu"
           :key="item.key"
           :to="item.to"
-          :title="desktopCollapsed ? item.label : ''"
+          v-tooltip.right="desktopCollapsed ? item.label : null"
           class="flex items-center px-3 py-2.5 rounded-xl
                  text-slate-600 dark:text-slate-400
                  hover:bg-emerald-50 hover:text-emerald-600
                  dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400
-                 transition-all duration-200 group overflow-hidden"
+                 transition-all duration-200 group overflow-hidden relative"
           :class="[
             desktopCollapsed ? 'lg:justify-center lg:px-0' : 'gap-3',
             (item.to === '/dashboard' ? route.path === '/dashboard' : route.path.startsWith(item.to))
-              ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400 font-semibold shadow-sm'
+              ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400 font-semibold shadow-sm animate-in fade-in duration-300'
               : ''
           ]"
           @click="sidebarOpen = false"
         >
-          <i :class="[item.icon, 'text-base group-hover:scale-110 transition-transform flex-shrink-0']" />
+          <i :class="[item.icon, 'text-base group-hover:scale-110 transition-transform flex-shrink-0 relative z-10']" />
           <span
-            class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
+            class="text-sm font-medium whitespace-nowrap transition-all duration-300 overflow-hidden"
             :class="desktopCollapsed ? 'lg:opacity-0 lg:w-0' : 'opacity-100'"
           >
             {{ item.label }}
@@ -92,26 +92,29 @@
       </nav>
 
       <!-- User Card -->
-      <div class="p-3 border-t border-slate-100 dark:border-slate-800 flex-shrink-0">
+      <div class="p-3 border-t border-slate-100 dark:border-slate-800 flex-shrink-0 transition-all duration-300"
+           :class="desktopCollapsed ? 'lg:p-2' : 'p-3'">
         <div
-          class="flex items-center gap-3 px-3 py-2.5 rounded-2xl
+          class="flex items-center rounded-2xl
                  bg-slate-50 dark:bg-slate-800/40
                  hover:bg-emerald-50 dark:hover:bg-emerald-900/20
                  border border-slate-100 dark:border-slate-800/50
                  hover:border-emerald-200 dark:hover:border-emerald-800/50
-                 cursor-pointer transition-all group overflow-hidden"
+                 cursor-pointer transition-all group overflow-hidden relative"
+          :class="desktopCollapsed ? 'justify-center p-0 h-10' : 'gap-3 px-3 py-2.5'"
           @click="showProfileDialog = true"
+          v-tooltip.right="desktopCollapsed ? user?.username : null"
         >
           <Avatar
             icon="pi pi-user"
             shape="circle"
             class="!w-8 !h-8 bg-white dark:bg-slate-700
                    text-emerald-600 shadow-sm
-                   transition-transform group-hover:scale-110 flex-shrink-0"
+                   transition-transform group-hover:scale-110 flex-shrink-0 z-10"
           />
           <div
-            class="flex-1 min-w-0 transition-all duration-200 overflow-hidden"
-            :class="desktopCollapsed ? 'lg:opacity-0 lg:w-0' : 'opacity-100'"
+            v-if="!desktopCollapsed"
+            class="flex-1 min-w-0 transition-all duration-300"
           >
             <p class="text-sm font-bold text-slate-700 dark:text-slate-200 truncate">{{ user?.username }}</p>
             <p class="text-[10px] uppercase font-bold text-slate-400 truncate tracking-wider">
@@ -119,12 +122,12 @@
             </p>
           </div>
           <Button
+            v-if="!desktopCollapsed"
             icon="pi pi-sign-out"
             text severity="secondary" size="small"
-            class="!w-8 !h-8 flex-shrink-0
+            class="!w-8 !h-8 flex-shrink-0 z-10
                    hover:!bg-rose-50 hover:!text-rose-500
                    dark:hover:!bg-rose-900/30 transition-all"
-            :class="desktopCollapsed ? 'lg:hidden' : ''"
             @click.stop="handleLogout"
           />
         </div>

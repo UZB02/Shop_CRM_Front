@@ -44,6 +44,7 @@ export function useStores() {
             // Fetch all pages to ensure local filtering is 100% accurate
             while (hasMore) {
                 const res = await branchesAPI.getAll({ page })
+                console.log('Filiallar API javobi (page ' + page + '):', res.data)
                 const data = res.data
 
                 const results = data.results ?? (Array.isArray(data) ? data : [])

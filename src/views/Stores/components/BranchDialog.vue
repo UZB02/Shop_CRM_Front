@@ -16,8 +16,8 @@
           <!-- Header -->
           <div class="px-5 sm:px-8 pt-5 sm:pt-6 pb-2 sm:pb-3">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 flex-shrink-0">
-                <i class="pi pi-sitemap text-lg sm:text-xl text-blue-500"></i>
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 flex-shrink-0">
+                <i class="pi pi-sitemap text-lg sm:text-xl text-emerald-500"></i>
               </div>
               <div class="min-w-0">
                 <h3 class="text-base sm:text-lg font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight leading-none mb-1 truncate">
@@ -41,14 +41,14 @@
                 </label>
                 <div class="flex items-stretch group">
                   <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-blue-500 transition-all rounded-l-xl">
-                    <i class="pi pi-bookmark text-slate-400 group-focus-within:text-blue-500 text-xs"></i>
+                    <i class="pi pi-bookmark text-slate-400 group-focus-within:text-emerald-500 text-xs"></i>
                   </div>
                   <InputText
                     id="b_name"
                     v-model.trim="branch.name"
                     autofocus
                     :placeholder="$t('stores.form.branch_name_ph')"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
+                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
                 </div>
               </div>
@@ -61,14 +61,14 @@
                     {{ $t('stores.form.branch_phone') }}
                   </label>
                   <div class="flex items-stretch group">
-                    <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-blue-500 transition-all rounded-l-xl">
-                      <i class="pi pi-phone text-slate-400 group-focus-within:text-blue-500 text-xs"></i>
+                    <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
+                      <i class="pi pi-phone text-slate-400 group-focus-within:text-emerald-500 text-xs"></i>
                     </div>
                     <InputText
                       id="b_phone"
                       v-model="branch.phone"
                       :placeholder="$t('stores.form.phone_ph')"
-                      class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
+                      class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                     />
                   </div>
                 </div>
@@ -95,14 +95,14 @@
                   {{ $t('stores.form.branch_address') }}
                 </label>
                 <div class="flex items-stretch group">
-                  <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-blue-500 transition-all rounded-l-xl">
-                    <i class="pi pi-map-marker text-slate-400 group-focus-within:text-blue-500 text-xs"></i>
+                  <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
+                    <i class="pi pi-map-marker text-slate-400 group-focus-within:text-emerald-500 text-xs"></i>
                   </div>
                   <InputText
                     id="b_address"
                     v-model.trim="branch.address"
                     :placeholder="$t('stores.form.branch_address_ph')"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
+                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
                 </div>
               </div>
@@ -122,7 +122,7 @@
               <button
                 @click="$emit('save')"
                 :disabled="saving"
-                class="w-full sm:w-auto px-8 sm:px-10 py-2.5 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-blue-500/20 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed min-w-[140px]"
+                class="w-full sm:w-auto px-8 sm:px-10 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed min-w-[140px]"
               >
                 <i v-if="saving" class="pi pi-spin pi-spinner text-[10px]"></i>
                 <i v-else class="pi pi-check text-[10px]"></i>

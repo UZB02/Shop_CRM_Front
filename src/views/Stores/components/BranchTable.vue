@@ -41,12 +41,12 @@
           <tr
             v-for="data in branches"
             :key="data.id"
-            class="group hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-colors"
+            class="group hover:bg-emerald-50/30 dark:hover:bg-emerald-500/5 transition-colors"
           >
             <td class="px-6 py-4">
               <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                  <i class="pi pi-sitemap text-[10px] text-blue-500"></i>
+                <div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+                  <i class="pi pi-sitemap text-[10px] text-emerald-500"></i>
                 </div>
                 <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ data.name }}</span>
               </div>
@@ -82,7 +82,7 @@
               <div class="flex justify-end gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                 <button
                   @click="$emit('edit', data)"
-                  class="w-8 h-8 rounded-lg flex items-center justify-center text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
+                  class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
                   :title="$t('common.edit')"
                 >
                   <i class="pi pi-pencil text-[10px]"></i>
@@ -115,7 +115,7 @@
             <button @click="currentPage = p"
                     class="w-8 h-8 rounded-xl text-[11px] font-black transition-all shadow-sm border focus:outline-none"
                     :class="currentPage === p 
-                      ? 'bg-blue-500 border-blue-500 text-white shadow-blue-500/20' 
+                      ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
                       : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'">
               {{ p }}
             </button>

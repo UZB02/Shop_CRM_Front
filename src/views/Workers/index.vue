@@ -97,7 +97,6 @@ import { workersAPI, storesAPI, branchesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import Button from 'primevue/button'
-import ConfirmDialog from 'primevue/confirmdialog'
 
 import WorkerTable from './components/WorkerTable.vue'
 import WorkerDialog from './components/WorkerDialog.vue'

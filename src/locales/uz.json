@@ -327,5 +327,42 @@
             "subtitle_store": "Tizimga yangi savdo nuqtasini kiritish",
             "subtitle_branch": "Do'kon tarkibidagi filialni boshqarish"
         }
+    },
+    "warehouse": {
+        "page_title": "Omborlar",
+        "page_subtitle": "Ob'ektlar va zahira markazlari boshqaruvi",
+        "search_placeholder": "Ombor nomi yoki manzili bo'yicha qidirish...",
+        "new_warehouse": "Yangi ombor",
+        "view_grid": "Karta",
+        "view_table": "Jadval",
+        "edit_warehouse": "Omborni tahrirlash",
+        "warehouse_name": "Ombor nomi",
+        "warehouse_address": "Manzil",
+        "no_warehouses": "Omborlar mavjud emas",
+        "no_warehouses_desc": "Hali hech qanday ombor yaratilmagan",
+        "no_results": "Natija topilmadi",
+        "search_no_data": "Qidiruv bo'yicha hech qanday ma'lumot mavjud emas",
+        "clear_filter": "Filtrni tozalash",
+        "add_first": "Birinchi omborni qo'shing",
+        "count_suffix": "ta ombor",
+        "form": {
+            "name": "Ombor nomi",
+            "name_ph": "Masalan: Markaziy Ombor",
+            "address": "Manzil",
+            "address_ph": "Masalan: Toshkent sh, Yunusobod",
+            "subtitle": "Tizimga yangi ombor kiritish"
+        },
+        "messages": {
+            "added": "Yangi ombor muvaffaqiyatli qo'shildi",
+            "updated": "Ombor ma'lumotlari yangilandi",
+            "deleted": "Ombor o'chirildi",
+            "load_error": "Ma'lumotlarni yuklashda xatolik",
+            "save_error": "Saqlashda xatolik",
+            "delete_error": "O'chirishda xatolik",
+            "delete_confirm": "\"{name}\" omborini o'chirishni tasdiqlaysizmi?",
+            "confirm_title": "Tasdiqlash",
+            "success": "Muvaffaqiyatli",
+            "error": "Xatolik"
+        }
     }
 }

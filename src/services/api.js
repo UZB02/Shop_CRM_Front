@@ -137,11 +137,11 @@ export const branchesAPI = {
 
 // Warehouses API
 export const warehousesAPI = {
-    getAll: (params) => api.get('/warehouses', { params }),
-    getById: (id) => api.get(`/warehouses/${id}`),
-    create: (data) => api.post('/warehouses', data),
-    update: (id, data) => api.put(`/warehouses/${id}`, data),
-    delete: (id) => api.delete(`/warehouses/${id}`)
+    getAll: (params) => api.get('/warehouse/warehouses/', { params }),
+    getById: (id) => api.get(`/warehouse/warehouses/${id}/`),
+    create: (data) => api.post('/warehouse/warehouses/', data),
+    update: (id, data) => api.patch(`/warehouse/warehouses/${id}/`, data),
+    delete: (id) => api.delete(`/warehouse/warehouses/${id}/`)
 }
 
 // Dashboard API
