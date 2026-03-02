@@ -75,10 +75,10 @@
                  transition-all duration-200 group overflow-hidden"
           :class="[
             desktopCollapsed ? 'lg:justify-center lg:px-0' : 'gap-3',
+            (item.to === '/dashboard' ? route.path === '/dashboard' : route.path.startsWith(item.to))
+              ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400 font-semibold shadow-sm'
+              : ''
           ]"
-          active-class="bg-emerald-50 text-emerald-600
-                        dark:bg-emerald-900/40 dark:text-emerald-400
-                        font-semibold shadow-sm"
           @click="sidebarOpen = false"
         >
           <i :class="[item.icon, 'text-base group-hover:scale-110 transition-transform flex-shrink-0']" />

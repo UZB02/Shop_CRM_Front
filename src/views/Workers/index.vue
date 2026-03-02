@@ -77,6 +77,7 @@
       v-model:createLogin="createLogin"
       :worker="worker"
       :stores="stores"
+      :branches="branches"
       :storesLoading="storesLoading"
       :saving="saving"
       :submitted="submitted"
@@ -114,6 +115,7 @@ const totalRecords = ref(0)
 const page = ref(1)
 const pageSize = ref(10)
 const stores = ref([])
+const branches = ref([])
 const loading = ref(false)
 const storesLoading = ref(false)
 const saving = ref(false)
@@ -145,12 +147,15 @@ const statusOptions = computed(() => [
 const worker = ref({
     first_name: '',
     last_name: '',
+    username: '',
+    email: '',
+    phone1: '',
+    password: '',
     role: 'seller',
+    salary: 0,
+    store: null,
     branch: null,
     status: 'active',
-    salary: 0,
-    phone1: '',
-    email: '',
     permissions: []
 })
 
@@ -199,25 +204,26 @@ watch(() => filters.value, () => {
     }, 500)
 }, { deep: true })
 
-const loadStores = async () => {
+const loadLocations = async () => {
     storesLoading.value = true
     try {
-        let response
-        try {
-            console.log("🔍 Fetching from storesAPI.getAll()...")
-            response = await storesAPI.getAll()
-            console.log("✅ storesAPI response data:", response.data)
-        } catch (e) {
-            console.warn("⚠️ storesAPI failed, trying branchesAPI.getAll()... Error:", e)
-            response = await branchesAPI.getAll()
-            console.log("✅ branchesAPI response data:", response.data)
-        }
-        const data = response.data
-        stores.value = data?.results ?? (Array.isArray(data) ? data : [])
-        console.log("📦 Processed stores list for dropdown:", stores.value)
+        const [storesRes, branchesRes] = await Promise.all([
+            storesAPI.getAll(),
+            branchesAPI.getAll()
+        ])
+        
+        console.group("📡 API Ma'lumotlari (Debug)");
+        console.log("🏪 Stores Raw Data:", storesRes.data);
+        console.log("🏢 Branches Raw Data:", branchesRes.data);
+        console.groupEnd();
+        
+        // Handle DRF results format or direct array
+        stores.value = storesRes.data?.results ?? (Array.isArray(storesRes.data) ? storesRes.data : [])
+        branches.value = branchesRes.data?.results ?? (Array.isArray(branchesRes.data) ? branchesRes.data : [])
+        
+        console.log("📦 Processed - Stores:", stores.value.length, "Branches:", branches.value.length)
     } catch (error) {
-        console.warn('Filiallarni yuklashda xatolik:', error)
-        stores.value = []
+        console.error('Joylashuvlarni yuklashda xatolik:', error)
     } finally {
         storesLoading.value = false
     }
@@ -227,13 +233,15 @@ const openNew = () => {
     worker.value = { 
         first_name: '',
         last_name: '',
-        role: 'seller',
-        branch: stores.value.length > 0 ? (stores.value[0]._id || stores.value[0].id) : null,
-        status: 'active',
-        salary: 0,
-        phone1: '',
+        username: '',
         email: '',
+        phone1: '',
         password: '',
+        role: 'seller',
+        salary: 0,
+        store: null,
+        branch: null,
+        status: 'active',
         permissions: [] 
     }
     createLogin.value = true
@@ -271,7 +279,8 @@ const editWorker = async (data) => {
         email: fullData.email || '',
         phone1: (fullData.phone1 || fullData.phone || '').replace(/\D/g, '').slice(-9),
         role: fullData.role || 'seller',
-        branch: fullData.branch?.id || fullData.branch?._id || (typeof fullData.branch === 'object' ? null : fullData.branch) || null,
+        store: fullData.store?.id || fullData.store?._id || fullData.store || null,
+        branch: fullData.branch?.id || fullData.branch?._id || fullData.branch || null,
         status: fullData.status || 'active',
         salary: parseFloat(fullData.salary) || 0,
         username: fullData.username || '',
@@ -304,26 +313,23 @@ const saveWorker = async () => {
         const payload = {
             first_name: worker.value.first_name.trim(),
             last_name: worker.value.last_name.trim(),
+            username: worker.value.username?.trim() || '',
+            email: worker.value.email?.trim() || '',
+            phone1: '',
+            password: worker.value.password || '',
             role: worker.value.role,
+            salary: Number(worker.value.salary) || 0,
             status: worker.value.status,
+            store: worker.value.store,
+            branch: worker.value.branch,
+            permissions: createLogin.value ? [...toRaw(worker.value.permissions || [])] : []
         }
 
-        if (worker.value.email) payload.email = worker.value.email
+        // Phone formatting
         if (worker.value.phone1) {
             let digits = String(worker.value.phone1).replace(/\D/g, '')
-            // Faqat oxirgi 9 ta raqamni olamiz (operator kodi + raqam)
-            // Chunki muloqot oynasida +998 har doim bor
             const cleanNumber = digits.length >= 9 ? digits.slice(-9) : digits
             payload.phone1 = '+998' + cleanNumber
-        }
-        if (worker.value.branch) payload.branch = worker.value.branch
-        if (worker.value.salary) payload.salary = worker.value.salary
-
-        if (createLogin.value) {
-            if (worker.value.username) payload.username = worker.value.username
-            if (worker.value.password) payload.password = worker.value.password
-            // permissionsni Proxy’dan oddiy Array’ga o'tkazib yuboramiz
-            payload.permissions = [...toRaw(worker.value.permissions || [])]
         }
 
         console.group("🚀 Xodim ma'lumotlarini yuborish");
@@ -414,7 +420,7 @@ const confirmDeleteWorker = (data) => {
 }
 
 onMounted(async () => {
-    await Promise.all([loadWorkers(), loadStores()])
+    await Promise.all([loadWorkers(), loadLocations()])
     
     if (route.query.edit) {
         const workerToEdit = workers.value.find(w => (w.id || w._id).toString() === route.query.edit.toString())
