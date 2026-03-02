@@ -49,7 +49,7 @@
                     v-model.trim="store.name"
                     autofocus
                     :placeholder="$t('stores.form.store_name_ph')"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
+                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
                 </div>
               </div>
@@ -65,7 +65,7 @@
                     id="location"
                     v-model.trim="store.location"
                     :placeholder="$t('stores.form.city_ph')"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
+                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
                 </div>
               </div>
@@ -79,13 +79,21 @@
                     <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
                       <i class="pi pi-phone text-slate-400 text-xs group-focus-within:text-emerald-500"></i>
                     </div>
-                    <InputText id="phone" v-model="store.phone" :placeholder="$t('stores.form.phone_ph')" class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-3 !py-2 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none" />
+                    <InputText id="phone" v-model="store.phone" :placeholder="$t('stores.form.phone_ph')" class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-3 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none" />
                   </div>
                 </div>
                 <!-- Status -->
                 <div class="space-y-1 sm:flex-[2] min-w-0">
                   <label for="status" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">{{ $t('stores.form.status') }}</label>
-                  <Dropdown id="status" v-model="store.status" :options="statuses" optionLabel="label" optionValue="value" :placeholder="$t('common.choose')" class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown" />
+                  <Dropdown
+                    id="status"
+                    v-model="store.status"
+                    :options="statuses"
+                    optionLabel="label"
+                    optionValue="value"
+                    :placeholder="$t('common.choose')"
+                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                  />
                 </div>
               </div>
 
@@ -198,6 +206,9 @@ const statuses = computed(() => [
   letter-spacing: 0.05em !important;
   padding: 0 1rem !important;
 }
+.dark :deep(.custom-premium-dropdown .p-dropdown-label) {
+  color: #ffffff !important;
+}
 :deep(.p-dropdown-panel) {
   border-radius: 1.25rem !important;
   border: 1px solid #e2e8f0 !important;
@@ -206,5 +217,21 @@ const statuses = computed(() => [
 .dark :deep(.p-dropdown-panel) {
   background: #0f172a !important;
   border-color: #334155 !important;
+}
+
+/* DARK MODE ENFORCEMENTS */
+.dark :deep(.p-inputtext),
+.dark :deep(.p-dropdown-label),
+.dark :deep(.p-dropdown-label.p-placeholder) {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.dark :deep(.p-inputtext::placeholder) {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+.dark label {
+  color: #cbd5e1 !important; /* slate-300 */
 }
 </style>

@@ -288,6 +288,7 @@
         "add_branch": "Қўшиш",
         "search_placeholder": "Филиал номи, телефон ёки манзил бўйича қидириш...",
         "col_branch": "Филиал номи",
+        "col_address": "Манзил",
         "col_store": "Дўкон",
         "col_phone": "Телефон",
         "col_status": "Статус",

@@ -48,7 +48,7 @@
                     v-model.trim="branch.name"
                     autofocus
                     :placeholder="$t('stores.form.branch_name_ph')"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
+                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
                   />
                 </div>
               </div>
@@ -68,7 +68,7 @@
                       id="b_phone"
                       v-model="branch.phone"
                       :placeholder="$t('stores.form.phone_ph')"
-                      class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
+                      class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
                     />
                   </div>
                 </div>
@@ -102,7 +102,7 @@
                     id="b_address"
                     v-model.trim="branch.address"
                     :placeholder="$t('stores.form.branch_address_ph')"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
+                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-blue-500 transition-all shadow-none outline-none"
                   />
                 </div>
               </div>
@@ -169,12 +169,6 @@ defineEmits(['update:visible', 'save', 'hide'])
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
-.dark :deep(.p-dropdown-panel) {
-  background: #0f172a !important;
-  border-color: #334155 !important;
-}
-
-/* Override PrimeVue components internal spacing in custom modal */
 :deep(.custom-premium-dropdown) {
   height: 42px;
 }
@@ -187,9 +181,24 @@ defineEmits(['update:visible', 'save', 'hide'])
   letter-spacing: 0.05em !important;
   padding: 0 1rem !important;
 }
+.dark :deep(.custom-premium-dropdown .p-dropdown-label) {
+  color: #ffffff !important;
+}
 :deep(.p-dropdown-panel) {
   border-radius: 1.25rem !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1) !important;
+}
+.dark :deep(.p-dropdown-panel) {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+/* DARK MODE ENFORCEMENTS */
+.dark :deep(.p-inputtext),
+.dark :deep(.p-dropdown-label),
+.dark :deep(.p-dropdown-label.p-placeholder) {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 </style>

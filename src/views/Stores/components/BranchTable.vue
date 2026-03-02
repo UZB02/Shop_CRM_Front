@@ -5,6 +5,7 @@
         <thead>
           <tr class="bg-slate-50/50 dark:bg-slate-800/30">
             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('stores.col_branch') }}</th>
+            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('stores.col_address') }}</th>
             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('stores.col_store') }}</th>
             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('stores.col_phone') }}</th>
             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('stores.col_status') }}</th>
@@ -16,6 +17,7 @@
           <template v-if="loading">
             <tr v-for="i in 4" :key="i">
               <td class="px-6 py-4"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-32 animate-pulse"></div></td>
+              <td class="px-6 py-4"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-40 animate-pulse"></div></td>
               <td class="px-6 py-4"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-20 animate-pulse"></div></td>
               <td class="px-6 py-4"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-28 animate-pulse"></div></td>
               <td class="px-6 py-4"><div class="h-5 bg-slate-100 dark:bg-slate-800 rounded-full w-14 animate-pulse"></div></td>
@@ -26,7 +28,7 @@
           <!-- Empty -->
           <template v-else-if="!branches.length">
             <tr>
-              <td colspan="5" class="px-6 py-14 text-center">
+              <td colspan="6" class="px-6 py-14 text-center">
                 <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3">
                   <i class="pi pi-sitemap text-xl text-slate-400"></i>
                 </div>
@@ -47,6 +49,12 @@
                   <i class="pi pi-sitemap text-[10px] text-blue-500"></i>
                 </div>
                 <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ data.name }}</span>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-1.5">
+                <i class="pi pi-map-marker text-[10px] text-slate-400"></i>
+                <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">{{ data.address || '—' }}</span>
               </div>
             </td>
             <td class="px-6 py-4">
@@ -92,13 +100,66 @@
         </tbody>
       </table>
     </div>
+    <!-- Pagination -->
+    <div v-if="totalRecords > 0" 
+         class="px-6 py-4 bg-slate-50/50 dark:bg-slate-900/30 border-t border-slate-100 dark:border-slate-800/50 flex items-center justify-end font-inter">
+      <div class="flex items-center gap-1">
+        <button @click="currentPage--" :disabled="currentPage === 1"
+                class="w-8 h-8 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30
+                       border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <i class="pi pi-angle-left text-[10px]"></i>
+        </button>
+        
+        <div class="flex items-center gap-1 mx-1">
+          <template v-for="p in displayedPages" :key="p">
+            <button @click="currentPage = p"
+                    class="w-8 h-8 rounded-xl text-[11px] font-black transition-all shadow-sm border focus:outline-none"
+                    :class="currentPage === p 
+                      ? 'bg-blue-500 border-blue-500 text-white shadow-blue-500/20' 
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'">
+              {{ p }}
+            </button>
+          </template>
+        </div>
+
+        <button @click="currentPage++" :disabled="currentPage === totalPages"
+                class="w-8 h-8 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30
+                       border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <i class="pi pi-angle-right text-[10px]"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   branches: { type: Array, default: () => [] },
-  loading: Boolean
+  loading: Boolean,
+  totalRecords: { type: Number, default: 0 },
+  page: { type: Number, default: 1 },
+  pageSize: { type: Number, default: 10 }
 })
-defineEmits(['edit', 'delete'])
+
+const emit = defineEmits(['edit', 'delete', 'update:page', 'page-change'])
+
+const currentPage = computed({
+  get: () => props.page,
+  set: (val) => {
+    emit('update:page', val)
+    emit('page-change')
+  }
+})
+
+const totalPages = computed(() => Math.ceil(props.totalRecords / props.pageSize))
+
+const displayedPages = computed(() => {
+  const total = totalPages.value
+  if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1)
+  if (currentPage.value <= 3) return [1, 2, 3, 4, 5]
+  if (currentPage.value >= total - 2) return [total - 4, total - 3, total - 2, total - 1, total]
+  return [currentPage.value - 2, currentPage.value - 1, currentPage.value, currentPage.value + 1, currentPage.value + 2]
+})
 </script>

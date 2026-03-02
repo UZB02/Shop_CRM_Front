@@ -1,0 +1,61 @@
+<template>
+  <div class="flex flex-col sm:flex-row gap-3 mb-4">
+    <div class="flex-1 relative">
+      <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"></i>
+      <input
+        v-model="search"
+        type="text"
+        :placeholder="$t('stores.search_placeholder')"
+        class="w-full pl-11 pr-10 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-semibold text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 transition-all shadow-sm"
+      />
+      <button
+        v-if="search"
+        @click="search = ''"
+        class="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+      >
+        <i class="pi pi-times text-[10px]"></i>
+      </button>
+    </div>
+    
+    <div class="w-full sm:w-48">
+      <Dropdown
+        v-model="status"
+        :options="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        class="w-full !rounded-2xl !bg-white dark:!bg-slate-900 !border-slate-200 dark:!border-slate-800 !shadow-sm custom-filter-dropdown"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import Dropdown from 'primevue/dropdown'
+
+const { t } = useI18n()
+
+const props = defineProps({
+  search: String,
+  status: String
+})
+
+const emit = defineEmits(['update:search', 'update:status'])
+
+const search = computed({
+  get: () => props.search,
+  set: (val) => emit('update:search', val)
+})
+
+const status = computed({
+  get: () => props.status,
+  set: (val) => emit('update:status', val)
+})
+
+const statusOptions = computed(() => [
+  { label: t('common.all'), value: 'all' },
+  { label: t('stores.status_active'), value: 'active' },
+  { label: t('stores.status_inactive'), value: 'inactive' }
+])
+</script>

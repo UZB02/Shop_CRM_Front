@@ -289,6 +289,7 @@
         "add_branch": "Qo'shish",
         "search_placeholder": "Filial nomi, telefon yoki manzil bo'yicha qidirish...",
         "col_branch": "Filial nomi",
+        "col_address": "Manzil",
         "col_store": "Do'kon",
         "col_phone": "Telefon",
         "col_status": "Status",
