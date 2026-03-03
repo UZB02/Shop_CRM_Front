@@ -11,35 +11,35 @@
     </template>
 
     <template v-else-if="store.id || store._id">
-      <div class="p-5 sm:p-8">
-        <div class="flex items-center gap-3 sm:gap-5 mb-3 sm:mb-0">
-          <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-            <i class="pi pi-building text-xl sm:text-2xl text-emerald-500"></i>
+      <div class="p-3.5 sm:p-5">
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+            <i class="pi pi-building text-lg sm:text-xl text-emerald-500"></i>
           </div>
 
           <div class="flex-1 min-w-0">
-            <h2 class="text-base sm:text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight truncate">
+            <h2 class="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight truncate">
               {{ store.name }}
             </h2>
-            <div class="mt-1 sm:mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-              <span v-if="store.location" class="flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-                <i class="pi pi-map-marker text-[9px] text-emerald-500"></i>{{ store.location }}
+            <div v-if="store.location || store.phone || store.openingHours || store.address" class="mt-0.5 sm:mt-1 flex flex-wrap items-center gap-x-3 sm:gap-x-4 gap-y-1">
+              <span v-if="store.location" class="flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                <i class="pi pi-map-marker text-[8px] text-emerald-500"></i>{{ store.location }}
               </span>
-              <span v-if="store.phone" class="flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-                <i class="pi pi-phone text-[9px] text-emerald-500"></i>{{ store.phone }}
+              <span v-if="store.phone" class="flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                <i class="pi pi-phone text-[8px] text-emerald-500"></i>{{ store.phone }}
               </span>
-              <span v-if="store.openingHours" class="flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-                <i class="pi pi-clock text-[9px] text-emerald-500"></i>{{ store.openingHours }}
+              <span v-if="store.openingHours" class="flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                <i class="pi pi-clock text-[8px] text-emerald-500"></i>{{ store.openingHours }}
               </span>
-              <span v-if="store.address" class="flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-                <i class="pi pi-home text-[9px] text-emerald-500"></i>{{ store.address }}
+              <span v-if="store.address" class="flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                <i class="pi pi-home text-[8px] text-emerald-500"></i>{{ store.address }}
               </span>
             </div>
           </div>
 
-          <div class="flex items-center gap-2 flex-shrink-0">
+          <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
             <span :class="[
-              'px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest',
+              'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[8px] sm:text-[9px] font-black uppercase tracking-widest',
               store.status === 'active'
                 ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
@@ -48,10 +48,10 @@
             </span>
             <button
               @click="$emit('edit')"
-              class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
               :title="$t('stores.edit_store')"
             >
-              <i class="pi pi-pencil text-xs sm:text-sm"></i>
+              <i class="pi pi-pencil text-[10px] sm:text-xs"></i>
             </button>
           </div>
         </div>
