@@ -186,7 +186,7 @@
             class="ml-2 underline underline-offset-2 text-amber-600 hover:text-amber-800 font-semibold whitespace-nowrap"
             @click="router.push('/dashboard/subscription')"
           >
-            To'lov →
+            {{ $t('common.pay') }} →
           </button>
         </div>
 
@@ -232,7 +232,7 @@
                    text-amber-800 dark:text-amber-300 font-semibold text-xs"
             @click="router.push('/dashboard/subscription')"
           >
-            To'lov qilish →
+            {{ $t('common.pay_action') }} →
           </button>
         </div>
 
@@ -322,8 +322,8 @@ const menuItems = computed(() => [
   { label: t('menu.inventory'),    icon: 'pi pi-database',      to: '/dashboard/warehouse',  key: 'warehouse' },
   { label: t('menu.products'),     icon: 'pi pi-tag',           to: '/dashboard/products',   key: 'products'  },
   { label: t('menu.workers'),      icon: 'pi pi-users',         to: '/dashboard/workers',    key: 'workers'   },
-  { label: t('menu.trades') || 'Savdolar',     icon: 'pi pi-shopping-cart', to: '/dashboard/trades',     key: 'trades'    },
-  { label: t('menu.reports') || 'Xarajatlar',   icon: 'pi pi-wallet',        to: '/dashboard/expenses',   key: 'expenses'  },
+  { label: t('menu.trades'),       icon: 'pi pi-shopping-cart', to: '/dashboard/trades',     key: 'trades'    },
+  { label: t('menu.reports'),      icon: 'pi pi-wallet',        to: '/dashboard/expenses',   key: 'expenses'  },
   { label: t('menu.customers'),    icon: 'pi pi-id-card',       to: '/dashboard/customers',  key: 'customers' },
   { label: t('menu.settings'),     icon: 'pi pi-cog',           to: '/dashboard/settings',   key: 'settings'  },
 ])

@@ -1,48 +1,83 @@
 <template>
-  <Dialog 
-    :visible="visible" 
-    @update:visible="$emit('update:visible', $event)"
-    :style="{ width: '400px' }" 
-    header="Kategoriya boshqaruvi" 
-    :modal="true" 
-    class="p-fluid"
-  >
-    <div class="field mb-4 pt-4">
-      <label for="c_name" class="font-bold block mb-2 text-slate-600 font-sm">Kategoriya nomi</label>
-      <InputText id="c_name" v-model.trim="category.name" required="true" autofocus :class="{ 'p-invalid': submitted && !category.name }" placeholder="Masalan: Ichimliklar" />
-      <small class="p-error" v-if="submitted && !category.name">Nom kiritilishi shart.</small>
-    </div>
-    <div class="field mb-4">
-      <label for="c_desc" class="font-bold block mb-2 text-slate-600 font-sm">Tavsif</label>
-      <Textarea id="c_desc" v-model="category.description" rows="3" placeholder="Ixtiyoriy..." />
-    </div>
-    
-    <div v-if="categories.length" class="mt-6">
-      <p class="text-sm font-bold text-slate-500 mb-3 ml-1">Mavjud kategoriyalar:</p>
-      <div class="max-h-40 overflow-y-auto border border-slate-100 rounded-lg p-2 space-y-1">
-        <div v-for="cat in categories" :key="cat._id" class="flex justify-between items-center p-2 hover:bg-slate-50 rounded group">
-          <span class="text-sm text-slate-700">{{ cat.name }}</span>
-          <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button icon="pi pi-pencil" text rounded size="small" @click="$emit('edit', cat)" />
-            <Button icon="pi pi-trash" text rounded severity="danger" size="small" @click="$emit('delete', cat)" />
+  <Teleport to="body">
+    <div v-if="visible" class="fixed inset-0 z-[2000] grid place-items-center p-4 overflow-y-auto">
+      <!-- Backdrop with blur -->
+      <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm animate-fade-in" @click="$emit('update:visible', false)"></div>
+      
+      <!-- Compact Creative Container -->
+      <div class="relative w-full max-w-[420px] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl shadow-emerald-500/20 border border-slate-100 dark:border-slate-800 p-8 animate-zoom-in overflow-hidden z-10 my-auto">
+      <!-- Minimal Header -->
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-3">
+          <div class="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
+          <h3 class="text-lg font-black text-slate-800 dark:text-white uppercase tracking-[0.1em]">
+            {{ category._id || category.id ? $t('common.edit') : $t('categories.title') }}
+          </h3>
+        </div>
+        <button 
+          @click="$emit('update:visible', false)" 
+          class="text-slate-300 hover:text-rose-500 transition-colors"
+        >
+          <i class="pi pi-times text-xs"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <div class="space-y-8">
+        <!-- Name Field -->
+        <div class="space-y-3">
+          <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">{{ $t('categories.name') }}</label>
+          <div class="relative group">
+            <input 
+              v-model.trim="category.name"
+              type="text"
+              :placeholder="$t('categories.name_ph')"
+              class="w-full bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent px-5 py-4 rounded-2xl text-sm font-bold text-slate-800 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 outline-none transition-all focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500/30 focus:shadow-lg focus:shadow-emerald-500/5"
+              :class="{ '!border-rose-500/30 !bg-rose-50/30 !text-rose-600': submitted && !category.name }"
+              autofocus
+            />
+            <small v-if="submitted && !category.name" class="text-[9px] font-black text-rose-500 uppercase tracking-widest mt-2 ml-1 block">{{ $t('categories.messages.name_required') }}</small>
+          </div>
+        </div>
+
+        <!-- Description Field -->
+        <div class="space-y-3">
+          <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">{{ $t('categories.description') }}</label>
+          <div class="relative group">
+            <textarea 
+              v-model="category.description"
+              :placeholder="$t('categories.description_ph')"
+              rows="3"
+              class="w-full bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent px-5 py-4 rounded-2xl text-sm font-medium text-slate-600 dark:text-slate-400 placeholder:text-slate-300 dark:placeholder:text-slate-600 outline-none transition-all focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500/30 focus:shadow-lg focus:shadow-emerald-500/5 resize-none"
+            ></textarea>
           </div>
         </div>
       </div>
-    </div>
 
-    <template #footer>
-      <Button label="Yopish" icon="pi pi-times" text @click="$emit('update:visible', false)" />
-      <Button :label="category._id ? 'Yangilash' : 'Qo\'shish'" icon="pi pi-check" :loading="saving" @click="onSave" />
-    </template>
-  </Dialog>
+      <!-- Actions -->
+      <div class="mt-12 flex items-center justify-end gap-6">
+        <button 
+          @click="$emit('update:visible', false)"
+          class="text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+        >
+          {{ $t('common.cancel') }}
+        </button>
+        <button 
+          @click="onSave"
+          :disabled="saving"
+          class="h-14 px-10 bg-slate-900 dark:bg-emerald-500 text-white text-xs font-black uppercase tracking-[0.15em] rounded-2xl hover:shadow-2xl hover:shadow-emerald-500/30 active:scale-95 transition-all disabled:opacity-50"
+        >
+          <span v-if="saving">...</span>
+          <span v-else>{{ category._id || category.id ? $t('common.save') : $t('common.add') }}</span>
+        </button>
+      </div>
+    </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
-import Dialog from 'primevue/dialog'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import Textarea from 'primevue/textarea'
 
 const props = defineProps({
   visible: Boolean,
@@ -63,12 +98,26 @@ const onSave = () => {
 }
 
 watch(() => props.visible, (newVal) => {
-  if (!newVal) {
-    submitted.value = false
-  }
+  if (!newVal) submitted.value = false
 })
 </script>
 
 <style scoped>
-.font-sm { font-size: 0.875rem; }
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoom-in {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.animate-zoom-in {
+  animation: zoom-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 </style>

@@ -1,49 +1,61 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Mahsulotlar Boshqaruvi</h1>
-      <div class="flex gap-2">
-        <Button label="Kategoriya qo'shish" icon="pi pi-folder-plus" outlined severity="secondary" @click="openCategoryDialog" />
-        <Button label="Yangi mahsulot" icon="pi pi-plus" severity="success" @click="openNewProductDialog" />
+  <div class="space-y-6 animate-fade-in">
+    <!-- Page Header & Stats -->
+    <div class="flex flex-col gap-5 sm:gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
+      <ProductPageHeader 
+        :totalProducts="totalProducts"
+        @add-category="openCategoryDialog"
+      />
+
+      <!-- Quick Stats -->
+      <ProductStats 
+        :totalProducts="totalProducts"
+        :categoriesCount="categories.length"
+        :warehousesCount="warehouses.length"
+      />
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Left Sidebar: Categories -->
+      <div class="col-span-12 lg:col-span-3">
+        <CategoryList 
+          :categories="categories" 
+          :selectedId="selectedCategory"
+          :totalProducts="totalProducts"
+          @select="onCategorySelect"
+          @add="openCategoryDialog"
+          @edit="editCategory"
+          @delete="confirmDeleteCategory"
+        />
+      </div>
+
+      <!-- Right Main: Products -->
+      <div class="col-span-12 lg:col-span-9 space-y-4">
+        <!-- Filters and Search -->
+        <ProductFilters 
+          v-model:searchQuery="searchQuery"
+          v-model:selectedWarehouse="selectedWarehouse"
+          :warehouses="warehouses"
+          :loading="loading"
+          @search="loadProducts"
+          @change="loadProducts"
+          @refresh="loadProducts"
+        />
+
+        <!-- Products Table Component -->
+        <ProductTable 
+          :products="products" 
+          :loading="loading" 
+          :totalRecords="totalProducts" 
+          :currentPage="currentPage"
+          @delete="confirmDeleteProduct"
+          @page-change="handlePageChange"
+        />
       </div>
     </div>
 
-    <!-- Filters and Search -->
-    <Card class="border-none shadow-sm">
-      <template #content>
-        <div class="flex flex-wrap gap-4 items-center justify-between">
-          <div class="flex gap-4 items-center">
-            <span class="p-input-icon-left w-full md:w-80">
-              <i class="pi pi-search" />
-              <InputText v-model="searchQuery" placeholder="Qidiruv (Nomi, Barcode...)" class="w-full" @input="handleSearch" />
-            </span>
-            <Dropdown v-model="selectedWarehouse" placeholder="omborni tanlang" :options="warehouses" optionLabel="name" optionValue="_id" class="w-48" showClear @change="loadProducts" />
-            <Dropdown v-model="selectedCategory" placeholder="Kategoriyani tanlang" :options="categories" optionLabel="name" optionValue="name" class="w-48" showClear @change="loadProducts" />
-          </div>
-          <Button icon="pi pi-filter" text severity="secondary" label="Filtrlar" />
-        </div>
-      </template>
-    </Card>
 
-    <!-- Products Table Component -->
-    <ProductTable 
-      :products="products" 
-      :loading="loading" 
-      :totalRecords="totalProducts" 
-      @edit="editProduct" 
-      @delete="confirmDeleteProduct"
-    />
-
-    <!-- Product Dialog Component -->
-    <ProductDialog 
-      v-model:visible="productDialog"
-      :product="product"
-      :categories="categories"
-      :warehouses="warehouses"
-      :saving="saving"
-      :header="productDialogHeader"
-      @save="saveProduct"
-    />
 
     <!-- Category Dialog Component -->
     <CategoryDialog 
@@ -55,232 +67,99 @@
       @edit="editCategory"
       @delete="confirmDeleteCategory"
     />
-
-
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useToast } from 'primevue/usetoast'
-import { useConfirm } from 'primevue/useconfirm'
-import Button from 'primevue/button'
-import Card from 'primevue/card'
-import InputText from 'primevue/inputtext'
-import Dropdown from 'primevue/dropdown'
-import ConfirmDialog from 'primevue/confirmdialog'
+import { onMounted } from 'vue'
 
+// Components
 import ProductTable from './components/ProductTable.vue'
-import ProductDialog from './components/ProductDialog.vue'
 import CategoryDialog from './components/CategoryDialog.vue'
+import CategoryList from './components/CategoryList.vue'
+import ProductStats from './components/ProductStats.vue'
+import ProductPageHeader from './components/ProductPageHeader.vue'
+import ProductFilters from './components/ProductFilters.vue'
 
-import { productsAPI, warehousesAPI, categoriesAPI } from '@/services/api'
+// Composables
+import { useProducts } from './composables/useProducts'
+import { useCategories } from './composables/useCategories'
 
-const toast = useToast()
-const confirm = useConfirm()
+const {
+  loading,
+  products,
+  totalProducts,
+  currentPage,
+  searchQuery,
+  selectedWarehouse,
+  selectedCategory,
+  loadProducts,
+  handlePageChange,
+  confirmDeleteProduct
+} = useProducts()
 
-const loading = ref(false)
-const saving = ref(false)
-const cSaving = ref(false)
-const searchQuery = ref('')
-const selectedWarehouse = ref(null)
-const selectedCategory = ref(null)
-const warehouses = ref([])
-const categories = ref([])
-const products = ref([])
-const totalProducts = ref(0)
+const {
+  categories,
+  warehouses,
+  cSaving,
+  categoryDialog,
+  category,
+  loadData,
+  openCategoryDialog,
+  editCategory,
+  saveCategory,
+  confirmDeleteCategory
+} = useCategories()
 
-const productDialog = ref(false)
-const categoryDialog = ref(false)
-
-const product = ref({
-  name: '',
-  category: '',
-  barcode: '',
-  warehouse: null,
-  unit: 'dona',
-  amount: 0,
-  purchasePrice: 0,
-  salePrice: 0,
-  lowStockThreshold: 10,
-  imageUrl: ''
-})
-
-const category = ref({
-  name: '',
-  description: ''
-})
-
-const productDialogHeader = computed(() => {
-  return (product.value.id || product.value._id) ? "Mahsulotni tahrirlash" : "Yangi mahsulot qo'shish"
-})
-
-let searchTimeout = null
-
-const handleSearch = () => {
-  clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
-    loadProducts()
-  }, 500)
-}
-
-const loadProducts = async () => {
-  loading.value = true
-  try {
-    const params = { page: 1, limit: 10 }
-    if (searchQuery.value) params.search = searchQuery.value
-    if (selectedWarehouse.value) params.warehouse = selectedWarehouse.value
-    if (selectedCategory.value) params.category = selectedCategory.value
-
-    const response = await productsAPI.getAll(params)
-    products.value = response.data.products
-    totalProducts.value = response.data.total
-  } catch (error) {
-    console.error('Error loading products:', error)
-    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Mahsulotlarni yuklashda xatolik', life: 3000 })
-  } finally {
-    loading.value = false
-  }
-}
-
-const loadData = async () => {
-  try {
-    const [wRes, cRes] = await Promise.all([
-      warehousesAPI.getAll(),
-      categoriesAPI.getAll()
-    ])
-    warehouses.value = wRes.data
-    categories.value = cRes.data
-  } catch (error) {
-    console.error('Error loading data:', error)
-  }
+const onCategorySelect = (cat) => {
+  selectedCategory.value = cat ? (cat._id || cat.id || cat.name) : null
+  currentPage.value = 1
+  loadProducts()
 }
 
 onMounted(() => {
   loadProducts()
   loadData()
 })
-
-// Product Methods
-const openNewProductDialog = () => {
-  product.value = {
-    name: '',
-    category: categories.value.length > 0 ? categories.value[0].name : '',
-    barcode: '',
-    warehouse: warehouses.value.length > 0 ? warehouses.value[0]._id : null,
-    unit: 'dona',
-    amount: 0,
-    purchasePrice: 0,
-    salePrice: 0,
-    lowStockThreshold: 10,
-    imageUrl: ''
-  }
-  productDialog.value = true
-}
-
-const saveProduct = async ({ product: productData, file }) => {
-  saving.value = true
-  try {
-    const formData = new FormData()
-    Object.keys(productData).forEach(key => {
-      if (productData[key] !== null && productData[key] !== undefined && key !== '__v' && key !== 'createdAt' && key !== 'updatedAt') {
-        let val = productData[key]
-        if (val && typeof val === 'object' && val._id) val = val._id
-        formData.append(key, val)
-      }
-    })
-
-    if (file) {
-      formData.append('image', file)
-    }
-
-    if (productData.id || productData._id) {
-      const id = productData.id || productData._id
-      await productsAPI.update(id, formData)
-      toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot yangilandi', life: 3000 })
-    } else {
-      await productsAPI.create(formData)
-      toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi mahsulot qo\'shildi', life: 3000 })
-    }
-    productDialog.value = false
-    loadProducts()
-  } catch (error) {
-    console.error('Product saving error:', error)
-    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Saqlashda xatolik yuz berdi', life: 3000 })
-  } finally {
-    saving.value = false
-  }
-}
-
-const editProduct = (data) => {
-  product.value = { ...data, warehouse: data.warehouse?._id || data.warehouse }
-  productDialog.value = true
-}
-
-const confirmDeleteProduct = (data) => {
-  confirm.require({
-    message: `"${data.name}" ni o'chirishni tasdiqlaysizmi?`,
-    header: 'Tasdiqlash',
-    icon: 'pi pi-exclamation-triangle',
-    acceptClass: 'p-button-danger',
-    accept: async () => {
-      try {
-        const id = data.id || data._id
-        await productsAPI.delete(id)
-        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot o\'chirildi', life: 3000 })
-        loadProducts()
-      } catch (error) {
-        console.error('Product deletion error:', error)
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 3000 })
-      }
-    }
-  })
-}
-
-// Category Methods
-const openCategoryDialog = () => {
-  category.value = { name: '', description: '' }
-  categoryDialog.value = true
-}
-
-const saveCategory = async (catData) => {
-  cSaving.value = true
-  try {
-    if (catData._id) {
-      await categoriesAPI.update(catData._id, catData)
-      toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya yangilandi', life: 3000 })
-    } else {
-      await categoriesAPI.create(catData)
-      toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya qo\'shildi', life: 3000 })
-    }
-    category.value = { name: '', description: '' }
-    loadData()
-  } catch (error) {
-    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Xatolik yuz berdi', life: 3000 })
-  } finally {
-    cSaving.value = false
-  }
-}
-
-const editCategory = (cat) => {
-  category.value = { ...cat }
-}
-
-const confirmDeleteCategory = (cat) => {
-  confirm.require({
-    message: `"${cat.name}" kategoriyasini o'chirishni tasdiqlaysizmi? Bu mahsulotlarni o'chirmaydi.`,
-    header: 'Tasdiqlash',
-    icon: 'pi pi-exclamation-triangle',
-    acceptClass: 'p-button-danger',
-    accept: async () => {
-      try {
-        await categoriesAPI.delete(cat._id)
-        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya o\'chirildi', life: 3000 })
-        loadData()
-      } catch (error) {
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 3000 })
-      }
-    }
-  })
-}
 </script>
+
+<style scoped>
+@keyframes slide-in-top {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: slide-in-top 0.5s ease-out forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* Common PrimeVue Deep Styles for consistency */
+:deep(.p-datatable-custom) .p-datatable-thead > tr > th {
+  background-color: rgba(248, 250, 252, 0.5);
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 1rem 1.5rem;
+}
+</style>

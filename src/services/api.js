@@ -59,26 +59,26 @@ export const authAPI = {
 
 // Products API
 export const productsAPI = {
-    getAll: (params) => api.get('/products', { params }),
-    getById: (id) => api.get(`/products/${id}`),
+    getAll: (params) => api.get('/warehouse/products/', { params }),
+    getById: (id) => api.get(`/warehouse/products/${id}/`),
     create: (data) => {
         const config = data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
-        return api.post('/products', data, config)
+        return api.post('/warehouse/products/', data, config)
     },
     update: (id, data) => {
         const config = data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
-        return api.put(`/products/${id}`, data, config)
+        return api.patch(`/warehouse/products/${id}/`, data, config)
     },
-    delete: (id) => api.delete(`/products/${id}`),
-    getLowStock: () => api.get('/products/lowstock')
+    delete: (id) => api.delete(`/warehouse/products/${id}/`),
+    getLowStock: () => api.get('/warehouse/products/lowstock/')
 }
 
 // Categories API
 export const categoriesAPI = {
-    getAll: () => api.get('/categories'),
-    create: (data) => api.post('/categories', data),
-    update: (id, data) => api.put(`/categories/${id}`, data),
-    delete: (id) => api.delete(`/categories/${id}`)
+    getAll: (params) => api.get('/warehouse/categories/', { params }),
+    create: (data) => api.post('/warehouse/categories/', data),
+    update: (id, data) => api.patch(`/warehouse/categories/${id}/`, data),
+    delete: (id) => api.delete(`/warehouse/categories/${id}/`)
 }
 
 // Customers API

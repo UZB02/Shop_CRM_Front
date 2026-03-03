@@ -61,6 +61,18 @@ const routes = [
                 meta: { permission: 'products' }
             },
             {
+                path: 'products/create',
+                name: 'product-create',
+                component: () => import('@/views/Products/CreateProduct.vue'),
+                meta: { permission: 'products' }
+            },
+            {
+                path: 'products/edit/:id',
+                name: 'product-edit',
+                component: () => import('@/views/Products/CreateProduct.vue'),
+                meta: { permission: 'products' }
+            },
+            {
                 path: 'workers',
                 name: 'workers',
                 component: () => import('@/views/Workers/index.vue'),
