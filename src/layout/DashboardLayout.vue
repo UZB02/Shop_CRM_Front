@@ -206,8 +206,22 @@
           </div>
 
           <div class="flex items-center gap-1.5 border-l border-slate-200 dark:border-slate-800 pl-3">
+            <!-- Dark / Light Mode Toggle -->
+            <button
+              @click="toggleTheme"
+              class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 relative overflow-hidden
+                     bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700
+                     border border-slate-200 dark:border-slate-700
+                     text-slate-500 dark:text-amber-400
+                     hover:scale-110 active:scale-95"
+              :title="isDark ? 'Light mode' : 'Dark mode'"
+            >
+              <Transition name="theme-icon" mode="out-in">
+                <i v-if="isDark" key="sun" class="pi pi-sun text-sm text-amber-400" />
+                <i v-else key="moon" class="pi pi-moon text-sm text-slate-500" />
+              </Transition>
+            </button>
             <Button icon="pi pi-bell" text rounded severity="secondary" class="!w-9 !h-9" />
-            <Button icon="pi pi-cog" text rounded severity="secondary" class="!w-9 !h-9" />
           </div>
         </div>
       </header>
@@ -269,6 +283,29 @@ const desktopCollapsed  = ref(false)   // desktop icon-only mode
 const showProfileDialog = ref(false)
 const subscriptionWarning = ref('')
 
+/* --- Dark / Light Mode --- */
+const isDark = ref(false)
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+    localStorage.setItem('theme', 'dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+    localStorage.setItem('theme', 'light')
+  }
+}
+const initTheme = () => {
+  const saved = localStorage.getItem('theme')
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  isDark.value = saved ? saved === 'dark' : prefersDark
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
+
 /* --- Language --- */
 const setLang = (lang) => {
   locale.value = lang
@@ -305,6 +342,7 @@ const handleSubscriptionWarning = (e) => {
 const onKeydown = (e) => { if (e.key === 'Escape') sidebarOpen.value = false }
 
 onMounted(() => {
+  initTheme()
   window.addEventListener('subscription-warning', handleSubscriptionWarning)
   window.addEventListener('keydown', onKeydown)
   checkSubscriptionStatus()
@@ -369,4 +407,10 @@ const handleLogout = () => {
 
 /* Prevent body scroll when mobile sidebar is open */
 :global(body:has(.sidebar-open)) { overflow: hidden; }
+
+/* Theme icon transition */
+.theme-icon-enter-active,
+.theme-icon-leave-active { transition: all 0.2s ease; }
+.theme-icon-enter-from   { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+.theme-icon-leave-to     { opacity: 0; transform: rotate(90deg) scale(0.5); }
 </style>
