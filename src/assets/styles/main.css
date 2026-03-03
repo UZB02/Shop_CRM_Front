@@ -63,25 +63,46 @@ body {
    ============================================================ */
 
 .sr-input {
-  @apply w-full bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 px-5 py-3.5 rounded-2xl text-[13px] font-bold text-slate-800 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 outline-none transition-all duration-300;
+  @apply w-full bg-slate-50 border border-slate-100 px-5 py-3.5 rounded-2xl text-[13px] font-bold text-slate-800 placeholder:text-slate-300 outline-none transition-all duration-300;
+}
+
+.dark .sr-input {
+  @apply bg-slate-800/40 border-slate-800/60 text-white placeholder:text-slate-600;
 }
 
 .sr-input:focus {
-  @apply bg-white dark:bg-slate-900 border-emerald-500/30 ring-4 ring-emerald-500/5 shadow-xl shadow-emerald-500/5;
+  @apply bg-white border-emerald-500/30 ring-4 ring-emerald-500/5 shadow-xl shadow-emerald-500/5;
+}
+
+.dark .sr-input:focus {
+  @apply bg-slate-900;
 }
 
 /* Senior UI Standards: Custom Select & Number */
 .p-select.sr-select,
 .p-select {
-  @apply !bg-slate-50 dark: !bg-slate-800/40 !border-slate-100 dark: !border-slate-800/60 !rounded-2xl transition-all duration-300 !w-full;
+  @apply !bg-slate-50 !border-slate-100 !rounded-2xl transition-all duration-300 !w-full;
+}
+
+.dark .p-select.sr-select,
+.dark .p-select {
+  @apply !bg-slate-800/40 !border-slate-800/60;
 }
 
 .p-select-label {
-  @apply !text-[13px] !font-bold !text-slate-800 dark: !text-white !px-5 !py-3.5;
+  @apply !text-[13px] !font-bold !text-slate-800 !px-5 !py-3.5;
+}
+
+.dark .p-select-label {
+  @apply !text-white;
 }
 
 .p-select:not(.p-disabled).p-focus {
-  @apply !border-emerald-500/30 !ring-4 !ring-emerald-500/5 !bg-white dark: !bg-slate-900;
+  @apply !border-emerald-500/30 !ring-4 !ring-emerald-500/5 !bg-white;
+}
+
+.dark .p-select:not(.p-disabled).p-focus {
+  @apply !bg-slate-900;
 }
 
 .p-inputnumber {
@@ -89,20 +110,36 @@ body {
 }
 
 .p-inputnumber .p-inputtext {
-  @apply !bg-transparent !border-none !text-[13px] !font-extrabold !text-slate-800 dark: !text-white !px-5 !py-3.5 !w-full;
+  @apply !bg-transparent !border-none !text-[13px] !font-extrabold !text-slate-800 !px-5 !py-3.5 !w-full;
+}
+
+.dark .p-inputnumber .p-inputtext {
+  @apply !text-white;
 }
 
 .sr-number {
-  @apply bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 rounded-2xl w-full flex items-center transition-all duration-300;
+  @apply bg-slate-50 border border-slate-100 rounded-2xl w-full flex items-center transition-all duration-300;
+}
+
+.dark .sr-number {
+  @apply bg-slate-800/40 border-slate-800/60;
 }
 
 .sr-number:focus-within {
-  @apply bg-white dark:bg-slate-900 border-emerald-500/30 ring-4 ring-emerald-500/5;
+  @apply bg-white border-emerald-500/30 ring-4 ring-emerald-500/5;
+}
+
+.dark .sr-number:focus-within {
+  @apply bg-slate-900;
 }
 
 /* Dropdown Panel Senior Styling */
 .p-select-panel {
-  @apply !border-slate-100 dark: !border-slate-800 !shadow-2xl !rounded-[1.25rem] !mt-2;
+  @apply !border-slate-100 !shadow-2xl !rounded-[1.25rem] !mt-2;
+}
+
+.dark .p-select-panel {
+  @apply !border-slate-800;
 }
 
 .p-select-option {
