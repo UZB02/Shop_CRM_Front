@@ -61,6 +61,7 @@ const passwordDialog = ref(false)
 const saving = ref(false)
 const submitted = ref(false)
 const createLogin = ref(true)
+const originalWorker = ref(null)
 const stores = ref([])
 const storesLoading = ref(false)
 const workerToEdit = ref({
@@ -139,6 +140,7 @@ const handleEdit = () => {
     }
 
     createLogin.value = !!(worker.value.user || worker.value.userId || worker.value.username)
+    originalWorker.value = JSON.parse(JSON.stringify(workerToEdit.value))
     submitted.value = false
     workerDialog.value = true
 }
@@ -154,27 +156,44 @@ const saveWorker = async () => {
 
     saving.value = true
     try {
-        const payload = {
-            first_name: workerToEdit.value.first_name.trim(),
-            last_name: workerToEdit.value.last_name.trim(),
-            role: workerToEdit.value.role,
-            status: workerToEdit.value.status,
+        const payload = {}
+        const current = workerToEdit.value
+        const original = originalWorker.value
+
+        if (current.first_name?.trim() !== original.first_name) payload.first_name = current.first_name.trim()
+        if (current.last_name?.trim() !== original.last_name) payload.last_name = current.last_name.trim()
+        if (current.email?.trim() !== original.email) payload.email = current.email?.trim() || ''
+        if (current.role !== original.role) payload.role = current.role
+        if (current.status !== original.status) payload.status = current.status
+        if (Number(current.salary) !== Number(original.salary)) payload.salary = Number(current.salary) || 0
+        if (current.branch !== original.branch) payload.branch = current.branch
+        if (current.username?.trim() !== original.username) payload.username = current.username?.trim() || ''
+        if (current.password) payload.password = current.password
+
+        // Permissions comparison
+        const currentPerms = [...toRaw(current.permissions || [])].sort()
+        const originalPerms = [...toRaw(original.permissions || [])].sort()
+        if (JSON.stringify(currentPerms) !== JSON.stringify(originalPerms)) {
+            payload.permissions = createLogin.value ? currentPerms : []
         }
 
-        if (workerToEdit.value.email) payload.email = workerToEdit.value.email
-        if (workerToEdit.value.phone1) {
-            let digits = String(workerToEdit.value.phone1).replace(/\D/g, '')
+        // Phone formatting check
+        if (current.phone1 !== original.phone1) {
+            let digits = String(current.phone1).replace(/\D/g, '')
             const cleanNumber = digits.length >= 9 ? digits.slice(-9) : digits
             payload.phone1 = '+998' + cleanNumber
         }
-        if (workerToEdit.value.branch) payload.branch = workerToEdit.value.branch
-        if (workerToEdit.value.salary) payload.salary = workerToEdit.value.salary
 
-        if (createLogin.value) {
-            if (workerToEdit.value.username) payload.username = workerToEdit.value.username
-            if (workerToEdit.value.password) payload.password = workerToEdit.value.password
-            payload.permissions = [...toRaw(workerToEdit.value.permissions || [])]
+        // If nothing changed, just close the dialog
+        if (Object.keys(payload).length === 0) {
+            workerDialog.value = false
+            saving.value = false
+            return
         }
+
+        console.group("🚀 Xodim ma'lumotlarini yuborish (Detail - PATCH)");
+        console.log("Final API Payload:", payload);
+        console.groupEnd();
 
         await workersAPI.update(workerToEdit.value.id, payload)
         toast.add({ 

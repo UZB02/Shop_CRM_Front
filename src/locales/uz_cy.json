@@ -470,5 +470,113 @@
         "qop": "Қоп",
         "quti": "Қути",
         "dona": "Дона"
+    },
+    "settings": {
+        "title": "Тизим Созламалари",
+        "save": "Сақлаш",
+        "saving": "Сақланмоқда...",
+        "unsaved_changes": "Сақланмаган ўзгаришлар мавжуд",
+        "load_error": "Созламаларни юклашда хатолик",
+        "save_success": "Созламалар муваффақиятли янгиланди",
+        "error": "Хатолик юз берди",
+        "tabs": {
+            "modules": "Модуллар",
+            "stock": "Омбор",
+            "payment": "Тўлов",
+            "currency": "Валюта",
+            "receipt": "Чек",
+            "tax": "Солиқ / OFD",
+            "telegram": "Telegram"
+        },
+        "modules": {
+            "title": "Модуллар",
+            "subcategory_label": "Субкатегориялар",
+            "subcategory_desc": "Маҳсулот субкатегорияларини ёқиш",
+            "sale_return_label": "Савдо Қайтариш",
+            "sale_return_desc": "Сотилган маҳсулотни қайтариш имкониятi",
+            "wastage_label": "Чиқит (Wastage)",
+            "wastage_desc": "Маҳсулот чиқитини омбордан ечиладиган қилиш",
+            "stock_audit_label": "Инвентаризация",
+            "stock_audit_desc": "Омбор аудити ва текшируv модули",
+            "kpi_label": "KPI Модули",
+            "kpi_desc": "Ходимлар самарадорлигини баҳолаш",
+            "price_list_label": "Нархлар Рўйхати",
+            "price_list_desc": "Маҳсулотлар нархлар jadvalини ёқиш",
+            "supplier_credit_label": "Таъминотчи Кредит",
+            "supplier_credit_desc": "Таъминотчиларга қарз ёзиб бориш",
+            "shift_title": "Смена & Шифт",
+            "shift_label": "Смена Бошқаруви",
+            "shift_desc": "Ходимлар сменасини кузатиш ва ёпиш",
+            "shifts_per_day_label": "Кундаги смена сони",
+            "shifts_per_day_desc": "1 кунда нечта смена ишлашини белгиланг",
+            "cash_count_label": "Касса ҳисоби (смена ёпишда)",
+            "cash_count_desc": "Смена тугаганда кассани ҳисоблашни талаб қилиш"
+        },
+        "stock": {
+            "title": "Кам Қолдиқ Огоҳлантириш",
+            "low_stock_label": "Огоҳланtirishni Ёқиш",
+            "low_stock_desc": "Маҳсулот белгиланган миқдордан кам бўлганида билдируv",
+            "threshold_label": "Минимал қолдиқ чегараси",
+            "threshold_desc": "Қанча қолганида огоҳлантириш юборилсин (дона)"
+        },
+        "payment": {
+            "title": "Тўлов Усуллари",
+            "cash_label": "Нақд Пул",
+            "cash_desc": "Нақд тўловни қабул қилиш имконияти",
+            "card_label": "Пластик Карта",
+            "card_desc": "Карта орқали тўловни ёқиш",
+            "debt_label": "Қарзга Бериш",
+            "debt_desc": "Мижозларга қарзга сотиш",
+            "discount_title": "Чегирма",
+            "discount_label": "Чегирма Бериш",
+            "discount_desc": "Сотувчи чегирма бера олиши",
+            "max_discount_label": "Максимал чегирма фоизи",
+            "max_discount_desc": "Сотувчи бера оладиган энг юқори чегирма"
+        },
+        "currency": {
+            "title": "Валюта Созламалари",
+            "default_label": "Асосий валюта",
+            "default_desc": "Тизимда ишлатиладиган асосий ҳисоб бирлиги",
+            "show_usd_label": "USD нархини кўрсатиш",
+            "show_usd_desc": "Барча маҳсулотларда доллар нархини ҳам чиқариш",
+            "show_rub_label": "RUB нархини кўрсатиш",
+            "show_rub_desc": "Барча маҳсулотларда рубл нархини ҳам чиқariш"
+        },
+        "receipt": {
+            "title": "Чек Кўринishi",
+            "logo_label": "Дўкон логосини чиқариш",
+            "logo_desc": "Чек тeпасида дўкон логоси кўринсин",
+            "worker_name_label": "Ходим исмини чиқариш",
+            "worker_name_desc": "Чекда кассирнинг исми кўринсин",
+            "text_title": "Чeк Матни",
+            "header_label": "Сарлавҳа (Header)",
+            "header_desc": "Чек тепасидаги матн (дўкон номи, манзил...)",
+            "header_placeholder": "Масалан: Дўконимизга хуш келибсиз!",
+            "footer_label": "Оёқ қисм (Footer)",
+            "footer_desc": "Чек пастидаги матн (раҳмат, қайта келинг...)",
+            "footer_placeholder": "Масалан: Харидингиз учун раҳмат!"
+        },
+        "tax": {
+            "title": "Солиқ (Tax)",
+            "tax_label": "Солиқни Ёқиш",
+            "tax_desc": "Савдоларда автоматик солиқ ҳисоби",
+            "tax_percent_label": "Солиқ фоизи",
+            "tax_percent_desc": "Савдо суммасига қўшиладиган солиқ улуши",
+            "ofd_title": "OFD (Фискал Қурилма)",
+            "ofd_label": "OFD Интеграция",
+            "ofd_desc": "Онлайн фискал қурилма билан уланиш",
+            "ofd_token_label": "OFD Token",
+            "ofd_token_desc": "Оператор томонидан берилган махфий калит",
+            "ofd_device_label": "Қурилма ID (Device ID)",
+            "ofd_device_desc": "Фискал қурилманинг уникал идентификатори"
+        },
+        "telegram": {
+            "title": "Telegram Bot Интеграция",
+            "label": "Telegram Ботни Ёқиш",
+            "desc": "Янги савдолар ва огоҳлантиришларни Telegramга юбориш",
+            "chat_id_label": "Chat ID",
+            "chat_id_desc": "Хабар юбориладиган Telegram канал ёки гуруҳ IDси",
+            "chat_id_placeholder": "-100xxxxxxxxx"
+        }
     }
 }

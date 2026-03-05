@@ -464,5 +464,113 @@
         "qop": "Qop",
         "quti": "Quti",
         "dona": "Dona"
+    },
+    "settings": {
+        "title": "Tizim Sozlamalari",
+        "save": "Saqlash",
+        "saving": "Saqlanmoqda...",
+        "unsaved_changes": "Saqlanmagan o'zgarishlar mavjud",
+        "load_error": "Sozlamalarni yuklashda xatolik",
+        "save_success": "Sozlamalar muvaffaqiyatli yangilandi",
+        "error": "Xatolik yuz berdi",
+        "tabs": {
+            "modules": "Modullar",
+            "stock": "Ombor",
+            "payment": "To'lov",
+            "currency": "Valyuta",
+            "receipt": "Chek",
+            "tax": "Soliq / OFD",
+            "telegram": "Telegram"
+        },
+        "modules": {
+            "title": "Modullar",
+            "subcategory_label": "Subkategoriyalar",
+            "subcategory_desc": "Mahsulot subkategoriyalarini yoqish",
+            "sale_return_label": "Savdo Qaytarish",
+            "sale_return_desc": "Sotilgan mahsulotni qaytarish imkoniyati",
+            "wastage_label": "Chiqit (Wastage)",
+            "wastage_desc": "Mahsulot chiqitini ombordan yechiladigan qilish",
+            "stock_audit_label": "Inventarizatsiya",
+            "stock_audit_desc": "Ombor auditi va tekshiruv moduli",
+            "kpi_label": "KPI Moduli",
+            "kpi_desc": "Xodimlar samaradorligini baholash",
+            "price_list_label": "Narxlar Ro'yxati",
+            "price_list_desc": "Mahsulotlar narxlar jadvalini yoqish",
+            "supplier_credit_label": "Ta'minotchi Kredit",
+            "supplier_credit_desc": "Ta'minotchilarga qarz yozib borish",
+            "shift_title": "Smena & Shift",
+            "shift_label": "Smena Boshqaruvi",
+            "shift_desc": "Xodimlar smenasini kuzatish va yopish",
+            "shifts_per_day_label": "Kundagi smena soni",
+            "shifts_per_day_desc": "1 kunda nechta smena ishlashini belgilang",
+            "cash_count_label": "Kassa hisobi (smena yopishda)",
+            "cash_count_desc": "Smena tugaganda kassani hisoblashni talab qilish"
+        },
+        "stock": {
+            "title": "Kam Qoldiq Ogohlantirish",
+            "low_stock_label": "Ogohlantirishni Yoqish",
+            "low_stock_desc": "Mahsulot belgilangan miqdordan kam bo'lganda bildiruv",
+            "threshold_label": "Minimal qoldiq chegarasi",
+            "threshold_desc": "Qancha qolganida ogohlantirish yuborilsin (dona)"
+        },
+        "payment": {
+            "title": "To'lov Usullari",
+            "cash_label": "Naqd Pul",
+            "cash_desc": "Naqd to'lovni qabul qilish imkoniyati",
+            "card_label": "Plastik Karta",
+            "card_desc": "Karta orqali to'lovni yoqish",
+            "debt_label": "Qarzga Berish",
+            "debt_desc": "Mijozlarga qarzga sotish",
+            "discount_title": "Chegirma",
+            "discount_label": "Chegirma Berish",
+            "discount_desc": "Sotuvchi chegirma bera olishi",
+            "max_discount_label": "Maksimal chegirma foizi",
+            "max_discount_desc": "Sotuvchi bera oladigan eng yuqori chegirma"
+        },
+        "currency": {
+            "title": "Valyuta Sozlamalari",
+            "default_label": "Asosiy valyuta",
+            "default_desc": "Tizimda ishlatiladigan asosiy hisob birligi",
+            "show_usd_label": "USD narxini ko'rsatish",
+            "show_usd_desc": "Barcha mahsulotlarda dollar narxini ham chiqarish",
+            "show_rub_label": "RUB narxini ko'rsatish",
+            "show_rub_desc": "Barcha mahsulotlarda rubl narxini ham chiqarish"
+        },
+        "receipt": {
+            "title": "Chek Ko'rinishi",
+            "logo_label": "Do'kon logosini chiqarish",
+            "logo_desc": "Chek tepasida do'kon logosi ko'rinsin",
+            "worker_name_label": "Xodim ismini chiqarish",
+            "worker_name_desc": "Chekda kassirning ismi ko'rinsin",
+            "text_title": "Chek Matni",
+            "header_label": "Sarlavha (Header)",
+            "header_desc": "Chek tepasidagi matn (do'kon nomi, manzil...)",
+            "header_placeholder": "Masalan: Do'konimizga xush kelibsiz!",
+            "footer_label": "Oyoq qism (Footer)",
+            "footer_desc": "Chek pastidagi matn (rahmat, qayta keling...)",
+            "footer_placeholder": "Masalan: Xaridingiz uchun rahmat!"
+        },
+        "tax": {
+            "title": "Soliq (Tax)",
+            "tax_label": "Soliqni Yoqish",
+            "tax_desc": "Savdolarda avtomatik soliq hisobi",
+            "tax_percent_label": "Soliq foizi",
+            "tax_percent_desc": "Savdo summasiga qo'shiladigan soliq ulushi",
+            "ofd_title": "OFD (Fiskal Qurilma)",
+            "ofd_label": "OFD Integratsiya",
+            "ofd_desc": "Onlayn fiskal qurilma bilan ulanish",
+            "ofd_token_label": "OFD Token",
+            "ofd_token_desc": "Operator tomonidan berilgan maxfiy kalit",
+            "ofd_device_label": "Qurilma ID (Device ID)",
+            "ofd_device_desc": "Fiskal qurilmaning unikal identifikatori"
+        },
+        "telegram": {
+            "title": "Telegram Bot Integratsiya",
+            "label": "Telegram Botni Yoqish",
+            "desc": "Yangi savdolar va ogohlantirishlarni Telegramga yuborish",
+            "chat_id_label": "Chat ID",
+            "chat_id_desc": "Xabar yuboriladigan Telegram kanal yoki guruh IDsi",
+            "chat_id_placeholder": "-100xxxxxxxxx"
+        }
     }
 }

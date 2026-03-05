@@ -159,4 +159,11 @@ export const subscriptionAPI = {
     changePlan: (data) => api.post('/subscription/plan', data)
 }
 
+// Settings API
+export const settingsAPI = {
+    getAll: (params) => api.get('/settings/', { params }),
+    getById: (id) => api.get(`/settings/${id}/`),
+    update: (id, data) => api.patch(`/settings/${id}/`, data)
+}
+
 export default api
