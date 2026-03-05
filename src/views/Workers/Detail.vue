@@ -79,6 +79,7 @@ const loadWorker = async () => {
     loading.value = true
     try {
         const res = await workersAPI.getById(route.params.id)
+        console.log('Worker detail data from API:', res.data)
         worker.value = res.data
     } catch (e) {
         console.error('Worker load error:', e)

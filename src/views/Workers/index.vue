@@ -76,9 +76,7 @@
       v-model:visible="workerDialog"
       v-model:createLogin="createLogin"
       :worker="worker"
-      :stores="stores"
       :branches="branches"
-      :storesLoading="storesLoading"
       :saving="saving"
       :submitted="submitted"
       @save="saveWorker"
@@ -152,7 +150,6 @@ const worker = ref({
     password: '',
     role: 'seller',
     salary: 0,
-    store: null,
     branch: null,
     status: 'active',
     permissions: []
@@ -238,7 +235,6 @@ const openNew = () => {
         password: '',
         role: 'seller',
         salary: 0,
-        store: null,
         branch: null,
         status: 'active',
         permissions: [] 
@@ -278,7 +274,6 @@ const editWorker = async (data) => {
         email: fullData.email || '',
         phone1: (fullData.phone1 || fullData.phone || '').replace(/\D/g, '').slice(-9),
         role: fullData.role || 'seller',
-        store: fullData.store_id || fullData.store?.id || fullData.store?._id || fullData.store || null,
         branch: fullData.branch_id || fullData.branch?.id || fullData.branch?._id || fullData.branch || null,
         status: fullData.status || 'active',
         salary: parseFloat(fullData.salary) || 0,
@@ -319,7 +314,6 @@ const saveWorker = async () => {
             role: worker.value.role,
             salary: Number(worker.value.salary) || 0,
             status: worker.value.status,
-            store: worker.value.store,
             branch: worker.value.branch,
             permissions: createLogin.value ? [...toRaw(worker.value.permissions || [])] : []
         }

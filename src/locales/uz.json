@@ -145,6 +145,10 @@
             "xodimlar": {
                 "label": "Xodimlar",
                 "desc": "Xodimlarni boshqarish"
+            },
+            "sozlamalar": {
+                "label": "Sozlamalar",
+                "desc": "Tizim sozlamalari"
             }
         },
         "messages": {
@@ -389,6 +393,7 @@
     },
     "products": {
         "title": "Mahsulotlar Boshqaruvi",
+        "title_header": "Mahsulotlar Boshqaruvi",
         "subtitle": "{count} ta mahsulot boshqarishga tayyor",
         "new_product": "Yangi mahsulot",
         "new_category": "Kategoriya qo'shish",

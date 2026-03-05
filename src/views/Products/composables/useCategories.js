@@ -17,16 +17,44 @@ export function useCategories(loadProductsCallback) {
     })
 
     const loadData = async () => {
-        try {
-            const [wRes, cRes] = await Promise.all([
-                warehousesAPI.getAll(),
-                categoriesAPI.getAll()
-            ])
-            warehouses.value = wRes.data.results || wRes.data || []
-            categories.value = cRes.data.results || cRes.data || []
-        } catch (error) {
-            console.error('Error loading data:', error)
+        // Individual handlers for partial data loading
+        const fetchWarehouses = async () => {
+            try {
+                const res = await warehousesAPI.getAll()
+                warehouses.value = res.data.results || res.data || []
+            } catch (error) {
+                console.error('%c⚠️ Warehouse Loading Error:', 'color: #f59e0b; font-weight: bold', error.message, error.config?.url)
+                warehouses.value = []
+            }
         }
+
+        const fetchCategories = async () => {
+            try {
+                const res = await categoriesAPI.getAll()
+                const data = res.data.results ?? res.data ?? []
+                categories.value = Array.isArray(data) ? data : []
+
+                // Debug logging (only for dev/debug)
+                console.groupCollapsed('%c📦 Categories loaded', 'color: #6366f1; font-weight: bold')
+                console.log('API URL:', res.config?.url)
+                console.log('Categories:', categories.value)
+                console.groupEnd()
+            } catch (error) {
+                console.error('%c❌ Category Loading Error:', 'color: #ef4444; font-weight: bold', error.message, error.config?.url)
+                categories.value = []
+                if (error.response?.status === 404) {
+                    toast.add({
+                        severity: 'warn',
+                        summary: 'Kategoriya topilmadi',
+                        detail: 'Kategoriyalar endpointi topilmadi (404). API manzilini tekshiring.',
+                        life: 5000
+                    })
+                }
+            }
+        }
+
+        // Parallel but independent
+        await Promise.all([fetchWarehouses(), fetchCategories()])
     }
 
     const openCategoryDialog = () => {

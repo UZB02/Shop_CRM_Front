@@ -1,14 +1,14 @@
 <template>
   <div class="space-y-4">
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] overflow-hidden shadow-sm transition-all duration-500">
+    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl sm:rounded-2xl overflow-hidden shadow-sm transition-all duration-500">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
-              <th class="px-3 sm:px-6 py-3 sm:py-4 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_product') }}</th>
-              <th class="px-3 sm:px-6 py-3 sm:py-4 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_stock') }}</th>
-              <th class="px-3 sm:px-6 py-3 sm:py-4 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_price') }}</th>
-              <th class="px-3 sm:px-6 py-3 sm:py-4 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 text-right">{{ $t('products.col_actions') }}</th>
+              <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_product') }}</th>
+              <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_stock') }}</th>
+              <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_price') }}</th>
+              <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 text-right">{{ $t('products.col_actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -32,12 +32,12 @@
             <tr v-else v-for="item in products" :key="item.id || item._id" 
               class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all duration-300"
             >
-              <td class="px-3 sm:px-6 py-3 sm:py-4">
-                <div class="flex items-center gap-2.5 sm:gap-4">
-                  <div class="relative group/img">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-xl sm:rounded-2xl flex items-center justify-center text-slate-400 overflow-hidden shadow-sm group-hover/img:shadow-md transition-all">
+              <td class="px-3 sm:px-5 py-2.5 sm:py-3.5">
+                <div class="flex items-center gap-2.5 sm:gap-3">
+                  <div class="relative group/img shrink-0">
+                    <div class="w-9 h-9 sm:w-11 sm:h-11 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-lg sm:rounded-xl flex items-center justify-center text-slate-400 overflow-hidden shadow-sm group-hover/img:shadow-md transition-all">
                       <img v-if="item.image" :src="item.image" class="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
-                      <i v-else class="pi pi-image text-lg sm:text-xl text-slate-300"></i>
+                      <i v-else class="pi pi-image text-base sm:text-lg text-slate-300"></i>
                     </div>
                     <div v-if="item.status === 'inactive'" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
                   </div>
@@ -96,7 +96,7 @@
     </div>
 
     <!-- Custom Pagination -->
-    <div v-if="totalRecords > 10" class="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] shadow-sm">
+    <div v-if="totalRecords > 10" class="flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl sm:rounded-2xl shadow-sm">
       <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">
         {{ $t('products.page_info', { current: (currentPage - 1) * 10 + 1 + '-' + Math.min(currentPage * 10, totalRecords), total: totalRecords }) }}
       </p>

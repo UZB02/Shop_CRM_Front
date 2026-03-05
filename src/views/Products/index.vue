@@ -112,7 +112,8 @@ const {
 } = useCategories()
 
 const onCategorySelect = (cat) => {
-  selectedCategory.value = cat ? (cat._id || cat.id || cat.name) : null
+  // API numeric id qaytaradi: cat.id
+  selectedCategory.value = cat ? (cat.id ?? null) : null
   currentPage.value = 1
   loadProducts()
 }

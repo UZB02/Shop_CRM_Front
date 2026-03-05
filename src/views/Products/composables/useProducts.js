@@ -25,12 +25,33 @@ export function useProducts() {
             }
             if (searchQuery.value) params.search = searchQuery.value
             if (selectedWarehouse.value) params.warehouse = selectedWarehouse.value
-            if (selectedCategory.value) {
-                params.category = selectedCategory.value
-                params.category_id = selectedCategory.value
+            if (selectedCategory.value != null) {
+                params.category = selectedCategory.value  // numeric id
             }
 
             const response = await productsAPI.getAll(params)
+
+            // ===== DEBUG: API RESPONSE =====
+            console.group('%c📦 Products API Response', 'color: #10b981; font-weight: bold; font-size: 13px')
+            console.log('📋 Full response:', response)
+            console.log('📊 Response data:', response.data)
+            console.log('🔢 Total count:', response.data.count)
+            console.log('📄 Products list:', response.data.results)
+            if (response.data.results?.length) {
+                console.log('🔍 First product sample:', response.data.results[0])
+                console.table(response.data.results.map(p => ({
+                    id: p.id || p._id,
+                    name: p.name,
+                    category: p.category_name,
+                    price: p.sale_price,
+                    stock: p.amount,
+                    unit: p.unit,
+                    barcode: p.barcode
+                })))
+            }
+            console.groupEnd()
+            // ============= END DEBUG ===========
+
             products.value = response.data.results || []
             totalProducts.value = response.data.count || 0
         } catch (error) {

@@ -1,29 +1,29 @@
 <template>
-  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-6">
-    <div class="space-y-0.5">
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
-        <div class="w-1 h-6 sm:w-1.5 sm:h-8 bg-emerald-500 rounded-full"></div>
-        {{ $t('products.title') }}
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+    <div class="space-y-0.2">
+      <h1 class="text-lg sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+        <div class="w-1 h-5 sm:h-7 bg-emerald-500 rounded-full"></div>
+        {{ $t('products.title_header') || 'Mahsulotlar Boshqaruvi' }}
       </h1>
-      <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-medium ml-3.5 sm:ml-4">
+      <p class="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-bold ml-3 sm:ml-4">
         {{ $t('products.subtitle', { count: totalProducts }) }}
       </p>
     </div>
-    <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+    <div class="flex items-center gap-2 w-full sm:w-auto">
       <Button 
         :label="$t('products.new_category')" 
         icon="pi pi-folder-plus" 
         text 
         severity="secondary" 
         @click="$emit('add-category')" 
-        class="!rounded-xl !px-3 sm:!px-4 !text-xs sm:!text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-semibold flex-1 sm:flex-none" 
+        class="!rounded-lg !px-3 !text-[11px] sm:!text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-bold flex-1 sm:flex-none" 
       />
       <Button 
         :label="$t('products.new_product')" 
         icon="pi pi-plus" 
         severity="success" 
         @click="router.push('/dashboard/products/create')" 
-        class="!rounded-xl !px-4 sm:!px-6 !text-xs sm:!text-sm shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all font-bold flex-1 sm:flex-none" 
+        class="!rounded-lg !px-4 !text-[11px] sm:!text-xs shadow-lg shadow-emerald-500/10 hover:scale-[1.02] active:scale-95 transition-all font-black flex-1 sm:flex-none" 
       />
     </div>
   </div>

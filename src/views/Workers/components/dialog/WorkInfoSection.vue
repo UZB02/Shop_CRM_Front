@@ -3,52 +3,38 @@
     <SectionTitle :label="$t('workers.form.work_info')" color="slate" />
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-      <FormField :label="$t('workers.form.store')">
-        <Dropdown v-model="worker.store"
-                  :options="stores"
-                  optionLabel="name"
-                  optionValue="id"
-                  class="w-full field-input !h-10 flex items-center"
-                  :loading="storesLoading"
-                  @change="worker.branch = null"
-                  :placeholder="$t('common.choose')" />
-      </FormField>
       <FormField :label="$t('workers.form.branch')">
         <Dropdown v-model="worker.branch"
-                  :options="filteredBranches"
+                  :options="branches"
                   optionLabel="name"
                   optionValue="id"
-                  class="w-full !bg-white !border-slate-200 !h-10 !rounded-xl flex items-center"
-                  :disabled="!worker.store"
+                  class="sr-select"
                   :placeholder="$t('workers.form.placeholder_branch')" />
       </FormField>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
       <FormField :label="$t('workers.form.role')">
         <Dropdown v-model="worker.role"
                   :options="localizedRoles"
                   optionLabel="label"
                   optionValue="value"
-                  class="w-full field-input !h-10 flex items-center"
+                  class="sr-select"
                   :placeholder="$t('common.choose')" />
-      </FormField>
-      <FormField :label="$t('workers.form.salary')">
-        <InputNumber v-model="worker.salary"
-                     mode="decimal"
-                     class="w-full rounded-xl"
-                     inputClass="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 h-10 px-3 rounded-xl text-emerald-600 dark:text-emerald-400 font-black outline-none focus:border-emerald-500 transition-all"
-                     placeholder="0" />
       </FormField>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+      <FormField :label="$t('workers.form.salary')">
+        <InputNumber v-model="worker.salary"
+                     mode="decimal"
+                     class="sr-number"
+                     inputClass="!text-emerald-500 dark:!text-emerald-400 !font-black"
+                     placeholder="0" />
+      </FormField>
       <FormField :label="$t('workers.form.status')">
         <Dropdown v-model="worker.status"
                   :options="localizedStatuses"
                   optionLabel="label"
                   optionValue="value"
-                  class="w-full field-input !h-10 flex items-center"
+                  class="sr-select"
                   :placeholder="$t('common.choose')" />
       </FormField>
     </div>
@@ -67,10 +53,8 @@ import { WORKER_STATUSES as statuses, WORKER_ROLES as roles } from '../../compos
 const { t } = useI18n()
 
 const props = defineProps({
-  worker:        { type: Object,  required: true },
-  stores:        { type: Array,   default: () => [] },
-  branches:      { type: Array,   default: () => [] },
-  storesLoading: Boolean,
+  worker:   { type: Object, required: true },
+  branches: { type: Array,  default: () => [] },
 })
 
 const localizedRoles = computed(() => roles.map(r => ({
@@ -82,15 +66,4 @@ const localizedStatuses = computed(() => statuses.map(s => ({
   ...s,
   label: t(`workers.statuses.${s.value}`)
 })))
-
-const filteredBranches = computed(() => {
-  const selectedStoreId = props.worker.store
-  if (!selectedStoreId) return []
-  
-  return props.branches.filter(b => {
-    // API response format check (id or _id, and nested store object or simple ID)
-    const branchStoreId = b.store?.id || b.store?._id || b.store || b.store_id
-    return Number(branchStoreId) === Number(selectedStoreId)
-  })
-})
 </script>

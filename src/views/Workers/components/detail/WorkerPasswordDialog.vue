@@ -146,12 +146,20 @@ const handleSubmit = async () => {
   }
 
   loading.value = true
+  
+  const payload = {
+    current_password: form.current_password,
+    password: form.password,
+    password2: form.password2
+  }
+  
+  console.log('Worker password change request:', {
+    workerId: props.workerId,
+    ...payload
+  })
+
   try {
-    await workersAPI.update(props.workerId, {
-      current_password: form.current_password,
-      password: form.password,
-      password2: form.password2
-    })
+    await workersAPI.changePassword(props.workerId, payload)
     
     toast.add({
       severity: 'success',

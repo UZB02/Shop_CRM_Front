@@ -52,10 +52,7 @@
           </button>
         </div>
       </div>
-      <div class="text-center">
-        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('common.status') }} ID</p>
-        <p class="text-xs lg:text-sm font-black text-slate-700 dark:text-slate-300 tracking-widest">#00{{ worker?.id }}</p>
-      </div>
+
     </div>
 
     <!-- Actions -->

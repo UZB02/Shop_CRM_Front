@@ -1,19 +1,6 @@
 <template>
   <div class="rounded-3xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 p-5 flex flex-col min-h-0">
-    <!-- Toggle Header -->
-    <div class="flex items-center justify-between mb-4">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400">
-          <i class="pi pi-key text-sm"></i>
-        </div>
-        <h3 class="text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">{{ $t('workers.form.system_access') }}</h3>
-      </div>
-      <InputSwitch
-        :modelValue="createLogin"
-        @update:modelValue="$emit('update:createLogin', $event)"
-        class="scale-90"
-      />
-    </div>
+
 
     <!-- Login form (visible when enabled) -->
     <Transition name="fade-slide">
@@ -22,7 +9,7 @@
           <FormField :label="$t('workers.form.username')">
             <div class="p-input-icon-left w-full">
               <InputText v-model="worker.username"
-                         class="w-full !bg-white !border-slate-200 !h-10 !rounded-xl"
+                         class="sr-input"
                          placeholder="username" />
             </div>
           </FormField>
@@ -32,7 +19,7 @@
               <Password v-model="worker.password"
                         toggleMask
                         :feedback="false"
-                        inputClass="w-full !bg-white !border-slate-200 !h-10 !rounded-xl !pl-10"
+                        inputClass="sr-input !pl-10"
                         class="w-full"
                         placeholder="••••••••" />
             </div>

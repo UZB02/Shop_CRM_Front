@@ -9,7 +9,13 @@ export function useWorkerDetail() {
 
     const formatDate = (dateStr) => {
         if (!dateStr) return '—'
-        return new Date(dateStr).toLocaleDateString('uz-UZ', {
+        // If backend already formatted the date (e.g. "2024-03-05 | 12:14")
+        if (typeof dateStr === 'string' && dateStr.includes('|')) return dateStr
+
+        const date = new Date(dateStr)
+        if (isNaN(date.getTime())) return dateStr // Return raw if invalid
+
+        return date.toLocaleDateString('uz-UZ', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',

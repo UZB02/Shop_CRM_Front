@@ -1,7 +1,6 @@
 // Xodim formasidagi barcha statik ma'lumotlar
 export const WORKER_ROLES = [
     { label: 'Egasi (Owner)', value: 'owner' },
-    { label: 'Admin', value: 'admin' },
     { label: 'Menejer', value: 'manager' },
     { label: 'Sotuvchi', value: 'seller' },
 ]
@@ -23,4 +22,5 @@ export const PERMISSIONS_LIST = [
     { label: 'Sotuv (POS)', value: 'sotuv', icon: 'pi-desktop', desc: 'Kassa va sotuv oynasiga kirish' },
     { label: 'Xarajatlar', value: 'xarajatlar', icon: 'pi-wallet', desc: 'Xarajatlar va moliya' },
     { label: 'Xodimlar', value: 'xodimlar', icon: 'pi-id-card', desc: 'Xodimlarni boshqarish' },
+    { label: 'Sozlamalar', value: 'sozlamalar', icon: 'pi-cog', desc: 'Tizim sozlamalari' },
 ]

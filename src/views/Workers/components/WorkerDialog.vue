@@ -21,7 +21,7 @@
         <!-- Left: Personal + Work (7 cols on md+, full on mobile) -->
         <div class="col-span-1 md:col-span-7 space-y-6 md:space-y-8">
           <PersonalInfoSection :worker="worker" :submitted="submitted" />
-          <WorkInfoSection :worker="worker" :stores="stores" :branches="branches" :storesLoading="storesLoading" />
+          <WorkInfoSection :worker="worker" :branches="branches" />
         </div>
 
         <!-- Right: System Access (5 cols on md+, full on mobile) -->
@@ -63,9 +63,7 @@ import SystemAccessPanel from './dialog/SystemAccessPanel.vue'
 const props = defineProps({
   visible:     Boolean,
   worker:      Object,
-  stores:      Array,
   branches:    Array,
-  storesLoading: Boolean,
   saving:      Boolean,
   createLogin: Boolean,
   submitted:   Boolean,

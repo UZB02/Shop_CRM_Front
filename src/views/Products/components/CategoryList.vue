@@ -1,12 +1,12 @@
 <template>
-  <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] overflow-hidden sticky top-24 shadow-sm flex flex-col max-h-[calc(100vh-120px)]">
+  <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl sm:rounded-2xl overflow-hidden sticky top-24 shadow-sm flex flex-col max-h-[calc(100vh-120px)]">
     <!-- Header -->
-    <div class="p-3.5 sm:p-5 border-b border-slate-50 dark:border-slate-800/50 flex items-center justify-between shrink-0">
-      <div class="flex items-center gap-2.5 sm:gap-3">
-        <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
-          <i class="pi pi-th-large text-emerald-500 text-xs sm:text-sm"></i>
+    <div class="p-3 sm:p-4 border-b border-slate-50 dark:border-slate-800/50 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
+          <i class="pi pi-th-large text-emerald-500 text-xs"></i>
         </div>
-        <span class="font-bold sm:font-extrabold text-[13px] sm:text-base text-slate-800 dark:text-white tracking-tight">{{ $t('categories.title') }}</span>
+        <span class="font-black text-xs sm:text-sm text-slate-800 dark:text-white uppercase tracking-tighter">{{ $t('categories.title') }}</span>
       </div>
       <Button 
         icon="pi pi-plus" 
@@ -104,8 +104,8 @@ import Button from 'primevue/button'
 import Badge from 'primevue/badge'
 
 const props = defineProps({
-  categories: Array,
-  selectedId: [String, Number],
+  categories: { type: Array, default: () => [] },
+  selectedId: [String, Number, null],
   totalProducts: Number
 })
 
@@ -114,23 +114,20 @@ const emit = defineEmits(['select', 'add', 'edit', 'delete'])
 const catSearch = ref('')
 
 const filteredCategories = computed(() => {
-  if (!catSearch.value) return props.categories
+  const list = Array.isArray(props.categories) ? props.categories : []
+  if (!catSearch.value) return list
   const query = catSearch.value.toLowerCase()
-  return props.categories.filter(c => c.name?.toLowerCase().includes(query))
+  return list.filter(c => c.name?.toLowerCase().includes(query))
 })
 
 const isSelected = (cat) => {
-  if (!cat || !props.selectedId) return false
-  const catId = cat._id || cat.id
-  return props.selectedId === catId || props.selectedId === cat.name
+  if (!cat || props.selectedId == null) return false
+  // API faqat numeric `id` qaytaradi
+  return Number(props.selectedId) === Number(cat.id)
 }
 
 const selectCategory = (cat) => {
-  if (!cat) {
-    emit('select', null)
-  } else {
-    emit('select', cat)
-  }
+  emit('select', cat ?? null)
 }
 </script>
 
