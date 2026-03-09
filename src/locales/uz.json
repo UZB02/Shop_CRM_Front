@@ -30,7 +30,8 @@
         "subscription_warning_title": "Obuna Ogohlantirishi",
         "no_results": "Hech nima topilmadi",
         "pay": "To'lov",
-        "pay_action": "To'lov qilish"
+        "pay_action": "To'lov qilish",
+        "required_field": "Maydonni to'ldirish shart"
     },
     "workers": {
         "title": "Xodimlar",

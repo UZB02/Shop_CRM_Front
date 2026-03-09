@@ -79,7 +79,7 @@
               </span>
             </td>
             <td class="px-6 py-4 text-right">
-              <div class="flex justify-end gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+              <div class="flex justify-end gap-1 transition-opacity">
                 <button
                   @click="$emit('edit', data)"
                   class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"

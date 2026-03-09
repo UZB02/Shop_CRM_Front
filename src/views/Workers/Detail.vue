@@ -1,12 +1,28 @@
 <template>
-  <div class="max-w-[1600px] mx-auto pb-8 px-4 sm:px-6 lg:px-8 space-y-6 transition-all duration-300">
-    
+  <div class="max-w-[1600px] mx-auto pb-8 px-4 sm:px-6 lg:px-8 space-y-5 transition-all duration-300">
+
+    <!-- Page Nav -->
+    <div class="flex items-center gap-3">
+      <button
+        @click="$router.back()"
+        class="flex items-center justify-center w-8 h-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-emerald-500 hover:border-emerald-400 dark:hover:border-emerald-500 transition-all shadow-sm hover:shadow-emerald-500/10"
+      >
+        <i class="pi pi-arrow-left text-xs"></i>
+      </button>
+      <div class="flex items-center gap-2 text-xs">
+        <span
+          class="text-slate-400 dark:text-slate-500 hover:text-emerald-500 cursor-pointer font-semibold transition-colors"
+          @click="$router.push('/dashboard/workers')"
+        >{{ $t('workers.title') }}</span>
+        <i class="pi pi-angle-right text-slate-300 dark:text-slate-600 text-[10px]"></i>
+        <span class="text-slate-700 dark:text-slate-300 font-bold">{{ worker?.full_name || '...' }}</span>
+      </div>
+    </div>
+
     <!-- HEADER -->
-    <DetailHeader :worker="worker" @edit="handleEdit" @change-password="passwordDialog = true" />
+    <DetailHeader :worker="worker" @edit="handleEdit" />
 
     <div class="space-y-6">
-      <!-- INFO GRID -->
-      <DetailInfoGrid :worker="worker" />
 
       <!-- ACCORDION (Details & Permissions) -->
       <DetailAccordion :worker="worker" />
@@ -25,13 +41,6 @@
       @hide="hideDialog"
     />
 
-    <!-- Password Reset Dialog -->
-    <WorkerPasswordDialog 
-      v-if="worker"
-      v-model:visible="passwordDialog"
-      :workerId="worker.id || worker._id"
-      :workerName="worker.full_name"
-    />
   </div>
 </template>
 
@@ -42,12 +51,9 @@ import { useI18n } from 'vue-i18n'
 import { workersAPI, storesAPI, branchesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
-// Components
 import WorkerDialog from './components/WorkerDialog.vue'
 import DetailHeader from './components/detail/DetailHeader.vue'
-import DetailInfoGrid from './components/detail/DetailInfoGrid.vue'
 import DetailAccordion from './components/detail/DetailAccordion.vue'
-import WorkerPasswordDialog from './components/detail/WorkerPasswordDialog.vue'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -55,9 +61,7 @@ const toast = useToast()
 const worker = ref(null)
 const loading = ref(false)
 
-// Dialog states
 const workerDialog = ref(false)
-const passwordDialog = ref(false)
 const saving = ref(false)
 const submitted = ref(false)
 const createLogin = ref(true)
@@ -152,7 +156,7 @@ const hideDialog = () => {
 
 const saveWorker = async () => {
     submitted.value = true
-    if (!workerToEdit.value.first_name?.trim() || !workerToEdit.value.last_name?.trim()) return
+    if (!workerToEdit.value.first_name?.trim() || !workerToEdit.value.last_name?.trim() || !workerToEdit.value.email?.trim()) return
 
     saving.value = true
     try {

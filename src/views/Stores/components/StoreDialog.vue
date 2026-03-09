@@ -38,8 +38,10 @@
             <div class="space-y-2 py-1">
 
               <!-- Store Name -->
-              <div class="space-y-1">
-                <label for="name" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">{{ $t('stores.form.store_name') }}</label>
+              <div class="space-y-1 relative">
+                <label for="name" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
+                  {{ $t('stores.form.store_name') }} <span class="text-red-500">*</span>
+                </label>
                 <div class="flex items-stretch group">
                   <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
                     <i class="pi pi-pencil text-slate-400 group-focus-within:text-emerald-500 text-xs"></i>
@@ -49,14 +51,20 @@
                     v-model.trim="store.name"
                     autofocus
                     :placeholder="$t('stores.form.store_name_ph')"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.name?.trim() }"
                     class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
+                  <p v-if="submitted && !store.name?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                    {{ $t('common.required_field') }}
+                  </p>
                 </div>
               </div>
 
               <!-- Location -->
-              <div class="space-y-1">
-                <label for="location" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">{{ $t('stores.form.city') }}</label>
+              <div class="space-y-1 relative">
+                <label for="location" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
+                  {{ $t('stores.form.city') }} <span class="text-red-500">*</span>
+                </label>
                 <div class="flex items-stretch group">
                   <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
                     <i class="pi pi-map-marker text-slate-400 group-focus-within:text-emerald-500 text-xs"></i>
@@ -65,21 +73,36 @@
                     id="location"
                     v-model.trim="store.location"
                     :placeholder="$t('stores.form.city_ph')"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.location?.trim() }"
                     class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
+                  <p v-if="submitted && !store.location?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                    {{ $t('common.required_field') }}
+                  </p>
                 </div>
               </div>
 
               <!-- Phone & Status: stacked on mobile, side-by-side on desktop -->
               <div class="flex flex-col sm:flex-row gap-3">
                 <!-- Phone -->
-                <div class="space-y-1 sm:flex-[3] min-w-0">
-                  <label for="phone" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">{{ $t('stores.form.phone') }}</label>
+                <div class="space-y-1 sm:flex-[3] min-w-0 relative">
+                  <label for="phone" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
+                    {{ $t('stores.form.phone') }} <span class="text-red-500">*</span>
+                  </label>
                   <div class="flex items-stretch group">
                     <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
                       <i class="pi pi-phone text-slate-400 text-xs group-focus-within:text-emerald-500"></i>
                     </div>
-                    <InputText id="phone" v-model="store.phone" :placeholder="$t('stores.form.phone_ph')" class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-3 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none" />
+                    <InputText
+                      id="phone"
+                      v-model="store.phone"
+                      :placeholder="$t('stores.form.phone_ph')"
+                      :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.phone?.trim() }"
+                      class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-3 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
+                    />
+                    <p v-if="submitted && !store.phone?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                      {{ $t('common.required_field') }}
+                    </p>
                   </div>
                 </div>
                 <!-- Status -->

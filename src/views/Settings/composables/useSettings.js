@@ -49,7 +49,13 @@ export function useSettings() {
                 settings.value = data
                 FORM_FIELDS.forEach(f => { form[f] = data[f] })
                 originalForm.value = { ...form }
-                console.log('Settings loaded:', data)
+                console.log('Settings loaded (getAll):', data)
+
+                // getById natijasini consolega chiqarish
+                if (data.id) {
+                    const byIdRes = await settingsAPI.getById(data.id)
+                    console.log('Settings getById natijasi:', byIdRes.data)
+                }
             }
         } catch (e) {
             console.error('Settings load error:', e)

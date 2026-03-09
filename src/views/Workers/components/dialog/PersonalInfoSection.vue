@@ -29,9 +29,10 @@
                      placeholder="901234567" />
         </div>
       </FormField>
-      <FormField :label="$t('workers.form.email')">
+      <FormField :label="$t('workers.form.email')" required>
         <InputText v-model.trim="worker.email"
                    class="sr-input"
+                   :class="{ '!border-rose-500': submitted && !worker.email }"
                    placeholder="email@example.com" />
       </FormField>
     </div>

@@ -80,7 +80,7 @@ const props = defineProps({
   worker: Object
 })
 
-const { t } = useWorkerDetail()
+const { t, formatDate } = useWorkerDetail()
 
 const detailItems = computed(() => [
   { label: t('workers.full_name'), value: props.worker?.full_name, icon: 'pi-user' },
@@ -90,6 +90,7 @@ const detailItems = computed(() => [
   { label: t('common.status'), value: props.worker?.status ? t(`workers.statuses.${props.worker.status}`) : '—', icon: 'pi-info-circle' },
   { label: t('workers.role'), value: props.worker?.role_display, icon: 'pi-briefcase' },
   { label: t('workers.branch'), value: props.worker?.branch_name, icon: 'pi-map-marker' },
+  { label: t('workers.created_at'), value: formatDate(props.worker?.created_on), icon: 'pi-calendar' },
 ])
 </script>
 

@@ -57,15 +57,8 @@
 
     <!-- Actions -->
     <div class="flex items-center flex-wrap gap-2 md:gap-3 w-full sm:w-auto justify-center sm:justify-end border-t sm:border-t-0 pt-4 sm:pt-0 mt-2 sm:mt-0 border-slate-100 dark:border-slate-800">
-      <Button icon="pi pi-arrow-left" 
-              :label="$t('common.back')" 
-              text 
-              class="!text-slate-400 hover:!text-emerald-500 !font-bold !text-[10px] uppercase tracking-widest !px-2"
-              @click="$router.back()" />
-      <Button icon="pi pi-key" 
-              label="Parol" 
-              class="!rounded-xl !px-3 !py-2.5 !bg-slate-100 dark:!bg-slate-800 !border-none !text-slate-600 dark:!text-slate-300 !font-black !text-[10px] transition-all hover:-translate-y-0.5" 
-              @click="$emit('change-password')" />
+
+
       <Button icon="pi pi-pencil" 
               :label="$t('common.edit')" 
               class="!rounded-xl !px-3 sm:!px-5 !py-2.5 !bg-emerald-500 hover:!bg-emerald-600 !border-none !text-white !font-black !text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5" 
@@ -83,7 +76,7 @@ const props = defineProps({
   worker: Object
 })
 
-defineEmits(['edit', 'change-password'])
+defineEmits(['edit'])
 
 const showSalary = ref(false)
 const { getAvatarGradient, getInitials, getStatusStyles, formatCurrency } = useWorkerDetail()

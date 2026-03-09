@@ -35,9 +35,9 @@
             <div class="space-y-3 py-1">
 
               <!-- Branch Name -->
-              <div class="space-y-1">
+              <div class="space-y-1 relative">
                 <label for="b_name" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
-                  {{ $t('stores.form.branch_name') }}
+                  {{ $t('stores.form.branch_name') }} <span class="text-red-500">*</span>
                 </label>
                 <div class="flex items-stretch group">
                   <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-blue-500 transition-all rounded-l-xl">
@@ -48,17 +48,21 @@
                     v-model.trim="branch.name"
                     autofocus
                     :placeholder="$t('stores.form.branch_name_ph')"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !branch.name?.trim() }"
                     class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
+                  <p v-if="submitted && !branch.name?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                    {{ $t('common.required_field') }}
+                  </p>
                 </div>
               </div>
 
               <!-- Phone & Status Row -->
               <div class="flex flex-col sm:flex-row gap-3">
                 <!-- Phone -->
-                <div class="space-y-1 sm:flex-[3] min-w-0">
+                <div class="space-y-1 sm:flex-[3] min-w-0 relative">
                   <label for="b_phone" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
-                    {{ $t('stores.form.branch_phone') }}
+                    {{ $t('stores.form.branch_phone') }} <span class="text-red-500">*</span>
                   </label>
                   <div class="flex items-stretch group">
                     <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
@@ -68,8 +72,12 @@
                       id="b_phone"
                       v-model="branch.phone"
                       :placeholder="$t('stores.form.phone_ph')"
+                      :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !branch.phone?.trim() }"
                       class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                     />
+                    <p v-if="submitted && !branch.phone?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                      {{ $t('common.required_field') }}
+                    </p>
                   </div>
                 </div>
                 <!-- Status -->
@@ -90,9 +98,9 @@
               </div>
 
               <!-- Address -->
-              <div class="space-y-1">
+              <div class="space-y-1 relative">
                 <label for="b_address" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
-                  {{ $t('stores.form.branch_address') }}
+                  {{ $t('stores.form.branch_address') }} <span class="text-red-500">*</span>
                 </label>
                 <div class="flex items-stretch group">
                   <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
@@ -102,8 +110,12 @@
                     id="b_address"
                     v-model.trim="branch.address"
                     :placeholder="$t('stores.form.branch_address_ph')"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !branch.address?.trim() }"
                     class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2.5 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
+                  <p v-if="submitted && !branch.address?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                    {{ $t('common.required_field') }}
+                  </p>
                 </div>
               </div>
 

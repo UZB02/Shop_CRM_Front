@@ -88,7 +88,7 @@ export function useWorkerActions(loadWorkersCallback) {
 
     const saveWorker = async () => {
         submitted.value = true
-        if (!worker.value.first_name?.trim() || !worker.value.last_name?.trim()) return
+        if (!worker.value.first_name?.trim() || !worker.value.last_name?.trim() || !worker.value.email?.trim()) return
 
         if (createLogin.value && worker.value.username?.trim().length < 5) {
             toast.add({

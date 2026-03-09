@@ -133,7 +133,7 @@ export function useStores() {
 
     const saveStore = async () => {
         submitted.value = true
-        if (!storeForm.value.name?.trim()) return
+        if (!storeForm.value.name?.trim() || !storeForm.value.location?.trim() || !storeForm.value.phone?.trim()) return
         saving.value = true
         try {
             const id = storeForm.value.id || storeForm.value._id
@@ -167,7 +167,7 @@ export function useStores() {
 
     const saveBranch = async () => {
         branchSubmitted.value = true
-        if (!branch.value.name?.trim()) return
+        if (!branch.value.name?.trim() || !branch.value.phone?.trim() || !branch.value.address?.trim()) return
         saving.value = true
         try {
             const id = branch.value.id || branch.value._id
