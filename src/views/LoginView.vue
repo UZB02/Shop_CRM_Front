@@ -17,12 +17,12 @@
 
         <div class="flex flex-col gap-2">
           <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Username</label>
-          <InputText v-model="form.username" placeholder="admin" class="w-full" @keyup.enter="handleLogin" />
+          <InputText v-model="form.username" placeholder="admin" class="sr-input" @keyup.enter="handleLogin" />
         </div>
 
         <div class="flex flex-col gap-2">
           <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Parol</label>
-          <Password v-model="form.password" :feedback="false" toggleMask placeholder="••••••••" class="w-full" inputClass="w-full" @keyup.enter="handleLogin" />
+          <Password v-model="form.password" :feedback="false" toggleMask placeholder="••••••••" class="w-full" inputClass="sr-input" @keyup.enter="handleLogin" />
         </div>
 
         <Button label="Kirish" 

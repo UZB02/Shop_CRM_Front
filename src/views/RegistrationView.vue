@@ -23,12 +23,12 @@
         <!-- Grid for Names -->
         <div class="grid grid-cols-2 gap-4">
           <FieldGroup label="Ism" icon="pi-user" required>
-            <InputText v-model.trim="form.first_name" placeholder="Odamcha" class="w-full"
-                       :class="{ 'p-invalid': submitted && !form.first_name }" />
+            <InputText v-model.trim="form.first_name" placeholder="Odamcha" class="sr-input"
+                       :class="{ '!border-rose-500': submitted && !form.first_name }" />
           </FieldGroup>
           <FieldGroup label="Familiya" icon="pi-user" required>
-            <InputText v-model.trim="form.last_name" placeholder="Familiyacha" class="w-full"
-                       :class="{ 'p-invalid': submitted && !form.last_name }" />
+            <InputText v-model.trim="form.last_name" placeholder="Familiyacha" class="sr-input"
+                       :class="{ '!border-rose-500': submitted && !form.last_name }" />
           </FieldGroup>
         </div>
 
@@ -39,30 +39,30 @@
           required 
           help-text="Ushbu nom tizimga kirish uchun login sifatida ishlatiladi. U unikal bo'lishi shart."
         >
-          <InputText v-model.trim="form.username" placeholder="username" class="w-full"
-                     :class="{ 'p-invalid': submitted && !form.username }" />
+          <InputText v-model.trim="form.username" placeholder="username" class="sr-input"
+                     :class="{ '!border-rose-500': submitted && !form.username }" />
         </FieldGroup>
 
         <!-- Phone -->
         <FieldGroup label="Telefon raqami" icon="pi-phone" required>
-          <InputMask v-model="form.phone1" mask="+999999999999" placeholder="+998" class="w-full"
-                     :class="{ 'p-invalid': submitted && !form.phone1 }" />
+          <InputMask v-model="form.phone1" mask="+999999999999" placeholder="+998" class="sr-input"
+                     :class="{ '!border-rose-500': submitted && !form.phone1 }" />
         </FieldGroup>
 
         <!-- Email -->
         <FieldGroup label="Elektron pochta" icon="pi-envelope">
-          <InputText v-model.trim="form.email" type="email" placeholder="misol@gmail.com" class="w-full" />
+          <InputText v-model.trim="form.email" type="email" placeholder="misol@gmail.com" class="sr-input" />
         </FieldGroup>
 
         <!-- Password Grid -->
         <div class="grid grid-cols-2 gap-4">
           <FieldGroup label="Parol" icon="pi-lock" required>
             <Password v-model="form.password" :feedback="false" toggleMask placeholder="••••••••" 
-                      class="w-full" inputClass="w-full" :class="{ 'p-invalid': submitted && !form.password }" />
+                      class="w-full" inputClass="sr-input" :class="{ 'p-invalid': submitted && !form.password }" />
           </FieldGroup>
           <FieldGroup label="Tasdiqlash" icon="pi-lock" required>
             <Password v-model="form.password2" :feedback="false" toggleMask placeholder="••••••••" 
-                      class="w-full" inputClass="w-full" :class="{ 'p-invalid': submitted && !form.password2 }" />
+                      class="w-full" inputClass="sr-input" :class="{ 'p-invalid': submitted && !form.password2 }" />
           </FieldGroup>
         </div>
 
@@ -245,58 +245,6 @@ const handleRegister = async () => {
 </script>
 
 <style scoped>
-.reg-input,
-:deep(.p-password input),
-:deep(.p-inputmask) {
-  background: white !important;
-  border-color: #e2e8f0 !important;
-  border-radius: 12px !important;
-  height: 44px !important;
-  color: #1e293b !important;
-  font-size: 14px !important;
-  transition: all 0.2s ease;
-}
-
-.dark .reg-input,
-.dark :deep(.p-password input),
-.dark :deep(.p-inputmask) {
-  background: rgb(15 23 42 / 0.7) !important;
-  border-color: rgb(51 65 85) !important;
-  color: white !important;
-}
-
-.reg-input:focus,
-.reg-input.p-focus,
-:deep(.p-password input:focus),
-:deep(.p-inputmask:focus) {
-  border-color: #10b981 !important;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
-  outline: none !important;
-}
-
-.dark .reg-input:focus,
-.dark .reg-input.p-focus,
-.dark :deep(.p-password input:focus),
-.dark :deep(.p-inputmask:focus) {
-  border-color: rgb(16 185 129 / 0.6) !important;
-  box-shadow: 0 0 0 3px rgb(16 185 129 / 0.12) !important;
-}
-
-.reg-input::placeholder,
-:deep(.p-password input::placeholder),
-:deep(.p-inputmask::placeholder) { 
-  color: #94a3b8; 
-}
-
-.dark .reg-input::placeholder,
-.dark :deep(.p-password input::placeholder),
-.dark :deep(.p-inputmask::placeholder) { 
-  color: rgb(100 116 139); 
-}
-
-:deep(.p-password-toggle-icon) { color: #94a3b8; }
-.dark :deep(.p-password-toggle-icon) { color: rgb(100 116 139); }
-
 .slide-down-enter-active { animation: slidedown 0.25s ease; }
 .slide-down-leave-active { animation: slidedown 0.2s reverse ease; }
 @keyframes slidedown {

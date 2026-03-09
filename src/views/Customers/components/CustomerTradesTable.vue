@@ -1,58 +1,77 @@
 <template>
-  <Card class="border-none shadow-sm h-full">
-    <template #title>Xaridlar Tarixi</template>
-    <template #content>
-      <DataTable :value="trades" paginator :rows="10" stripedRows responsiveLayout="scroll">
-        <template #empty>
-          <div class="text-center py-8 text-gray-500">
-            Ushbu mijoz uchun xaridlar tarixi topilmadi.
-          </div>
-        </template>
-        <Column field="tradeId" header="ID">
-          <template #body="slotProps">
-            <span class="font-mono font-medium text-emerald-600">{{ slotProps.data.tradeId }}</span>
+  <div class="bg-white dark:bg-slate-900/50 rounded-[2.5rem] border border-slate-100 dark:border-slate-800/50 overflow-hidden shadow-sm backdrop-blur-xl h-full flex flex-col">
+    <!-- Header -->
+    <div class="px-8 py-5 border-b border-slate-50 dark:border-slate-800/50 flex items-center justify-between">
+      <h3 class="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Xaridlar Tarixi</h3>
+      <div class="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-[9px] font-black text-indigo-500 uppercase tracking-widest">
+        {{ trades.length }} ta savdo
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="flex-grow overflow-x-auto">
+      <table class="w-full text-left border-collapse min-w-[500px]">
+        <thead>
+          <tr class="bg-slate-50/30 dark:bg-slate-800/20">
+            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">ID / Sana</th>
+            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">Mahsulotlar</th>
+            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">Summa</th>
+            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 text-right">Holat</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50 dark:divide-slate-800/40">
+          <template v-if="!trades.length">
+            <tr>
+              <td colspan="4" class="px-6 py-12 text-center text-slate-400 italic text-sm">
+                Xaridlar tarixi topilmadi.
+              </td>
+            </tr>
           </template>
-        </Column>
-        <Column header="Sana">
-          <template #body="slotProps">
-            {{ formatDateTime(slotProps.data.createdAt) }}
-          </template>
-        </Column>
-        <Column header="Mahsulotlar">
-          <template #body="slotProps">
-            <div class="flex flex-col gap-1">
-              <span v-for="(item, index) in slotProps.data.products.slice(0, 2)" :key="index" class="text-sm">
-                {{ item.quantity }}x {{ item.product?.name || item.productName }}
+          <tr v-for="t in trades" :key="t.id" class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+            <td class="px-6 py-4">
+              <div class="flex flex-col">
+                <span class="text-[11px] font-black text-indigo-500 tracking-tight">#{{ t.tradeId || t.id }}</span>
+                <span class="text-[9px] font-bold text-slate-400 mt-0.5">{{ formatDateTime(t.created_on || t.createdAt) }}</span>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex flex-col gap-0.5">
+                <template v-if="t.products && t.products.length">
+                  <div v-for="(item, idx) in t.products.slice(0, 2)" :key="idx" class="flex items-center gap-1">
+                    <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300">
+                      {{ item.quantity }}x {{ item.product_name || item.product?.name || 'Mahsulot' }}
+                    </span>
+                  </div>
+                  <span v-if="t.products.length > 2" class="text-[8px] font-black text-slate-400 uppercase">
+                    + yana {{ t.products.length - 2 }} ta
+                  </span>
+                </template>
+                <span v-else class="text-[10px] text-slate-400 tracking-tight">Mahsulotlar yo'q</span>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <span class="text-[11px] font-black text-slate-800 dark:text-white tracking-tighter">
+                {{ formatCurrency(t.total) }}
               </span>
-              <span v-if="slotProps.data.products.length > 2" class="text-xs text-gray-400">
-                + yana {{ slotProps.data.products.length - 2 }} ta
+            </td>
+            <td class="px-6 py-4 text-right">
+              <span 
+                class="inline-flex px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest border"
+                :class="getStatusClass(t.status)"
+              >
+                {{ t.status_display || t.status }}
               </span>
-            </div>
-          </template>
-        </Column>
-        <Column header="Summa">
-          <template #body="slotProps">
-            <span class="font-bold">{{ formatCurrency(slotProps.data.total) }}</span>
-          </template>
-        </Column>
-        <Column header="Holat">
-          <template #body="slotProps">
-            <Tag :value="slotProps.data.status" :severity="getStatusSeverity(slotProps.data.status)" />
-          </template>
-        </Column>
-      </DataTable>
-    </template>
-  </Card>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import Tag from 'primevue/tag'
-import Card from 'primevue/card'
-
 const props = defineProps({
-  trades: Array
+  trades: { type: Array, default: () => [] }
 })
 
 const formatDateTime = (dateString) => {
@@ -70,12 +89,12 @@ const formatCurrency = (val) => {
   return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 }
 
-const getStatusSeverity = (status) => {
-  switch (status) {
-    case 'Yakunlangan': return 'success';
-    case "Qisman to'langan": return 'warning';
-    case "To'lanmagan": return 'danger';
-    default: return 'info';
-  }
+const getStatusClass = (status) => {
+  const s = String(status).toLowerCase()
+  if (s.includes('yakunlangan') || s.includes('payed')) return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+  if (s.includes('qisman') || s.includes('partial')) return 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+  if (s.includes('to\'lanmagan') || s.includes('unpaid')) return 'bg-rose-500/10 text-rose-500 border-rose-500/20'
+  return 'bg-slate-500/10 text-slate-500 border-slate-500/20'
 }
 </script>
+

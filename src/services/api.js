@@ -83,11 +83,19 @@ export const categoriesAPI = {
 
 // Customers API
 export const customersAPI = {
-    getAll: (params) => api.get('/customers', { params }),
-    getById: (id) => api.get(`/customers/${id}`),
-    create: (data) => api.post('/customers', data),
-    update: (id, data) => api.put(`/customers/${id}`, data),
-    delete: (id) => api.delete(`/customers/${id}`)
+    getAll: (params) => api.get('/customers/', { params }),
+    getById: (id) => api.get(`/customers/${id}/`),
+    create: (data) => api.post('/customers/', data),
+    update: (id, data) => api.patch(`/customers/${id}/`, data),
+    delete: (id) => api.delete(`/customers/${id}/`)
+}
+
+// Customer Groups API
+export const customerGroupsAPI = {
+    getAll: (params) => api.get('/customer-groups/', { params }),
+    create: (data) => api.post('/customer-groups/', data),
+    update: (id, data) => api.patch(`/customer-groups/${id}/`, data),
+    delete: (id) => api.delete(`/customer-groups/${id}/`)
 }
 
 // Trades API
