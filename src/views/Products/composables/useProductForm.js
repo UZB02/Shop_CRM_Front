@@ -44,6 +44,9 @@ export function useProductForm() {
             categories.value = Array.isArray(catsRes.data) ? catsRes.data : (catsRes.data?.results || [])
             warehouses.value = Array.isArray(whsRes.data) ? whsRes.data : (whsRes.data?.results || [])
 
+            console.log('Product Form - Warehouses Data:', whsRes.data)
+            console.log('Product Form - Extracted Warehouses:', warehouses.value)
+
             if (isEdit.value) {
                 const res = await productsAPI.getById(route.params.id)
                 const data = res.data

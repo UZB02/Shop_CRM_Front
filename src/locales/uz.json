@@ -359,7 +359,10 @@
             "name_ph": "Masalan: Markaziy Ombor",
             "address": "Manzil",
             "address_ph": "Masalan: Toshkent sh, Yunusobod",
-            "subtitle": "Tizimga yangi ombor kiritish"
+            "subtitle": "Tizimga yangi ombor kiritish",
+            "status": "Holati",
+            "active": "Faol",
+            "inactive": "Nofaol"
         },
         "messages": {
             "added": "Yangi ombor muvaffaqiyatli qo'shildi",

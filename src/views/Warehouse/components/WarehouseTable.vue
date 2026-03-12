@@ -27,8 +27,13 @@
           </td>
           <td class="px-6 py-4">
             <div class="flex items-center gap-2">
-              <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('common.active') }}</span>
+              <div 
+                class="w-1.5 h-1.5 rounded-full" 
+                :class="w.status === 'inactive' ? 'bg-rose-500' : 'bg-emerald-500 animate-pulse'"
+              ></div>
+              <span class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                {{ w.status === 'inactive' ? $t('common.inactive') : $t('common.active') }}
+              </span>
             </div>
           </td>
           <td class="px-6 py-4">

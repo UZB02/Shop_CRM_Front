@@ -24,7 +24,8 @@ export function useWarehouses() {
 
     const warehouse = ref({
         name: '',
-        address: ''
+        address: '',
+        status: 'active'
     })
 
     const filteredWarehouses = computed(() => {
@@ -45,6 +46,8 @@ export function useWarehouses() {
                 page_size: rows.value
             })
 
+            console.log('Warehouses API Full Response:', res.data)
+
             if (res.data.results) {
                 warehouses.value = res.data.results
                 totalRecords.value = res.data.count || res.data.results.length
@@ -52,6 +55,7 @@ export function useWarehouses() {
                 warehouses.value = Array.isArray(res.data) ? res.data : []
                 totalRecords.value = warehouses.value.length
             }
+            console.log('Warehouses List:', warehouses.value)
         } catch (error) {
             toast.add({
                 severity: 'error',
@@ -72,7 +76,8 @@ export function useWarehouses() {
         try {
             const payload = {
                 name: warehouse.value.name.trim(),
-                address: warehouse.value.address?.trim() || ''
+                address: warehouse.value.address?.trim() || '',
+                status: warehouse.value.status || 'active'
             }
 
             const id = warehouse.value.id || warehouse.value._id
@@ -113,13 +118,18 @@ export function useWarehouses() {
     }
 
     const openNewDialog = () => {
-        warehouse.value = { name: '', address: '' }
+        warehouse.value = { name: '', address: '', status: 'active' }
         submitted.value = false
         warehouseDialog.value = true
     }
 
     const editWarehouse = (data) => {
-        warehouse.value = { ...data }
+        console.log('Editing Warehouse:', data)
+        console.log('Warehouse ID:', data.id || data._id)
+        warehouse.value = {
+            ...data,
+            status: data.status || 'active'
+        }
         warehouseDialog.value = true
     }
 

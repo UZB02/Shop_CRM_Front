@@ -21,6 +21,7 @@ export function useCategories(loadProductsCallback) {
         const fetchWarehouses = async () => {
             try {
                 const res = await warehousesAPI.getAll()
+                console.log('UseCategories - Warehouses loaded:', res.data)
                 warehouses.value = res.data.results || res.data || []
             } catch (error) {
                 console.error('%c⚠️ Warehouse Loading Error:', 'color: #f59e0b; font-weight: bold', error.message, error.config?.url)

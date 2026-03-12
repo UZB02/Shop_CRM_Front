@@ -86,9 +86,15 @@ export const useAuthStore = defineStore('auth', {
         logout() {
             this.user = null
             this.token = null
-            localStorage.removeItem('isLoggedIn')
-            localStorage.removeItem('user')
-            localStorage.removeItem('token')
+
+            // Clear all localStorage except for preferences we want to keep
+            const preservedKeys = ['theme', 'lang']
+
+            Object.keys(localStorage).forEach(key => {
+                if (!preservedKeys.includes(key)) {
+                    localStorage.removeItem(key)
+                }
+            })
         }
     }
 })

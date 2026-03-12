@@ -57,8 +57,13 @@
       <!-- Footer/Action area -->
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-          <span class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('common.active') }}</span>
+          <div 
+            class="w-1.5 h-1.5 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.3)]"
+            :class="warehouse.status === 'inactive' ? 'bg-rose-500 shadow-rose-500/30' : 'bg-emerald-500 animate-pulse shadow-emerald-500/30'"
+          ></div>
+          <span class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+            {{ warehouse.status === 'inactive' ? $t('common.inactive') : $t('common.active') }}
+          </span>
         </div>
         <button
           @click="$emit('edit', warehouse)"

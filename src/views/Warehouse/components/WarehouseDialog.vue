@@ -79,6 +79,37 @@
                     />
                   </div>
                 </div>
+
+                <!-- Status -->
+                <div class="space-y-2 px-1 text-left">
+                  <label class="text-[9px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1 text-left">
+                    {{ $t('warehouse.form.status') }}
+                  </label>
+                  <div class="flex gap-4">
+                    <button
+                      type="button"
+                      @click="warehouse.status = 'active'"
+                      class="flex-1 flex items-center justify-center gap-3 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 transition-all font-black text-[10px] uppercase tracking-widest"
+                      :class="warehouse.status === 'active' 
+                        ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                        : 'bg-transparent border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-600 hover:border-emerald-200 dark:hover:border-emerald-900/40'"
+                    >
+                      <i class="pi pi-check-circle"></i>
+                      {{ $t('warehouse.form.active') }}
+                    </button>
+                    <button
+                      type="button"
+                      @click="warehouse.status = 'inactive'"
+                      class="flex-1 flex items-center justify-center gap-3 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 transition-all font-black text-[10px] uppercase tracking-widest"
+                      :class="warehouse.status === 'inactive' 
+                        ? 'bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-500/20' 
+                        : 'bg-transparent border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-600 hover:border-rose-200 dark:hover:border-rose-900/40'"
+                    >
+                      <i class="pi pi-times-circle"></i>
+                      {{ $t('warehouse.form.inactive') }}
+                    </button>
+                  </div>
+                </div>
               </div>
 
               <!-- Footer Actions -->

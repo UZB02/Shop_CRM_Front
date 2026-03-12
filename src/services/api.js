@@ -39,10 +39,15 @@ api.interceptors.response.use(
     },
     (error) => {
         if (error.response?.status === 401) {
-            // Token expired or invalid
-            localStorage.removeItem('token')
-            localStorage.removeItem('user')
-            localStorage.removeItem('isLoggedIn')
+            // Token expired or invalid - Clear all except preferences
+            const preservedKeys = ['theme', 'lang']
+            Object.keys(localStorage).forEach(key => {
+                if (!preservedKeys.includes(key)) {
+                    localStorage.removeItem(key)
+                }
+            })
+
+            // Redirect to login
             window.location.href = '/login'
         }
         return Promise.reject(error)

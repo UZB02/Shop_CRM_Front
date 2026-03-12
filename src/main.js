@@ -12,6 +12,17 @@ import i18n from './i18n'
 import './assets/styles/main.css'
 import 'primeicons/primeicons.css'
 
+// Security: Clear localStorage data if it's a new browser session (except preferences)
+if (!sessionStorage.getItem('session_active')) {
+    const preservedKeys = ['theme', 'lang']
+    Object.keys(localStorage).forEach(key => {
+        if (!preservedKeys.includes(key)) {
+            localStorage.removeItem(key)
+        }
+    })
+    sessionStorage.setItem('session_active', 'true')
+}
+
 const app = createApp(App)
 const pinia = createPinia()
 
