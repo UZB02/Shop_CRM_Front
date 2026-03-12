@@ -227,7 +227,7 @@
       </header>
 
       <!-- PAGE CONTENT -->
-      <main class="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
+      <main class="flex-1 p-4 sm:p-5 lg:p-6 lg:pt-4 min-w-0">
 
         <!-- Subscription warning (mobile) -->
         <div

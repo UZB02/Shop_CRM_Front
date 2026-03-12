@@ -3,19 +3,13 @@
 
     <!-- Page Nav -->
     <div class="flex items-center gap-3">
-      <button
-        @click="$router.back()"
-        class="flex items-center justify-center w-8 h-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-emerald-500 hover:border-emerald-400 dark:hover:border-emerald-500 transition-all shadow-sm hover:shadow-emerald-500/10"
-      >
-        <i class="pi pi-arrow-left text-xs"></i>
-      </button>
-      <div class="flex items-center gap-2 text-xs">
-        <span
-          class="text-slate-400 dark:text-slate-500 hover:text-emerald-500 cursor-pointer font-semibold transition-colors"
-          @click="$router.push('/dashboard/workers')"
-        >{{ $t('workers.title') }}</span>
-        <i class="pi pi-angle-right text-slate-300 dark:text-slate-600 text-[10px]"></i>
-        <span class="text-slate-700 dark:text-slate-300 font-bold">{{ worker?.full_name || '...' }}</span>
+      <div class="flex items-center gap-2">
+        <router-link
+          to="/dashboard/workers"
+          class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 hover:text-emerald-500 transition-colors"
+        >{{ $t('workers.title') }}</router-link>
+        <i class="pi pi-chevron-right text-slate-300 dark:text-slate-700 text-[8px]"></i>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">{{ worker?.full_name || '...' }}</span>
       </div>
     </div>
 

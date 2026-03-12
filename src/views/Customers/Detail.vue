@@ -3,14 +3,19 @@
     <!-- Header -->
     <div class="flex flex-wrap items-center justify-between gap-6 pb-2">
       <div class="flex items-center gap-5">
-        <button 
-          @click="$router.push('/dashboard/customers')"
-          class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:border-emerald-500/30 transition-all shadow-sm group"
-        >
-          <i class="pi pi-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-        </button>
         <div>
-          <h1 class="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Mijoz Tafsilotlari</h1>
+          <div class="flex items-center gap-2 mb-1">
+            <router-link to="/dashboard/customers" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-500 transition-colors">
+              Mijozlar
+            </router-link>
+            <i class="pi pi-chevron-right text-[7px] text-slate-300 dark:text-slate-700"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">
+              Tafsilotlar
+            </span>
+          </div>
+          <h1 class="text-3xl font-black text-slate-800 dark:text-white tracking-tight uppercase">
+            {{ customer?.name || 'Mijoz Tafsilotlari' }}
+          </h1>
           <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             Mijoz haqida batafsil ma'lumotlar
