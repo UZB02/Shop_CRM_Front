@@ -2,67 +2,111 @@
   <Dialog 
     :visible="visible" 
     @update:visible="$emit('update:visible', $event)"
-    :style="{ width: '600px' }" 
-    header="Mijoz Guruhlarini Boshqarish" 
-    :modal="true" 
-    class="p-fluid"
+    :style="{ width: '92vw', maxWidth: '480px' }"
+    :breakpoints="{ '641px': '92vw', '480px': '95vw' }"
+    :header="$t('customers.groups.manage_title')" 
+    :modal="true"
+    :draggable="false"
+    class="p-fluid sr-professional-dialog"
+    pt:root:class="!rounded-[2rem] !border-none !shadow-2xl overflow-hidden shadow-emerald-500/5"
+    pt:header:class="!px-6 !pt-6 !pb-4 !bg-white dark:!bg-slate-900 !text-slate-900 dark:!text-white !font-black !uppercase !tracking-tighter !text-lg"
+    pt:content:class="!px-6 !pb-6 !bg-white dark:!bg-slate-900"
+    pt:closeButton:class="!rounded-xl hover:!bg-slate-100 dark:hover:!bg-slate-800 transition-all"
   >
-    <div class="space-y-6 pt-4">
-      <!-- Create New Group -->
-      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/50 space-y-4">
-        <h3 class="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight flex items-center gap-2">
-          <i class="pi pi-plus-circle text-emerald-500"></i>
-          Yangi Guruh Qo'shish
-        </h3>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="field">
-            <label class="text-[11px] font-bold text-slate-500 uppercase ml-1 mb-1 block">Guruh Nomi</label>
-            <InputText v-model="newGroup.name" placeholder="Masalan: VIP mijozlar" class="sr-input" />
+    <div class="space-y-5">
+      <!-- Create New Group Section (Ultra Compact) -->
+      <div class="relative group">
+        <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-[1.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+        <div class="relative p-4 bg-slate-50 dark:bg-slate-800/40 rounded-[1.5rem] border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+            <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">{{ $t('customers.groups.add_subtitle') }}</span>
           </div>
-          <div class="field">
-            <label class="text-[11px] font-bold text-slate-500 uppercase ml-1 mb-1 block">Chegirma (%)</label>
-            <InputNumber v-model="newGroup.discount" :min="0" :max="100" placeholder="0.00" mode="decimal" :minFractionDigits="2" class="sr-number" />
+          
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
+            <div class="flex-1 flex flex-col gap-1.5 min-w-0">
+              <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.name') }}</label>
+              <div class="relative">
+                <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-300 transition-colors group-focus-within:text-emerald-500"></i>
+                <InputText 
+                  v-model="newGroup.name" 
+                  :placeholder="$t('customers.groups.name_placeholder')" 
+                  class="!h-9 !pl-8 !text-[11px] !font-bold !rounded-xl !bg-white dark:!bg-slate-900 !border-slate-200 dark:!border-slate-700 focus:!ring-4 focus:!ring-emerald-500/10 transition-all w-full" 
+                />
+              </div>
+            </div>
+            
+            <div class="w-full sm:w-[130px] flex flex-col gap-1.5 flex-shrink-0">
+              <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.discount') }}</label>
+              <div class="flex gap-2">
+                <div class="relative flex-1 flex items-center">
+                  <InputNumber 
+                    v-model="newGroup.discount" 
+                    :min="0" :max="100" 
+                    placeholder="0" 
+                    mode="decimal" 
+                    class="w-full"
+                    pt:root:class="!h-9"
+                    pt:input:class="!h-9 !px-3 !text-[11px] !font-bold !rounded-xl !bg-white dark:!bg-slate-900 !border-slate-200 dark:!border-slate-700 w-full !text-left focus:!border-emerald-500/50"
+                  />
+                </div>
+                <Button 
+                  icon="pi pi-check" 
+                  :loading="saving" 
+                  @click="addGroup"
+                  class="!w-9 !h-9 !rounded-xl !bg-emerald-500 !border-none !shadow-lg !shadow-emerald-500/20 active:scale-90 transition-all flex-shrink-0 text-white"
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="flex justify-end">
-          <Button 
-            label="Guruhni qo'shish" 
-            icon="pi pi-plus" 
-            :loading="saving" 
-            severity="success" 
-            size="small"
-            class="!rounded-xl"
-            @click="addGroup" 
-          />
         </div>
       </div>
 
+      <!-- Separator -->
+      <div class="flex items-center gap-4 py-1">
+        <div class="h-px flex-1 bg-slate-100 dark:bg-slate-800"></div>
+        <span class="text-[8px] font-black uppercase tracking-[0.3em] text-slate-300 dark:text-slate-600">{{ $t('customers.groups.list_separator') }}</span>
+        <div class="h-px flex-1 bg-slate-100 dark:bg-slate-800"></div>
+      </div>
+
       <!-- Groups List -->
-      <div class="space-y-3">
-        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Mavjud Guruhlar</h3>
+      <div class="min-h-[200px] max-h-[320px] overflow-y-auto pr-1 custom-scrollbar-professional">
         <div v-if="loading" class="space-y-3">
-          <div v-for="i in 3" :key="i" class="h-16 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-2xl"></div>
+          <div v-for="i in 3" :key="i" class="h-14 bg-slate-50 dark:bg-slate-800/40 animate-pulse rounded-2xl border border-slate-100 dark:border-slate-800/50"></div>
         </div>
-        <div v-else-if="groups.length === 0" class="text-center py-6 text-slate-400 italic text-sm">
-          Guruhlar topilmadi.
+        
+        <div v-else-if="groups.length === 0" class="flex flex-col items-center justify-center py-10 opacity-30">
+          <i class="pi pi-box text-3xl mb-2"></i>
+          <p class="text-[10px] font-black uppercase tracking-widest">{{ $t('customers.groups.no_groups') }}</p>
         </div>
-        <div v-else class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+        
+        <div v-else class="space-y-2.5">
           <div 
             v-for="g in groups" 
-            :key="g.id"
-            class="group flex items-center justify-between p-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl transition-all hover:border-emerald-500/30"
+            :key="g.id || g._id"
+            class="group/item flex items-center justify-between p-2.5 bg-white dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 rounded-2xl hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-300"
           >
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                <i class="pi pi-users text-sm"></i>
+              <div class="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-800/60 flex items-center justify-center text-slate-400 group-hover/item:text-emerald-500 group-hover/item:bg-emerald-500/10 transition-colors">
+                <i class="pi pi-users text-xs"></i>
               </div>
-              <div>
-                <p class="text-sm font-black text-slate-700 dark:text-slate-200">{{ g.name }}</p>
-                <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">{{ g.discount }}% chegirma</span>
+              <div class="flex flex-col">
+                <p class="text-[12px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tighter leading-none mb-1">{{ g.name }}</p>
+                <div class="flex items-center gap-1.5 leading-none">
+                  <span class="text-[9px] font-bold text-emerald-500 tracking-wider">{{ g.discount }}% OFF</span>
+                  <div class="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                  <span class="text-[8px] font-medium text-slate-400 uppercase tracking-widest">{{ $t('customers.groups.loyalty_system') }}</span>
+                </div>
               </div>
             </div>
-            <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button icon="pi pi-trash" severity="danger" text rounded size="small" @click="confirmDelete(g)" />
+            
+            <div class="flex items-center gap-1">
+              <button 
+                @click="confirmDelete(g)"
+                class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all opacity-0 group-hover/item:opacity-100 active:scale-90"
+              >
+                <i class="pi pi-trash text-[10px]"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -79,6 +123,7 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { customerGroupsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   visible: Boolean
@@ -86,6 +131,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:visible', 'groups-updated'])
 const toast = useToast()
+const { t } = useI18n()
 
 const loading = ref(false)
 const saving = ref(false)
@@ -96,7 +142,6 @@ const loadGroups = async () => {
   loading.value = true
   try {
     const response = await customerGroupsAPI.getAll()
-    // Depending on backend structure, might be response.data or response.data.results
     groups.value = response.data.results || response.data
   } catch (error) {
     console.error('Error loading groups:', error)
@@ -111,27 +156,27 @@ const addGroup = async () => {
   saving.value = true
   try {
     await customerGroupsAPI.create(newGroup.value)
-    toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: "Guruh qo'shildi", life: 3000 })
+    toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.groups.added_message') || "Guruh qo'shildi", life: 3000 })
     newGroup.value = { name: '', discount: 0 }
     loadGroups()
     emit('groups-updated')
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Xatolik', detail: "Guruh qo'shishda xatolik", life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.add_error') || "Guruh qo'shishda xatolik", life: 3000 })
   } finally {
     saving.value = false
   }
 }
 
 const confirmDelete = async (group) => {
-  if (!confirm(`"${group.name}" guruhini o'chirishni tasdiqlaysizmi?`)) return
+  if (!confirm(t('customers.groups.delete_confirm', { name: group.name }))) return
   
   try {
-    await customerGroupsAPI.delete(group.id)
-    toast.add({ severity: 'success', summary: 'O\'chirildi', detail: "Guruh o'chirildi", life: 3000 })
+    await customerGroupsAPI.delete(group.id || group._id)
+    toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.groups.deleted_message') || "Guruh o'chirildi", life: 3000 })
     loadGroups()
     emit('groups-updated')
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Xatolik', detail: "Guruhni o'chirishda xatolik. Mijozlar bog'langan bo'lishi mumkin.", life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.delete_error') || "Guruhni o'chirishda xatolik", life: 3000 })
   }
 }
 
@@ -145,17 +190,22 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+.custom-scrollbar-professional::-webkit-scrollbar {
+  width: 3px;
 }
-.custom-scrollbar::-webkit-scrollbar-track {
+.custom-scrollbar-professional::-webkit-scrollbar-track {
   background: transparent;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb {
+.custom-scrollbar-professional::-webkit-scrollbar-thumb {
   background: #e2e8f0;
   border-radius: 10px;
 }
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+.dark .custom-scrollbar-professional::-webkit-scrollbar-thumb {
   background: #334155;
+}
+
+.sr-professional-dialog :deep(.p-dialog-header-close-icon) {
+  width: 10px;
+  height: 10px;
 }
 </style>

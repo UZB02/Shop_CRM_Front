@@ -3,8 +3,8 @@
     <!-- Header -->
     <div class="flex flex-wrap items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Mijozlar Bazasi</h1>
-        <p class="text-xs text-slate-500 font-semibold mt-1">Sodiq mijozlaringiz bilan ishlash va guruhlarni boshqarish</p>
+        <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">{{ $t('customers.title') }}</h1>
+        <p class="text-xs text-slate-500 font-semibold mt-1">{{ $t('customers.subtitle') }}</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
         <!-- Search -->
@@ -13,14 +13,14 @@
           <input 
             v-model="searchQuery" 
             type="text" 
-            placeholder="Mijoz ismi yoki telefon raqami bo'yicha qidirish..." 
+            :placeholder="$t('customers.search_placeholder')" 
             class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-sm font-medium focus:outline-none focus:border-emerald-500/50 transition-all shadow-sm"
             @input="handleSearch"
           />
         </div>
 
         <Button 
-          label="Guruhlar" 
+          :label="$t('customers.groups_btn')" 
           icon="pi pi-users" 
           severity="secondary" 
           outlined
@@ -28,7 +28,7 @@
           @click="groupsDialog = true" 
         />
         <Button 
-          label="Yangi mijoz" 
+          :label="$t('customers.new_customer')" 
           icon="pi pi-user-plus" 
           severity="success" 
           class="!rounded-xl shadow-lg shadow-emerald-500/20"
@@ -75,6 +75,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import Button from 'primevue/button'
@@ -88,6 +89,7 @@ import { customersAPI, customerGroupsAPI } from '@/services/api'
 const router = useRouter()
 const toast = useToast()
 const confirm = useConfirm()
+const { t } = useI18n()
 
 const loading = ref(false)
 const saving = ref(false)
@@ -125,7 +127,7 @@ const loadCustomers = async () => {
     totalRecords.value = response.data.count || (response.data.results ? response.data.results.length : response.data.length)
   } catch (error) {
     console.error('Error loading customers:', error)
-    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Mijozlarni yuklashda xatolik', life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 3000 })
   } finally {
     loading.value = false
   }
@@ -178,16 +180,16 @@ const saveCustomer = async () => {
 
     if (customer.value.id) {
       await customersAPI.update(customer.value.id, payload)
-      toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mijoz ma\'lumotlari yangilandi', life: 3000 })
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.updated'), life: 3000 })
     } else {
       await customersAPI.create(payload)
-      toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi mijoz qo\'shildi', life: 3000 })
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.added'), life: 3000 })
     }
     customerDialog.value = false
     loadCustomers()
   } catch (error) {
     console.error('Error saving customer:', error)
-    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Saqlashda xatolik yuz berdi', life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.save_error'), life: 3000 })
   } finally {
     saving.value = false
   }
@@ -195,17 +197,17 @@ const saveCustomer = async () => {
 
 const confirmDelete = (data) => {
   confirm.require({
-    message: `"${data.name}" mijozini o'chirishni tasdiqlaysizmi?`,
-    header: 'Tasdiqlash',
+    message: t('customers.messages.delete_confirm', { name: data.name }),
+    header: t('common.confirm_title') || 'Tasdiqlash',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: async () => {
       try {
         await customersAPI.delete(data.id)
-        toast.add({ severity: 'success', summary: 'O\'chirildi', detail: 'Mijoz muvaffaqiyatli o\'chirildi', life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.messages.deleted'), life: 3000 })
         loadCustomers()
       } catch (error) {
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 3000 })
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.delete_error'), life: 3000 })
       }
     }
   })

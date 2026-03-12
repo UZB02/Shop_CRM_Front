@@ -4,11 +4,11 @@
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-slate-50/50 dark:bg-slate-800/30">
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Mijoz Ismi</th>
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Telefon / Manzil</th>
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">Savdolar</th>
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Umumiy Xarid</th>
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">Amallar</th>
+            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('customers.table.name') }}</th>
+            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('customers.table.contact_address') }}</th>
+            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('customers.table.trades') }}</th>
+            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('customers.table.total_spent') }}</th>
+            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('customers.table.actions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -30,7 +30,7 @@
                 <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3">
                   <i class="pi pi-users text-xl text-slate-400"></i>
                 </div>
-                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Mijozlar topilmadi.</p>
+                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('customers.table.no_results') }}</p>
               </td>
             </tr>
           </template>
@@ -85,7 +85,7 @@
                 <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">
                   {{ formatCurrency(data.totalSpent) }}
                 </span>
-                <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-0.5">Jami xarid</span>
+                <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-0.5">{{ $t('customers.table.total_spent_label') }}</span>
               </div>
             </td>
 
@@ -95,21 +95,21 @@
                 <button
                   @click="$emit('view-history', data.id)"
                   class="w-8 h-8 rounded-lg flex items-center justify-center text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all"
-                  title="Xaridlar tarixi"
+                  :title="$t('customers.table.history_tooltip')"
                 >
                   <i class="pi pi-history text-[10px]"></i>
                 </button>
                 <button
                   @click="$emit('edit', data)"
                   class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
-                  title="Tahrirlash"
+                  :title="$t('customers.table.edit_tooltip')"
                 >
                   <i class="pi pi-pencil text-[10px]"></i>
                 </button>
                 <button
                   @click="$emit('delete', data)"
                   class="w-8 h-8 rounded-lg flex items-center justify-center text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all"
-                  title="O'chirish"
+                  :title="$t('customers.table.delete_tooltip')"
                 >
                   <i class="pi pi-trash text-[10px]"></i>
                 </button>

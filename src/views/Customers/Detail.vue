@@ -6,25 +6,25 @@
         <div>
           <div class="flex items-center gap-2 mb-1">
             <router-link to="/dashboard/customers" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-500 transition-colors">
-              Mijozlar
+              {{ $t('menu.customers') }}
             </router-link>
             <i class="pi pi-chevron-right text-[7px] text-slate-300 dark:text-slate-700"></i>
             <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">
-              Tafsilotlar
+              {{ $t('customers.details.subtitle') }}
             </span>
           </div>
           <h1 class="text-3xl font-black text-slate-800 dark:text-white tracking-tight uppercase">
-            {{ customer?.name || 'Mijoz Tafsilotlari' }}
+            {{ customer?.name || $t('customers.details.title') }}
           </h1>
           <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            Mijoz haqida batafsil ma'lumotlar
+            {{ $t('customers.details.subtitle') }}
           </p>
         </div>
       </div>
       <div class="flex items-center gap-3">
         <Button 
-          label="Tahrirlash" 
+          :label="$t('common.edit')" 
           icon="pi pi-pencil" 
           severity="success" 
           class="!rounded-2xl !px-6 shadow-lg shadow-emerald-500/20"
@@ -64,39 +64,39 @@
               <!-- Contact -->
               <div class="space-y-4">
                 <div class="flex flex-col gap-1">
-                  <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Telefon</span>
+                  <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.phone') }}</span>
                   <p class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ customer.phone }}</p>
                 </div>
                 <div class="flex flex-col gap-1">
-                  <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Ro'yxatdan o'tgan</span>
+                  <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.registered') }}</span>
                   <p class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ customer.created_on || formatDate(customer.createdAt) }}</p>
                 </div>
               </div>
 
               <!-- Address -->
               <div class="flex flex-col gap-1">
-                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Manzil</span>
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.address') }}</span>
                 <p class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ customer.address || '—' }}</p>
               </div>
 
               <!-- Stats 1 -->
               <div class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800/50">
-                <span class="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1 block">Jami xarid</span>
+                <span class="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1 block">{{ $t('customers.details.total_spent') }}</span>
                 <div class="flex items-baseline gap-1">
                   <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">{{ formatCurrency(customer.totalSpent) }}</span>
                 </div>
-                <div class="text-[10px] font-bold text-slate-500 mt-2">{{ customer.tradesCount }} ta savdo orqali</div>
+                <div class="text-[10px] font-bold text-slate-500 mt-2">{{ $t('customers.details.trades_count', { count: customer.tradesCount }) }}</div>
               </div>
 
               <!-- Stats 2 -->
               <div class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800/50 flex flex-col justify-center">
                 <template v-if="Number(customer.debt_balance) > 0">
-                  <span class="text-[8px] font-black text-rose-500 uppercase tracking-[0.2em] mb-1 block">Qarz qoldig'i</span>
+                  <span class="text-[8px] font-black text-rose-500 uppercase tracking-[0.2em] mb-1 block">{{ $t('customers.details.debt') }}</span>
                   <span class="text-2xl font-black text-rose-500 tracking-tighter">{{ formatCurrency(customer.debt_balance) }}</span>
                 </template>
                 <template v-else>
-                  <span class="text-[8px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1 block">Moliyaviy holat</span>
-                  <span class="text-sm font-black text-emerald-500">Qarzlar mavjud emas</span>
+                  <span class="text-[8px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1 block">{{ $t('customers.details.financial_status') }}</span>
+                  <span class="text-sm font-black text-emerald-500">{{ $t('customers.details.no_debt') }}</span>
                 </template>
               </div>
             </div>
@@ -115,9 +115,9 @@
       <div class="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mx-auto mb-6">
         <i class="pi pi-exclamation-circle text-3xl text-slate-300"></i>
       </div>
-      <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-tight">Mijoz topilmadi</h3>
-      <p class="text-slate-500 text-sm mt-2">Balki u o'chirib yuborilgan yoki ID xato kiritilgan.</p>
-      <Button label="Ortga qaytish" class="!rounded-2xl !mt-8 shadow-sm" severity="secondary" @click="$router.push('/dashboard/customers')" />
+      <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-tight">{{ $t('customers.details.not_found') }}</h3>
+      <p class="text-slate-500 text-sm mt-2">{{ $t('customers.details.not_found_desc') }}</p>
+      <Button :label="$t('customers.details.back')" class="!rounded-2xl !mt-8 shadow-sm" severity="secondary" @click="$router.push('/dashboard/customers')" />
     </div>
 
     <!-- Edit Dialog -->
@@ -141,12 +141,14 @@ import Accordion from 'primevue/accordion'
 import AccordionPanel from 'primevue/accordionpanel'
 import AccordionHeader from 'primevue/accordionheader'
 import AccordionContent from 'primevue/accordioncontent'
+import { useI18n } from 'vue-i18n'
 
 import CustomerTradesTable from './components/CustomerTradesTable.vue'
 import CustomerDialog from './components/CustomerDialog.vue'
 
 const route = useRoute()
 const toast = useToast()
+const { t } = useI18n()
 
 const loading = ref(true)
 const saving = ref(false)
@@ -175,7 +177,7 @@ const loadCustomerData = async () => {
     }
   } catch (error) {
     console.error('Error loading customer details:', error)
-    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Ma\'lumotlarni yuklashda xatolik', life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 3000 })
   } finally {
     loading.value = false
   }
@@ -199,11 +201,11 @@ const saveUpdate = async () => {
             group: customerToEdit.value.group
         }
         await customersAPI.update(customerToEdit.value.id, payload)
-        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangilandi', life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.success'), detail: t('common.updated'), life: 3000 })
         editDialog.value = false
         loadCustomerData()
     } catch (error) {
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Xatolik yuz berdi', life: 3000 })
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error'), life: 3000 })
     } finally {
         saving.value = false
     }

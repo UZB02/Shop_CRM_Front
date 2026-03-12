@@ -2,9 +2,9 @@
   <div class="bg-white dark:bg-slate-900/50 rounded-[2.5rem] border border-slate-100 dark:border-slate-800/50 overflow-hidden shadow-sm backdrop-blur-xl h-full flex flex-col">
     <!-- Header -->
     <div class="px-8 py-5 border-b border-slate-50 dark:border-slate-800/50 flex items-center justify-between">
-      <h3 class="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Xaridlar Tarixi</h3>
+      <h3 class="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('customers.trades.title') }}</h3>
       <div class="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-[9px] font-black text-indigo-500 uppercase tracking-widest">
-        {{ trades.length }} ta savdo
+        {{ $t('customers.trades.count', { count: trades.length }) }}
       </div>
     </div>
 
@@ -13,17 +13,17 @@
       <table class="w-full text-left border-collapse min-w-[500px]">
         <thead>
           <tr class="bg-slate-50/30 dark:bg-slate-800/20">
-            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">ID / Sana</th>
-            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">Mahsulotlar</th>
-            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">Summa</th>
-            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 text-right">Holat</th>
+            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">{{ $t('customers.trades.col_id_date') }}</th>
+            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">{{ $t('customers.trades.col_products') }}</th>
+            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">{{ $t('customers.trades.col_total') }}</th>
+            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 text-right">{{ $t('customers.trades.col_status') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/40">
           <template v-if="!trades.length">
             <tr>
               <td colspan="4" class="px-6 py-12 text-center text-slate-400 italic text-sm">
-                Xaridlar tarixi topilmadi.
+                {{ $t('customers.trades.no_history') }}
               </td>
             </tr>
           </template>
@@ -39,14 +39,14 @@
                 <template v-if="t.products && t.products.length">
                   <div v-for="(item, idx) in t.products.slice(0, 2)" :key="idx" class="flex items-center gap-1">
                     <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300">
-                      {{ item.quantity }}x {{ item.product_name || item.product?.name || 'Mahsulot' }}
+                      {{ item.quantity }}x {{ item.product_name || item.product?.name || $t('customers.trades.product_placeholder') }}
                     </span>
                   </div>
                   <span v-if="t.products.length > 2" class="text-[8px] font-black text-slate-400 uppercase">
-                    + yana {{ t.products.length - 2 }} ta
+                    {{ $t('customers.trades.more_products', { count: t.products.length - 2 }) }}
                   </span>
                 </template>
-                <span v-else class="text-[10px] text-slate-400 tracking-tight">Mahsulotlar yo'q</span>
+                <span v-else class="text-[10px] text-slate-400 tracking-tight">{{ $t('customers.trades.no_products') }}</span>
               </div>
             </td>
             <td class="px-6 py-4">

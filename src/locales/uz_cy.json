@@ -581,5 +581,91 @@
             "chat_id_desc": "Хабар юбориладиган Telegram канал ёки гуруҳ IDси",
             "chat_id_placeholder": "-100xxxxxxxxx"
         }
+    },
+    "customers": {
+        "title": "Мижозлар Базаси",
+        "subtitle": "Содиқ мижозларингиз билан ишлаш ва гуруҳларни бошқариш",
+        "search_placeholder": "Мижоз исми ёки телефон рақами бўйича қидириш...",
+        "groups_btn": "Гуруҳлар",
+        "new_customer": "Янги мижоз",
+        "table": {
+            "name": "Мижоз Исми",
+            "contact_address": "Телефон / Манзил",
+            "trades": "Савдолар",
+            "total_spent": "Умумий Харид",
+            "actions": "Амаллар",
+            "no_results": "Мижозлар топилмади.",
+            "total_spent_label": "Жами харид",
+            "history_tooltip": "Харидлар тарихи",
+            "edit_tooltip": "Таҳрирлаш",
+            "delete_tooltip": "Ўчириш"
+        },
+        "form": {
+            "edit": "Мижозни Таҳрирлаш",
+            "add": "Янги Мижоз Қўшиш",
+            "full_name": "Ф.И.Ш.",
+            "name_placeholder": "Мижознинг тўлиқ исми",
+            "name_required": "Ф.И.Ш. киритилиши шарт.",
+            "phone": "Телефон рақами",
+            "phone_required": "Телефон рақами киритилиши шарт.",
+            "group": "Мижоз Гуруҳи",
+            "group_placeholder": "Гуруҳни танланг",
+            "address": "Манзил",
+            "address_placeholder": "Яшаш манзили"
+        },
+        "groups": {
+            "manage_title": "Мижоз Гуруҳлари",
+            "add_new": "Янги Гуруҳ Қўшиш",
+            "add_subtitle": "Янги гуруҳ қўшинг",
+            "name": "Гуруҳ номи",
+            "name_placeholder": "Масалан: VIP",
+            "discount": "Чeгирма (%)",
+            "loyalty_system": "Содиқлик тизими",
+            "add": "Гуруҳни қўшиш",
+            "list_title": "Мавжуд Гуруҳлар",
+            "list_separator": "Гуруҳлар рўйхати",
+            "no_groups": "Ҳозирча гуруҳлар йўқ",
+            "added_message": "Гуруҳ қўшилди",
+            "deleted_message": "Гуруҳ ўчирилди",
+            "delete_confirm": "\"{name}\" гуруҳини ўчиришни тасдиқлайсизми?",
+            "add_error": "Гуруҳ қўшишда хатолик",
+            "delete_error": "Гуруҳни ўчиришда хатолик"
+        },
+        "details": {
+            "title": "Мижоз Тафсилотлари",
+            "subtitle": "Мижоз ҳақида батафсил маълумотлар",
+            "phone": "Тeлeфон",
+            "registered": "Рўйхатдан ўтган",
+            "address": "Манзил",
+            "total_spent": "Жами харид",
+            "trades_count": "{count} та савдо орқали",
+            "debt": "Қарз қолдиғи",
+            "financial_status": "Молиявий ҳолат",
+            "no_debt": "Қарзлар мавжду эмас",
+            "not_found": "Мижоз топилмади",
+            "not_found_desc": "Балки у ўчириб юборилган ёки ID хато киритилган.",
+            "back": "Ортга қайтиш"
+        },
+        "trades": {
+            "title": "Харидлар Тарихи",
+            "count": "{count} та савдо",
+            "col_id_date": "ID / Сана",
+            "col_products": "Маҳсулотлар",
+            "col_total": "Сумма",
+            "col_status": "Ҳолат",
+            "no_history": "Харидлар тарихи топилмади.",
+            "product_placeholder": "Маҳсулот",
+            "more_products": "+ яна {count} та",
+            "no_products": "Маҳсулотлар йўқ"
+        },
+        "messages": {
+            "updated": "Мижоз маълумотлари янгиланди",
+            "added": "Янги мижоз қўшилди",
+            "deleted": "Мижоз муваффақиятли ўчирилди",
+            "delete_confirm": "\"{name}\" мижозини ўчиришни тасдиқлайсизми?",
+            "load_error": "Мижозларни юклашда хатолик",
+            "save_error": "Савдо юклашда хатолик юз бeрди",
+            "delete_error": "Ўчиришда хатолик юз бeрди"
+        }
     }
 }

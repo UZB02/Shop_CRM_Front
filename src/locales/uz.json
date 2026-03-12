@@ -576,5 +576,91 @@
             "chat_id_desc": "Xabar yuboriladigan Telegram kanal yoki guruh IDsi",
             "chat_id_placeholder": "-100xxxxxxxxx"
         }
+    },
+    "customers": {
+        "title": "Mijozlar Bazasi",
+        "subtitle": "Sodiq mijozlaringiz bilan ishlash va guruhlarni boshqarish",
+        "search_placeholder": "Mijoz ismi yoki telefon raqami bo'yicha qidirish...",
+        "groups_btn": "Guruhlar",
+        "new_customer": "Yangi mijoz",
+        "table": {
+            "name": "Mijoz Ismi",
+            "contact_address": "Telefon / Manzil",
+            "trades": "Savdolar",
+            "total_spent": "Umumiy Xarid",
+            "actions": "Amallar",
+            "no_results": "Mijozlar topilmadi.",
+            "total_spent_label": "Jami xarid",
+            "history_tooltip": "Xaridlar tarixi",
+            "edit_tooltip": "Tahrirlash",
+            "delete_tooltip": "O'chirish"
+        },
+        "form": {
+            "edit": "Mijozni Tahrirlash",
+            "add": "Yangi Mijoz Qo'shish",
+            "full_name": "F.I.SH.",
+            "name_placeholder": "Mijozning to'liq ismi",
+            "name_required": "F.I.SH. kiritilishi shart.",
+            "phone": "Telefon raqami",
+            "phone_required": "Telefon raqami kiritilishi shart.",
+            "group": "Mijoz Guruhi",
+            "group_placeholder": "Guruhni tanlang",
+            "address": "Manzil",
+            "address_placeholder": "Yashash manzili"
+        },
+        "groups": {
+            "manage_title": "Mijoz Guruhlari",
+            "add_new": "Yangi Guruh Qo'shish",
+            "add_subtitle": "Yangi guruh qo'shing",
+            "name": "Guruh nomi",
+            "name_placeholder": "Masalan: VIP",
+            "discount": "Chegirma (%)",
+            "loyalty_system": "Sodiqlik tizimi",
+            "add": "Guruhni qo'shish",
+            "list_title": "Mavjud Guruhlar",
+            "list_separator": "Guruhlar ro'yxati",
+            "no_groups": "Hozircha guruhlar yo'q",
+            "added_message": "Guruh qo'shildi",
+            "deleted_message": "Guruh o'chirildi",
+            "delete_confirm": "\"{name}\" guruhini o'chirishni tasdiqlaysizmi?",
+            "add_error": "Guruh qo'shishda xatolik",
+            "delete_error": "Guruhni o'chirishda xatolik"
+        },
+        "details": {
+            "title": "Mijoz Tafsilotlari",
+            "subtitle": "Mijoz haqida batafsil ma'lumotlar",
+            "phone": "Telefon",
+            "registered": "Ro'yxatdan o'tgan",
+            "address": "Manzil",
+            "total_spent": "Jami xarid",
+            "trades_count": "{count} ta savdo orqali",
+            "debt": "Qarz qoldig'i",
+            "financial_status": "Moliyaviy holat",
+            "no_debt": "Qarzlar mavjud emas",
+            "not_found": "Mijoz topilmadi",
+            "not_found_desc": "Balki u o'chirib yuborilgan yoki ID xato kiritilgan.",
+            "back": "Ortga qaytish"
+        },
+        "trades": {
+            "title": "Xaridlar Tarixi",
+            "count": "{count} ta savdo",
+            "col_id_date": "ID / Sana",
+            "col_products": "Mahsulotlar",
+            "col_total": "Summa",
+            "col_status": "Holat",
+            "no_history": "Xaridlar tarixi topilmadi.",
+            "product_placeholder": "Mahsulot",
+            "more_products": "+ yana {count} ta",
+            "no_products": "Mahsulotlar yo'q"
+        },
+        "messages": {
+            "updated": "Mijoz ma'lumotlari yangilandi",
+            "added": "Yangi mijoz qo'shildi",
+            "deleted": "Mijoz muvaffaqiyatli o'chirildi",
+            "delete_confirm": "\"{name}\" mijozini o'chirishni tasdiqlaysizmi?",
+            "load_error": "Mijozlarni yuklashda xatolik",
+            "save_error": "Saqlashda xatolik yuz berdi",
+            "delete_error": "O'chirishda xatolik yuz berdi"
+        }
     }
 }
