@@ -11,11 +11,11 @@
     </div>
     <div class="flex items-center gap-2 w-full sm:w-auto">
       <Button 
-        :label="$t('products.new_category')" 
-        icon="pi pi-folder-plus" 
+        :label="$t('categories.title')" 
+        icon="pi pi-folder" 
         text 
         severity="secondary" 
-        @click="$emit('add-category')" 
+        @click="router.push('/dashboard/products/categories')" 
         class="!rounded-lg !px-3 !text-[11px] sm:!text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-bold flex-1 sm:flex-none" 
       />
       <Button 

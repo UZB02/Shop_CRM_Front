@@ -86,6 +86,14 @@ export const categoriesAPI = {
     delete: (id) => api.delete(`/warehouse/categories/${id}/`)
 }
 
+// Subcategories API
+export const subcategoriesAPI = {
+    getAll: (params) => api.get('/warehouse/subcategories/', { params }),
+    create: (data) => api.post('/warehouse/subcategories/', data),
+    update: (id, data) => api.patch(`/warehouse/subcategories/${id}/`, data),
+    delete: (id) => api.delete(`/warehouse/subcategories/${id}/`)
+}
+
 // Customers API
 export const customersAPI = {
     getAll: (params) => api.get('/customers/', { params }),

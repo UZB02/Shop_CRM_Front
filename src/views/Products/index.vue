@@ -23,10 +23,8 @@
           :categories="categories" 
           :selectedId="selectedCategory"
           :totalProducts="totalProducts"
+          readonly
           @select="onCategorySelect"
-          @add="openCategoryDialog"
-          @edit="editCategory"
-          @delete="confirmDeleteCategory"
         />
       </div>
 
@@ -57,16 +55,7 @@
 
 
 
-    <!-- Category Dialog Component -->
-    <CategoryDialog 
-      v-model:visible="categoryDialog"
-      :category="category"
-      :categories="categories"
-      :saving="cSaving"
-      @save="saveCategory"
-      @edit="editCategory"
-      @delete="confirmDeleteCategory"
-    />
+
   </div>
 </template>
 
@@ -101,14 +90,7 @@ const {
 const {
   categories,
   warehouses,
-  cSaving,
-  categoryDialog,
-  category,
-  loadData,
-  openCategoryDialog,
-  editCategory,
-  saveCategory,
-  confirmDeleteCategory
+  loadData
 } = useCategories()
 
 const onCategorySelect = (cat) => {

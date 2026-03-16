@@ -1,25 +1,25 @@
 <template>
-  <div class="bg-white dark:bg-slate-900/50 rounded-[2.5rem] border border-slate-100 dark:border-slate-800/50 overflow-hidden shadow-sm backdrop-blur-xl">
-    <div class="overflow-x-auto">
+  <div class="bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden shadow-sm backdrop-blur-xl border border-slate-100/50 dark:border-slate-800/30">
+    <div class="overflow-x-auto overflow-y-hidden">
       <table class="w-full text-left border-collapse">
         <thead>
-          <tr class="bg-slate-50/50 dark:bg-slate-800/30">
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('customers.table.name') }}</th>
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('customers.table.contact_address') }}</th>
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('customers.table.trades') }}</th>
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('customers.table.total_spent') }}</th>
-            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('customers.table.actions') }}</th>
+          <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.name') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.contact_address') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center font-inter">{{ $t('customers.table.trades') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.total_spent') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right font-inter">{{ $t('customers.table.actions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
           <!-- Loading -->
           <template v-if="loading">
             <tr v-for="i in 5" :key="i">
-              <td class="px-6 py-4"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-32 animate-pulse"></div></td>
-              <td class="px-6 py-4"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-40 animate-pulse"></div></td>
-              <td class="px-6 py-4"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-16 mx-auto animate-pulse"></div></td>
-              <td class="px-6 py-4"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-24 animate-pulse"></div></td>
-              <td class="px-6 py-4"><div class="h-8 bg-slate-100 dark:bg-slate-800 rounded-lg w-24 ml-auto animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-24 animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-32 animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-12 mx-auto animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-20 animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-6 bg-slate-100 dark:bg-slate-800 rounded-lg w-20 ml-auto animate-pulse"></div></td>
             </tr>
           </template>
 
@@ -39,10 +39,10 @@
           <tr 
             v-for="data in customers" 
             :key="data.id" 
-            class="group hover:bg-emerald-50/30 dark:hover:bg-emerald-500/5 transition-colors"
+            class="group hover:bg-emerald-50/30 dark:hover:bg-emerald-500/5 transition-all border-b border-slate-50 dark:border-slate-800 last:border-0"
           >
             <!-- Name & Group -->
-            <td class="px-6 py-4">
+            <td class="px-4 py-2.5">
               <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 flex-shrink-0">
                   <i class="pi pi-user text-sm"></i>
@@ -59,7 +59,7 @@
             </td>
 
             <!-- Contact & Address -->
-            <td class="px-6 py-4">
+            <td class="px-4 py-2.5">
               <div class="space-y-1">
                 <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
                   <i class="pi pi-phone text-[9px] text-slate-400"></i>
@@ -73,14 +73,14 @@
             </td>
 
             <!-- Stats -->
-            <td class="px-6 py-4 text-center">
+            <td class="px-4 py-2.5 text-center">
               <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 text-[11px] font-black text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
                 {{ data.tradesCount || 0 }}
               </span>
             </td>
 
             <!-- Total Spent -->
-            <td class="px-6 py-4">
+            <td class="px-4 py-2.5 text-right">
               <div class="flex flex-col">
                 <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">
                   {{ formatCurrency(data.totalSpent) }}
@@ -120,7 +120,10 @@
       </table>
     </div>
     <div v-if="totalRecords > 0" 
-         class="px-6 py-4 bg-slate-50/50 dark:bg-slate-900/30 border-t border-slate-100 dark:border-slate-800/50 flex items-center justify-end font-inter">
+         class="px-4 py-2.5 bg-slate-50/50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+        Showing {{ (currentPage-1)*pageSize + 1 }} - {{ Math.min(currentPage*pageSize, totalRecords) }} of {{ totalRecords }}
+      </div>
       <div class="flex items-center gap-1">
         <button @click="currentPage--" :disabled="currentPage === 1"
                 class="w-8 h-8 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30

@@ -395,6 +395,21 @@
             "delete_confirm": "\"{name}\" kategoriyasini o'chirishni tasdiqlaysizmi? Bu mahsulotlarni o'chirmaydi."
         }
     },
+    "subcategories": {
+        "title": "Subkategoriyalar",
+        "management": "Subkategoriya boshqaruvi",
+        "name": "Subkategoriya nomi",
+        "name_ph": "Masalan: Gazlangan",
+        "description": "Tavsif",
+        "description_ph": "Masalan: Gazlangan sovuq ichimliklar",
+        "messages": {
+            "added": "Subkategoriya qo'shildi",
+            "updated": "Subkategoriya yangilandi",
+            "deleted": "Subkategoriya o'chirildi",
+            "name_required": "Subkategoriya nomi kiritilishi shart",
+            "delete_confirm": "\"{name}\" subkategoriyasini o'chirishni tasdiqlaysizmi?"
+        }
+    },
     "products": {
         "title": "Mahsulotlar Boshqaruvi",
         "title_header": "Mahsulotlar Boshqaruvi",
@@ -619,6 +634,7 @@
             "add": "Guruhni qo'shish",
             "list_title": "Mavjud Guruhlar",
             "list_separator": "Guruhlar ro'yxati",
+            "count_unit": "guruh",
             "no_groups": "Hozircha guruhlar yo'q",
             "added_message": "Guruh qo'shildi",
             "deleted_message": "Guruh o'chirildi",

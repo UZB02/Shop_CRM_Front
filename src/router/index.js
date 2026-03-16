@@ -61,6 +61,12 @@ const routes = [
                 meta: { permission: 'products' }
             },
             {
+                path: 'products/categories',
+                name: 'product-categories',
+                component: () => import('@/views/Products/Categories.vue'),
+                meta: { permission: 'products' }
+            },
+            {
                 path: 'products/create',
                 name: 'product-create',
                 component: () => import('@/views/Products/CreateProduct.vue'),
@@ -100,6 +106,12 @@ const routes = [
                 path: 'customers',
                 name: 'customers',
                 component: () => import('@/views/Customers/index.vue'),
+                meta: { permission: 'customers' }
+            },
+            {
+                path: 'customers/groups',
+                name: 'customer-groups',
+                component: () => import('@/views/Customers/Groups.vue'),
                 meta: { permission: 'customers' }
             },
             {
