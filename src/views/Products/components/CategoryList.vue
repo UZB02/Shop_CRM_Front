@@ -4,9 +4,12 @@
     <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800/50 flex items-center justify-between shrink-0">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center shadow-lg shadow-emerald-500/5">
-          <i class="pi pi-grid text-emerald-500 text-[10px] font-black"></i>
+          <i class="pi pi-objects-column text-emerald-500 text-xs"></i>
         </div>
         <span class="font-black text-[10px] sm:text-[11px] text-slate-800 dark:text-white uppercase tracking-[0.15em]">{{ $t('categories.title') }}</span>
+        <div v-if="categories.length" class="ml-1 px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-[9px] font-black text-slate-500 dark:text-slate-400">
+          {{ categories.length }}
+        </div>
       </div>
       <Button 
         v-if="!readonly"

@@ -6,7 +6,7 @@
           <thead>
             <tr class="bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
               <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_product') }}</th>
-              <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_stock') }}</th>
+              <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.form.barcode') }}</th>
               <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ $t('products.col_price') }}</th>
               <th class="px-3 sm:px-5 py-2.5 sm:py-3.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 text-right">{{ $t('products.col_actions') }}</th>
             </tr>
@@ -45,36 +45,25 @@
                     <p class="font-bold text-xs sm:text-sm text-slate-800 dark:text-white tracking-tight group-hover:text-emerald-500 transition-colors truncate">{{ item.name }}</p>
                     <div class="flex items-center gap-1.5 sm:gap-2">
                       <span class="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-md truncate">{{ item.category_name }}</span>
-                      <span v-if="item.barcode" class="text-[9px] sm:text-[10px] font-medium text-slate-400 truncate hidden xs:inline">#{{ item.barcode }}</span>
                     </div>
                   </div>
                 </div>
               </td>
               <td class="px-3 sm:px-6 py-3 sm:py-4">
-                <div class="flex flex-col gap-1.5 sm:gap-2 min-w-[100px] sm:min-w-[140px]">
-                  <div class="flex items-end justify-between px-0.5">
-                    <span :class="['text-[10px] sm:text-xs font-black uppercase tracking-wider', (item.amount || 0) < 10 ? 'text-rose-500' : 'text-slate-500 dark:text-slate-400']">
-                      {{ item.amount ?? 0 }} {{ $t('units.' + (item.unit || 'dona')) }}
-                    </span>
-                    <span class="text-[8px] sm:text-[10px] font-bold text-slate-300 dark:text-slate-600">{{ Math.min(Math.round(((item.amount || 0) / 100) * 100), 100) }}%</span>
-                  </div>
-                  <div class="h-1 sm:h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div 
-                      class="h-full transition-all duration-1000 rounded-full"
-                      :class="(item.amount || 0) < 10 ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.4)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]' "
-                      :style="`width: ${Math.min(((item.amount || 0) / 100) * 100, 100)}%`"
-                    ></div>
-                  </div>
-                </div>
+                <span v-if="item.barcode" class="text-[11px] font-mono font-black tracking-widest text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-lg">
+                  {{ item.barcode }}
+                </span>
+                <span v-else class="text-[10px] font-bold text-slate-300 italic">Noma'lum</span>
               </td>
               <td class="px-3 sm:px-6 py-3 sm:py-4">
                 <div class="flex flex-col">
-                  <span class="text-xs sm:text-sm font-black text-slate-800 dark:text-white whitespace-nowrap">{{ formatCurrency(item.sale_price) }}</span>
-                  <span v-if="item.purchase_price" class="text-[8px] sm:text-[10px] font-bold text-slate-400 line-through decoration-slate-300/50 italic">{{ formatCurrency(item.purchase_price) }}</span>
+                  <span class="text-xs sm:text-sm font-black text-slate-800 dark:text-white whitespace-nowrap">{{ formatCurrency(item.sale_price, item.price_currency) }}</span>
+                  <span v-if="item.purchase_price" class="text-[8px] sm:text-[10px] font-bold text-slate-400 line-through decoration-slate-300/50 italic">{{ formatCurrency(item.purchase_price, item.price_currency) }}</span>
                 </div>
               </td>
               <td class="px-3 sm:px-6 py-3 sm:py-4 text-right">
                 <div class="flex gap-0.5 sm:gap-1 justify-end">
+                  <Button icon="pi pi-barcode" text rounded severity="secondary" v-if="item.barcode" @click="viewBarcode(item)" class="!h-7 !w-7 sm:!h-9 sm:!w-9 hover:!bg-amber-500/10 hover:!text-amber-500 transition-all !p-0" v-tooltip.top="'Shtrix-kodni ko\'rish'" />
                   <Button icon="pi pi-pencil" text rounded severity="secondary" @click="router.push(`/dashboard/products/edit/${item.id || item._id}`)" class="!h-7 !w-7 sm:!h-9 sm:!w-9 hover:!bg-emerald-500/10 hover:!text-emerald-500 transition-all !p-0" />
                   <Button icon="pi pi-trash" text rounded severity="secondary" @click="$emit('delete', item)" class="!h-7 !w-7 sm:!h-9 sm:!w-9 hover:!bg-rose-500/10 hover:!text-rose-500 transition-all !p-0" />
                 </div>
@@ -200,9 +189,24 @@ const changePage = (page) => {
   }
 }
 
-const formatCurrency = (value) => {
-  if (!value) return '0 UZS'
-  return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(value)
+const formatCurrency = (value, currencyId = 1) => {
+  if (!value) return '0'
+  const currencies = [
+    { id: 1, code: 'UZS' },
+    { id: 2, code: 'USD' },
+    { id: 3, code: 'RUB' }
+  ]
+  const currency = currencies.find(c => c.id === currencyId)?.code || 'UZS'
+  return new Intl.NumberFormat('uz-UZ', { 
+    style: 'currency', 
+    currency: currency, 
+    maximumFractionDigits: 0 
+  }).format(value)
+}
+
+const viewBarcode = (item) => {
+  const id = item.id || item._id
+  window.open(`https://shopcrmsystem-production.up.railway.app/api/v1/products/${id}/barcode/`, '_blank')
 }
 </script>
 

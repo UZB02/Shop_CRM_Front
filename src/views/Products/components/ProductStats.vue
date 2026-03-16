@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+  <div class="grid grid-cols-2 gap-3 sm:gap-4">
     <div v-for="stat in stats" :key="stat.label" class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md transition-all group flex items-center gap-2.5 sm:gap-4">
       <div :class="['w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shrink-0', stat.bg]">
         <i :class="['pi text-base sm:text-lg font-bold', stat.icon, stat.color]"></i>
@@ -16,15 +16,11 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  totalProducts: Number,
-  categoriesCount: Number,
-  warehousesCount: Number
+  totalProducts: Number
 })
 
 const stats = computed(() => [
   { label: 'total', value: props.totalProducts, icon: 'pi-box', color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-  { label: 'low_stock', value: 0, icon: 'pi-exclamation-triangle', color: 'text-amber-500', bg: 'bg-amber-500/10' },
-  { label: 'categories_count', value: props.categoriesCount, icon: 'pi-folder', color: 'text-indigo-500', bg: 'bg-indigo-500/10' },
-  { label: 'warehouses_count', value: props.warehousesCount, icon: 'pi-building', color: 'text-sky-500', bg: 'bg-sky-500/10' }
+  { label: 'low_stock', value: 0, icon: 'pi-exclamation-triangle', color: 'text-amber-500', bg: 'bg-amber-500/10' }
 ])
 </script>

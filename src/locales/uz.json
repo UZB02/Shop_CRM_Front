@@ -442,6 +442,9 @@
             "name_required": "Nomi kiritilishi shart"
         },
         "form": {
+            "main_info": "Asosiy ma'lumotlar",
+            "pricing_inventory": "Narxlar va Ombor",
+            "currency": "Valyuta",
             "name": "Mahsulot nomi",
             "category": "Kategoriya",
             "barcode": "Barcode / Artikul",
@@ -450,6 +453,7 @@
             "min_limit": "Min. limit",
             "purchase_price": "Sotib olish narxi",
             "sale_price": "Sotish narxi",
+            "sale_label": "Sotuv",
             "image": "Mahsulot tasviri",
             "upload_image": "Rasm yuklang",
             "change": "O'zgartirish",
@@ -469,20 +473,15 @@
         }
     },
     "units": {
-        "kg": "Kilogram",
-        "l": "Litr",
-        "sh": "Dona",
-        "l_unit": "Litr",
-        "litr": "Litr",
-        "m": "Metr",
-        "metr": "Metr",
-        "p": "Pachka",
-        "g": "Gram",
-        "m2": "Kv. metr",
-        "yashik": "Yashik",
-        "qop": "Qop",
+        "box": "Quti",
         "quti": "Quti",
-        "dona": "Dona"
+        "dona": "Dona",
+        "kg": "Kilogram",
+        "litr": "Litr",
+        "litre": "Litr",
+        "metr": "Metr",
+        "meter": "Metr",
+        "piece": "Dona"
     },
     "settings": {
         "title": "Tizim Sozlamalari",

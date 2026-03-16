@@ -25,24 +25,24 @@
       </button>
     </div>
 
-    <!-- Warehouse Filter -->
+    <!-- Status Filter -->
     <div class="flex items-center gap-2">
       <Select
-        :modelValue="selectedWarehouse"
-        @update:modelValue="$emit('update:selectedWarehouse', $event)"
-        :placeholder="$t('products.warehouse_placeholder')"
-        :options="warehouses"
-        optionLabel="name"
-        :optionValue="(opt) => opt._id || opt.id"
+        :modelValue="selectedStatus"
+        @update:modelValue="$emit('update:selectedStatus', $event)"
+        :placeholder="$t('common.status')"
+        :options="statusOptions"
+        optionLabel="label"
+        optionValue="value"
         showClear
         @change="$emit('change')"
-        pt:root:class="!h-10 sm:!h-12 !min-w-[160px] sm:!min-w-[200px] !rounded-xl sm:!rounded-2xl !border !border-slate-200 dark:!border-slate-700/60 !bg-white dark:!bg-slate-800/70 !shadow-none focus:!border-emerald-500"
+        pt:root:class="!h-10 sm:!h-12 !min-w-[140px] !rounded-xl sm:!rounded-2xl !border !border-slate-200 dark:!border-slate-700/60 !bg-white dark:!bg-slate-800/70 !shadow-none focus:!border-emerald-500"
         pt:label:class="!text-xs sm:!text-sm !font-semibold !text-slate-700 dark:!text-slate-200"
       >
         <template #value="slotProps">
-          <div v-if="slotProps.value" class="flex items-center gap-1.5 sm:gap-2">
-            <i class="pi pi-building text-emerald-500 text-[10px] sm:text-xs"></i>
-            <span class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-white">{{ warehouses.find(w => (w._id || w.id) === slotProps.value)?.name }}</span>
+          <div v-if="slotProps.value" class="flex items-center gap-2">
+            <div :class="['w-1.5 h-1.5 rounded-full', slotProps.value === 'active' ? 'bg-emerald-500' : 'bg-rose-500']"></div>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-white">{{ statusOptions.find(s => s.value === slotProps.value)?.label }}</span>
           </div>
           <span v-else class="text-xs sm:text-sm text-slate-400 font-medium">{{ slotProps.placeholder }}</span>
         </template>
@@ -67,13 +67,16 @@ import Select from 'primevue/select'
 
 const props = defineProps({
   searchQuery: String,
-  selectedWarehouse: [String, Number, null],
-  warehouses: Array,
+  selectedStatus: [String, null],
   loading: Boolean
 })
 
-const emit = defineEmits(['update:searchQuery', 'update:selectedWarehouse', 'change', 'refresh', 'search'])
+const emit = defineEmits(['update:searchQuery', 'update:selectedStatus', 'change', 'refresh', 'search'])
 
+const statusOptions = [
+  { label: 'Faol', value: 'active' },
+  { label: 'Nofaol', value: 'inactive' }
+]
 let searchTimeout = null
 const onSearch = (val) => {
   emit('update:searchQuery', val)

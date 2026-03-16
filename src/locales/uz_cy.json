@@ -414,6 +414,9 @@
             "name_required": "Номи киритилиши шарт"
         },
         "form": {
+            "main_info": "Асосий маълумотлар",
+            "pricing_inventory": "Нархлар ва Омбор",
+            "currency": "Валюта",
             "name": "Маҳсулот номи",
             "category": "Категория",
             "barcode": "Barcode / Артикул",
@@ -422,6 +425,7 @@
             "min_limit": "Мин. лимит",
             "purchase_price": "Сотиб олиш нархи",
             "sale_price": "Сотиш нархи",
+            "sale_label": "Сотув",
             "image": "Маҳсулот тасвири",
             "upload_image": "Расм юкланг",
             "change": "Ўзгартириш",
@@ -487,7 +491,11 @@
         "yashik": "Яшик",
         "qop": "Қоп",
         "quti": "Қути",
-        "dona": "Дона"
+        "box": "Қути",
+        "dona": "Дона",
+        "piece": "Дона",
+        "litre": "Литр",
+        "meter": "Метр"
     },
     "settings": {
         "title": "Тизим Созламалари",

@@ -29,7 +29,7 @@
           <GeneralInfoCard 
             v-model="product"
             :categories="categories"
-            :warehouses="warehouses"
+            :subcategories="subcategories"
             :submitted="submitted"
             class="h-full shrink-0 lg:shrink lg:overflow-y-auto custom-scrollbar-hidden"
           />
@@ -40,6 +40,7 @@
           <PricingInventoryCard 
             v-model="product"
             :units="units"
+            :currencies="currencies"
             class="h-full shrink-0 lg:shrink lg:overflow-y-auto custom-scrollbar-hidden"
           />
         </div>
@@ -78,8 +79,9 @@ const {
   saving,
   product,
   categories,
-  warehouses,
+  subcategories,
   units,
+  currencies,
   previewUrl,
   isEdit,
   submitted,

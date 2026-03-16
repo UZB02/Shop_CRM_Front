@@ -66,16 +66,11 @@ export const authAPI = {
 export const productsAPI = {
     getAll: (params) => api.get('/warehouse/products/', { params }),
     getById: (id) => api.get(`/warehouse/products/${id}/`),
-    create: (data) => {
-        const config = data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
-        return api.post('/warehouse/products/', data, config)
-    },
-    update: (id, data) => {
-        const config = data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
-        return api.patch(`/warehouse/products/${id}/`, data, config)
-    },
+    create: (data) => api.post('/warehouse/products/', data),
+    update: (id, data) => api.patch(`/warehouse/products/${id}/`, data),
     delete: (id) => api.delete(`/warehouse/products/${id}/`),
-    getLowStock: () => api.get('/warehouse/products/lowstock/')
+    getLowStock: () => api.get('/warehouse/products/lowstock/'),
+    getBarcode: (id) => api.get(`/warehouse/products/${id}/barcode/`, { responseType: 'blob' })
 }
 
 // Categories API

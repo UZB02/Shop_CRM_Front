@@ -7,11 +7,14 @@
         @add-category="openCategoryDialog"
       />
 
-      <!-- Quick Stats -->
-      <ProductStats 
-        :totalProducts="totalProducts"
-        :categoriesCount="categories.length"
-        :warehousesCount="warehouses.length"
+
+
+      <!-- Category Management Dialog -->
+      <CategoryDialog
+        v-model:visible="categoryDialog"
+        :category="category"
+        :saving="cSaving"
+        @save="saveCategory"
       />
     </div>
 
@@ -33,8 +36,7 @@
         <!-- Filters and Search -->
         <ProductFilters 
           v-model:searchQuery="searchQuery"
-          v-model:selectedWarehouse="selectedWarehouse"
-          :warehouses="warehouses"
+          v-model:selectedStatus="selectedStatus"
           :loading="loading"
           @search="loadProducts"
           @change="loadProducts"
@@ -66,7 +68,7 @@ import { onMounted } from 'vue'
 import ProductTable from './components/ProductTable.vue'
 import CategoryDialog from './components/CategoryDialog.vue'
 import CategoryList from './components/CategoryList.vue'
-import ProductStats from './components/ProductStats.vue'
+
 import ProductPageHeader from './components/ProductPageHeader.vue'
 import ProductFilters from './components/ProductFilters.vue'
 
@@ -80,8 +82,8 @@ const {
   totalProducts,
   currentPage,
   searchQuery,
-  selectedWarehouse,
   selectedCategory,
+  selectedStatus,
   loadProducts,
   handlePageChange,
   confirmDeleteProduct
@@ -89,8 +91,12 @@ const {
 
 const {
   categories,
-  warehouses,
-  loadData
+  cSaving,
+  categoryDialog,
+  category,
+  loadData,
+  openCategoryDialog,
+  saveCategory
 } = useCategories()
 
 const onCategorySelect = (cat) => {

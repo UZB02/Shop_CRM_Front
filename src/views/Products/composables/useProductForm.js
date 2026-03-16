@@ -1,7 +1,7 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
-import { productsAPI, categoriesAPI, warehousesAPI } from '@/services/api'
+import { productsAPI, categoriesAPI, subcategoriesAPI, warehousesAPI } from '@/services/api'
 
 export function useProductForm() {
     const route = useRoute()
@@ -16,19 +16,24 @@ export function useProductForm() {
     const product = ref({
         name: '',
         category: null,
-        barcode: '',
-        warehouse: null,
+        subcategory: null,
         unit: 'dona',
-        amount: 0,
         purchase_price: 0,
         sale_price: 0,
-        lowStockThreshold: 10,
+        price_currency: 1,
+        barcode: '',
         imageUrl: ''
     })
 
     const categories = ref([])
-    const warehouses = ref([])
-    const units = ['dona', 'kg', 'g', 'litr', 'metr', 'm2', 'yashik', 'qop', 'quti']
+    const subcategories = ref([])
+    const units = ['dona', 'kg', 'litr', 'quti', 'metr']
+    const currencies = ref([
+        { id: 1, name: "UZS", symbol: "so'm" },
+        { id: 2, name: "USD", symbol: "$" },
+        { id: 3, name: "RUB", symbol: "₽" }
+    ])
+
     const fileInput = ref(null)
     const selectedFile = ref(null)
     const previewUrl = ref(null)
@@ -36,16 +41,8 @@ export function useProductForm() {
     const fetchData = async () => {
         loading.value = true
         try {
-            const [catsRes, whsRes] = await Promise.all([
-                categoriesAPI.getAll(),
-                warehousesAPI.getAll()
-            ])
-
-            categories.value = Array.isArray(catsRes.data) ? catsRes.data : (catsRes.data?.results || [])
-            warehouses.value = Array.isArray(whsRes.data) ? whsRes.data : (whsRes.data?.results || [])
-
-            console.log('Product Form - Warehouses Data:', whsRes.data)
-            console.log('Product Form - Extracted Warehouses:', warehouses.value)
+            const res = await categoriesAPI.getAll()
+            categories.value = Array.isArray(res.data) ? res.data : (res.data?.results || [])
 
             if (isEdit.value) {
                 const res = await productsAPI.getById(route.params.id)
@@ -54,15 +51,17 @@ export function useProductForm() {
                 product.value = {
                     ...data,
                     category: data.category_id || data.category?._id || data.category?.id || data.category,
+                    subcategory: data.subcategory_id || data.subcategory?._id || data.subcategory?.id || data.subcategory,
+                    price_currency: data.price_currency || 1,
+                    unit: data.unit || 'piece',
                     imageUrl: data.image || data.imageUrl,
                     purchase_price: Number(data.purchase_price) || 0,
-                    sale_price: Number(data.sale_price) || 0,
-                    amount: Number(data.amount) || 0
+                    sale_price: Number(data.sale_price) || 0
                 }
 
-                if (data.store_name) {
-                    const matchedWh = warehouses.value.find(w => w.name === data.store_name)
-                    if (matchedWh) product.value.warehouse = matchedWh._id || matchedWh.id
+                // If editing and has category, fetch subcategories
+                if (product.value.category) {
+                    fetchSubcategories(product.value.category)
                 }
             }
         } catch (err) {
@@ -72,6 +71,24 @@ export function useProductForm() {
             loading.value = false
         }
     }
+
+    const fetchSubcategories = async (categoryId) => {
+        try {
+            const res = await subcategoriesAPI.getAll({ category: categoryId })
+            subcategories.value = Array.isArray(res.data) ? res.data : (res.data?.results || [])
+        } catch (err) {
+            console.error('Subcategory fetch error:', err)
+        }
+    }
+
+    watch(() => product.value.category, (newVal) => {
+        if (newVal) {
+            fetchSubcategories(newVal)
+        } else {
+            subcategories.value = []
+            product.value.subcategory = null
+        }
+    })
 
     const onFileSelect = (event) => {
         const file = event.target.files[0]
@@ -94,7 +111,7 @@ export function useProductForm() {
 
     const onSave = async () => {
         submitted.value = true
-        if (!product.value.name || !product.value.category) {
+        if (!product.value.name || !product.value.category || !product.value.purchase_price || !product.value.sale_price) {
             toast.add({ severity: 'warn', summary: 'Ogohlantirish', detail: 'Iltimos, barcha majburiy maydonlarni to\'ldiring', life: 3000 })
             return
         }
@@ -102,9 +119,24 @@ export function useProductForm() {
         saving.value = true
         try {
             const formData = new FormData()
-            Object.keys(product.value).forEach(key => {
-                if (key !== 'imageUrl' && product.value[key] !== null) {
-                    formData.append(key, product.value[key])
+
+            // Map the product object to the required API field names
+            const payload = {
+                name: product.value.name,
+                category: product.value.category,
+                subcategory: product.value.subcategory,
+                unit: product.value.unit,
+                purchase_price: product.value.purchase_price.toString(),
+                sale_price: product.value.sale_price.toString(),
+                price_currency: product.value.price_currency,
+                barcode: product.value.barcode || ''
+            }
+
+            console.log('Sending Product Data:', payload)
+
+            Object.keys(payload).forEach(key => {
+                if (payload[key] !== null && payload[key] !== undefined) {
+                    formData.append(key, payload[key])
                 }
             })
 
@@ -133,8 +165,9 @@ export function useProductForm() {
         saving,
         product,
         categories,
-        warehouses,
+        subcategories,
         units,
+        currencies,
         fileInput,
         previewUrl,
         isEdit,
