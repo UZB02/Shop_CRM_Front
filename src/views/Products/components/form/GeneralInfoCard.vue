@@ -42,6 +42,7 @@
             optionLabel="name"
             :optionValue="(c) => c._id || c.id"
             :placeholder="$t('products.form.select_category')"
+            filter
             class="w-full h-11"
             pt:root:class="!h-11 !rounded-xl !border-slate-200 dark:!border-slate-700 !bg-slate-50 dark:!bg-slate-800/40 !shadow-sm focus:!ring-4 focus:!ring-emerald-500/10 focus:!border-emerald-500"
             pt:label:class="!text-[11px] !font-bold !text-slate-700 dark:!text-white !flex !items-center !px-4"
@@ -61,6 +62,7 @@
             optionLabel="name"
             :optionValue="(c) => c._id || c.id"
             :placeholder="$t('common.choose')"
+            filter
             :disabled="!modelValue.category"
             class="w-full h-11"
             pt:root:class="!h-11 !rounded-xl !border-slate-200 dark:!border-slate-700 !bg-slate-50 dark:!bg-slate-800/40 !shadow-sm focus:!ring-4 focus:!ring-emerald-500/10 focus:!border-emerald-500 disabled:opacity-50"

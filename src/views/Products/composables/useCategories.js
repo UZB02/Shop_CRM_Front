@@ -74,16 +74,16 @@ export function useCategories(loadProductsCallback) {
             const id = catData._id || catData.id
             if (id) {
                 await categoriesAPI.update(id, catData)
-                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya yangilandi', life: 3000 })
+                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya yangilandi', life: 5000 })
             } else {
                 await categoriesAPI.create(catData)
-                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya qo\'shildi', life: 3000 })
+                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya qo\'shildi', life: 5000 })
             }
             categoryDialog.value = false
             category.value = { name: '', description: '' }
             loadData()
         } catch (error) {
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Xatolik yuz berdi', life: 3000 })
+            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Xatolik yuz berdi', life: 5000 })
         } finally {
             cSaving.value = false
         }
@@ -99,10 +99,10 @@ export function useCategories(loadProductsCallback) {
                 try {
                     const id = cat._id || cat.id
                     await categoriesAPI.delete(id)
-                    toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya o\'chirildi', life: 3000 })
+                    toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya o\'chirildi', life: 5000 })
                     loadData()
                 } catch (error) {
-                    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 3000 })
+                    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 5000 })
                 }
             }
         })

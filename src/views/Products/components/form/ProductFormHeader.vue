@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between gap-4">
     <div class="flex items-center gap-3">
       <div class="text-left">
-        <div class="flex items-center gap-2 mb-0.5">
+        <div class="flex items-center gap-2 mb-2">
           <router-link to="/dashboard/products" class="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-500 transition-colors">
             {{ $t('products.title') }}
           </router-link>

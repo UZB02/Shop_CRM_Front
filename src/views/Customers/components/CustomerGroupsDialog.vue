@@ -156,12 +156,12 @@ const addGroup = async () => {
   saving.value = true
   try {
     await customerGroupsAPI.create(newGroup.value)
-    toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.groups.added_message') || "Guruh qo'shildi", life: 3000 })
+    toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.groups.added_message') || "Guruh qo'shildi", life: 5000 })
     newGroup.value = { name: '', discount: 0 }
     loadGroups()
     emit('groups-updated')
   } catch (error) {
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.add_error') || "Guruh qo'shishda xatolik", life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.add_error') || "Guruh qo'shishda xatolik", life: 5000 })
   } finally {
     saving.value = false
   }
@@ -172,11 +172,11 @@ const confirmDelete = async (group) => {
   
   try {
     await customerGroupsAPI.delete(group.id || group._id)
-    toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.groups.deleted_message') || "Guruh o'chirildi", life: 3000 })
+    toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.groups.deleted_message') || "Guruh o'chirildi", life: 5000 })
     loadGroups()
     emit('groups-updated')
   } catch (error) {
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.delete_error') || "Guruhni o'chirishda xatolik", life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.delete_error') || "Guruhni o'chirishda xatolik", life: 5000 })
   }
 }
 

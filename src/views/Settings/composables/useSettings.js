@@ -63,7 +63,7 @@ export function useSettings() {
                 severity: 'error',
                 summary: t('common.error'),
                 detail: t('settings.load_error'),
-                life: 3000
+                life: 5000
             })
         } finally {
             loading.value = false
@@ -85,7 +85,7 @@ export function useSettings() {
                 severity: 'success',
                 summary: t('common.updated'),
                 detail: t('settings.save_success'),
-                life: 3000
+                life: 5000
             })
         } catch (e) {
             console.error('Settings save error:', e)

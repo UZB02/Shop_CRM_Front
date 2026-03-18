@@ -95,7 +95,7 @@ export function useWorkerActions(loadWorkersCallback) {
                 severity: 'error',
                 summary: t('common.error'),
                 detail: t('workers.messages.username_min_length'),
-                life: 3000
+                life: 5000
             })
             return
         }
@@ -163,7 +163,7 @@ export function useWorkerActions(loadWorkersCallback) {
                     severity: 'success',
                     summary: t('common.updated'),
                     detail: t('workers.messages.updated', { name: `${worker.value.first_name} ${worker.value.last_name}` }),
-                    life: 3000
+                    life: 5000
                 })
             } else {
                 await workersAPI.create(payload)
@@ -171,7 +171,7 @@ export function useWorkerActions(loadWorkersCallback) {
                     severity: 'success',
                     summary: t('common.added'),
                     detail: t('workers.messages.added'),
-                    life: 3000
+                    life: 5000
                 })
             }
             workerDialog.value = false
@@ -209,10 +209,10 @@ export function useWorkerActions(loadWorkersCallback) {
             accept: async () => {
                 try {
                     await workersAPI.delete(data.id || data._id)
-                    toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('workers.messages.deleted', { name }), life: 3000 })
+                    toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('workers.messages.deleted', { name }), life: 5000 })
                     if (loadWorkersCallback) loadWorkersCallback()
                 } catch (error) {
-                    toast.add({ severity: 'error', summary: t('common.error'), detail: t('workers.messages.delete_error'), life: 3000 })
+                    toast.add({ severity: 'error', summary: t('common.error'), detail: t('workers.messages.delete_error'), life: 5000 })
                 }
             }
         })

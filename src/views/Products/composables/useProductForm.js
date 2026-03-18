@@ -66,7 +66,7 @@ export function useProductForm() {
             }
         } catch (err) {
             console.error('Fetch error:', err)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Ma\'lumotlarni yuklab bo\'lmadi', life: 3000 })
+            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Ma\'lumotlarni yuklab bo\'lmadi', life: 5000 })
         } finally {
             loading.value = false
         }
@@ -94,7 +94,7 @@ export function useProductForm() {
         const file = event.target.files[0]
         if (file) {
             if (file.size > 5 * 1024 * 1024) {
-                toast.add({ severity: 'warn', summary: 'Ogohlantirish', detail: 'Rasm hajmi 5MBdan oshmasligi kerak', life: 3000 })
+                toast.add({ severity: 'warn', summary: 'Ogohlantirish', detail: 'Rasm hajmi 5MBdan oshmasligi kerak', life: 5000 })
                 return
             }
             selectedFile.value = file
@@ -112,7 +112,7 @@ export function useProductForm() {
     const onSave = async () => {
         submitted.value = true
         if (!product.value.name || !product.value.category || !product.value.purchase_price || !product.value.sale_price) {
-            toast.add({ severity: 'warn', summary: 'Ogohlantirish', detail: 'Iltimos, barcha majburiy maydonlarni to\'ldiring', life: 3000 })
+            toast.add({ severity: 'warn', summary: 'Ogohlantirish', detail: 'Iltimos, barcha majburiy maydonlarni to\'ldiring', life: 5000 })
             return
         }
 
@@ -146,15 +146,15 @@ export function useProductForm() {
 
             if (isEdit.value) {
                 await productsAPI.update(route.params.id, formData)
-                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot yangilandi', life: 3000 })
+                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot yangilandi', life: 5000 })
             } else {
                 await productsAPI.create(formData)
-                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi mahsulot qo\'shildi', life: 3000 })
+                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi mahsulot qo\'shildi', life: 5000 })
             }
             router.push('/dashboard/products')
         } catch (err) {
             console.error('Save error:', err)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Saqlashda xatolik yuz berdi', life: 3000 })
+            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Saqlashda xatolik yuz berdi', life: 5000 })
         } finally {
             saving.value = false
         }

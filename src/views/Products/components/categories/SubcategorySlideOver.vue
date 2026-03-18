@@ -14,15 +14,15 @@
     >
       <div v-if="visible" class="fixed top-0 right-0 h-full w-full max-w-[420px] bg-white dark:bg-slate-950 border-l border-slate-100 dark:border-slate-800 shadow-[-20px_0_60px_-15px_rgba(0,0,0,0.2)] dark:shadow-[-20px_0_60px_-15px_rgba(0,0,0,0.5)] z-[100] flex flex-col">
         <!-- Header -->
-        <div class="p-8 border-b border-slate-50 dark:border-slate-900 flex items-center justify-between">
-          <div class="flex items-center gap-4">
-            <div class="w-3 h-3 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.5)]" :class="isEditing ? 'bg-amber-500' : 'bg-emerald-500 animate-pulse'"></div>
-            <span class="text-xs font-black uppercase tracking-[0.25em] text-slate-500">
+        <div class="px-8 py-5 border-b border-slate-50 dark:border-slate-900/50 flex items-center justify-between bg-white/80 dark:bg-slate-950/80 backdrop-blur-md sticky top-0 z-10">
+          <div class="flex items-center gap-3">
+            <div class="w-2.5 h-2.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.4)]" :class="isEditing ? 'bg-amber-500' : 'bg-emerald-500 animate-pulse'"></div>
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
               {{ isEditing ? $t('common.edit') : $t('subcategories.management') }}
             </span>
           </div>
-          <button @click="$emit('update:visible', false)" class="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-white dark:hover:bg-slate-800 transition-all shadow-sm border border-slate-100 dark:border-slate-800">
-            <i class="pi pi-times text-[12px] font-black"></i>
+          <button @click="$emit('update:visible', false)" class="w-8 h-8 rounded-xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all duration-300">
+            <i class="pi pi-times text-[10px] font-black"></i>
           </button>
         </div>
 
@@ -55,12 +55,31 @@
                 <Textarea v-model="subcategory.description" :placeholder="$t('subcategories.description_ph')" rows="5" class="sr-input py-4 w-full" />
               </div>
             </div>
+
+            <!-- Status Toggle -->
+            <div class="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-900/60 rounded-[1.5rem] border border-slate-100 dark:border-slate-800/80 group/status transition-all hover:bg-white dark:hover:bg-slate-900 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none">
+              <div class="flex items-center gap-4">
+                <div :class="['w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500', subcategory.status === 'active' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'bg-slate-200 dark:bg-slate-800 text-slate-400']">
+                  <i :class="['pi', subcategory.status === 'active' ? 'pi-check' : 'pi-power-off', 'text-[10px] font-black']"></i>
+                </div>
+                <div>
+                  <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-0.5">{{ $t('common.status') }}</p>
+                  <p :class="['text-[11px] font-black uppercase tracking-widest transition-colors duration-300', subcategory.status === 'active' ? 'text-emerald-500' : 'text-slate-400']">
+                    {{ subcategory.status === 'active' ? $t('common.active') : $t('common.inactive') }}
+                  </p>
+                </div>
+              </div>
+              <ToggleSwitch 
+                :modelValue="subcategory.status === 'active'" 
+                @update:modelValue="subcategory.status = $event ? 'active' : 'inactive'"
+              />
+            </div>
           </div>
         </div>
 
         <!-- Footer -->
-        <div class="p-8 border-t border-slate-50 dark:border-slate-900 bg-slate-50/50 dark:bg-slate-950">
-          <div class="flex gap-4 items-center">
+        <div class="p-6 border-t border-slate-50 dark:border-slate-900/50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
+          <div class="flex gap-3 items-center">
             <Button :label="$t('common.cancel')" text class="sr-btn-cancel" @click="$emit('update:visible', false)" />
             <Button :label="isEditing ? $t('common.save') : $t('common.add')" :icon="isEditing ? 'pi pi-check' : 'pi pi-plus'" :loading="saving" @click="$emit('submit')" class="sr-btn-save" />
           </div>
@@ -71,9 +90,13 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
+import ToggleSwitch from 'primevue/toggleswitch'
 import Button from 'primevue/button'
+
+const { t } = useI18n()
 
 defineProps({
   visible: Boolean,
@@ -97,10 +120,10 @@ defineEmits(['update:visible', 'submit'])
   @apply !bg-white dark:!bg-slate-950 !ring-8 !ring-emerald-500/5 !border-emerald-500/20;
 }
 .sr-btn-cancel {
-  @apply !flex-1 !text-[11px] !font-black !uppercase !tracking-[0.2em] !rounded-2xl !text-slate-400 !h-12 hover:!bg-slate-50 dark:hover:!bg-slate-900/50 transition-all;
+  @apply !flex-1 !text-[10px] !font-black !uppercase !tracking-[0.15em] !rounded-xl !text-slate-400 !h-11 hover:!bg-slate-50 dark:hover:!bg-slate-900/50 transition-all;
 }
 .sr-btn-save {
-  @apply !flex-[2] !h-12 !rounded-2xl !bg-emerald-500 !border-none !shadow-2xl !shadow-emerald-500/20 active:scale-95 transition-all text-white !text-[11px] !font-black !uppercase !tracking-[0.2em];
+  @apply !flex-[2] !h-11 !rounded-xl !bg-emerald-500 !border-none !shadow-lg !shadow-emerald-500/20 active:scale-95 transition-all text-white !text-[10px] !font-black !uppercase !tracking-[0.15em];
 }
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;

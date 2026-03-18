@@ -184,7 +184,7 @@ const onFileSelect = (event) => {
   const file = event.target.files[0]
   if (file) {
     if (file.size > 5 * 1024 * 1024) {
-      toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Fayl hajmi 5MB dan oshmasligi kerak', life: 3000 })
+      toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Fayl hajmi 5MB dan oshmasligi kerak', life: 5000 })
       return
     }
     selectedFile.value = file

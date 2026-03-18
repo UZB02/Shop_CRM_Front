@@ -65,7 +65,7 @@ export function useStores() {
             applyLocalFilters()
         } catch (error) {
             console.error('Filiallarni yuklashda xatolik:', error)
-            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.load_error'), life: 3000 })
+            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.load_error'), life: 5000 })
         } finally {
             loadingBranches.value = false
         }
@@ -112,7 +112,7 @@ export function useStores() {
 
             await loadBranches()
         } catch {
-            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.load_error'), life: 3000 })
+            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.load_error'), life: 5000 })
         } finally {
             loading.value = false
         }
@@ -139,15 +139,15 @@ export function useStores() {
             const id = storeForm.value.id || storeForm.value._id
             if (id) {
                 await storesAPI.update(id, storeForm.value)
-                toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.store_updated'), life: 3000 })
+                toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.store_updated'), life: 5000 })
             } else {
                 await storesAPI.create(storeForm.value)
-                toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.store_added'), life: 3000 })
+                toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.store_added'), life: 5000 })
             }
             storeDialog.value = false
             loadData()
         } catch {
-            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.save_error'), life: 3000 })
+            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.save_error'), life: 5000 })
         } finally {
             saving.value = false
         }
@@ -179,15 +179,15 @@ export function useStores() {
             }
             if (id) {
                 await branchesAPI.update(id, payload)
-                toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_updated'), life: 3000 })
+                toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_updated'), life: 5000 })
             } else {
                 await branchesAPI.create(payload)
-                toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_added'), life: 3000 })
+                toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_added'), life: 5000 })
             }
             branchDialog.value = false
             loadData()
         } catch {
-            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.save_error'), life: 3000 })
+            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.save_error'), life: 5000 })
         } finally {
             saving.value = false
         }
@@ -202,10 +202,10 @@ export function useStores() {
             accept: async () => {
                 try {
                     await branchesAPI.delete(data.id || data._id)
-                    toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_deleted'), life: 3000 })
+                    toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_deleted'), life: 5000 })
                     loadData()
                 } catch {
-                    toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.delete_error'), life: 3000 })
+                    toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.delete_error'), life: 5000 })
                 }
             }
         })

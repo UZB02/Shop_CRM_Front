@@ -54,10 +54,12 @@
                     :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.name?.trim() }"
                     class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
-                  <p v-if="submitted && !store.name?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                </div>
+                <Transition name="fade-slide">
+                  <p v-if="submitted && !store.name?.trim()" class="text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse px-1 mt-0.5">
                     {{ $t('common.required_field') }}
                   </p>
-                </div>
+                </Transition>
               </div>
 
               <!-- Location -->
@@ -76,10 +78,12 @@
                     :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.location?.trim() }"
                     class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
-                  <p v-if="submitted && !store.location?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                </div>
+                <Transition name="fade-slide">
+                  <p v-if="submitted && !store.location?.trim()" class="text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse px-1 mt-0.5">
                     {{ $t('common.required_field') }}
                   </p>
-                </div>
+                </Transition>
               </div>
 
               <!-- Phone & Status: stacked on mobile, side-by-side on desktop -->
@@ -100,10 +104,12 @@
                       :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.phone?.trim() }"
                       class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-3 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                     />
-                    <p v-if="submitted && !store.phone?.trim()" class="absolute -bottom-4 left-1 text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                  </div>
+                  <Transition name="fade-slide">
+                    <p v-if="submitted && !store.phone?.trim()" class="text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse px-1 mt-0.5">
                       {{ $t('common.required_field') }}
                     </p>
-                  </div>
+                  </Transition>
                 </div>
                 <!-- Status -->
                 <div class="space-y-1 sm:flex-[2] min-w-0">

@@ -34,7 +34,7 @@ export function useProducts() {
             totalProducts.value = response.data.count || 0
         } catch (error) {
             console.error('Error loading products:', error)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Mahsulotlarni yuklashda xatolik', life: 3000 })
+            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Mahsulotlarni yuklashda xatolik', life: 5000 })
         } finally {
             loading.value = false
         }
@@ -62,11 +62,11 @@ export function useProducts() {
                 try {
                     const id = data.id || data._id
                     await productsAPI.delete(id)
-                    toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot o\'chirildi', life: 3000 })
+                    toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot o\'chirildi', life: 5000 })
                     loadProducts()
                 } catch (error) {
                     console.error('Product deletion error:', error)
-                    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 3000 })
+                    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 5000 })
                 }
             }
         })

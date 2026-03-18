@@ -7,10 +7,7 @@ const API_BASE_URL =
 
 // Create axios instance
 const api = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json'
-    }
+    baseURL: API_BASE_URL
 })
 
 // Request interceptor to add auth token
@@ -108,11 +105,11 @@ export const customerGroupsAPI = {
 
 // Trades API
 export const tradesAPI = {
-    getAll: (params) => api.get('/trades', { params }),
-    getById: (id) => api.get(`/trades/${id}`),
-    create: (data) => api.post('/trades', data),
-    update: (id, data) => api.put(`/trades/${id}`, data),
-    delete: (id) => api.delete(`/trades/${id}`)
+    getAll: (params) => api.get('/trades/', { params }),
+    getById: (id) => api.get(`/trades/${id}/`),
+    create: (data) => api.post('/trades/', data),
+    update: (id, data) => api.patch(`/trades/${id}/`, data),
+    delete: (id) => api.delete(`/trades/${id}/`)
 }
 
 // Workers API
@@ -127,20 +124,24 @@ export const workersAPI = {
 
 // Expenses API
 export const expensesAPI = {
-    getAll: (params) => api.get('/expenses', { params }),
-    getById: (id) => api.get(`/expenses/${id}`),
-    create: (data) => api.post('/expenses', data),
-    update: (id, data) => api.put(`/expenses/${id}`, data),
-    delete: (id) => api.delete(`/expenses/${id}`),
-    getSummary: (params) => api.get('/expenses/summary', { params })
+    getAll: (params) => api.get('/expenses/', { params }),
+    getById: (id) => api.get(`/expenses/${id}/`),
+    create: (data) => api.post('/expenses/', data),
+    update: (id, data) => api.patch(`/expenses/${id}/`, data),
+    delete: (id) => api.delete(`/expenses/${id}/`),
+    getSummary: (params) => api.get('/expenses/summary/', { params })
 }
 
 // Stores / Branches API
 export const storesAPI = {
-    getAll: (params) => api.get('/stores/', { params }),
+    getAll: async (params) => {
+        const response = await api.get('/stores/', { params });
+        console.log('Stores API data:', response.data);
+        return response;
+    },
     getById: (id) => api.get(`/stores/${id}/`),
     create: (data) => api.post('/stores/', data),
-    update: (id, data) => api.put(`/stores/${id}/`, data),
+    update: (id, data) => api.patch(`/stores/${id}/`, data),
     delete: (id) => api.delete(`/stores/${id}/`)
 }
 

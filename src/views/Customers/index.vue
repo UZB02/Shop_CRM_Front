@@ -121,11 +121,12 @@ const loadCustomers = async () => {
       search: searchQuery.value || undefined 
     }
     const response = await customersAPI.getAll(params)
+    console.log('Customers Response:', response.data)
     customers.value = response.data.results || response.data
     totalRecords.value = response.data.count || (response.data.results ? response.data.results.length : response.data.length)
   } catch (error) {
     console.error('Error loading customers:', error)
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 5000 })
   } finally {
     loading.value = false
   }
@@ -154,9 +155,16 @@ const openNew = () => {
   customerDialog.value = true
 }
 
-const editCustomer = (data) => {
-  customer.value = { ...data }
-  customerDialog.value = true
+const editCustomer = async (data) => {
+  try {
+    const response = await customersAPI.getById(data.id)
+    console.log('Single Customer Details:', response.data)
+    customer.value = { ...response.data }
+    customerDialog.value = true
+  } catch (error) {
+    console.error('Error fetching customer details:', error)
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 5000 })
+  }
 }
 
 const viewHistory = (id) => {
@@ -178,16 +186,16 @@ const saveCustomer = async () => {
 
     if (customer.value.id) {
       await customersAPI.update(customer.value.id, payload)
-      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.updated'), life: 3000 })
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.updated'), life: 5000 })
     } else {
       await customersAPI.create(payload)
-      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.added'), life: 3000 })
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.added'), life: 5000 })
     }
     customerDialog.value = false
     loadCustomers()
   } catch (error) {
     console.error('Error saving customer:', error)
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.save_error'), life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.save_error'), life: 5000 })
   } finally {
     saving.value = false
   }
@@ -202,10 +210,10 @@ const confirmDelete = (data) => {
     accept: async () => {
       try {
         await customersAPI.delete(data.id)
-        toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.messages.deleted'), life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.messages.deleted'), life: 5000 })
         loadCustomers()
       } catch (error) {
-        toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.delete_error'), life: 3000 })
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.delete_error'), life: 5000 })
       }
     }
   })

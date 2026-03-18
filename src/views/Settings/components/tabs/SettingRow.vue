@@ -4,7 +4,16 @@
       <p class="row-label">{{ label }}</p>
       <p v-if="desc" class="row-desc">{{ desc }}</p>
     </div>
-    <button type="button" @click="$emit('update:modelValue', !modelValue)" class="toggle-switch flex-shrink-0" :class="modelValue ? 'toggle-on' : 'toggle-off'">
+    <button 
+      type="button" 
+      :disabled="disabled"
+      @click="$emit('update:modelValue', !modelValue)" 
+      class="toggle-switch flex-shrink-0" 
+      :class="[
+        modelValue ? 'toggle-on' : 'toggle-off',
+        disabled ? 'opacity-40 cursor-not-allowed' : ''
+      ]"
+    >
       <span class="toggle-knob" :class="modelValue ? 'knob-on' : 'knob-off'"></span>
     </button>
   </div>
@@ -14,7 +23,8 @@
 defineProps({
   modelValue: { type: Boolean, default: false },
   label: { type: String, required: true },
-  desc:  { type: String, default: '' }
+  desc:  { type: String, default: '' },
+  disabled: { type: Boolean, default: false }
 })
 defineEmits(['update:modelValue'])
 </script>

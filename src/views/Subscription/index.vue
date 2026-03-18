@@ -95,7 +95,7 @@ const loadSubscription = async () => {
         subscription.value = response.data
     } catch (error) {
         console.error('Error loading subscription:', error)
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Obuna ma\'lumotlarini yuklashda xatolik', life: 3000 })
+        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Obuna ma\'lumotlarini yuklashda xatolik', life: 5000 })
     } finally {
         loading.value = false
     }
@@ -131,7 +131,7 @@ const processPayment = async () => {
             authStore.user.subscription = response.data.subscription;
         }
 
-        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'To\'lov qabul qilindi va tarif yangilandi', life: 3000 })
+        toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'To\'lov qabul qilindi va tarif yangilandi', life: 5000 })
         paymentDialog.value = false
         
         if (subscription.value.status === 'active') {
@@ -140,7 +140,7 @@ const processPayment = async () => {
 
     } catch (error) {
         console.error('Payment error:', error)
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'To\'lovni amalga oshirishda xatolik', life: 3000 })
+        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'To\'lovni amalga oshirishda xatolik', life: 5000 })
     } finally {
         processing.value = false
     }

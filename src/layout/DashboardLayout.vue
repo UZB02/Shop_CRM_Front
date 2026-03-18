@@ -333,7 +333,7 @@ const handleSubscriptionWarning = (e) => {
     severity: 'warn', 
     summary: t('common.subscription_warning_title') || 'Obuna Ogohlantirishi', 
     detail: e.detail || t('common.subscription_warning'), 
-    life: 10000 
+    life: 5000 
   })
   if (authStore.user?.subscription) authStore.user.subscription.status = 'warning'
 }

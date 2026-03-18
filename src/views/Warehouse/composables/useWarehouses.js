@@ -61,7 +61,7 @@ export function useWarehouses() {
                 severity: 'error',
                 summary: t('warehouse.messages.error'),
                 detail: t('warehouse.messages.load_error'),
-                life: 3000
+                life: 5000
             })
         } finally {
             loading.value = false
@@ -83,16 +83,16 @@ export function useWarehouses() {
             const id = warehouse.value.id || warehouse.value._id
             if (id) {
                 await warehousesAPI.update(id, payload)
-                toast.add({ severity: 'success', summary: t('warehouse.messages.success'), detail: t('warehouse.messages.updated'), life: 3000 })
+                toast.add({ severity: 'success', summary: t('warehouse.messages.success'), detail: t('warehouse.messages.updated'), life: 5000 })
             } else {
                 await warehousesAPI.create(payload)
-                toast.add({ severity: 'success', summary: t('warehouse.messages.success'), detail: t('warehouse.messages.added'), life: 3000 })
+                toast.add({ severity: 'success', summary: t('warehouse.messages.success'), detail: t('warehouse.messages.added'), life: 5000 })
             }
 
             warehouseDialog.value = false
             loadWarehouses(currentPage.value)
         } catch (error) {
-            toast.add({ severity: 'error', summary: t('warehouse.messages.error'), detail: t('warehouse.messages.save_error'), life: 3000 })
+            toast.add({ severity: 'error', summary: t('warehouse.messages.error'), detail: t('warehouse.messages.save_error'), life: 5000 })
         } finally {
             saving.value = false
         }
@@ -108,10 +108,10 @@ export function useWarehouses() {
             accept: async () => {
                 try {
                     await warehousesAPI.delete(data.id || data._id)
-                    toast.add({ severity: 'success', summary: t('warehouse.messages.success'), detail: t('warehouse.messages.deleted'), life: 3000 })
+                    toast.add({ severity: 'success', summary: t('warehouse.messages.success'), detail: t('warehouse.messages.deleted'), life: 5000 })
                     loadWarehouses(currentPage.value)
                 } catch (error) {
-                    toast.add({ severity: 'error', summary: t('warehouse.messages.error'), detail: t('warehouse.messages.delete_error'), life: 3000 })
+                    toast.add({ severity: 'error', summary: t('warehouse.messages.error'), detail: t('warehouse.messages.delete_error'), life: 5000 })
                 }
             }
         })

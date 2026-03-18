@@ -21,8 +21,8 @@ export function useCategoryManager() {
   const filteredCategories = computed(() => {
     if (!searchQuery.value?.trim()) return categories.value
     const query = searchQuery.value.toLowerCase().trim()
-    return categories.value.filter(c => 
-      c.name?.toLowerCase().includes(query) || 
+    return categories.value.filter(c =>
+      c.name?.toLowerCase().includes(query) ||
       c.description?.toLowerCase().includes(query)
     )
   })
@@ -30,13 +30,13 @@ export function useCategoryManager() {
   // Category Form State
   const panelVisible = ref(false)
   const isEditing = ref(false)
-  const activeCategory = reactive({ id: null, name: '', description: '' })
+  const activeCategory = reactive({ id: null, name: '', description: '', status: 'active' })
 
   // Subcategory Form State
   const subPanelVisible = ref(false)
   const isEditingSub = ref(false)
   const savingSub = ref(false)
-  const activeSubcategory = reactive({ id: null, name: '', description: '', categoryId: null })
+  const activeSubcategory = reactive({ id: null, name: '', description: '', categoryId: null, status: 'active' })
 
   const currentCategoryName = computed(() => {
     const cat = categories.value.find(c => (c.id || c._id) === activeSubcategory.categoryId)
@@ -47,8 +47,8 @@ export function useCategoryManager() {
     let filtered = subcategories.value.filter(s => (s.category_id || s.category) === catId)
     if (subSearchQuery.value?.trim()) {
       const q = subSearchQuery.value.toLowerCase().trim()
-      filtered = filtered.filter(s => 
-        s.name?.toLowerCase().includes(q) || 
+      filtered = filtered.filter(s =>
+        s.name?.toLowerCase().includes(q) ||
         s.description?.toLowerCase().includes(q)
       )
     }
@@ -70,52 +70,60 @@ export function useCategoryManager() {
         categoriesAPI.getAll(),
         subcategoriesAPI.getAll()
       ])
+      console.log('Categories data from API:', catRes.data)
+      console.log('Subcategories data from API:', subRes.data)
       categories.value = catRes.data.results || catRes.data || []
       subcategories.value = subRes.data.results || subRes.data || []
     } catch (error) {
       console.error('Error loading data:', error)
-      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 3000 })
+      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
     } finally {
       loading.value = false
     }
   }
 
   // Category Handlers
-  const openAddMode = () => { 
+  const openAddMode = () => {
     isEditing.value = false
     activeCategory.id = null
     activeCategory.name = ''
     activeCategory.description = ''
-    panelVisible.value = true 
+    activeCategory.status = 'active'
+    panelVisible.value = true
   }
 
-  const startEdit = (cat) => { 
+  const startEdit = (cat) => {
     isEditing.value = true
     activeCategory.id = cat.id || cat._id
     activeCategory.name = cat.name
     activeCategory.description = cat.description
-    panelVisible.value = true 
+    activeCategory.status = cat.status || 'active'
+    panelVisible.value = true
   }
 
   const handleCategorySubmit = async () => {
     if (!activeCategory.name?.trim()) {
-      toast.add({ severity: 'warn', summary: t('common.error'), detail: t('categories.messages.name_required'), life: 3000 })
+      toast.add({ severity: 'warn', summary: t('common.error'), detail: t('categories.messages.name_required'), life: 5000 })
       return
     }
     saving.value = true
     try {
-      const payload = { name: activeCategory.name.trim(), description: activeCategory.description?.trim() }
+      const payload = {
+        name: activeCategory.name.trim(),
+        description: activeCategory.description?.trim(),
+        status: activeCategory.status
+      }
       if (isEditing.value) {
         await categoriesAPI.update(activeCategory.id, payload)
-        toast.add({ severity: 'success', summary: t('common.success'), detail: t('categories.messages.updated'), life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.success'), detail: t('categories.messages.updated'), life: 5000 })
       } else {
         await categoriesAPI.create(payload)
-        toast.add({ severity: 'success', summary: t('common.success'), detail: t('categories.messages.added'), life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.success'), detail: t('categories.messages.added'), life: 5000 })
       }
       panelVisible.value = false
       await loadData()
     } catch (error) {
-      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 3000 })
+      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
     } finally { saving.value = false }
   }
 
@@ -128,10 +136,10 @@ export function useCategoryManager() {
       accept: async () => {
         try {
           await categoriesAPI.delete(cat.id || cat._id)
-          toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('categories.messages.deleted'), life: 3000 })
+          toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('categories.messages.deleted'), life: 5000 })
           loadData()
         } catch (error) {
-          toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 3000 })
+          toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
         }
       }
     })
@@ -143,6 +151,7 @@ export function useCategoryManager() {
     activeSubcategory.id = null
     activeSubcategory.name = ''
     activeSubcategory.description = ''
+    activeSubcategory.status = 'active'
     activeSubcategory.categoryId = cat.id || cat._id
     subPanelVisible.value = true
   }
@@ -152,33 +161,35 @@ export function useCategoryManager() {
     activeSubcategory.id = sub.id || sub._id
     activeSubcategory.name = sub.name
     activeSubcategory.description = sub.description
+    activeSubcategory.status = sub.status || 'active'
     activeSubcategory.categoryId = sub.category_id || sub.category
     subPanelVisible.value = true
   }
 
   const handleSubSubmit = async () => {
     if (!activeSubcategory.name?.trim()) {
-      toast.add({ severity: 'warn', summary: t('common.error'), detail: t('subcategories.messages.name_required'), life: 3000 })
+      toast.add({ severity: 'warn', summary: t('common.error'), detail: t('subcategories.messages.name_required'), life: 5000 })
       return
     }
     savingSub.value = true
     try {
-      const payload = { 
-        name: activeSubcategory.name.trim(), 
+      const payload = {
+        name: activeSubcategory.name.trim(),
         description: activeSubcategory.description?.trim(),
-        category: activeSubcategory.categoryId
+        category: activeSubcategory.categoryId,
+        status: activeSubcategory.status
       }
       if (isEditingSub.value) {
         await subcategoriesAPI.update(activeSubcategory.id, payload)
-        toast.add({ severity: 'success', summary: t('common.success'), detail: t('subcategories.messages.updated'), life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.success'), detail: t('subcategories.messages.updated'), life: 5000 })
       } else {
         await subcategoriesAPI.create(payload)
-        toast.add({ severity: 'success', summary: t('common.success'), detail: t('subcategories.messages.added'), life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.success'), detail: t('subcategories.messages.added'), life: 5000 })
       }
       subPanelVisible.value = false
       await loadData()
     } catch (error) {
-      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 3000 })
+      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
     } finally { savingSub.value = false }
   }
 
@@ -191,10 +202,10 @@ export function useCategoryManager() {
       accept: async () => {
         try {
           await subcategoriesAPI.delete(sub.id || sub._id)
-          toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('subcategories.messages.deleted'), life: 3000 })
+          toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('subcategories.messages.deleted'), life: 5000 })
           loadData()
         } catch (error) {
-          toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 3000 })
+          toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
         }
       }
     })

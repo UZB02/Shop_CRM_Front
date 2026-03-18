@@ -139,7 +139,7 @@ const loadData = async () => {
         summaryData.value = summaryRes.data
     } catch (error) {
         console.error('Error loading expenses:', error)
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Ma\'lumotlarni yuklashda xatolik yuz berdi', life: 3000 })
+        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Ma\'lumotlarni yuklashda xatolik yuz berdi', life: 5000 })
     } finally {
         loading.value = false
     }
@@ -176,10 +176,10 @@ const saveExpense = async () => {
     try {
         if (expense.value._id) {
             await expensesAPI.update(expense.value._id, expense.value)
-            toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Xarajat yangilandi', life: 3000 })
+            toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Xarajat yangilandi', life: 5000 })
         } else {
             await expensesAPI.create(expense.value)
-            toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi xarajat saqlandi', life: 3000 })
+            toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi xarajat saqlandi', life: 5000 })
         }
         expenseDialog.value = false
         loadData()
@@ -200,10 +200,10 @@ const confirmDelete = (data) => {
         accept: async () => {
             try {
                 await expensesAPI.delete(data._id)
-                toast.add({ severity: 'success', summary: 'O\'chirildi', detail: 'Xarajat muvaffaqiyatli o\'chirildi', life: 3000 })
+                toast.add({ severity: 'success', summary: 'O\'chirildi', detail: 'Xarajat muvaffaqiyatli o\'chirildi', life: 5000 })
                 loadData()
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 3000 })
+                toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 5000 })
             }
         }
     })

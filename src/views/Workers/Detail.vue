@@ -198,7 +198,7 @@ const saveWorker = async () => {
             severity: 'success', 
             summary: t('common.updated'), 
             detail: t('workers.messages.updated', { name: `${workerToEdit.value.first_name} ${workerToEdit.value.last_name}` }), 
-            life: 3000 
+            life: 5000 
         })
         
         workerDialog.value = false

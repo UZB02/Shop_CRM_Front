@@ -70,7 +70,7 @@ export function useWorkers() {
                 severity: 'error',
                 summary: t('common.error'),
                 detail: t('workers.messages.load_error'),
-                life: 3000
+                life: 5000
             })
         } finally {
             loading.value = false

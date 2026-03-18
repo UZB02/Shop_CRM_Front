@@ -224,7 +224,7 @@ const loadGroups = async () => {
     groups.value = response.data.results || response.data
   } catch (error) {
     console.error('Error loading groups:', error)
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 5000 })
   } finally {
     loading.value = false
   }
@@ -240,7 +240,7 @@ const startEdit = (group) => {
 
 const handleSubmit = async () => {
   if (!activeGroup.name?.trim()) {
-    toast.add({ severity: 'warn', summary: t('common.error'), detail: t('customers.form.name_required'), life: 3000 })
+    toast.add({ severity: 'warn', summary: t('common.error'), detail: t('customers.form.name_required'), life: 5000 })
     return
   }
   
@@ -253,17 +253,17 @@ const handleSubmit = async () => {
 
     if (isEditing.value) {
       await customerGroupsAPI.update(activeGroup.id, payload)
-      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.updated'), life: 3000 })
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.updated'), life: 5000 })
     } else {
       await customerGroupsAPI.create(payload)
-      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.groups.added_message'), life: 3000 })
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.groups.added_message'), life: 5000 })
     }
     
     panelVisible.value = false
     resetForm()
     await loadGroups()
   } catch (error) {
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message') || "Xatolik yuz berdi", life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message') || "Xatolik yuz berdi", life: 5000 })
   } finally {
     saving.value = false
   }
@@ -278,11 +278,11 @@ const confirmDelete = (group) => {
     accept: async () => {
       try {
         await customerGroupsAPI.delete(group.id || group._id)
-        toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.groups.deleted_message'), life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.groups.deleted_message'), life: 5000 })
         loadGroups()
         if (activeGroup.id === (group.id || group._id)) panelVisible.value = false
       } catch (error) {
-        toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.delete_error'), life: 3000 })
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.delete_error'), life: 5000 })
       }
     }
   })

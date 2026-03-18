@@ -177,7 +177,7 @@ const loadCustomerData = async () => {
     }
   } catch (error) {
     console.error('Error loading customer details:', error)
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 5000 })
   } finally {
     loading.value = false
   }
@@ -201,11 +201,11 @@ const saveUpdate = async () => {
             group: customerToEdit.value.group
         }
         await customersAPI.update(customerToEdit.value.id, payload)
-        toast.add({ severity: 'success', summary: t('common.success'), detail: t('common.updated'), life: 3000 })
+        toast.add({ severity: 'success', summary: t('common.success'), detail: t('common.updated'), life: 5000 })
         editDialog.value = false
         loadCustomerData()
     } catch (error) {
-        toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error'), life: 3000 })
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error'), life: 5000 })
     } finally {
         saving.value = false
     }

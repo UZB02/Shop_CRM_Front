@@ -6,22 +6,32 @@
       :class="[
         isExpanded 
           ? 'bg-white dark:bg-slate-900 border-emerald-500/30 shadow-2xl shadow-emerald-500/5' 
-          : 'bg-white/40 dark:bg-slate-900/40 border-slate-100/50 dark:border-slate-800/40 hover:bg-white dark:hover:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700'
+          : 'bg-white/40 dark:bg-slate-900/40 border-slate-100/50 dark:border-slate-800/40 hover:bg-white dark:hover:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700',
+        category.status === 'inactive' ? '!bg-rose-50/50 dark:!bg-rose-950/20 !border-rose-200 dark:!border-rose-800/50' : ''
       ]"
     >
       <div class="flex items-center gap-3 sm:gap-5 min-w-0">
         <div 
           class="w-10 h-10 sm:w-12 sm:h-12 rounded-[1rem] sm:rounded-[1.25rem] flex items-center justify-center transition-all duration-500 shrink-0"
           :class="[
-            isExpanded
-              ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30'
-              : 'bg-slate-50 dark:bg-slate-800 text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-500 dark:group-hover:bg-emerald-500/10'
+            category.status === 'inactive'
+              ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30'
+              : (isExpanded
+                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30'
+                : 'bg-slate-50 dark:bg-slate-800 text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-500 dark:group-hover:bg-emerald-500/10')
           ]"
         >
           <i class="pi pi-box text-base sm:text-lg"></i>
         </div>
         <div class="min-w-0 overflow-hidden">
-          <h3 class="text-[11px] sm:text-[13px] font-black uppercase tracking-tight transition-colors duration-500 truncate" :class="isExpanded ? 'text-emerald-500 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-200'">
+          <h3 
+            class="text-[11px] sm:text-[13px] font-black uppercase tracking-tight transition-colors duration-500 truncate" 
+            :class="[
+              category.status === 'inactive'
+                ? 'text-rose-500 dark:text-rose-400'
+                : (isExpanded ? 'text-emerald-500 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-200')
+            ]"
+          >
             {{ category.name }}
           </h3>
           <p v-if="category.description" class="text-[8px] sm:text-[10px] text-slate-400 font-bold mt-0.5 line-clamp-1 opacity-70 truncate">{{ category.description }}</p>
@@ -51,7 +61,11 @@
           <div class="w-px h-5 sm:h-6 bg-slate-100 dark:bg-slate-800 mx-0.5 sm:mx-1"></div>
           <div 
             class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-500"
-            :class="isExpanded ? 'rotate-180 bg-emerald-500/10 text-emerald-500' : 'text-slate-300'"
+            :class="[
+              category.status === 'inactive'
+                ? (isExpanded ? 'rotate-180 bg-rose-500/20 text-rose-500' : 'text-rose-400')
+                : (isExpanded ? 'rotate-180 bg-emerald-500/10 text-emerald-500' : 'text-slate-300')
+            ]"
           >
             <i class="pi pi-chevron-down text-[8px] sm:text-[10px] font-black"></i>
           </div>

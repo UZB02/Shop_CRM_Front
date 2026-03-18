@@ -165,7 +165,7 @@ const handleSubmit = async () => {
       severity: 'success',
       summary: t('password_change.success_title'),
       detail: t('password_change.success_message'),
-      life: 3000
+      life: 5000
     })
     
     emit('success')
@@ -176,7 +176,7 @@ const handleSubmit = async () => {
       severity: 'error',
       summary: t('password_change.error_title'),
       detail: error.response?.data?.detail || error.response?.data?.message || t('password_change.error_message'),
-      life: 3000
+      life: 5000
     })
   } finally {
     loading.value = false
