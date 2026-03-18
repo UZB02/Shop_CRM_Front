@@ -36,7 +36,7 @@
                 <div class="flex items-center gap-2.5 sm:gap-3">
                   <div class="relative group/img shrink-0">
                     <div class="w-9 h-9 sm:w-11 sm:h-11 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-lg sm:rounded-xl flex items-center justify-center text-slate-400 overflow-hidden shadow-sm group-hover/img:shadow-md transition-all">
-                      <img v-if="item.image" :src="item.image" class="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
+                      <img v-if="formatImageUrl(item.image)" :src="formatImageUrl(item.image)" class="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <i v-else class="pi pi-image text-base sm:text-lg text-slate-300"></i>
                     </div>
                     <div v-if="item.status === 'inactive'" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
@@ -202,6 +202,13 @@ const formatCurrency = (value, currencyId = 1) => {
     currency: currency, 
     maximumFractionDigits: 0 
   }).format(value)
+}
+
+const formatImageUrl = (url) => {
+  if (!url) return null
+  if (url.startsWith('http')) return url
+  const baseUrl = 'https://shopcrmsystem-production.up.railway.app'
+  return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`
 }
 
 const viewBarcode = (item) => {

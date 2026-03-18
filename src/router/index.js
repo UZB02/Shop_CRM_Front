@@ -127,6 +127,12 @@ const routes = [
                 meta: { permission: 'warehouse' }
             },
             {
+                path: 'warehouse/:id',
+                name: 'warehouse-detail',
+                component: () => import('@/views/Warehouse/Detail.vue'),
+                meta: { permission: 'warehouse' }
+            },
+            {
                 path: 'pos',
                 name: 'pos',
                 component: () => import('@/views/Pos/index.vue'),

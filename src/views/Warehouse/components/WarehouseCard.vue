@@ -65,12 +65,21 @@
             {{ warehouse.status === 'inactive' ? $t('common.inactive') : $t('common.active') }}
           </span>
         </div>
-        <button
-          @click="$emit('edit', warehouse)"
-          class="px-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all border border-slate-100 dark:border-slate-700 hover:border-emerald-500"
-        >
-          {{ $t('common.view') }}
-        </button>
+        <div class="flex gap-2">
+          <button
+            @click="$emit('move', warehouse)"
+            class="px-4 py-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all border border-emerald-500/20 hover:border-emerald-500 flex items-center gap-2"
+          >
+            <i class="pi pi-plus-circle"></i>
+            Kirim / Chiqim
+          </button>
+          <button
+            @click="$router.push(`/dashboard/warehouse/${warehouse.id || warehouse._id}`)"
+            class="px-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-slate-100 dark:border-slate-700"
+          >
+            {{ $t('common.view') }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -80,5 +89,5 @@
 defineProps({
   warehouse: Object
 })
-defineEmits(['edit', 'delete'])
+defineEmits(['edit', 'delete', 'move'])
 </script>

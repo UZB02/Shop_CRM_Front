@@ -54,6 +54,7 @@
           :warehouse="w"
           @edit="editWarehouse"
           @delete="confirmDelete"
+          @move="openMovementDialog"
         />
       </div>
 
@@ -63,6 +64,7 @@
           :warehouses="filteredWarehouses"
           @edit="editWarehouse"
           @delete="confirmDelete"
+          @move="openMovementDialog"
         />
       </div>
 
@@ -95,6 +97,15 @@
       @save="saveWarehouse"
     />
 
+    <!-- Stock Movement Dialog -->
+    <StockMovementDialog
+      v-model:visible="moveVisible"
+      :warehouse="moveWarehouse"
+      :products="products"
+      :saving="moveSaving"
+      @save="saveMovement"
+    />
+
   </div>
 </template>
 
@@ -107,7 +118,10 @@ import WarehouseFilters from './components/WarehouseFilters.vue'
 import WarehouseCard from './components/WarehouseCard.vue'
 import WarehouseTable from './components/WarehouseTable.vue'
 import WarehouseDialog from './components/WarehouseDialog.vue'
+import StockMovementDialog from './components/StockMovementDialog.vue'
+
 import { useWarehouses } from './composables/useWarehouses'
+import { useStockMovement } from './composables/useStockMovement'
 
 const {
   warehouses, loading, saving, warehouseDialog, submitted,
@@ -115,6 +129,15 @@ const {
   warehouse, filteredWarehouses,
   loadWarehouses, saveWarehouse, confirmDelete, openNewDialog, editWarehouse, onPageChange
 } = useWarehouses()
+
+const {
+  visible: moveVisible,
+  saving: moveSaving,
+  warehouse: moveWarehouse,
+  products,
+  openMovementDialog,
+  saveMovement
+} = useStockMovement()
 
 onMounted(() => loadWarehouses())
 </script>

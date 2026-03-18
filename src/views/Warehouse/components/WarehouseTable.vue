@@ -37,7 +37,21 @@
             </div>
           </td>
           <td class="px-6 py-4">
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-2 text-left">
+              <button
+                @click="$router.push(`/dashboard/warehouse/${w.id || w._id}`)"
+                v-tooltip.left="'Ko\'rish'"
+                class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm"
+              >
+                <i class="pi pi-eye text-[10px]"></i>
+              </button>
+              <button
+                @click="$emit('move', w)"
+                v-tooltip.left="'Kirim / Chiqim'"
+                class="w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
+              >
+                <i class="pi pi-sync text-[10px]"></i>
+              </button>
               <button
                 @click="$emit('edit', w)"
                 class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
@@ -62,7 +76,7 @@
 defineProps({
   warehouses: Array
 })
-defineEmits(['edit', 'delete'])
+defineEmits(['edit', 'delete', 'move'])
 </script>
 
 <style scoped>
