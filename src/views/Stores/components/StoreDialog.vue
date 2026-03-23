@@ -73,14 +73,14 @@
                   </div>
                   <InputText
                     id="location"
-                    v-model.trim="store.location"
+                    v-model.trim="store.address"
                     :placeholder="$t('stores.form.city_ph')"
-                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.location?.trim() }"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.address?.trim() }"
                     class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
                 </div>
                 <Transition name="fade-slide">
-                  <p v-if="submitted && !store.location?.trim()" class="text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse px-1 mt-0.5">
+                  <p v-if="submitted && !store.address?.trim()" class="text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse px-1 mt-0.5">
                     {{ $t('common.required_field') }}
                   </p>
                 </Transition>

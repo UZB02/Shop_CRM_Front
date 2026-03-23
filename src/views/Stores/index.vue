@@ -1,8 +1,8 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-6 animate-in fade-in duration-500 max-w-[1600px] mx-auto pb-12 px-4 sm:px-6">
     <!-- Page Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-      <h1 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $t('stores.page_title') }}</h1>
+      <h1 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">{{ $t('stores.page_title') }}</h1>
     </div>
 
     <!-- Store Info Card -->

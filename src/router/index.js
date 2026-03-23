@@ -55,6 +55,12 @@ const routes = [
                 meta: { permission: 'stores' }
             },
             {
+                path: 'stores/:id',
+                name: 'store-detail',
+                component: () => import('@/views/Stores/Detail.vue'),
+                meta: { permission: 'stores' }
+            },
+            {
                 path: 'products',
                 name: 'products',
                 component: () => import('@/views/Products/index.vue'),

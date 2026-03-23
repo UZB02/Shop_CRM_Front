@@ -120,25 +120,43 @@ export function useStores() {
 
     // ─── Store Actions ────────────────────────────────────────
     const openNewStoreDialog = () => {
-        storeForm.value = { name: '', location: '', phone: '', status: 'active' }
+        storeForm.value = { name: '', address: '', phone: '', status: 'active' }
         submitted.value = false
         storeDialog.value = true
     }
 
-    const openEditStoreDialog = () => {
-        storeForm.value = { ...store.value }
-        submitted.value = false
-        storeDialog.value = true
+    const openEditStoreDialog = async () => {
+        const id = store.value.id || store.value._id
+        if (!id) return
+
+        try {
+            const res = await storesAPI.getById(id)
+            console.log('API dan kelgan do\'kon ma\'lumotlari (detail):', res.data)
+            storeForm.value = { ...res.data }
+            submitted.value = false
+            storeDialog.value = true
+        } catch (error) {
+            console.error('Do\'kon ma\'lumotlarini olishda xatolik:', error)
+            // Fallback to existing list data
+            storeForm.value = { ...store.value }
+            storeDialog.value = true
+        }
     }
 
     const saveStore = async () => {
         submitted.value = true
-        if (!storeForm.value.name?.trim() || !storeForm.value.location?.trim() || !storeForm.value.phone?.trim()) return
+        if (!storeForm.value.name?.trim() || !storeForm.value.address?.trim() || !storeForm.value.phone?.trim()) return
         saving.value = true
         try {
             const id = storeForm.value.id || storeForm.value._id
+            const payload = {
+                name: storeForm.value.name,
+                address: storeForm.value.address,
+                phone: storeForm.value.phone,
+                status: storeForm.value.status
+            }
             if (id) {
-                await storesAPI.update(id, storeForm.value)
+                await storesAPI.update(id, payload)
                 toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.store_updated'), life: 5000 })
             } else {
                 await storesAPI.create(storeForm.value)

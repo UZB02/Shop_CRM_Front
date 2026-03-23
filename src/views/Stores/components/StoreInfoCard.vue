@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
+  <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
     <template v-if="loading">
       <div class="p-6 sm:p-8 flex items-start gap-5 animate-pulse">
         <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex-shrink-0"></div>
@@ -11,64 +11,98 @@
     </template>
 
     <template v-else-if="store.id || store._id">
-      <div class="p-3.5 sm:p-5">
-        <div class="flex items-center gap-3 sm:gap-4">
-          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-            <i class="pi pi-building text-lg sm:text-xl text-emerald-500"></i>
+      <!-- MOBILE VIEW: Compact and Side-by-Side (Max 2-3 rows) -->
+      <div class="block sm:hidden p-5 space-y-4">
+        <div class="flex items-start gap-4">
+          <!-- Small Icon -->
+          <div class="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
+            <i class="pi pi-building text-white text-2xl font-black"></i>
           </div>
-
           <div class="flex-1 min-w-0">
-            <h2 class="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight truncate">
-              {{ store.name }}
-            </h2>
-            <div v-if="store.location || store.phone || store.openingHours || store.address" class="mt-0.5 sm:mt-1 flex flex-wrap items-center gap-x-3 sm:gap-x-4 gap-y-1">
-              <span v-if="store.location" class="flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400">
-                <i class="pi pi-map-marker text-[8px] text-emerald-500"></i>{{ store.location }}
+            <router-link :to="`/dashboard/stores/${store.id || store._id}`" class="block">
+              <h2 class="text-base font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight truncate mb-1.5 leading-tight">
+                {{ store.name }}
+              </h2>
+            </router-link>
+            <div class="flex items-center gap-1.5">
+              <span class="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-[8px] text-slate-500 font-black tracking-widest border border-slate-200 dark:border-slate-700">
+                ID: {{ store.id || store._id }}
               </span>
-              <span v-if="store.phone" class="flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400">
-                <i class="pi pi-phone text-[8px] text-emerald-500"></i>{{ store.phone }}
-              </span>
-              <span v-if="store.openingHours" class="flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400">
-                <i class="pi pi-clock text-[8px] text-emerald-500"></i>{{ store.openingHours }}
-              </span>
-              <span v-if="store.address" class="flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400">
-                <i class="pi pi-home text-[8px] text-emerald-500"></i>{{ store.address }}
+              <span :class="[
+                'px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border',
+                store.status === 'active' ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/10' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700'
+              ]">
+                {{ store.status === 'active' ? 'FAOL' : 'NOFAOL' }}
               </span>
             </div>
           </div>
+        </div>
 
-          <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-            <span :class="[
-              'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[8px] sm:text-[9px] font-black uppercase tracking-widest',
-              store.status === 'active'
-                ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
-            ]">
-              {{ store.status === 'active' ? $t('stores.status_active') : $t('stores.status_inactive') }}
-            </span>
-            <button
-              @click="$emit('edit')"
-              class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
-              :title="$t('stores.edit_store')"
-            >
-              <i class="pi pi-pencil text-[10px] sm:text-xs"></i>
-            </button>
+        <div class="flex items-center justify-between gap-2 pt-4 border-t border-slate-50 dark:border-slate-800/50">
+           <div v-if="store.phone" class="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/60 px-3 py-2 rounded-2xl border border-slate-100 dark:border-slate-700/50 max-w-[150px] truncate">
+              <i class="pi pi-phone text-[8px] text-emerald-500"></i>{{ store.phone }}
+           </div>
+           <div class="flex items-center gap-2">
+             <button @click="$emit('edit')" class="w-9 h-9 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 shadow-sm transition-transform active:scale-95"><i class="pi pi-pencil text-[10px]"></i></button>
+             <router-link :to="`/dashboard/stores/${store.id || store._id}`" class="w-9 h-9 rounded-xl flex items-center justify-center bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 active:scale-95 transition-transform"><i class="pi pi-arrow-right text-[10px]"></i></router-link>
+           </div>
+        </div>
+      </div>
+
+      <!-- DESKTOP VIEW: Horizontal and Professional -->
+      <div class="hidden sm:block p-6">
+        <div class="flex items-center gap-6">
+          <div class="w-20 h-20 rounded-3xl bg-emerald-500 flex items-center justify-center shadow-xl shadow-emerald-500/20 shrink-0 transform transition-transform hover:scale-105">
+            <i class="pi pi-building text-white text-3xl font-black"></i>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-3 mb-3">
+              <router-link 
+                :to="`/dashboard/stores/${store.id || store._id}`"
+                class="group/title inline-flex items-center gap-2 hover:opacity-80 transition-all cursor-pointer"
+              >
+                <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight truncate group-hover/title:text-emerald-500 transition-colors">
+                  {{ store.name }}
+                </h2>
+              </router-link>
+              <span class="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-[9px] text-slate-500 dark:text-slate-400 font-black tracking-widest border border-slate-200 dark:border-slate-700">
+                ID: {{ store.id || store._id }}
+              </span>
+              <span :class="[
+                'px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border',
+                store.status === 'active' ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/10' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700'
+              ]">
+                {{ store.status === 'active' ? 'FAOL' : 'NOFAOL' }}
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4">
+              <div v-if="store.phone" class="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-700/50">
+                <i class="pi pi-phone text-[9px] text-emerald-500"></i>{{ store.phone }}
+              </div>
+              <div v-if="store.address" class="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-700/50">
+                <i class="pi pi-map-marker text-[9px] text-emerald-500"></i>{{ store.address }}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+             <button @click="$emit('edit')" class="w-11 h-11 rounded-2xl flex items-center justify-center bg-white dark:bg-slate-800 text-slate-500 hover:text-emerald-500 hover:bg-emerald-50 transition-all border border-slate-100 dark:border-slate-700 shadow-sm"><i class="pi pi-pencil text-sm"></i></button>
+             <router-link :to="`/dashboard/stores/${store.id || store._id}`" class="w-11 h-11 rounded-2xl flex items-center justify-center bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 transition-all"><i class="pi pi-arrow-right text-sm"></i></router-link>
           </div>
         </div>
       </div>
     </template>
 
     <template v-else>
-      <div class="p-8 text-center">
-        <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
-          <i class="pi pi-building text-2xl text-slate-400"></i>
+      <div class="p-10 text-center">
+        <div class="w-20 h-20 rounded-3xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-6">
+          <i class="pi pi-building text-3xl text-slate-300"></i>
         </div>
-        <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">{{ $t('stores.no_store') }}</p>
-        <button
-          @click="$emit('add')"
-          class="px-6 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/20"
-        >
-          <i class="pi pi-plus mr-2"></i>{{ $t('stores.add_store') }}
+        <h3 class="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest mb-2">{{ $t('stores.no_store') }}</h3>
+        <button @click="$emit('add')" class="inline-flex items-center gap-3 px-8 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black uppercase tracking-widest transition-all shadow-xl shadow-emerald-500/20">
+          <i class="pi pi-plus font-bold"></i>{{ $t('stores.add_store') }}
         </button>
       </div>
     </template>
