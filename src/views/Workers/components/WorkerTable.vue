@@ -83,14 +83,17 @@
             <tr v-else v-for="data in workers" :key="data.id" 
                 class="group bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200">
               <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="relative flex-shrink-0">
+                <div 
+                  class="flex items-center gap-3 cursor-pointer group/worker"
+                  @click="router.push({ name: 'worker-detail', params: { id: data.id || data._id } })"
+                >
+                  <div class="relative flex-shrink-0 transition-transform duration-300 group-hover/worker:scale-105">
                     <div v-if="data.avatar_url"
-                         class="w-11 h-11 rounded-2xl overflow-hidden ring-2 ring-slate-100 dark:ring-slate-800 group-hover:ring-emerald-500/20 transition-all shadow-sm">
+                         class="w-11 h-11 rounded-2xl overflow-hidden ring-2 ring-slate-100 dark:ring-slate-800 group-hover/worker:ring-emerald-500 transition-all shadow-sm">
                       <img :src="data.avatar_url" class="w-full h-full object-cover" />
                     </div>
                     <div v-else
-                         class="w-11 h-11 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-lg ring-2 ring-slate-100 dark:ring-slate-800 group-hover:ring-emerald-500/20 transition-all"
+                         class="w-11 h-11 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-lg ring-2 ring-slate-100 dark:ring-slate-800 group-hover/worker:ring-emerald-500 transition-all font-black"
                          :style="getAvatarGradient(data.full_name || data.first_name)">
                       {{ getInitials(data) }}
                     </div>
@@ -98,7 +101,7 @@
                           :class="getStatusDotClass(data)"></span>
                   </div>
                   <div class="min-w-0">
-                    <p class="font-black text-sm text-slate-900 dark:text-white leading-none truncate">
+                    <p class="font-black text-sm text-slate-900 dark:text-white leading-none truncate group-hover/worker:text-emerald-500 transition-colors">
                       {{ getDisplayName(data) }}
                     </p>
                     <span class="inline-flex items-center mt-1.5 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-widest border"
@@ -154,20 +157,14 @@
               <td class="px-6 py-4 text-right">
                 <div class="flex gap-1.5 justify-end items-center group-hover:opacity-100 transition-opacity">
                   <button
-                    class="w-8 h-8 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center transition-all duration-200"
-                    :title="$t('common.view')"
-                    @click="router.push({ name: 'worker-detail', params: { id: data.id || data._id } })">
-                    <i class="pi pi-eye text-xs"></i>
-                  </button>
-                  <button
                     class="w-8 h-8 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-all duration-200"
-                    :title="$t('common.edit')"
+                    v-tooltip.top="$t('common.edit')"
                     @click="$emit('edit', data)">
                     <i class="pi pi-pencil text-xs"></i>
                   </button>
                   <button
                     class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 hover:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center transition-all duration-200"
-                    :title="$t('common.delete')"
+                    v-tooltip.top="$t('common.delete')"
                     @click="$emit('delete', data)">
                     <i class="pi pi-trash text-xs"></i>
                   </button>

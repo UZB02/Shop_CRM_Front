@@ -12,11 +12,14 @@
       <tbody>
         <tr v-for="w in warehouses" :key="w.id || w._id" class="group border-b border-slate-50 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
           <td class="px-6 py-4">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                <i class="pi pi-box text-emerald-500 text-xs"></i>
+            <div 
+              class="flex items-center gap-3 cursor-pointer group/name" 
+              @click="$router.push(`/dashboard/warehouse/${w.id || w._id}`)"
+            >
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center transition-all group-hover/name:bg-emerald-500 group-hover/name:text-white group-hover/name:rotate-12">
+                <i class="pi pi-box text-emerald-500 group-hover/name:text-white text-xs"></i>
               </div>
-              <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ w.name }}</span>
+              <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight group-hover/name:text-emerald-500 transition-colors">{{ w.name }}</span>
             </div>
           </td>
           <td class="px-6 py-4">
@@ -39,13 +42,6 @@
           <td class="px-6 py-4">
             <div class="flex justify-end gap-2 text-left">
               <button
-                @click="$router.push(`/dashboard/warehouse/${w.id || w._id}`)"
-                v-tooltip.left="'Ko\'rish'"
-                class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm"
-              >
-                <i class="pi pi-eye text-[10px]"></i>
-              </button>
-              <button
                 @click="$emit('move', w)"
                 v-tooltip.left="'Kirim / Chiqim'"
                 class="w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
@@ -54,6 +50,7 @@
               </button>
               <button
                 @click="$emit('edit', w)"
+                v-tooltip.left="'Tahrirlash'"
                 class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
               >
                 <i class="pi pi-pencil text-[10px]"></i>

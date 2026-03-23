@@ -16,11 +16,11 @@ export function useWorkerActions(loadWorkersCallback) {
         email: '',
         phone1: '',
         password: '',
-        role: null,
+        role: 'seller',
         salary: 0,
         branch: null,
         status: 'active',
-        permissions: []
+        permissions: ['sotuv', 'savdolar', 'mijozlar', 'ombor', 'mahsulotlar']
     })
 
     const workerDialog = ref(false)
@@ -37,11 +37,11 @@ export function useWorkerActions(loadWorkersCallback) {
             email: '',
             phone1: '',
             password: '',
-            role: null,
+            role: 'seller',
             salary: 0,
             branch: null,
             status: 'active',
-            permissions: []
+            permissions: ['sotuv', 'savdolar', 'mijozlar', 'ombor', 'mahsulotlar']
         }
         createLogin.value = true
         submitted.value = false

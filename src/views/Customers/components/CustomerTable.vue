@@ -43,12 +43,15 @@
           >
             <!-- Name & Group -->
             <td class="px-4 py-2.5">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 flex-shrink-0">
+              <div 
+                class="flex items-center gap-3 cursor-pointer group/name" 
+                @click="$emit('view-history', data.id)"
+              >
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 flex-shrink-0 transition-all group-hover/name:bg-emerald-500 group-hover/name:text-white">
                   <i class="pi pi-user text-sm"></i>
                 </div>
                 <div>
-                  <p class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-tight">{{ data.name }}</p>
+                  <p class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-tight group-hover/name:text-emerald-500 transition-colors">{{ data.name }}</p>
                   <div v-if="data.group_name" class="flex mt-0.5">
                     <span class="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest border border-amber-500/20">
                       {{ data.group_name }}
@@ -91,25 +94,18 @@
 
             <!-- Actions -->
             <td class="px-6 py-4 text-right">
-              <div class="flex justify-end gap-1 transition-opacity">
+              <div class="flex justify-end gap-1.5 transition-opacity">
                 <button
-                  @click="$emit('view-history', data.id)"
-                  class="w-8 h-8 rounded-lg flex items-center justify-center text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all"
-                  :title="$t('customers.table.history_tooltip')"
-                >
-                  <i class="pi pi-history text-[10px]"></i>
-                </button>
-                <button
-                  @click="$emit('edit', data)"
+                  @click="emit('edit', data)"
+                  v-tooltip.top="$t('customers.table.edit_tooltip')"
                   class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
-                  :title="$t('customers.table.edit_tooltip')"
                 >
                   <i class="pi pi-pencil text-[10px]"></i>
                 </button>
                 <button
-                  @click="$emit('delete', data)"
+                  @click="emit('delete', data)"
+                  v-tooltip.top="$t('customers.table.delete_tooltip')"
                   class="w-8 h-8 rounded-lg flex items-center justify-center text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all"
-                  :title="$t('customers.table.delete_tooltip')"
                 >
                   <i class="pi pi-trash text-[10px]"></i>
                 </button>
