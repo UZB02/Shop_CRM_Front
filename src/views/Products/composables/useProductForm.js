@@ -27,7 +27,17 @@ export function useProductForm() {
 
     const categories = ref([])
     const subcategories = ref([])
-    const units = ['dona', 'kg', 'litr', 'quti', 'metr']
+    const units = [
+        { value: 'dona', label: 'Dona' },
+        { value: 'kg', label: 'Kilogram' },
+        { value: 'g', label: 'Gram' },
+        { value: 'litr', label: 'Litr' },
+        { value: 'metr', label: 'Metr' },
+        { value: 'm2', label: 'Kvadrat metr' },
+        { value: 'yashik', label: 'Yashik' },
+        { value: 'qop', label: 'Qop' },
+        { value: 'quti', label: 'Quti' },
+    ]
     const currencies = ref([
         { id: 1, name: "UZS", symbol: "so'm" },
         { id: 2, name: "USD", symbol: "$" },

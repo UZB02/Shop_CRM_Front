@@ -263,7 +263,16 @@ const handleSubmit = async () => {
     resetForm()
     await loadGroups()
   } catch (error) {
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message') || "Xatolik yuz berdi", life: 5000 })
+    console.error('Save error:', error)
+    const errData = error?.response?.data
+    const errDetail = !errData
+      ? t('customers.groups.add_error')
+      : typeof errData === 'string'
+        ? errData
+        : errData?.detail || errData?.message || errData?.non_field_errors?.[0]
+          || Object.values(errData).flat().join(' ')  
+          || t('customers.groups.add_error')
+    toast.add({ severity: 'error', summary: t('common.error'), detail: errDetail, life: 7000 })
   } finally {
     saving.value = false
   }

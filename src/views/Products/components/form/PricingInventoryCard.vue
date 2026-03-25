@@ -74,7 +74,7 @@
               @change="$emit('update:modelValue', { ...modelValue, unit: $event.target.value })"
               class="w-full h-11 px-3 pr-8 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 outline-none appearance-none cursor-pointer"
             >
-              <option v-for="u in units" :key="u" :value="u">{{ $t('units.' + u) }}</option>
+              <option v-for="u in units" :key="u.value" :value="u.value">{{ $t('units.' + u.value) }}</option>
             </select>
             <i class="pi pi-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none transition-colors"></i>
           </div>

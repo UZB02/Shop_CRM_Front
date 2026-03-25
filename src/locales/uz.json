@@ -31,7 +31,10 @@
         "no_results": "Hech nima topilmadi",
         "pay": "To'lov",
         "pay_action": "To'lov qilish",
-        "required_field": "Maydonni to'ldirish shart"
+        "required_field": "Maydonni to'ldirish shart",
+        "success": "Muvaffaqiyatli",
+        "error_message": "Xatolik yuz berdi",
+        "confirm_title": "Tasdiqlash"
     },
     "workers": {
         "title": "Xodimlar",
@@ -335,6 +338,25 @@
             "branch_address_ph": "Masalan: Alisher Navoi ko'chasi, 5-a uy",
             "subtitle_store": "Tizimga yangi savdo nuqtasini kiritish",
             "subtitle_branch": "Do'kon tarkibidagi filialni boshqarish"
+        },
+        "detail": {
+            "tab_branches": "Filiallar",
+            "tab_workers": "Xodimlar",
+            "tab_shifts": "Ochiq Smenalar",
+            "tab_settings": "Sozlamalar",
+            "stat_branches": "Filiallar",
+            "stat_workers": "Xodimlar",
+            "no_address": "Manzil kiritilmagan",
+            "no_phone": "Telefon kiritilmagan",
+            "shifts_empty": "Hozirda ochiq smenalar mavjud emas",
+            "shift_opened": "Ochildi: {date}",
+            "cash_balance": "Kassa balansi",
+            "actions": "Amallar",
+            "settings_title": "Do'kon Sozlamalari",
+            "main_currency": "Asosiy valyuta",
+            "vat": "QQS (VAT)",
+            "security": "Xavfsizlik",
+            "security_desc": "Do'kon ma'lumotlari faqatgina do'kon egasi va ruxsati bor xodimlar tomonidan boshqariladi."
         }
     },
     "warehouse": {
@@ -473,14 +495,18 @@
         }
     },
     "units": {
-        "box": "Quti",
-        "quti": "Quti",
         "dona": "Dona",
         "kg": "Kilogram",
+        "g": "Gram",
         "litr": "Litr",
         "litre": "Litr",
         "metr": "Metr",
         "meter": "Metr",
+        "m2": "Kv. metr",
+        "yashik": "Yashik",
+        "qop": "Qop",
+        "quti": "Quti",
+        "box": "Quti",
         "piece": "Dona"
     },
     "settings": {
