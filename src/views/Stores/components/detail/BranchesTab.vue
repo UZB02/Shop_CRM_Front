@@ -48,12 +48,12 @@
               >
                 <!-- Name -->
                 <td class="px-6 py-4">
-                  <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300 shrink-0">
+                  <router-link :to="`/dashboard/branches/${branch.id}`" class="flex items-center gap-3 group/link">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover/link:bg-emerald-500 group-hover/link:text-white transition-all duration-300 shrink-0">
                       <i class="pi pi-sitemap text-sm"></i>
                     </div>
-                    <span class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">{{ branch.name }}</span>
-                  </div>
+                    <span class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight group-hover/link:text-emerald-500 transition-colors">{{ branch.name }}</span>
+                  </router-link>
                 </td>
 
                 <!-- Address -->
@@ -121,20 +121,20 @@
             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
               <i class="pi pi-sitemap text-sm"></i>
             </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight truncate">{{ branch.name }}</p>
+            <router-link :to="`/dashboard/branches/${branch.id}`" class="flex-1 min-w-0">
+              <p class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight truncate hover:text-emerald-500 transition-colors">{{ branch.name }}</p>
               <p class="text-[10px] font-bold text-slate-400 truncate mt-0.5">
                 <i class="pi pi-map-marker text-[8px]"></i> {{ branch.address || '—' }}
               </p>
-            </div>
+            </router-link>
             <div class="flex items-center gap-1.5 shrink-0">
               <button
                 @click="$emit('edit', branch)"
-                class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center active:scale-95"
+                class="w-9 h-9 rounded-xl bg-blue-500 text-white flex items-center justify-center active:scale-95"
               ><i class="pi pi-pencil text-xs"></i></button>
               <button
                 @click="$emit('delete', branch)"
-                class="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center active:scale-95"
+                class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center active:scale-95"
               ><i class="pi pi-trash text-xs"></i></button>
             </div>
           </div>

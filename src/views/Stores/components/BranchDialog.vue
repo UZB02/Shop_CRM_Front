@@ -89,7 +89,7 @@
                   <label for="b_status" class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1">
                     {{ $t('stores.form.status') }}
                   </label>
-                  <Dropdown
+                  <Select
                     id="b_status"
                     v-model="branch.status"
                     :options="statuses"
@@ -156,7 +156,7 @@
 
 <script setup>
 import InputText from 'primevue/inputtext'
-import Dropdown from 'primevue/dropdown'
+import Select from 'primevue/select'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -190,7 +190,7 @@ defineEmits(['update:visible', 'save', 'hide'])
 :deep(.custom-premium-dropdown) {
   height: 42px;
 }
-:deep(.custom-premium-dropdown .p-dropdown-label) {
+:deep(.custom-premium-dropdown .p-select-label) {
   display: flex !important;
   align-items: center !important;
   font-size: 11px !important;
@@ -199,23 +199,23 @@ defineEmits(['update:visible', 'save', 'hide'])
   letter-spacing: 0.05em !important;
   padding: 0 1rem !important;
 }
-.dark :deep(.custom-premium-dropdown .p-dropdown-label) {
+.dark :deep(.custom-premium-dropdown .p-select-label) {
   color: #ffffff !important;
 }
-:deep(.p-dropdown-panel) {
+:deep(.p-select-panel) {
   border-radius: 1.25rem !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1) !important;
 }
-.dark :deep(.p-dropdown-panel) {
+.dark :deep(.p-select-panel) {
   background: #0f172a !important;
   border-color: #334155 !important;
 }
 
 /* DARK MODE ENFORCEMENTS */
 .dark :deep(.p-inputtext),
-.dark :deep(.p-dropdown-label),
-.dark :deep(.p-dropdown-label.p-placeholder) {
+.dark :deep(.p-select-label),
+.dark :deep(.p-select-label.p-placeholder) {
   color: #ffffff !important;
   opacity: 1 !important;
 }

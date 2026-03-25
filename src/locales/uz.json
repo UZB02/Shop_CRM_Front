@@ -356,7 +356,19 @@
             "main_currency": "Asosiy valyuta",
             "vat": "QQS (VAT)",
             "security": "Xavfsizlik",
-            "security_desc": "Do'kon ma'lumotlari faqatgina do'kon egasi va ruxsati bor xodimlar tomonidan boshqariladi."
+            "security_desc": "Do'kon ma'lumotlari faqatgina do'kon egasi va ruxsati bor xodimlar tomonidan boshqariladi.",
+            "stat_products": "Mahsulotlar",
+            "stat_customers": "Mijozlar"
+        },
+        "branch_detail": {
+            "title": "Filial Tafsilotlari",
+            "no_workers": "Ushbu filialda xodimlar mavjud emas",
+            "no_products": "Ushbu filialda mahsulotlar mavjud emas",
+            "no_customers": "Hozircha mijozlar mavjud emas",
+            "worker_name": "Xodim F.I.SH",
+            "worker_role": "Lavozimi",
+            "worker_salary": "Maoshi",
+            "worker_phone": "Telefon raqami"
         }
     },
     "warehouse": {
