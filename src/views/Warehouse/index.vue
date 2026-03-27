@@ -54,7 +54,7 @@
           :warehouse="w"
           @edit="editWarehouse"
           @delete="confirmDelete"
-          @move="openMovementDialog"
+          @move="goToBulk(w)"
         />
       </div>
 
@@ -64,7 +64,7 @@
           :warehouses="filteredWarehouses"
           @edit="editWarehouse"
           @delete="confirmDelete"
-          @move="openMovementDialog"
+          @move="goToBulk"
         />
       </div>
 
@@ -97,20 +97,12 @@
       @save="saveWarehouse"
     />
 
-    <!-- Stock Movement Dialog -->
-    <StockMovementDialog
-      v-model:visible="moveVisible"
-      :warehouse="moveWarehouse"
-      :products="products"
-      :saving="moveSaving"
-      @save="saveMovement"
-    />
-
   </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import Paginator from 'primevue/paginator'
 
 import WarehouseHeader from './components/WarehouseHeader.vue'
@@ -118,11 +110,10 @@ import WarehouseFilters from './components/WarehouseFilters.vue'
 import WarehouseCard from './components/WarehouseCard.vue'
 import WarehouseTable from './components/WarehouseTable.vue'
 import WarehouseDialog from './components/WarehouseDialog.vue'
-import StockMovementDialog from './components/StockMovementDialog.vue'
 
 import { useWarehouses } from './composables/useWarehouses'
-import { useStockMovement } from './composables/useStockMovement'
 
+const router = useRouter()
 const {
   warehouses, loading, saving, warehouseDialog, submitted,
   viewMode, searchQuery, currentPage, rows, totalRecords,
@@ -130,14 +121,9 @@ const {
   loadWarehouses, saveWarehouse, confirmDelete, openNewDialog, editWarehouse, onPageChange
 } = useWarehouses()
 
-const {
-  visible: moveVisible,
-  saving: moveSaving,
-  warehouse: moveWarehouse,
-  products,
-  openMovementDialog,
-  saveMovement
-} = useStockMovement()
+const goToBulk = (w) => {
+  router.push({ name: 'warehouse-bulk', params: { id: w.id || w._id } })
+}
 
 onMounted(() => loadWarehouses())
 </script>

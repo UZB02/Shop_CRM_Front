@@ -1,0 +1,123 @@
+<template>
+  <div class="flex-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col min-w-0">
+    
+    <!-- Table Header Control -->
+    <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-900/40">
+      <div class="flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+        <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest">Mahsulotlar Ro'yxati</h4>
+      </div>
+      <button 
+        @click="$emit('add')"
+        class="h-9 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+      >
+        <i class="pi pi-plus text-[9px]"></i>
+        Qator qo'shish
+      </button>
+    </div>
+
+    <!-- Real Compact Scrollable Table -->
+    <div class="flex-1 overflow-auto relative custom-scrollbar">
+      <table class="w-full text-left border-collapse table-fixed">
+        <thead>
+          <tr class="sticky top-0 z-10 bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+            <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest w-[45%]">Mahsulot</th>
+            <th class="px-4 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center w-36">Miqdor</th>
+            <th v-if="movementType === 'in'" class="px-4 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right w-48">Narxi (UZS)</th>
+            <th class="px-6 py-4 w-16 text-center"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
+          <tr v-for="(item, index) in items" :key="index" class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all duration-200">
+            <td class="px-6 py-3">
+              <Select
+                v-model="item.product"
+                :options="products"
+                optionLabel="name"
+                optionValue="id"
+                filter
+                placeholder="Mahsulotni tanlang..."
+                class="!w-full !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !h-11 !text-[13px] !shadow-none"
+                panelClass="!rounded-xl !shadow-2xl"
+              >
+                <template #option="slotProps">
+                  <div class="flex items-center gap-3 py-0.5">
+                    <div class="w-7 h-7 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0 border border-slate-100 dark:border-slate-700">
+                      <img v-if="slotProps.option.image" :src="slotProps.option.image" class="w-full h-full object-cover" />
+                      <i v-else class="pi pi-image text-slate-300 text-[10px]"></i>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-[12px] font-bold text-slate-700 dark:text-slate-200 truncate">{{ slotProps.option.name }}</span>
+                      <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ slotProps.option.barcode || 'SHTRIX-KODSIZ' }}</span>
+                    </div>
+                  </div>
+                </template>
+              </Select>
+            </td>
+            <td class="px-4 py-3">
+              <InputNumber 
+                v-model="item.quantity" 
+                mode="decimal" 
+                :minFractionDigits="0" 
+                placeholder="0"
+                class="w-full h-11"
+                inputClass="!rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !px-3 font-black !text-[13px] !text-center outline-none focus:!border-emerald-500"
+              />
+            </td>
+            <td v-if="movementType === 'in'" class="px-4 py-3">
+              <InputNumber 
+                v-model="item.unit_cost" 
+                mode="currency" 
+                currency="UZS" 
+                locale="uz-UZ"
+                placeholder="0"
+                class="w-full h-11"
+                inputClass="!rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !px-3 font-black !text-[13px] !text-right uppercase outline-none focus:!border-emerald-500"
+              />
+            </td>
+            <td class="px-6 py-3 text-center">
+              <button 
+                @click="$emit('remove', index)"
+                v-if="items.length > 1"
+                class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-all border border-transparent"
+              >
+                <i class="pi pi-trash text-xs"></i>
+              </button>
+            </td>
+          </tr>
+          <!-- Empty Row Footer trigger -->
+          <tr v-if="items.length < 5" class="bg-slate-50/20 dark:bg-slate-900/10">
+            <td colspan="4" class="px-6 py-10 text-center">
+              <button 
+                @click="$emit('add')"
+                class="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors uppercase tracking-[0.2em]"
+              >
+                <i class="pi pi-plus-circle mr-2"></i>
+                Yangi mahsulot kiritish uchun bu yerga bosing
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+        <span>Klaviaturada 'Enter' orqali qator qo'shishingiz mumkun</span>
+        <span>Jami: {{ validCount }} ta mahsulot tayyor</span>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import Select from 'primevue/select'
+import InputNumber from 'primevue/inputnumber'
+
+defineProps({
+  items: Array,
+  products: Array,
+  movementType: String,
+  validCount: Number
+})
+
+defineEmits(['add', 'remove'])
+</script>

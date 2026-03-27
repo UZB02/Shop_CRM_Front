@@ -70,6 +70,18 @@ const {
   editModalVisible, branchForm, submitted, saving,
   openEditModal, handleSave
 } = useBranchDetail()
+
+// Log branch data to console for debugging
+import { watch } from 'vue'
+watch(branch, (newVal) => {
+  if (newVal) {
+    console.group('🌿 Branch Detail Data')
+    console.log('ID:', newVal.id || newVal._id)
+    console.log('Name:', newVal.name)
+    console.log('Full Object:', newVal)
+    console.groupEnd()
+  }
+}, { immediate: true })
 </script>
 
 <style scoped>

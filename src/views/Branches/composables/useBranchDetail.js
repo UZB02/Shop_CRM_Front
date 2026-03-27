@@ -30,6 +30,7 @@ export function useBranchDetail() {
             loading.value = true
             const res = await branchesAPI.getById(route.params.id)
             branch.value = res.data
+            console.log('Branch API Data:', res.data)
         } catch (err) {
             console.error('Error fetching branch:', err)
             toast.add({

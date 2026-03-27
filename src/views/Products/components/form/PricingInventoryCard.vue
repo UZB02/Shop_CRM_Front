@@ -13,7 +13,7 @@
       <!-- Currency Selection -->
       <div class="flex flex-col gap-2 pb-2">
         <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.currency') }}</label>
-        <div class="flex gap-2">
+        <div class="grid grid-cols-3 gap-2">
           <button 
             v-for="curr in currencies" 
             :key="curr.id"

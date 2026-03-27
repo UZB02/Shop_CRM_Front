@@ -14,7 +14,7 @@ export function useWarehouses() {
     const saving = ref(false)
     const warehouseDialog = ref(false)
     const submitted = ref(false)
-    const viewMode = ref('grid') // 'grid' or 'table'
+    const viewMode = ref('table') // 'grid' or 'table'
     const searchQuery = ref('')
 
     // Pagination State

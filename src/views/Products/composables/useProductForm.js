@@ -20,7 +20,7 @@ export function useProductForm() {
         unit: 'dona',
         purchase_price: 0,
         sale_price: 0,
-        price_currency: 1,
+        price_currency: 'UZS',
         barcode: '',
         imageUrl: ''
     })
@@ -39,9 +39,11 @@ export function useProductForm() {
         { value: 'quti', label: 'Quti' },
     ]
     const currencies = ref([
-        { id: 1, name: "UZS", symbol: "so'm" },
-        { id: 2, name: "USD", symbol: "$" },
-        { id: 3, name: "RUB", symbol: "₽" }
+        { id: "UZS", name: "UZS", symbol: "so'm" },
+        { id: "USD", name: "USD", symbol: "$" },
+        { id: "EUR", name: "EUR", symbol: "€" },
+        { id: "RUB", name: "RUB", symbol: "₽" },
+        { id: "CNY", name: "CNY", symbol: "¥" }
     ])
 
     const fileInput = ref(null)
@@ -62,7 +64,7 @@ export function useProductForm() {
                     ...data,
                     category: data.category_id || data.category?._id || data.category?.id || data.category,
                     subcategory: data.subcategory_id || data.subcategory?._id || data.subcategory?.id || data.subcategory,
-                    price_currency: data.price_currency || 1,
+                    price_currency: data.currency_code || data.price_currency || 'UZS',
                     unit: data.unit || 'piece',
                     imageUrl: data.image || data.imageUrl,
                     purchase_price: Number(data.purchase_price) || 0,
@@ -138,7 +140,7 @@ export function useProductForm() {
                 unit: product.value.unit,
                 purchase_price: product.value.purchase_price.toString(),
                 sale_price: product.value.sale_price.toString(),
-                price_currency: product.value.price_currency,
+                currency_code: product.value.price_currency,
                 barcode: product.value.barcode || ''
             }
 

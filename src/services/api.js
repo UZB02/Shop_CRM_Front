@@ -166,7 +166,8 @@ export const warehousesAPI = {
 export const movementsAPI = {
     getAll: (params) => api.get('/warehouse/movements/', { params }),
     getById: (id) => api.get(`/warehouse/movements/${id}/`),
-    create: (data) => api.post('/warehouse/movements/', data)
+    create: (data) => api.post('/warehouse/movements/', data),
+    bulkCreate: (data) => api.post('/warehouse/movements/bulk/', data)
 }
 
 // Dashboard API

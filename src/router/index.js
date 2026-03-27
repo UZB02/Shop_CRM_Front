@@ -139,6 +139,12 @@ const routes = [
                 meta: { permission: 'warehouse' }
             },
             {
+                path: 'warehouse/:id/bulk',
+                name: 'warehouse-bulk',
+                component: () => import('@/views/Warehouse/BulkMovement.vue'),
+                meta: { permission: 'warehouse' }
+            },
+            {
                 path: 'pos',
                 name: 'pos',
                 component: () => import('@/views/Pos/index.vue'),

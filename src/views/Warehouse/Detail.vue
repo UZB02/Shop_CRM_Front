@@ -179,42 +179,23 @@
         </div>
       </div>
     </div>
-
-    <!-- Reuse StockMovementDialog -->
-    <StockMovementDialog
-      v-model:visible="moveVisible"
-      :warehouse="warehouse"
-      :products="products"
-      :saving="moveSaving"
-      @save="saveMovement"
-    />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { warehousesAPI } from '@/services/api'
-import StockMovementDialog from './components/StockMovementDialog.vue'
-import { useStockMovement } from './composables/useStockMovement'
 
 const route = useRoute()
+const router = useRouter()
 const warehouse = ref(null)
 const loading = ref(true)
-
-const {
-  visible: moveVisible,
-  saving: moveSaving,
-  products,
-  openMovementDialog: internalOpenMoveDialog,
-  saveMovement
-} = useStockMovement()
 
 const fetchWarehouseDetails = async () => {
   loading.value = true
   try {
     const res = await warehousesAPI.getById(route.params.id)
-    console.log('Ombor ma\'lumotlari (API):', res.data)
     warehouse.value = res.data
   } catch (error) {
     console.error('Error fetching warehouse details:', error)
@@ -225,7 +206,10 @@ const fetchWarehouseDetails = async () => {
 
 const openMovementDialog = () => {
   if (warehouse.value) {
-    internalOpenMoveDialog(warehouse.value)
+    router.push({ 
+      name: 'warehouse-bulk', 
+      params: { id: warehouse.value.id || warehouse.value._id } 
+    })
   }
 }
 

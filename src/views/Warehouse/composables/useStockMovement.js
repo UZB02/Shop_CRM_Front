@@ -6,6 +6,7 @@ export function useStockMovement() {
     const toast = useToast()
 
     const visible = ref(false)
+    const bulkVisible = ref(false)
     const saving = ref(false)
     const warehouse = ref(null)
     const products = ref([])
@@ -31,10 +32,23 @@ export function useStockMovement() {
         }
     }
 
+    const openBulkMovementDialog = (w) => {
+        warehouse.value = w
+        bulkVisible.value = true
+        if (products.value.length === 0) {
+            loadProducts()
+        }
+    }
+
     const saveMovement = async (formData) => {
         saving.value = true
         try {
-            const response = await movementsAPI.create(formData)
+            let response;
+            if (formData.isBulk) {
+                response = await movementsAPI.bulkCreate(formData)
+            } else {
+                response = await movementsAPI.create(formData)
+            }
             toast.add({
                 severity: 'success',
                 summary: 'Muvaffaqiyatli',
@@ -42,6 +56,7 @@ export function useStockMovement() {
                 life: 5000
             })
             visible.value = false
+            bulkVisible.value = false
             return response.data
         } catch (error) {
             const errorMsg = error.response?.data?.detail || error.response?.data?.non_field_errors?.[0] || 'Xatolik yuz berdi'
@@ -59,11 +74,14 @@ export function useStockMovement() {
 
     return {
         visible,
+        bulkVisible,
         saving,
         warehouse,
         products,
         loadingProducts,
+        loadProducts,
         openMovementDialog,
+        openBulkMovementDialog,
         saveMovement
     }
 }
