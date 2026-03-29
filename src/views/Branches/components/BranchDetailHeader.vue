@@ -10,13 +10,24 @@
         <span class="text-slate-600 dark:text-slate-300 truncate max-w-[120px] sm:max-w-none">{{ branch?.name || '...' }}</span>
       </div>
 
-      <button 
-        @click="$emit('edit')"
-        class="flex items-center gap-2 group px-3 sm:px-5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm active:scale-95 shrink-0"
-      >
-        <i class="pi pi-pencil text-[9px] text-emerald-500 group-hover:rotate-12 transition-transform"></i>
-        <span class="hidden sm:inline">{{ $t('common.edit') }}</span>
-      </button>
+      <div class="flex items-center gap-2 shrink-0">
+        <button 
+          v-if="branch?.id"
+          @click="router.push({ name: 'branch-bulk', params: { id: branch.id } })"
+          class="flex items-center gap-2 group px-3 sm:px-5 py-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm active:scale-95"
+        >
+          <i class="pi pi-database text-[9px] group-hover:scale-110 transition-transform"></i>
+          <span class="hidden sm:inline">Ommaviy yuklash</span>
+        </button>
+
+        <button 
+          @click="$emit('edit')"
+          class="flex items-center gap-2 group px-3 sm:px-5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm active:scale-95"
+        >
+          <i class="pi pi-pencil text-[9px] text-emerald-500 group-hover:rotate-12 transition-transform"></i>
+          <span class="hidden sm:inline">{{ $t('common.edit') }}</span>
+        </button>
+      </div>
     </div>
 
     <!-- Header Card -->
@@ -85,9 +96,11 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+const router = useRouter()
 
 const props = defineProps({
   branch: Object,

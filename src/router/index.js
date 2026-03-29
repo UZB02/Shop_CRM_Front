@@ -61,6 +61,12 @@ const routes = [
                 meta: { permission: 'stores' }
             },
             {
+                path: 'branches/:id/bulk',
+                name: 'branch-bulk',
+                component: () => import('@/views/Branches/BulkMovement.vue'),
+                meta: { permission: 'stores' }
+            },
+            {
                 path: 'products',
                 name: 'products',
                 component: () => import('@/views/Products/index.vue'),

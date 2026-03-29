@@ -1,13 +1,15 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStockMovement } from './useStockMovement'
-import { warehousesAPI } from '@/services/api'
+import { warehousesAPI, branchesAPI } from '@/services/api'
 
 export function useBulkMovement() {
   const route = useRoute()
   const router = useRouter()
-  const warehouseId = route.params.id
-  const warehouseName = ref('...')
+  const entityId = route.params.id
+  const isBranch = route.path.includes('/branches/')
+  
+  const displayName = ref('...')
 
   const { products, saving, loadProducts, saveMovement } = useStockMovement()
 
@@ -32,17 +34,21 @@ export function useBulkMovement() {
     if (validItems.length === 0) return
 
     try {
-      await saveMovement({
+      const payload = {
         isBulk: true,
         movement_type: movement_type.value,
-        warehouse: warehouseId,
         note: note.value,
         items: validItems.map(item => ({
           product: item.product,
           quantity: item.quantity,
           unit_cost: item.unit_cost || 0
         }))
-      })
+      }
+
+      if (isBranch) payload.branch = entityId
+      else payload.warehouse = entityId
+
+      await saveMovement(payload)
       router.back()
     } catch (error) {
       console.error('Error saving bulk movement:', error)
@@ -52,15 +58,20 @@ export function useBulkMovement() {
   onMounted(async () => {
     loadProducts()
     try {
-      const res = await warehousesAPI.getById(warehouseId)
-      warehouseName.value = res.data.name
+      if (isBranch) {
+        const res = await branchesAPI.getById(entityId)
+        displayName.value = res.data.name
+      } else {
+        const res = await warehousesAPI.getById(entityId)
+        displayName.value = res.data.name
+      }
     } catch (error) {
-      console.error('Error fetching warehouse:', error)
+      console.error('Error fetching entity:', error)
     }
   })
 
   return {
-    warehouseName,
+    warehouseName: displayName, // Keep it as warehouseName for compatibility or rename in components
     products,
     saving,
     bulkItems,
