@@ -119,7 +119,9 @@ export const workersAPI = {
     create: (data) => api.post('/workers/', data),
     update: (id, data) => api.patch(`/workers/${id}/`, data),
     delete: (id) => api.delete(`/workers/${id}/`),
-    changePassword: (id, data) => api.post(`/workers/${id}/change-password/`, data)
+    changePassword: (id, data) => api.post(`/workers/${id}/change-password/`, data),
+    getMe: () => api.get('/workers/me/'),
+    updateMe: (data) => api.patch('/workers/me/', data)
 }
 
 // Expenses API

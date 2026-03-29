@@ -5,14 +5,14 @@
     <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-900/40">
       <div class="flex items-center gap-3">
         <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-        <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest">Mahsulotlar Ro'yxati</h4>
+        <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest">{{ $t('warehouse.bulk.products_list') }}</h4>
       </div>
       <button 
         @click="$emit('add')"
         class="h-9 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
       >
         <i class="pi pi-plus text-[9px]"></i>
-        Qator qo'shish
+        {{ $t('warehouse.bulk.add_row') }}
       </button>
     </div>
 
@@ -21,9 +21,9 @@
       <table class="w-full text-left border-collapse table-fixed">
         <thead>
           <tr class="sticky top-0 z-10 bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest w-[45%]">Mahsulot</th>
-            <th class="px-4 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center w-36">Miqdor</th>
-            <th v-if="movementType === 'in'" class="px-4 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right w-48">Narxi (UZS)</th>
+            <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest w-[45%]">{{ $t('warehouse.bulk.col_product') }}</th>
+            <th class="px-4 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center w-36">{{ $t('warehouse.bulk.col_quantity') }}</th>
+            <th v-if="movementType === 'in'" class="px-4 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right w-48">{{ $t('warehouse.bulk.col_price') }}</th>
             <th class="px-6 py-4 w-16 text-center"></th>
           </tr>
         </thead>
@@ -36,7 +36,7 @@
                 optionLabel="name"
                 optionValue="id"
                 filter
-                placeholder="Mahsulotni tanlang..."
+                :placeholder="$t('warehouse.bulk.product_ph')"
                 class="!w-full !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !h-11 !text-[13px] !shadow-none"
                 panelClass="!rounded-xl !shadow-2xl"
               >
@@ -48,7 +48,7 @@
                     </div>
                     <div class="flex flex-col min-w-0">
                       <span class="text-[12px] font-bold text-slate-700 dark:text-slate-200 truncate">{{ slotProps.option.name }}</span>
-                      <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ slotProps.option.barcode || 'SHTRIX-KODSIZ' }}</span>
+                      <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ slotProps.option.barcode || $t('warehouse.bulk.no_barcode') }}</span>
                     </div>
                   </div>
                 </template>
@@ -93,7 +93,7 @@
                 class="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors uppercase tracking-[0.2em]"
               >
                 <i class="pi pi-plus-circle mr-2"></i>
-                Yangi mahsulot kiritish uchun bu yerga bosing
+                {{ $t('warehouse.bulk.new_product_tip') }}
               </button>
             </td>
           </tr>
@@ -102,8 +102,8 @@
     </div>
 
     <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-        <span>Klaviaturada 'Enter' orqali qator qo'shishingiz mumkun</span>
-        <span>Jami: {{ validCount }} ta mahsulot tayyor</span>
+        <span>{{ $t('warehouse.bulk.enter_to_add') }}</span>
+        <span>{{ $t('warehouse.bulk.total_ready', { count: validCount }) }}</span>
     </div>
   </div>
 </template>

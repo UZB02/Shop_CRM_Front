@@ -3,7 +3,7 @@
     
     <!-- Type Selection -->
     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">Operatsiya Turi</h4>
+      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">{{ $t('warehouse.bulk.type') }}</h4>
       <div class="flex p-1 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700">
         <button 
           @click="$emit('update:type', 'in')"
@@ -11,7 +11,7 @@
           :class="type === 'in' ? 'bg-white dark:bg-slate-700 text-emerald-600 shadow-sm border border-slate-200 dark:border-slate-600' : 'text-slate-400 hover:text-slate-600'"
         >
           <i class="pi pi-download"></i>
-          Kirim
+          {{ $t('warehouse.bulk.in') }}
         </button>
         <button 
           @click="$emit('update:type', 'out')"
@@ -19,19 +19,19 @@
           :class="type === 'out' ? 'bg-white dark:bg-slate-700 text-rose-600 shadow-sm border border-slate-200 dark:border-slate-600' : 'text-slate-400 hover:text-slate-600'"
         >
           <i class="pi pi-upload"></i>
-          Chiqim
+          {{ $t('warehouse.bulk.out') }}
         </button>
       </div>
     </div>
 
     <!-- Note Section -->
     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">Izohlar</h4>
+      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">{{ $t('warehouse.bulk.notes') }}</h4>
       <Textarea 
         :modelValue="note"
         @update:modelValue="$emit('update:note', $event)"
         rows="5" 
-        placeholder="Kirim/Chiqim uchun umumiy tavsif..."
+        :placeholder="$t('warehouse.bulk.notes_ph')"
         class="w-full !rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !p-4 font-semibold text-[13px] outline-none focus:!border-blue-500 shadow-inner transition-all resize-none"
       />
     </div>
@@ -42,7 +42,7 @@
         <i class="pi pi-info-circle text-white"></i>
       </div>
       <p class="text-[11px] font-bold leading-relaxed opacity-80 uppercase tracking-wide">
-        Jadvalga mahsulotlarni kiriting, miqdori va narxlarini belgilang. Tizim avtomatik ravishda FIFO usulida operatsiyani amalga oshiradi.
+        {{ $t('warehouse.bulk.fifo_tip') }}
       </p>
     </div>
   </div>

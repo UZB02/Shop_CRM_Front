@@ -18,7 +18,7 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-      <FormField :label="$t('workers.form.phone')" required>
+      <FormField :label="$t('workers.form.phone1')" required>
         <div class="relative flex items-center w-full">
           <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-sm pointer-events-none select-none z-10">+998</span>
           <InputText v-model="worker.phone1"
@@ -29,6 +29,19 @@
                      placeholder="901234567" />
         </div>
       </FormField>
+      <FormField :label="$t('workers.form.phone2')">
+        <div class="relative flex items-center w-full">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-sm pointer-events-none select-none z-10">+998</span>
+          <InputText v-model="worker.phone2"
+                     class="sr-input !pl-14"
+                     maxlength="9"
+                     @input="worker.phone2 = worker.phone2.replace(/\D/g, '')"
+                     placeholder="901234567" />
+        </div>
+      </FormField>
+    </div>
+
+    <div class="mt-4">
       <FormField :label="$t('workers.form.email')" required>
         <InputText v-model.trim="worker.email"
                    class="sr-input"

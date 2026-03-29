@@ -4,7 +4,7 @@
       <button 
         @click="$emit('back')"
         class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all border border-slate-200 dark:border-slate-700 active:scale-95"
-        v-tooltip.bottom="'Orqaga'"
+        v-tooltip.bottom="$t('common.back')"
       >
         <i class="pi pi-arrow-left text-sm"></i>
       </button>
@@ -12,26 +12,28 @@
       <div>
         <div class="flex items-center gap-2 mb-0.5">
           <h1 class="text-lg font-black text-slate-900 dark:text-slate-50 uppercase tracking-tight">
-            Ommaviy Yuklash
+            {{ $t('warehouse.bulk.title') }}
           </h1>
           <Tag :value="warehouseName" severity="info" class="!text-[10px] !font-black !rounded-md !px-2" />
         </div>
         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] leading-none">
-          Zaxira operatsiyasini shakillantirish
+          {{ $t('warehouse.bulk.subtitle') }}
         </p>
       </div>
     </div>
     
     <div class="flex items-center gap-3">
       <div class="flex flex-col items-end pr-4 border-r border-slate-100 dark:border-slate-800 hidden sm:flex">
-        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">To'ldirilgan</span>
+        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+          {{ $t('warehouse.bulk.filled') }}
+        </span>
         <span class="text-sm font-black text-slate-800 dark:text-slate-200 leading-none">{{ validCount }} / {{ totalCount }}</span>
       </div>
       <button
         @click="$emit('back')"
         class="h-11 px-6 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 text-[11px] font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95"
       >
-        Bekor qilish
+        {{ $t('warehouse.bulk.cancel') }}
       </button>
       <button
         @click="$emit('save')"
@@ -41,7 +43,7 @@
       >
         <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
         <i v-else class="pi pi-cloud-upload text-xs"></i>
-        Saqlash
+        {{ $t('warehouse.bulk.save') }}
       </button>
     </div>
   </div>

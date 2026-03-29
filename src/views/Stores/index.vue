@@ -48,7 +48,11 @@
           @edit="editBranch"
           @delete="confirmDeleteBranch"
         />
-        <SmenasTab   v-if="activeTab === 'smenas'"   :smenas="storeDetail?.open_smenas" />
+        <SmenasTab   
+          v-if="activeTab === 'smenas'"   
+          :openSmenas="storeDetail?.open_smenas" 
+          :closedSmenas="storeDetail?.closed_smenas" 
+        />
         <SettingsTab v-if="activeTab === 'settings'" :store="storeDetail" />
       </div>
     </template>

@@ -128,6 +128,7 @@ const handleEdit = () => {
         last_name: lastName,
         email: worker.value.email || '',
         phone1: (worker.value.phone1 || worker.value.phone || '').replace(/\D/g, '').slice(-9),
+        phone2: (worker.value.phone2 || '').replace(/\D/g, '').slice(-9),
         role: worker.value.role || 'seller',
         branch: worker.value.branch?.id || worker.value.branch?._id || (typeof worker.value.branch === 'object' ? null : worker.value.branch) || null,
         status: worker.value.status || 'active',
@@ -180,6 +181,15 @@ const saveWorker = async () => {
             let digits = String(current.phone1).replace(/\D/g, '')
             const cleanNumber = digits.length >= 9 ? digits.slice(-9) : digits
             payload.phone1 = '+998' + cleanNumber
+        }
+        if (current.phone2 !== original.phone2) {
+            let digits = String(current.phone2).replace(/\D/g, '')
+            if (digits) {
+                const cleanNumber = digits.length >= 9 ? digits.slice(-9) : digits
+                payload.phone2 = '+998' + cleanNumber
+            } else {
+                payload.phone2 = ''
+            }
         }
 
         // If nothing changed, just close the dialog

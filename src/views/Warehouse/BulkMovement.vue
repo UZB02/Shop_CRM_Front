@@ -37,7 +37,7 @@
       <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 shadow-2xl flex items-center justify-center border border-slate-200 dark:border-slate-700">
         <i class="pi pi-spin pi-spinner text-blue-500 text-2xl"></i>
       </div>
-      <p class="text-[10px] font-black text-slate-900 dark:text-slate-100 uppercase tracking-widest">Saqlanmoqda...</p>
+      <p class="text-[10px] font-black text-slate-900 dark:text-slate-100 uppercase tracking-widest">{{ $t('warehouse.bulk.saving') }}</p>
     </div>
     
   </div>
