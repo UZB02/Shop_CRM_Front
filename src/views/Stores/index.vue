@@ -44,7 +44,7 @@
       <div>
         <BranchesTab
           v-if="activeTab === 'branches'"
-          :branches="storeDetail?.branches"
+          :branches="allStoreBranches"
           @edit="editBranch"
           @delete="confirmDeleteBranch"
         />
@@ -109,6 +109,7 @@ const { t } = useI18n()
 const {
   store, storeForm, storeDialog, submitted, loading, saving,
   openNewStoreDialog, openEditStoreDialog, saveStore,
+  branches: allStoreBranches,
   branch, branchDialog, branchSubmitted,
   openNewBranchDialog, editBranch, saveBranch, confirmDeleteBranch,
 } = useStores()
