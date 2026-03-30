@@ -67,7 +67,7 @@ export const productsAPI = {
     update: (id, data) => api.patch(`/warehouse/products/${id}/`, data),
     delete: (id) => api.delete(`/warehouse/products/${id}/`),
     getLowStock: () => api.get('/warehouse/products/lowstock/'),
-    getBarcode: (id) => api.get(`/warehouse/products/${id}/barcode/`, { responseType: 'blob' })
+    getBarcode: (id) => api.get(`/products/${id}/barcode/`, { responseType: 'blob' })
 }
 
 // Categories API
@@ -191,6 +191,15 @@ export const settingsAPI = {
     getAll: (params) => api.get('/settings/', { params }),
     getById: (id) => api.get(`/settings/${id}/`),
     update: (id, data) => api.patch(`/settings/${id}/`, data)
+}
+
+// Transfers API
+export const transfersAPI = {
+    getAll: (params) => api.get('/warehouse/transfers/', { params }),
+    getById: (id) => api.get(`/warehouse/transfers/${id}/`),
+    create: (data) => api.post('/warehouse/transfers/', data),
+    confirm: (id) => api.post(`/warehouse/transfers/${id}/confirm/`, {}),
+    cancel: (id) => api.post(`/warehouse/transfers/${id}/cancel/`, {})
 }
 
 export default api

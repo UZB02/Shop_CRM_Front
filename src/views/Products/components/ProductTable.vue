@@ -47,9 +47,12 @@
                     <div v-if="item.status === 'active'" class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full shadow-sm animate-pulse"></div>
                   </div>
                   <div class="flex flex-col gap-1 min-w-0">
-                    <p class="font-bold text-sm sm:text-base text-slate-800 dark:text-white tracking-tight group-hover:text-emerald-500 transition-colors truncate">
+                    <router-link 
+                      :to="`/dashboard/products/${item.id || item._id}`"
+                      class="font-bold text-sm sm:text-base text-slate-800 dark:text-white tracking-tight hover:text-emerald-500 transition-colors truncate"
+                    >
                       {{ item.name }}
-                    </p>
+                    </router-link>
                     <div class="flex items-center gap-2">
                       <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-500/10 dark:bg-emerald-500/20 px-2 py-0.5 rounded-md border border-emerald-500/20">
                         {{ item.category_name }}
@@ -86,9 +89,10 @@
               </td>
               <td class="px-3 sm:px-6 py-3 sm:py-4 text-right">
                 <div class="flex gap-1 justify-end">
+                  <Button icon="pi pi-eye" text rounded severity="secondary" @click="router.push(`/dashboard/products/${item.id || item._id}`)" class="!h-8 !w-8 sm:!h-10 sm:!w-10 hover:!bg-sky-500/10 hover:!text-sky-500 transition-all !p-0 !border-none" v-tooltip.top="'Ko\'rish'" />
                   <Button icon="pi pi-barcode" text rounded severity="secondary" v-if="item.barcode" @click="viewBarcode(item)" class="!h-8 !w-8 sm:!h-10 sm:!w-10 hover:!bg-amber-500/10 hover:!text-amber-500 transition-all !p-0 !border-none" v-tooltip.top="'Shtrix-kod'" />
-                  <Button icon="pi pi-pencil" text rounded severity="secondary" @click="router.push(`/dashboard/products/edit/${item.id || item._id}`)" class="!h-8 !w-8 sm:!h-10 sm:!w-10 hover:!bg-emerald-500/10 hover:!text-emerald-500 transition-all !p-0 !border-none" />
-                  <Button icon="pi pi-trash" text rounded severity="secondary" @click="$emit('delete', item)" class="!h-8 !w-8 sm:!h-10 sm:!w-10 hover:!bg-rose-500/10 hover:!text-rose-500 transition-all !p-0 !border-none" />
+                  <Button icon="pi pi-pencil" text rounded severity="secondary" @click="router.push(`/dashboard/products/edit/${item.id || item._id}`)" class="!h-8 !w-8 sm:!h-10 sm:!w-10 hover:!bg-emerald-500/10 hover:!text-emerald-500 transition-all !p-0 !border-none" v-tooltip.top="'Tahrirlash'" />
+                  <Button icon="pi pi-trash" text rounded severity="secondary" @click="$emit('delete', item)" class="!h-8 !w-8 sm:!h-10 sm:!w-10 hover:!bg-rose-500/10 hover:!text-rose-500 transition-all !p-0 !border-none" v-tooltip.top="'O\'chirish'" />
                 </div>
               </td>
             </tr>

@@ -36,6 +36,14 @@
             key="products" 
             :products="branch?.products" 
           />
+          <TransfersTab 
+            v-else-if="activeTab === 'transfers'" 
+            key="transfers" 
+            :source-id="branch?.id || branch?._id"
+            source-type="branch"
+            :source-name="branch?.name"
+            :available-products="branch?.products"
+          />
           <BranchCustomersTab 
             v-else 
             key="customers" 
@@ -63,6 +71,7 @@ import BranchDetailHeader from './components/BranchDetailHeader.vue'
 import BranchWorkersTab from './components/BranchWorkersTab.vue'
 import BranchProductsTab from './components/BranchProductsTab.vue'
 import BranchCustomersTab from './components/BranchCustomersTab.vue'
+import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 import BranchDialog from '../Stores/components/BranchDialog.vue'
 
 const {

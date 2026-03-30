@@ -38,8 +38,8 @@
           v-model:searchQuery="searchQuery"
           v-model:selectedStatus="selectedStatus"
           :loading="loading"
-          @search="loadProducts"
-          @change="loadProducts"
+          @search="handleSearch"
+          @change="currentPage = 1; loadProducts()"
           @refresh="loadProducts"
         />
 
@@ -85,6 +85,7 @@ const {
   selectedCategory,
   selectedStatus,
   loadProducts,
+  handleSearch,
   handlePageChange,
   confirmDeleteProduct
 } = useProducts()

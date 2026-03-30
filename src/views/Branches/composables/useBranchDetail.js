@@ -22,6 +22,7 @@ export function useBranchDetail() {
     const tabs = computed(() => [
         { id: 'workers', label: t('menu.workers') },
         { id: 'products', label: t('menu.products') },
+        { id: 'transfers', label: 'O\'tkazmalar' },
         { id: 'customers', label: t('menu.customers') }
     ])
 

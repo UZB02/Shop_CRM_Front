@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 animate-in fade-in duration-700 max-w-[1600px] mx-auto">
+  <div class="space-y-6 animate-in fade-in duration-700 max-w-[1600px] mx-auto min-h-screen pb-20">
     <!-- Breadcrumbs / Top Navigation Feel -->
     <div class="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">
       <router-link to="/dashboard/warehouse" class="hover:text-emerald-500 transition-colors">Omborlar</router-link>
@@ -66,117 +66,133 @@
       </div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 pb-12">
-      <!-- Full-width Inventory Display -->
-      <div class="lg:col-span-4">
-        <div class="bg-white dark:bg-slate-900/50 rounded-[2rem] border border-slate-100 dark:border-slate-800/50 p-4 sm:p-8 min-h-[500px] flex flex-col relative overflow-hidden shadow-sm">
-          
-          <!-- Section Header for Table -->
-          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 px-2">
-            <h3 class="text-[10px] sm:text-xs font-black text-slate-900 dark:text-slate-100 uppercase tracking-[0.2em] flex items-center gap-3 text-center sm:text-left">
-              <span class="hidden sm:block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              Zaxira Ob'ektlari Ro'yxati
-            </h3>
-            <div class="px-3 py-1 rounded-full bg-slate-50 dark:bg-slate-800/50 text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest shrink-0">
-              Jami: {{ warehouse?.products?.length || 0 }} xil mahsulot
-            </div>
-          </div>
+    <!-- Navigation Tabs -->
+    <div class="space-y-6">
+      <div class="flex items-center gap-1.5 p-1.5 bg-white dark:bg-slate-900/80 backdrop-blur-md border border-slate-100 dark:border-slate-800 rounded-2xl w-full sm:w-fit overflow-x-auto no-scrollbar">
+        <button 
+          v-for="tab in tabs" :key="tab.id"
+          @click="activeTab = tab.id"
+          class="flex-1 sm:flex-none px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap"
+          :class="activeTab === tab.id 
+            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+            : 'text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800'"
+        >
+          {{ tab.label }}
+        </button>
+      </div>
 
-          <!-- Inventory List View (Desktop: Table, Mobile: Cards) -->
-          <div v-if="warehouse?.products?.length">
-            <!-- Table View (Hidden on mobile) -->
-            <div class="hidden sm:block overflow-x-auto custom-scrollbar">
-              <table class="w-full text-left border-collapse min-w-[800px]">
-                <thead>
-                  <tr class="bg-slate-50/50 dark:bg-slate-800/30">
-                    <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">№</th>
-                    <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Mahsulot Nomi</th>
-                    <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Shtrix-kod</th>
-                    <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Miqdori</th>
-                    <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Xarid Narxi</th>
-                    <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Sotuv Narxi</th>
-                    <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Qo'shilgan</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in warehouse.products" :key="item.product_id" class="group border-b border-slate-50 dark:border-slate-800/50 hover:bg-emerald-500/[0.02] transition-colors">
-                    <td class="px-6 py-4">
-                      <span class="text-[10px] font-bold text-slate-400 tracking-tight">{{ index + 1 }}</span>
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="flex flex-col">
-                        <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight group-hover:text-emerald-500 transition-colors">{{ item.product_name }}</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="text-[10px] font-bold text-slate-400 tracking-widest font-mono bg-slate-50 dark:bg-slate-800/50 px-2 py-1 rounded-md">{{ item.barcode }}</span>
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                        <span class="text-[11px] font-black tracking-tight">{{ item.quantity }}</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">
-                      <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 tracking-tight">{{ Number(item.purchase_price).toLocaleString() }}</span>
-                    </td>
-                    <td class="px-6 py-4">
-                      <span class="text-[11px] font-black text-slate-900 dark:text-slate-100 tracking-tight">{{ Number(item.sale_price).toLocaleString() }}</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="text-[10px] font-bold text-slate-400 tracking-tight uppercase">{{ item.added_on?.split('|')[0] || '—' }}</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+      <!-- Tab Content -->
+      <div class="tabs-content min-h-[400px]">
+        <Transition name="fade-slide" mode="out-in">
+          <!-- Products Tab -->
+          <div v-if="activeTab === 'products'" key="products" class="lg:col-span-4">
+            <div class="bg-white dark:bg-slate-900/50 rounded-[2rem] border border-slate-100 dark:border-slate-800/50 p-4 sm:p-8 min-h-[500px] flex flex-col relative overflow-hidden shadow-sm">
+              <!-- Section Header for Table -->
+              <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 px-2">
+                <h3 class="text-[10px] sm:text-xs font-black text-slate-900 dark:text-slate-100 uppercase tracking-[0.2em] flex items-center gap-3 text-center sm:text-left">
+                  <span class="hidden sm:block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Zaxira Ob'ektlari Ro'yxati
+                </h3>
+                <div class="px-3 py-1 rounded-full bg-slate-50 dark:bg-slate-800/50 text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+                  Jami: {{ warehouse?.products?.length || 0 }} xil mahsulot
+                </div>
+              </div>
 
-            <!-- Card View (Visible only on mobile) -->
-            <div class="block sm:hidden space-y-4">
-              <div v-for="(item, index) in warehouse.products" :key="item.product_id" class="bg-slate-50 dark:bg-slate-800/30 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex flex-col gap-4">
-                <div class="flex justify-between items-start gap-3">
-                  <div class="flex-grow">
-                    <h4 class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ item.product_name }}</h4>
-                    <span class="text-[9px] font-bold text-slate-400 tracking-widest font-mono mt-1 block tracking-wider">{{ item.barcode }}</span>
-                  </div>
-                  <div class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-black">
-                    {{ item.quantity }}
+              <!-- Inventory List View -->
+              <div v-if="warehouse?.products?.length">
+                <!-- Table View -->
+                <div class="hidden sm:block overflow-x-auto custom-scrollbar">
+                  <table class="w-full text-left border-collapse min-w-[800px]">
+                    <thead>
+                      <tr class="bg-slate-50/50 dark:bg-slate-800/30">
+                        <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">№</th>
+                        <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Mahsulot Nomi</th>
+                        <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Shtrix-kod</th>
+                        <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Miqdori</th>
+                        <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Xarid Narxi</th>
+                        <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Sotuv Narxi</th>
+                        <th class="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800">Qo'shilgan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(item, index) in warehouse.products" :key="item.product_id" class="group border-b border-slate-50 dark:border-slate-800/50 hover:bg-emerald-500/[0.02] transition-colors">
+                        <td class="px-6 py-4">
+                          <span class="text-[10px] font-bold text-slate-400 tracking-tight">{{ index + 1 }}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                          <div class="flex flex-col">
+                            <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight group-hover:text-emerald-500 transition-colors">{{ item.product_name }}</span>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="text-[10px] font-bold text-slate-400 tracking-widest font-mono bg-slate-50 dark:bg-slate-800/50 px-2 py-1 rounded-md">{{ item.barcode }}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                          <div class="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                            <span class="text-[11px] font-black tracking-tight">{{ item.quantity }}</span>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4">
+                          <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 tracking-tight">{{ Number(item.purchase_price).toLocaleString() }}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                          <span class="text-[11px] font-black text-slate-900 dark:text-slate-100 tracking-tight">{{ Number(item.sale_price).toLocaleString() }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="text-[10px] font-bold text-slate-400 tracking-tight uppercase">{{ item.added_on?.split('|')[0] || '—' }}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Card View -->
+                <div class="block sm:hidden space-y-4">
+                  <div v-for="(item, index) in warehouse.products" :key="item.product_id" class="bg-slate-50 dark:bg-slate-800/30 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex flex-col gap-4">
+                    <div class="flex justify-between items-start gap-3">
+                      <div class="flex-grow">
+                        <h4 class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ item.product_name }}</h4>
+                        <span class="text-[9px] font-bold text-slate-400 tracking-widest font-mono mt-1 block tracking-wider">{{ item.barcode }}</span>
+                      </div>
+                      <div class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-black">
+                        {{ item.quantity }}
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+                      <div class="flex flex-col gap-1">
+                        <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Xarid Narxi</span>
+                        <span class="text-[11px] font-bold text-slate-500">{{ Number(item.purchase_price).toLocaleString() }}</span>
+                      </div>
+                      <div class="flex flex-col gap-1 text-right">
+                        <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Sotuv Narxi</span>
+                        <span class="text-[11px] font-black text-slate-900 dark:text-slate-100">{{ Number(item.sale_price).toLocaleString() }}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                  <div class="flex flex-col gap-1">
-                    <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Xarid Narxi</span>
-                    <span class="text-[11px] font-bold text-slate-500">{{ Number(item.purchase_price).toLocaleString() }}</span>
-                  </div>
-                  <div class="flex flex-col gap-1 text-right">
-                    <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Sotuv Narxi</span>
-                    <span class="text-[11px] font-black text-slate-900 dark:text-slate-100">{{ Number(item.sale_price).toLocaleString() }}</span>
-                  </div>
+              </div>
+
+              <!-- Empty State -->
+              <div v-else class="flex-grow flex flex-col items-center justify-center py-20 relative z-10">
+                <div class="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-6 shadow-sm">
+                  <i class="pi pi-database text-2xl text-slate-300"></i>
                 </div>
+                <h3 class="text-lg font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-2">Zaxira Ob'ektlari</h3>
+                <p class="text-slate-400 dark:text-slate-500 text-[9px] font-bold uppercase tracking-[0.2em] max-w-xs mx-auto">Ushbu omborda hozirda mahsulotlar mavjud emas</p>
               </div>
             </div>
           </div>
 
-          <!-- Empty State -->
-          <div v-else class="flex-grow flex flex-col items-center justify-center py-20 relative z-10">
-            <!-- Background Pattern -->
-            <div class="absolute inset-0 opacity-[0.015] pointer-events-none">
-              <div class="grid grid-cols-12 gap-4 h-full">
-                <div v-for="i in 48" :key="i" class="border-r border-b border-slate-900"></div>
-              </div>
-            </div>
-            
-            <div class="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-6 shadow-sm">
-              <i class="pi pi-database text-2xl text-slate-300"></i>
-            </div>
-            <h3 class="text-lg font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-2">Zaxira Ob'ektlari</h3>
-            <p class="text-slate-400 dark:text-slate-500 text-[9px] font-bold uppercase tracking-[0.2em] max-w-xs mx-auto">
-              Ushbu omborda hozirda mahsulotlar mavjud emas
-            </p>
+          <!-- Transfers Tab -->
+          <div v-else-if="activeTab === 'transfers'" key="transfers">
+            <TransfersTab 
+              :source-id="warehouse?.id || warehouse?._id"
+              source-type="warehouse"
+              :source-name="warehouse?.name"
+              :available-products="warehouse?.products"
+            />
           </div>
-
-        </div>
+        </Transition>
       </div>
     </div>
   </div>
@@ -186,11 +202,18 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { warehousesAPI } from '@/services/api'
+import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 
 const route = useRoute()
 const router = useRouter()
 const warehouse = ref(null)
 const loading = ref(true)
+const activeTab = ref('products')
+
+const tabs = [
+  { id: 'products', label: 'Mahsulotlar' },
+  { id: 'transfers', label: 'O\'tkazmalar' }
+]
 
 const fetchWarehouseDetails = async () => {
   loading.value = true
@@ -224,4 +247,11 @@ onMounted(() => {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.fade-slide-enter-active, .fade-slide-leave-active { transition: all 0.3s ease; }
+.fade-slide-enter-from { opacity: 0; transform: translateX(20px); }
+.fade-slide-leave-to { opacity: 0; transform: translateX(-20px); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>

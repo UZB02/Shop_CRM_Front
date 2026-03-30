@@ -538,6 +538,23 @@
             "pricing": "Narxlar",
             "inventory": "Inventar",
             "image_tip": "Tavsiya: kvadrat yoki 16:9 o'lchamdagi yuqori sifatli surat. Max hajm: 5MB"
+        },
+        "detail": {
+            "title": "Mahsulot Tafsilotlari",
+            "category": "Turkum",
+            "store": "Asosiy do'kon",
+            "unit": "Birlik",
+            "created_at": "Kirishtilgan sana",
+            "pricing_title": "Moliya & Narxlar Panel",
+            "purchase_price": "Xarid Narxi",
+            "sale_price": "Sotuv Narxi",
+            "expected_margin": "Sof foyda (Taxminiy)",
+            "barcode": "Shtrix-kod",
+            "promo_duration": "Aksiya muddati",
+            "stock_status": "Holat",
+            "sufficient": "Yetarli",
+            "no_image_tip": "Surat mavjud emas",
+            "stock_label": "Zahira Miqdori"
         }
     },
     "units": {

@@ -507,6 +507,23 @@
             "pricing": "Нархлар",
             "inventory": "Инвентар",
             "image_tip": "Тавсия: квадрат ёки 16:9 ўлчамдаги юқори сифатли сурат. Max ҳажм: 5МБ"
+        },
+        "detail": {
+            "title": "Маҳсулот Тафсилотлари",
+            "category": "Туркум",
+            "store": "Асосий дўкон",
+            "unit": "Бирлик",
+            "created_at": "Кириштилган сана",
+            "pricing_title": "Молия & Нархлар Панел",
+            "purchase_price": "Харид Нархи",
+            "sale_price": "Сотув Нархи",
+            "expected_margin": "Соф фойда (Тахминий)",
+            "barcode": "Штрих-код",
+            "promo_duration": "Акция муддати",
+            "stock_status": "Ҳолат",
+            "sufficient": "Етарли",
+            "no_image_tip": "Сурат мавжуд эмас",
+            "stock_label": "Захира Миқдори"
         }
     },
     "categories": {

@@ -11,12 +11,15 @@ export function useProducts() {
     const products = ref([])
     const totalProducts = ref(0)
     const currentPage = ref(1)
-    const rowsPerPage = ref(15)
+    const rowsPerPage = ref(10)
     const searchQuery = ref('')
     const selectedCategory = ref(null)
     const selectedStatus = ref(null)
 
+    let lastRequestId = 0
+
     const loadProducts = async () => {
+        const requestId = ++lastRequestId
         loading.value = true
         try {
             const params = {
@@ -24,19 +27,28 @@ export function useProducts() {
                 page_size: rowsPerPage.value
             }
             if (searchQuery.value) params.search = searchQuery.value
-            if (selectedCategory.value != null) params.category = selectedCategory.value
+            if (selectedCategory.value != null && selectedCategory.value !== 'all') {
+                params.category = selectedCategory.value
+            }
             if (selectedStatus.value) params.status = selectedStatus.value
 
             const response = await productsAPI.getAll(params)
-            console.log('API Products Response:', response.data)
-
-            products.value = response.data.results || []
-            totalProducts.value = response.data.count || 0
+            
+            // Only update if this is still the most recent request
+            if (requestId === lastRequestId) {
+                console.log('API Products Response (current):', response.data)
+                products.value = response.data.results || response.data || []
+                totalProducts.value = response.data.count || (Array.isArray(response.data) ? response.data.length : 0)
+            }
         } catch (error) {
-            console.error('Error loading products:', error)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Mahsulotlarni yuklashda xatolik', life: 5000 })
+            if (requestId === lastRequestId) {
+                console.error('Error loading products:', error)
+                toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Mahsulotlarni yuklashda xatolik', life: 5000 })
+            }
         } finally {
-            loading.value = false
+            if (requestId === lastRequestId) {
+                loading.value = false
+            }
         }
     }
 
