@@ -9,16 +9,23 @@
             <div class="profile-header">
               <div class="profile-identity">
                 <div class="profile-avatar">
-                  <img v-if="user.avatar_url" :src="user.avatar_url" alt="avatar" />
+                  <img v-if="currentWorker?.avatar_url || user.avatar_url"
+                       :src="currentWorker?.avatar_url || user.avatar_url"
+                       alt="avatar" />
                   <i v-else class="pi pi-user"></i>
                   <span class="profile-status-dot"></span>
                 </div>
                 <div class="profile-name-block">
-                  <h2 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h2>
+                  <h2 class="profile-name">
+                    {{ (currentWorker?.first_name || user.first_name) }}
+                    {{ (currentWorker?.last_name  || user.last_name)  }}
+                  </h2>
                   <div class="profile-meta">
-                    <span class="profile-role">{{ user.worker?.role_display || 'User' }}</span>
+                    <span class="profile-role">
+                      {{ currentWorker?.role_display || user.worker?.role_display || 'User' }}
+                    </span>
                     <span class="profile-dot">·</span>
-                    <span class="profile-id">@{{ user.username }}</span>
+                    <span class="profile-id">@{{ currentWorker?.username || user.username }}</span>
                   </div>
                 </div>
               </div>

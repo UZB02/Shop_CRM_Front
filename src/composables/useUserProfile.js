@@ -44,14 +44,16 @@ export function useUserProfile(userRef, onUpdated) {
 
   const startEditing = () => {
     const user = getUser()
-    editForm.email            = user?.email || ''
-    editForm.phone1           = currentWorker.value?.phone1 || user?.phone1 || ''
-    editForm.phone2           = currentWorker.value?.phone2 || user?.phone2 || ''
+    // API dan kelgan ma'lumotlar prioritet — localStorage faqat fallback
+    const cw = currentWorker.value
+    editForm.email            = cw?.email    || user?.email    || ''
+    editForm.phone1           = cw?.phone1   || user?.phone1   || ''
+    editForm.phone2           = cw?.phone2   || user?.phone2   || ''
     editForm.current_password = ''
     editForm.new_password     = ''
     editForm.new_password2    = ''
     isEditing.value = true
-    console.log('[Profile] startEditing — form:', { ...editForm })
+    console.log('[Profile] startEditing — form (from API):', { ...editForm })
   }
 
   const saveChanges = async () => {

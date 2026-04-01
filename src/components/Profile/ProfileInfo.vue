@@ -5,7 +5,7 @@
         <i class="pi pi-envelope info-icon"></i>
         <div class="info-content">
           <span class="info-label">{{ $t('profile.email') }}</span>
-          <span class="info-value">{{ user.email || '—' }}</span>
+          <span class="info-value">{{ currentWorker?.email || user.email || '—' }}</span>
         </div>
       </div>
       <div class="info-item">
@@ -27,8 +27,10 @@
         <div class="info-content">
           <span class="info-label">{{ $t('profile.workplace') }}</span>
           <span class="info-value">
-            {{ user.worker?.store_name || '—' }}
-            <span v-if="user.worker?.branch_name" class="branch-tag">{{ user.worker.branch_name }}</span>
+            {{ currentWorker?.store_name || user.worker?.store_name || '—' }}
+            <span v-if="currentWorker?.branch_name || user.worker?.branch_name" class="branch-tag">
+              {{ currentWorker?.branch_name || user.worker?.branch_name }}
+            </span>
           </span>
         </div>
       </div>
