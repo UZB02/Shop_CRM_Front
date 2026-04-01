@@ -221,6 +221,18 @@
                 <i v-else key="moon" class="pi pi-moon text-sm text-slate-500" />
               </Transition>
             </button>
+
+            <!-- Fullscreen Toggle -->
+            <Button
+              v-tooltip.bottom="isFullscreen ? 'Kichraytirish' : 'To\'shiq ekran'"
+              :icon="isFullscreen ? 'pi pi-compress' : 'pi pi-expand'"
+              text
+              rounded
+              class="!w-9 !h-9 !transition-all !duration-300 hover:!scale-110 active:!scale-95"
+              :class="isFullscreen ? '!text-emerald-500' : '!text-slate-500 dark:!text-slate-400'"
+              @click="toggleFullscreen"
+            />
+
             <Button icon="pi pi-bell" text rounded severity="secondary" class="!w-9 !h-9" />
           </div>
         </div>
@@ -306,6 +318,21 @@ const initTheme = () => {
   }
 }
 
+/* --- Fullscreen --- */
+const isFullscreen = ref(false)
+const toggleFullscreen = () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.error(`Error attempting to enable full-screen mode: ${err.message}`)
+    })
+  } else {
+    document.exitFullscreen()
+  }
+}
+const onFullscreenChange = () => {
+  isFullscreen.value = !!document.fullscreenElement
+}
+
 /* --- Language --- */
 const setLang = (lang) => {
   locale.value = lang
@@ -345,11 +372,13 @@ onMounted(() => {
   initTheme()
   window.addEventListener('subscription-warning', handleSubscriptionWarning)
   window.addEventListener('keydown', onKeydown)
+  document.addEventListener('fullscreenchange', onFullscreenChange)
   checkSubscriptionStatus()
 })
 onUnmounted(() => {
   window.removeEventListener('subscription-warning', handleSubscriptionWarning)
   window.removeEventListener('keydown', onKeydown)
+  document.removeEventListener('fullscreenchange', onFullscreenChange)
 })
 
 /* --- Menu --- */
