@@ -124,6 +124,7 @@
     <CustomerDialog 
         v-model:visible="editDialog"
         :customer="customerToEdit"
+        :groups="groups"
         :saving="saving"
         :submitted="submitted"
         @save="saveUpdate"
@@ -134,7 +135,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { customersAPI } from '@/services/api'
+import { customersAPI, customerGroupsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
 import Accordion from 'primevue/accordion'
@@ -155,6 +156,7 @@ const saving = ref(false)
 const submitted = ref(false)
 const customer = ref(null)
 const trades = ref([])
+const groups = ref([])
 
 const editDialog = ref(false)
 const customerToEdit = ref({})
@@ -181,6 +183,15 @@ const loadCustomerData = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const loadGroups = async () => {
+    try {
+        const response = await customerGroupsAPI.getAll()
+        groups.value = response.data.results || response.data
+    } catch (error) {
+        console.error('Error loading groups:', error)
+    }
 }
 
 const editCustomer = () => {
@@ -227,6 +238,7 @@ const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currenc
 
 onMounted(() => {
   loadCustomerData()
+  loadGroups()
 })
 </script>
 

@@ -89,6 +89,7 @@ export const subcategoriesAPI = {
 // Customers API
 export const customersAPI = {
     getAll: (params) => api.get('/customers/', { params }),
+    getGrouped: (params) => api.get('/customers/grouped/', { params }),
     getById: (id) => api.get(`/customers/${id}/`),
     create: (data) => api.post('/customers/', data),
     update: (id, data) => api.patch(`/customers/${id}/`, data),

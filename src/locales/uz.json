@@ -683,6 +683,9 @@
     "customers": {
         "title": "Mijozlar Bazasi",
         "subtitle": "Sodiq mijozlaringiz bilan ishlash va guruhlarni boshqarish",
+        "tab_all": "Mijozlar",
+        "tab_debtors": "Qarzdorlar",
+        "total_debt_label": "Umumiy Qarzdorlik",
         "regular_customer": "Oddiy mijoz",
         "search_placeholder": "Mijoz ismi yoki telefon raqami bo'yicha qidirish...",
         "groups_btn": "Guruhlar",
@@ -692,6 +695,8 @@
             "contact_address": "Telefon / Manzil",
             "trades": "Savdolar",
             "total_spent": "Umumiy Xarid",
+            "debt_label": "Qarz Miqdori",
+            "debt_status": "To'lanmagan",
             "actions": "Amallar",
             "no_results": "Mijozlar topilmadi.",
             "total_spent_label": "Jami xarid",

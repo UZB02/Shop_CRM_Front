@@ -7,7 +7,9 @@
             <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.name') }}</th>
             <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.contact_address') }}</th>
             <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center font-inter">{{ $t('customers.table.trades') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.total_spent') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">
+              {{ mode === 'debtors' ? ($t('customers.table.debt_label') || 'Qarz Miqdori') : $t('customers.table.total_spent') }}
+            </th>
             <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right font-inter">{{ $t('customers.table.actions') }}</th>
           </tr>
         </thead>
@@ -52,8 +54,8 @@
                 </div>
                 <div>
                   <p class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-tight group-hover/name:text-emerald-500 transition-colors">{{ data.name }}</p>
-                  <div v-if="data.group_name" class="flex mt-0.5">
-                    <span class="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest border border-amber-500/20">
+                  <div class="flex items-center gap-1.5 mt-0.5">
+                    <span v-if="data.group_name" class="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest border border-amber-500/20">
                       {{ data.group_name }}
                     </span>
                   </div>
@@ -72,23 +74,38 @@
                   <i class="pi pi-map-marker text-[9px]"></i>
                   <span class="text-[10px] font-medium truncate max-w-[180px]">{{ data.address || '—' }}</span>
                 </div>
+                <div v-if="data.created_on" class="flex items-center gap-1.5 text-[9px] font-bold text-slate-400/70 uppercase tracking-wider">
+                  <i class="pi pi-calendar text-[8px]"></i>
+                  {{ data.created_on }}
+                </div>
               </div>
             </td>
 
-            <!-- Stats -->
+            <!-- Status & Trades -->
             <td class="px-4 py-2.5 text-center">
-              <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 text-[11px] font-black text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
-                {{ data.tradesCount || 0 }}
-              </span>
+              <div class="flex flex-col items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest"
+                      :class="data.status === 'active' ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : 'bg-slate-500/10 text-slate-500 border border-slate-500/20'">
+                  {{ data.status_display || data.status }}
+                </span>
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 text-[11px] font-black text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
+                  {{ data.tradesCount || 0 }}
+                </span>
+              </div>
             </td>
 
-            <!-- Total Spent -->
+            <!-- Total Spent / Debt Balance -->
             <td class="px-4 py-2.5 text-right">
               <div class="flex flex-col">
-                <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">
-                  {{ formatCurrency(data.totalSpent) }}
+                <span 
+                  class="text-[12px] font-black tracking-tighter"
+                  :class="mode === 'debtors' ? 'text-rose-500' : 'text-emerald-600 dark:text-emerald-400'"
+                >
+                  {{ formatCurrency(mode === 'debtors' ? data.debt_balance : data.totalSpent) }}
                 </span>
-                <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-0.5">{{ $t('customers.table.total_spent_label') }}</span>
+                <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-0.5">
+                  {{ mode === 'debtors' ? ($t('customers.table.debt_status') || 'To\'lanmagan') : $t('customers.table.total_spent_label') }}
+                </span>
               </div>
             </td>
 
@@ -157,7 +174,8 @@ const props = defineProps({
   loading: Boolean,
   totalRecords: { type: Number, default: 0 },
   page: { type: Number, default: 1 },
-  pageSize: { type: Number, default: 10 }
+  pageSize: { type: Number, default: 10 },
+  mode: { type: String, default: 'no_debt' }
 })
 
 const emit = defineEmits(['edit', 'delete', 'view-history', 'update:page', 'page-change'])

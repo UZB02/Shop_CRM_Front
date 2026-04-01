@@ -53,7 +53,6 @@
           :openSmenas="storeDetail?.open_smenas" 
           :closedSmenas="storeDetail?.closed_smenas" 
         />
-        <SettingsTab v-if="activeTab === 'settings'" :store="storeDetail" />
       </div>
     </template>
 
@@ -100,7 +99,6 @@ import { storesAPI } from '@/services/api'
 import StoreDetailHeader from './components/detail/StoreDetailHeader.vue'
 import BranchesTab       from './components/detail/BranchesTab.vue'
 import SmenasTab         from './components/detail/SmenasTab.vue'
-import SettingsTab       from './components/detail/SettingsTab.vue'
 import StoreDialog       from './components/StoreDialog.vue'
 import BranchDialog      from './components/BranchDialog.vue'
 
@@ -121,7 +119,6 @@ const activeTab   = ref('branches')
 const tabs = computed(() => [
   { id: 'branches', label: t('stores.detail.tab_branches') },
   { id: 'smenas',   label: t('stores.detail.tab_shifts') },
-  { id: 'settings', label: t('stores.detail.tab_settings') },
 ])
 
 const loadDetail = async () => {

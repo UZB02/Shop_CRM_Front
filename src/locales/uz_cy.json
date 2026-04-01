@@ -690,6 +690,9 @@
     "customers": {
         "title": "Мижозлар Базаси",
         "subtitle": "Содиқ мижозларингиз билан ишлаш ва гуруҳларни бошқариш",
+        "tab_all": "Мижозлар",
+        "tab_debtors": "Қарздорлар",
+        "total_debt_label": "Умумий Қарздорлик",
         "regular_customer": "Оддий мижоз",
         "search_placeholder": "Мижоз исми ёки телефон рақами бўйича қидириш...",
         "groups_btn": "Гуруҳлар",
@@ -699,6 +702,8 @@
             "contact_address": "Телефон / Манзил",
             "trades": "Савдолар",
             "total_spent": "Умумий Харид",
+            "debt_label": "Қарз Миқдори",
+            "debt_status": "Тўланмаган",
             "actions": "Амаллар",
             "no_results": "Мижозлар топилмади.",
             "total_spent_label": "Жами харид",
