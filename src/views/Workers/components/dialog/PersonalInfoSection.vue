@@ -25,7 +25,11 @@
                      class="sr-input !pl-14"
                      :class="{ '!border-rose-500': submitted && !worker.phone1 }"
                      maxlength="9"
-                     @input="worker.phone1 = worker.phone1.replace(/\D/g, '')"
+                     inputmode="numeric"
+                     type="tel"
+                     @keydown="onPhoneKeydown"
+                     @paste="onPhonePaste($event, 'phone1')"
+                     @input="worker.phone1 = worker.phone1.replace(/\D/g, '').slice(0, 9)"
                      placeholder="901234567" />
         </div>
       </FormField>
@@ -35,7 +39,11 @@
           <InputText v-model="worker.phone2"
                      class="sr-input !pl-14"
                      maxlength="9"
-                     @input="worker.phone2 = worker.phone2.replace(/\D/g, '')"
+                     inputmode="numeric"
+                     type="tel"
+                     @keydown="onPhoneKeydown"
+                     @paste="onPhonePaste($event, 'phone2')"
+                     @input="worker.phone2 = worker.phone2.replace(/\D/g, '').slice(0, 9)"
                      placeholder="901234567" />
         </div>
       </FormField>
@@ -53,20 +61,35 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import InputText from 'primevue/inputtext'
-import Dropdown from 'primevue/dropdown'
 import SectionTitle from './SectionTitle.vue'
 import FormField from './FormField.vue'
-// Removed: import { WORKER_ROLES as roles } from '../../composables/useWorkerForm.js'
 
-const { t } = useI18n()
-
-// Removed: localizedRoles computed property
-
-defineProps({
+const props = defineProps({
   worker: { type: Object, required: true },
   submitted: Boolean,
 })
+
+// Faqat raqam tugmalariga ruxsat beradi
+const ALLOWED_KEYS = [
+  'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+  'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+  'Home', 'End'
+]
+const onPhoneKeydown = (e) => {
+  // Ctrl/Cmd kombinatsiyalari (copy, paste, select all) ruxsat
+  if (e.ctrlKey || e.metaKey) return
+  // Ruxsat etilgan maxsus tugmalar
+  if (ALLOWED_KEYS.includes(e.key)) return
+  // Faqat 0-9 raqamlar
+  if (!/^\d$/.test(e.key)) e.preventDefault()
+}
+
+// Paste da faqat raqamlarni qoldiradi
+const onPhonePaste = (e, field) => {
+  e.preventDefault()
+  const text = (e.clipboardData || window.clipboardData).getData('text')
+  const digits = text.replace(/\D/g, '').slice(0, 9)
+  props.worker[field] = digits
+}
 </script>
