@@ -69,14 +69,26 @@
         <div class="flex flex-col gap-2">
           <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.unit') }}</label>
           <div class="relative group">
-            <select
-              :value="modelValue.unit"
-              @change="$emit('update:modelValue', { ...modelValue, unit: $event.target.value })"
-              class="w-full h-11 px-3 pr-8 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 outline-none appearance-none cursor-pointer"
+            <Select
+              :modelValue="modelValue.unit"
+              @update:modelValue="$emit('update:modelValue', { ...modelValue, unit: $event })"
+              :options="units"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+              pt:root:class="!h-11 !rounded-xl !border-[1.5px] !border-slate-200 dark:!border-slate-700/60 !bg-slate-50 dark:!bg-slate-800/40 !shadow-none focus:!border-emerald-500 focus:!ring-4 focus:!ring-emerald-500/10 !transition-all !duration-300"
+              pt:label:class="!text-[10px] !font-black !uppercase !tracking-widest !text-slate-700 dark:!text-slate-200 !py-0 !flex !items-center !h-full"
             >
-              <option v-for="u in units" :key="u.value" :value="u.value">{{ $t('units.' + u.value) }}</option>
-            </select>
-            <i class="pi pi-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none transition-colors"></i>
+              <template #value="slotProps">
+                <span v-if="slotProps.value" class="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">
+                  {{ $t('units.' + slotProps.value) }}
+                </span>
+                <span v-else class="text-[10px] text-slate-400 font-medium italic lowercase tracking-normal">{{ slotProps.placeholder }}</span>
+              </template>
+              <template #option="slotProps">
+                <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('units.' + slotProps.option.value) }}</span>
+              </template>
+            </Select>
           </div>
         </div>
       </div>
@@ -85,6 +97,8 @@
 </template>
 
 <script setup>
+import Select from 'primevue/select'
+
 defineProps({
   modelValue: Object,
   units: Array,
