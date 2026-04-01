@@ -5,10 +5,12 @@
       <button 
         v-for="st in subTabs" :key="st.id"
         @click="activeSubTab = st.id"
-        class="px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all"
+        class="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300"
         :class="activeSubTab === st.id 
-          ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 shadow-sm border border-slate-200 dark:border-slate-600' 
-          : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'"
+          ? (st.id === 'open' 
+              ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25 border-emerald-400/50' 
+              : 'bg-rose-500 text-white shadow-lg shadow-rose-500/25 border-rose-400/50')
+          : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
       >
         {{ st.label }}
       </button>
