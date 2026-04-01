@@ -33,7 +33,7 @@
       <!-- Pricing Grid -->
       <div class="grid grid-cols-1 gap-5">
         <div class="flex flex-col gap-2">
-          <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.purchase_price') }}</label>
+          <label class="text-[9px] font-black uppercase tracking_widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.purchase_price') }}</label>
           <div class="relative group">
             <input
               :value="modelValue.purchase_price"

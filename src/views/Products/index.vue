@@ -37,6 +37,8 @@
         <ProductFilters 
           v-model:searchQuery="searchQuery"
           v-model:selectedStatus="selectedStatus"
+          v-model:selectedSubcategory="selectedSubcategory"
+          :subcategories="subcategories"
           :loading="loading"
           @search="handleSearch"
           @change="currentPage = 1; loadProducts()"
@@ -83,7 +85,10 @@ const {
   currentPage,
   searchQuery,
   selectedCategory,
+  selectedSubcategory,
   selectedStatus,
+  subcategories,
+  fetchSubcategories,
   loadProducts,
   handleSearch,
   handlePageChange,
@@ -102,8 +107,14 @@ const {
 
 const onCategorySelect = (cat) => {
   // API numeric id qaytaradi: cat.id
-  selectedCategory.value = cat ? (cat.id ?? null) : null
+  const catId = cat ? (cat.id ?? null) : null
+  selectedCategory.value = catId
+  selectedSubcategory.value = null // Clear subcategory when category changes
   currentPage.value = 1
+  
+  // Fetch subcategories for the selected category
+  fetchSubcategories(catId)
+  
   loadProducts()
 }
 

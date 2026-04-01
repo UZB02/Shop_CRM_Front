@@ -1,127 +1,69 @@
 <template>
   <Teleport to="body">
-    <Transition name="fade">
-      <div v-if="visible" class="fixed inset-0 z-[1050] flex items-center justify-center p-4 sm:p-6">
-        <!-- Modern Blur Backdrop -->
-        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-[8px]" @click="closeModal"></div>
-        
-        <!-- Modal Container -->
-        <Transition name="scale-up">
-          <div v-if="visible" class="relative w-full max-w-[420px] bg-white dark:bg-slate-900 overflow-hidden rounded-[2rem] border border-white/20 dark:border-slate-800/50 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] flex flex-col transition-all duration-300">
-            
-            <!-- Elegant Header with Subtle Mesh Gradient -->
-            <div class="relative h-24 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-between px-6">
-              <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.4),transparent)]"></div>
-              
-              <h3 class="text-white text-sm font-black uppercase tracking-[0.2em] relative z-10 opacity-90">
-                {{ $t('profile.title') }}
-              </h3>
+    <Transition name="profile-fade">
+      <div v-if="visible" class="profile-overlay" @mousedown.self="closeModal">
+        <Transition name="profile-pop">
+          <div v-if="visible" class="profile-card">
 
-              <button 
-                class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all border-none cursor-pointer relative z-10" 
-                @click="closeModal" 
-              >
-                <i class="pi pi-times text-[10px]"></i>
+            <!-- ═══ HEADER ═══ -->
+            <div class="profile-header">
+              <div class="profile-identity">
+                <div class="profile-avatar">
+                  <img v-if="user.avatar_url" :src="user.avatar_url" alt="avatar" />
+                  <i v-else class="pi pi-user"></i>
+                  <span class="profile-status-dot"></span>
+                </div>
+                <div class="profile-name-block">
+                  <h2 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h2>
+                  <div class="profile-meta">
+                    <span class="profile-role">{{ user.worker?.role_display || 'User' }}</span>
+                    <span class="profile-dot">·</span>
+                    <span class="profile-id">@{{ user.username }}</span>
+                  </div>
+                </div>
+              </div>
+              <button class="profile-close" @click="closeModal">
+                <i class="pi pi-times"></i>
               </button>
             </div>
 
-            <!-- Profile Overview Section -->
-            <div class="px-6 -mt-10 relative z-10">
-              <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex items-center gap-4 group">
-                <div class="relative shrink-0">
-                  <div class="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-105">
-                    <Avatar 
-                      v-if="user.avatar_url"
-                      :image="user.avatar_url"
-                      shape="square"
-                      class="!w-full !h-full"
-                    />
-                    <div v-else class="w-full h-full flex items-center justify-center bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500">
-                      <i class="pi pi-user text-2xl"></i>
-                    </div>
-                  </div>
-                  <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full shadow-sm"></div>
-                </div>
+            <div class="profile-divider"></div>
 
-                <div class="flex-1 min-w-0">
-                  <h4 class="text-base font-black text-slate-900 dark:text-white truncate">
-                    {{ user.first_name }} {{ user.last_name }}
-                  </h4>
-                  <div class="flex items-center gap-2 mt-0.5">
-                    <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest">{{ user.worker?.role_display || 'Xodim' }}</span>
-                    <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ID: #{{ currentWorker?.id || user.id }}</span>
-                  </div>
-                </div>
-              </div>
+            <!-- ═══ VIEW MODE ═══ -->
+            <ProfileInfo v-if="!isEditing"
+              :user="user"
+              :currentWorker="currentWorker"
+            />
+
+            <!-- ═══ EDIT MODE ═══ -->
+            <ProfileEditForm v-else
+              :modelValue="editForm"
+              @update:modelValue="updateEditForm"
+            />
+
+            <div class="profile-divider"></div>
+
+            <!-- ═══ ACTIONS ═══ -->
+            <div class="profile-footer">
+              <template v-if="!isEditing">
+                <button class="btn-edit" @click="startEditing">
+                  <i class="pi pi-pencil"></i>
+                  {{ $t('common.edit') }}
+                </button>
+                <button class="btn-logout" @click="$emit('logout')" :title="$t('profile.logout')">
+                  <i class="pi pi-power-off"></i>
+                </button>
+              </template>
+              <template v-else>
+                <button class="btn-cancel" @click="isEditing = false">{{ $t('common.cancel') }}</button>
+                <button class="btn-save" @click="saveChanges" :disabled="saving">
+                  <i v-if="saving" class="pi pi-spin pi-spinner"></i>
+                  <i v-else class="pi pi-check"></i>
+                  {{ $t('common.save') }}
+                </button>
+              </template>
             </div>
 
-            <!-- Scrollable Content -->
-            <div class="p-6 overflow-y-auto max-h-[60vh] custom-scrollbar">
-              <div class="space-y-4 animate-in fade-in duration-500">
-                <!-- Account Info Group -->
-                <div class="grid grid-cols-1 gap-1">
-                  <div class="flex items-center px-4 py-3 rounded-2xl bg-slate-50/50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-800 transition-colors">
-                    <i class="pi pi-at text-slate-400 mr-4 text-xs"></i>
-                    <div class="flex flex-col">
-                      <span class="text-[8px] font-black text-slate-400 uppercase tracking-[0.15em] leading-none mb-1">{{ $t('profile.username') }}</span>
-                      <span class="text-sm font-bold text-slate-700 dark:text-slate-200">@{{ user.username }}</span>
-                    </div>
-                  </div>
-
-                  <div class="flex items-center px-4 py-3 rounded-2xl bg-slate-50/50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-800 transition-colors">
-                    <i class="pi pi-envelope text-slate-400 mr-4 text-xs"></i>
-                    <div class="flex flex-col">
-                      <span class="text-[8px] font-black text-slate-400 uppercase tracking-[0.15em] leading-none mb-1">{{ $t('profile.email') }}</span>
-                      <span class="text-sm font-bold text-slate-700 dark:text-slate-200 truncate">{{ user.email || '—' }}</span>
-                    </div>
-                  </div>
-
-                  <div class="flex items-center px-4 py-3 rounded-2xl bg-slate-50/50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-800 transition-colors">
-                    <i class="pi pi-phone text-slate-400 mr-4 text-xs"></i>
-                    <div class="flex flex-col">
-                      <span class="text-[8px] font-black text-slate-400 uppercase tracking-[0.15em] leading-none mb-1">{{ $t('profile.contact') }}</span>
-                      <div class="flex flex-col gap-0.5">
-                        <span class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ currentWorker?.phone1 || user.phone1 }}</span>
-                        <span v-if="currentWorker?.phone2 || user.phone2" class="text-xs font-medium text-slate-500 dark:text-slate-400">{{ currentWorker?.phone2 || user.phone2 }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Workplace Badge -->
-                <div class="relative overflow-hidden p-4 rounded-3xl bg-emerald-500/[0.03] dark:bg-emerald-500/[0.05] border border-emerald-500/10 mt-6 group">
-                  <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-emerald-500/5 rotate-12 rounded-full transition-transform group-hover:scale-110"></div>
-                  <div class="flex items-start gap-3 relative z-10">
-                    <div class="w-8 h-8 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-emerald-500 border border-emerald-500/10">
-                      <i class="pi pi-map-marker text-[10px]"></i>
-                    </div>
-                    <div class="flex flex-col min-w-0">
-                      <span class="text-[8px] font-black text-emerald-600/60 dark:text-emerald-400/60 uppercase tracking-[0.2em] mb-0.5">{{ $t('profile.workplace') }}</span>
-                      <span class="text-xs font-black text-slate-800 dark:text-white uppercase truncate tracking-tight">{{ user.worker?.store_name }}</span>
-                      <span class="text-[10px] font-bold text-emerald-500/70">{{ user.worker?.branch_name }}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Footer Actions -->
-                <div class="flex items-center gap-3 pt-6">
-                  <button 
-                    @click="goToEdit"
-                    class="flex-1 h-12 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-[10px] uppercase tracking-widest transition-all hover:shadow-xl hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 border-none cursor-pointer"
-                  >
-                    <i class="pi pi-sliders-h text-[9px]"></i>
-                    {{ $t('common.edit') }}
-                  </button>
-                  <button 
-                    @click="$emit('logout')"
-                    class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-500/10 text-rose-500 flex items-center justify-center transition-all hover:bg-rose-500 hover:text-white border border-rose-100 dark:border-rose-500/20 active:scale-95 cursor-pointer"
-                  >
-                    <i class="pi pi-power-off text-sm"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </Transition>
       </div>
@@ -130,66 +72,251 @@
 </template>
 
 <script setup>
-import Avatar from 'primevue/avatar'
-import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { workersAPI } from '@/services/api'
+import { watch, toRef } from 'vue'
+import { useUserProfile } from '@/composables/useUserProfile'
+import ProfileInfo from './Profile/ProfileInfo.vue'
+import ProfileEditForm from './Profile/ProfileEditForm.vue'
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
-  user: { type: Object, required: true }
+  user:    { type: Object, required: true  }
 })
 
-const emit = defineEmits(['update:visible', 'logout'])
-const router = useRouter()
+const emit = defineEmits(['update:visible', 'logout', 'updated'])
 
-const currentWorker = ref(null)
+// Pass user as a reactive ref so composable always gets the latest prop value
+const userRef = toRef(props, 'user')
 
-watch(() => props.visible, async (val) => {
+const {
+  currentWorker,
+  isEditing,
+  saving,
+  editForm,
+  fetchMe,
+  startEditing,
+  saveChanges
+} = useUserProfile(userRef, () => emit('updated'))
+
+// Handle form updates from child component (proper v-model pattern)
+const updateEditForm = (newVal) => {
+  Object.assign(editForm, newVal)
+}
+
+watch(() => props.visible, (val) => {
   if (val) {
-    try {
-      const res = await workersAPI.getMe()
-      currentWorker.value = res.data
-      console.log('Current Worker Profile (Fetch):', res.data)
-    } catch (e) {
-      console.error('Error fetching worker me on open:', e)
-    }
-    document.addEventListener('keydown', handleEsc)
+    fetchMe()
+    document.addEventListener('keydown', onEsc)
   } else {
-    document.removeEventListener('keydown', handleEsc)
+    isEditing.value = false
+    document.removeEventListener('keydown', onEsc)
   }
 })
 
-const goToEdit = () => {
-  const workerId = currentWorker.value?.id || props.user.worker?.id || props.user.id
-  if (!workerId) return
-  
-  emit('update:visible', false)
-  router.push({ name: 'worker-detail', params: { id: workerId } })
-}
-
-const closeModal = () => {
-  emit('update:visible', false)
-}
-
-const handleEsc = (e) => { if (e.key === 'Escape') closeModal() }
+const closeModal = () => emit('update:visible', false)
+const onEsc = (e) => { if (e.key === 'Escape') closeModal() }
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
-.fade-enter-from, .fade-leave-to        { opacity: 0; }
-
-.scale-up-enter-active, .scale-up-leave-active { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.scale-up-enter-from,   .scale-up-leave-to     { opacity: 0; transform: scale(0.95) translateY(10px); }
-
-.animate-in { animation: animateIn 0.5s ease-out both; }
-@keyframes animateIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ─── Overlay ─── */
+.profile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(2, 6, 23, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+/* ─── Card ─── */
+.profile-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(0,0,0,0.07);
+  box-shadow: 0 20px 60px -10px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.9) inset;
+  overflow: hidden;
+}
+.dark .profile-card {
+  background: #111827;
+  border-color: rgba(255,255,255,0.06);
+  box-shadow: 0 20px 60px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset;
+}
+
+/* ─── Header ─── */
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 18px;
+}
+.profile-identity { display: flex; align-items: center; gap: 14px; }
+.profile-avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #f1f5f9;
+  border: 2px solid #e2e8f0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 20px;
+}
+.dark .profile-avatar { background: #1e293b; border-color: #334155; }
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-status-dot {
+  position: absolute;
+  bottom: 2px; right: 2px;
+  width: 10px; height: 10px;
+  background: #10b981;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+.dark .profile-status-dot { border-color: #111827; }
+
+.profile-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 5px;
+  letter-spacing: -0.3px;
+  line-height: 1;
+}
+.dark .profile-name { color: #f8fafc; }
+
+.profile-meta { display: flex; align-items: center; gap: 6px; }
+.profile-role {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.profile-dot { color: #cbd5e1; font-size: 12px; }
+.profile-id  { font-size: 11px; color: #64748b; font-weight: 600; }
+.dark .profile-id { color: #94a3b8; }
+
+.profile-close {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  transition: all 0.15s;
+}
+.dark .profile-close { border-color: #334155; color: #64748b; }
+.profile-close:hover { background: #fee2e2; border-color: #fca5a5; color: #ef4444; }
+.dark .profile-close:hover { background: rgba(239,68,68,0.1); }
+
+/* ─── Divider ─── */
+.profile-divider { height: 1px; background: #f1f5f9; margin: 0; }
+.dark .profile-divider { background: #1e293b; }
+
+/* ─── Footer ─── */
+.profile-footer {
+  padding: 14px 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-edit {
+  flex: 1;
+  height: 40px;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.2s;
+}
+.dark .btn-edit { background: #f8fafc; color: #0f172a; }
+.btn-edit:hover { background: #10b981; color: #fff; transform: translateY(-1px); box-shadow: 0 8px 20px -4px rgba(16,185,129,0.35); }
+.dark .btn-edit:hover { background: #10b981; color: #fff; }
+
+.btn-logout {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: transparent;
+  color: #94a3b8;
+  border: 1.5px solid #e2e8f0;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.dark .btn-logout { border-color: #334155; }
+.btn-logout:hover { background: #fee2e2; border-color: #fca5a5; color: #ef4444; }
+.dark .btn-logout:hover { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); }
+
+.btn-cancel {
+  flex: 1;
+  height: 40px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  color: #64748b;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.dark .btn-cancel { background: #1e293b; color: #64748b; }
+.btn-cancel:hover { background: #e2e8f0; color: #475569; }
+.dark .btn-cancel:hover { background: #334155; }
+
+.btn-save {
+  flex: 1.6;
+  height: 40px;
+  border-radius: 12px;
+  background: #10b981;
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px -2px rgba(16,185,129,0.4);
+}
+.btn-save:hover:not(:disabled) {
+  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -4px rgba(16,185,129,0.45);
+}
+.btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ─── Transitions ─── */
+.profile-fade-enter-active, .profile-fade-leave-active { transition: opacity 0.25s ease; }
+.profile-fade-enter-from, .profile-fade-leave-to { opacity: 0; }
+
+.profile-pop-enter-active { transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+.profile-pop-leave-active  { transition: all 0.2s ease; }
+.profile-pop-enter-from    { opacity: 0; transform: scale(0.94) translateY(16px); }
+.profile-pop-leave-to      { opacity: 0; transform: scale(0.97); }
 </style>

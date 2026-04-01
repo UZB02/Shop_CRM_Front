@@ -14,9 +14,26 @@ export function useProducts() {
     const rowsPerPage = ref(10)
     const searchQuery = ref('')
     const selectedCategory = ref(null)
+    const selectedSubcategory = ref(null)
     const selectedStatus = ref(null)
+    const subcategories = ref([])
 
     let lastRequestId = 0
+
+    const fetchSubcategories = async (categoryId) => {
+        if (!categoryId) {
+            subcategories.value = []
+            selectedSubcategory.value = null
+            return
+        }
+        try {
+            const { subcategoriesAPI } = await import('@/services/api')
+            const res = await subcategoriesAPI.getAll({ category: categoryId })
+            subcategories.value = Array.isArray(res.data) ? res.data : (res.data?.results || [])
+        } catch (err) {
+            console.error('Subcategory fetch error:', err)
+        }
+    }
 
     const loadProducts = async () => {
         const requestId = ++lastRequestId
@@ -27,10 +44,18 @@ export function useProducts() {
                 page_size: rowsPerPage.value
             }
             if (searchQuery.value) params.search = searchQuery.value
-            if (selectedCategory.value != null && selectedCategory.value !== 'all') {
+            
+            if (selectedCategory.value) {
                 params.category = selectedCategory.value
             }
-            if (selectedStatus.value) params.status = selectedStatus.value
+            
+            if (selectedSubcategory.value) {
+                params.subcategory = selectedSubcategory.value
+            }
+            
+            if (selectedStatus.value) {
+                params.status = selectedStatus.value
+            }
 
             const response = await productsAPI.getAll(params)
             
@@ -92,7 +117,10 @@ export function useProducts() {
         rowsPerPage,
         searchQuery,
         selectedCategory,
+        selectedSubcategory,
         selectedStatus,
+        subcategories,
+        fetchSubcategories,
         loadProducts,
         handleSearch,
         handlePageChange,
