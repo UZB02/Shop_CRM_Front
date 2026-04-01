@@ -20,8 +20,8 @@
       v-model="filters"
       :role-options="roleOptions"
       :status-options="statusOptions"
-      :stores="stores"
-      :stores-loading="storesLoading"
+      :branches="branches"
+      :loading-locations="storesLoading"
     />
 
     <!-- Workers Table Component -->

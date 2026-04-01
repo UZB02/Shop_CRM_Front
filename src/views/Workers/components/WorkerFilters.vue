@@ -14,7 +14,7 @@
       </div>
 
       <!-- Role Filter -->
-      <Dropdown 
+      <Select 
         v-model="modelValue.role" 
         :options="roleOptions" 
         optionLabel="label" 
@@ -25,7 +25,7 @@
       />
 
       <!-- Status Filter -->
-      <Dropdown 
+      <Select 
         v-model="modelValue.status" 
         :options="statusOptions" 
         optionLabel="label" 
@@ -36,14 +36,14 @@
       />
 
       <!-- Branch Filter -->
-      <Dropdown 
+      <Select 
         v-model="modelValue.branch" 
-        :options="stores" 
+        :options="branches" 
         optionLabel="name" 
         optionValue="id" 
         showClear 
         :placeholder="$t('workers.branch')" 
-        :loading="storesLoading"
+        :loading="loadingLocations"
         class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm !text-slate-700 dark:!text-white"
       />
     </div>
@@ -52,7 +52,7 @@
 
 <script setup>
 import InputText from 'primevue/inputtext'
-import Dropdown from 'primevue/dropdown'
+import Select from 'primevue/select'
 
 defineProps({
   modelValue: {
@@ -61,8 +61,8 @@ defineProps({
   },
   roleOptions: Array,
   statusOptions: Array,
-  stores: Array,
-  storesLoading: Boolean
+  branches: Array,
+  loadingLocations: Boolean
 })
 
 defineEmits(['update:modelValue'])

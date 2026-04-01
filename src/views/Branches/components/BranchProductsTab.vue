@@ -31,6 +31,7 @@
             <tr class="bg-slate-50/50 dark:bg-slate-800/50">
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('products.col_product') }}</th>
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('products.form.category') }}</th>
+              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-right">{{ $t('products.col_price') }}</th>
             </tr>
           </thead>
@@ -68,6 +69,13 @@
                   <span v-if="product.subcategory_name" class="text-[9px] font-bold text-slate-400">
                     {{ product.subcategory_name }}
                   </span>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-center">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border"
+                     :class="product.quantity > 10 ? 'bg-emerald-500/5 border-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/5 border-rose-500/10 text-rose-600 dark:text-rose-400'">
+                  <span class="text-[11px] font-black tracking-tighter">{{ product.quantity }}</span>
+                  <span class="text-[8px] font-bold uppercase tracking-widest opacity-60">{{ $t('common.pcs') || 'dona' }}</span>
                 </div>
               </td>
               <td class="px-6 py-4 text-right">

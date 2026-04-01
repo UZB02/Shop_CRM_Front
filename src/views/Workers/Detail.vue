@@ -18,8 +18,8 @@
 
     <div class="space-y-6">
 
-      <!-- ACCORDION (Details & Permissions) -->
-      <DetailAccordion :worker="worker" />
+      <!-- TABS (Details & Permissions) -->
+      <DetailTabs :worker="worker" />
     </div>
 
     <!-- Worker Dialog Component -->
@@ -27,8 +27,7 @@
       v-model:visible="workerDialog"
       v-model:createLogin="createLogin"
       :worker="workerToEdit"
-      :stores="stores"
-      :storesLoading="storesLoading"
+      :branches="stores"
       :saving="saving"
       :submitted="submitted"
       @save="saveWorker"
@@ -42,12 +41,12 @@
 import { ref, onMounted, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { workersAPI, storesAPI, branchesAPI } from '@/services/api'
+import { workersAPI, branchesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
 import WorkerDialog from './components/WorkerDialog.vue'
 import DetailHeader from './components/detail/DetailHeader.vue'
-import DetailAccordion from './components/detail/DetailAccordion.vue'
+import DetailTabs from './components/detail/DetailTabs.vue'
 
 const route = useRoute()
 const { t } = useI18n()

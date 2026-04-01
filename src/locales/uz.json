@@ -34,7 +34,8 @@
         "required_field": "Maydonni to'ldirish shart",
         "success": "Muvaffaqiyatli",
         "error_message": "Xatolik yuz berdi",
-        "confirm_title": "Tasdiqlash"
+        "confirm_title": "Tasdiqlash",
+        "pcs": "dona"
     },
     "workers": {
         "title": "Xodimlar",
@@ -493,6 +494,7 @@
         "warehouses_count": "Omborlar",
         "col_product": "Mahsulot",
         "col_stock": "Ombordagi holat",
+        "col_inventory": "Qoldiq",
         "col_price": "Sotish bahosi",
         "col_actions": "Boshqaruv",
         "not_found": "Ma'lumotlar topilmadi",

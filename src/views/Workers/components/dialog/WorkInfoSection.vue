@@ -4,7 +4,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
       <FormField :label="$t('workers.form.branch')">
-        <Dropdown v-model="worker.branch"
+        <Select v-model="worker.branch"
                   :options="branches"
                   optionLabel="name"
                   optionValue="id"
@@ -12,7 +12,7 @@
                   :placeholder="$t('workers.form.placeholder_branch')" />
       </FormField>
       <FormField :label="$t('workers.form.role')">
-        <Dropdown v-model="worker.role"
+        <Select v-model="worker.role"
                   :options="localizedRoles"
                   optionLabel="label"
                   optionValue="value"
@@ -30,7 +30,7 @@
                      placeholder="0" />
       </FormField>
       <FormField :label="$t('workers.form.status')">
-        <Dropdown v-model="worker.status"
+        <Select v-model="worker.status"
                   :options="localizedStatuses"
                   optionLabel="label"
                   optionValue="value"
@@ -44,7 +44,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import Dropdown from 'primevue/dropdown'
+import Select from 'primevue/select'
 import InputNumber from 'primevue/inputnumber'
 import SectionTitle from './SectionTitle.vue'
 import FormField from './FormField.vue'

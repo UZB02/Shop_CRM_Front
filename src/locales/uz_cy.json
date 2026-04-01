@@ -30,7 +30,8 @@
         "subscription_warning_title": "Обуна Огоҳлантириши",
         "no_results": "Ҳеч нима топилмади",
         "pay": "Тўлов",
-        "pay_action": "Тўлов қилиш"
+        "pay_action": "Тўлов қилиш",
+        "pcs": "дона"
     },
     "workers": {
         "title": "Ходимлар",
@@ -455,6 +456,7 @@
         "warehouses_count": "Омборлар",
         "col_product": "Маҳсулот",
         "col_stock": "Омбордаги ҳолат",
+        "col_inventory": "Қолдиқ",
         "col_price": "Сотиш баҳоси",
         "col_actions": "Бошқарув",
         "not_found": "Маълумотлар топилмади",
