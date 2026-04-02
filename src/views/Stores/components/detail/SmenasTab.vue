@@ -33,8 +33,9 @@
         class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-5 shadow-sm hover:shadow-md transition-all cursor-pointer hover:border-emerald-500/30 relative overflow-hidden group"
       >
         <!-- Status Badge -->
-        <div class="absolute top-0 right-0 px-3 py-1 bg-slate-50 dark:bg-slate-800 text-[8px] font-black uppercase tracking-widest border-l border-b border-slate-100 dark:border-slate-700 rounded-bl-xl text-slate-400">
-          {{ smena.status_display }}
+        <div class="absolute top-0 right-0 px-3 py-1 text-[8px] font-black uppercase tracking-widest border-l border-b rounded-bl-xl transition-colors"
+             :class="activeSubTab === 'closed' ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-100 dark:border-rose-500/20 text-rose-500' : 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-100 dark:border-emerald-500/20 text-emerald-500'">
+          {{ activeSubTab === 'closed' ? $t('shifts.status.closed') : $t('shifts.status.open') }}
         </div>
 
         <div class="flex items-center gap-4">

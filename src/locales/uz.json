@@ -774,5 +774,59 @@
             "save_error": "Saqlashda xatolik yuz berdi",
             "delete_error": "O'chirishda xatolik yuz berdi"
         }
+    },
+    "shifts": {
+        "report_title": "Smena hisoboti",
+        "print": "Chop etish",
+        "branch": "Filial",
+        "store": "Do'kon",
+        "period": "Xisobot Davri",
+        "status": {
+            "open": "Ochiq",
+            "closed": "Yopiq"
+        },
+        "stats": {
+            "total_sales": "Umumiy Savdo",
+            "net_sales": "Sof Savdo",
+            "returns": "Qaytarishlar",
+            "net_income": "Sof Foyda",
+            "transactions": "{count} ta tranzaksiya",
+            "operations": "{count} ta operatsiya"
+        },
+        "payment": {
+            "title": "To'lov turlari bo'yicha tushum",
+            "cash": "Naqd pul",
+            "card": "Plastik karta",
+            "mixed": "Aralash",
+            "debt": "Nasiya"
+        },
+        "workers": {
+            "title": "Xodimlar bo'yicha savdo",
+            "col_worker": "Xodim",
+            "col_sales": "Savdolar soni",
+            "col_amount": "Summa (UZS)"
+        },
+        "expenses": {
+            "title": "Xarajatlar",
+            "wastage": "Spisaniya",
+            "docs": "{count} ta hujjat"
+        },
+        "cash": {
+            "title": "Kassa holati",
+            "start": "Boshlang'ich kassa",
+            "income": "Tushum (Naqd qiymatda)",
+            "end": "Yakuniy kassa"
+        },
+        "info": {
+            "title": "Vaqt va Xodimlar",
+            "opened": "Smena ochilgan",
+            "closed": "Smena yopilgan",
+            "note": "Izoh"
+        },
+        "error": {
+            "not_found": "Ma'lumot topilmadi",
+            "not_found_desc": "Ushbu smena uchun hisobot ma'lumotlarini yuklab bo'lmadi yoki sizda ushbu sahifani ko'rish huquqi yo'q.",
+            "back": "Ortga qaytish"
+        }
     }
 }

@@ -93,21 +93,21 @@
                     <router-link
                       :to="`/dashboard/branches/${branch.id}/bulk`"
                       class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all shadow-sm"
-                      title="Ommaviy yuklash"
+                      v-tooltip.top="'Ommaviy yuklash'"
                     >
                       <i class="pi pi-database text-sm"></i>
                     </router-link>
                     <button
                       @click="$emit('edit', branch)"
                       class="w-9 h-9 rounded-xl bg-blue-500 text-white flex items-center justify-center hover:bg-blue-600 transition-colors shadow-sm"
-                      title="Tahrirlash"
+                      v-tooltip.top="'Tahrirlash'"
                     >
                       <i class="pi pi-pencil text-sm"></i>
                     </button>
                     <button
                       @click="$emit('delete', branch)"
                       class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center hover:bg-rose-600 transition-colors shadow-sm"
-                      title="O'chirish"
+                      v-tooltip.top="`O'chirish`"
                     >
                       <i class="pi pi-trash text-sm"></i>
                     </button>
@@ -138,14 +138,17 @@
               <router-link
                 :to="`/dashboard/branches/${branch.id}/bulk`"
                 class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center active:scale-95"
+                v-tooltip.top="'Ommaviy yuklash'"
               ><i class="pi pi-database text-xs"></i></router-link>
               <button
                 @click="$emit('edit', branch)"
                 class="w-9 h-9 rounded-xl bg-blue-500 text-white flex items-center justify-center active:scale-95"
+                v-tooltip.top="'Tahrirlash'"
               ><i class="pi pi-pencil text-xs"></i></button>
               <button
                 @click="$emit('delete', branch)"
                 class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center active:scale-95"
+                v-tooltip.top="`O'chirish`"
               ><i class="pi pi-trash text-xs"></i></button>
             </div>
           </div>

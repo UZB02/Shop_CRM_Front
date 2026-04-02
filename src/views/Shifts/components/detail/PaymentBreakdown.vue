@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
      <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-5 flex items-center gap-2">
-        <i class="pi pi-chart-pie text-slate-400"></i> To'lov turlari bo'yicha tushum
+        <i class="pi pi-chart-pie text-slate-400"></i> {{ $t('shifts.payment.title') }}
      </h3>
      
      <!-- Progress Bar Segmented -->
