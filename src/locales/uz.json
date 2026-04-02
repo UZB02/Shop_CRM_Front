@@ -484,6 +484,7 @@
         }
     },
     "products": {
+        "page_title": "Mahsulotlar",
         "title": "Mahsulotlar Boshqaruvi",
         "title_header": "Mahsulotlar Boshqaruvi",
         "subtitle": "{count} ta mahsulot boshqarishga tayyor",

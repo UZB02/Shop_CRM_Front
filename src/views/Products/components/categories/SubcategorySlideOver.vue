@@ -1,9 +1,11 @@
 <template>
-  <div>
+  <Teleport to="body">
+    <!-- Backdrop -->
     <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-      <div v-if="visible" @click="$emit('update:visible', false)" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-[99]"></div>
+      <div v-if="visible" @click="$emit('update:visible', false)" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-[999]"></div>
     </Transition>
 
+    <!-- Panel -->
     <Transition 
       enter-active-class="transition duration-500 cubic-bezier(0.4, 0, 0.2, 1)" 
       enter-from-class="translate-x-full" 
@@ -12,59 +14,69 @@
       leave-from-class="translate-x-0" 
       leave-to-class="translate-x-full"
     >
-      <div v-if="visible" class="fixed top-0 right-0 h-full w-full max-w-[420px] bg-white dark:bg-slate-950 border-l border-slate-100 dark:border-slate-800 shadow-[-20px_0_60px_-15px_rgba(0,0,0,0.2)] dark:shadow-[-20px_0_60px_-15px_rgba(0,0,0,0.5)] z-[100] flex flex-col">
-        <!-- Header -->
-        <div class="px-8 py-5 border-b border-slate-50 dark:border-slate-900/50 flex items-center justify-between bg-white/80 dark:bg-slate-950/80 backdrop-blur-md sticky top-0 z-10">
-          <div class="flex items-center gap-3">
-            <div class="w-2.5 h-2.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.4)]" :class="isEditing ? 'bg-amber-500' : 'bg-emerald-500 animate-pulse'"></div>
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-              {{ isEditing ? $t('common.edit') : $t('subcategories.management') }}
-            </span>
+      <div v-if="visible" class="fixed top-0 right-0 h-full w-full max-w-[400px] bg-white dark:bg-slate-900 border-l border-slate-100 dark:border-slate-800 shadow-[-20px_0_50px_-12px_rgba(0,0,0,0.1)] z-[1000] flex flex-col font-inter">
+        <!-- Panel Header -->
+        <div class="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold text-emerald-500 uppercase tracking-widest">{{ isEditing ? $t('common.edit') : $t('subcategories.management') }}</span>
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">{{ categoryName }}</span>
           </div>
-          <button @click="$emit('update:visible', false)" class="w-8 h-8 rounded-xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all duration-300">
-            <i class="pi pi-times text-[10px] font-black"></i>
+          <button @click="$emit('update:visible', false)" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-white transition-all shadow-sm">
+            <i class="pi pi-times text-[10px]"></i>
           </button>
         </div>
 
-        <!-- Body -->
-        <div class="p-8 space-y-10 flex-1 overflow-y-auto custom-scrollbar">
-          <div class="space-y-8">
+        <!-- Panel Body -->
+        <div class="p-6 space-y-6 flex-1 overflow-y-auto custom-scrollbar">
+          <div class="space-y-4">
             <!-- Context Info -->
-            <div class="p-5 bg-slate-50 dark:bg-slate-900/60 rounded-3xl border border-slate-100 dark:border-slate-800/80 flex items-center gap-4">
-              <div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-emerald-500 shadow-sm border border-slate-50 dark:border-slate-700">
-                <i class="pi pi-folder text-lg"></i>
+            <div class="p-4 bg-slate-50/50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800/60 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-emerald-500 shadow-sm border border-slate-100 dark:border-slate-700">
+                <i class="pi pi-folder text-sm"></i>
               </div>
               <div>
-                <p class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">{{ $t('categories.title') }}</p>
-                <p class="text-[13px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ categoryName }}</p>
+                <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-0.5">{{ $t('categories.title') }}</p>
+                <p class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ categoryName }}</p>
               </div>
             </div>
 
-            <div class="space-y-3">
-              <label class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">{{ $t('subcategories.name') }}</label>
+            <!-- Name Field -->
+            <div class="field">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('subcategories.name') }}</label>
               <div class="relative group/input">
-                <i class="pi pi-tag absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-300 transition-colors group-focus-within/input:text-emerald-500"></i>
-                <InputText v-model="subcategory.name" :placeholder="$t('subcategories.name_ph')" class="sr-input w-full" autofocus />
+                <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 transition-colors group-focus-within/input:text-emerald-500"></i>
+                <InputText 
+                  v-model="subcategory.name" 
+                  :placeholder="$t('subcategories.name_ph')" 
+                  class="!h-11 !pl-10 !text-sm !font-semibold !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-transparent focus:!bg-white dark:focus:!bg-slate-900 focus:!ring-8 focus:!ring-emerald-500/5 transition-all w-full" 
+                  autofocus
+                />
               </div>
             </div>
 
-            <div class="space-y-3">
-              <label class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">{{ $t('subcategories.description') }}</label>
+            <!-- Description Field -->
+            <div class="field">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('subcategories.description') }}</label>
               <div class="relative group/input">
-                <i class="pi pi-align-left absolute left-4 top-5 text-sm text-slate-300 transition-colors group-focus-within/input:text-emerald-500"></i>
-                <Textarea v-model="subcategory.description" :placeholder="$t('subcategories.description_ph')" rows="5" class="sr-input py-4 w-full" />
+                <i class="pi pi-align-left absolute left-3 top-4 text-xs text-slate-300 transition-colors group-focus-within/input:text-emerald-500"></i>
+                <Textarea 
+                  v-model="subcategory.description" 
+                  :placeholder="$t('subcategories.description_ph')" 
+                  rows="4"
+                  class="!pl-10 !pt-3 !text-sm !font-semibold !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-transparent focus:!bg-white dark:focus:!bg-slate-900 focus:!ring-8 focus:!ring-emerald-500/5 transition-all w-full leading-relaxed" 
+                />
               </div>
             </div>
 
             <!-- Status Toggle -->
-            <div class="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-900/60 rounded-[1.5rem] border border-slate-100 dark:border-slate-800/80 group/status transition-all hover:bg-white dark:hover:bg-slate-900 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none">
-              <div class="flex items-center gap-4">
-                <div :class="['w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500', subcategory.status === 'active' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'bg-slate-200 dark:bg-slate-800 text-slate-400']">
-                  <i :class="['pi', subcategory.status === 'active' ? 'pi-check' : 'pi-power-off', 'text-[10px] font-black']"></i>
+            <div class="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800/60 mt-4">
+              <div class="flex items-center gap-3">
+                <div :class="['w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300', subcategory.status === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-200 dark:bg-slate-800 text-slate-400']">
+                  <i :class="['pi', subcategory.status === 'active' ? 'pi-check' : 'pi-power-off', 'text-[10px]']"></i>
                 </div>
                 <div>
-                  <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-0.5">{{ $t('common.status') }}</p>
-                  <p :class="['text-[11px] font-black uppercase tracking-widest transition-colors duration-300', subcategory.status === 'active' ? 'text-emerald-500' : 'text-slate-400']">
+                  <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-0.5">{{ $t('common.status') }}</p>
+                  <p :class="['text-[11px] font-bold uppercase tracking-widest transition-colors', subcategory.status === 'active' ? 'text-emerald-500' : 'text-slate-400']">
                     {{ subcategory.status === 'active' ? $t('common.active') : $t('common.inactive') }}
                   </p>
                 </div>
@@ -77,16 +89,26 @@
           </div>
         </div>
 
-        <!-- Footer -->
-        <div class="p-6 border-t border-slate-50 dark:border-slate-900/50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
+        <!-- Panel Footer -->
+        <div class="px-6 py-4 border-t border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
           <div class="flex gap-3 items-center">
-            <Button :label="$t('common.cancel')" text class="sr-btn-cancel" @click="$emit('update:visible', false)" />
-            <Button :label="isEditing ? $t('common.save') : $t('common.add')" :icon="isEditing ? 'pi pi-check' : 'pi pi-plus'" :loading="saving" @click="$emit('submit')" class="sr-btn-save" />
+            <Button 
+              :label="$t('common.cancel')"
+              text
+              class="!flex-1 !text-[10px] !font-bold !uppercase !tracking-widest !rounded-xl !text-slate-400 !h-10"
+              @click="$emit('update:visible', false)"
+            />
+            <Button 
+              :label="isEditing ? $t('common.save') : $t('common.add')"
+              :loading="saving" 
+              @click="$emit('submit')"
+              class="!flex-[2] !h-10 !rounded-xl !bg-emerald-500 !border-none !shadow-xl !shadow-emerald-500/20 active:scale-95 transition-all text-white !text-[10px] !font-bold !uppercase !tracking-widest"
+            />
           </div>
         </div>
       </div>
     </Transition>
-  </div>
+  </Teleport>
 </template>
 
 <script setup>
@@ -110,21 +132,6 @@ defineEmits(['update:visible', 'submit'])
 </script>
 
 <style scoped>
-@reference "../../../../assets/styles/main.css";
-
-.sr-input {
-  @apply !pl-11 !text-[13px] !font-bold !rounded-[1.25rem] !bg-slate-50 dark:!bg-slate-900/60 !border-slate-100 dark:!border-slate-800/80 transition-all duration-300;
-  padding-left: 3rem !important;
-}
-.sr-input:focus {
-  @apply !bg-white dark:!bg-slate-950 !ring-8 !ring-emerald-500/5 !border-emerald-500/20;
-}
-.sr-btn-cancel {
-  @apply !flex-1 !text-[10px] !font-black !uppercase !tracking-[0.15em] !rounded-xl !text-slate-400 !h-11 hover:!bg-slate-50 dark:hover:!bg-slate-900/50 transition-all;
-}
-.sr-btn-save {
-  @apply !flex-[2] !h-11 !rounded-xl !bg-emerald-500 !border-none !shadow-lg !shadow-emerald-500/20 active:scale-95 transition-all text-white !text-[10px] !font-black !uppercase !tracking-[0.15em];
-}
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -132,6 +139,10 @@ defineEmits(['update:visible', 'submit'])
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 dark:bg-slate-800 rounded-full;
+  background: theme('colors.slate.200');
+  border-radius: 10px;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: theme('colors.slate.800');
 }
 </style>

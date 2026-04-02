@@ -8,7 +8,7 @@
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <div v-if="visible" class="fixed inset-0 w-screen h-screen z-[999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" @click.self="$emit('update:visible', false)">
+      <div v-if="visible" class="fixed inset-0 w-screen h-screen z-[999] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm overflow-hidden" @click.self="$emit('update:visible', false)">
         <Transition
           enter-active-class="transition duration-300 ease-out"
           enter-from-class="opacity-0 scale-95 translate-y-4"
@@ -17,119 +17,116 @@
           leave-from-class="opacity-100 scale-100 translate-y-0"
           leave-to-class="opacity-0 scale-95 translate-y-4"
         >
-          <div class="w-full max-w-lg sm:max-w-xl md:max-w-lg overflow-hidden rounded-[2rem] sm:rounded-[3rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl shadow-emerald-500/10">
-            <!-- Custom Header -->
-            <div class="px-6 py-5 sm:px-10 sm:py-8 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center text-left">
-              <div class="flex items-center gap-4 text-left">
-                <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                  <i class="pi pi-box text-white text-lg sm:text-2xl"></i>
+          <div class="w-full max-w-md overflow-hidden rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl font-inter">
+            <!-- Modal Header -->
+            <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                  <i class="pi pi-box text-lg"></i>
                 </div>
-                <div class="text-left">
-                  <h3 class="text-base sm:text-xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
+                <div>
+                  <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100">
                     {{ warehouse.id || warehouse._id ? $t('warehouse.edit_warehouse') : $t('warehouse.new_warehouse') }}
                   </h3>
-                  <p class="text-[8px] sm:text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">
+                  <p class="text-[10px] font-medium text-slate-400 dark:text-slate-500">
                     {{ $t('warehouse.form.subtitle') }}
                   </p>
                 </div>
               </div>
               <button
                 @click="$emit('update:visible', false)"
-                class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-white dark:hover:bg-slate-800 transition-all border border-transparent hover:border-slate-100 dark:hover:border-slate-700"
+                class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
               >
-                <i class="pi pi-times text-xs sm:text-sm"></i>
+                <i class="pi pi-times text-xs"></i>
               </button>
             </div>
 
-            <!-- Form Content -->
-            <div class="p-6 sm:p-10 space-y-6 sm:space-y-8 text-left">
-              <!-- Main Info Section -->
-              <div class="space-y-5 sm:space-y-6 text-left">
-                <!-- Warehouse Name -->
-                <div class="space-y-2 px-1 text-left">
-                  <label for="name" class="text-[9px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1 text-left">
-                    {{ $t('warehouse.form.name') }} <span class="text-rose-500">*</span>
-                  </label>
-                  <div class="relative group text-left">
-                    <i class="pi pi-bookmark absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors text-sm sm:text-base"></i>
-                    <InputText
-                      id="name"
-                      v-model="warehouse.name"
-                      :placeholder="$t('warehouse.form.name_ph')"
-                      class="w-full !pl-11 !rounded-xl sm:!rounded-2xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 focus:!ring-4 focus:!ring-emerald-500/10 focus:!border-emerald-500 transition-all !py-3 sm:!py-4 font-semibold dark:!text-white text-sm sm:text-base"
-                      :class="{ 'p-invalid': submitted && !warehouse.name }"
-                      autofocus
-                    />
-                  </div>
-                  <small v-if="submitted && !warehouse.name" class="text-rose-500 text-[10px] font-bold uppercase tracking-wider px-2 block animate-bounce">{{ $t('warehouse.form.name') }} kiritilishi shart.</small>
+            <!-- Modal Body -->
+            <div class="p-6 space-y-5">
+              <!-- Warehouse Name -->
+              <div class="space-y-1.5 focus-within:z-10 relative">
+                <label for="name" class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">
+                  {{ $t('warehouse.form.name') }} <span class="text-rose-500">*</span>
+                </label>
+                <div class="relative group">
+                  <i class="pi pi-bookmark absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors text-xs"></i>
+                  <InputText
+                    id="name"
+                    v-model="warehouse.name"
+                    :placeholder="$t('warehouse.form.name_ph')"
+                    class="w-full !pl-10 !rounded-xl !bg-slate-50/50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 hover:!border-slate-300 dark:hover:!border-slate-600 focus:!ring-4 focus:!ring-emerald-500/10 focus:!border-emerald-500 transition-all !py-3 font-semibold dark:!text-white text-sm"
+                    :class="{ 'p-invalid': submitted && !warehouse.name }"
+                    autofocus
+                  />
                 </div>
+                <small v-if="submitted && !warehouse.name" class="text-rose-500 text-[10px] font-bold uppercase tracking-wider px-1 block">{{ $t('warehouse.form.name') }} kiritilishi shart.</small>
+              </div>
 
-                <!-- Address -->
-                <div class="space-y-2 px-1 text-left">
-                  <label for="address" class="text-[9px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1 text-left">
-                    {{ $t('warehouse.form.address') }}
-                  </label>
-                  <div class="relative group text-left">
-                    <i class="pi pi-map-marker absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors text-sm sm:text-base"></i>
-                    <InputText
-                      id="address"
-                      v-model="warehouse.address"
-                      :placeholder="$t('warehouse.form.address_ph')"
-                      class="w-full !pl-11 !rounded-xl sm:!rounded-2xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 focus:!ring-4 focus:!ring-emerald-500/10 focus:!border-emerald-500 transition-all !py-3 sm:!py-4 font-semibold dark:!text-white text-sm sm:text-base"
-                    />
-                  </div>
-                </div>
-
-                <!-- Status -->
-                <div class="space-y-2 px-1 text-left">
-                  <label class="text-[9px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block px-1 text-left">
-                    {{ $t('warehouse.form.status') }}
-                  </label>
-                  <div class="flex gap-4">
-                    <button
-                      type="button"
-                      @click="warehouse.status = 'active'"
-                      class="flex-1 flex items-center justify-center gap-3 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 transition-all font-black text-[10px] uppercase tracking-widest"
-                      :class="warehouse.status === 'active' 
-                        ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
-                        : 'bg-transparent border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-600 hover:border-emerald-200 dark:hover:border-emerald-900/40'"
-                    >
-                      <i class="pi pi-check-circle"></i>
-                      {{ $t('warehouse.form.active') }}
-                    </button>
-                    <button
-                      type="button"
-                      @click="warehouse.status = 'inactive'"
-                      class="flex-1 flex items-center justify-center gap-3 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 transition-all font-black text-[10px] uppercase tracking-widest"
-                      :class="warehouse.status === 'inactive' 
-                        ? 'bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-500/20' 
-                        : 'bg-transparent border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-600 hover:border-rose-200 dark:hover:border-rose-900/40'"
-                    >
-                      <i class="pi pi-times-circle"></i>
-                      {{ $t('warehouse.form.inactive') }}
-                    </button>
-                  </div>
+              <!-- Address -->
+              <div class="space-y-1.5 focus-within:z-10 relative">
+                <label for="address" class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">
+                  {{ $t('warehouse.form.address') }}
+                </label>
+                <div class="relative group">
+                  <i class="pi pi-map-marker absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors text-xs"></i>
+                  <InputText
+                    id="address"
+                    v-model="warehouse.address"
+                    :placeholder="$t('warehouse.form.address_ph')"
+                    class="w-full !pl-10 !rounded-xl !bg-slate-50/50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 hover:!border-slate-300 dark:hover:!border-slate-600 focus:!ring-4 focus:!ring-emerald-500/10 focus:!border-emerald-500 transition-all !py-3 font-semibold dark:!text-white text-sm"
+                  />
                 </div>
               </div>
 
-              <!-- Footer Actions -->
-              <div class="flex flex-col sm:flex-row gap-4 pt-4 text-left">
-                <button
-                  @click="$emit('update:visible', false)"
-                  class="flex-1 px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[10px] sm:text-[11px] font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95"
-                >
-                  {{ $t('common.cancel') }}
-                </button>
-                <button
-                  @click="$emit('save')"
-                  :disabled="saving"
-                  class="flex-[2] px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] sm:text-[11px] font-black uppercase tracking-widest transition-all shadow-xl shadow-emerald-500/20 active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
-                >
-                  <i v-if="saving" class="pi pi-spin pi-spinner text-sm"></i>
-                  <i v-else class="pi pi-check text-sm"></i>
-                  {{ $t('common.save') }}
-                </button>
+              <!-- Status Selection -->
+              <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1 block">
+                  {{ $t('warehouse.form.status') }}
+                </label>
+                <div class="grid grid-cols-2 gap-3 p-1 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-700/50">
+                  <button
+                    type="button"
+                    @click="warehouse.status = 'active'"
+                    class="flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all text-[10px] font-bold uppercase tracking-widest"
+                    :class="warehouse.status === 'active' 
+                      ? 'bg-white dark:bg-slate-700 text-emerald-500 shadow-sm border border-slate-100 dark:border-slate-600' 
+                      : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'"
+                  >
+                    <div class="w-1.5 h-1.5 rounded-full" :class="warehouse.status === 'active' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300 dark:bg-slate-600'"></div>
+                    {{ $t('warehouse.form.active') }}
+                  </button>
+                  <button
+                    type="button"
+                    @click="warehouse.status = 'inactive'"
+                    class="flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all text-[10px] font-bold uppercase tracking-widest"
+                    :class="warehouse.status === 'inactive' 
+                      ? 'bg-white dark:bg-slate-700 text-rose-500 shadow-sm border border-slate-100 dark:border-slate-600' 
+                      : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'"
+                  >
+                    <div class="w-1.5 h-1.5 rounded-full" :class="warehouse.status === 'inactive' ? 'bg-rose-500' : 'bg-slate-300 dark:bg-slate-600'"></div>
+                    {{ $t('warehouse.form.inactive') }}
+                  </button>
+                </div>
               </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-5 bg-slate-50/50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800/50 flex gap-3">
+              <button
+                @click="$emit('update:visible', false)"
+                class="flex-1 h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest hover:bg-white dark:hover:bg-slate-800 transition-all active:scale-[0.98]"
+              >
+                {{ $t('common.cancel') }}
+              </button>
+              <button
+                @click="$emit('save')"
+                :disabled="saving"
+                class="flex-[2] h-11 px-4 rounded-xl bg-slate-900 dark:bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+              >
+                <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
+                <i v-else class="pi pi-check text-xs"></i>
+                {{ $t('common.save') }}
+              </button>
             </div>
           </div>
         </Transition>
@@ -152,14 +149,4 @@ defineEmits(['update:visible', 'save', 'hide'])
 </script>
 
 <style scoped>
-/* Dark mode overrides for internal PrimeVue components */
-.dark :deep(.p-inputtext) {
-  background-color: rgba(30, 41, 59, 0.4) !important;
-  border-color: rgba(51, 65, 85, 1) !important;
-  color: white !important;
-}
-
-.dark :deep(.p-inputtext::placeholder) {
-  color: rgba(100, 116, 139, 1) !important;
-}
 </style>
