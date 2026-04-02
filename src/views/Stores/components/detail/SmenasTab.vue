@@ -27,7 +27,11 @@
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div v-for="smena in currentShifts" :key="smena.id" class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-5 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+      <div 
+        v-for="smena in currentShifts" :key="smena.id" 
+        @click="$router.push({ name: 'shift-detail', params: { id: smena.id } })"
+        class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-5 shadow-sm hover:shadow-md transition-all cursor-pointer hover:border-emerald-500/30 relative overflow-hidden group"
+      >
         <!-- Status Badge -->
         <div class="absolute top-0 right-0 px-3 py-1 bg-slate-50 dark:bg-slate-800 text-[8px] font-black uppercase tracking-widest border-l border-b border-slate-100 dark:border-slate-700 rounded-bl-xl text-slate-400">
           {{ smena.status_display }}

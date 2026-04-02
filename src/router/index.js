@@ -67,6 +67,12 @@ const routes = [
                 meta: { permission: 'stores' }
             },
             {
+                path: 'shifts/:id',
+                name: 'shift-detail',
+                component: () => import('@/views/Shifts/Detail.vue'),
+                meta: { permission: 'stores' }
+            },
+            {
                 path: 'products',
                 name: 'products',
                 component: () => import('@/views/Products/index.vue'),

@@ -204,4 +204,9 @@ export const transfersAPI = {
     cancel: (id) => api.post(`/warehouse/transfers/${id}/cancel/`, {})
 }
 
+// Shifts API
+export const shiftsAPI = {
+    getXReport: (id) => api.get(`/shifts/${id}/x-report/`)
+}
+
 export default api
