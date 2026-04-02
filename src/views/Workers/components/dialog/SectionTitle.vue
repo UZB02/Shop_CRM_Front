@@ -1,7 +1,9 @@
 <template>
-  <div class="flex items-center gap-3 mb-3">
-    <span class="w-1.5 h-6 rounded-full" :class="barColor"></span>
-    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">{{ label }}</h3>
+  <div class="flex items-center gap-3 mb-4 font-inter">
+    <span class="w-1 h-5 rounded-full" :class="barColor"></span>
+    <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+      {{ label }}
+    </h3>
   </div>
 </template>
 
@@ -13,7 +15,7 @@ const props = defineProps({
 })
 const barColor = computed(() => ({
   'bg-emerald-500': props.color === 'emerald',
-  'bg-slate-300':  props.color === 'slate',
+  'bg-slate-300 dark:bg-slate-700':  props.color === 'slate',
   'bg-blue-500':   props.color === 'blue',
 }))
 </script>

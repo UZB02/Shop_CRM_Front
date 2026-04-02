@@ -1,39 +1,35 @@
 <template>
-  <div class="rounded-3xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 p-5 flex flex-col min-h-0">
-
-
+  <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 flex flex-col min-h-0 font-inter h-full">
     <!-- Login form (visible when enabled) -->
     <Transition name="fade-slide">
       <div v-if="createLogin" class="flex-1 flex flex-col min-h-0">
-        <div class="space-y-4">
+        <div class="space-y-6">
           <FormField :label="$t('workers.form.username')">
-            <div class="p-input-icon-left w-full">
-              <InputText v-model="worker.username"
-                         class="sr-input"
-                         placeholder="username" />
-            </div>
+            <InputText v-model="worker.username"
+                       class="sr-input"
+                       placeholder="username" />
           </FormField>
 
           <FormField v-if="!worker.id" :label="$t('workers.form.password')">
-            <div class="p-input-icon-left w-full">
-              <Password v-model="worker.password"
-                        toggleMask
-                        :feedback="false"
-                        inputClass="sr-input !pl-10"
-                        class="w-full"
-                        placeholder="••••••••" />
-            </div>
+            <Password v-model="worker.password"
+                      toggleMask
+                      :feedback="false"
+                      inputClass="sr-input !pl-10"
+                      class="w-full"
+                      placeholder="••••••••" />
           </FormField>
         </div>
 
         <!-- Permissions List -->
-        <PermissionsList
-          :selectedPermissions="worker.permissions || []"
-          :allSelected="allSelected"
-          :selectedCount="selectedCount"
-          @toggle="togglePermission"
-          @toggle-all="toggleAll"
-        />
+        <div class="mt-8 flex-1 flex flex-col min-h-0">
+          <PermissionsList
+            :selectedPermissions="worker.permissions || []"
+            :allSelected="allSelected"
+            :selectedCount="selectedCount"
+            @toggle="togglePermission"
+            @toggle-all="toggleAll"
+          />
+        </div>
       </div>
     </Transition>
 
@@ -41,12 +37,12 @@
     <Transition name="fade">
       <div v-if="!createLogin"
            class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4 opacity-40">
-        <div class="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shadow-inner">
+        <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-700">
           <i class="pi pi-lock text-3xl text-slate-400"></i>
         </div>
         <div>
           <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">{{ $t('workers.form.access_denied') }}</p>
-          <p class="text-xs text-slate-400 mt-1 max-w-[160px]">
+          <p class="text-[11px] font-medium text-slate-400 mt-2 max-w-[200px] leading-relaxed">
             {{ $t('workers.form.access_enable_desc') }}
           </p>
         </div>
@@ -56,13 +52,11 @@
 </template>
 
 <script setup>
-import InputSwitch from 'primevue/inputswitch'
 import InputText  from 'primevue/inputtext'
 import Password   from 'primevue/password'
 import FormField      from './FormField.vue'
 import PermissionsList from './PermissionsList.vue'
 import { useWorkerPermissions } from '../../composables/useWorkerPermissions.js'
-import { computed } from 'vue'
 
 const props = defineProps({
   worker:      { type: Object,  required: true },

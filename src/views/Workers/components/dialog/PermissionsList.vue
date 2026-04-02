@@ -1,16 +1,16 @@
 <template>
-  <div class="mt-4 flex flex-col min-h-0 overflow-hidden">
-    <!-- Header: sarlavha + count + select-all -->
-    <div class="flex items-center justify-between mb-3">
+  <div class="flex flex-col min-h-0 overflow-hidden font-inter">
+    <!-- Header: title + count + select-all -->
+    <div class="flex items-center justify-between mb-4 px-1">
       <div class="flex items-center gap-2">
-        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('workers.form.permissions') }}</span>
-        <span class="px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 text-[9px] font-black">
+        <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('workers.form.permissions') }}</span>
+        <span class="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[10px] font-black">
           {{ selectedCount }}/{{ total }}
         </span>
       </div>
       <button
-        class="text-[9px] font-black uppercase tracking-widest transition-colors"
-        :class="allSelected ? 'text-rose-400 hover:text-rose-300' : 'text-emerald-400 hover:text-emerald-300'"
+        class="text-[10px] font-black uppercase tracking-widest transition-all hover:opacity-80 active:scale-95"
+        :class="allSelected ? 'text-rose-400' : 'text-emerald-500'"
         @click="$emit('toggle-all')"
       >
         {{ allSelected ? $t('workers.form.unselect_all') : $t('workers.form.select_all') }}
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Permissions list -->
-    <div class="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar-thin pr-1 max-h-[300px]">
+    <div class="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar transition-all pr-1 min-h-[300px]">
       <PermissionItem
         v-for="perm in permissionsList"
         :key="perm.value"
@@ -46,12 +46,8 @@ defineEmits(['toggle', 'toggle-all'])
 </script>
 
 <style scoped>
-.custom-scrollbar-thin::-webkit-scrollbar { width: 3px; }
-.custom-scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-.dark .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #1e293b;
-}
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
 </style>

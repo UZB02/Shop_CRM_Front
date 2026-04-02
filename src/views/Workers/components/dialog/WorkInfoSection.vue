@@ -1,8 +1,8 @@
 <template>
-  <section>
+  <section class="font-inter">
     <SectionTitle :label="$t('workers.form.work_info')" color="slate" />
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
       <FormField :label="$t('workers.form.branch')">
         <Select v-model="worker.branch"
                   :options="branches"
@@ -21,12 +21,12 @@
       </FormField>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6 mt-6">
       <FormField :label="$t('workers.form.salary')">
         <InputNumber v-model="worker.salary"
                      mode="decimal"
                      class="sr-number"
-                     inputClass="!text-emerald-500 dark:!text-emerald-400 !font-black"
+                     inputClass="!text-emerald-500 !font-black !py-3 !px-4"
                      placeholder="0" />
       </FormField>
       <FormField :label="$t('workers.form.status')">
