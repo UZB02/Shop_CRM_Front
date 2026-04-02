@@ -173,7 +173,7 @@ const {
   .bg-slate-50\/50, .dark\:bg-\[\#0B0F19\] { background-color: white !important; }
   .p-4, .p-6, .p-8 { padding: 0 !important; }
   button, i.pi-arrow-left { display: none !important; }
-  .shadow-sm, .shadow-xl { shadow: none !important; border: 1px solid #ddd !important; border-radius: 0 !important; }
+  .shadow-sm, .shadow-xl { box-shadow: none !important; border: 1px solid #ddd !important; border-radius: 0 !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 </style>
