@@ -163,7 +163,8 @@ export const warehousesAPI = {
     getById: (id) => api.get(`/warehouse/warehouses/${id}/`),
     create: (data) => api.post('/warehouse/warehouses/', data),
     update: (id, data) => api.patch(`/warehouse/warehouses/${id}/`, data),
-    delete: (id) => api.delete(`/warehouse/warehouses/${id}/`)
+    delete: (id) => api.delete(`/warehouse/warehouses/${id}/`),
+    getTransfers: (id, params) => api.get(`/warehouse/warehouses/${id}/transfers/`, { params })
 }
 
 // Stock Movements API

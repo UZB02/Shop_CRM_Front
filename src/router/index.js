@@ -67,6 +67,12 @@ const routes = [
                 meta: { permission: 'stores' }
             },
             {
+                path: 'branches/:id/transfer/create',
+                name: 'branch-transfer-create',
+                component: () => import('@/views/Warehouse/TransferCreate.vue'),
+                meta: { permission: 'stores' }
+            },
+            {
                 path: 'shifts/:id',
                 name: 'shift-detail',
                 component: () => import('@/views/Shifts/Detail.vue'),
@@ -160,6 +166,12 @@ const routes = [
                 path: 'warehouse/:id/bulk',
                 name: 'warehouse-bulk',
                 component: () => import('@/views/Warehouse/BulkMovement.vue'),
+                meta: { permission: 'warehouse' }
+            },
+            {
+                path: 'warehouse/:id/transfer/create',
+                name: 'warehouse-transfer-create',
+                component: () => import('@/views/Warehouse/TransferCreate.vue'),
                 meta: { permission: 'warehouse' }
             },
             {

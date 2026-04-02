@@ -43,6 +43,24 @@ export function useTransfers() {
         }
     }
 
+    const fetchWarehouseTransfers = async (warehouseId, params = {}) => {
+        loading.value = true
+        try {
+            const res = await warehousesAPI.getTransfers(warehouseId, params)
+            transfers.value = res.data.results || res.data
+        } catch (error) {
+            console.error('Error fetching warehouse transfers:', error)
+            toast.add({
+                severity: 'error',
+                summary: t('common.error'),
+                detail: t('common.error_message'),
+                life: 3000
+            })
+        } finally {
+            loading.value = false
+        }
+    }
+
     const fetchLocations = async () => {
         try {
             const [wRes, bRes] = await Promise.all([
@@ -189,6 +207,7 @@ export function useTransfers() {
         warehouses,
         branches,
         fetchTransfers,
+        fetchWarehouseTransfers,
         fetchLocations,
         createTransfer,
         confirmTransfer,

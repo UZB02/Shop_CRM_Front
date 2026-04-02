@@ -1,127 +1,155 @@
 <template>
-  <div class="space-y-6">
-    <!-- Header with Action -->
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
-          <i class="pi pi-sync text-emerald-500 text-sm"></i>
-        </div>
-        <div>
-          <h3 class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">O'tkazmalar (Transfers)</h3>
-          <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Joylar orasida mahsulot harakati</p>
-        </div>
-      </div>
-      <button 
-        @click="openNewTransferAction"
-        class="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-2"
+  <div class="flex flex-col gap-4">
+
+    <!-- Status filter tabs -->
+    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+      <button
+        v-for="s in statusOptions"
+        :key="s.id"
+        @click="activeStatus = s.id"
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap"
+        :class="activeStatus === s.id
+          ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm'
+          : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-700 dark:hover:text-slate-200'"
       >
-        <i class="pi pi-plus text-[10px]"></i>
-        O'tkazma yaratish
+        {{ s.label }}
+        <span
+          class="text-xs px-1.5 py-0.5 rounded-full font-semibold"
+          :class="activeStatus === s.id
+            ? 'bg-white/20 dark:bg-black/20 text-inherit'
+            : 'bg-slate-100 dark:bg-slate-800 text-slate-400'"
+        >{{ s.count }}</span>
       </button>
     </div>
 
-    <!-- Status Filters -->
-    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
-      <button 
-        v-for="status in statusOptions" :key="status.id"
-        @click="activeStatus = status.id"
-        class="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap"
-        :class="activeStatus === status.id 
-          ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/10' 
-          : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800'"
-      >
-        {{ status.label }}
-        <span v-if="status.count" class="ml-2 px-1.5 py-0.5 rounded-md bg-white/20 text-[9px]">{{ status.count }}</span>
-      </button>
-    </div>
+    <!-- Table card -->
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
 
-    <!-- Transfer List -->
-    <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px] relative">
-      <div v-if="loading" class="absolute inset-0 z-20 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm flex items-center justify-center">
-        <i class="pi pi-spin pi-spinner text-emerald-500 text-2xl"></i>
-      </div>
-
-      <div v-if="!filteredTransfers.length && !loading" class="flex flex-col items-center justify-center py-20 opacity-40">
-        <div class="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-4">
-          <i class="pi pi-sync text-2xl text-slate-300"></i>
+      <!-- Loading overlay -->
+      <div v-if="loading" class="divide-y divide-slate-100 dark:divide-slate-800">
+        <div v-for="n in 4" :key="n" class="flex items-center gap-4 px-6 py-4">
+          <div class="h-4 w-32 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></div>
+          <div class="h-4 flex-1 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></div>
+          <div class="h-4 flex-1 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></div>
+          <div class="h-6 w-20 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+          <div class="h-8 w-24 bg-slate-100 dark:bg-slate-800 rounded-lg animate-pulse"></div>
         </div>
-        <p class="text-[10px] font-black uppercase tracking-widest">O'tkazmalar topilmadi</p>
       </div>
 
+      <!-- Empty state -->
+      <div
+        v-else-if="!filteredTransfers.length"
+        class="flex flex-col items-center justify-center py-16 text-center"
+      >
+        <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+          <i class="pi pi-arrows-h text-slate-400 text-xl"></i>
+        </div>
+        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">O'tkazmalar topilmadi</p>
+        <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">
+          {{ activeStatus !== 'all' ? 'Bu holatda o\'tkazmalar yo\'q' : 'Hali birorta o\'tkazma yaratilmagan' }}
+        </p>
+      </div>
+
+      <!-- Transfers table -->
       <div v-else class="overflow-x-auto custom-scrollbar">
-        <table class="w-full text-left border-collapse min-w-[800px]">
+        <table class="w-full text-sm text-left min-w-[780px]">
           <thead>
-            <tr class="bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-100 dark:border-slate-800">Sana</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-100 dark:border-slate-800">Qayerdan</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-100 dark:border-slate-800">Qayerga</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-100 dark:border-slate-800 text-center">Mahsulotlar</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-100 dark:border-slate-800 text-center">Holati</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-100 dark:border-slate-800 text-right">Amallar</th>
+            <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30">
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">ID / Sana</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Yo'nalish</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Mahsulot</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Xodim</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Holat</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-right">Amallar</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
-            <tr v-for="t in filteredTransfers" :key="t.id" class="group hover:bg-emerald-500/[0.02] transition-colors">
-              <td class="px-6 py-5">
-                <div class="flex flex-col">
-                  <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 tracking-tight">{{ formatDate(t.created_at) }}</span>
-                  <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ID: #{{ t.id }}</span>
-                </div>
+          <tbody class="divide-y divide-slate-50 dark:divide-slate-800/60">
+            <tr
+              v-for="t in filteredTransfers"
+              :key="t.id"
+              class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors group"
+            >
+              <!-- ID / Date -->
+              <td class="px-5 py-3.5">
+                <div class="font-medium text-slate-700 dark:text-slate-300 text-xs">#{{ t.id }}</div>
+                <div class="text-xs text-slate-400 mt-0.5">{{ t.created_on }}</div>
               </td>
-              <td class="px-6 py-5">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" 
-                    :class="t.from_branch ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'"
-                  >
-                    <i class="pi" :class="t.from_branch ? 'pi-building' : 'pi-box'"></i>
+
+              <!-- Direction: From → To -->
+              <td class="px-5 py-3.5">
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-1.5">
+                    <i class="pi text-xs"
+                      :class="[
+                        locationIcon(t.from_location_type),
+                        t.from_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500'
+                      ]"
+                    ></i>
+                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ t.from_location_name }}</span>
                   </div>
-                  <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-tight">{{ t.from_branch_name || t.from_warehouse_name }}</span>
-                </div>
-              </td>
-              <td class="px-6 py-5">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" 
-                    :class="t.to_branch ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'"
-                  >
-                    <i class="pi" :class="t.to_branch ? 'pi-building' : 'pi-box'"></i>
+                  <i class="pi pi-arrow-right text-[10px] text-slate-300 dark:text-slate-600 shrink-0"></i>
+                  <div class="flex items-center gap-1.5">
+                    <i class="pi text-xs"
+                      :class="[
+                        locationIcon(t.to_location_type),
+                        t.to_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500'
+                      ]"
+                    ></i>
+                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ t.to_location_name }}</span>
                   </div>
-                  <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-tight">{{ t.to_branch_name || t.to_warehouse_name }}</span>
                 </div>
               </td>
-              <td class="px-6 py-5 text-center">
-                <span class="text-[10px] font-black px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">{{ t.total_items || (t.items?.length || 0) }} dona</span>
+
+              <!-- Item count -->
+              <td class="px-5 py-3.5 text-center">
+                <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                  {{ t.item_count ?? t.items?.length ?? 0 }} dona
+                </span>
               </td>
-              <td class="px-6 py-5">
+
+              <!-- Worker -->
+              <td class="px-5 py-3.5">
+                <span class="text-xs text-slate-500 dark:text-slate-400">{{ t.worker_name || '—' }}</span>
+              </td>
+
+              <!-- Status -->
+              <td class="px-5 py-3.5">
                 <div class="flex justify-center">
-                  <span class="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5"
+                  <span
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
                     :class="statusClass(t.status)"
                   >
-                    <div class="w-1 h-1 rounded-full bg-current" :class="t.status === 'pending' ? 'animate-pulse' : ''"></div>
-                    {{ t.status }}
+                    <span class="w-1.5 h-1.5 rounded-full bg-current"
+                      :class="t.status === 'pending' ? 'animate-pulse' : ''"></span>
+                    {{ t.status_display || t.status }}
                   </span>
                 </div>
               </td>
-              <td class="px-6 py-5 text-right">
-                <div class="flex items-center justify-end gap-2">
-                  <button 
+
+              <!-- Actions -->
+              <td class="px-5 py-3.5">
+                <div class="flex items-center justify-end gap-1.5">
+                  <button
                     @click="viewDetail(t)"
-                    class="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-emerald-500 transition-all flex items-center justify-center"
                     v-tooltip.top="'Batafsil'"
+                    class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center"
                   >
-                    <i class="pi pi-eye text-[10px]"></i>
+                    <i class="pi pi-eye text-xs"></i>
                   </button>
                   <template v-if="t.status === 'pending'">
-                    <button 
+                    <button
                       @click="confirmAction(t)"
-                      class="px-3 py-1.5 rounded-lg bg-emerald-500 text-white text-[9px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/10 active:scale-95"
+                      v-tooltip.top="'Tasdiqlash'"
+                      class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-all flex items-center justify-center"
                     >
-                      Tasdiqlash
+                      <i class="pi pi-check text-xs"></i>
                     </button>
-                    <button 
+                    <button
                       @click="cancelAction(t)"
-                      class="px-3 py-1.5 rounded-lg bg-rose-500 text-white text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all shadow-md shadow-rose-500/10 active:scale-95"
+                      v-tooltip.top="'Bekor qilish'"
+                      class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-all flex items-center justify-center"
                     >
-                      Bekor qilish
+                      <i class="pi pi-times text-xs"></i>
                     </button>
                   </template>
                 </div>
@@ -132,91 +160,154 @@
       </div>
     </div>
 
-    <!-- Detail Dialog -->
-    <Dialog 
-      v-model:visible="detailDialog" 
-      modal 
-      header=" "
+    <!-- ===== DETAIL DIALOG ===== -->
+    <Dialog
+      v-model:visible="detailDialog"
+      modal
       :showHeader="false"
-      class="!bg-white dark:!bg-slate-900 !rounded-[2.5rem] !border-none !shadow-2xl overflow-hidden" 
-      style="width: 100%; max-width: 600px;"
+      style="width: 100%; max-width: 520px;"
+      pt:root:class="!rounded-2xl !border-none !shadow-2xl overflow-hidden"
       pt:mask:class="backdrop-blur-sm bg-black/40"
     >
-      <div v-if="selectedTransfer" class="flex flex-col bg-white dark:bg-slate-900">
-        <div class="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <div v-if="selectedTransfer" class="flex flex-col">
+
+        <!-- Dialog Header -->
+        <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <h3 class="text-lg font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">O'tkazma Tafsiloti</h3>
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ID: #{{ selectedTransfer.id }} | {{ formatDate(selectedTransfer.created_at) }}</p>
+            <div class="flex items-center gap-2">
+              <span class="text-base font-bold text-slate-800 dark:text-slate-100">O'tkazma #{{ selectedTransfer.id }}</span>
+              <span
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
+                :class="statusClass(selectedTransfer.status)"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-current"
+                  :class="selectedTransfer.status === 'pending' ? 'animate-pulse' : ''"></span>
+                {{ selectedTransfer.status_display || selectedTransfer.status }}
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">{{ selectedTransfer.created_on }}</p>
           </div>
-          <button @click="detailDialog = false" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
-            <i class="pi pi-times text-[10px]"></i>
+          <button
+            @click="detailDialog = false"
+            class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+          >
+            <i class="pi pi-times text-xs"></i>
           </button>
         </div>
 
-        <div class="p-8 space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar">
-          <!-- Flow Visualization -->
-          <div class="flex items-center justify-between p-6 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
-            <div class="text-center flex flex-col items-center gap-2">
-              <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center shadow-sm">
-                <i class="pi" :class="selectedTransfer.from_branch ? 'pi-building text-amber-500' : 'pi-box text-emerald-500'"></i>
+        <div class="p-6 space-y-5 max-h-[65vh] overflow-y-auto no-scrollbar">
+
+          <!-- From → To flow -->
+          <div class="flex items-center gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/60">
+            <div class="flex-1 flex flex-col items-center gap-1.5 text-center">
+              <div class="w-9 h-9 rounded-lg bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 flex items-center justify-center shadow-sm">
+                <i class="pi text-sm"
+                  :class="[
+                    locationIcon(selectedTransfer.from_location_type),
+                    selectedTransfer.from_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500'
+                  ]"
+                ></i>
               </div>
-              <span class="text-[9px] font-black uppercase tracking-tight text-slate-700 dark:text-slate-200">{{ selectedTransfer.from_branch_name || selectedTransfer.from_warehouse_name }}</span>
-            </div>
-            
-            <div class="flex-grow flex flex-col items-center gap-1 mx-4">
-              <div class="relative w-full h-px bg-slate-200 dark:bg-slate-700">
-                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 border-t border-r border-slate-300 dark:border-slate-600 rotate-45"></div>
+              <div>
+                <div class="text-xs font-semibold text-slate-700 dark:text-slate-200">{{ selectedTransfer.from_location_name }}</div>
+                <div class="text-[10px] text-slate-400 capitalize">{{ selectedTransfer.from_location_type }}</div>
               </div>
-              <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">{{ selectedTransfer.status }}</span>
             </div>
 
-            <div class="text-center flex flex-col items-center gap-2">
-              <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center shadow-sm">
-                <i class="pi" :class="selectedTransfer.to_branch ? 'pi-building text-amber-500' : 'pi-box text-emerald-500'"></i>
+            <div class="flex flex-col items-center gap-1 shrink-0">
+              <div class="flex items-center gap-1">
+                <div class="w-8 h-px bg-slate-300 dark:bg-slate-600"></div>
+                <i class="pi pi-arrow-right text-[10px] text-slate-400"></i>
+                <div class="w-8 h-px bg-slate-300 dark:bg-slate-600"></div>
               </div>
-              <span class="text-[9px] font-black uppercase tracking-tight text-slate-700 dark:text-slate-200">{{ selectedTransfer.to_branch_name || selectedTransfer.to_warehouse_name }}</span>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center gap-1.5 text-center">
+              <div class="w-9 h-9 rounded-lg bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 flex items-center justify-center shadow-sm">
+                <i class="pi text-sm"
+                  :class="[
+                    locationIcon(selectedTransfer.to_location_type),
+                    selectedTransfer.to_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500'
+                  ]"
+                ></i>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-700 dark:text-slate-200">{{ selectedTransfer.to_location_name }}</div>
+                <div class="text-[10px] text-slate-400 capitalize">{{ selectedTransfer.to_location_type }}</div>
+              </div>
             </div>
           </div>
 
-          <!-- Items Table -->
-          <div class="space-y-3">
-            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Mahsulotlar Ro'yxati</h4>
-            <div class="rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
-               <table class="w-full text-left border-collapse">
-                 <thead class="bg-slate-50 dark:bg-slate-800/50">
-                   <tr>
-                     <th class="px-4 py-3 text-[8px] font-black uppercase tracking-widest text-slate-400">Mahsulot</th>
-                     <th class="px-4 py-3 text-[8px] font-black uppercase tracking-widest text-slate-400 text-center">Miqdor</th>
-                   </tr>
-                 </thead>
-                 <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50 text-[10px]">
-                   <tr v-for="item in selectedTransfer.items" :key="item.id" class="dark:bg-slate-900/40">
-                     <td class="px-4 py-3 font-bold text-slate-700 dark:text-slate-200">{{ item.product_name }} <span class="block text-[8px] text-slate-400">{{ item.barcode }}</span></td>
-                     <td class="px-4 py-3 font-black text-emerald-500 text-center">{{ item.quantity }}</td>
-                   </tr>
-                 </tbody>
-               </table>
+          <!-- Items list -->
+          <div>
+            <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
+              Mahsulotlar ({{ selectedTransfer.items?.length ?? selectedTransfer.item_count ?? 0 }})
+            </h4>
+            <div class="rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                    <th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400">Mahsulot</th>
+                    <th class="px-4 py-2.5 text-right text-xs font-semibold text-slate-400">Miqdor</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
+                  <tr
+                    v-for="item in selectedTransfer.items"
+                    :key="item.product_id"
+                    class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
+                  >
+                    <td class="px-4 py-2.5">
+                      <span class="font-medium text-slate-700 dark:text-slate-200">{{ item.product_name }}</span>
+                      <span v-if="item.product_unit" class="ml-1.5 text-xs text-slate-400">{{ item.product_unit }}</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-right font-semibold text-emerald-600 dark:text-emerald-400">
+                      {{ item.quantity }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Meta info row -->
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div v-if="selectedTransfer.worker_name"
+              class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"
+            >
+              <div class="text-xs text-slate-400 mb-0.5">Xodim</div>
+              <div class="font-medium text-slate-700 dark:text-slate-200">{{ selectedTransfer.worker_name }}</div>
+            </div>
+            <div v-if="selectedTransfer.confirmed_at"
+              class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20"
+            >
+              <div class="text-xs text-emerald-600 dark:text-emerald-400 mb-0.5">Tasdiqlangan vaqt</div>
+              <div class="font-medium text-slate-700 dark:text-slate-200">{{ selectedTransfer.confirmed_at }}</div>
             </div>
           </div>
 
           <!-- Note -->
-          <div v-if="selectedTransfer.note" class="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/10">
-            <h5 class="text-[8px] font-black text-amber-600 uppercase tracking-widest mb-1">Izoh</h5>
-            <p class="text-[10px] font-bold text-slate-600 dark:text-slate-400">{{ selectedTransfer.note }}</p>
+          <div v-if="selectedTransfer.note"
+            class="flex gap-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20"
+          >
+            <i class="pi pi-info-circle text-amber-500 mt-0.5 shrink-0"></i>
+            <p class="text-sm text-slate-600 dark:text-slate-300">{{ selectedTransfer.note }}</p>
           </div>
         </div>
 
-        <!-- Footer Actions if pending -->
-        <div v-if="selectedTransfer.status === 'pending'" class="p-8 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
-          <button 
+        <!-- Footer actions -->
+        <div v-if="selectedTransfer.status === 'pending'"
+          class="flex items-center gap-2 px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30"
+        >
+          <button
             @click="cancelAction(selectedTransfer); detailDialog = false"
-            class="flex-1 py-3 rounded-xl bg-rose-500 text-white text-[9px] font-black uppercase tracking-widest hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-rose-500/10"
+            class="flex-1 h-9 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 dark:hover:border-rose-500/30 text-sm font-medium transition-all"
           >
             Bekor qilish
           </button>
-          <button 
+          <button
             @click="confirmAction(selectedTransfer); detailDialog = false"
-            class="flex-[2] py-3 rounded-xl bg-emerald-500 text-white text-[9px] font-black uppercase tracking-widest hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-emerald-500/10"
+            class="flex-[2] h-9 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition-all"
           >
             Tasdiqlash
           </button>
@@ -225,7 +316,7 @@
     </Dialog>
 
     <!-- New Transfer Dialog -->
-    <TransferNewDialog 
+    <TransferNewDialog
       v-model="transferDialog"
       :form="transferForm"
       :sub-loading="subLoading"
@@ -241,113 +332,100 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useTransfers } from '@/composables/useTransfers'
 import TransferNewDialog from './TransferNewDialog.vue'
 import Dialog from 'primevue/dialog'
 
 const props = defineProps({
   sourceId: [Number, String],
-  sourceType: String, // 'branch' or 'warehouse'
+  sourceType: String,
   sourceName: String,
   availableProducts: Array
 })
+
+const emit = defineEmits(['pending-count'])
 
 const {
   transfers, loading, subLoading,
   transferDialog, transferForm,
   warehouses, branches,
-  fetchTransfers, createTransfer, confirmTransfer, cancelTransfer, openNewTransfer
+  fetchTransfers, fetchWarehouseTransfers,
+  createTransfer, confirmTransfer, cancelTransfer, openNewTransfer
 } = useTransfers()
 
 const activeStatus = ref('all')
 const detailDialog = ref(false)
 const selectedTransfer = ref(null)
 
-const statusOptions = [
-  { id: 'all', label: 'Barchasi' },
-  { id: 'pending', label: 'Kutilmoqda' },
-  { id: 'confirmed', label: 'Tasdiqlangan' },
-  { id: 'cancelled', label: 'Bekor qilingan' }
-]
-
-const filteredTransfers = computed(() => {
-  let list = transfers.value
-  
-  // Filter by source location if sourceId is provided
-  // We want to see transfers WHERE this location is EITHER Source OR Destination
-  if (props.sourceId) {
-    const sid = String(props.sourceId)
-    list = list.filter(t => {
-        if (props.sourceType === 'branch') {
-            return String(t.from_branch) === sid || String(t.to_branch) === sid
-        } else {
-            return String(t.from_warehouse) === sid || String(t.to_warehouse) === sid
-        }
-    })
-  }
-
-  if (activeStatus.value !== 'all') {
-    list = list.filter(t => t.status === activeStatus.value)
-  }
-  
-  return list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+const statusOptions = computed(() => {
+  const pending = transfers.value.filter(t => t.status === 'pending').length
+  emit('pending-count', pending)
+  return [
+    { id: 'all',       label: 'Barchasi',       count: transfers.value.length },
+    { id: 'pending',   label: 'Kutilmoqda',     count: pending },
+    { id: 'confirmed', label: 'Tasdiqlangan',   count: transfers.value.filter(t => t.status === 'confirmed').length },
+    { id: 'cancelled', label: 'Bekor qilingan', count: transfers.value.filter(t => t.status === 'cancelled').length }
+  ]
 })
 
-const openNewTransferAction = () => {
-    openNewTransfer({ id: props.sourceId, type: props.sourceType })
+const filteredTransfers = computed(() => {
+  if (activeStatus.value === 'all') return transfers.value
+  return transfers.value.filter(t => t.status === activeStatus.value)
+})
+
+const loadTransfers = () => {
+  if (props.sourceType === 'warehouse' && props.sourceId) {
+    fetchWarehouseTransfers(props.sourceId)
+  } else {
+    fetchTransfers()
+  }
 }
 
 const handleCreateTransfer = async () => {
-    const success = await createTransfer()
-    if (success) {
-        fetchTransfers()
-    }
+  const success = await createTransfer()
+  if (success) loadTransfers()
 }
 
 const confirmAction = async (t) => {
-    const success = await confirmTransfer(t.id)
-    if (success) {
-        fetchTransfers()
-    }
+  const success = await confirmTransfer(t.id)
+  if (success) loadTransfers()
 }
 
 const cancelAction = async (t) => {
-    const success = await cancelTransfer(t.id)
-    if (success) {
-        fetchTransfers()
-    }
+  const success = await cancelTransfer(t.id)
+  if (success) loadTransfers()
 }
 
 const viewDetail = (t) => {
-    selectedTransfer.value = t
-    detailDialog.value = true
+  selectedTransfer.value = t
+  detailDialog.value = true
 }
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '-'
-  try {
-    const d = new Date(dateStr)
-    return d.toLocaleString('uz-UZ', { 
-        year: 'numeric', month: 'short', day: '2-digit', 
-        hour: '2-digit', minute: '2-digit' 
-    })
-  } catch (e) {
-    return dateStr
-  }
+  return dateStr
+}
+
+const locationIcon = (locationType) => {
+  return locationType === 'branch' ? 'pi-building' : 'pi-box'
+}
+
+const locationIconBg = (locationType) => {
+  return locationType === 'branch' ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'
 }
 
 const statusClass = (status) => {
   switch (status) {
-    case 'pending': return 'bg-amber-500/10 text-amber-600'
-    case 'confirmed': return 'bg-emerald-500/10 text-emerald-600'
-    case 'cancelled': return 'bg-rose-500/10 text-rose-600'
-    default: return 'bg-slate-500/10 text-slate-600'
+    case 'pending':   return 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400'
+    case 'confirmed': return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
+    case 'cancelled': return 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
+    default:          return 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
   }
 }
 
 onMounted(() => {
-  fetchTransfers()
+  loadTransfers()
 })
 </script>
 
