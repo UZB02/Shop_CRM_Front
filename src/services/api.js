@@ -1,9 +1,18 @@
 import axios from 'axios'
+import router from '@/router'
 
-// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL ||
-    "https://shopcrmsystem-production.up.railway.app/api/v1";
+    "https://shopcrmsystem-production.up.railway.app/api/v1"
+
+// In-memory token store — primary source of truth for the active session.
+// localStorage is only used as a fallback on page refresh (persisted by auth store).
+// NOTE: HttpOnly cookies (set by the backend) would fully eliminate XSS token exposure,
+// but that requires backend changes. This is the best mitigation achievable on the frontend.
+let _memToken = null
+
+export const setApiToken = (token) => { _memToken = token }
+export const clearApiToken = () => { _memToken = null }
 
 // Create axios instance
 const api = axios.create({
@@ -13,15 +22,13 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token')
+        const token = _memToken || localStorage.getItem('token')
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
         }
         return config
     },
-    (error) => {
-        return Promise.reject(error)
-    }
+    (error) => Promise.reject(error)
 )
 
 // Response interceptor to handle errors and warnings
@@ -36,16 +43,16 @@ api.interceptors.response.use(
     },
     (error) => {
         if (error.response?.status === 401) {
-            // Token expired or invalid - Clear all except preferences
+            // Token expired or invalid — clear session data
+            clearApiToken()
             const preservedKeys = ['theme', 'lang']
             Object.keys(localStorage).forEach(key => {
                 if (!preservedKeys.includes(key)) {
                     localStorage.removeItem(key)
                 }
             })
-
-            // Redirect to login
-            window.location.href = '/login'
+            // Use Vue Router instead of hard redirect to preserve SPA state
+            router.push({ name: 'login' })
         }
         return Promise.reject(error)
     }

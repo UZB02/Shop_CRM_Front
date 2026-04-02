@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/store/auth'
 
 const routes = [
     {
@@ -202,69 +203,62 @@ const router = createRouter({
 })
 
 // Global Navigation Guard
-router.beforeEach((to, from, next) => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
-    const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+//
+// Security model:
+//  1. authStore.userPermissions is in-memory (Pinia state) — cannot be spoofed via localStorage.
+//  2. On the first protected navigation each browser session, verifySession() calls /auth/me
+//     and writes server-verified permissions into memory. After that, sessionVerified = true
+//     and subsequent navigations are instant (no extra API call).
+//  3. If /auth/me returns 401 the user is logged out regardless of what localStorage contains.
+router.beforeEach(async (to, from, next) => {
+    const authStore = useAuthStore()
+    const isLoggedIn = !!authStore.token
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth !== false)
 
-    // Check authentication
-    if (requiresAuth && !isLoggedIn) {
+    // Public routes — let through
+    if (to.meta.requiresAuth === false) {
+        if (isLoggedIn && (to.name === 'login' || to.name === 'register')) {
+            next({ name: 'dashboard' })
+        } else {
+            next()
+        }
+        return
+    }
+
+    // Not logged in — redirect to login
+    if (!isLoggedIn) {
         next({ name: 'login' })
         return
     }
 
-    // Check permissions for protected routes
-    if (to.meta.permission) {
-        const userStr = localStorage.getItem('user')
-        const permissionsStr = localStorage.getItem('permissions')
-
-        if (!userStr) {
-            next({ name: 'unauthorized' })
+    // First protected navigation: verify token with the server.
+    // This replaces the localStorage-bootstrapped permissions with server-verified ones.
+    if (!authStore.sessionVerified) {
+        const ok = await authStore.verifySession()
+        if (!ok) {
+            next({ name: 'login' })
             return
         }
+    }
 
-        const user = JSON.parse(userStr)
-        let userPermissions = []
+    // No permission requirement on this route — allow
+    if (!to.meta.permission) {
+        next()
+        return
+    }
 
-        // 1. Check if user has specific permissions (New System)
-        if (permissionsStr) {
-            try {
-                const permissions = JSON.parse(permissionsStr)
-                if (Array.isArray(permissions)) {
-                    userPermissions = permissions
-                } else {
-                    const userRole = user.role || 'superadmin'
-                    userPermissions = permissions[userRole] || []
-                }
-            } catch (e) {
-                console.error('Error parsing permissions', e)
+    // Check in-memory (server-verified) permissions
+    if (!authStore.hasAccess(to.meta.permission)) {
+        // If blocked on dashboard, redirect to first accessible module instead
+        if (to.name === 'dashboard' && authStore.userPermissions.length > 0) {
+            const firstPerm = authStore.userPermissions[0]
+            if (router.hasRoute(firstPerm)) {
+                next({ name: firstPerm })
+                return
             }
         }
-        else if (user.permissions && Array.isArray(user.permissions)) {
-            userPermissions = user.permissions
-        }
-
-        // Admin/Owner bypass (optional, but good practice)
-        if (user.role === 'superadmin' || user.role === 'owner') {
-            next()
-            return
-        }
-
-        if (!userPermissions.includes(to.meta.permission)) {
-            // Intelligent Redirect: If trying to access dashboard but lacks permission, 
-            // redirect to the first authorized module instead of blocking.
-            if (to.name === 'dashboard' && userPermissions.length > 0) {
-                const firstPerm = userPermissions[0];
-                // Map permissions to routes (simple mapping)
-                // This assumes permission name matches route name or has simple mapping
-                if (router.hasRoute(firstPerm)) {
-                    next({ name: firstPerm });
-                    return;
-                }
-            }
-
-            next({ name: 'unauthorized' })
-            return
-        }
+        next({ name: 'unauthorized' })
+        return
     }
 
     next()

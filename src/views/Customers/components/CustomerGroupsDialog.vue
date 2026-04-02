@@ -123,6 +123,7 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { customerGroupsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
@@ -131,6 +132,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:visible', 'groups-updated'])
 const toast = useToast()
+const confirm = useConfirm()
 const { t } = useI18n()
 
 const loading = ref(false)
@@ -167,17 +169,24 @@ const addGroup = async () => {
   }
 }
 
-const confirmDelete = async (group) => {
-  if (!confirm(t('customers.groups.delete_confirm', { name: group.name }))) return
-  
-  try {
-    await customerGroupsAPI.delete(group.id || group._id)
-    toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.groups.deleted_message') || "Guruh o'chirildi", life: 5000 })
-    loadGroups()
-    emit('groups-updated')
-  } catch (error) {
-    toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.delete_error') || "Guruhni o'chirishda xatolik", life: 5000 })
-  }
+const confirmDelete = (group) => {
+  confirm.require({
+    message: t('customers.groups.delete_confirm', { name: group.name }),
+    header: t('common.confirm') || 'Tasdiqlash',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: { label: t('common.cancel') || 'Bekor qilish', severity: 'secondary', outlined: true },
+    acceptProps: { label: t('common.delete') || "O'chirish", severity: 'danger' },
+    accept: async () => {
+      try {
+        await customerGroupsAPI.delete(group.id || group._id)
+        toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('customers.groups.deleted_message') || "Guruh o'chirildi", life: 5000 })
+        loadGroups()
+        emit('groups-updated')
+      } catch (error) {
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.groups.delete_error') || "Guruhni o'chirishda xatolik", life: 5000 })
+      }
+    }
+  })
 }
 
 watch(() => props.visible, (newVal) => {
