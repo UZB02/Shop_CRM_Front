@@ -3,35 +3,30 @@
   <div class="lg:hidden">
     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
       <button
-        @click="selectCategory(null)"
+        @click="selectBranch(null)"
         class="flex-shrink-0 flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-medium transition-all whitespace-nowrap border"
         :class="!selectedId
           ? 'bg-emerald-500 text-white border-emerald-500'
           : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'"
       >
-        <i class="pi pi-th-large text-[10px]"></i>
-        {{ $t('categories.all') }}
+        <i class="pi pi-home text-[10px]"></i>
+        {{ $t('common.all') }}
         <span
           class="px-1.5 py-0.5 rounded-full text-[10px] font-semibold"
           :class="!selectedId ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500'"
-        >{{ totalProducts }}</span>
+        >{{ totalWorkers }}</span>
       </button>
 
       <button
-        v-for="cat in categories"
-        :key="cat._id || cat.id"
-        @click="selectCategory(cat)"
+        v-for="branch in branches"
+        :key="branch.id"
+        @click="selectBranch(branch)"
         class="flex-shrink-0 flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-medium transition-all whitespace-nowrap border"
-        :class="isSelected(cat)
+        :class="isSelected(branch)
           ? 'bg-emerald-500 text-white border-emerald-500'
           : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'"
       >
-        {{ cat.name }}
-        <span
-          v-if="cat.product_count !== undefined"
-          class="px-1.5 py-0.5 rounded-full text-[10px] font-semibold"
-          :class="isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500'"
-        >{{ cat.product_count }}</span>
+        {{ branch.name }}
       </button>
     </div>
   </div>
@@ -42,20 +37,12 @@
     <!-- Header -->
     <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0">
       <div class="flex items-center gap-2">
-        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ $t('categories.title') }}</span>
+        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ $t('branches.title') }}</span>
         <span
-          v-if="categories.length"
+          v-if="branches.length"
           class="px-1.5 py-0.5 rounded-md text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
-        >{{ categories.length }}</span>
+        >{{ branches.length }}</span>
       </div>
-      <button
-        v-if="!readonly"
-        @click="$emit('add')"
-        class="w-6 h-6 rounded-md flex items-center justify-center text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
-        v-tooltip.top="$t('products.new_category')"
-      >
-        <i class="pi pi-plus text-xs"></i>
-      </button>
     </div>
 
     <!-- Search -->
@@ -63,9 +50,9 @@
       <div class="relative">
         <i class="pi pi-search absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400"></i>
         <input
-          v-model="catSearch"
+          v-model="branchSearch"
           type="text"
-          :placeholder="$t('categories.search_ph')"
+          :placeholder="$t('common.search') + '...'"
           class="w-full h-7 pl-7 pr-3 text-xs rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-400 transition-all"
         />
       </div>
@@ -75,67 +62,43 @@
     <div class="flex-1 overflow-y-auto no-scrollbar p-2 space-y-0.5">
 
       <button
-        v-if="!catSearch"
-        @click="selectCategory(null)"
+        v-if="!branchSearch"
+        @click="selectBranch(null)"
         class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all"
         :class="!selectedId
           ? 'bg-emerald-500 text-white'
           : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200'"
       >
         <div class="flex items-center gap-2.5">
-          <i class="pi pi-th-large text-xs"></i>
-          <span class="font-medium text-xs">{{ $t('categories.all') }}</span>
+          <i class="pi pi-home text-xs"></i>
+          <span class="font-medium text-xs">{{ $t('common.all') }}</span>
         </div>
         <span
           class="text-xs font-semibold px-1.5 py-0.5 rounded-md"
           :class="!selectedId ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'"
-        >{{ totalProducts }}</span>
+        >{{ totalWorkers }}</span>
       </button>
 
       <div
-        v-for="cat in filteredCategories"
-        :key="cat._id || cat.id"
+        v-for="branch in filteredBranches"
+        :key="branch.id"
         class="group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all text-sm"
-        :class="isSelected(cat)
+        :class="isSelected(branch)
           ? 'bg-emerald-500 text-white'
           : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200'"
-        @click="selectCategory(cat)"
+        @click="selectBranch(branch)"
       >
         <div class="flex items-center gap-2.5 min-w-0 flex-1">
           <div
             class="w-6 h-6 rounded-md flex items-center justify-center text-[9px] font-bold shrink-0 transition-all"
-            :class="isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 group-hover:text-emerald-600'"
-          >{{ cat.name?.substring(0, 2).toUpperCase() }}</div>
-          <span class="text-xs font-medium truncate">{{ cat.name }}</span>
-        </div>
-
-        <div class="flex items-center gap-1 shrink-0">
-          <span
-            v-if="cat.product_count !== undefined"
-            class="text-xs font-semibold px-1.5 py-0.5 rounded-md transition-all"
-            :class="[
-              isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400',
-              !readonly ? 'group-hover:hidden' : ''
-            ]"
-          >{{ cat.product_count }}</span>
-
-          <div v-if="!readonly" class="hidden group-hover:flex gap-0.5">
-            <button class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-white/20 dark:hover:bg-slate-700 transition-all" @click.stop="$emit('edit', cat)">
-              <i class="pi pi-pencil text-[9px]"></i>
-            </button>
-            <button
-              class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-rose-500/20 hover:text-rose-500 transition-all"
-              :class="isSelected(cat) ? 'text-white/70' : 'text-slate-400'"
-              @click.stop="$emit('delete', cat)"
-            >
-              <i class="pi pi-trash text-[9px]"></i>
-            </button>
-          </div>
+            :class="isSelected(branch) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 group-hover:text-emerald-600'"
+          >{{ branch.name?.substring(0, 2).toUpperCase() }}</div>
+          <span class="text-xs font-medium truncate">{{ branch.name }}</span>
         </div>
       </div>
 
-      <div v-if="!filteredCategories.length" class="py-10 text-center">
-        <i class="pi pi-folder-open text-slate-300 dark:text-slate-600 text-xl mb-2 block"></i>
+      <div v-if="!filteredBranches.length" class="py-10 text-center">
+        <i class="pi pi-home text-slate-300 dark:text-slate-600 text-xl mb-2 block"></i>
         <p class="text-xs text-slate-400">{{ $t('common.no_results') }}</p>
       </div>
     </div>
@@ -146,28 +109,27 @@
 import { ref, computed } from 'vue'
 
 const props = defineProps({
-  categories: { type: Array, default: () => [] },
+  branches: { type: Array, default: () => [] },
   selectedId: [String, Number, null],
-  totalProducts: Number,
-  readonly: { type: Boolean, default: false }
+  totalWorkers: Number
 })
 
-const emit = defineEmits(['select', 'add', 'edit', 'delete'])
-const catSearch = ref('')
+const emit = defineEmits(['select'])
+const branchSearch = ref('')
 
-const filteredCategories = computed(() => {
-  const list = Array.isArray(props.categories) ? props.categories : []
-  if (!catSearch.value) return list
-  const q = catSearch.value.toLowerCase()
-  return list.filter(c => c.name?.toLowerCase().includes(q))
+const filteredBranches = computed(() => {
+  const list = Array.isArray(props.branches) ? props.branches : []
+  if (!branchSearch.value) return list
+  const q = branchSearch.value.toLowerCase()
+  return list.filter(b => b.name?.toLowerCase().includes(q))
 })
 
-const isSelected = (cat) => {
-  if (!cat || props.selectedId == null) return false
-  return Number(props.selectedId) === Number(cat.id)
+const isSelected = (branch) => {
+  if (!branch || props.selectedId == null) return false
+  return (branch.id || branch._id).toString() === props.selectedId.toString()
 }
 
-const selectCategory = (cat) => emit('select', cat ?? null)
+const selectBranch = (branch) => emit('select', branch ? (branch.id || branch._id) : null)
 </script>
 
 <style scoped>

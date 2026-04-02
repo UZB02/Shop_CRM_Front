@@ -1,59 +1,54 @@
 <template>
-  <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <!-- Search -->
-      <div class="relative w-full">
-        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-300">
-          <i class="pi pi-search"></i>
-        </span>
-        <InputText 
-          v-model="modelValue.search" 
-          :placeholder="$t('common.search') + '...'" 
-          class="w-full !pl-11 !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 focus:!ring-2 focus:!ring-emerald-500/20 transition-all text-sm !text-slate-700 dark:!text-white"
-        />
-      </div>
-
-      <!-- Role Filter -->
-      <Select 
-        v-model="modelValue.role" 
-        :options="roleOptions" 
-        optionLabel="label" 
-        optionValue="value" 
-        showClear 
-        :placeholder="$t('workers.role')" 
-        class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm !text-slate-700 dark:!text-white"
+  <div class="flex flex-wrap gap-2 items-center">
+    <!-- Search -->
+    <div class="relative flex-1 min-w-[220px]">
+      <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"></i>
+      <input
+        v-model="modelValue.search"
+        type="text"
+        :placeholder="$t('common.search') + '...'"
+        class="w-full h-9 pl-9 pr-8 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all"
       />
-
-      <!-- Status Filter -->
-      <Select 
-        v-model="modelValue.status" 
-        :options="statusOptions" 
-        optionLabel="label" 
-        optionValue="value" 
-        showClear 
-        :placeholder="$t('common.status')" 
-        class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm !text-slate-700 dark:!text-white"
-      />
-
-      <!-- Branch Filter -->
-      <Select 
-        v-model="modelValue.branch" 
-        :options="branches" 
-        optionLabel="name" 
-        optionValue="id" 
-        showClear 
-        :placeholder="$t('workers.branch')" 
-        :loading="loadingLocations"
-        class="w-full !h-12 !rounded-2xl !bg-slate-50 dark:!bg-slate-800/80 !border-slate-200 dark:!border-slate-700 flex items-center px-2 text-sm !text-slate-700 dark:!text-white"
-      />
+      <button
+        v-if="modelValue.search"
+        @click="modelValue.search = ''"
+        class="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded flex items-center justify-center text-slate-400 hover:text-slate-600 transition-all"
+      >
+        <i class="pi pi-times text-[9px]"></i>
+      </button>
     </div>
+
+    <!-- Role Filter -->
+    <select
+      v-model="modelValue.role"
+      class="h-9 px-3 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all appearance-none pr-8 min-w-[140px]"
+    >
+      <option :value="null">{{ $t('workers.role') }}</option>
+      <option v-for="opt in roleOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+    </select>
+
+    <!-- Status Filter -->
+    <select
+      v-model="modelValue.status"
+      class="h-9 px-3 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all appearance-none pr-8 min-w-[120px]"
+    >
+      <option :value="null">{{ $t('common.status') }}</option>
+      <option v-for="opt in statusOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+    </select>
+
+    <!-- Branch Filter (Fallback for mobile/no-sidebar view if needed, or simply removed if sidebar exists) -->
+    <!-- We keep it as a select for mobile compatibility if sidebar is hidden -->
+    <select
+      v-model="modelValue.branch"
+      class="lg:hidden h-9 px-3 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all appearance-none pr-8 min-w-[140px]"
+    >
+      <option :value="null">{{ $t('workers.branch') }}</option>
+      <option v-for="b in branches" :key="b.id" :value="b.id">{{ b.name }}</option>
+    </select>
   </div>
 </template>
 
 <script setup>
-import InputText from 'primevue/inputtext'
-import Select from 'primevue/select'
-
 defineProps({
   modelValue: {
     type: Object,
@@ -69,60 +64,6 @@ defineEmits(['update:modelValue'])
 </script>
 
 <style scoped>
-/* LIGHT MODE */
-:deep(.p-inputtext::placeholder),
-:deep(.p-dropdown-label.p-placeholder) {
-  color: #64748b !important;
-}
-
-:deep(.p-inputtext),
-:deep(.p-dropdown-label) {
-  color: #1e293b !important;
-  font-weight: 500;
-}
-
-/* DARK MODE - DEEP WHITE ENFORCEMENT */
-.dark :deep(.p-inputtext),
-.dark :deep(.p-inputtext::placeholder),
-.dark :deep(.p-dropdown-label),
-.dark :deep(.p-dropdown-label.p-placeholder),
-.dark :deep(.p-dropdown-clear-icon),
-.dark :deep(.p-dropdown-trigger),
-.dark :deep(.p-dropdown-trigger-icon) {
-  color: #ffffff !important; /* PURE WHITE */
-  opacity: 1 !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* Lighten the filter boxes for better contrast */
-.dark .p-inputtext,
-.dark .p-dropdown {
-  background: #334155 !important; /* solid slate-700 */
-  border-color: #475569 !important; /* slate-600 */
-}
-
-/* Ensure selected label is white */
-.dark :deep(.p-dropdown .p-dropdown-label:not(.p-placeholder)) {
-  color: #ffffff !important;
-}
-
-/* Panel/Overlay Styling */
-.dark :deep(.p-dropdown-panel) {
-  background: #1e293b !important; /* slate-800 */
-  border: 1px solid #475569 !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
-}
-
-.dark :deep(.p-dropdown-item) {
-  color: #f8fafc !important; /* slate-50 */
-}
-
-.dark :deep(.p-dropdown-item.p-highlight) {
-  background: #10b981 !important; /* emerald-500 */
-  color: #ffffff !important;
-}
-
-.dark :deep(.p-dropdown-item:not(.p-highlight):not(.p-disabled):hover) {
-  background: #334155 !important;
-}
+/* Remove PrimeVue styles since we're using native elements */
 </style>
+

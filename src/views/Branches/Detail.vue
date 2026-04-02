@@ -1,30 +1,29 @@
 <template>
-  <div class="p-4 sm:p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-700 max-w-[1600px] mx-auto min-h-screen pb-20">
-    
-    <!-- Header: Breadcrumbs, Actions and Info Card -->
-    <BranchDetailHeader 
-      :branch="branch" 
-      :loading="loading" 
-      @edit="openEditModal" 
+  <div class="space-y-4">
+    <!-- Header -->
+    <BranchPageHeader
+      :branch="branch"
+      @edit="openEditModal"
     />
 
-    <!-- Navigation Tabs -->
-    <div class="space-y-6">
-      <div class="flex items-center gap-1.5 p-1.5 bg-white dark:bg-slate-900/80 backdrop-blur-md border border-slate-100 dark:border-slate-800 rounded-2xl w-full sm:w-fit overflow-x-auto no-scrollbar">
-        <button 
-          v-for="tab in tabs" :key="tab.id"
-          @click="activeTab = tab.id"
-          class="flex-1 sm:flex-none px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap"
-          :class="activeTab === tab.id 
-            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
-            : 'text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800'"
-        >
-          {{ tab.label }}
-        </button>
+    <!-- Main layout -->
+    <div v-if="loading" class="flex flex-col lg:flex-row gap-4">
+      <div class="w-full lg:w-60 xl:w-64 shrink-0 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 animate-pulse h-48"></div>
+      <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 animate-pulse h-96"></div>
+    </div>
+
+    <div v-else-if="branch" class="flex flex-col lg:flex-row gap-4">
+      <!-- Left: Sidebar Tabs -->
+      <div class="w-full lg:w-60 xl:w-64 shrink-0">
+        <BranchTabsSidebar
+          :tabs="navTabs"
+          :active="activeTab"
+          @select="activeTab = $event"
+        />
       </div>
 
-      <!-- Tab Content -->
-      <div class="tabs-content min-h-[400px]">
+      <!-- Right: Tab Content -->
+      <div class="flex-1 min-w-0 space-y-3">
         <Transition name="fade-slide" mode="out-in">
           <BranchWorkersTab 
             v-if="activeTab === 'workers'" 
@@ -45,7 +44,7 @@
             :available-products="branch?.products"
           />
           <BranchCustomersTab 
-            v-else 
+            v-else-if="activeTab === 'customers'"
             key="customers" 
             :customers="branch?.customers" 
           />
@@ -66,44 +65,40 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useBranchDetail } from './composables/useBranchDetail'
-import BranchDetailHeader from './components/BranchDetailHeader.vue'
+import { useI18n } from 'vue-i18n'
+
+import BranchPageHeader from './components/BranchPageHeader.vue'
+import BranchTabsSidebar from './components/BranchTabsSidebar.vue'
 import BranchWorkersTab from './components/BranchWorkersTab.vue'
 import BranchProductsTab from './components/BranchProductsTab.vue'
 import BranchCustomersTab from './components/BranchCustomersTab.vue'
 import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 import BranchDialog from '../Stores/components/BranchDialog.vue'
 
+const { t } = useI18n()
 const {
-  branch, loading, activeTab, tabs,
+  branch, loading, activeTab,
   editModalVisible, branchForm, submitted, saving,
   openEditModal, handleSave
 } = useBranchDetail()
 
-// Log branch data to console for debugging
-import { watch } from 'vue'
-watch(branch, (newVal) => {
-  if (newVal) {
-    console.group('🌿 Branch Detail Data')
-    console.log('ID:', newVal.id || newVal._id)
-    console.log('Name:', newVal.name)
-    console.log('Full Object:', newVal)
-    console.groupEnd()
-  }
-}, { immediate: true })
+// Prepare tabs with counts and icons
+const navTabs = computed(() => [
+  { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: branch.value?.workers?.length },
+  { id: 'products', label: t('menu.products'), icon: 'pi pi-box', count: branch.value?.products?.length },
+  { id: 'transfers', label: 'O\'tkazmalar', icon: 'pi pi-arrow-right-arrow-left' },
+  { id: 'customers', label: t('menu.customers'), icon: 'pi pi-user', count: branch.value?.customers?.length },
+])
 </script>
 
 <style scoped>
-.animate-in { animation: fadeIn 0.7s ease-out; }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.fade-slide-enter-active, .fade-slide-leave-active { transition: all 0.3s ease; }
-.fade-slide-enter-from { opacity: 0; transform: translateX(20px); }
-.fade-slide-leave-to { opacity: 0; transform: translateX(-20px); }
+.fade-slide-enter-active, .fade-slide-leave-active { transition: all 0.2s ease; }
+.fade-slide-enter-from { opacity: 0; transform: translateX(10px); }
+.fade-slide-leave-to { opacity: 0; transform: translateX(-10px); }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+

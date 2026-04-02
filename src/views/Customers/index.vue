@@ -1,7 +1,7 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
     <!-- Header Component -->
-    <CustomerHeader 
+    <CustomerPageHeader 
       :totalRecords="totalRecords"
       v-model:searchQuery="searchQuery"
       @add="openNew"
@@ -9,14 +9,14 @@
     />
 
     <!-- Stats & Tabs Component -->
-    <CustomerStatsTabs 
+    <MinimalCustomerStatsTabs 
       :tabs="customerTabs"
       v-model:activeTab="activeTab"
-      :totalDebt="groupedData.debtors.total_debt_balance"
+       :totalDebt="groupedData.debtors.total_debt_balance"
     />
 
     <!-- Table Section -->
-    <div class="bg-white dark:bg-slate-900/50 rounded-3xl border border-slate-100 dark:border-slate-800/50 overflow-hidden shadow-sm backdrop-blur-xl p-0.5">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
       <CustomerTable 
         :customers="activeCustomers" 
         :loading="loading" 
@@ -42,7 +42,7 @@
       @hide="hideDialog"
     />
 
-    <ConfirmDialog />
+    <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
   </div>
 </template>
 
@@ -50,8 +50,8 @@
 import ConfirmDialog from 'primevue/confirmdialog'
 import CustomerTable from './components/CustomerTable.vue'
 import CustomerDialog from './components/CustomerDialog.vue'
-import CustomerHeader from './components/CustomerHeader.vue'
-import CustomerStatsTabs from './components/CustomerStatsTabs.vue'
+import CustomerPageHeader from './components/CustomerPageHeader.vue'
+import MinimalCustomerStatsTabs from './components/MinimalCustomerStatsTabs.vue'
 import { useCustomers } from './composables/useCustomers'
 
 const {

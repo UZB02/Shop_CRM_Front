@@ -1,25 +1,35 @@
 <template>
-  <div class="max-w-[1600px] mx-auto pb-8 px-4 sm:px-6 lg:px-8 space-y-5 transition-all duration-300">
+  <div class="space-y-4">
+    <!-- Header -->
+    <WorkerDetailPageHeader
+      :worker="worker"
+      @edit="handleEdit"
+    />
 
-    <!-- Page Nav -->
-    <div class="flex items-center gap-3">
-      <div class="flex items-center gap-2">
-        <router-link
-          to="/dashboard/workers"
-          class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 hover:text-emerald-500 transition-colors"
-        >{{ $t('workers.title') }}</router-link>
-        <i class="pi pi-chevron-right text-slate-300 dark:text-slate-700 text-[8px]"></i>
-        <span class="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">{{ worker?.full_name || '...' }}</span>
-      </div>
+    <!-- Main layout -->
+    <div v-if="loading" class="flex flex-col lg:flex-row gap-4">
+      <div class="w-full lg:w-60 xl:w-64 shrink-0 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 animate-pulse h-48"></div>
+      <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 animate-pulse h-96"></div>
     </div>
 
-    <!-- HEADER -->
-    <DetailHeader :worker="worker" @edit="handleEdit" />
+    <div v-else-if="worker" class="flex flex-col lg:flex-row gap-4">
+      <!-- Left: Sidebar Tabs -->
+      <div class="w-full lg:w-60 xl:w-64 shrink-0">
+        <WorkerTabsSidebar
+          :tabs="navTabs"
+          :active="activeTab"
+          @select="activeTab = $event"
+        />
+      </div>
 
-    <div class="space-y-6">
-
-      <!-- TABS (Details & Permissions) -->
-      <DetailTabs :worker="worker" />
+      <!-- Right: Tab Content -->
+      <div class="flex-1 min-w-0">
+        <Transition name="fade-slide" mode="out-in">
+          <WorkerInfoTab v-if="activeTab === 'details'" key="details" :worker="worker" />
+          <WorkerPermissionsTab v-else-if="activeTab === 'permissions'" key="permissions" :worker="worker" />
+          <WorkerHistoryTab v-else-if="activeTab === 'history'" key="history" :worker-id="worker?.id || worker?._id" />
+        </Transition>
+      </div>
     </div>
 
     <!-- Worker Dialog Component -->
@@ -33,26 +43,31 @@
       @save="saveWorker"
       @hide="hideDialog"
     />
-
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, toRaw } from 'vue'
+import { ref, onMounted, toRaw, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { workersAPI, branchesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
 import WorkerDialog from './components/WorkerDialog.vue'
-import DetailHeader from './components/detail/DetailHeader.vue'
-import DetailTabs from './components/detail/DetailTabs.vue'
+import WorkerDetailPageHeader from './components/WorkerDetailPageHeader.vue'
+import WorkerTabsSidebar from './components/WorkerTabsSidebar.vue'
+
+// Tab components
+import WorkerInfoTab from './components/detail/tabs/WorkerInfoTab.vue'
+import WorkerPermissionsTab from './components/detail/tabs/WorkerPermissionsTab.vue'
+import WorkerHistoryTab from './components/detail/tabs/WorkerHistoryTab.vue'
 
 const route = useRoute()
 const { t } = useI18n()
 const toast = useToast()
 const worker = ref(null)
 const loading = ref(false)
+const activeTab = ref('details')
 
 const workerDialog = ref(false)
 const saving = ref(false)
@@ -73,11 +88,17 @@ const workerToEdit = ref({
     permissions: []
 })
 
+// Prepare tabs
+const navTabs = computed(() => [
+  { id: 'details', label: t('workers.details'), icon: 'pi pi-id-card' },
+  { id: 'permissions', label: t('workers.permissions'), icon: 'pi pi-shield' },
+  { id: 'history', label: t('workers.logs') || 'Tizim Jurnali', icon: 'pi pi-history' }
+])
+
 const loadWorker = async () => {
     loading.value = true
     try {
         const res = await workersAPI.getById(route.params.id)
-        console.log('Worker detail data from API:', res.data)
         worker.value = res.data
     } catch (e) {
         console.error('Worker load error:', e)
@@ -89,12 +110,7 @@ const loadWorker = async () => {
 const loadStores = async () => {
     storesLoading.value = true
     try {
-        let response
-        try {
-            response = await storesAPI.getAll()
-        } catch (e) {
-            response = await branchesAPI.getAll()
-        }
+        const response = await branchesAPI.getAll()
         const data = response.data
         stores.value = data?.results ?? (Array.isArray(data) ? data : [])
     } catch (error) {
@@ -198,10 +214,6 @@ const saveWorker = async () => {
             return
         }
 
-        console.group("🚀 Xodim ma'lumotlarini yuborish (Detail - PATCH)");
-        console.log("Final API Payload:", payload);
-        console.groupEnd();
-
         await workersAPI.update(workerToEdit.value.id, payload)
         toast.add({ 
             severity: 'success', 
@@ -215,18 +227,6 @@ const saveWorker = async () => {
     } catch (error) {
         console.error('❌ Error saving worker:', error)
         let errorDetail = t('workers.messages.save_error')
-        if (error.response?.data) {
-            const data = error.response.data
-            if (typeof data === 'string') {
-                errorDetail = data
-            } else {
-                const firstKey = Object.keys(data)[0]
-                if (firstKey) {
-                    const message = data[firstKey]
-                    errorDetail = Array.isArray(message) ? message[0] : message
-                }
-            }
-        }
         toast.add({ 
             severity: 'error', 
             summary: t('common.error'), 
@@ -240,5 +240,11 @@ const saveWorker = async () => {
 </script>
 
 <style scoped>
-/* Any view-specific styles can remain here, but most were moved to components */
+.fade-slide-enter-active, .fade-slide-leave-active { transition: all 0.2s ease; }
+.fade-slide-enter-from { opacity: 0; transform: translateX(10px); }
+.fade-slide-leave-to { opacity: 0; transform: translateX(-10px); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+

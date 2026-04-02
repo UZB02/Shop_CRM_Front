@@ -5,9 +5,9 @@
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
             <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.name') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.contact_address') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center font-inter">{{ $t('customers.table.trades') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter hidden sm:table-cell">{{ $t('customers.table.contact_address') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center font-inter hidden md:table-cell">{{ $t('customers.table.trades') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right sm:text-left">
               {{ mode === 'debtors' ? ($t('customers.table.debt_label') || 'Qarz Miqdori') : $t('customers.table.total_spent') }}
             </th>
             <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right font-inter">{{ $t('customers.table.actions') }}</th>
@@ -18,9 +18,9 @@
           <template v-if="loading">
             <tr v-for="i in 5" :key="i">
               <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-24 animate-pulse"></div></td>
-              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-32 animate-pulse"></div></td>
-              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-12 mx-auto animate-pulse"></div></td>
-              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-20 animate-pulse"></div></td>
+              <td class="px-4 py-3 hidden sm:table-cell"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-32 animate-pulse"></div></td>
+              <td class="px-4 py-3 hidden md:table-cell"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-12 mx-auto animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-20 animate-pulse ml-auto sm:ml-0"></div></td>
               <td class="px-4 py-3"><div class="h-6 bg-slate-100 dark:bg-slate-800 rounded-lg w-20 ml-auto animate-pulse"></div></td>
             </tr>
           </template>
@@ -49,22 +49,23 @@
                 class="flex items-center gap-3 cursor-pointer group/name" 
                 @click="$emit('view-history', data.id)"
               >
-                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 flex-shrink-0 transition-all group-hover/name:bg-emerald-500 group-hover/name:text-white">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 flex-shrink-0 transition-all group-hover/name:bg-emerald-500 group-hover/name:text-white hidden xs:flex">
                   <i class="pi pi-user text-sm"></i>
                 </div>
-                <div>
-                  <p class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-tight group-hover/name:text-emerald-500 transition-colors">{{ data.name }}</p>
+                <div class="min-w-0">
+                  <p class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-tight group-hover/name:text-emerald-500 transition-colors truncate">{{ data.name }}</p>
                   <div class="flex items-center gap-1.5 mt-0.5">
-                    <span v-if="data.group_name" class="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest border border-amber-500/20">
+                    <span v-if="data.group_name" class="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest border border-amber-500/20 truncate">
                       {{ data.group_name }}
                     </span>
+                    <span class="sm:hidden text-[10px] text-slate-400 font-medium truncate">{{ data.phone }}</span>
                   </div>
                 </div>
               </div>
             </td>
 
             <!-- Contact & Address -->
-            <td class="px-4 py-2.5">
+            <td class="px-4 py-2.5 hidden sm:table-cell">
               <div class="space-y-1">
                 <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
                   <i class="pi pi-phone text-[9px] text-slate-400"></i>
@@ -82,7 +83,7 @@
             </td>
 
             <!-- Status & Trades -->
-            <td class="px-4 py-2.5 text-center">
+            <td class="px-4 py-2.5 text-center hidden md:table-cell">
               <div class="flex flex-col items-center gap-1.5">
                 <span class="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest"
                       :class="data.status === 'active' ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : 'bg-slate-500/10 text-slate-500 border border-slate-500/20'">
@@ -95,7 +96,7 @@
             </td>
 
             <!-- Total Spent / Debt Balance -->
-            <td class="px-4 py-2.5 text-right">
+            <td class="px-4 py-2.5 text-right sm:text-left">
               <div class="flex flex-col">
                 <span 
                   class="text-[12px] font-black tracking-tighter"
@@ -110,19 +111,17 @@
             </td>
 
             <!-- Actions -->
-            <td class="px-6 py-4 text-right">
-              <div class="flex justify-end gap-1.5 transition-opacity">
+            <td class="px-4 py-4 text-right">
+              <div class="flex justify-end gap-1 transition-opacity">
                 <button
                   @click="emit('edit', data)"
-                  v-tooltip.top="$t('customers.table.edit_tooltip')"
-                  class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
+                  class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/20"
                 >
                   <i class="pi pi-pencil text-[10px]"></i>
                 </button>
                 <button
                   @click="emit('delete', data)"
-                  v-tooltip.top="$t('customers.table.delete_tooltip')"
-                  class="w-8 h-8 rounded-lg flex items-center justify-center text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all"
+                  class="w-8 h-8 rounded-lg flex items-center justify-center text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all border border-transparent hover:border-rose-100 dark:hover:border-rose-500/20"
                 >
                   <i class="pi pi-trash text-[10px]"></i>
                 </button>

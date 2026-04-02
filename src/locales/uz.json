@@ -1,4 +1,7 @@
 {
+    "branches": {
+        "title": "Filiallar"
+    },
     "common": {
         "all": "Barchasi",
         "save": "Saqlash",
@@ -409,6 +412,7 @@
             "active": "Faol",
             "inactive": "Nofaol"
         },
+        "management_title": "Omborxonalar Boshqaruvi",
         "messages": {
             "added": "Yangi ombor muvaffaqiyatli qo'shildi",
             "updated": "Ombor ma'lumotlari yangilandi",
@@ -683,8 +687,11 @@
         }
     },
     "customers": {
-        "title": "Mijozlar Bazasi",
+        "title": "Mijozlar",
+        "management_title": "Mijozlar Boshqaruvi",
+        "management_subtitle": "Sizning mijozlar bazangiz va qarzdorliklar nazorati",
         "subtitle": "Sodiq mijozlaringiz bilan ishlash va guruhlarni boshqarish",
+        "customer_count": "{count} ta mijoz",
         "tab_all": "Mijozlar",
         "tab_debtors": "Qarzdorlar",
         "total_debt_label": "Umumiy Qarzdorlik",

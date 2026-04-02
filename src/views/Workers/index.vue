@@ -1,43 +1,48 @@
 <template>
-  <div class="space-y-4 md:space-y-6">
+  <div class="space-y-4">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-      <div>
-        <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{{ $t('workers.management_title') }}</h1>
-        <p class="text-slate-500 text-sm mt-1">{{ $t('workers.management_subtitle') }}</p>
+    <WorkerPageHeader
+      :totalWorkers="totalRecords"
+      @add="openNew"
+    />
+
+    <!-- Main layout -->
+    <div class="flex flex-col lg:flex-row gap-4">
+      <!-- Left: Branches -->
+      <div class="w-full lg:w-60 xl:w-64 shrink-0">
+        <BranchSidebar
+          :branches="branches"
+          :selectedId="filters.branch"
+          :totalWorkers="totalRecords"
+          @select="onBranchSelect"
+        />
       </div>
-      <Button 
-        :label="$t('workers.new_worker')" 
-        icon="pi pi-user-plus" 
-        severity="success" 
-        class="shadow-sm w-full sm:w-auto" 
-        @click="openNew" 
-      />
+
+      <!-- Right: Filters + Table -->
+      <div class="flex-1 min-w-0 space-y-3">
+        <WorkerFilters
+          v-model="filters"
+          :role-options="roleOptions"
+          :status-options="statusOptions"
+          :branches="branches"
+          :loading-locations="storesLoading"
+        />
+
+        <WorkerTable
+          :workers="workers"
+          :loading="loading"
+          :total-records="totalRecords"
+          v-model:page="page"
+          v-model:pageSize="pageSize"
+          @edit="editWorker"
+          @delete="confirmDeleteWorker"
+          @page-change="loadWorkers"
+        />
+      </div>
     </div>
 
-    <!-- Filters Section -->
-    <WorkerFilters 
-      v-model="filters"
-      :role-options="roleOptions"
-      :status-options="statusOptions"
-      :branches="branches"
-      :loading-locations="storesLoading"
-    />
-
-    <!-- Workers Table Component -->
-    <WorkerTable 
-      :workers="workers" 
-      :loading="loading" 
-      :total-records="totalRecords"
-      v-model:page="page"
-      v-model:pageSize="pageSize"
-      @edit="editWorker" 
-      @delete="confirmDeleteWorker" 
-      @page-change="loadWorkers"
-    />
-
     <!-- Worker Dialog Component -->
-    <WorkerDialog 
+    <WorkerDialog
       v-model:visible="workerDialog"
       v-model:createLogin="createLogin"
       :worker="worker"
@@ -53,12 +58,13 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import Button from 'primevue/button'
 
 // Components
 import WorkerTable from './components/WorkerTable.vue'
 import WorkerDialog from './components/WorkerDialog.vue'
 import WorkerFilters from './components/WorkerFilters.vue'
+import WorkerPageHeader from './components/WorkerPageHeader.vue'
+import BranchSidebar from './components/BranchSidebar.vue'
 
 // Composables
 import { useWorkers } from './composables/useWorkers'
@@ -74,7 +80,6 @@ const {
     pageSize,
     loading,
     filters,
-    stores,
     branches,
     storesLoading,
     roleOptions,
@@ -97,6 +102,12 @@ const {
     hideDialog
 } = useWorkerActions(loadWorkers)
 
+const onBranchSelect = (branchId) => {
+  filters.value.branch = branchId
+  page.value = 1
+  loadWorkers()
+}
+
 // Initialization
 onMounted(async () => {
     await Promise.all([loadWorkers(), loadLocations()])
@@ -118,3 +129,4 @@ onMounted(async () => {
 <style scoped>
 /* Core layout styles remain minimal as logic and component-specific styles were moved */
 </style>
+

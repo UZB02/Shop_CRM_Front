@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { authAPI, setApiToken, clearApiToken } from '../services/api'
+import { authAPI, workersAPI, setApiToken, clearApiToken } from '../services/api'
 
 const ALL_PERMISSIONS = [
     'dashboard', 'stores', 'warehouse', 'products',
@@ -86,7 +86,7 @@ export const useAuthStore = defineStore('auth', {
         async verifySession() {
             if (!this.token) return false
             try {
-                const res = await authAPI.getMe()
+                const res = await workersAPI.getMe()
                 const userData = res.data
                 this.user = userData
                 const perms = buildPermissions(userData)
@@ -96,10 +96,16 @@ export const useAuthStore = defineStore('auth', {
                 localStorage.setItem('user', JSON.stringify(userData))
                 localStorage.setItem('permissions', JSON.stringify(perms))
                 return true
-            } catch {
-                // 401 or network error — token is invalid, clear everything
-                this.logout()
-                return false
+            } catch (err) {
+                if (err.response?.status === 401) {
+                    // Token is definitely invalid — force logout
+                    this.logout()
+                    return false
+                }
+                // Network error, 404, 500 etc. — don't log out, fall back to
+                // localStorage-bootstrapped permissions and continue the session
+                this.sessionVerified = true
+                return true
             }
         },
 

@@ -1,12 +1,12 @@
 <template>
-  <div class="overflow-x-auto custom-scrollbar rounded-[2rem] border border-slate-100 dark:border-slate-800">
+  <div class="overflow-x-auto custom-scrollbar">
     <table class="w-full text-left border-collapse min-w-[600px]">
       <thead>
-        <tr class="bg-slate-50/50 dark:bg-slate-800/30">
-          <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('warehouse.warehouse_name') }}</th>
-          <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('warehouse.warehouse_address') }}</th>
-          <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('common.status') }}</th>
-          <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('common.actions') }}</th>
+        <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('warehouse.warehouse_name') }}</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('warehouse.warehouse_address') }}</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('common.status') }}</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right font-inter">{{ $t('common.actions') }}</th>
         </tr>
       </thead>
       <tbody>
