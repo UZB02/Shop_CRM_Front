@@ -37,7 +37,12 @@
         "pay_action": "Тўлов қилиш",
         "confirm_title": "Тасдиқлаш",
         "pcs": "дона",
-        "date": "Сана"
+        "date": "Сана",
+        "download": "Юклаб олиш",
+        "filters": "Филтрлар",
+        "date_from": "Санадан",
+        "date_to": "Санагача",
+        "reset": "Тозалаш"
     },
     "workers": {
         "title": "Ходимлар",

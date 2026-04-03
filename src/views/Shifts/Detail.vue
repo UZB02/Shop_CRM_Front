@@ -6,7 +6,7 @@
       :status="data.smena.status"
       :branchName="data.smena.branch_name"
       :storeName="data.smena.store_name"
-      @print="handlePrint"
+      @download="handleDownload"
     />
 
     <!-- Skeleton Loading -->
@@ -141,7 +141,7 @@ const {
   progressClasses,
   formatCurrency,
   calculatePercent,
-  handlePrint
+  handleDownload
 } = useShiftDetail()
 </script>
 

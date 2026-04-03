@@ -217,7 +217,9 @@ export const transfersAPI = {
 
 // Shifts API
 export const shiftsAPI = {
-    getXReport: (id) => api.get(`/shifts/${id}/x-report/`)
+    getAll: (params) => api.get('/shifts/', { params }),
+    getXReport: (id) => api.get(`/shifts/${id}/x-report/`),
+    export: (id) => api.get(`/export/shifts/${id}/`, { responseType: 'blob' })
 }
 
 export default api

@@ -40,7 +40,12 @@
         "error_message": "Xatolik yuz berdi",
         "confirm_title": "Tasdiqlash",
         "pcs": "dona",
-        "date": "Sana"
+        "date": "Sana",
+        "download": "Yuklab olish",
+        "filters": "Filtrlar",
+        "date_from": "Sanadan",
+        "date_to": "Sanagacha",
+        "reset": "Tozalash"
     },
     "workers": {
         "title": "Xodimlar",

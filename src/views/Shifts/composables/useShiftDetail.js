@@ -60,8 +60,22 @@ export function useShiftDetail() {
     return ((current / total) * 100).toFixed(1)
   }
 
-  const handlePrint = () => {
-    window.print()
+  const handleDownload = async () => {
+    try {
+      const id = route.params.id
+      const response = await shiftsAPI.export(id)
+      
+      const blob = new Blob([response.data], { type: response.headers['content-type'] })
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = `Smena_Hisoboti_${id}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      
+    } catch (error) {
+      console.error('Export error:', error)
+    }
   }
 
   onMounted(() => {
@@ -77,6 +91,6 @@ export function useShiftDetail() {
     progressClasses,
     formatCurrency,
     calculatePercent,
-    handlePrint
+    handleDownload
   }
 }
