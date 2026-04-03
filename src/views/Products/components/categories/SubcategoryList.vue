@@ -97,10 +97,10 @@ const searchModel = computed({
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: theme('colors.slate.200');
+  background: var(--color-slate-200);
   border-radius: 10px;
 }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: theme('colors.slate.800');
+  background: var(--color-slate-800);
 }
 </style>
