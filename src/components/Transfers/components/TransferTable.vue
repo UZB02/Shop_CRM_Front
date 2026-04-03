@@ -26,99 +26,159 @@
     </div>
 
     <!-- Transfers table -->
-    <div v-else class="overflow-x-auto custom-scrollbar">
-      <table class="w-full text-sm text-left min-w-[780px]">
-        <thead>
-          <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30">
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">ID / Sana</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Yo'nalish</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Mahsulot</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Xodim</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Holat</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-right">Amallar</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-50 dark:divide-slate-800/60">
-          <tr
-            v-for="t in transfers"
-            :key="t.id"
-            class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors group"
-          >
-            <!-- ID / Date -->
-            <td class="px-5 py-3.5">
-              <div class="font-medium text-slate-700 dark:text-slate-300 text-xs">#{{ t.id }}</div>
-              <div class="text-xs text-slate-400 mt-0.5">{{ t.created_on }}</div>
-            </td>
-
-            <!-- Direction -->
-            <td class="px-5 py-3.5">
-              <div class="flex items-center gap-2">
-                <div class="flex items-center gap-1.5">
-                  <i class="pi text-xs" :class="[locationIcon(t.from_location_type), t.from_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
-                  <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ t.from_location_name }}</span>
+    <div v-else class="custom-scrollbar">
+      <!-- Desktop Tablet Table -->
+      <div class="hidden sm:block overflow-x-auto">
+        <table class="w-full text-sm text-left min-w-[780px]">
+          <thead>
+            <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30">
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">ID / Sana</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Yo'nalish</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Mahsulot</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Xodim</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Holat</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-right">Amallar</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50 dark:divide-slate-800/60">
+            <tr
+              v-for="t in transfers"
+              :key="t.id"
+              class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors group"
+            >
+              <!-- ID / Date -->
+              <td class="px-5 py-3.5">
+                <div class="font-medium text-slate-700 dark:text-slate-300 text-xs">#{{ t.id }}</div>
+                <div class="text-xs text-slate-400 mt-0.5">{{ t.created_on }}</div>
+              </td>
+  
+              <!-- Direction -->
+              <td class="px-5 py-3.5">
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-1.5">
+                    <i class="pi text-xs" :class="[locationIcon(t.from_location_type), t.from_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
+                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ t.from_location_name }}</span>
+                  </div>
+                  <i class="pi pi-arrow-right text-[10px] text-slate-300 dark:text-slate-600 shrink-0"></i>
+                  <div class="flex items-center gap-1.5">
+                    <i class="pi text-xs" :class="[locationIcon(t.to_location_type), t.to_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
+                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ t.to_location_name }}</span>
+                  </div>
                 </div>
-                <i class="pi pi-arrow-right text-[10px] text-slate-300 dark:text-slate-600 shrink-0"></i>
-                <div class="flex items-center gap-1.5">
-                  <i class="pi text-xs" :class="[locationIcon(t.to_location_type), t.to_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
-                  <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ t.to_location_name }}</span>
-                </div>
-              </div>
-            </td>
-
-            <!-- Item count -->
-            <td class="px-5 py-3.5 text-center">
-              <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                {{ t.item_count ?? t.items?.length ?? 0 }} dona
-              </span>
-            </td>
-
-            <!-- Worker -->
-            <td class="px-5 py-3.5">
-              <span class="text-xs text-slate-500 dark:text-slate-400">{{ t.worker_name || '—' }}</span>
-            </td>
-
-            <!-- Status -->
-            <td class="px-5 py-3.5">
-              <div class="flex justify-center">
-                <span
-                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
-                  :class="statusClass(t.status)"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full bg-current" :class="t.status === 'pending' ? 'animate-pulse' : ''"></span>
-                  {{ t.status_display || t.status }}
+              </td>
+  
+              <!-- Item count -->
+              <td class="px-5 py-3.5 text-center">
+                <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                  {{ t.item_count ?? t.items?.length ?? 0 }} dona
                 </span>
-              </div>
-            </td>
+              </td>
+  
+              <!-- Worker -->
+              <td class="px-5 py-3.5">
+                <span class="text-xs text-slate-500 dark:text-slate-400">{{ t.worker_name || '—' }}</span>
+              </td>
+  
+              <!-- Status -->
+              <td class="px-5 py-3.5">
+                <div class="flex justify-center">
+                  <span
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
+                    :class="statusClass(t.status)"
+                  >
+                    <span class="w-1.5 h-1.5 rounded-full bg-current" :class="t.status === 'pending' ? 'animate-pulse' : ''"></span>
+                    {{ t.status_display || t.status }}
+                  </span>
+                </div>
+              </td>
+  
+              <!-- Actions -->
+              <td class="px-5 py-3.5 text-right">
+                <div class="flex items-center justify-end gap-1.5">
+                  <button
+                    @click="$emit('view', t)"
+                    class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center"
+                  >
+                    <i class="pi pi-eye text-xs"></i>
+                  </button>
+                  <template v-if="t.status === 'pending'">
+                    <button
+                      v-if="t.direction === 'in'"
+                      @click="$emit('confirm', t)"
+                      class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-all flex items-center justify-center"
+                    >
+                      <i class="pi pi-check text-xs"></i>
+                    </button>
+                    <button
+                      @click="$emit('cancel', t)"
+                      class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-all flex items-center justify-center"
+                    >
+                      <i class="pi pi-times text-xs"></i>
+                    </button>
+                  </template>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-            <!-- Actions -->
-            <td class="px-5 py-3.5 text-right">
-              <div class="flex items-center justify-end gap-1.5">
-                <button
-                  @click="$emit('view', t)"
-                  class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center"
-                >
-                  <i class="pi pi-eye text-xs"></i>
-                </button>
-                <template v-if="t.status === 'pending'">
-                  <button
-                    v-if="t.direction === 'in'"
-                    @click="$emit('confirm', t)"
-                    class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-all flex items-center justify-center"
-                  >
-                    <i class="pi pi-check text-xs"></i>
-                  </button>
-                  <button
-                    @click="$emit('cancel', t)"
-                    class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-all flex items-center justify-center"
-                  >
-                    <i class="pi pi-times text-xs"></i>
-                  </button>
-                </template>
+      <!-- Mobile Card List -->
+      <div class="sm:hidden divide-y divide-slate-100 dark:divide-slate-800">
+        <div 
+          v-for="t in transfers" 
+          :key="t.id"
+          @click="$emit('view', t)"
+          class="p-4 active:bg-slate-50 dark:active:bg-slate-800/40 transition-colors"
+        >
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-900 dark:text-slate-100">#{{ t.id }}</span>
+              <span class="text-[10px] text-slate-400">{{ t.created_on }}</span>
+            </div>
+            <span
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
+              :class="statusClass(t.status)"
+            >
+              {{ t.status_display || t.status }}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3 mb-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5 mb-1">
+                <i class="pi text-[10px]" :class="[locationIcon(t.from_location_type), t.from_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
+                <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400 truncate">{{ t.from_location_name }}</span>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              <div class="flex items-center gap-1.5">
+                <i class="pi text-[10px]" :class="[locationIcon(t.to_location_type), t.to_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
+                <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400 truncate">{{ t.to_location_name }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-end shrink-0">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ t.item_count ?? t.items?.length ?? 0 }} dona</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-500 mt-0.5">{{ t.worker_name?.split(' ')[0] }}</span>
+            </div>
+          </div>
+
+          <!-- Mobile Actions -->
+          <div v-if="t.status === 'pending'" class="flex gap-2 mt-2 pt-3 border-t border-slate-50 dark:border-slate-800/50">
+            <button
+              v-if="t.direction === 'in'"
+              @click.stop="$emit('confirm', t)"
+              class="flex-1 h-8 rounded-lg bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest"
+            >
+              Tasdiqlash
+            </button>
+            <button
+              @click.stop="$emit('cancel', t)"
+              class="flex-1 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 text-[10px] font-bold uppercase tracking-widest border border-rose-100 dark:border-rose-500/20"
+            >
+              Bekor qilish
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -1,7 +1,9 @@
 import { ref, computed } from 'vue'
+import { useConfirm } from 'primevue/useconfirm'
 import { useTransfers } from '@/composables/useTransfers'
 
 export function useTransfersTab(props, emit) {
+  const confirm = useConfirm()
   const {
     transfers, loading, subLoading,
     transferDialog, transferForm,
@@ -45,14 +47,34 @@ export function useTransfersTab(props, emit) {
     if (success) loadTransfers()
   }
 
-  const confirmAction = async (t) => {
-    const success = await confirmTransfer(t.id)
-    if (success) loadTransfers()
+  const confirmAction = (t) => {
+    confirm.require({
+      message: 'Ushbu o\'tkazmani tasdiqlashni xohlaysizmi?',
+      header: 'Tasdiqlash',
+      icon: 'pi pi-check-circle',
+      acceptClass: 'p-button-success',
+      acceptLabel: 'Ha, tasdiqlash',
+      rejectLabel: 'Bekor qilish',
+      accept: async () => {
+        const success = await confirmTransfer(t.id)
+        if (success) loadTransfers()
+      }
+    })
   }
 
-  const cancelAction = async (t) => {
-    const success = await cancelTransfer(t.id)
-    if (success) loadTransfers()
+  const cancelAction = (t) => {
+    confirm.require({
+      message: 'Ushbu o\'tkazmani bekor qilishni xohlaysizmi?',
+      header: 'Bekor qilish',
+      icon: 'pi pi-exclamation-triangle',
+      acceptClass: 'p-button-danger',
+      acceptLabel: 'Ha, bekor qilish',
+      rejectLabel: 'Ortga qaytish',
+      accept: async () => {
+        const success = await cancelTransfer(t.id)
+        if (success) loadTransfers()
+      }
+    })
   }
 
   const viewDetail = (t) => {

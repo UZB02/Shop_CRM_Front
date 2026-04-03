@@ -1,18 +1,19 @@
 <template>
   <!-- ── MOBILE: horizontal scrollable chips ── -->
-  <div class="lg:hidden shrink-0">
-    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+  <div class="lg:hidden shrink-0 -mx-4 px-4 overflow-x-auto no-scrollbar pb-1">
+    <div class="flex items-center gap-2">
       <button
         v-for="tab in tabs"
         :key="tab.id"
         @click="$emit('select', tab.id)"
-        class="flex-shrink-0 flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-medium transition-all whitespace-nowrap border"
+        class="flex-shrink-0 flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-semibold transition-all whitespace-nowrap border"
         :class="active === tab.id
-          ? 'bg-emerald-500 text-white border-emerald-500'
-          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'"
+          ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm shadow-emerald-500/20'
+          : 'bg-white dark:bg-slate-900/40 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-800' "
       >
         <i :class="[tab.icon, 'text-[10px]']"></i>
-        {{ tab.label }}
+        <span>{{ tab.label }}</span>
+        <span v-if="tab.count !== undefined" class="text-[9px] opacity-70">({{ tab.count }})</span>
       </button>
     </div>
   </div>
