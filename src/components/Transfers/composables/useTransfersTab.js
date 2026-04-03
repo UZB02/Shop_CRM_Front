@@ -6,7 +6,7 @@ export function useTransfersTab(props, emit) {
     transfers, loading, subLoading,
     transferDialog, transferForm,
     warehouses, branches,
-    fetchTransfers, fetchWarehouseTransfers,
+    fetchTransfers, fetchWarehouseTransfers, fetchBranchTransfers,
     createTransfer, confirmTransfer, cancelTransfer, openNewTransfer
   } = useTransfers()
 
@@ -33,6 +33,8 @@ export function useTransfersTab(props, emit) {
   const loadTransfers = () => {
     if (props.sourceType === 'warehouse' && props.sourceId) {
       fetchWarehouseTransfers(props.sourceId)
+    } else if (props.sourceType === 'branch' && props.sourceId) {
+      fetchBranchTransfers(props.sourceId)
     } else {
       fetchTransfers()
     }
