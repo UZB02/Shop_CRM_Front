@@ -1,4 +1,4 @@
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { branchesAPI } from '@/services/api'
@@ -11,7 +11,14 @@ export function useBranchDetail() {
 
     const branch = ref(null)
     const loading = ref(true)
+    const tabLoading = ref(false)
     const activeTab = ref('workers')
+
+    // Refresh only the relevant tab when changed
+    watch(activeTab, (tab) => {
+        if (tab === 'transfers') return // TransfersTab has its own fetch logic
+        fetchDetail(tab)
+    })
 
     // Edit State
     const editModalVisible = ref(false)
@@ -26,11 +33,23 @@ export function useBranchDetail() {
         { id: 'customers', label: t('menu.customers') }
     ])
 
-    const fetchDetail = async () => {
+    const fetchDetail = async (tab = null) => {
         try {
-            loading.value = true
-            const res = await branchesAPI.getById(route.params.id)
-            branch.value = res.data
+            if (tab) tabLoading.value = true
+            else if (!branch.value) loading.value = true
+
+            const res = await branchesAPI.getById(route.params.id, tab ? { tab } : {})
+            
+            if (tab && branch.value) {
+                // Merge only the specific tab data to keep other tab counts alive
+                if (res.data[tab]) {
+                    branch.value[tab] = res.data[tab]
+                } else {
+                    branch.value = res.data
+                }
+            } else {
+                branch.value = res.data
+            }
             console.log('Branch API Data:', res.data)
         } catch (err) {
             console.error('Error fetching branch:', err)
@@ -42,6 +61,7 @@ export function useBranchDetail() {
             })
         } finally {
             loading.value = false
+            tabLoading.value = false
         }
     }
 
@@ -92,6 +112,7 @@ export function useBranchDetail() {
     return {
         branch,
         loading,
+        tabLoading,
         activeTab,
         tabs,
         editModalVisible,

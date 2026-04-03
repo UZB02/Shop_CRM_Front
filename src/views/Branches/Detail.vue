@@ -8,7 +8,7 @@
     />
 
     <!-- Main layout -->
-    <div v-if="loading" class="flex flex-col lg:flex-row gap-4">
+    <div v-if="loading && !branch" class="flex flex-col lg:flex-row gap-4">
       <div class="w-full lg:w-60 xl:w-64 shrink-0 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 animate-pulse h-48"></div>
       <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 animate-pulse h-96"></div>
     </div>
@@ -24,7 +24,12 @@
       </div>
 
       <!-- Right: Tab Content -->
-      <div class="flex-1 min-w-0 space-y-3">
+      <div class="flex-1 min-w-0 space-y-3 relative">
+        <!-- Tab Loading Progress -->
+        <div v-if="tabLoading" class="absolute inset-x-0 -top-2 h-0.5 bg-emerald-500/10 overflow-hidden rounded-full z-10">
+          <div class="h-full bg-emerald-500/40 animate-loading translate-x-[-100%]"></div>
+        </div>
+        
         <Transition name="fade-slide" mode="out-in">
           <BranchWorkersTab 
             v-if="activeTab === 'workers'" 
@@ -82,7 +87,7 @@ import BranchDialog from '../Stores/components/BranchDialog.vue'
 const { t } = useI18n()
 const router = useRouter()
 const {
-  branch, loading, activeTab,
+  branch, loading, tabLoading, activeTab,
   editModalVisible, branchForm, submitted, saving,
   openEditModal, handleSave
 } = useBranchDetail()
@@ -110,5 +115,14 @@ const navTabs = computed(() => [
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@keyframes loading {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+.animate-loading {
+  animation: loading 1.5s infinite ease-in-out;
+}
 </style>
 

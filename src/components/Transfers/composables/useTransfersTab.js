@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useTransfers } from '@/composables/useTransfers'
 
@@ -15,6 +15,11 @@ export function useTransfersTab(props, emit) {
   const activeStatus = ref('all')
   const detailDialog = ref(false)
   const selectedTransfer = ref(null)
+  
+  // Refresh data when tab changes
+  watch(activeStatus, () => {
+    loadTransfers()
+  })
 
   const statusOptions = computed(() => {
     const pending = transfers.value.filter(t => t.status === 'pending').length

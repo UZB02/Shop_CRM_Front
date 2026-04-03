@@ -8,7 +8,7 @@
     />
 
     <!-- Main layout -->
-    <div v-if="loading" class="flex flex-col lg:flex-row gap-4">
+    <div v-if="loading && !warehouse" class="flex flex-col lg:flex-row gap-4">
       <div class="w-full lg:w-60 xl:w-64 shrink-0 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 animate-pulse h-48"></div>
       <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 animate-pulse h-96"></div>
     </div>
@@ -24,7 +24,12 @@
       </div>
 
       <!-- Right: Tab Content -->
-      <div class="flex-1 min-w-0">
+      <div class="flex-1 min-w-0 relative">
+        <!-- Tab Loading Progress -->
+        <div v-if="tabLoading" class="absolute inset-x-0 -top-2 h-0.5 bg-emerald-500/10 overflow-hidden rounded-full z-10">
+          <div class="h-full bg-emerald-500/40 animate-loading translate-x-[-100%]"></div>
+        </div>
+        
         <Transition name="fade-slide" mode="out-in">
 
           <!-- ===== MAHSULOTLAR TAB ===== -->
@@ -126,7 +131,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { warehousesAPI } from '@/services/api'
 import TransfersTab from '@/components/Transfers/TransfersTab.vue'
@@ -138,7 +143,14 @@ const router = useRouter()
 
 const warehouse = ref(null)
 const loading = ref(true)
+const tabLoading = ref(false)
 const activeTab = ref('products')
+
+// Refresh only the relevant tab when changed
+watch(activeTab, (tab) => {
+  if (tab === 'transfers') return // TransfersTab has its own fetch logic
+  fetchWarehouseDetails(tab)
+})
 const productSearch = ref('')
 const pendingCount = ref(0)
 
@@ -158,15 +170,27 @@ const navTabs = computed(() => [
   { id: 'transfers', label: "O'tkazmalar", icon: 'pi-arrows-h', count: pendingCount.value > 0 ? pendingCount.value : undefined }
 ])
 
-const fetchWarehouseDetails = async () => {
-  loading.value = true
+const fetchWarehouseDetails = async (tab = null) => {
+  if (tab) tabLoading.value = true
+  else if (!warehouse.value) loading.value = true
+  
   try {
-    const res = await warehousesAPI.getById(route.params.id)
-    warehouse.value = res.data
+    const res = await warehousesAPI.getById(route.params.id, tab ? { tab } : {})
+    
+    if (tab && warehouse.value) {
+      if (res.data[tab]) {
+        warehouse.value[tab] = res.data[tab]
+      } else {
+        warehouse.value = res.data
+      }
+    } else {
+      warehouse.value = res.data
+    }
   } catch (error) {
     console.error('Error fetching warehouse details:', error)
   } finally {
     loading.value = false
+    tabLoading.value = false
   }
 }
 
@@ -198,6 +222,15 @@ onMounted(() => {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@keyframes loading {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+.animate-loading {
+  animation: loading 1.5s infinite ease-in-out;
+}
 </style>
 
 

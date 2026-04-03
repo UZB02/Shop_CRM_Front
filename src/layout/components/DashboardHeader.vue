@@ -20,10 +20,35 @@
       {{ currentPageTitle }}
     </h2>
 
+    <!-- Browser Navigation Controls (Back, Forward, Reload) -->
+    <div class="hidden sm:flex items-center gap-0.5 ml-2 mr-auto border-l border-slate-200 dark:border-slate-800 pl-2">
+      <button 
+        @click="router.go(-1)"
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-95"
+        v-tooltip.bottom="'Ortga'"
+      >
+        <i class="pi pi-arrow-left text-[10px]"></i>
+      </button>
+      <button 
+        @click="router.go(1)"
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-95"
+        v-tooltip.bottom="'Oldinga'"
+      >
+        <i class="pi pi-arrow-right text-[10px]"></i>
+      </button>
+      <button 
+        @click="handleReload"
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all active:scale-95"
+        v-tooltip.bottom="'Yangilash'"
+      >
+        <i class="pi pi-refresh text-[10px]" :class="{ 'animate-spin': isReloading }"></i>
+      </button>
+    </div>
+
     <!-- Subscription warning strip (md+) -->
     <div
       v-if="subscriptionWarning"
-      class="hidden md:flex items-center gap-2 ml-4 mr-auto
+      class="hidden md:flex items-center gap-2 mr-auto
              bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800
              text-amber-700 dark:text-amber-400
              px-3 py-1.5 rounded-lg text-xs font-medium"
@@ -86,10 +111,19 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 
 const router = useRouter()
+const isReloading = ref(false)
+
+const handleReload = () => {
+  isReloading.value = true
+  setTimeout(() => {
+    window.location.reload()
+  }, 200)
+}
 
 defineProps({
   currentPageTitle: String,

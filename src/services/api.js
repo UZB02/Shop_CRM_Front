@@ -158,7 +158,7 @@ export const storesAPI = {
 
 export const branchesAPI = {
     getAll: (params) => api.get('/branches/', { params }),
-    getById: (id) => api.get(`/branches/${id}/`),
+    getById: (id, params) => api.get(`/branches/${id}/`, { params }),
     create: (data) => api.post('/branches/', data),
     update: (id, data) => api.patch(`/branches/${id}/`, data),
     delete: (id) => api.delete(`/branches/${id}/`),
@@ -168,7 +168,7 @@ export const branchesAPI = {
 // Warehouses API
 export const warehousesAPI = {
     getAll: (params) => api.get('/warehouse/warehouses/', { params }),
-    getById: (id) => api.get(`/warehouse/warehouses/${id}/`),
+    getById: (id, params) => api.get(`/warehouse/warehouses/${id}/`, { params }),
     create: (data) => api.post('/warehouse/warehouses/', data),
     update: (id, data) => api.patch(`/warehouse/warehouses/${id}/`, data),
     delete: (id) => api.delete(`/warehouse/warehouses/${id}/`),
