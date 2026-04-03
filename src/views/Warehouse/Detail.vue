@@ -42,7 +42,7 @@
                   <input
                     v-model="productSearch"
                     type="text"
-                    placeholder="Mahsulot qidirish..."
+                    :placeholder="$t('warehouse.detail.search_products')"
                     class="h-8 pl-8 pr-4 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 w-64 transition-all"
                   />
                 </div>
@@ -57,12 +57,12 @@
                   <thead>
                     <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest w-10">№</th>
-                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mahsulot</th>
-                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Shtrix-kod</th>
-                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Miqdor</th>
-                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Xarid narxi</th>
-                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Sotuv narxi</th>
-                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Sana</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.col_product') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.form.barcode') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.col_price') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.date') }}</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -101,13 +101,12 @@
                 </table>
               </div>
 
-              <!-- Empty state -->
               <div v-else class="flex flex-col items-center justify-center py-12 text-center">
                 <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mb-3">
                   <i class="pi pi-inbox text-slate-400 text-lg"></i>
                 </div>
                 <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  {{ productSearch ? 'Qidiruv natijasi topilmadi' : 'Omborda mahsulotlar mavjud emas' }}
+                  {{ productSearch ? $t('warehouse.detail.no_search_results') : $t('warehouse.detail.no_warehouse_products') }}
                 </p>
               </div>
             </div>
@@ -124,6 +123,102 @@
             />
           </div>
 
+          <!-- ===== KIRIM TARIXI TAB ===== -->
+          <div v-else-if="activeTab === 'incoming'" key="incoming" class="space-y-3">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+              <!-- Table header info -->
+              <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10 flex items-center justify-between">
+                <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.detail.incoming_title') }}</h3>
+                <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                  {{ $t('warehouse.detail.total_count', { count: incomingTotal }) }}
+                </span>
+              </div>
+
+              <!-- Incoming table -->
+              <div v-if="incomingHistory.length" class="overflow-x-auto">
+                <table class="w-full text-left min-w-[900px]">
+                  <thead>
+                    <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.col_product') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.all') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.detail.col_description') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.date') }}</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
+                    <tr
+                      v-for="item in incomingHistory"
+                      :key="item.id"
+                      class="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-colors"
+                    >
+                      <td class="px-4 py-2.5">
+                        <div class="flex flex-col">
+                          <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">
+                            {{ item.product_name }}
+                          </span>
+                          <span class="text-[9px] font-medium text-slate-400">
+                             {{ item.product_barcode }} | {{ item.product_unit }}
+                          </span>
+                        </div>
+                      </td>
+                      <td class="px-4 py-2.5 text-right">
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">
+                          {{ item.quantity }}
+                        </span>
+                      </td>
+                      <td class="px-4 py-2.5 text-right text-[10px] text-slate-500 dark:text-slate-400">
+                        {{ Number(item.unit_cost).toLocaleString() }}
+                      </td>
+                      <td class="px-4 py-2.5 text-right font-black text-slate-800 dark:text-slate-100 text-[10px]">
+                        {{ Number(item.total_cost).toLocaleString() }}
+                      </td>
+                      <td class="px-4 py-2.5">
+                        <div class="flex items-center gap-1.5">
+                          <div class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px] font-bold text-slate-500">
+                            {{ item.worker_name?.charAt(0) }}
+                          </div>
+                          <span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">
+                            {{ item.worker_name }}
+                          </span>
+                        </div>
+                      </td>
+                      <td class="px-4 py-2.5">
+                        <span class="text-[10px] text-slate-400 italic">
+                          {{ item.description || '—' }}
+                        </span>
+                      </td>
+                      <td class="px-4 py-2.5 text-right text-[10px] text-slate-400">
+                        {{ item.created_on }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div v-else class="flex flex-col items-center justify-center py-12 text-center">
+                <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mb-3">
+                  <i class="pi pi-history text-slate-400 text-lg"></i>
+                </div>
+                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                  {{ $t('warehouse.detail.no_incoming') }}
+                </p>
+              </div>
+
+              <!-- Pagination -->
+              <div class="border-t border-slate-100 dark:border-slate-800">
+                <TablePagination
+                  :currentPage="incomingPage"
+                  :totalRecords="incomingTotal"
+                  :rowsPerPage="incomingRows"
+                  @page-change="onIncomingPageChange"
+                />
+              </div>
+            </div>
+          </div>
+
         </Transition>
       </div>
     </div>
@@ -134,9 +229,11 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { warehousesAPI } from '@/services/api'
+import TablePagination from '@/components/TablePagination.vue'
 import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 import WarehouseDetailPageHeader from './components/WarehouseDetailPageHeader.vue'
 import WarehouseTabsSidebar from './components/WarehouseTabsSidebar.vue'
+import i18n from '@/i18n'
 
 const route = useRoute()
 const router = useRouter()
@@ -153,6 +250,10 @@ watch(activeTab, (tab) => {
 })
 const productSearch = ref('')
 const pendingCount = ref(0)
+const incomingHistory = ref([])
+const incomingTotal = ref(0)
+const incomingPage = ref(1)
+const incomingRows = ref(10)
 
 const filteredProducts = computed(() => {
   const products = warehouse.value?.products ?? []
@@ -166,8 +267,9 @@ const filteredProducts = computed(() => {
 
 // Prepare tabs
 const navTabs = computed(() => [
-  { id: 'products', label: 'Mahsulotlar', icon: 'pi-box', count: warehouse.value?.products?.length ?? 0 },
-  { id: 'transfers', label: "O'tkazmalar", icon: 'pi-arrows-h', count: pendingCount.value > 0 ? pendingCount.value : undefined }
+  { id: 'products', label: i18n.global.t('warehouse.detail.products'), icon: 'pi-box', count: warehouse.value?.products?.length ?? 0 },
+  { id: 'transfers', label: i18n.global.t('warehouse.detail.transfers'), icon: 'pi-arrows-h', count: pendingCount.value > 0 ? pendingCount.value : undefined },
+  { id: 'incoming', label: i18n.global.t('warehouse.detail.incoming_history'), icon: 'pi-history', count: incomingHistory.value?.length > 0 ? incomingHistory.value.length : undefined }
 ])
 
 const fetchWarehouseDetails = async (tab = null) => {
@@ -175,16 +277,29 @@ const fetchWarehouseDetails = async (tab = null) => {
   else if (!warehouse.value) loading.value = true
   
   try {
-    const res = await warehousesAPI.getById(route.params.id, tab ? { tab } : {})
+    const params = tab === 'incoming' ? { page: incomingPage.value } : (tab ? { tab } : {})
+    const res = await (tab === 'incoming' 
+      ? warehousesAPI.getIncoming(route.params.id, params)
+      : warehousesAPI.getById(route.params.id, params)
+    )
     
     if (tab && warehouse.value) {
-      if (res.data[tab]) {
+      if (tab === 'incoming') {
+        incomingHistory.value = res.data.results || res.data
+        incomingTotal.value = res.data.count || (Array.isArray(res.data) ? res.data.length : 0)
+      } else if (res.data[tab]) {
         warehouse.value[tab] = res.data[tab]
       } else {
         warehouse.value = res.data
       }
     } else {
       warehouse.value = res.data
+      // Also fetch counts if needed
+      if (!tab) {
+         const incRes = await warehousesAPI.getIncoming(route.params.id, { page: 1 })
+         incomingHistory.value = incRes.data.results || incRes.data
+         incomingTotal.value = incRes.data.count || (Array.isArray(incRes.data) ? incRes.data.length : 0)
+      }
     }
   } catch (error) {
     console.error('Error fetching warehouse details:', error)
@@ -192,6 +307,11 @@ const fetchWarehouseDetails = async (tab = null) => {
     loading.value = false
     tabLoading.value = false
   }
+}
+
+const onIncomingPageChange = (event) => {
+  incomingPage.value = event.page + 1
+  fetchWarehouseDetails('incoming')
 }
 
 const openMovementDialog = () => {
@@ -232,5 +352,3 @@ onMounted(() => {
   animation: loading 1.5s infinite ease-in-out;
 }
 </style>
-
-

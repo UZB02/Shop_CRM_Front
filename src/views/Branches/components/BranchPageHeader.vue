@@ -19,7 +19,7 @@
         class="flex-none h-8 px-3 rounded-lg text-xs sm:text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap bg-white dark:bg-slate-900"
       >
         <i class="pi pi-send text-[10px] sm:text-xs text-amber-500"></i>
-        <span>Yangi o'tkazma</span>
+        <span>{{ $t('warehouse.detail.new_transfer') }}</span>
       </button>
       <button
         v-if="branch?.id"
@@ -27,7 +27,7 @@
         class="flex-none h-8 px-3 rounded-lg text-xs sm:text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap bg-white dark:bg-slate-900"
       >
         <i class="pi pi-database text-[10px] sm:text-xs text-blue-500"></i>
-        <span>Ommaviy yuklash</span>
+        <span>{{ $t('warehouse.detail.bulk_movement') }}</span>
       </button>
       <button
         @click="$emit('edit')"

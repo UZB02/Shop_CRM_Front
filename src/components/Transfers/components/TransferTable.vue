@@ -19,9 +19,9 @@
       <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
         <i class="pi pi-arrows-h text-slate-400 text-xl"></i>
       </div>
-      <p class="text-sm font-medium text-slate-500 dark:text-slate-400">O'tkazmalar topilmadi</p>
+      <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ $t('transfers.not_found') }}</p>
       <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">
-        {{ activeStatus !== 'all' ? 'Bu holatda o\'tkazmalar yo\'q' : 'Hali birorta o\'tkazma yaratilmagan' }}
+        {{ activeStatus !== 'all' ? $t('transfers.empty_status') : $t('transfers.empty_all') }}
       </p>
     </div>
 
@@ -32,12 +32,12 @@
         <table class="w-full text-sm text-left min-w-[780px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30">
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">ID / Sana</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Yo'nalish</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Mahsulot</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Xodim</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Holat</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-right">Amallar</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('transfers.col_id_date') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('transfers.col_direction') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">{{ $t('transfers.col_product') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('transfers.col_worker') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">{{ $t('transfers.col_status') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-right">{{ $t('transfers.col_actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/60">
@@ -70,7 +70,7 @@
               <!-- Item count -->
               <td class="px-5 py-3.5 text-center">
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  {{ t.item_count ?? t.items?.length ?? 0 }} dona
+                  {{ t.item_count ?? t.items?.length ?? 0 }} {{ $t('common.pcs') }}
                 </span>
               </td>
   
@@ -87,7 +87,7 @@
                     :class="statusClass(t.status)"
                   >
                     <span class="w-1.5 h-1.5 rounded-full bg-current" :class="t.status === 'pending' ? 'animate-pulse' : ''"></span>
-                    {{ t.status_display || t.status }}
+                    {{ $t('transfers.status.' + t.status) }}
                   </span>
                 </div>
               </td>
@@ -140,7 +140,7 @@
               class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
               :class="statusClass(t.status)"
             >
-              {{ t.status_display || t.status }}
+              {{ $t('transfers.status.' + t.status) }}
             </span>
           </div>
 
@@ -156,7 +156,7 @@
               </div>
             </div>
             <div class="flex flex-col items-end shrink-0">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ t.item_count ?? t.items?.length ?? 0 }} dona</span>
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ t.item_count ?? t.items?.length ?? 0 }} {{ $t('common.pcs') }}</span>
               <span class="text-[10px] text-slate-500 dark:text-slate-500 mt-0.5">{{ t.worker_name?.split(' ')[0] }}</span>
             </div>
           </div>
@@ -168,13 +168,13 @@
               @click.stop="$emit('confirm', t)"
               class="flex-1 h-8 rounded-lg bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest"
             >
-              Tasdiqlash
+              {{ $t('transfers.confirm_btn') }}
             </button>
             <button
               @click.stop="$emit('cancel', t)"
               class="flex-1 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 text-[10px] font-bold uppercase tracking-widest border border-rose-100 dark:border-rose-500/20"
             >
-              Bekor qilish
+              {{ $t('transfers.cancel_btn') }}
             </button>
           </div>
         </div>

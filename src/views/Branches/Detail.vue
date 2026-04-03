@@ -54,6 +54,12 @@
             key="customers" 
             :customers="branch?.customers" 
           />
+
+          <BranchIncomingTab 
+            v-else-if="activeTab === 'incoming'" 
+            key="incoming" 
+            :branch-id="branch?.id || branch?._id"
+          />
         </Transition>
       </div>
     </div>
@@ -80,6 +86,7 @@ import BranchPageHeader from './components/BranchPageHeader.vue'
 import BranchTabsSidebar from './components/BranchTabsSidebar.vue'
 import BranchWorkersTab from './components/BranchWorkersTab.vue'
 import BranchProductsTab from './components/BranchProductsTab.vue'
+import BranchIncomingTab from './components/BranchIncomingTab.vue'
 import BranchCustomersTab from './components/BranchCustomersTab.vue'
 import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 import BranchDialog from '../Stores/components/BranchDialog.vue'
@@ -103,7 +110,8 @@ const openNewTransferHandler = () => {
 const navTabs = computed(() => [
   { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: branch.value?.workers?.length },
   { id: 'products', label: t('menu.products'), icon: 'pi pi-box', count: branch.value?.products?.length },
-  { id: 'transfers', label: 'O\'tkazmalar', icon: 'pi pi-arrow-right-arrow-left' },
+  { id: 'transfers', label: t('warehouse.detail.transfers'), icon: 'pi pi-arrow-right-arrow-left' },
+  { id: 'incoming', label: t('warehouse.detail.incoming_history'), icon: 'pi pi-history' },
   { id: 'customers', label: t('menu.customers'), icon: 'pi pi-user', count: branch.value?.customers?.length },
 ])
 </script>

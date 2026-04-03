@@ -32,9 +32,12 @@
         "subscription_warning": "Обуна муддати тугаган. 3 кун ичида тўлов қилинг.",
         "subscription_warning_title": "Обуна Огоҳлантириши",
         "no_results": "Ҳеч нима топилмади",
+        "no_results_desc": "Ҳозирча ҳеч қандай маълумот мавжуд эмас.",
         "pay": "Тўлов",
         "pay_action": "Тўлов қилиш",
-        "pcs": "дона"
+        "confirm_title": "Тасдиқлаш",
+        "pcs": "дона",
+        "date": "Сана"
     },
     "workers": {
         "title": "Ходимлар",
@@ -322,6 +325,7 @@
         "success": "Муваффақиятли",
         "error": "Хатолик",
         "confirm_title": "Тасдиқлаш",
+        "date": "Сана",
         "form": {
             "store_name": "Дўкон номи",
             "store_name_ph": "Масалан: Бош Дўкон",
@@ -442,7 +446,24 @@
             "saving": "Саqlанмоқда...",
             "enter_to_add": "Клавиатурада 'Enter' орқали қатор қўшишингиз мумкин",
             "no_barcode": "ШТРИХ-КОДСИЗ",
-            "fifo_tip": "Жадвалга маҳсулотларни киритинг, миқдори ва нархларини белгиланг. Тизим автоматик равишда FIFO усулида операцияни амалга оширади."
+            "fifo_tip": "Жадвалга маҳсулотларни киритинг, миқдори ва нархларини белгиланг. Тизим автоматик равишda FIFO усулида операцияни амалга оширади."
+        },
+        "detail": {
+            "products": "Маҳсулотлар",
+            "transfers": "Ўтказмалар",
+            "incoming_history": "Кирим тарихи",
+            "incoming_title": "Кирим қилинган маҳсулотлар тарихи",
+            "no_incoming": "Ҳозирча кирим тарихи мавжуд эмас",
+            "col_worker": "Масъул ходим",
+            "col_description": "Тавсиф",
+            "search_products": "Маҳсулот қидириш...",
+            "new_transfer": "Янги ўтказма",
+            "bulk_movement": "Оммавий ҳаракат",
+            "store_unspecified": "Дўкон кўрсатилмаган",
+            "address_unspecified": "Манзил кўрсатилмаган",
+            "no_warehouse_products": "Омборда маҳсулотлар мавжуд эмас",
+            "no_search_results": "Қидирув натижаси топилмади",
+            "total_count": "{count} та жами ёзув"
         }
     },
     "products": {
@@ -839,9 +860,34 @@
             "note": "Изоҳ"
         },
         "error": {
-            "not_found": "Маълумот топилмади",
-            "not_found_desc": "Ушбу смена учун ҳисобот маълумотларини юклаб бўлмади ёки сизда ушбу саҳифани кўриш ҳуquқи йўқ.",
-            "back": "Ортга қайтиш"
+            "not_found": "Ma'lumot topilmadi",
+            "not_found_desc": "Ushbu smena uchun hisobot ma'lumotlarini yuklab bo'lmadi yoki sizda ushbu sahifani ko'rish huquqi yo'q.",
+            "back": "Ortga qaytish"
+        }
+    },
+    "transfers": {
+        "title": "Ўтказмалар",
+        "not_found": "Ўтказмалар топилмади",
+        "empty_status": "Бу ҳолатда ўтказмалар йўқ",
+        "empty_all": "Ҳали бирорта ўтказма яратилмаган",
+        "col_id_date": "ID / Сана",
+        "col_direction": "Йўналиш",
+        "col_product": "Маҳсулот",
+        "col_worker": "Ходим",
+        "col_status": "Ҳолат",
+        "col_actions": "Амаллар",
+        "confirm_msg": "Ушбу ўтказмани тасдиқлашни хоҳлайсизми?",
+        "cancel_msg": "Ушбу ўтказмани бекор қилишни хоҳлайсизми?",
+        "confirm_btn": "Тасдиқлаш",
+        "cancel_btn": "Бекор қилиш",
+        "back_btn": "Ортга қайтиш",
+        "yes_confirm": "Ҳа, тасдиқлаш",
+        "yes_cancel": "Ҳа, бекор қилиш",
+        "status": {
+            "all": "Барчаси",
+            "pending": "Кутилмоқда",
+            "confirmed": "Тасдиқланган",
+            "cancelled": "Бекор қилинган"
         }
     }
 }

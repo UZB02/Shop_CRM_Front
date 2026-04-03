@@ -162,6 +162,7 @@ export const branchesAPI = {
     create: (data) => api.post('/branches/', data),
     update: (id, data) => api.patch(`/branches/${id}/`, data),
     delete: (id) => api.delete(`/branches/${id}/`),
+    getIncoming: (id, params) => api.get(`/branches/${id}/incoming/`, { params }),
     getTransfers: (id, params) => api.get(`/branches/${id}/transfers/`, { params })
 }
 
@@ -169,6 +170,7 @@ export const branchesAPI = {
 export const warehousesAPI = {
     getAll: (params) => api.get('/warehouse/warehouses/', { params }),
     getById: (id, params) => api.get(`/warehouse/warehouses/${id}/`, { params }),
+    getIncoming: (id, params) => api.get(`/warehouse/warehouses/${id}/incoming/`, { params }),
     create: (data) => api.post('/warehouse/warehouses/', data),
     update: (id, data) => api.patch(`/warehouse/warehouses/${id}/`, data),
     delete: (id) => api.delete(`/warehouse/warehouses/${id}/`),

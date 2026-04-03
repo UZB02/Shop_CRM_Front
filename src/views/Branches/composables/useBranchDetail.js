@@ -16,7 +16,7 @@ export function useBranchDetail() {
 
     // Refresh only the relevant tab when changed
     watch(activeTab, (tab) => {
-        if (tab === 'transfers') return // TransfersTab has its own fetch logic
+        if (tab === 'transfers' || tab === 'incoming') return // These have their own fetch logic
         fetchDetail(tab)
     })
 
@@ -29,7 +29,8 @@ export function useBranchDetail() {
     const tabs = computed(() => [
         { id: 'workers', label: t('menu.workers') },
         { id: 'products', label: t('menu.products') },
-        { id: 'transfers', label: 'O\'tkazmalar' },
+        { id: 'transfers', label: t('warehouse.detail.transfers') },
+        { id: 'incoming', label: t('warehouse.detail.incoming_history') },
         { id: 'customers', label: t('menu.customers') }
     ])
 

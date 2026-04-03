@@ -32,13 +32,15 @@
         "subscription_warning": "Obuna muddati tugagan. 3 kun ichida to'lov qiling.",
         "subscription_warning_title": "Obuna Ogohlantirishi",
         "no_results": "Hech nima topilmadi",
+        "no_results_desc": "Hozircha hech qanday ma'lumot mavjud emas.",
         "pay": "To'lov",
         "pay_action": "To'lov qilish",
         "required_field": "Maydonni to'ldirish shart",
         "success": "Muvaffaqiyatli",
         "error_message": "Xatolik yuz berdi",
         "confirm_title": "Tasdiqlash",
-        "pcs": "dona"
+        "pcs": "dona",
+        "date": "Sana"
     },
     "workers": {
         "title": "Xodimlar",
@@ -448,6 +450,23 @@
             "enter_to_add": "Klaviaturada 'Enter' orqali qator qo'shishingiz mumkin",
             "no_barcode": "SHTRIX-KODSIZ",
             "fifo_tip": "Jadvalga mahsulotlarni kiriting, miqdori va narxlarini belgilang. Tizim avtomatik ravishda FIFO usulida operatsiyani amalga oshiradi."
+        },
+        "detail": {
+            "products": "Mahsulotlar",
+            "transfers": "O'tkazmalar",
+            "incoming_history": "Kirim tarixi",
+            "incoming_title": "Kirim qilingan mahsulotlar tarixi",
+            "no_incoming": "Hozircha kirim tarixi mavjud emas",
+            "col_worker": "Mas'ul xodim",
+            "col_description": "Tavsif",
+            "search_products": "Mahsulot qidirish...",
+            "new_transfer": "Yangi o'tkazma",
+            "bulk_movement": "Ommaviy harakat",
+            "store_unspecified": "Do'kon ko'rsatilmagan",
+            "address_unspecified": "Manzil ko'rsatilmagan",
+            "no_warehouse_products": "Omborda mahsulotlar mavjud emas",
+            "no_search_results": "Qidiruv natijasi topilmadi",
+            "total_count": "{count} ta jami yozuv"
         }
     },
     "categories": {
@@ -835,6 +854,31 @@
             "not_found": "Ma'lumot topilmadi",
             "not_found_desc": "Ushbu smena uchun hisobot ma'lumotlarini yuklab bo'lmadi yoki sizda ushbu sahifani ko'rish huquqi yo'q.",
             "back": "Ortga qaytish"
+        }
+    },
+    "transfers": {
+        "title": "O'tkazmalar",
+        "not_found": "O'tkazmalar topilmadi",
+        "empty_status": "Bu holatda o'tkazmalar yo'q",
+        "empty_all": "Hali birorta o'tkazma yaratilmagan",
+        "col_id_date": "ID / Sana",
+        "col_direction": "Yo'nalish",
+        "col_product": "Mahsulot",
+        "col_worker": "Xodim",
+        "col_status": "Holat",
+        "col_actions": "Amallar",
+        "confirm_msg": "Ushbu o'tkazmani tasdiqlashni xohlaysizmi?",
+        "cancel_msg": "Ushbu o'tkazmani bekor qilishni xohlaysizmi?",
+        "confirm_btn": "Tasdiqlash",
+        "cancel_btn": "Bekor qilish",
+        "back_btn": "Ortga qaytish",
+        "yes_confirm": "Ha, tasdiqlash",
+        "yes_cancel": "Ha, bekor qilish",
+        "status": {
+            "all": "Barchasi",
+            "pending": "Kutilmoqda",
+            "confirmed": "Tasdiqlangan",
+            "cancelled": "Bekor qilingan"
         }
     }
 }

@@ -18,10 +18,10 @@
             ? 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
             : 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'"
         >
-          {{ warehouse.status === 'active' ? 'Faol' : 'Nofaol' }}
+          {{ warehouse.status === 'active' ? $t('common.active') : $t('common.inactive') }}
         </span>
       </div>
-      <p class="text-xs text-slate-400 mt-0.5 truncate">{{ warehouse?.store_name || 'Store unspecified' }} • {{ warehouse?.address || 'Address unspecified' }}</p>
+      <p class="text-xs text-slate-400 mt-0.5 truncate">{{ warehouse?.store_name || $t('warehouse.detail.store_unspecified') }} • {{ warehouse?.address || $t('warehouse.detail.address_unspecified') }}</p>
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <button
@@ -29,14 +29,14 @@
         class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
       >
         <i class="pi pi-bolt text-xs text-amber-500"></i>
-        <span>Ommaviy harakat</span>
+        <span>{{ $t('warehouse.detail.bulk_movement') }}</span>
       </button>
       <button
         @click="$emit('transfer')"
         class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
       >
         <i class="pi pi-plus text-xs"></i>
-        <span>Yangi o'tkazma</span>
+        <span>{{ $t('warehouse.detail.new_transfer') }}</span>
       </button>
     </div>
   </div>

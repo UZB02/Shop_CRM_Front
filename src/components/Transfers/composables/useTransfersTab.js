@@ -1,6 +1,7 @@
 import { ref, computed, watch } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useTransfers } from '@/composables/useTransfers'
+import i18n from '@/i18n'
 
 export function useTransfersTab(props, emit) {
   const confirm = useConfirm()
@@ -25,10 +26,10 @@ export function useTransfersTab(props, emit) {
     const pending = transfers.value.filter(t => t.status === 'pending').length
     emit('pending-count', pending)
     return [
-      { id: 'all',       label: 'Barchasi',       count: transfers.value.length },
-      { id: 'pending',   label: 'Kutilmoqda',     count: pending },
-      { id: 'confirmed', label: 'Tasdiqlangan',   count: transfers.value.filter(t => t.status === 'confirmed').length },
-      { id: 'cancelled', label: 'Bekor qilingan', count: transfers.value.filter(t => t.status === 'cancelled').length }
+      { id: 'all',       label: i18n.global.t('transfers.status.all'),       count: transfers.value.length },
+      { id: 'pending',   label: i18n.global.t('transfers.status.pending'),   count: pending },
+      { id: 'confirmed', label: i18n.global.t('transfers.status.confirmed'), count: transfers.value.filter(t => t.status === 'confirmed').length },
+      { id: 'cancelled', label: i18n.global.t('transfers.status.cancelled'), count: transfers.value.filter(t => t.status === 'cancelled').length }
     ]
   })
 
@@ -54,12 +55,12 @@ export function useTransfersTab(props, emit) {
 
   const confirmAction = (t) => {
     confirm.require({
-      message: 'Ushbu o\'tkazmani tasdiqlashni xohlaysizmi?',
-      header: 'Tasdiqlash',
+      message: i18n.global.t('transfers.confirm_msg'),
+      header: i18n.global.t('common.confirm_title'),
       icon: 'pi pi-check-circle',
       acceptClass: 'p-button-success',
-      acceptLabel: 'Ha, tasdiqlash',
-      rejectLabel: 'Bekor qilish',
+      acceptLabel: i18n.global.t('transfers.yes_confirm'),
+      rejectLabel: i18n.global.t('transfers.cancel_btn'),
       accept: async () => {
         const success = await confirmTransfer(t.id)
         if (success) loadTransfers()
@@ -69,12 +70,12 @@ export function useTransfersTab(props, emit) {
 
   const cancelAction = (t) => {
     confirm.require({
-      message: 'Ushbu o\'tkazmani bekor qilishni xohlaysizmi?',
-      header: 'Bekor qilish',
+      message: i18n.global.t('transfers.cancel_msg'),
+      header: i18n.global.t('transfers.cancel_btn'),
       icon: 'pi pi-exclamation-triangle',
       acceptClass: 'p-button-danger',
-      acceptLabel: 'Ha, bekor qilish',
-      rejectLabel: 'Ortga qaytish',
+      acceptLabel: i18n.global.t('transfers.yes_cancel'),
+      rejectLabel: i18n.global.t('transfers.back_btn'),
       accept: async () => {
         const success = await cancelTransfer(t.id)
         if (success) loadTransfers()

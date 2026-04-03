@@ -14,14 +14,14 @@
       <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-base font-bold text-slate-800 dark:text-slate-100">O'tkazma #{{ transfer.id }}</span>
+            <span class="text-base font-bold text-slate-800 dark:text-slate-100">{{ $t('transfers.title') }} #{{ transfer.id }}</span>
             <span
               class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
               :class="statusClass(transfer.status)"
             >
               <span class="w-1.5 h-1.5 rounded-full bg-current"
                 :class="transfer.status === 'pending' ? 'animate-pulse' : ''"></span>
-              {{ transfer.status_display || transfer.status }}
+              {{ $t('transfers.status.' + transfer.status) }}
             </span>
           </div>
           <p class="text-xs text-slate-400 mt-0.5">{{ transfer.created_on }}</p>
@@ -80,14 +80,14 @@
         <!-- Items list -->
         <div>
           <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
-            Mahsulotlar ({{ transfer.items?.length ?? transfer.item_count ?? 0 }})
+            {{ $t('warehouse.detail.products') }} ({{ transfer.items?.length ?? transfer.item_count ?? 0 }})
           </h4>
           <div class="rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
             <table class="w-full text-sm">
               <thead>
                 <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
-                  <th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400">Mahsulot</th>
-                  <th class="px-4 py-2.5 text-right text-xs font-semibold text-slate-400">Miqdor</th>
+                  <th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400">{{ $t('products.table.product') }}</th>
+                  <th class="px-4 py-2.5 text-right text-xs font-semibold text-slate-400">{{ $t('products.form.amount') }}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -114,13 +114,13 @@
           <div v-if="transfer.worker_name"
             class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"
           >
-            <div class="text-xs text-slate-400 mb-0.5">Xodim</div>
+            <div class="text-xs text-slate-400 mb-0.5">{{ $t('transfers.col_worker') }}</div>
             <div class="font-medium text-slate-700 dark:text-slate-200">{{ transfer.worker_name }}</div>
           </div>
           <div v-if="transfer.confirmed_at"
             class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20"
           >
-            <div class="text-xs text-emerald-600 dark:text-emerald-400 mb-0.5">Tasdiqlangan vaqt</div>
+            <div class="text-xs text-emerald-600 dark:text-emerald-400 mb-0.5">{{ $t('transfers.status.confirmed') }}</div>
             <div class="font-medium text-slate-700 dark:text-slate-200">{{ transfer.confirmed_at }}</div>
           </div>
         </div>
@@ -142,14 +142,14 @@
           @click="$emit('cancel', transfer)"
           class="flex-1 h-9 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 dark:hover:border-rose-500/30 text-sm font-medium transition-all"
         >
-          Bekor qilish
+          {{ $t('transfers.cancel_btn') }}
         </button>
         <button
           v-if="transfer.direction === 'in'"
           @click="$emit('confirm', transfer)"
           class="flex-[2] h-9 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition-all"
         >
-          Tasdiqlash
+          {{ $t('transfers.confirm_btn') }}
         </button>
       </div>
     </div>
