@@ -4,6 +4,7 @@
     <BranchPageHeader
       :branch="branch"
       @edit="openEditModal"
+      @transfer="openNewTransferHandler"
     />
 
     <!-- Main layout -->
@@ -66,6 +67,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useBranchDetail } from './composables/useBranchDetail'
 import { useI18n } from 'vue-i18n'
 
@@ -78,11 +80,19 @@ import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 import BranchDialog from '../Stores/components/BranchDialog.vue'
 
 const { t } = useI18n()
+const router = useRouter()
 const {
   branch, loading, activeTab,
   editModalVisible, branchForm, submitted, saving,
   openEditModal, handleSave
 } = useBranchDetail()
+
+const openNewTransferHandler = () => {
+  router.push({
+    name: 'branch-transfer-create',
+    params: { id: branch.value?.id || branch.value?._id }
+  })
+}
 
 // Prepare tabs with counts and icons
 const navTabs = computed(() => [
