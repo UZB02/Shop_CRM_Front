@@ -145,6 +145,7 @@
           Bekor qilish
         </button>
         <button
+          v-if="transfer.direction === 'in'"
           @click="$emit('confirm', transfer)"
           class="flex-[2] h-9 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition-all"
         >

@@ -101,6 +101,7 @@
                 </button>
                 <template v-if="t.status === 'pending'">
                   <button
+                    v-if="t.direction === 'in'"
                     @click="$emit('confirm', t)"
                     class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-all flex items-center justify-center"
                   >
