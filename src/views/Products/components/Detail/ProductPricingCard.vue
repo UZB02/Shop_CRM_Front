@@ -30,7 +30,7 @@
           </div>
           <div v-if="product?.active_promotion" class="flex items-center gap-2">
             <span class="text-[9px] font-bold text-slate-400 line-through opacity-70">{{ formatPrice(product?.sale_price) }}</span>
-            <span class="text-[8px] font-bold text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded-md uppercase tracking-widest">{{ $t('products.detail.promo_duration').split(' ')[0] }}</span>
+            <span class="text-[8px] font-bold text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded-md uppercase tracking-widest truncate max-w-[120px]">{{ product.active_promotion.name }}</span>
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@ export function useProductDetail() {
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '-'
-    return new Date(dateStr).toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long', year: 'numeric' })
+    return dateStr
   }
 
   const calculateMargin = () => {
