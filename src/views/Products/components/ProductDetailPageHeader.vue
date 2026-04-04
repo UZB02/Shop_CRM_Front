@@ -21,7 +21,7 @@
           {{ product.status_display || product.status }}
         </span>
       </div>
-      <p class="text-xs text-slate-400 mt-0.5 truncate">{{ product?.category?.name || 'Uncategorized' }} • SKU: {{ product?.sku || product?.barcode || '—' }}</p>
+      <p class="text-xs text-slate-400 mt-0.5 truncate">{{ product?.category?.name || $t('common.not_specified') }} • SKU: {{ product?.sku || product?.barcode || '—' }}</p>
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <button
@@ -29,7 +29,7 @@
         class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
       >
         <i class="pi pi-pencil text-xs text-emerald-500"></i>
-        <span>Tahrirlash</span>
+        <span>{{ $t('common.edit') }}</span>
       </button>
       <button
         @click="$emit('delete')"

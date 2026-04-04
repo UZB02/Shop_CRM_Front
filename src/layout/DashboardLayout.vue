@@ -26,7 +26,8 @@
       <!-- HEADER -->
       <DashboardHeader 
         v-model:sidebarOpen="sidebarOpen"
-        v-model:locale="locale"
+        :locale="locale"
+        @update:locale="setLang"
         :current-page-title="currentPageTitle"
         :subscription-warning="subscriptionWarning"
         :is-dark="isDark"
@@ -72,7 +73,7 @@ import UserProfileDialog from '@/components/UserProfileDialog.vue'
 
 const confirm = useConfirm()
 const { 
-  router, t, locale,
+  router, t, locale, setLang,
   sidebarOpen, desktopCollapsed, showProfileDialog, subscriptionWarning,
   isDark, toggleTheme,
   isFullscreen, toggleFullscreen,

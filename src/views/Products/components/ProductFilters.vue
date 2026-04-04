@@ -37,9 +37,9 @@
       @change="$emit('update:selectedPromotion', $event.target.value); $emit('change')"
       class="h-9 px-3 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all appearance-none pr-8 min-w-[140px]"
     >
-      <option value="">Barcha narxlar</option>
-      <option value="true">Aksiyadagi (Chegirma)</option>
-      <option value="false">Aksiyasiz (Oddiy)</option>
+      <option value="">{{ $t('products.filter_all_prices') }}</option>
+      <option value="true">{{ $t('products.filter_promo') }}</option>
+      <option value="false">{{ $t('products.filter_no_promo') }}</option>
     </select>
 
     <!-- Status filter -->
