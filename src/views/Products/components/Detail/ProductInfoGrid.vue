@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
     <!-- Category Card -->
     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
       <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2">{{ $t('products.detail.category') }}</span>

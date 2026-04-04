@@ -34,6 +34,7 @@
         <ProductFilters
           v-model:searchQuery="searchQuery"
           v-model:selectedStatus="selectedStatus"
+          v-model:selectedPromotion="selectedPromotion"
           v-model:selectedSubcategory="selectedSubcategory"
           :subcategories="subcategories"
           :loading="loading"
@@ -67,7 +68,7 @@ import { useCategories } from './composables/useCategories'
 
 const {
   loading, products, totalProducts, currentPage,
-  searchQuery, selectedCategory, selectedSubcategory, selectedStatus,
+  searchQuery, selectedCategory, selectedSubcategory, selectedStatus, selectedPromotion,
   subcategories, fetchSubcategories, loadProducts, handleSearch,
   handlePageChange, confirmDeleteProduct
 } = useProducts()

@@ -16,6 +16,7 @@ export function useProducts() {
     const selectedCategory = ref(null)
     const selectedSubcategory = ref(null)
     const selectedStatus = ref(null)
+    const selectedPromotion = ref(null)
     const subcategories = ref([])
 
     let lastRequestId = 0
@@ -55,6 +56,10 @@ export function useProducts() {
             
             if (selectedStatus.value) {
                 params.status = selectedStatus.value
+            }
+            
+            if (selectedPromotion.value !== null && selectedPromotion.value !== '') {
+                params.on_promotion = selectedPromotion.value
             }
 
             const response = await productsAPI.getAll(params)
@@ -119,6 +124,7 @@ export function useProducts() {
         selectedCategory,
         selectedSubcategory,
         selectedStatus,
+        selectedPromotion,
         subcategories,
         fetchSubcategories,
         loadProducts,

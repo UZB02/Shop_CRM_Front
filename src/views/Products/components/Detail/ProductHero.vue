@@ -1,12 +1,12 @@
 <template>
-  <div class="col-span-12 sm:col-span-4 xl:col-span-3 space-y-6">
+  <div class="space-y-6 max-w-md mx-auto md:max-w-none md:mx-0">
     <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 p-3 shadow-sm relative overflow-hidden group">
-      <div class="relative aspect-square rounded-[1.5rem] overflow-hidden bg-slate-50 dark:bg-slate-950 flex items-center justify-center border border-slate-50 dark:border-slate-800/40">
+      <div class="relative aspect-square rounded-[1.5rem] overflow-hidden bg-white dark:bg-white flex items-center justify-center p-2 lg:p-4">
         <template v-if="!loading">
           <img 
             v-if="product?.image" 
             :src="product.image" 
-            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
           />
           <div v-else class="flex flex-col items-center gap-2 text-slate-300">
             <i class="pi pi-image text-4xl opacity-50"></i>

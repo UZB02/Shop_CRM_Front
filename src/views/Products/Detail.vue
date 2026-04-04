@@ -8,32 +8,31 @@
     />
 
     <!-- Skeleton Loading -->
-    <div v-if="loading" class="grid grid-cols-12 gap-4">
-      <div class="col-span-12 lg:col-span-3 h-64 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 animate-pulse"></div>
-      <div class="col-span-12 lg:col-span-9 space-y-4">
-        <div class="h-32 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 animate-pulse"></div>
-        <div class="grid grid-cols-3 gap-4">
-           <div class="h-40 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 animate-pulse"></div>
-           <div class="h-40 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 animate-pulse"></div>
-           <div class="h-40 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 animate-pulse"></div>
+    <div v-if="loading" class="grid grid-cols-12 gap-4 lg:gap-6">
+      <div class="col-span-12 md:col-span-5 lg:col-span-4 xl:col-span-3 min-h-[300px] md:min-h-[400px] bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 animate-pulse"></div>
+      <div class="col-span-12 md:col-span-7 lg:col-span-8 xl:col-span-9 space-y-6">
+        <div class="h-32 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800/60 animate-pulse"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+           <div class="md:col-span-2 h-64 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 animate-pulse"></div>
+           <div class="h-64 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 animate-pulse"></div>
         </div>
       </div>
     </div>
 
     <!-- Main Grid Dashboard -->
-    <div v-else-if="product" class="grid grid-cols-12 gap-4">
+    <div v-else-if="product" class="grid grid-cols-12 gap-4 lg:gap-6">
       
       <!-- Photo and Status Column -->
-      <ProductHero :product="product" :loading="loading" />
+      <ProductHero class="col-span-12 md:col-span-5 lg:col-span-4 xl:col-span-3" :product="product" :loading="loading" />
 
       <!-- Main Data Column -->
-      <div class="col-span-12 lg:col-span-9 space-y-4">
+      <div class="col-span-12 md:col-span-7 lg:col-span-8 xl:col-span-9 space-y-4 lg:space-y-6">
         
         <!-- Specs Grid -->
         <ProductInfoGrid :product="product" />
 
         <!-- Financial & Barcode Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:items-start">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 lg:items-start">
           <ProductPricingCard 
              :product="product" 
              :formatPrice="formatPrice" 
