@@ -27,18 +27,22 @@
         <div class="hidden xl:flex items-center gap-4 text-right">
            <div class="flex flex-col">
               <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Do'kon</span>
-              <span class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase truncate max-w-[120px]">Test Do'kon</span>
+              <span class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase truncate max-w-[120px]">
+                {{ activeShift?.branch_name || 'Tanlanmagan' }}
+              </span>
            </div>
         </div>
 
         <!-- Xodim Info -->
         <div class="hidden sm:flex items-center gap-3">
-           <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
-              <i class="pi pi-user text-lg"></i>
+           <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold uppercase">
+              {{ authStore.user?.full_name?.charAt(0) || 'U' }}
            </div>
            <div class="flex flex-col">
               <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Xodim</span>
-              <span class="text-xs font-black text-slate-800 dark:text-slate-200">Ulugbek</span>
+              <span class="text-xs font-black text-slate-800 dark:text-slate-200">
+                {{ authStore.user?.full_name || 'Foydalanuvchi' }}
+              </span>
            </div>
         </div>
 
@@ -126,11 +130,14 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { usePOS } from '@/composables/usePOS'
+import { useAuthStore } from '@/store/auth'
 import PosCatalog from './components/PosCatalog.vue'
 import PosCart from './components/PosCart.vue'
 import PosReceipt from './components/PosReceipt.vue'
 import CheckoutModal from './components/CheckoutModal.vue'
 import ShiftModal from './components/ShiftModal.vue'
+
+const authStore = useAuthStore()
 
 const {
   activeShift,

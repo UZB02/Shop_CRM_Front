@@ -20,10 +20,24 @@ const PERMISSION_MAP = {
 }
 
 function buildPermissions(userData) {
-    const role = userData?.role || userData?.worker?.role || ''
-    if (role === 'superadmin' || role === 'owner') return ALL_PERMISSIONS
-    const raw = userData?.worker?.permissions || []
-    return raw.map(p => PERMISSION_MAP[p] || p)
+    if (!userData) return []
+    
+    // Check various ownership/admin flags that might come from the server
+    const isOwner = userData.is_owner || userData.is_superuser || userData.is_staff
+    const role = (userData.role || userData.worker?.role || '').toLowerCase()
+    
+    // If user is owner or admin in any way, grant all permissions
+    if (isOwner || role === 'superadmin' || role === 'owner') {
+        return [...ALL_PERMISSIONS]
+    }
+
+    // Otherwise, use worker-specific permissions list
+    const raw = userData.worker?.permissions || userData.permissions || []
+    if (!Array.isArray(raw)) return []
+    
+    const mapped = raw.map(p => PERMISSION_MAP[p] || p)
+    // Filter out duplicates and invalid mappings
+    return [...new Set(mapped.filter(p => ALL_PERMISSIONS.includes(p)))]
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -31,9 +45,7 @@ export const useAuthStore = defineStore('auth', {
         const savedToken = localStorage.getItem('token')
         if (savedToken) setApiToken(savedToken)
 
-        // Bootstrap permissions from localStorage so the first navigation
-        // (before verifySession completes) doesn't immediately redirect.
-        // These are replaced by server-verified values in verifySession().
+        // Bootstrap permissions from localStorage carefully
         const bootstrapPerms = (() => {
             try {
                 const p = JSON.parse(localStorage.getItem('permissions') || '[]')
@@ -44,10 +56,7 @@ export const useAuthStore = defineStore('auth', {
         return {
             user: JSON.parse(localStorage.getItem('user')) || null,
             token: savedToken || null,
-            // In-memory permissions — the only source the router guard trusts.
-            // Populated from the API, not from localStorage directly.
             userPermissions: bootstrapPerms,
-            // True once /auth/me has confirmed the session this browser session.
             sessionVerified: false,
         }
     },
@@ -73,37 +82,43 @@ export const useAuthStore = defineStore('auth', {
                 localStorage.setItem('permissions', JSON.stringify(perms))
                 localStorage.setItem('isLoggedIn', 'true')
 
+                console.log('✅ Auth success: permissions granted:', perms)
                 return { success: true }
             } catch (error) {
-                console.error('Login error:', error)
+                console.error('❌ Login error:', error)
                 return { success: false, message: error.response?.data || 'Login failed' }
             }
         },
 
-        // Called once per browser session by the router guard before the first
-        // protected navigation. Fetches real user data from the server and writes
-        // verified permissions into memory. localStorage cannot influence the result.
         async verifySession() {
             if (!this.token) return false
             try {
                 const res = await workersAPI.getMe()
                 const userData = res.data
+                
+                if (!userData) throw new Error('Invalid user data from server')
+
                 this.user = userData
                 const perms = buildPermissions(userData)
+                
+                // Update in-memory state
                 this.userPermissions = perms
                 this.sessionVerified = true
-                // Keep localStorage in sync so bootstrap is fresh on next page load
+                
+                // Keep localStorage in sync correctly
                 localStorage.setItem('user', JSON.stringify(userData))
                 localStorage.setItem('permissions', JSON.stringify(perms))
+                
                 return true
             } catch (err) {
+                console.warn('⚠️ Session verification failed:', err.message)
                 if (err.response?.status === 401) {
-                    // Token is definitely invalid — force logout
                     this.logout()
                     return false
                 }
-                // Network error, 404, 500 etc. — don't log out, fall back to
-                // localStorage-bootstrapped permissions and continue the session
+                
+                // Critical: Fallback to existing permissions if it's just a network/server error
+                // This prevents users from getting locked out due to temporary API issues
                 this.sessionVerified = true
                 return true
             }

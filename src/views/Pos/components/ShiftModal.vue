@@ -21,24 +21,20 @@
       <!-- Opening Shift Inputs -->
       <div v-if="!isClosing" class="space-y-4">
         <div class="space-y-1.5">
-          <label class="text-[11px] font-bold text-slate-400 uppercase ml-1">Filialni tanlang</label>
-          <Select 
-            v-model="branch" 
-            :options="branches" 
-            optionLabel="name" 
-            optionValue="id"
-            placeholder="Filialni tanlang" 
-            class="sr-select w-full"
-          />
-        </div>
-        <div class="space-y-1.5">
           <label class="text-[11px] font-bold text-slate-400 uppercase ml-1">Boshlang'ich kassa (Naqd)</label>
           <InputNumber 
             v-model="cashStart" 
             class="w-full sr-input"
             :min="0"
             placeholder="0.00"
+            autofocus
           />
+        </div>
+        <div class="p-3 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-500/10 flex items-center gap-3">
+          <i class="pi pi-info-circle text-emerald-500"></i>
+          <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight">
+            Smena joriy filialda ({{ authStore.user?.branch_name || 'Aniqlanmagan' }}) ochiladi
+          </span>
         </div>
       </div>
 
@@ -76,7 +72,7 @@
         </button>
         <button 
           @click="handleSubmit"
-          :disabled="loading || (!isClosing && !branch)"
+          :disabled="loading || (!isClosing && !authStore.user?.branch_id)"
           class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl disabled:opacity-50"
           :class="[
              isClosing ? 'bg-rose-500 hover:bg-rose-600 hover:shadow-rose-400/30' : 'bg-[#10b981] hover:bg-[#059669] hover:shadow-emerald-500/30'
@@ -91,11 +87,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, watch } from 'vue'
 import Dialog from 'primevue/dialog'
 import InputNumber from 'primevue/inputnumber'
-import Select from 'primevue/select'
-import { branchesAPI } from '@/services/api'
+import { useAuthStore } from '@/store/auth'
 
 const props = defineProps({
   visible: Boolean,
@@ -106,28 +101,18 @@ const props = defineProps({
 
 const emit = defineEmits(['update:visible', 'confirm'])
 
-const branch = ref(null)
+const authStore = useAuthStore()
 const cashStart = ref(0)
 const cashCounted = ref(0)
-const branches = ref([])
-
-onMounted(async () => {
-  try {
-    const res = await branchesAPI.getAll()
-    branches.value = res.data.results || res.data
-    if (branches.value.length > 0) {
-      branch.value = branches.value[0].id
-    }
-  } catch (error) {
-    console.error('Error loading branches:', error)
-  }
-})
 
 const handleSubmit = () => {
   if (props.isClosing) {
     emit('confirm', { cash_counted: cashCounted.value })
   } else {
-    emit('confirm', { branch: branch.value, cash_start: cashStart.value })
+    emit('confirm', { 
+      branch: authStore.user?.branch_id, 
+      cash_start: cashStart.value 
+    })
   }
 }
 

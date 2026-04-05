@@ -32,7 +32,7 @@ export function useCheckout(props, emit) {
 
   const isValid = computed(() => {
     if (paymentType.value === 'mixed') return isMixedValid.value
-    if (paymentType.value === 'debt') return props.selectedCustomer && (paidAmount.value < props.total)
+    if (paymentType.value === 'debt') return props.selectedCustomer
     if (paymentType.value === 'cash' || paymentType.value === 'card') return paidAmount.value >= props.total
     return true
   })

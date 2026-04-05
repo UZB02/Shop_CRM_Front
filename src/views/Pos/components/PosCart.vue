@@ -71,9 +71,9 @@
 
           <!-- Vertical/Compact Qty Controller -->
           <div class="flex items-center gap-3 bg-slate-50 dark:bg-slate-900 p-1 rounded-lg border border-slate-100/30 dark:border-slate-800/50">
-            <button @click="$emit('update-qty', { product: item, change: -1 })" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">-</button>
+            <button @click="item.qty > 1 ? $emit('update-qty', item.id, item.qty - 1) : $emit('remove', item.id)" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">-</button>
             <span class="text-[11px] font-black w-3 text-center dark:text-slate-300">{{ item.qty }}</span>
-            <button @click="$emit('update-qty', { product: item, change: 1 })" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-emerald-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">+</button>
+            <button @click="$emit('update-qty', item.id, item.qty + 1)" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-emerald-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">+</button>
           </div>
         </div>
       </div>

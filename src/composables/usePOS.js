@@ -2,23 +2,37 @@ import { ref, computed, watch } from 'vue'
 import { shiftsAPI, salesAPI, customersAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/store/auth'
 
 export function usePOS() {
     const toast = useToast()
     const { t } = useI18n()
+    const authStore = useAuthStore()
 
     // --- State ---
     const activeShift = ref(null)
     const shiftLoading = ref(false)
     const posLoading = ref(false)
 
-    // --- Multi-Order State ---
-    const orders = ref([
+    // --- Multi-Order State & Persistence ---
+    const savedOrders = localStorage.getItem('pos_orders')
+    const orders = ref(savedOrders ? JSON.parse(savedOrders) : [
         { id: Date.now(), name: 'Savat 1', cart: [], selectedCustomer: null, discountAmount: 0 }
     ])
-    const activeOrderIndex = ref(0)
+    
+    const savedActiveIndex = localStorage.getItem('pos_active_order_index')
+    const activeOrderIndex = ref(savedActiveIndex ? parseInt(savedActiveIndex) : 0)
 
-    const activeOrder = computed(() => orders.value[activeOrderIndex.value])
+    // Sync to localStorage
+    watch(orders, (newOrders) => {
+        localStorage.setItem('pos_orders', JSON.stringify(newOrders))
+    }, { deep: true })
+
+    watch(activeOrderIndex, (newIndex) => {
+        localStorage.setItem('pos_active_order_index', newIndex.toString())
+    })
+
+    const activeOrder = computed(() => orders.value[activeOrderIndex.value] || orders.value[0])
     
     // Computed aliases for backward compatibility with existing components
     const cart = computed({
@@ -69,9 +83,12 @@ export function usePOS() {
     // --- Shift Logic ---
     const fetchShiftStatus = async () => {
         shiftLoading.value = true
+        console.log('🔄 Checking shift status...')
         try {
             const res = await shiftsAPI.getAll({ status: 'open', limit: 1 })
             const openShifts = res.data.results || res.data
+            console.log('📋 Shift API Response Data:', openShifts)
+            
             if (openShifts && openShifts.length > 0) {
                 activeShift.value = openShifts[0]
             } else {
@@ -245,6 +262,7 @@ export function usePOS() {
         posLoading.value = true
         try {
             const payload = {
+                branch: activeShift.value?.branch || authStore.user?.branch_id,
                 shift: activeShift.value?.id,
                 customer: selectedCustomer.value?.id || null,
                 items: cart.value.map(item => ({

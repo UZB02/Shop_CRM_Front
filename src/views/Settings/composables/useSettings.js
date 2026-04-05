@@ -71,26 +71,38 @@ export function useSettings() {
     }
 
     const saveSettings = async () => {
-        if (!settings.value?.id || !isDirty.value) return
+        if (!isDirty.value) return
         saving.value = true
+        console.log('--- Starting Save Process ---')
         try {
-            const patch = {}
+            const dataToSave = {}
             FORM_FIELDS.forEach(f => {
-                if (String(form[f]) !== String(originalForm.value[f])) patch[f] = form[f]
+                if (String(form[f]) !== String(originalForm.value[f])) dataToSave[f] = form[f]
             })
-            console.log('Settings PATCH payload:', patch)
-            await settingsAPI.update(settings.value.id, patch)
+
+            console.log('Payload:', dataToSave)
+            
+            if (settings.value?.id) {
+                // UPDATE BY ID
+                await settingsAPI.update(settings.value.id, dataToSave)
+            } else {
+                // UPDATE SINGLETON (no ID) or falls back
+                console.log('No ID found, attempting singleton PATCH on /settings/')
+                await settingsAPI.update(dataToSave)
+            }
+
             originalForm.value = { ...form }
             toast.add({
                 severity: 'success',
                 summary: t('common.updated'),
                 detail: t('settings.save_success'),
-                life: 5000
+                life: 3000
             })
+            console.log('--- Save Successful ---')
         } catch (e) {
-            console.error('Settings save error:', e)
+            console.error('Settings save error details:', e)
             const detail = e.response?.data
-                ? (typeof e.response.data === 'string' ? e.response.data : Object.values(e.response.data)[0])
+                ? (typeof e.response.data === 'string' ? e.response.data : JSON.stringify(e.response.data))
                 : t('settings.error')
             toast.add({ severity: 'error', summary: t('common.error'), detail, life: 5000 })
         } finally {

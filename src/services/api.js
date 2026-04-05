@@ -34,6 +34,9 @@ api.interceptors.request.use(
 // Response interceptor to handle errors and warnings
 api.interceptors.response.use(
     (response) => {
+        // Log all incoming API data to console for monitoring
+        console.log(`🌐 API RESPONSE [${response.config.method.toUpperCase()}] ${response.config.url}:`, response.data)
+
         // Check for subscription warning
         const warning = response.headers['x-subscription-warning']
         if (warning) {
@@ -42,6 +45,8 @@ api.interceptors.response.use(
         return response
     },
     (error) => {
+        console.error(`❌ API ERROR [${error.config?.method?.toUpperCase()}] ${error.config?.url}:`, error.response?.data || error.message)
+        
         if (error.response?.status === 401) {
             // Token expired or invalid — clear session data
             clearApiToken()
@@ -159,6 +164,7 @@ export const storesAPI = {
 export const branchesAPI = {
     getAll: (params) => api.get('/branches/', { params }),
     getById: (id, params) => api.get(`/branches/${id}/`, { params }),
+    getProducts: (id, params) => api.get(`/branches/${id}/products/`, { params }),
     create: (data) => api.post('/branches/', data),
     update: (id, data) => api.patch(`/branches/${id}/`, data),
     delete: (id) => api.delete(`/branches/${id}/`),
@@ -203,7 +209,13 @@ export const subscriptionAPI = {
 export const settingsAPI = {
     getAll: (params) => api.get('/settings/', { params }),
     getById: (id) => api.get(`/settings/${id}/`),
-    update: (id, data) => api.patch(`/settings/${id}/`, data)
+    create: (data) => api.post('/settings/', data),
+    update: (id, data) => {
+        if (typeof id === 'object' && !data) {
+            return api.patch('/settings/', id);
+        }
+        return api.patch(`/settings/${id}/`, data);
+    }
 }
 
 // Transfers API
