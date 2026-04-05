@@ -1,123 +1,161 @@
 <template>
-  <div class="space-y-6 pb-12">
+  <div class="space-y-4 pb-8">
     <!-- Header -->
-    <div class="flex flex-wrap items-center justify-between gap-6 pb-2">
-      <div class="flex items-center gap-5">
+    <div class="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-100 dark:border-slate-800">
+      <div class="flex items-center gap-3">
         <div>
-          <div class="flex items-center gap-2 mb-1">
-            <router-link to="/dashboard/customers" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-500 transition-colors">
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <router-link to="/dashboard/customers" class="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-500 transition-colors">
               {{ $t('menu.customers') }}
             </router-link>
-            <i class="pi pi-chevron-right text-[7px] text-slate-300 dark:text-slate-700"></i>
-            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">
+            <i class="pi pi-chevron-right text-[6px] text-slate-300 dark:text-slate-700"></i>
+            <span class="text-[9px] font-black uppercase tracking-widest text-slate-500">
               {{ $t('customers.details.subtitle') }}
             </span>
           </div>
-          <h1 class="text-3xl font-black text-slate-800 dark:text-white tracking-tight uppercase">
+          <h1 class="text-xl font-black text-slate-800 dark:text-white tracking-tight uppercase">
             {{ customer?.name || $t('customers.details.title') }}
           </h1>
-          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            {{ $t('customers.details.subtitle') }}
-          </p>
         </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
         <Button 
           :label="$t('common.edit')" 
-          icon="pi pi-pencil" 
+          icon="pi pi-pencil text-xs" 
           severity="success" 
-          class="!rounded-2xl !px-6 shadow-lg shadow-emerald-500/20"
+          class="!rounded-xl !px-4 !py-2 !text-xs !font-bold shadow-lg shadow-emerald-500/20"
           @click="editCustomer" 
         />
       </div>
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="space-y-6">
-      <div class="h-20 bg-slate-100 dark:bg-slate-900 animate-pulse rounded-3xl"></div>
-      <div class="h-[500px] bg-slate-100 dark:bg-slate-900 animate-pulse rounded-[2.5rem]"></div>
+    <div v-if="loading" class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
+      <div class="md:col-span-4 h-[300px] bg-slate-50 dark:bg-slate-900/50 animate-pulse rounded-2xl"></div>
+      <div class="md:col-span-8 h-[400px] bg-slate-50 dark:bg-slate-900/50 animate-pulse rounded-2xl"></div>
     </div>
 
-    <div v-else-if="customer" class="space-y-6">
-      <!-- Customer Info Accordion -->
-      <Accordion :value="['0']" class="detail-accordion">
-        <AccordionPanel value="0" class="!border-none !bg-transparent">
-          <AccordionHeader class="!bg-white dark:!bg-slate-900 !rounded-[2rem] !border !border-slate-100 dark:!border-slate-800 !px-8 !py-6 !shadow-sm hover:!bg-slate-50 dark:hover:!bg-slate-800/50 transition-colors">
-            <div class="flex items-center gap-5 text-left">
-              <div class="w-14 h-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl font-black shadow-lg shadow-emerald-500/20">
-                {{ getInitials(customer.name) }}
-              </div>
-              <div class="flex flex-col">
-                <span class="text-xl font-black text-slate-800 dark:text-white tracking-tight">{{ customer.name }}</span>
-                <div class="flex items-center gap-2 mt-1">
-                  <span v-if="customer.group_name" class="px-2 py-0.5 rounded-md bg-amber-500/10 text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest border border-amber-500/20">
-                    {{ customer.group_name }}
-                  </span>
-                  <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">{{ customer.status_display || customer.status }}</span>
-                </div>
+    <div v-else-if="customer" class="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-4">
+      
+      <!-- Left Column: Customer Profile & Stats -->
+      <div class="lg:col-span-4 flex flex-col gap-5">
+        
+        <!-- Profile Card -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm relative overflow-hidden group">
+          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          
+          <div class="flex items-start gap-4 mb-5 relative z-10">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-white flex items-center justify-center text-xl font-black shadow-md shadow-emerald-500/20 shrink-0">
+              {{ getInitials(customer.name) }}
+            </div>
+            <div class="flex flex-col pt-1">
+              <h2 class="text-base font-black text-slate-800 dark:text-white tracking-tight leading-tight">{{ customer.name }}</h2>
+              <div class="flex items-center gap-1.5 flex-wrap mt-1.5">
+                <span v-if="customer.group_name" class="px-2 py-0.5 rounded-md bg-amber-500/10 text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest border border-amber-500/20">
+                  {{ customer.group_name }}
+                </span>
+                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest border border-emerald-500/20">
+                  {{ customer.status_display || customer.status || 'ACTIVE' }}
+                </span>
               </div>
             </div>
-          </AccordionHeader>
-          <AccordionContent class="!bg-white dark:!bg-slate-900 !mt-2 !rounded-[2rem] !border !border-slate-100 dark:!border-slate-800 !overflow-hidden">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 p-8">
-              <!-- Contact -->
-              <div class="space-y-4">
-                <div class="flex flex-col gap-1">
-                  <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.phone') }}</span>
-                  <p class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ customer.phone }}</p>
-                </div>
-                <div class="flex flex-col gap-1">
-                  <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.registered') }}</span>
-                  <p class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ customer.created_on || formatDate(customer.createdAt) }}</p>
-                </div>
-              </div>
+          </div>
 
-              <!-- Address -->
-              <div class="flex flex-col gap-1">
-                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.address') }}</span>
-                <p class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ customer.address || '—' }}</p>
+          <div class="space-y-2.5 relative z-10 border-t border-slate-50 dark:border-slate-800/50 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 shrink-0">
+                <i class="pi pi-phone text-[10px]"></i>
               </div>
+              <div class="flex flex-col min-w-0">
+                <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.phone') }}</span>
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ customer.phone || '—' }}</span>
+              </div>
+            </div>
 
-              <!-- Stats 1 -->
-              <div class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800/50">
-                <span class="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1 block">{{ $t('customers.details.total_spent') }}</span>
-                <div class="flex items-baseline gap-1">
-                  <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">{{ formatCurrency(customer.totalSpent) }}</span>
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 shrink-0">
+                <i class="pi pi-map-marker text-[10px]"></i>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.address') }}</span>
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-200 line-clamp-2 leading-tight">{{ customer.address || '—' }}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 shrink-0">
+                <i class="pi pi-calendar text-[10px]"></i>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.registered') }}</span>
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ customer.created_on || formatDate(customer.createdAt) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Overview Cards -->
+        <div class="grid grid-cols-2 gap-3 md:gap-4">
+          <!-- Total Spent Card -->
+          <div class="bg-indigo-50 border border-indigo-100 dark:bg-indigo-500/10 dark:border-indigo-500/20 rounded-2xl p-4 relative overflow-hidden group">
+            <div class="absolute -right-4 -top-4 w-16 h-16 bg-indigo-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+            <div class="relative z-10 flex flex-col h-full justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-md bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-500">
+                  <i class="pi pi-wallet text-[10px]"></i>
                 </div>
-                <div class="text-[10px] font-bold text-slate-500 mt-2">{{ $t('customers.details.trades_count', { count: customer.tradesCount }) }}</div>
+                <span class="text-[8px] font-black text-indigo-400 uppercase tracking-widest">{{ $t('customers.details.total_spent') }}</span>
               </div>
+              <div>
+                <span class="text-sm font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">{{ formatCurrency(customer.totalSpent) }}</span>
+                <p class="text-[8px] text-slate-400 mt-0.5 uppercase font-bold tracking-wider">{{ $t('customers.details.trades_count', { count: customer.tradesCount }) }}</p>
+              </div>
+            </div>
+          </div>
 
-              <!-- Stats 2 -->
-              <div class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800/50 flex flex-col justify-center">
+          <!-- Debt Card -->
+          <div :class="[
+              'rounded-2xl p-4 border relative overflow-hidden group',
+              Number(customer.debt_balance) > 0 ? 'bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20' : 'bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+            ]"
+          >
+            <div class="absolute -left-4 -bottom-4 w-16 h-16 bg-white/40 dark:bg-white/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+            <div class="relative z-10 flex flex-col h-full justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <div :class="['w-6 h-6 rounded-md flex items-center justify-center', Number(customer.debt_balance) > 0 ? 'bg-rose-100 text-rose-500 dark:bg-rose-500/20' : 'bg-emerald-100 text-emerald-500 dark:bg-emerald-500/20']">
+                  <i :class="['text-[10px] pi', Number(customer.debt_balance) > 0 ? 'pi-exclamation-triangle' : 'pi-check-circle']"></i>
+                </div>
+                <span :class="['text-[8px] font-black uppercase tracking-widest', Number(customer.debt_balance) > 0 ? 'text-rose-400' : 'text-emerald-400']">{{ Number(customer.debt_balance) > 0 ? $t('customers.details.debt') : $t('customers.details.financial_status') }}</span>
+              </div>
+              <div>
                 <template v-if="Number(customer.debt_balance) > 0">
-                  <span class="text-[8px] font-black text-rose-500 uppercase tracking-[0.2em] mb-1 block">{{ $t('customers.details.debt') }}</span>
-                  <span class="text-2xl font-black text-rose-500 tracking-tighter">{{ formatCurrency(customer.debt_balance) }}</span>
+                  <span class="text-sm font-black text-rose-600 dark:text-rose-400 tracking-tighter">{{ formatCurrency(customer.debt_balance) }}</span>
                 </template>
                 <template v-else>
-                  <span class="text-[8px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1 block">{{ $t('customers.details.financial_status') }}</span>
-                  <span class="text-sm font-black text-emerald-500">{{ $t('customers.details.no_debt') }}</span>
+                  <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide block pt-1.5">{{ $t('customers.details.no_debt') }}</span>
                 </template>
               </div>
             </div>
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
+          </div>
+        </div>
 
-      <!-- History Column -->
-      <div class="h-full">
-        <CustomerTradesTable :trades="trades" />
       </div>
+
+      <!-- Right Column: Trade History -->
+      <div class="lg:col-span-8 flex flex-col min-h-[400px]">
+        <CustomerTradesTable :trades="trades" class="flex-grow" />
+      </div>
+
     </div>
     
     <!-- Not Found State -->
-    <div v-else class="text-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border border-dashed border-slate-200 dark:border-slate-800">
-      <div class="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mx-auto mb-6">
-        <i class="pi pi-exclamation-circle text-3xl text-slate-300"></i>
+    <div v-else class="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 mt-4">
+      <div class="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4 border border-slate-100 dark:border-slate-700">
+        <i class="pi pi-search text-lg text-slate-400"></i>
       </div>
-      <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-tight">{{ $t('customers.details.not_found') }}</h3>
-      <p class="text-slate-500 text-sm mt-2">{{ $t('customers.details.not_found_desc') }}</p>
-      <Button :label="$t('customers.details.back')" class="!rounded-2xl !mt-8 shadow-sm" severity="secondary" @click="$router.push('/dashboard/customers')" />
+      <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wide">{{ $t('customers.details.not_found') }}</h3>
+      <p class="text-slate-400 text-xs mt-1">{{ $t('customers.details.not_found_desc') }}</p>
+      <Button :label="$t('customers.details.back')" class="!rounded-xl !mt-6 shadow-sm !text-xs !px-4 !py-2" severity="secondary" @click="$router.push('/dashboard/customers')" />
     </div>
 
     <!-- Edit Dialog -->
@@ -138,10 +176,6 @@ import { useRoute } from 'vue-router'
 import { customersAPI, customerGroupsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
-import Accordion from 'primevue/accordion'
-import AccordionPanel from 'primevue/accordionpanel'
-import AccordionHeader from 'primevue/accordionheader'
-import AccordionContent from 'primevue/accordioncontent'
 import { useI18n } from 'vue-i18n'
 
 import CustomerTradesTable from './components/CustomerTradesTable.vue'
@@ -169,7 +203,7 @@ const loadCustomerData = async () => {
     const response = await customersAPI.getById(id)
     console.log('Customer Data from Backend:', response.data)
     
-    // Support different response structures: { data: { customer, trades } } or { data: { results, ... } }
+    // Support different response structures
     if (response.data.customer) {
         customer.value = response.data.customer
         trades.value = response.data.trades || []
@@ -241,13 +275,4 @@ onMounted(() => {
   loadGroups()
 })
 </script>
-
-<style scoped>
-.detail-accordion :deep(.p-accordionheader) {
-  padding: 0;
-}
-.detail-accordion :deep(.p-accordioncontent-content) {
-  padding: 0;
-}
-</style>
 
