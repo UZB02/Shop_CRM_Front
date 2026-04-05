@@ -218,8 +218,17 @@ export const transfersAPI = {
 // Shifts API
 export const shiftsAPI = {
     getAll: (params) => api.get('/shifts/', { params }),
+    open: (data) => api.post('/shifts/', data),
+    close: (id, data) => api.patch(`/shifts/${id}/close/`, data),
     getXReport: (id) => api.get(`/shifts/${id}/x-report/`),
     export: (id) => api.get(`/export/shifts/${id}/`, { responseType: 'blob' })
+}
+
+// Sales API
+export const salesAPI = {
+    create: (data) => api.post('/sales/', data),
+    getReceipt: (id) => api.get(`/sales/${id}/receipt/`, { responseType: 'blob' }),
+    scanProduct: (barcode) => api.get(`/warehouse/products/scan/`, { params: { code: barcode } })
 }
 
 export default api
