@@ -117,10 +117,11 @@ export function usePOS() {
             })
             return true
         } catch (error) {
+            const errorMsg = error.response?.data?.detail || error.response?.data?.message || (typeof error.response?.data === 'string' ? error.response.data : 'Smenani ochishda xatolik')
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.detail || 'Smenani ochishda xatolik',
+                detail: errorMsg,
                 life: 3000
             })
             return false
@@ -145,10 +146,11 @@ export function usePOS() {
             })
             return true
         } catch (error) {
+            const errorMsg = error.response?.data?.detail || error.response?.data?.message || (typeof error.response?.data === 'string' ? error.response.data : 'Smenani yopishda xatolik')
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.detail || 'Smenani yopishda xatolik',
+                detail: errorMsg,
                 life: 3000
             })
             return false
@@ -296,11 +298,43 @@ export function usePOS() {
             
             return res.data
         } catch (error) {
+            const errData = error.response?.data
+            let detail = 'Savdoni yakunlashda xatolik'
+            
+            if (errData) {
+                if (errData.detail) detail = errData.detail
+                else if (errData.message) detail = errData.message
+                else if (errData.error) detail = errData.error // Add support for .error field
+                else if (typeof errData === 'object') {
+                    const fields = Object.keys(errData)
+                    if (fields.length > 0) {
+                        const firstField = fields[0]
+                        let fieldError = errData[firstField]
+                        if (Array.isArray(fieldError)) fieldError = fieldError[0]
+                        
+                        // Handle one more level of nested object if it's not a string yet
+                        if (typeof fieldError === 'object' && fieldError !== null) {
+                            const subFields = Object.keys(fieldError)
+                            if (subFields.length > 0) {
+                                let subVal = fieldError[subFields[0]]
+                                if (Array.isArray(subVal)) subVal = subVal[0]
+                                fieldError = subVal
+                            }
+                        }
+                        
+                        // Fallback to field name if message is still not a string
+                        detail = typeof fieldError === 'string' ? fieldError : `${firstField} xatoligi`
+                    }
+                } else if (typeof errData === 'string') {
+                    detail = errData
+                }
+            }
+
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.detail || 'Savdoni yakunlashda xatolik',
-                life: 3000
+                detail: detail,
+                life: 5000 // Increased persistence for complex error messages
             })
             return null
         } finally {

@@ -10,10 +10,14 @@
         <option value="UZS">🇺🇿 UZS</option>
         <option value="USD">🇺🇸 USD</option>
         <option value="RUB">🇷🇺 RUB</option>
+        <option value="EUR">🇪🇺 EUR</option>
+        <option value="CNY">🇨🇳 CNY</option>
       </select>
     </div>
     <SettingRow v-model="form.show_usd_price" :label="$t('settings.currency.show_usd_label')" :desc="$t('settings.currency.show_usd_desc')" />
     <SettingRow v-model="form.show_rub_price" :label="$t('settings.currency.show_rub_label')" :desc="$t('settings.currency.show_rub_desc')" />
+    <SettingRow v-model="form.show_eur_price" :label="$t('settings.currency.show_eur_label')" :desc="$t('settings.currency.show_eur_desc')" />
+    <SettingRow v-model="form.show_cny_price" :label="$t('settings.currency.show_cny_label')" :desc="$t('settings.currency.show_cny_desc')" />
   </div>
 </template>
 

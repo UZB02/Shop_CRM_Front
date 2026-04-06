@@ -19,6 +19,10 @@
       </div>
       <textarea v-model="form.receipt_footer" rows="3" :placeholder="$t('settings.receipt.footer_placeholder')" class="settings-input resize-none text-xs" style="width: 100%; max-width: 280px;"></textarea>
     </div>
+
+    <SectionHeader icon="pi-barcode" color="text-slate-500">{{ $t('settings.receipt.barcode_settings_title') }}</SectionHeader>
+    <SettingRow v-model="form.show_name_on_barcode"  :label="$t('settings.receipt.show_name_on_barcode_label')"  :desc="$t('settings.receipt.show_name_on_barcode_desc')" />
+    <SettingRow v-model="form.show_price_on_barcode" :label="$t('settings.receipt.show_price_on_barcode_label')" :desc="$t('settings.receipt.show_price_on_barcode_desc')" />
   </div>
 </template>
 

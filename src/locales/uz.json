@@ -645,7 +645,9 @@
             "shifts_per_day_label": "Kundagi smena soni",
             "shifts_per_day_desc": "1 kunda nechta smena ishlashini belgilang",
             "cash_count_label": "Kassa hisobi (smena yopishda)",
-            "cash_count_desc": "Smena tugaganda kassani hisoblashni talab qilish"
+            "cash_count_desc": "Smena tugaganda kassani hisoblashni talab qilish",
+            "auto_pdf_label": "Avtomatik PDF hisobot",
+            "auto_pdf_desc": "Smena yopilganda hisobotni PDF shaklida tayyorlash"
         },
         "stock": {
             "title": "Kam Qoldiq Ogohlantirish",
@@ -675,7 +677,11 @@
             "show_usd_label": "USD narxini ko'rsatish",
             "show_usd_desc": "Barcha mahsulotlarda dollar narxini ham chiqarish",
             "show_rub_label": "RUB narxini ko'rsatish",
-            "show_rub_desc": "Barcha mahsulotlarda rubl narxini ham chiqarish"
+            "show_rub_desc": "Barcha mahsulotlarda rubl narxini ham chiqarish",
+            "show_eur_label": "EUR narxini ko'rsatish",
+            "show_eur_desc": "Barcha mahsulotlarda yevro narxini ham chiqarish",
+            "show_cny_label": "CNY narxini ko'rsatish",
+            "show_cny_desc": "Barcha mahsulotlarda yuan narxini ham chiqarish"
         },
         "receipt": {
             "title": "Chek Ko'rinishi",
@@ -689,7 +695,12 @@
             "header_placeholder": "Masalan: Do'konimizga xush kelibsiz!",
             "footer_label": "Oyoq qism (Footer)",
             "footer_desc": "Chek pastidagi matn (rahmat, qayta keling...)",
-            "footer_placeholder": "Masalan: Xaridingiz uchun rahmat!"
+            "footer_placeholder": "Masalan: Xaridingiz uchun rahmat!",
+            "barcode_settings_title": "Shtrix-kod sozlamalari",
+            "show_name_on_barcode_label": "Shtrix-kodda nomini chiqarish",
+            "show_name_on_barcode_desc": "Shtrix-kod yorlig'ida mahsulot nomi ko'rinsin",
+            "show_price_on_barcode_label": "Shtrix-kodda narxni chiqarish",
+            "show_price_on_barcode_desc": "Shtrix-kod yorlig'ida mahsulot narxi ko'rinsin"
         },
         "tax": {
             "title": "Soliq (Tax)",
