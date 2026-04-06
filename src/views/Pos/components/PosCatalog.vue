@@ -46,12 +46,12 @@
         v-for="product in filteredProducts" 
         :key="product.id" 
         class="product-minimal-card"
-        @click="(product.quantity === undefined || product.quantity > 0) && $emit('add-to-cart', product)"
+        @click="(product.displayQuantity === undefined || product.displayQuantity > 0) && $emit('add-to-cart', product)"
       >
         <div class="relative bg-white dark:bg-[#0f172a] rounded-2xl overflow-hidden flex flex-col border transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.03)] dark:shadow-none hover:-translate-y-1 hover:shadow-lg cursor-pointer min-h-[220px]"
              :class="[
-               product.quantity !== undefined && product.quantity <= 0 ? 'opacity-40 grayscale border-slate-100 dark:border-slate-800' : 
-               product.quantity !== undefined && product.quantity <= 5 ? 'bg-rose-50/30 dark:bg-rose-950/10 border-rose-200 dark:border-rose-900/40' : 
+               product.displayQuantity !== undefined && product.displayQuantity <= 0 ? 'opacity-40 grayscale border-slate-100 dark:border-slate-800' : 
+               product.displayQuantity !== undefined && product.displayQuantity <= 5 ? 'bg-rose-50/30 dark:bg-rose-950/10 border-rose-200 dark:border-rose-900/40' : 
                'border-slate-100 dark:border-slate-800'
              ]">
           
@@ -61,7 +61,7 @@
             <i v-else class="pi pi-box text-3xl text-slate-200 dark:text-slate-800"></i>
             
             <!-- Diagonal Low Stock Label -->
-            <div v-if="product.quantity !== undefined && product.quantity > 0 && product.quantity <= 5" 
+            <div v-if="product.displayQuantity !== undefined && product.displayQuantity > 0 && product.displayQuantity <= 5" 
                  class="absolute -top-1 -right-8 w-24 h-10 bg-rose-500 text-white flex items-center justify-center rotate-45 shadow-lg z-10">
               <span class="text-[7px] font-black uppercase tracking-widest mt-3">Tugamoqda</span>
             </div>
@@ -94,12 +94,12 @@
                 <span class="text-[8px] font-black text-slate-300 uppercase tracking-widest mt-1">{{ product.unit_display || product.unit }}</span>
               </div>
 
-              <div v-if="product.quantity !== undefined && product.quantity > 0" class="px-2 py-1 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-100 dark:border-orange-500/10">
+              <div v-if="product.displayQuantity !== undefined && product.displayQuantity > 0" class="px-2 py-1 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-100 dark:border-orange-500/10">
                  <span class="text-[8px] font-black text-orange-400 dark:text-orange-500 uppercase tracking-widest flex flex-col text-center">
-                   {{ product.quantity }} {{ product.unit_display || product.unit }}
+                   {{ product.displayQuantity }} {{ product.unit_display || product.unit }}
                  </span>
               </div>
-              <div v-else-if="product.quantity !== undefined && product.quantity <= 0" class="px-2 py-1 bg-rose-50 dark:bg-rose-950/20 rounded-lg text-[8px] font-black text-rose-400 uppercase">
+              <div v-else-if="product.displayQuantity !== undefined && product.displayQuantity <= 0" class="px-2 py-1 bg-rose-50 dark:bg-rose-950/20 rounded-lg text-[8px] font-black text-rose-400 uppercase">
                  Tugadi
               </div>
               <div v-else class="px-2 py-1 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg text-[8px] font-black text-emerald-500 uppercase">
@@ -118,11 +118,23 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { productsAPI, categoriesAPI, branchesAPI } from '@/services/api'
 import { useAuthStore } from '@/store/auth'
 
-const props = defineProps(['externalSearch'])
+const props = defineProps(['externalSearch', 'cart'])
 const emit = defineEmits(['add-to-cart', 'focus-barcode'])
 
 const authStore = useAuthStore()
 const products = ref([])
+
+// Compute stock relative to cart
+const productsWithStock = computed(() => {
+  return products.value.map(p => {
+    const inCart = props.cart?.find(item => item.id === p.id)
+    const cartQty = inCart ? inCart.qty : 0
+    return {
+      ...p,
+      displayQuantity: p.quantity !== undefined ? Math.max(0, p.quantity - cartQty) : undefined
+    }
+  })
+})
 const categories = ref([{ id: 'all', name: 'All' }])
 const loading = ref(false)
 const selectedCategoryId = ref('all')
@@ -181,7 +193,7 @@ const debouncedFetch = debounce((search, catId, subId) => {
   fetchProducts(search, catId, subId)
 }, 500)
 
-const filteredProducts = computed(() => products.value)
+const filteredProducts = computed(() => productsWithStock.value)
 
 watch(() => props.externalSearch, (newVal) => {
   debouncedFetch(newVal, selectedCategoryId.value, selectedSubcategoryId.value)
@@ -212,6 +224,8 @@ const formatCurrency = (val, currency = 'UZS') => {
     }).format(val || 0)
   }
 }
+// Expose fetchProducts for manual triggers (e.g. after checkout)
+defineExpose({ fetchProducts })
 </script>
 
 <style scoped>

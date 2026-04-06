@@ -91,7 +91,7 @@
             :model-value="selectedCustomer"
             @update:model-value="$emit('update:selectedCustomer', $event)"
             :options="customers" 
-            option-label="fullname" 
+            option-label="name" 
             placeholder="Tanlanmagan" 
             filter
             @filter="$emit('search-customers', $event.value)"

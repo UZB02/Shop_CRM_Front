@@ -74,6 +74,8 @@
         <input ref="barcodeInput" type="text" v-model="barcodeBuffer" @keyup.enter="handleBarcodeScan" class="opacity-0 absolute -top-8 left-0"/>
         
         <PosCatalog 
+          ref="catalogRef"
+          :cart="cart"
           @add-to-cart="addToCart"
           @focus-barcode="focusScanning"
           :external-search="searchQueryGlobal"
@@ -173,9 +175,13 @@ const lastTransaction = ref(null)
 const barcodeBuffer = ref('')
 const barcodeInput = ref(null)
 const searchQueryGlobal = ref('')
+const catalogRef = ref(null)
 
 onMounted(async () => {
-  await fetchShiftStatus()
+  await Promise.all([
+    fetchShiftStatus(),
+    fetchCustomers()
+  ])
   window.addEventListener('keydown', handleGlobalKey)
   if (activeShift.value) focusScanning()
 })
@@ -212,6 +218,11 @@ const onCheckoutConfirm = async (paymentData) => {
     lastTransaction.value = result
     showCheckout.value = false
     showReceipt.value = true
+    
+    // Refresh catalog to update stock levels
+    if (catalogRef.value) {
+      catalogRef.value.fetchProducts(searchQueryGlobal.value)
+    }
   }
 }
 
