@@ -64,36 +64,33 @@
             </div>
           </div>
 
-          <!-- Cash / Card amount -->
+          <!-- Chegirma miqdori (Naqd / Karta) -->
           <div v-if="paymentType !== 'mixed' && paymentType !== 'debt'" class="flex flex-col gap-1.5 animate-fadein">
             <div class="flex items-center justify-between">
-              <label class="lbl">Kiritilgan miqdor</label>
-              <button v-if="paymentType === 'cash'" @click="paidAmount = total"
-                class="text-[7.5px] font-black text-emerald-500 hover:text-emerald-400 uppercase tracking-widest transition-colors">
-                ✓ To'liq summa
+              <label class="lbl">Chegirma miqdori</label>
+              <button @click="discountAmount = 0"
+                class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 uppercase tracking-widest transition-colors">
+                × Tozalash
               </button>
             </div>
             <div class="relative group">
               <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors z-10 select-none">UZS</span>
-              <InputNumber v-model="paidAmount" inputId="paid_amount" class="w-full co-amount-input" :min="0" placeholder="0" :use-grouping="true" />
+              <InputNumber v-model="discountAmount" inputId="discount_amount" class="w-full co-amount-input" :min="0" :max="total" placeholder="0" :use-grouping="true" />
             </div>
-            <!-- Change -->
-            <div v-if="paymentType === 'cash' && paidAmount > total"
+            <!-- Yakuniy to'lanadigan summa -->
+            <div v-if="paidAmount < total"
               class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-800/30 animate-fadein">
               <div>
-                <span class="text-[7.5px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block">Mijozga qaytim</span>
-                <span class="text-base font-black text-emerald-600 dark:text-emerald-400 font-outfit leading-tight">{{ formatNum(paidAmount - total) }} <span class="text-xs">UZS</span></span>
+                <span class="text-[7.5px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block">To'lanadigan summa</span>
+                <span class="text-base font-black text-emerald-600 dark:text-emerald-400 font-outfit leading-tight">{{ formatNum(paidAmount) }} <span class="text-xs">UZS</span></span>
               </div>
-              <i class="pi pi-money-bill text-emerald-500 text-base" />
+              <i class="pi pi-tag text-emerald-500 text-base" />
             </div>
-            <!-- Remaining debt info (when paidAmount < total) -->
-            <div v-if="remainingDebt > 0"
-              class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/10 border border-amber-200 dark:border-amber-800/30 animate-fadein">
-              <div>
-                <span class="text-[7.5px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest block">Qolgan qarz</span>
-                <span class="text-base font-black text-amber-600 dark:text-amber-400 font-outfit leading-tight">{{ formatNum(remainingDebt) }} <span class="text-xs">UZS</span></span>
-              </div>
-              <i class="pi pi-info-circle text-amber-500 text-base" />
+            <!-- Chegirma totaldan oshib ketsa ogohlantirish -->
+            <div v-if="discountAmount > total"
+              class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-100 dark:border-rose-800/30 animate-fadein">
+              <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">Chegirma jami summadan oshib ketmoqda!</span>
             </div>
           </div>
 
@@ -164,7 +161,7 @@
           <!-- Note -->
           <div class="flex flex-col gap-1.5">
             <label class="lbl">Izoh <span class="normal-case font-medium tracking-normal text-slate-300 dark:text-slate-700">(ixtiyoriy)</span></label>
-            <textarea v-model="note" class="co-textarea" placeholder="Savdo haqida qo'shimcha ma'lumot..." rows="2" />
+            <textarea v-model="description" class="co-textarea" placeholder="Savdo haqida qo'shimcha ma'lumot..." rows="2" />
           </div>
 
         </div>
@@ -207,7 +204,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:visible', 'update:selected-customer', 'search-customers', 'confirm'])
 
-const { paymentType, paidAmount, cashAmount, cardAmount, note, methods, isMixedValid, isValid, remainingDebt, handleConfirm } = useCheckout(props, emit)
+const { paymentType, discountAmount, paidAmount, cashAmount, cardAmount, description, methods, isMixedValid, isValid, handleConfirm } = useCheckout(props, emit)
 
 const formatNum = (val) => new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(val || 0)
 </script>

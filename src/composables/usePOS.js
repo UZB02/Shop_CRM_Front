@@ -269,26 +269,42 @@ export function usePOS() {
         posLoading.value = true
         try {
             const payload = {
-                branch: activeShift.value?.branch || authStore.user?.branch_id,
-                shift: activeShift.value?.id,
                 customer: selectedCustomer.value?.id || null,
                 items: cart.value.map(item => ({
                     product: item.id,
-                    quantity: item.qty,
-                    price: item.sale_price || item.price,
-                    item_discount_pct: item.item_discount_pct || 0
+                    quantity: parseFloat(item.qty) || 1,
+                    unit_price: parseFloat(item.sale_price || item.price) || 0,
+                    ...(item.item_discount_pct > 0 && {
+                        original_price: parseFloat(item.original_sale_price || item.sale_price || item.price) || 0,
+                        item_discount_pct: parseFloat(item.item_discount_pct) || 0
+                    })
                 })),
-                discount_amount: discountAmount.value || 0,
                 payment_type: paymentData.payment_type,
                 paid_amount: paymentData.paid_amount,
-                note: paymentData.note || ''
+                description: paymentData.description || ''
             }
 
+            // discount_amount faqat 0 dan katta bo'lsa yuboriladi
+            if ((paymentData.discount_amount || 0) > 0) {
+                payload.discount_amount = paymentData.discount_amount
+            }
+
+            // To'lov turiga qarab amount maydonlarini qo'shish
             if (paymentData.payment_type === 'mixed') {
                 payload.cash_amount = paymentData.cash_amount
                 payload.card_amount = paymentData.card_amount
+            } else if (paymentData.payment_type === 'card') {
+                payload.card_amount = paymentData.paid_amount
+            } else if (paymentData.payment_type === 'cash') {
+                payload.cash_amount = paymentData.paid_amount
+            } else if (paymentData.payment_type === 'debt') {
+                // Debt: qisman to'langan bo'lsa cash_amount yuboriladi
+                if (paymentData.paid_amount > 0) {
+                    payload.cash_amount = paymentData.paid_amount
+                }
             }
 
+            console.log('🛒 CHECKOUT PAYLOAD (POST /sales/):', JSON.stringify(payload, null, 2))
             const res = await salesAPI.create(payload)
             toast.add({
                 severity: 'success',
@@ -301,7 +317,7 @@ export function usePOS() {
             const indexToRemove = activeOrderIndex.value
             removeOrder(indexToRemove)
             
-            return res.data
+            return res.data?.data || res.data
         } catch (error) {
             const errData = error.response?.data
             let detail = 'Savdoni yakunlashda xatolik'

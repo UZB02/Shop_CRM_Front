@@ -231,7 +231,42 @@ const onCheckoutConfirm = async (paymentData) => {
   }
 }
 
-const printReceipt = () => window.print()
+const printReceipt = () => {
+  const el = document.getElementById('printable-receipt')
+  if (!el) return
+  const html = el.innerHTML
+  const iframe = document.createElement('iframe')
+  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:80mm;height:auto;border:none;'
+  document.body.appendChild(iframe)
+  const doc = iframe.contentDocument || iframe.contentWindow.document
+  doc.open()
+  doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Savdo cheki</title><style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Courier New',monospace;font-size:9.5px;color:#1e293b;background:#fff;padding:8px 12px;width:80mm;}
+    .text-center{text-align:center;} .font-black{font-weight:900;} .font-bold{font-weight:700;}
+    .text-slate-400{color:#94a3b8;} .text-slate-500{color:#64748b;} .text-slate-700{color:#334155;}
+    .text-slate-800{color:#1e293b;} .text-slate-900{color:#0f172a;}
+    .text-emerald-500{color:#10b981;} .text-emerald-600{color:#059669;}
+    .text-rose-400{color:#f87171;} .text-rose-500{color:#ef4444;} .text-amber-500{color:#f59e0b;}
+    .text-xs{font-size:9px;} .text-sm{font-size:10px;} .text-lg{font-size:14px;}
+    .text-xl{font-size:16px;font-weight:900;} .uppercase{text-transform:uppercase;}
+    .tracking-widest{letter-spacing:0.15em;} .tracking-tighter{letter-spacing:-0.02em;}
+    .font-outfit{font-family:'Courier New',monospace;}
+    .flex{display:flex;} .justify-between{justify-content:space-between;} .items-center{align-items:center;}
+    .space-y-1>*+*{margin-top:2px;} .space-y-1\\.5>*+*{margin-top:3px;} .space-y-2\\.5>*+*{margin-top:6px;}
+    .border-b-2{border-bottom:1.5px dashed #cbd5e1;} .border-t-2{border-top:1.5px dashed #cbd5e1;}
+    .border-t{border-top:1px dashed #e2e8f0;}
+    .py-4{padding:8px 0;} .pt-3{padding-top:6px;} .pt-2{padding-top:4px;} .pb-2{padding-bottom:4px;}
+    .mb-1{margin-bottom:2px;} .mb-2{margin-bottom:4px;} .mb-3{margin-bottom:8px;} .mt-0\\.5{margin-top:2px;}
+    .leading-none{line-height:1;} .leading-tight{line-height:1.25;} .leading-relaxed{line-height:1.5;}
+    .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .receipt-paper{border:none!important;box-shadow:none!important;padding:0!important;}
+  </style></head><body>${html}</body></html>`)
+  doc.close()
+  iframe.contentWindow.focus()
+  iframe.contentWindow.print()
+  setTimeout(() => document.body.removeChild(iframe), 1000)
+}
 const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 </script>
 

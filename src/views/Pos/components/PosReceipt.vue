@@ -1,90 +1,178 @@
 <template>
-  <Dialog 
-    :visible="visible" 
-    @update:visible="$emit('update:visible', $event)" 
-    modal 
-    header="Muvaffaqiyatli savdo" 
-    :style="{ width: '400px' }" 
-    class="receipt-dialog"
-    :closable="false"
-  >
-    <div class="flex flex-col items-center gap-6 py-4">
-      <!-- Success Icon -->
-      <div class="w-20 h-20 rounded-[32px] bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-500 shadow-xl shadow-emerald-500/10">
-        <i class="pi pi-check-circle text-4xl animate-success-pop"></i>
-      </div>
+  <Teleport to="body">
+    <!-- Backdrop -->
+    <Transition name="rc-backdrop">
+      <div v-if="visible" class="fixed inset-0 z-[1100] bg-black/50 backdrop-blur-sm" @click="$emit('update:visible', false)" />
+    </Transition>
 
-      <!-- Transaction Summary Card -->
-      <div id="printable-receipt" class="w-full bg-slate-50 dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 p-6 space-y-6">
-        <div class="text-center font-outfit border-b border-dashed border-slate-200 dark:border-slate-700 pb-4">
-          <h3 class="font-black text-slate-800 dark:text-white uppercase tracking-tighter">Sirius CRM</h3>
-          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{{ formatDate(transaction?.created_at) }}</p>
-        </div>
+    <!-- Receipt Drawer -->
+    <Transition name="rc-slide">
+      <div v-if="visible" class="fixed top-0 right-0 h-full z-[1101] w-[420px] max-w-full flex flex-col bg-white dark:bg-[#0b0f1a] shadow-2xl">
 
-        <div class="space-y-3">
-          <div v-for="item in transaction?.items" :key="item.id" class="flex justify-between items-start gap-4">
-            <div class="flex-1 min-w-0">
-              <p class="text-[11px] font-black text-slate-700 dark:text-slate-300 truncate">{{ item.product_name || 'Mahsulot' }}</p>
-              <p class="text-[10px] text-slate-400 font-bold">{{ item.quantity }} x {{ formatCurrency(item.price) }}</p>
+        <!-- Header -->
+        <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+              <i class="pi pi-check text-white text-sm font-black" />
             </div>
-            <span class="text-[11px] font-black text-slate-800 dark:text-white shrink-0">
-              {{ formatCurrency(item.quantity * item.price) }}
-            </span>
+            <div>
+              <p class="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-600 leading-none mb-0.5">Savdo yakunlandi</p>
+              <p class="text-sm font-black text-slate-800 dark:text-white font-outfit leading-none">Savdo cheki #{{ t.id }}</p>
+            </div>
+          </div>
+          <button @click="$emit('update:visible', false)"
+            class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-400 transition-all">
+            <i class="pi pi-times text-xs" />
+          </button>
+        </div>
+
+        <!-- Receipt Paper -->
+        <div class="flex-1 overflow-y-auto px-4 py-4">
+          <div id="printable-receipt" class="receipt-paper mx-auto max-w-[340px] font-mono">
+
+            <!-- Store Header -->
+            <div class="text-center py-4 border-b-2 border-dashed border-slate-300 dark:border-slate-600 mb-3">
+              <p class="text-[10px] font-black tracking-[0.3em] text-slate-400 dark:text-slate-500 uppercase mb-1">★ ★ ★</p>
+              <h2 class="text-lg font-black tracking-tighter text-slate-900 dark:text-white font-outfit uppercase">Sirius CRM</h2>
+              <p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5">{{ t.branch_name || 'Do\'kon' }}</p>
+            </div>
+
+            <!-- Meta Info -->
+            <div class="space-y-1 text-[9.5px] mb-3">
+              <div class="flex justify-between">
+                <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Sana:</span>
+                <span class="text-slate-700 dark:text-slate-300 font-black">{{ t.created_on || '—' }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Kassir:</span>
+                <span class="text-slate-700 dark:text-slate-300 font-black">{{ t.worker_name || '—' }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Smena:</span>
+                <span class="text-slate-700 dark:text-slate-300 font-black">#{{ t.smena_id || '—' }}</span>
+              </div>
+              <div v-if="t.customer_name" class="flex justify-between">
+                <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Mijoz:</span>
+                <span class="text-slate-700 dark:text-slate-300 font-black">{{ t.customer_name }}</span>
+              </div>
+              <div v-if="t.receipt_number" class="flex justify-between">
+                <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Chek №:</span>
+                <span class="text-slate-700 dark:text-slate-300 font-black">{{ t.receipt_number }}</span>
+              </div>
+            </div>
+
+            <!-- Items -->
+            <div class="border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3">
+              <p class="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center">— MAHSULOTLAR —</p>
+              <div class="space-y-2.5">
+                <div v-for="(item, idx) in t.items" :key="item.id || idx">
+                  <!-- Product name -->
+                  <p class="text-[10px] font-black text-slate-800 dark:text-slate-200 truncate leading-tight">
+                    {{ item.product_name || 'Mahsulot' }}
+                  </p>
+                  <!-- qty × price = total -->
+                  <div class="flex justify-between items-center mt-0.5">
+                    <span class="text-[9px] text-slate-400 dark:text-slate-500 font-bold">
+                      {{ num(item.quantity) }} {{ item.unit || 'dona' }} × {{ fmt(item.unit_price) }}
+                    </span>
+                    <span class="text-[10px] font-black text-slate-700 dark:text-slate-300">
+                      {{ fmt(num(item.quantity) * num(item.unit_price)) }}
+                    </span>
+                  </div>
+                  <!-- item discount if any -->
+                  <div v-if="num(item.item_discount_pct) > 0" class="flex justify-between items-center">
+                    <span class="text-[8.5px] text-rose-400 font-bold">Chegirma {{ item.item_discount_pct }}%:</span>
+                    <span class="text-[8.5px] text-rose-400 font-bold">-{{ fmt(num(item.quantity) * num(item.unit_price) * num(item.item_discount_pct) / 100) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Totals -->
+            <div class="border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3 space-y-1.5">
+              <div class="flex justify-between text-[9.5px]">
+                <span class="text-slate-400 dark:text-slate-500 font-bold uppercase">Jami narx:</span>
+                <span class="text-slate-700 dark:text-slate-300 font-black">{{ fmt(t.total_price) }}</span>
+              </div>
+
+              <div v-if="num(t.discount_amount) > 0" class="flex justify-between text-[9.5px]">
+                <span class="text-rose-400 font-bold uppercase">Chegirma:</span>
+                <span class="text-rose-500 font-black">-{{ fmt(t.discount_amount) }}</span>
+              </div>
+
+              <!-- Final paid line -->
+              <div class="flex justify-between items-center pt-2 border-t border-dashed border-slate-200 dark:border-slate-700">
+                <span class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase font-outfit tracking-tight">TO'LANDI:</span>
+                <span class="text-xl font-black text-emerald-500 font-outfit">{{ fmt(t.paid_amount) }}</span>
+              </div>
+
+              <!-- Debt amount -->
+              <div v-if="num(t.debt_amount) > 0" class="flex justify-between items-center">
+                <span class="text-[9.5px] font-black text-amber-500 uppercase">Qarz:</span>
+                <span class="text-sm font-black text-amber-500">{{ fmt(t.debt_amount) }}</span>
+              </div>
+            </div>
+
+            <!-- Payment Breakdown -->
+            <div class="border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3">
+              <p class="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center">— TO'LOV USULI —</p>
+              <div class="space-y-1">
+                <div class="flex justify-between items-center text-[9.5px]">
+                  <span class="text-slate-400 dark:text-slate-500 font-bold uppercase">Tur:</span>
+                  <span class="font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                    {{ t.payment_type_display || t.payment_type || '—' }}
+                  </span>
+                </div>
+                <div v-if="num(t.cash_amount) > 0" class="flex justify-between text-[9.5px]">
+                  <span class="text-slate-400 dark:text-slate-500 font-bold uppercase">Naqd:</span>
+                  <span class="text-slate-700 dark:text-slate-300 font-black">{{ fmt(t.cash_amount) }}</span>
+                </div>
+                <div v-if="num(t.card_amount) > 0" class="flex justify-between text-[9.5px]">
+                  <span class="text-slate-400 dark:text-slate-500 font-bold uppercase">Karta:</span>
+                  <span class="text-slate-700 dark:text-slate-300 font-black">{{ fmt(t.card_amount) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 pb-2">
+              <p class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-relaxed">
+                Xarid uchun rahmat!<br/>
+                <span class="text-[8px]">★ ★ ★</span>
+              </p>
+            </div>
+
           </div>
         </div>
 
-        <div class="pt-4 border-t border-dashed border-slate-200 dark:border-slate-700 space-y-2">
-          <div class="flex justify-between text-[11px] font-bold">
-            <span class="text-slate-400 uppercase">Oraliq jami:</span>
-            <span class="text-slate-700 dark:text-slate-300">{{ formatCurrency(transaction?.total_price) }}</span>
+        <!-- Actions -->
+        <div class="flex-shrink-0 px-4 py-4 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
+          <div class="grid grid-cols-2 gap-2">
+            <button @click="$emit('download')"
+              class="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 transition-all active:scale-95">
+              <i class="pi pi-download text-sm" />
+              Yuklab olish
+            </button>
+            <button @click="$emit('print')"
+              class="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 transition-all active:scale-95">
+              <i class="pi pi-print text-sm" />
+              Chop etish
+            </button>
           </div>
-          <div v-if="transaction?.discount_amount > 0" class="flex justify-between text-[11px] font-bold">
-            <span class="text-rose-400 uppercase">Chegirma:</span>
-            <span class="text-rose-500">-{{ formatCurrency(transaction?.discount_amount) }}</span>
-          </div>
-          <div class="flex justify-between pt-2">
-            <span class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase font-outfit">Yakuniy:</span>
-            <span class="text-xl font-black text-[#10b981] font-outfit">
-              {{ formatCurrency(transaction?.paid_amount) }}
-            </span>
-          </div>
+          <button @click="$emit('update:visible', false)"
+            class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[9px] font-black uppercase tracking-[0.18em] shadow-lg shadow-emerald-500/25 transition-all active:scale-[0.98]">
+            <i class="pi pi-plus mr-2" />
+            Yangi savdo boshlash
+          </button>
         </div>
-        
-        <div class="text-center p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700/50">
-           <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">To'lov turi</p>
-           <p class="text-xs font-black text-slate-700 dark:text-emerald-400 uppercase tracking-wider">{{ transaction?.payment_type }}</p>
-        </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div class="grid grid-cols-2 gap-3 w-full">
-        <button 
-          @click="$emit('download')"
-          class="flex items-center justify-center gap-2 py-4 bg-slate-100 dark:bg-slate-800 rounded-2xl text-[11px] font-black uppercase text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-all"
-        >
-          <i class="pi pi-download"></i>
-          Chekni yuklash
-        </button>
-        <button 
-          @click="$emit('print')"
-          class="flex items-center justify-center gap-2 py-4 bg-slate-100 dark:bg-slate-800 rounded-2xl text-[11px] font-black uppercase text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-all"
-        >
-          <i class="pi pi-print"></i>
-          Chop etish
-        </button>
-        <button 
-          @click="$emit('update:visible', false)"
-          class="col-span-2 py-4 bg-[#10b981] text-white rounded-2xl text-[11px] font-black uppercase shadow-lg shadow-emerald-500/20 hover:bg-[#059669] transition-all"
-        >
-          Yangi savdo boshlash
-        </button>
       </div>
-    </div>
-  </Dialog>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup>
-import Dialog from 'primevue/dialog'
+import { computed } from 'vue'
 
 const props = defineProps({
   visible: Boolean,
@@ -93,67 +181,49 @@ const props = defineProps({
 
 defineEmits(['update:visible', 'print', 'download'])
 
-const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
+// Safe numeric conversion (handles string values from backend)
+const num = (val) => parseFloat(val) || 0
 
-const formatDate = (val) => {
-  const d = val ? new Date(val) : new Date()
-  return d.toLocaleString('uz-UZ')
-}
+// Currency formatter
+const fmt = (val) =>
+  new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(num(val)) + ' UZS'
+
+// Shorthand for cleaner template
+const t = computed(() => props.transaction || {})
 </script>
 
 <style scoped>
-.font-outfit {
-  font-family: 'Outfit', sans-serif;
+.receipt-paper {
+  background: #fff;
+  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+  padding: 8px 16px;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.06);
 }
-
-@keyframes success-pop {
-  0% { transform: scale(0.5); opacity: 0; }
-  70% { transform: scale(1.2); }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.animate-success-pop {
-  animation: success-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-:deep(.receipt-dialog) {
-  border-radius: 40px !important;
-  border: none;
-  overflow: hidden;
-  box-shadow: 0 50px 100px -20px rgb(0 0 0 / 0.25);
-}
-
-:deep(.receipt-dialog .p-dialog-header) {
-  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
-  background: white;
-  font-family: 'Outfit', sans-serif;
-  text-align: center;
-}
-
-:deep(.receipt-dialog .p-dialog-content) {
-  padding: 0 1.5rem 1.5rem 1.5rem;
-  background: white;
-}
-
-.dark :deep(.receipt-dialog .p-dialog-header),
-.dark :deep(.receipt-dialog .p-dialog-content) {
+.dark .receipt-paper {
   background: #0f172a;
+  border-color: #1e293b;
 }
-</style>
 
-<style scoped>
+/* Transitions */
+.rc-backdrop-enter-active, .rc-backdrop-leave-active { transition: opacity 0.25s ease; }
+.rc-backdrop-enter-from, .rc-backdrop-leave-to { opacity: 0; }
+
+.rc-slide-enter-active { transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease; }
+.rc-slide-leave-active { transition: transform 0.22s cubic-bezier(0.4, 0, 1, 1), opacity 0.18s ease; }
+.rc-slide-enter-from, .rc-slide-leave-to { transform: translateX(100%); opacity: 0; }
+
+/* Print styles */
 @media print {
-  body * {
-    visibility: hidden;
-  }
-  #printable-receipt, #printable-receipt * {
-    visibility: visible;
-  }
+  body * { visibility: hidden; }
+  #printable-receipt, #printable-receipt * { visibility: visible; }
   #printable-receipt {
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+    left: 0; top: 0;
+    width: 80mm;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
   }
 }
 </style>
