@@ -165,8 +165,13 @@ export function usePOS() {
         if (existing) {
             existing.qty++
         } else {
+            // Determine effective price: promotion price takes priority
+            const effectivePrice = product.active_promotion?.discounted_price || product.sale_price || product.price || 0
+            
             cart.value.push({
                 ...product,
+                sale_price: effectivePrice, // Override sale_price with promo price
+                original_sale_price: product.sale_price, // Store original if needed
                 qty: 1,
                 item_discount_pct: 0
             })
