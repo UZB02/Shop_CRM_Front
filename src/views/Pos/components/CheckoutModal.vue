@@ -1,225 +1,264 @@
 <template>
-  <Dialog 
-    :visible="visible" 
-    @update:visible="$emit('update:visible', $event)"
-    modal 
-    header="To'lovni amalga oshirish" 
-    :style="{ width: '500px' }"
-    :breakpoints="{ '960px': '75vw', '641px': '95vw' }"
-    class="checkout-dialog-retail"
-    :draggable="false"
-  >
-    <div class="flex flex-col gap-5 p-1 pt-2">
-      <!-- Summary Display -->
-      <CheckoutSummary :total="total" />
-
-      <!-- Payment Methods Controls -->
-      <PaymentMethodsControl 
-        v-model:paymentType="paymentType" 
-        :methods="methods" 
+  <Teleport to="body">
+    <!-- Backdrop -->
+    <Transition name="co-backdrop">
+      <div
+        v-if="visible"
+        class="fixed inset-0 z-[1000] bg-black/40 backdrop-blur-[2px]"
+        @click="$emit('update:visible', false)"
       />
+    </Transition>
 
-      <!-- Contextual Input Fields -->
-      <div class="min-h-[100px] flex flex-col justify-center animate-fade-in">
-        <div v-if="paymentType !== 'mixed'" class="space-y-2">
-          <div class="flex items-center justify-between px-1">
-             <label class="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest leading-none">Kiritilgan miqdor</label>
-             <button v-if="paymentType === 'cash'" @click="paidAmount = total" class="text-[8px] font-black text-emerald-500 uppercase tracking-widest hover:underline transition-all">To'liq summa</button>
+    <!-- Right Drawer -->
+    <Transition name="co-drawer">
+      <div
+        v-if="visible"
+        class="fixed top-0 right-0 h-full z-[1001] flex flex-col w-[400px] max-w-full bg-white dark:bg-[#0b0f1a] shadow-2xl shadow-black/30 overflow-hidden"
+      >
+        <!-- Header -->
+        <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800/60 flex-shrink-0">
+          <div>
+            <span class="text-[7.5px] font-black uppercase tracking-[0.22em] text-slate-400 dark:text-slate-600 block">To'lov</span>
+            <h2 class="text-[1rem] font-black text-slate-900 dark:text-white font-outfit tracking-tight leading-tight m-0">Savdoni yakunlash</h2>
           </div>
-          <div class="relative group">
-            <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 font-outfit font-black text-base group-focus-within:text-emerald-500 transition-colors">UZS</span>
-            <InputNumber v-model="paidAmount" inputId="paid_amount" class="w-full sr-retail-input-compact" :min="0" placeholder="0.00" autoFocus />
+          <button
+            @click="$emit('update:visible', false)"
+            class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition-all text-slate-400 dark:text-slate-500"
+          >
+            <i class="pi pi-times text-xs" />
+          </button>
+        </div>
+
+        <!-- Total Hero -->
+        <div class="mx-4 mt-3 rounded-xl overflow-hidden relative flex-shrink-0 bg-gradient-to-br from-[#0d1826] to-[#071022] dark:from-[#090e1a] dark:to-[#040b16]">
+          <div class="absolute inset-0" style="background:radial-gradient(circle at 80% 20%,rgba(16,185,129,.22) 0%,transparent 60%)" />
+          <div class="relative px-5 py-3.5 text-center">
+            <p class="text-[7.5px] font-black uppercase tracking-[0.2em] text-emerald-400/70 mb-1 m-0">Jami to'lanishi lozim</p>
+            <div class="flex items-baseline justify-center gap-2">
+              <span class="text-[2rem] font-black text-white font-outfit tracking-tight leading-none">{{ formatNum(total) }}</span>
+              <span class="text-[11px] font-black text-emerald-400/60">UZS</span>
+            </div>
           </div>
         </div>
 
-        <div v-if="paymentType === 'mixed'" class="space-y-4">
-           <div class="grid grid-cols-2 gap-3">
-              <div class="space-y-2">
-                 <label class="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">Naqd pul</label>
-                 <InputNumber v-model="cashAmount" class="w-full sr-retail-input-small-compact" :min="0" />
+        <!-- Scrollable Body -->
+        <div class="flex flex-col gap-3 px-4 pt-3 pb-3 overflow-y-auto flex-1 min-h-0">
+
+          <!-- Payment Methods -->
+          <div class="flex flex-col gap-1.5">
+            <label class="lbl">To'lov usuli</label>
+            <div class="grid grid-cols-4 gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+              <button
+                v-for="m in methods"
+                :key="m.id"
+                @click="paymentType = m.id"
+                class="flex flex-col items-center justify-center gap-1 py-2.5 px-1 rounded-lg transition-all duration-200"
+                :class="paymentType === m.id
+                  ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-md shadow-slate-200/80 dark:shadow-black/40'
+                  : 'text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400'"
+              >
+                <i :class="m.icon" class="text-[13px] leading-none" />
+                <span class="text-[7.5px] font-black uppercase tracking-wide leading-none">{{ m.label }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cash / Card amount -->
+          <div v-if="paymentType !== 'mixed' && paymentType !== 'debt'" class="flex flex-col gap-1.5 animate-fadein">
+            <div class="flex items-center justify-between">
+              <label class="lbl">Kiritilgan miqdor</label>
+              <button v-if="paymentType === 'cash'" @click="paidAmount = total"
+                class="text-[7.5px] font-black text-emerald-500 hover:text-emerald-400 uppercase tracking-widest transition-colors">
+                ✓ To'liq summa
+              </button>
+            </div>
+            <div class="relative group">
+              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors z-10 select-none">UZS</span>
+              <InputNumber v-model="paidAmount" inputId="paid_amount" class="w-full co-amount-input" :min="0" placeholder="0" :use-grouping="true" />
+            </div>
+            <!-- Change -->
+            <div v-if="paymentType === 'cash' && paidAmount > total"
+              class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-800/30 animate-fadein">
+              <div>
+                <span class="text-[7.5px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block">Mijozga qaytim</span>
+                <span class="text-base font-black text-emerald-600 dark:text-emerald-400 font-outfit leading-tight">{{ formatNum(paidAmount - total) }} <span class="text-xs">UZS</span></span>
               </div>
-              <div class="space-y-2">
-                 <label class="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">Plastik karta</label>
-                 <InputNumber v-model="cardAmount" class="w-full sr-retail-input-small-compact" :min="0" />
-              </div>
-           </div>
-           <div class="p-3 rounded-xl border border-dashed flex justify-between items-center bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-800">
-             <div class="flex flex-col">
-                <span class="text-[7px] font-black text-slate-400 uppercase tracking-widest">Jami kiritildi</span>
-                <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-500' : 'text-slate-400'">
-                  {{ formatCurrency(cashAmount + cardAmount).replace('UZS','') }}
-                </span>
-             </div>
-             <div v-if="isMixedValid" class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center anim-bounce">
-                <i class="pi pi-check text-[9px]"></i>
-             </div>
-             <div v-else class="text-[8px] font-black text-rose-500 uppercase tracking-widest px-2 py-0.5 rounded-full bg-rose-500/10">Mos emas</div>
-           </div>
-        </div>
-
-        <div v-if="paymentType === 'cash' && paidAmount > total" class="mt-4 p-4 bg-emerald-50/50 dark:bg-emerald-950/10 rounded-2xl border border-emerald-100/50 dark:border-emerald-500/10 flex justify-between items-center transition-all animate-fade-in">
-          <div class="flex flex-col">
-             <span class="text-[8px] font-black text-emerald-600 uppercase tracking-widest">Mijozga qaytim:</span>
-             <span class="text-xl font-black text-emerald-600 font-outfit tracking-tight">
-                {{ formatCurrency(paidAmount - total).replace('UZS','') }}
-             </span>
+              <i class="pi pi-money-bill text-emerald-500 text-base" />
+            </div>
+            <!-- Insufficient -->
+            <div v-if="paidAmount > 0 && paidAmount < total"
+              class="flex items-center gap-2 px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-800/30">
+              <i class="pi pi-exclamation-triangle text-rose-500 text-xs" />
+              <span class="text-[7.5px] font-black text-rose-500 uppercase tracking-widest">Yetarli mablag' kiritilmadi</span>
+            </div>
           </div>
-          <i class="pi pi-money-bill text-emerald-500 text-lg"></i>
+
+          <!-- Mixed -->
+          <div v-if="paymentType === 'mixed'" class="flex flex-col gap-2 animate-fadein">
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex flex-col gap-1">
+                <label class="lbl">Naqd pul</label>
+                <InputNumber v-model="cashAmount" class="w-full co-amount-input-sm" :min="0" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="lbl">Plastik karta</label>
+                <InputNumber v-model="cardAmount" class="w-full co-amount-input-sm" :min="0" />
+              </div>
+            </div>
+            <div class="flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-dashed"
+              :class="isMixedValid ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40' : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800'">
+              <div>
+                <span class="text-[7.5px] font-black uppercase tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'">Jami kiritildi</span>
+                <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'">{{ formatNum(cashAmount + cardAmount) }} <span class="text-xs">UZS</span></span>
+              </div>
+              <div class="w-7 h-7 rounded-full flex items-center justify-center"
+                :class="isMixedValid ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'">
+                <i :class="isMixedValid ? 'pi pi-check' : 'pi pi-minus'" class="text-[9px]" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Debt info -->
+          <div v-if="paymentType === 'debt'" class="animate-fadein">
+            <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/10 border border-amber-200 dark:border-amber-800/20">
+              <i class="pi pi-info-circle text-amber-500 text-sm flex-shrink-0" />
+              <span class="text-[7.5px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest leading-relaxed">Nasiyada qoldirilyapti — mijoz tanlash majburiy</span>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="h-px bg-slate-100 dark:bg-slate-800/60 flex-shrink-0" />
+
+          <!-- Customer -->
+          <div class="flex flex-col gap-1.5">
+            <label class="lbl" :class="paymentType === 'debt' ? '!text-rose-500' : ''">
+              Mijoz
+              <span v-if="paymentType === 'debt'" class="text-rose-400 ml-1">(Majburiy)</span>
+              <span v-else class="text-slate-300 dark:text-slate-700 ml-1">(Ixtiyoriy)</span>
+            </label>
+            <div class="relative">
+              <i class="pi pi-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 z-10 text-xs" />
+              <Select
+                :model-value="selectedCustomer"
+                @update:model-value="$emit('update:selected-customer', $event)"
+                :options="customers"
+                option-label="name"
+                placeholder="Mijozni tanlang..."
+                filter
+                @filter="$emit('search-customers', $event.value)"
+                class="w-full co-customer-select"
+                :class="paymentType === 'debt' && !selectedCustomer ? 'co-customer-select--required' : ''"
+              />
+            </div>
+            <div v-if="paymentType === 'debt' && !selectedCustomer"
+              class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-800/30">
+              <i class="pi pi-user-minus text-rose-500 text-xs" />
+              <span class="text-[7.5px] font-black text-rose-500 uppercase tracking-widest">Nasiya uchun mijoz tanlash majburiy!</span>
+            </div>
+          </div>
+
+          <!-- Note -->
+          <div class="flex flex-col gap-1.5">
+            <label class="lbl">Izoh <span class="normal-case font-medium tracking-normal text-slate-300 dark:text-slate-700">(ixtiyoriy)</span></label>
+            <textarea v-model="note" class="co-textarea" placeholder="Savdo haqida qo'shimcha ma'lumot..." rows="2" />
+          </div>
+
         </div>
 
-        <div v-if="paymentType === 'debt' && !selectedCustomer" class="mt-3 p-3 bg-rose-50 dark:bg-rose-950/20 rounded-xl border border-rose-100 dark:border-rose-900/30 flex gap-3 items-center">
-          <i class="pi pi-user-minus text-rose-500 text-sm"></i>
-          <span class="text-[8px] font-black text-rose-600 uppercase tracking-widest leading-none">Mijoz tanlash majburiy!</span>
+        <!-- Footer -->
+        <div class="px-4 py-3.5 border-t border-slate-100 dark:border-slate-800/60 flex gap-2.5 flex-shrink-0 bg-white dark:bg-[#0b0f1a]">
+          <button
+            @click="$emit('update:visible', false)"
+            class="flex-shrink-0 px-4 py-3 rounded-xl font-black text-[8.5px] uppercase tracking-widest text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
+          >Bekor</button>
+          <button
+            @click="handleConfirm"
+            :disabled="!isValid || loading"
+            class="flex-1 py-3 px-5 rounded-xl font-black text-[9px] uppercase tracking-[0.16em] text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+            :class="isValid && !loading
+              ? 'bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/25'
+              : 'bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed'"
+          >
+            <template v-if="loading"><i class="pi pi-spin pi-spinner text-sm" /><span>Jarayonda...</span></template>
+            <template v-else><i class="pi pi-check-circle text-sm" /><span>Sotishni tasdiqlash</span></template>
+          </button>
         </div>
       </div>
-
-      <!-- Additional Note -->
-      <div class="space-y-2">
-        <label class="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">Izoh (Ixtiyoriy)</label>
-        <textarea v-model="note" class="sr-retail-textarea-compact" placeholder="Savdo qaydlari..."></textarea>
-      </div>
-
-      <!-- Sub-Component Handlers -->
-      <CheckoutActions 
-        :isValid="isValid" 
-        :loading="loading"
-        @cancel="$emit('update:visible', false)"
-        @confirm="handleConfirm"
-      />
-    </div>
-  </Dialog>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup>
 import { useCheckout } from '@/composables/useCheckout'
-import Dialog from 'primevue/dialog'
 import InputNumber from 'primevue/inputnumber'
-import CheckoutSummary from './CheckoutSummary.vue'
-import PaymentMethodsControl from './PaymentMethodsControl.vue'
-import CheckoutActions from './CheckoutActions.vue'
+import Select from 'primevue/select'
 
 const props = defineProps({
   visible: Boolean,
   total: Number,
+  customers: Array,
   selectedCustomer: Object,
   loading: Boolean
 })
 
-const emit = defineEmits(['update:visible', 'confirm'])
+const emit = defineEmits(['update:visible', 'update:selected-customer', 'search-customers', 'confirm'])
 
-const {
-  paymentType,
-  paidAmount,
-  cashAmount,
-  cardAmount,
-  note,
-  methods,
-  isMixedValid,
-  isValid,
-  handleConfirm
-} = useCheckout(props, emit)
+const { paymentType, paidAmount, cashAmount, cardAmount, note, methods, isMixedValid, isValid, handleConfirm } = useCheckout(props, emit)
 
-const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
+const formatNum = (val) => new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(val || 0)
 </script>
 
 <style>
-/* Core Global PrimeVue Overrides for POS */
-.sr-retail-input-compact .p-inputtext {
-  background: #f8fafc !important;
-  border: 1px solid #f1f5f9 !important;
-  padding: 0.875rem 1rem 0.875rem 4rem !important;
-  border-radius: 16px !important;
-  font-family: 'Outfit', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 1.125rem !important;
-  color: #1e293b !important;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: none !important;
+.lbl { font-size: 7.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.18em; color: #94a3b8; display: block; }
+.dark .lbl { color: #475569; }
+
+.co-amount-input .p-inputtext {
+  background: #f8fafc !important; border: 1.5px solid #e2e8f0 !important;
+  padding: 0.7rem 1rem 0.7rem 3rem !important; border-radius: 12px !important;
+  font-family: 'Outfit', sans-serif !important; font-weight: 900 !important;
+  font-size: 1.2rem !important; color: #0f172a !important;
+  transition: all 0.2s !important; box-shadow: none !important;
 }
+.dark .co-amount-input .p-inputtext { background: #0f172a !important; border-color: #1e293b !important; color: #f1f5f9 !important; }
+.co-amount-input .p-inputtext:focus { border-color: #10b981 !important; box-shadow: 0 0 0 3px rgba(16,185,129,.12) !important; background: #fff !important; }
+.dark .co-amount-input .p-inputtext:focus { background: #070d1a !important; }
 
-.dark .sr-retail-input-compact .p-inputtext {
-  background: #0f172a !important;
-  border-color: #1e293b !important;
-  color: white !important;
+.co-amount-input-sm .p-inputtext {
+  background: #f8fafc !important; border: 1.5px solid #e2e8f0 !important;
+  padding: 0.55rem 0.75rem !important; border-radius: 10px !important;
+  font-family: 'Outfit', sans-serif !important; font-weight: 800 !important;
+  font-size: 0.875rem !important; color: #0f172a !important;
+  box-shadow: none !important; transition: all 0.2s !important;
 }
+.dark .co-amount-input-sm .p-inputtext { background: #0f172a !important; border-color: #1e293b !important; color: #f1f5f9 !important; }
+.co-amount-input-sm .p-inputtext:focus { border-color: #10b981 !important; box-shadow: 0 0 0 3px rgba(16,185,129,.1) !important; }
 
-.sr-retail-input-compact .p-inputtext:focus {
-  border-color: #10b981 !important;
-  background: white !important;
+.co-customer-select { background: #f8fafc !important; border: 1.5px solid #e2e8f0 !important; border-radius: 12px !important; transition: all 0.2s !important; }
+.co-customer-select .p-select-label { padding: 0.62rem 1rem 0.62rem 2.3rem !important; font-family: 'Inter', sans-serif !important; font-weight: 600 !important; font-size: 0.78rem !important; color: #334155 !important; }
+.dark .co-customer-select { background: #0f172a !important; border-color: #1e293b !important; }
+.dark .co-customer-select .p-select-label { color: #94a3b8 !important; }
+.co-customer-select:hover { border-color: #10b981 !important; }
+.co-customer-select--required { border-color: #f43f5e !important; box-shadow: 0 0 0 3px rgba(244,63,94,.08) !important; }
+
+.co-textarea {
+  width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0;
+  padding: 0.6rem 0.85rem; border-radius: 12px; font-family: 'Inter', sans-serif;
+  font-size: 11.5px; font-weight: 500; color: #334155; outline: none;
+  resize: none; transition: all 0.2s; line-height: 1.5;
 }
-
-.sr-retail-input-small-compact .p-inputtext {
-  background: #f8fafc !important;
-  border: 1px solid #f1f5f9 !important;
-  padding: 0.625rem 0.875rem !important;
-  border-radius: 12px !important;
-  font-family: 'Outfit', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 0.875rem !important;
-}
-
-.sr-retail-textarea-compact {
-  width: 100%;
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
-  padding: 0.75rem 1rem;
-  border-radius: 16px;
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  outline: none;
-  min-height: 55px;
-  transition: all 0.3s ease;
-  resize: none;
-}
-
-.dark .sr-retail-textarea-compact {
-  background: #0f172a;
-  border-color: #1e293b;
-  color: #94a3b8;
-}
-
-.sr-retail-textarea-compact:focus {
-  border-color: #10b981;
-  background: white !important;
-}
-
-:deep(.checkout-dialog-retail) {
-  border-radius: 32px !important;
-  border: none;
-  background: white;
-  box-shadow: 0 40px 100px -20px rgba(0,0,0,0.15) !important;
-}
-
-.dark :deep(.checkout-dialog-retail) { background: #0b0f1a; }
-
-:deep(.checkout-dialog-retail .p-dialog-header) {
-  padding: 1.5rem 1.5rem 0 1.5rem;
-  background: transparent;
-}
-
-:deep(.checkout-dialog-retail .p-dialog-title) {
-  font-size: 0.85rem;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 900;
-  text-transform: uppercase;
-  color: #1e293b;
-  letter-spacing: 0.08em;
-  opacity: 0.6;
-}
-
-.dark :deep(.checkout-dialog-retail .p-dialog-title) { color: white; }
-
-:deep(.checkout-dialog-retail .p-dialog-content) {
-  padding: 0 1.5rem 1.5rem 1.5rem;
-  background: transparent;
-}
+.dark .co-textarea { background: #0f172a; border-color: #1e293b; color: #94a3b8; }
+.co-textarea:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.1); background: #fff; }
+.dark .co-textarea:focus { background: #070d1a; }
 </style>
 
 <style scoped>
-.animate-fade-in { animation: fadeIn 0.4s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.co-backdrop-enter-active, .co-backdrop-leave-active { transition: opacity 0.25s ease; }
+.co-backdrop-enter-from, .co-backdrop-leave-to { opacity: 0; }
 
-.anim-bounce { animation: bounce 1.5s infinite; }
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+.co-drawer-enter-active { transition: transform 0.3s cubic-bezier(0.22,1,.36,1), opacity 0.22s ease; }
+.co-drawer-leave-active { transition: transform 0.2s cubic-bezier(.4,0,1,1), opacity 0.16s ease; }
+.co-drawer-enter-from, .co-drawer-leave-to { transform: translateX(100%); opacity: 0; }
+
+.animate-fadein { animation: fadein 0.2s ease-out; }
+@keyframes fadein { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
 </style>

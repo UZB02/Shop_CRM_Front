@@ -87,15 +87,12 @@
         <PosCart 
           :cart="cart"
           :totals="cartTotals"
-          :customers="customers"
           :orders="orders"
           :active-order-index="activeOrderIndex"
-          v-model:selectedCustomer="selectedCustomer"
           @update-qty="updateQty"
           @remove="removeFromCart"
           @clear="clearCart"
           @checkout="showCheckout = true"
-          @search-customers="fetchCustomers"
           @update-discount="discountAmount = $event"
           @update-item-discount="updateItemDiscount"
           @new-order="createNewOrder"
@@ -124,7 +121,15 @@
 
     <!-- Modals -->
     <ShiftModal v-model:visible="showShiftModal" :is-closing="!!activeShift" :shift="activeShift" :loading="posLoading" @confirm="onShiftConfirm" />
-    <CheckoutModal v-model:visible="showCheckout" :total="cartTotals.finalTotal" :selected-customer="selectedCustomer" :loading="posLoading" @confirm="onCheckoutConfirm" />
+    <CheckoutModal 
+      v-model:visible="showCheckout" 
+      :total="cartTotals.finalTotal" 
+      :customers="customers"
+      v-model:selected-customer="selectedCustomer" 
+      :loading="posLoading" 
+      @search-customers="fetchCustomers"
+      @confirm="onCheckoutConfirm" 
+    />
     <PosReceipt v-model:visible="showReceipt" :transaction="lastTransaction" @print="printReceipt" @download="downloadReceipt(lastTransaction.id)" />
   </div>
 </template>

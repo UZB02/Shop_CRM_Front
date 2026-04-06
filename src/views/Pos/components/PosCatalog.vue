@@ -56,54 +56,51 @@
              ]">
           
           <!-- Image Section -->
-          <div class="h-28 w-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center relative overflow-hidden group-hover:bg-slate-100 transition-colors">
-            <img v-if="product.image" :src="product.image" class="w-full h-full object-cover" :alt="product.name">
-            <i v-else class="pi pi-box text-3xl text-slate-200 dark:text-slate-800"></i>
+          <div class="h-36 w-full bg-white flex items-center justify-center relative overflow-hidden group-hover:opacity-95 transition-opacity p-3">
+            <img v-if="product.image" :src="product.image" class="w-full h-full object-contain" :alt="product.name">
+            <i v-else class="pi pi-box text-5xl text-slate-100"></i>
             
             <!-- Diagonal Low Stock Label -->
             <div v-if="product.displayQuantity !== undefined && product.displayQuantity > 0 && product.displayQuantity <= 5" 
-                 class="absolute -top-1 -right-8 w-24 h-10 bg-rose-500 text-white flex items-center justify-center rotate-45 shadow-lg z-10">
-              <span class="text-[7px] font-black uppercase tracking-widest mt-3">Tugamoqda</span>
+                 class="absolute -top-1 -right-8 w-24 h-10 bg-orange-500 text-white flex items-center justify-center rotate-45 shadow-lg z-10">
+              <span class="text-[7px] font-black uppercase tracking-widest mt-3">Kam qoldi</span>
             </div>
 
             <!-- Promotion Badge -->
-            <div v-if="product.active_promotion" class="absolute top-2 right-2 bg-rose-500 text-white text-[8px] font-black px-2 py-1 rounded-md uppercase tracking-widest shadow-lg">
-              SALE
+            <div v-if="product.active_promotion" class="absolute top-2 right-2 bg-rose-500 text-white flex flex-col px-2 py-1.5 rounded-[8px] items-end max-w-[80%] text-right shadow-lg z-20 overflow-hidden">
+              <span class="text-[8px] font-black uppercase tracking-tight leading-none truncate w-full">{{ product.active_promotion.name }}</span>
+              <span class="text-[7px] font-black text-rose-100 uppercase tracking-widest mt-1 leading-none line-clamp-1 block whitespace-nowrap">{{ product.active_promotion.valid_to }}</span>
             </div>
           </div>
 
           <!-- Content Section -->
-          <div class="p-4 flex flex-col flex-1">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 font-outfit uppercase tracking-tight line-clamp-2">
+          <div class="p-4 flex flex-col flex-1 bg-white dark:bg-[#111827]">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="font-black text-[13px] text-slate-800 dark:text-white font-outfit uppercase tracking-tight line-clamp-2">
                 {{ product.name }}
               </h3>
             </div>
 
             <!-- Price & Stock -->
             <div class="flex items-end justify-between mt-auto">
-              <div class="flex flex-col leading-none">
+              <div class="flex flex-col justify-end leading-none gap-1">
                 <!-- Promo Price Logic -->
-                <div v-if="product.active_promotion" class="flex flex-col">
-                  <span class="text-[9px] text-slate-400 line-through mb-0.5">{{ formatCurrency(product.sale_price, product.currency_code) }}</span>
-                  <span class="text-base font-black text-rose-500 font-outfit">{{ formatCurrency(product.active_promotion.discounted_price, product.currency_code) }}</span>
+                <div v-if="product.active_promotion" class="flex flex-col gap-0.5">
+                  <span class="text-[10px] font-bold text-slate-400 line-through">{{ formatCurrency(product.sale_price, product.currency_code) }}</span>
+                  <span class="text-lg font-black text-rose-500 font-outfit">{{ formatCurrency(product.active_promotion.discounted_price, product.currency_code) }}</span>
                 </div>
-                <div v-else class="flex flex-col">
-                  <span class="text-base font-black text-emerald-500 font-outfit">{{ formatCurrency(product.sale_price, product.currency_code) }}</span>
+                <div v-else class="flex flex-col gap-0.5">
+                  <span class="text-[10px] font-bold text-transparent select-none">&nbsp;</span>
+                  <span class="text-lg font-black text-slate-800 dark:text-slate-100 font-outfit">{{ formatCurrency(product.sale_price, product.currency_code) }}</span>
                 </div>
-                <span class="text-[8px] font-black text-slate-300 uppercase tracking-widest mt-1">{{ product.unit_display || product.unit }}</span>
-              </div>
-
-              <div v-if="product.displayQuantity !== undefined && product.displayQuantity > 0" class="px-2 py-1 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-100 dark:border-orange-500/10">
-                 <span class="text-[8px] font-black text-orange-400 dark:text-orange-500 uppercase tracking-widest flex flex-col text-center">
-                   {{ product.displayQuantity }} {{ product.unit_display || product.unit }}
-                 </span>
-              </div>
-              <div v-else-if="product.displayQuantity !== undefined && product.displayQuantity <= 0" class="px-2 py-1 bg-rose-50 dark:bg-rose-950/20 rounded-lg text-[8px] font-black text-rose-400 uppercase">
-                 Tugadi
-              </div>
-              <div v-else class="px-2 py-1 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg text-[8px] font-black text-emerald-500 uppercase">
-                 Mavjud
+                
+                <!-- Stock Details instead of Unit -->
+                <span v-if="product.displayQuantity > 0" class="text-[9px] font-black uppercase tracking-widest mt-1 text-slate-500 dark:text-slate-400">
+                  Qoldiq: <span class="text-orange-500">{{ product.displayQuantity }} {{ product.unit_display || product.unit }}</span>
+                </span>
+                <span v-else class="text-[9px] font-black uppercase tracking-widest mt-1 text-rose-500">
+                  Omborda tugagan
+                </span>
               </div>
             </div>
           </div>

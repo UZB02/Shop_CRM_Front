@@ -79,27 +79,6 @@
       </div>
     </div>
 
-    <!-- Compact Customer Section -->
-    <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800/40">
-      <div class="flex flex-col gap-3">
-        <label class="text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest px-1">
-          MIJOZ (NASIYA UCHUN)
-        </label>
-        <div class="relative">
-          <i class="pi pi-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 z-10 text-xs"></i>
-          <Select 
-            :model-value="selectedCustomer"
-            @update:model-value="$emit('update:selectedCustomer', $event)"
-            :options="customers" 
-            option-label="name" 
-            placeholder="Tanlanmagan" 
-            filter
-            @filter="$emit('search-customers', $event.value)"
-            class="w-full sr-select-retail-compact"
-          />
-        </div>
-      </div>
-    </div>
 
     <!-- Final Summary -->
     <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800/40 space-y-6">
@@ -129,8 +108,6 @@ import Select from 'primevue/select'
 const props = defineProps({
   cart: Array,
   totals: Object,
-  customers: Array,
-  selectedCustomer: Object,
   orders: Array,
   activeOrderIndex: Number
 })
