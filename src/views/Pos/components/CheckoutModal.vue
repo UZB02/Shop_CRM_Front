@@ -30,13 +30,14 @@
         </div>
 
         <!-- Total Hero -->
-        <div class="mx-4 mt-3 rounded-xl overflow-hidden relative flex-shrink-0 bg-gradient-to-br from-[#0d1826] to-[#071022] dark:from-[#090e1a] dark:to-[#040b16]">
-          <div class="absolute inset-0" style="background:radial-gradient(circle at 80% 20%,rgba(16,185,129,.22) 0%,transparent 60%)" />
+        <div class="mx-4 mt-3 rounded-xl overflow-hidden relative flex-shrink-0 bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-[#090e1a] dark:to-[#040b16]">
+          <div class="absolute inset-0 dark:block hidden" style="background:radial-gradient(circle at 80% 20%,rgba(16,185,129,.22) 0%,transparent 60%)" />
+          <div class="absolute inset-0 block dark:hidden" style="background:radial-gradient(circle at 20% 80%,rgba(255,255,255,0.15) 0%,transparent 55%)" />
           <div class="relative px-5 py-3.5 text-center">
-            <p class="text-[7.5px] font-black uppercase tracking-[0.2em] text-emerald-400/70 mb-1 m-0">Jami to'lanishi lozim</p>
+            <p class="text-[7.5px] font-black uppercase tracking-[0.2em] text-white/70 mb-1 m-0">Jami to'lanishi lozim</p>
             <div class="flex items-baseline justify-center gap-2">
               <span class="text-[2rem] font-black text-white font-outfit tracking-tight leading-none">{{ formatNum(total) }}</span>
-              <span class="text-[11px] font-black text-emerald-400/60">UZS</span>
+              <span class="text-[11px] font-black text-white/60">UZS</span>
             </div>
           </div>
         </div>
