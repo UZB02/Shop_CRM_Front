@@ -14,15 +14,18 @@ export function useCheckout(props, emit) {
     { id: 'debt', label: 'Nasiya', icon: 'pi pi-history' }
   ]
 
-  // Reactive initialization when total or visibility changes
+  // Reset & initialize on open
   watch(() => props.visible, (newVal) => {
     if (newVal) {
-      if (paymentType.value !== 'mixed') {
-        paidAmount.value = props.total
-      } else {
-        cashAmount.value = props.total
-        cardAmount.value = 0
-      }
+      // Reset payment type to default
+      paymentType.value = 'cash'
+      note.value = ''
+      // Reset selected customer (emit to parent)
+      emit('update:selected-customer', null)
+      // Initialize amounts
+      paidAmount.value = props.total
+      cashAmount.value = props.total
+      cardAmount.value = 0
     }
   })
 
@@ -30,10 +33,20 @@ export function useCheckout(props, emit) {
     return Math.abs((cashAmount.value + cardAmount.value) - props.total) < 0.01
   })
 
+  // Qolgan qarz (kiritilgan summa jami summadan kam bo'lsa)
+  const remainingDebt = computed(() => {
+    if ((paymentType.value === 'cash' || paymentType.value === 'card') && paidAmount.value > 0) {
+      const diff = props.total - paidAmount.value
+      return diff > 0 ? diff : 0
+    }
+    return 0
+  })
+
   const isValid = computed(() => {
     if (paymentType.value === 'mixed') return isMixedValid.value
-    if (paymentType.value === 'debt') return props.selectedCustomer
-    if (paymentType.value === 'cash' || paymentType.value === 'card') return paidAmount.value >= props.total
+    if (paymentType.value === 'debt') return !!props.selectedCustomer
+    // Naqd/Karta: kelishilgan narx kiritilsa ham qabul qilinadi (paidAmount > 0 yetarli)
+    if (paymentType.value === 'cash' || paymentType.value === 'card') return paidAmount.value > 0
     return true
   })
 
@@ -71,6 +84,7 @@ export function useCheckout(props, emit) {
     methods,
     isMixedValid,
     isValid,
+    remainingDebt,
     handleConfirm,
     resetValues
   }

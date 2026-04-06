@@ -86,11 +86,14 @@
               </div>
               <i class="pi pi-money-bill text-emerald-500 text-base" />
             </div>
-            <!-- Insufficient -->
-            <div v-if="paidAmount > 0 && paidAmount < total"
-              class="flex items-center gap-2 px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-800/30">
-              <i class="pi pi-exclamation-triangle text-rose-500 text-xs" />
-              <span class="text-[7.5px] font-black text-rose-500 uppercase tracking-widest">Yetarli mablag' kiritilmadi</span>
+            <!-- Remaining debt info (when paidAmount < total) -->
+            <div v-if="remainingDebt > 0"
+              class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/10 border border-amber-200 dark:border-amber-800/30 animate-fadein">
+              <div>
+                <span class="text-[7.5px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest block">Qolgan qarz</span>
+                <span class="text-base font-black text-amber-600 dark:text-amber-400 font-outfit leading-tight">{{ formatNum(remainingDebt) }} <span class="text-xs">UZS</span></span>
+              </div>
+              <i class="pi pi-info-circle text-amber-500 text-base" />
             </div>
           </div>
 
@@ -204,7 +207,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:visible', 'update:selected-customer', 'search-customers', 'confirm'])
 
-const { paymentType, paidAmount, cashAmount, cardAmount, note, methods, isMixedValid, isValid, handleConfirm } = useCheckout(props, emit)
+const { paymentType, paidAmount, cashAmount, cardAmount, note, methods, isMixedValid, isValid, remainingDebt, handleConfirm } = useCheckout(props, emit)
 
 const formatNum = (val) => new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(val || 0)
 </script>

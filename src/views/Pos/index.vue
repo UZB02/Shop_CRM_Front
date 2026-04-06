@@ -68,9 +68,9 @@
     </header>
 
     <!-- Main Dynamic Layout -->
-    <main v-if="activeShift" class="flex-1 overflow-hidden grid grid-cols-12">
+    <main v-if="activeShift" class="flex-1 overflow-hidden flex">
       <!-- Left side: Product Library -->
-      <section class="col-span-12 lg:col-span-8 h-full relative overflow-hidden flex flex-col p-8">
+      <section class="flex-1 h-full relative overflow-hidden flex flex-col p-8">
         <input ref="barcodeInput" type="text" v-model="barcodeBuffer" @keyup.enter="handleBarcodeScan" class="opacity-0 absolute -top-8 left-0"/>
         
         <PosCatalog 
@@ -83,7 +83,7 @@
       </section>
 
       <!-- Right side: Sidebar (Cart) -->
-      <section class="col-span-12 lg:col-span-4 h-full border-l border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0f1422] z-10 shadow-lg relative flex flex-col">
+      <section class="w-[340px] xl:w-[380px] flex-shrink-0 h-full border-l border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0f1422] z-10 shadow-lg flex flex-col overflow-hidden">
         <PosCart 
           :cart="cart"
           :totals="cartTotals"

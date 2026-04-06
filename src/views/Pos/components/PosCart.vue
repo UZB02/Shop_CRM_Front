@@ -1,5 +1,7 @@
 <template>
-  <div class="h-full flex flex-col p-6 bg-white dark:bg-[#0b0f1a]">
+  <div class="h-full flex flex-col bg-white dark:bg-[#0b0f1a] overflow-hidden">
+    <!-- Fixed Top Section: Tabs + Header -->
+    <div class="px-6 pt-6 flex-shrink-0">
     <!-- Multi-Order Tabs -->
     <div class="flex items-center gap-2 mb-6 overflow-x-auto no-scrollbar pb-2 flex-shrink-0">
       <div 
@@ -39,10 +41,11 @@
         <i class="pi pi-trash text-[14px]"></i>
       </button>
     </div>
+    </div><!-- end fixed top -->
 
-    <!-- High-Density Bag -->
-    <div class="flex-1 overflow-y-auto custom-scrollbar no-scrollbar pr-1 min-h-[300px]">
-      <div v-if="cart.length === 0" class="h-full flex flex-col items-center justify-center py-20 px-8 text-center border-2 border-dashed border-slate-50 dark:border-slate-800/40 rounded-[32px] opacity-30">
+    <!-- Scrollable Cart Items -->
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-2 min-h-0">
+      <div v-if="cart.length === 0" class="h-full flex flex-col items-center justify-center py-12 px-8 text-center border-2 border-dashed border-slate-50 dark:border-slate-800/40 rounded-[32px] opacity-30">
          <div class="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center mb-5">
             <i class="pi pi-shopping-bag text-2xl text-slate-300 dark:text-slate-700"></i>
          </div>
@@ -77,12 +80,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div><!-- end scroll area -->
 
-
-    <!-- Final Summary -->
-    <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800/40 space-y-6">
-      <div class="flex items-center justify-between px-1">
+    <!-- Sticky Footer: Total + Checkout -->
+    <div class="flex-shrink-0 px-6 pb-6 pt-4 border-t border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0b0f1a]">
+      <div class="flex items-center justify-between px-1 mb-4">
         <span class="text-[10px] font-black text-slate-400 dark:text-slate-700 uppercase tracking-widest">JAMI:</span>
         <div class="flex items-baseline gap-1.5 text-right">
            <span class="text-2xl font-black text-emerald-500 font-outfit uppercase">{{ formatCurrency(totals.finalTotal).replace('UZS','') }}</span>
@@ -90,15 +92,15 @@
         </div>
       </div>
 
-      <button 
+      <button
         @click="$emit('checkout')"
         :disabled="cart.length === 0"
-        class="w-full py-5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white font-black uppercase text-[10px] tracking-[0.2em] shadow-xl shadow-emerald-500/10 transition-all active:scale-95 flex items-center justify-center gap-2"
+        class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white font-black uppercase text-[10px] tracking-[0.2em] shadow-xl shadow-emerald-500/10 transition-all active:scale-95 flex items-center justify-center gap-2"
       >
         <span>TO'LOVGA O'TISH</span>
         <i class="pi pi-chevron-right text-[8px]"></i>
       </button>
-    </div>
+    </div><!-- end footer -->
   </div>
 </template>
 
