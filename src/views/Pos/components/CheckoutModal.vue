@@ -99,22 +99,58 @@
             <div class="grid grid-cols-2 gap-2">
               <div class="flex flex-col gap-1">
                 <label class="lbl">Naqd pul</label>
-                <InputNumber v-model="cashAmount" class="w-full co-amount-input-sm" :min="0" />
+                <div :class="isCashOverflow ? 'co-input-error' : ''">
+                  <InputNumber
+                    v-model="cashAmount"
+                    @input="cashAmount = $event.value ?? 0"
+                    class="w-full co-amount-input-sm"
+                    :min="0"
+                  />
+                </div>
               </div>
               <div class="flex flex-col gap-1">
                 <label class="lbl">Plastik karta</label>
-                <InputNumber v-model="cardAmount" class="w-full co-amount-input-sm" :min="0" />
+                <div :class="isCardOverflow ? 'co-input-error' : ''">
+                  <InputNumber
+                    v-model="cardAmount"
+                    @input="cardAmount = $event.value ?? 0"
+                    class="w-full co-amount-input-sm"
+                    :min="0"
+                  />
+                </div>
               </div>
             </div>
+
+            <!-- Naqd pul alohida oshib ketsa -->
+            <div v-if="isCashOverflow && !isSumOverflow"
+              class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
+              <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">Naqd pul jami summadan oshib ketmoqda!</span>
+            </div>
+
+            <!-- Plastik karta alohida oshib ketsa -->
+            <div v-if="isCardOverflow && !isSumOverflow"
+              class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
+              <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">Plastik karta jami summadan oshib ketmoqda!</span>
+            </div>
+
+            <!-- Yig'indi oshib ketsa -->
+            <div v-if="isSumOverflow"
+              class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
+              <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">Kiritilgan jami summa to'lanadigan miqdordan oshib ketmoqda!</span>
+            </div>
+
             <div class="flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-dashed"
-              :class="isMixedValid ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40' : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800'">
+              :class="isMixedValid ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40' : isSumOverflow ? 'bg-rose-50 dark:bg-rose-950/10 border-rose-200 dark:border-rose-800/30' : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800'">
               <div>
-                <span class="text-[7.5px] font-black uppercase tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'">Jami kiritildi</span>
-                <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'">{{ formatNum(cashAmount + cardAmount) }} <span class="text-xs">UZS</span></span>
+                <span class="text-[7.5px] font-black uppercase tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">Jami kiritildi</span>
+                <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">{{ formatNum(cashAmount + cardAmount) }} <span class="text-xs">UZS</span></span>
               </div>
               <div class="w-7 h-7 rounded-full flex items-center justify-center"
-                :class="isMixedValid ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'">
-                <i :class="isMixedValid ? 'pi pi-check' : 'pi pi-minus'" class="text-[9px]" />
+                :class="isMixedValid ? 'bg-emerald-500 text-white' : isSumOverflow ? 'bg-rose-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'">
+                <i :class="isMixedValid ? 'pi pi-check' : isSumOverflow ? 'pi pi-times' : 'pi pi-minus'" class="text-[9px]" />
               </div>
             </div>
           </div>
@@ -132,11 +168,17 @@
 
           <!-- Customer -->
           <div class="flex flex-col gap-1.5">
-            <label class="lbl" :class="paymentType === 'debt' ? '!text-rose-500' : ''">
-              Mijoz
-              <span v-if="paymentType === 'debt'" class="text-rose-400 ml-1">(Majburiy)</span>
-              <span v-else class="text-slate-300 dark:text-slate-700 ml-1">(Ixtiyoriy)</span>
-            </label>
+            <div class="flex items-center justify-between">
+              <label class="lbl" :class="paymentType === 'debt' ? '!text-rose-500' : ''">
+                Mijoz
+                <span v-if="paymentType === 'debt'" class="text-rose-400 ml-1">(Majburiy)</span>
+                <span v-else class="text-slate-300 dark:text-slate-700 ml-1">(Ixtiyoriy)</span>
+              </label>
+              <button v-if="selectedCustomer" @click="$emit('update:selected-customer', null)"
+                class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 uppercase tracking-widest transition-colors">
+                × Olib tashlash
+              </button>
+            </div>
             <div class="relative">
               <i class="pi pi-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 z-10 text-xs" />
               <Select
@@ -146,6 +188,7 @@
                 option-label="name"
                 placeholder="Mijozni tanlang..."
                 filter
+                showClear
                 @filter="$emit('search-customers', $event.value)"
                 class="w-full co-customer-select"
                 :class="paymentType === 'debt' && !selectedCustomer ? 'co-customer-select--required' : ''"
@@ -204,7 +247,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:visible', 'update:selected-customer', 'search-customers', 'confirm'])
 
-const { paymentType, discountAmount, paidAmount, cashAmount, cardAmount, description, methods, isMixedValid, isValid, handleConfirm } = useCheckout(props, emit)
+const { paymentType, discountAmount, paidAmount, cashAmount, cardAmount, description, methods, isMixedValid, isCashOverflow, isCardOverflow, isSumOverflow, isValid, handleConfirm } = useCheckout(props, emit)
 
 const formatNum = (val) => new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(val || 0)
 </script>
@@ -230,6 +273,15 @@ const formatNum = (val) => new Intl.NumberFormat('uz-UZ', { maximumFractionDigit
   font-family: 'Outfit', sans-serif !important; font-weight: 800 !important;
   font-size: 0.875rem !important; color: #0f172a !important;
   box-shadow: none !important; transition: all 0.2s !important;
+}
+/* Overflow xatolik holati — PrimeVue !important larini spec bilan ustib yozamiz */
+.co-input-error .co-amount-input-sm .p-inputtext {
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.12) !important;
+}
+.dark .co-input-error .co-amount-input-sm .p-inputtext {
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15) !important;
 }
 .dark .co-amount-input-sm .p-inputtext { background: #0f172a !important; border-color: #1e293b !important; color: #f1f5f9 !important; }
 .co-amount-input-sm .p-inputtext:focus { border-color: #10b981 !important; box-shadow: 0 0 0 3px rgba(16,185,129,.1) !important; }

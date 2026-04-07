@@ -27,8 +27,15 @@ export function useCheckout(props, emit) {
     }
   })
 
+  // Har bir maydon totaldan oshib ketdimi?
+  const isCashOverflow  = computed(() => (cashAmount.value  || 0) > (props.total || 0))
+  const isCardOverflow  = computed(() => (cardAmount.value  || 0) > (props.total || 0))
+  // Ikkovining yig'indisi totaldan oshib ketdimi?
+  const isSumOverflow   = computed(() => (cashAmount.value + cardAmount.value) > (props.total || 0))
+  // To'lov valid: yig'indi aynan total ga teng bo'lishi kerak (±0.01)
   const isMixedValid = computed(() => {
-    return Math.abs((cashAmount.value + cardAmount.value) - props.total) < 0.01
+    return !isSumOverflow.value &&
+      Math.abs((cashAmount.value + cardAmount.value) - props.total) < 0.01
   })
 
   // Haqiqiy to'lanadigan summa = asl narx - chegirma
@@ -38,7 +45,9 @@ export function useCheckout(props, emit) {
   })
 
   const isValid = computed(() => {
-    if (paymentType.value === 'mixed') return isMixedValid.value
+    if (paymentType.value === 'mixed') {
+      return isMixedValid.value && !isCashOverflow.value && !isCardOverflow.value && !isSumOverflow.value
+    }
     if (paymentType.value === 'debt') return !!props.selectedCustomer
     // Chegirma summasi totaldan oshmasligi kerak
     if (paymentType.value === 'cash' || paymentType.value === 'card') {
@@ -99,6 +108,9 @@ export function useCheckout(props, emit) {
     description,
     methods,
     isMixedValid,
+    isCashOverflow,
+    isCardOverflow,
+    isSumOverflow,
     isValid,
     handleConfirm,
     resetValues

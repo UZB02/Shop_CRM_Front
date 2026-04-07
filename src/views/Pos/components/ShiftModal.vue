@@ -47,7 +47,7 @@
            </div>
            <div class="flex justify-between text-xs font-bold">
              <span class="text-slate-500">Ochilgan vaqt:</span>
-             <span class="text-slate-800 dark:text-white">{{ formatDate(shift?.created_at) }}</span>
+             <span class="text-slate-800 dark:text-white">{{ formatDate(shift?.opened_at || shift?.start_time || shift?.created_at) }}</span>
            </div>
         </div>
         <div class="space-y-1.5">
