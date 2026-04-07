@@ -879,6 +879,20 @@
             "closed": "Smena yopilgan",
             "note": "Izoh"
         },
+        "debt_info": {
+            "title": "Nasiya tafsilotlari",
+            "count": "{count} ta nasiya amaliyoti",
+            "paid_now": "Smenada to'langan",
+            "outstanding": "Yana qarz bo'ldi",
+            "col_customer": "Mijoz",
+            "col_paid": "To'landi",
+            "col_debt": "Qarz"
+        },
+        "tabs": {
+            "general": "Umumiy",
+            "debts": "Nasiyalar",
+            "finance": "Moliya & Xarajat"
+        },
         "error": {
             "not_found": "Ma'lumot topilmadi",
             "not_found_desc": "Ushbu smena uchun hisobot ma'lumotlarini yuklab bo'lmadi yoki sizda ushbu sahifani ko'rish huquqi yo'q.",

@@ -124,7 +124,7 @@
           </p>
           <div class="flex items-baseline gap-1.5">
             <span class="text-[1.5rem] font-black leading-none tracking-tight text-slate-800 dark:text-slate-100">
-              {{ Number(smena.status === 'open' ? (smena.cash_start || 0) : (smena.cash_end || 0)).toLocaleString() }}
+              {{ Number(smena.status === 'open' ? (smena.expected_cash || smena.cash_start || 0) : (smena.cash_end || 0)).toLocaleString() }}
             </span>
             <span class="text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase">uzs</span>
           </div>

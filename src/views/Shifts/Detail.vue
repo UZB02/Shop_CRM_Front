@@ -19,100 +19,141 @@
     </div>
 
     <template v-else-if="data">
-      <div class="space-y-4">
+      <div class="space-y-4 animate-in">
         
+        <!-- Stats Top Board -->
         <TopBoard 
           :smena="data.smena" 
           :xReport="data.x_report" 
           :formatCurrency="formatCurrency" 
         />
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:items-start">
+        <!-- Detailed Section Tabs -->
+        <div class="flex items-center gap-1 p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-fit">
+           <button 
+             v-for="t in [
+               { id: 'general', label: $t('shifts.tabs.general'), icon: 'pi-objects-column' },
+               { id: 'debts',   label: $t('shifts.tabs.debts'),   icon: 'pi-history' },
+               { id: 'finance', label: $t('shifts.tabs.finance'), icon: 'pi-wallet' }
+             ]" 
+             :key="t.id"
+             @click="activeTab = t.id"
+             class="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all"
+             :class="activeTab === t.id 
+               ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' 
+               : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'"
+           >
+             <i class="pi" :class="t.icon"></i> {{ t.label }}
+           </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:items-start anim-tab">
            
-           <!-- Left Column: Payments & Workers -->
-           <div class="lg:col-span-2 space-y-4">
-              <PaymentBreakdown 
-                 :xReport="data.x_report" 
-                 :paymentMethods="paymentMethods"
-                 :methodLabels="methodLabels"
-                 :dotClasses="dotClasses"
-                 :progressClasses="progressClasses"
-                 :calculatePercent="calculatePercent"
-                 :formatCurrency="formatCurrency"
-              />
+           <!-- Tab: General Contents -->
+           <template v-if="activeTab === 'general'">
+              <div class="lg:col-span-2 space-y-4 lg:order-1">
+                 <PaymentBreakdown 
+                    :xReport="data.x_report" 
+                    :paymentMethods="paymentMethods"
+                    :methodLabels="methodLabels"
+                    :dotClasses="dotClasses"
+                    :progressClasses="progressClasses"
+                    :calculatePercent="calculatePercent"
+                    :formatCurrency="formatCurrency"
+                 />
 
-              <WorkersPerformance 
-                 v-if="data.x_report.by_worker?.length > 0"
-                 :workers="data.x_report.by_worker"
-                 :formatCurrency="formatCurrency"
-              />
-              
-              <!-- Additional Expenses / Wastage (Compact) -->
-              <div class="grid grid-cols-2 gap-4">
-                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm flex items-center gap-4 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
-                    <div class="w-10 h-10 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0"><i class="pi pi-receipt"></i></div>
-                    <div class="min-w-0">
-                       <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate mb-0.5">{{ $t('shifts.expenses.title') }}</p>
-                       <p class="text-sm font-semibold text-slate-800 dark:text-white truncate">{{ formatCurrency(data.x_report.expenses_total) }} <span class="text-[10px] font-medium text-slate-400">UZS</span></p>
-                    </div>
-                 </div>
-                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm flex items-center gap-4 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
-                    <div class="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0"><i class="pi pi-trash"></i></div>
-                    <div class="min-w-0">
-                       <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate mb-0.5">{{ $t('shifts.expenses.wastage') }}</p>
-                       <p class="text-sm font-semibold text-slate-800 dark:text-white truncate">{{ data.x_report.wastage_count }} <span class="text-[10px] font-medium text-slate-400">{{ $t('shifts.expenses.docs', { count: data.x_report.wastage_count }) }}</span></p>
-                    </div>
-                 </div>
+                 <WorkersPerformance 
+                    v-if="data.x_report.by_worker?.length > 0"
+                    :workers="data.x_report.by_worker"
+                    :formatCurrency="formatCurrency"
+                 />
               </div>
-           </div>
 
-           <!-- Right Column: Meta info -->
-           <div class="space-y-4">
-              <CashBalance 
-                 :xReport="data.x_report"
-                 :formatCurrency="formatCurrency"
-              />
-
-              <!-- Discounts -->
-              <DiscountBreakdown
-                 v-if="data.x_report.discounts"
-                 :xReport="data.x_report"
-                 :formatCurrency="formatCurrency"
-              />
-
-              <!-- Time & Personnel Details -->
-              <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
-                 <h3 class="text-xs font-semibold text-slate-800 dark:text-white mb-5 flex items-center gap-2">
-                    <i class="pi pi-clock text-slate-400"></i> {{ $t('shifts.info.title') }}
-                 </h3>
-                 <div class="space-y-5">
-                    <div class="flex gap-4">
-                       <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20"><i class="pi pi-sign-in text-sm"></i></div>
-                       <div class="min-w-0">
-                          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('shifts.info.opened') }}</p>
-                          <p class="text-xs font-semibold text-slate-800 dark:text-white truncate">{{ data.smena.start_time }}</p>
-                          <p class="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5 truncate"><i class="pi pi-user text-[10px]"></i>{{ data.smena.worker_open_name }}</p>
+              <!-- General Right Column Meta -->
+              <div class="space-y-4 lg:order-2">
+                 <CashBalance 
+                    :xReport="data.x_report"
+                    :formatCurrency="formatCurrency"
+                 />
+                 
+                 <!-- Time & Personnel Details -->
+                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+                    <h3 class="text-xs font-semibold text-slate-800 dark:text-white mb-5 flex items-center gap-2">
+                       <i class="pi pi-clock text-slate-400"></i> {{ $t('shifts.info.title') }}
+                    </h3>
+                    <div class="space-y-5">
+                       <div class="flex gap-4">
+                          <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20"><i class="pi pi-sign-in text-sm"></i></div>
+                          <div class="min-w-0">
+                             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('shifts.info.opened') }}</p>
+                             <p class="text-xs font-semibold text-slate-800 dark:text-white truncate">{{ data.smena.start_time }}</p>
+                             <p class="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5 truncate"><i class="pi pi-user text-[10px]"></i>{{ data.smena.worker_open_name }}</p>
+                          </div>
                        </div>
-                    </div>
 
-                    <div class="flex gap-4">
-                       <div class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0 border border-rose-100 dark:border-rose-500/20"><i class="pi pi-sign-out text-sm"></i></div>
-                       <div class="min-w-0">
-                          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('shifts.info.closed') }}</p>
-                          <p class="text-xs font-semibold text-slate-800 dark:text-white truncate">{{ data.smena.end_time || '-' }}</p>
-                          <p class="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5 truncate"><i class="pi pi-user text-[10px]"></i>{{ data.smena.worker_close_name || '-' }}</p>
+                       <div class="flex gap-4">
+                          <div class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0 border border-rose-100 dark:border-rose-500/20"><i class="pi pi-sign-out text-sm"></i></div>
+                          <div class="min-w-0">
+                             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('shifts.info.closed') }}</p>
+                             <p class="text-xs font-semibold text-slate-800 dark:text-white truncate">{{ data.smena.end_time || '-' }}</p>
+                             <p class="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5 truncate"><i class="pi pi-user text-[10px]"></i>{{ data.smena.worker_close_name || '-' }}</p>
+                          </div>
                        </div>
                     </div>
                  </div>
+
+                 <!-- Note -->
+                 <div v-if="data.smena.description" class="bg-amber-50/50 dark:bg-amber-500/5 rounded-xl border border-amber-100/50 dark:border-amber-500/20 p-4 shadow-sm">
+                    <h3 class="text-[10px] font-bold text-amber-600/70 dark:text-amber-500/70 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="pi pi-comment"></i> {{ $t('shifts.info.note') }}</h3>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed italic">{{ data.smena.description }}</p>
+                 </div>
+              </div>
+           </template>
+
+           <!-- Tab: Debt List Details -->
+           <template v-if="activeTab === 'debts'">
+              <div class="lg:col-span-3">
+                 <DebtDetails 
+                    v-if="data.x_report.debt_info"
+                    :debtInfo="data.x_report.debt_info"
+                    :formatCurrency="formatCurrency"
+                 />
+                 <div v-else class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center text-slate-400 italic text-sm">
+                    {{ $t('common.no_results') }}
+                 </div>
+              </div>
+           </template>
+
+           <!-- Tab: Finance & Discounts -->
+           <template v-if="activeTab === 'finance'">
+              <div class="lg:col-span-2 space-y-4">
+                 <DiscountBreakdown
+                    v-if="data.x_report.discounts"
+                    :xReport="data.x_report"
+                    :formatCurrency="formatCurrency"
+                 />
+                 
+                 <!-- Expenses Card -->
+                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-5 flex items-center gap-2">
+                       <i class="pi pi-receipt text-slate-400"></i> {{ $t('shifts.expenses.title') }}
+                    </h3>
+                    <div class="p-8 text-center text-slate-400 italic text-sm border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-800/10">
+                       {{ formatCurrency(data.x_report.expenses_total) }} UZS
+                    </div>
+                 </div>
               </div>
 
-              <!-- Note -->
-              <div v-if="data.smena.description" class="bg-amber-50/50 dark:bg-amber-500/5 rounded-xl border border-amber-100/50 dark:border-amber-500/20 p-4 shadow-sm">
-                 <h3 class="text-[10px] font-bold text-amber-600/70 dark:text-amber-500/70 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="pi pi-comment"></i> {{ $t('shifts.info.note') }}</h3>
-                 <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed italic">{{ data.smena.description }}</p>
+              <!-- Right Sidebar for Finance -->
+              <div class="space-y-4">
+                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+                    <div class="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 mb-4"><i class="pi pi-trash"></i></div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('shifts.expenses.wastage') }}</p>
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">{{ data.x_report.wastage_count }} <span class="text-[10px] font-medium text-slate-400">{{ $t('shifts.expenses.docs', { count: data.x_report.wastage_count }) }}</span></p>
+                 </div>
               </div>
+           </template>
 
-           </div>
         </div>
       </div>
     </template>
@@ -132,6 +173,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useShiftDetail } from './composables/useShiftDetail'
 import ShiftPageHeader from './components/ShiftPageHeader.vue'
 import TopBoard from './components/detail/TopBoard.vue'
@@ -139,6 +181,9 @@ import PaymentBreakdown from './components/detail/PaymentBreakdown.vue'
 import WorkersPerformance from './components/detail/WorkersPerformance.vue'
 import CashBalance from './components/detail/CashBalance.vue'
 import DiscountBreakdown from './components/detail/DiscountBreakdown.vue'
+import DebtDetails from './components/detail/DebtDetails.vue'
+
+const activeTab = ref('general')
 
 const {
   loading,
@@ -152,6 +197,25 @@ const {
   handleDownload
 } = useShiftDetail()
 </script>
+
+<style scoped>
+.animate-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.anim-tab { animation: tabIn 0.3s ease-out; }
+@keyframes tabIn { from { opacity: 0; transform: translateX(5px); } to { opacity: 1; transform: translateX(0); } }
+
+@media print {
+  .bg-slate-50\/50, .dark\:bg-\[\#0B0F19\] { background-color: white !important; }
+  .p-4, .p-6, .p-8 { padding: 0 !important; }
+  button, i.pi-arrow-left { display: none !important; }
+  .shadow-sm, .shadow-xl { box-shadow: none !important; border: 1px solid #ddd !important; border-radius: 0 !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
 
 <style scoped>
 .animate-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
