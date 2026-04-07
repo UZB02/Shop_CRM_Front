@@ -38,20 +38,67 @@
         </div>
       </div>
 
-      <!-- Closing Shift Inputs -->
-      <div v-else class="space-y-4">
-        <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2">
-           <div class="flex justify-between text-xs font-bold">
-             <span class="text-slate-500">Smena ID:</span>
-             <span class="text-slate-800 dark:text-white">#{{ shift?.id }}</span>
+      <!-- Closing Shift / Summary Section -->
+      <div v-else class="space-y-5">
+        <!-- Shift Meta Info -->
+        <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2.5">
+           <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-wider">
+             <span class="text-slate-400">Smena ID / Holati</span>
+             <div class="flex items-center gap-2">
+               <span class="text-slate-800 dark:text-white">#{{ shift?.id }}</span>
+               <span :class="shift?.status === 'open' ? 'bg-emerald-500' : 'bg-slate-500'" class="w-1.5 h-1.5 rounded-full shadow-pulse"></span>
+               <span :class="shift?.status === 'open' ? 'text-emerald-500' : 'text-slate-500'">{{ (shift?.status === 'open' ? 'OCHIQ' : 'YOPILGAN') }}</span>
+             </div>
            </div>
-           <div class="flex justify-between text-xs font-bold">
-             <span class="text-slate-500">Ochilgan vaqt:</span>
+           <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-wider">
+             <span class="text-slate-400">Ochilgan vaqt:</span>
              <span class="text-slate-800 dark:text-white">{{ formatDate(shift?.opened_at || shift?.start_time || shift?.created_at) }}</span>
            </div>
         </div>
-        <div class="space-y-1.5">
-          <label class="text-[11px] font-bold text-slate-400 uppercase ml-1">Kassada sanalgan pul</label>
+
+        <!-- Cash Details Grid -->
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Yakuniy Kassa</span>
+            <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
+              {{ formatCurrency(displayCash) }}
+            </span>
+          </div>
+          <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Naqd Qoldiq</span>
+            <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
+              {{ formatCurrency(xReport?.net_income || shift?.net_income) }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Difference / Status Section (Faqat yopiq smenada) -->
+        <div v-if="(shift?.status === 'closed' || shift?.cash_difference !== null) && shift?.cash_difference !== undefined" class="animate-fadein">
+           <!-- Correct Cash -->
+           <div v-if="parseFloat(shift.cash_difference || 0) === 0" class="flex items-center gap-3 p-3.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl">
+              <i class="pi pi-check-circle text-emerald-500 text-lg"></i>
+              <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">✅ Kassa to'g'ri (Farq yo'q)</span>
+           </div>
+           <!-- Shortage (Kamomad) -->
+           <div v-else-if="parseFloat(shift.cash_difference || 0) < 0" class="flex items-center gap-3 p-3.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-500/20 rounded-2xl">
+              <i class="pi pi-exclamation-triangle text-rose-500 text-lg"></i>
+              <span class="text-[10px] font-black text-rose-600 dark:text-rose-400 uppercase tracking-wider leading-tight">
+                ⚠️ Kassir {{ formatCurrency(Math.abs(shift.cash_difference)) }} kam
+              </span>
+           </div>
+           <!-- Extra (Ortiqcha) -->
+           <div v-else class="flex items-center gap-3 p-3.5 bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-500/20 rounded-2xl">
+              <i class="pi pi-info-circle text-amber-500 text-lg"></i>
+              <span class="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider leading-tight">
+                ℹ️ Kassir {{ formatCurrency(shift.cash_difference) }} ortiqcha
+              </span>
+           </div>
+        </div>
+
+        <!-- Money Input (Only if open and trying to close) -->
+        <div v-if="shift?.status === 'open'" class="space-y-2 animate-fadein">
+          <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block ml-1">Kassada sanalgan pul</label>
           <InputNumber 
             v-model="cashCounted" 
             class="w-full sr-input text-lg"
@@ -68,9 +115,22 @@
           @click="$emit('update:visible', false)"
           class="flex-1 py-4 px-4 rounded-2xl font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 transition-all hover:bg-slate-200"
         >
-          Bekor qilish
+          {{ shift?.status === 'closed' ? 'Yopish' : 'Bekor qilish' }}
         </button>
+        
+        <!-- Case: Success / Download for closed shift -->
         <button 
+          v-if="isClosing && shift?.status === 'closed'"
+          @click="$emit('download', shift.id)"
+          class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl bg-[#151c2f] hover:bg-[#0f1422] shadow-slate-400/20"
+        >
+           <i class="pi pi-download mr-2"></i>
+           Yuklab olish
+        </button>
+
+        <!-- Case: Action for opening/closing -->
+        <button 
+          v-else
           @click="handleSubmit"
           :disabled="loading || (!isClosing && !authStore.user?.branch_id)"
           class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl disabled:opacity-50"
@@ -87,7 +147,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import Dialog from 'primevue/dialog'
 import InputNumber from 'primevue/inputnumber'
 import { useAuthStore } from '@/store/auth'
@@ -96,18 +156,29 @@ const props = defineProps({
   visible: Boolean,
   isClosing: Boolean,
   shift: Object,
+  xReport: Object, // Backend x-report ma'lumotlari
   loading: Boolean
 })
 
-const emit = defineEmits(['update:visible', 'confirm'])
+const emit = defineEmits(['update:visible', 'confirm', 'download'])
 
 const authStore = useAuthStore()
 const cashStart = ref(0)
 const cashCounted = ref(0)
 
+const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
+
+// Backend logic: cash_end bo'lmasa, x-report dagi expected_cash ni ko'rsatamiz
+const displayCash = computed(() => {
+  if (props.shift?.status === 'closed' && props.shift?.cash_end !== null) {
+     return props.shift.cash_end
+  }
+  return props.xReport?.expected_cash || 0
+})
+
 const handleSubmit = () => {
   if (props.isClosing) {
-    emit('confirm', { cash_counted: cashCounted.value })
+    emit('confirm', cashCounted.value)
   } else {
     emit('confirm', { 
       branch: authStore.user?.branch_id, 
@@ -118,7 +189,10 @@ const handleSubmit = () => {
 
 const formatDate = (val) => {
   if (!val) return ''
-  return new Date(val).toLocaleString('uz-UZ')
+  // Sring formatni tekshiramiz: "2024-04-07 | 10:41" dagi "|" JSga xalaqit beradi
+  let dateStr = String(val).replace('|', '').trim()
+  const d = new Date(dateStr)
+  return isNaN(d.getTime()) ? val : d.toLocaleString('uz-UZ')
 }
 
 // Reset state when opening

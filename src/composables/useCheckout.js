@@ -2,10 +2,11 @@ import { ref, computed, watch } from 'vue'
 
 export function useCheckout(props, emit) {
   const paymentType = ref('cash')
-  // Xodim bu yerga chegirma MIQDORINI yozadi (masalan: 8200)
   const discountAmount = ref(0)
   const cashAmount = ref(0)
   const cardAmount = ref(0)
+  const debtCashAmount = ref(0)
+  const debtCardAmount = ref(0)
   const description = ref('')
 
   const methods = [
@@ -22,20 +23,11 @@ export function useCheckout(props, emit) {
       description.value = ''
       emit('update:selected-customer', null)
       discountAmount.value = 0
-      cashAmount.value = props.total
+      debtCashAmount.value = 0
+      debtCardAmount.value = 0
+      cashAmount.value = props.total || 0
       cardAmount.value = 0
     }
-  })
-
-  // Har bir maydon totaldan oshib ketdimi?
-  const isCashOverflow  = computed(() => (cashAmount.value  || 0) > (props.total || 0))
-  const isCardOverflow  = computed(() => (cardAmount.value  || 0) > (props.total || 0))
-  // Ikkovining yig'indisi totaldan oshib ketdimi?
-  const isSumOverflow   = computed(() => (cashAmount.value + cardAmount.value) > (props.total || 0))
-  // To'lov valid: yig'indi aynan total ga teng bo'lishi kerak (±0.01)
-  const isMixedValid = computed(() => {
-    return !isSumOverflow.value &&
-      Math.abs((cashAmount.value + cardAmount.value) - props.total) < 0.01
   })
 
   // Haqiqiy to'lanadigan summa = asl narx - chegirma
@@ -44,12 +36,31 @@ export function useCheckout(props, emit) {
     return paid > 0 ? paid : 0
   })
 
+  // Har bir maydon paidAmount dan oshib ketdimi?
+  const isCashOverflow  = computed(() => (cashAmount.value  || 0) > (paidAmount.value || 0))
+  const isCardOverflow  = computed(() => (cardAmount.value  || 0) > (paidAmount.value || 0))
+  const isSumOverflow   = computed(() => (cashAmount.value + cardAmount.value) > (paidAmount.value || 0))
+
+  // Aralash to'lov validatsiyasi
+  const isMixedValid = computed(() => {
+    return !isSumOverflow.value &&
+      Math.abs((cashAmount.value + cardAmount.value) - paidAmount.value) < 0.01
+  })
+
+  // Nasiya uchun: Qolgan qarz miqdori
+  const remainingDebt = computed(() => {
+    const rem = paidAmount.value - (debtCashAmount.value + debtCardAmount.value)
+    return rem > 0 ? rem : 0
+  })
+
   const isValid = computed(() => {
     if (paymentType.value === 'mixed') {
       return isMixedValid.value && !isCashOverflow.value && !isCardOverflow.value && !isSumOverflow.value
     }
-    if (paymentType.value === 'debt') return !!props.selectedCustomer
-    // Chegirma summasi totaldan oshmasligi kerak
+    if (paymentType.value === 'debt') {
+      if (!props.selectedCustomer) return false
+      return (debtCashAmount.value + debtCardAmount.value) <= paidAmount.value
+    }
     if (paymentType.value === 'cash' || paymentType.value === 'card') {
       return (discountAmount.value || 0) <= (props.total || 0)
     }
@@ -61,15 +72,20 @@ export function useCheckout(props, emit) {
     discountAmount.value = 0
     cashAmount.value = 0
     cardAmount.value = 0
-    note.value = ''
+    debtCashAmount.value = 0
+    debtCardAmount.value = 0
+    description.value = ''
   }
 
   const handleConfirm = () => {
     if (!isValid.value) return
 
-    const paid = paymentType.value === 'mixed'
-      ? (cashAmount.value + cardAmount.value)
-      : paidAmount.value
+    let paid = paidAmount.value
+    if (paymentType.value === 'mixed') {
+      paid = (cashAmount.value + cardAmount.value)
+    } else if (paymentType.value === 'debt') {
+      paid = (debtCashAmount.value + debtCardAmount.value)
+    }
 
     const data = {
       payment_type: paymentType.value,
@@ -77,7 +93,6 @@ export function useCheckout(props, emit) {
       description: description.value
     }
 
-    // discount_amount faqat 0 dan katta bo'lsa yuboriladi
     if ((discountAmount.value || 0) > 0) {
       data.discount_amount = discountAmount.value
     }
@@ -90,10 +105,8 @@ export function useCheckout(props, emit) {
     } else if (paymentType.value === 'cash') {
       data.cash_amount = paid
     } else if (paymentType.value === 'debt') {
-      // Debt: qisman to'langan summa cash_amount ga yoziladi
-      if (paid > 0) {
-        data.cash_amount = paid
-      }
+      data.cash_amount = debtCashAmount.value
+      data.card_amount = debtCardAmount.value
     }
 
     emit('confirm', data)
@@ -105,6 +118,9 @@ export function useCheckout(props, emit) {
     paidAmount,
     cashAmount,
     cardAmount,
+    debtCashAmount,
+    debtCardAmount,
+    remainingDebt,
     description,
     methods,
     isMixedValid,

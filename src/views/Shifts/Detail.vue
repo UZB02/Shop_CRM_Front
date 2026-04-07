@@ -73,6 +73,13 @@
                  :formatCurrency="formatCurrency"
               />
 
+              <!-- Discounts -->
+              <DiscountBreakdown
+                 v-if="data.x_report.discounts"
+                 :xReport="data.x_report"
+                 :formatCurrency="formatCurrency"
+              />
+
               <!-- Time & Personnel Details -->
               <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
                  <h3 class="text-xs font-semibold text-slate-800 dark:text-white mb-5 flex items-center gap-2">
@@ -131,6 +138,7 @@ import TopBoard from './components/detail/TopBoard.vue'
 import PaymentBreakdown from './components/detail/PaymentBreakdown.vue'
 import WorkersPerformance from './components/detail/WorkersPerformance.vue'
 import CashBalance from './components/detail/CashBalance.vue'
+import DiscountBreakdown from './components/detail/DiscountBreakdown.vue'
 
 const {
   loading,

@@ -8,37 +8,64 @@ export function useShift() {
     const { t } = useI18n()
 
     const activeShift = ref(null)
+    const activeXReport = ref(null)
     const shiftLoading = ref(false)
     const posLoading = ref(false)
 
     const fetchShiftStatus = async () => {
         shiftLoading.value = true
-        console.log('🔄 Checking shift status...')
+        console.group('🔍 SHIFT DEBUG INFO');
         try {
-            const res = await shiftsAPI.getAll({ status: 'open', limit: 1 })
-            const openShifts = res.data.results || res.data
-            console.log('📋 Shift API Response Data:', openShifts)
+            // Backend taklifi: ?status=open (ochiqlarni tekshiramiz)
+            const res = await shiftsAPI.getAll({ status: 'open' })
+            const responseData = res.data.data?.results || res.data.results || res.data.data || res.data
+            
+            console.log('📡 API CALL: GET /shifts/?status=open');
+            console.log('📦 FULL RESPONSE:', res.data);
 
-            if (openShifts && openShifts.length > 0) {
-                activeShift.value = openShifts[0]
+            if (responseData && (Array.isArray(responseData) ? responseData.length > 0 : !!responseData)) {
+                activeShift.value = Array.isArray(responseData) ? responseData[0] : responseData
+                // Smena ochiq bo'lsa, x-report (expected_cash miqdori) ni tortamiz
+                await fetchXReport(activeShift.value.id)
             } else {
                 activeShift.value = null
+                activeXReport.value = null
             }
         } catch (error) {
-            console.error('Error fetching shift status:', error)
+            console.error('❌ SHIFT API ERROR:', error)
         } finally {
             shiftLoading.value = false
+            console.groupEnd();
+        }
+    }
+
+    const fetchXReport = async (shiftId) => {
+        if (!shiftId) return
+        try {
+            const res = await shiftsAPI.getXReport(shiftId)
+            activeXReport.value = res.data.x_report || res.data
+            console.log('📊 X-REPORT DATA:', activeXReport.value)
+        } catch (error) {
+            console.warn('⚠️ Could not fetch X-report:', error)
         }
     }
 
     const openShift = async (branchId, cashStart) => {
-        posLoading.value = true
+        shiftLoading.value = true
+        const payload = {
+            branch: branchId,
+            cash_start: cashStart
+        }
+
+        console.group('🚀 SMENA OCHISH DEBUG');
+        console.log('📡 API CALL: POST /shifts/');
+        console.log('📦 PAYLOAD:', payload);
+        console.groupEnd();
+
         try {
-            const res = await shiftsAPI.open({
-                branch: branchId,
-                cash_start: cashStart
-            })
-            activeShift.value = res.data
+            const res = await shiftsAPI.open(payload)
+            activeShift.value = res.data.data || res.data
+            await fetchXReport(activeShift.value.id)
             toast.add({
                 severity: 'success',
                 summary: t('common.success'),
@@ -47,14 +74,10 @@ export function useShift() {
             })
             return true
         } catch (error) {
-            const errorMsg =
-                error.response?.data?.detail ||
-                error.response?.data?.message ||
-                (typeof error.response?.data === 'string' ? error.response.data : 'Smenani ochishda xatolik')
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: errorMsg,
+                detail: error.response?.data?.error || 'Smenani ochib bo\'lmadi',
                 life: 3000
             })
             return false
@@ -67,10 +90,12 @@ export function useShift() {
         if (!activeShift.value) return
         posLoading.value = true
         try {
+            // cash_counted -> cash_end (backend talabi)
             await shiftsAPI.close(activeShift.value.id, {
-                cash_counted: cashCounted
+                cash_end: cashCounted
             })
             activeShift.value = null
+            activeXReport.value = null
             toast.add({
                 severity: 'success',
                 summary: t('common.success'),
@@ -79,14 +104,10 @@ export function useShift() {
             })
             return true
         } catch (error) {
-            const errorMsg =
-                error.response?.data?.detail ||
-                error.response?.data?.message ||
-                (typeof error.response?.data === 'string' ? error.response.data : 'Smenani yopishda xatolik')
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: errorMsg,
+                detail: error.response?.data?.error || 'Smenani yopib bo\'lmadi',
                 life: 3000
             })
             return false
@@ -97,9 +118,11 @@ export function useShift() {
 
     return {
         activeShift,
+        activeXReport,
         shiftLoading,
         posLoading,
         fetchShiftStatus,
+        fetchXReport,
         openShift,
         closeShift
     }

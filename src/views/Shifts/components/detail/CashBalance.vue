@@ -25,7 +25,7 @@
               </div>
               <div>
                  <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $t('shifts.cash.income') }}</p>
-                 <p class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">+ {{ formatCurrency(xReport.by_payment.cash) }}</p>
+                 <p class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">+ {{ formatCurrency(xReport.by_payment.total_cash ?? xReport.by_payment.cash) }}</p>
               </div>
            </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="pt-4 mt-2">
            <div class="bg-emerald-50 dark:bg-emerald-500/5 rounded-xl p-4 border border-emerald-100 dark:border-emerald-500/20 flex justify-between items-center">
               <span class="text-xs font-bold text-emerald-700 dark:text-emerald-500 uppercase tracking-wider">{{ $t('shifts.cash.end') }}</span>
-              <span class="text-lg font-black text-emerald-600 tracking-tight">{{ formatCurrency(xReport.cash_end) }}</span>
+              <span class="text-lg font-black text-emerald-600 tracking-tight">{{ formatCurrency(xReport.cash_end ?? xReport.expected_cash) }}</span>
            </div>
         </div>
      </div>

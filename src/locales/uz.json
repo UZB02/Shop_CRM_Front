@@ -835,7 +835,7 @@
             "total_sales": "Umumiy Savdo",
             "net_sales": "Sof Savdo",
             "returns": "Qaytarishlar",
-            "net_income": "Sof Foyda",
+            "net_income": "Naqd qoldiq",
             "transactions": "{count} ta tranzaksiya",
             "operations": "{count} ta operatsiya"
         },
@@ -844,7 +844,11 @@
             "cash": "Naqd pul",
             "card": "Plastik karta",
             "mixed": "Aralash",
-            "debt": "Nasiya"
+            "debt": "Nasiya",
+            "cash_part": "Naqd",
+            "card_part": "Karta",
+            "total_cash": "Jami naqd tushum",
+            "total_card": "Jami plastikka tushum"
         },
         "workers": {
             "title": "Xodimlar bo'yicha savdo",
@@ -856,6 +860,12 @@
             "title": "Xarajatlar",
             "wastage": "Spisaniya",
             "docs": "{count} ta hujjat"
+        },
+        "discounts": {
+            "title": "Chegirmalar",
+            "catalog": "Katalog chegirmasi",
+            "sale": "Savdo chegirmasi",
+            "total": "Jami chegirma"
         },
         "cash": {
             "title": "Kassa holati",

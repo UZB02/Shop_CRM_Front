@@ -51,9 +51,8 @@ export function useCheckout() {
             } else if (paymentData.payment_type === 'cash') {
                 payload.cash_amount = paymentData.paid_amount
             } else if (paymentData.payment_type === 'debt') {
-                if (paymentData.paid_amount > 0) {
-                    payload.cash_amount = paymentData.paid_amount
-                }
+                payload.cash_amount = paymentData.cash_amount
+                payload.card_amount = paymentData.card_amount
             }
 
             console.log('🛒 CHECKOUT PAYLOAD (POST /sales/):', JSON.stringify(payload, null, 2))

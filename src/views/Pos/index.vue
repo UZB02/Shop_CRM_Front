@@ -4,10 +4,7 @@
     <header class="bg-white dark:bg-[#0f172a] border-b border-slate-100 dark:border-slate-800/60 px-8 py-3 flex items-center justify-between sticky top-0 z-50">
       <div class="flex items-center gap-10">
         <!-- Logo -->
-        <div class="flex flex-col">
-          <h1 class="text-xl font-black font-outfit m-0 tracking-tighter leading-none dark:text-white">Sirius CRM</h1>
-          <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-tight">Point of Sale</span>
-        </div>
+        <h1 class="text-xl font-black font-outfit m-0 tracking-tighter leading-none dark:text-white">Sirius CRM</h1>
 
         <!-- Integrated Search -->
         <div class="hidden lg:flex w-[400px] relative group">
@@ -61,9 +58,9 @@
           <button 
             @click="handleShiftAction"
             class="px-6 py-3.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-xl active:scale-95"
-            :class="activeShift ? 'bg-[#151c2f] text-white hover:bg-[#0f1422]' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20'"
+            :class="activeShift && activeShift.status === 'open' ? 'bg-[#151c2f] text-white hover:bg-[#0f1422]' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20'"
           >
-            {{ activeShift ? 'Smena Yopish' : 'Smena Ochish' }}
+            {{ activeShift && activeShift.status === 'open' ? 'Smena Yopish' : (activeShift?.status === 'closed' ? 'Smena Hisoboti' : 'Smena Ochish') }}
           </button>
         </div>
       </div>
@@ -122,58 +119,90 @@
     </div>
 
     <!-- Modals -->
-    <ShiftModal v-model:visible="showShiftModal" :is-closing="!!activeShift" :shift="activeShift" :loading="posLoading" @confirm="onShiftConfirm" />
-    <CheckoutModal 
-      v-model:visible="showCheckout" 
-      :total="cartTotals.finalTotal" 
-      :customers="customers"
-      v-model:selected-customer="selectedCustomer" 
-      :loading="posLoading" 
-      @search-customers="fetchCustomers"
-      @confirm="onCheckoutConfirm" 
-    />
-    <PosReceipt v-model:visible="showReceipt" :transaction="lastTransaction" @print="printReceipt" @download="downloadReceipt(lastTransaction.id)" />
-  </div>
-</template>
+      <ShiftModal 
+        v-model:visible="showShiftModal" 
+        :is-closing="!!activeShift" 
+        :shift="activeShift" 
+        :x-report="activeXReport"
+        :loading="posLoading" 
+        @confirm="onShiftConfirm"
+        @download="onDownloadShift"
+      />
+      <CheckoutModal 
+        v-model:visible="showCheckout" 
+        :total="cartTotals.finalTotal" 
+        :customers="customers"
+        v-model:selected-customer="selectedCustomer" 
+        :loading="posLoading" 
+        @search-customers="fetchCustomers"
+        @confirm="onCheckoutConfirm" 
+      />
+      <PosReceipt v-model:visible="showReceipt" :transaction="lastTransaction" @print="printReceipt" @download="downloadReceipt(lastTransaction.id)" />
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted, onBeforeUnmount } from 'vue'
+  import { usePOS } from '@/composables/usePOS'
+  import { useAuthStore } from '@/store/auth'
+  import { shiftsAPI } from '@/services/api' // Export uchun to'g'ridan-to'g'ri chaqiramiz
+  import { useToast } from 'primevue/usetoast'
+  import PosCatalog from './components/PosCatalog.vue'
+  import PosCart from './components/PosCart.vue'
+  import PosReceipt from './components/PosReceipt.vue'
+  import CheckoutModal from './components/CheckoutModal.vue'
+  import ShiftModal from './components/ShiftModal.vue'
+  
+  const authStore = useAuthStore()
+  const toast = useToast()
+  
+  const {
+    activeShift,
+    activeXReport,
+    shiftLoading,
+    posLoading,
+    orders,
+    activeOrderIndex,
+    cart,
+    discountAmount,
+    selectedCustomer,
+    customers,
+    cartTotals,
+    createNewOrder,
+    switchOrder,
+    removeOrder,
+    fetchShiftStatus,
+    openShift,
+    closeShift,
+    addToCart,
+    removeFromCart,
+    updateQty,
+    updateItemDiscount,
+    scanAndAdd,
+    clearCart,
+    fetchCustomers,
+    performCheckout,
+    downloadReceipt
+  } = usePOS()
 
-<script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { usePOS } from '@/composables/usePOS'
-import { useAuthStore } from '@/store/auth'
-import PosCatalog from './components/PosCatalog.vue'
-import PosCart from './components/PosCart.vue'
-import PosReceipt from './components/PosReceipt.vue'
-import CheckoutModal from './components/CheckoutModal.vue'
-import ShiftModal from './components/ShiftModal.vue'
+  // ... (o'rta qismlar uzgarmaydi)
 
-const authStore = useAuthStore()
-
-const {
-  activeShift,
-  posLoading,
-  orders,
-  activeOrderIndex,
-  cart,
-  discountAmount,
-  selectedCustomer,
-  customers,
-  cartTotals,
-  createNewOrder,
-  switchOrder,
-  removeOrder,
-  fetchShiftStatus,
-  openShift,
-  closeShift,
-  addToCart,
-  removeFromCart,
-  updateQty,
-  updateItemDiscount,
-  scanAndAdd,
-  clearCart,
-  fetchCustomers,
-  performCheckout,
-  downloadReceipt
-} = usePOS()
+  const onDownloadShift = async (shiftId) => {
+    try {
+      const res = await shiftsAPI.export(shiftId)
+      // Excel uchun blob yaratamiz
+      const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `shift-report-${shiftId}.xlsx`) // .xlsx formatida yuklaymiz
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Hisobotni yuklab bo\'lmadi', life: 3000 })
+    }
+  }
 
 const showShiftModal = ref(false)
 const showCheckout = ref(false)
@@ -236,21 +265,44 @@ const handleShiftAction = () => {
 }
 
 const onShiftConfirm = async (data) => {
-  let success = activeShift.value ? await closeShift(data.cash_counted) : await openShift(data.branch, data.cash_start)
+  // activeShift bo'lsa smena yopiladi: data faqat cashCounted summasi
+  // activeShift bo'lmasa smena ochiladi: data = { branch, cash_start }
+  let success = activeShift.value 
+    ? await closeShift(data) 
+    : await openShift(data.branch, data.cash_start)
+    
   if (success) showShiftModal.value = false
 }
 
 const onCheckoutConfirm = async (paymentData) => {
-  const result = await performCheckout(paymentData)
-  if (result) {
-    lastTransaction.value = result
-    showCheckout.value = false
-    showReceipt.value = true
-    
-    // Refresh catalog to update stock levels
-    if (catalogRef.value) {
-      catalogRef.value.fetchProducts(searchQueryGlobal.value)
+  try {
+    // Backend talabi bo'yicha payload'ni shakllantiramiz
+    const finalPayload = {
+      ...paymentData,
+      // customer_id -> customer
+      customer: selectedCustomer.value?.id || null,
+      // product_id -> product, price -> unit_price
+      items: cart.value.map(item => ({
+        product: item.id,
+        quantity: item.qty,
+        unit_price: item.price,
+        item_discount_pct: item.discount || 0
+      }))
     }
+
+    const result = await performCheckout(finalPayload)
+    if (result) {
+      lastTransaction.value = result
+      showCheckout.value = false
+      showReceipt.value = true
+      
+      // Refresh catalog to update stock levels
+      if (catalogRef.value) {
+        catalogRef.value.fetchProducts(searchQueryGlobal.value)
+      }
+    }
+  } catch (error) {
+    console.error('Checkout error:', error)
   }
 }
 

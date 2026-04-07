@@ -65,13 +65,15 @@ export function useShiftDetail() {
       const id = route.params.id
       const response = await shiftsAPI.export(id)
       
-      const blob = new Blob([response.data], { type: response.headers['content-type'] })
+      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       const link = document.createElement('a')
-      link.href = window.URL.createObjectURL(blob)
-      link.download = `Smena_Hisoboti_${id}.pdf`
+      const url = window.URL.createObjectURL(blob)
+      link.href = url
+      link.download = `Smena_Hisoboti_${id}.xlsx` // Excel format
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
       
     } catch (error) {
       console.error('Export error:', error)

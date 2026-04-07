@@ -26,6 +26,16 @@
               <div>
                  <p class="text-sm font-black text-slate-900 dark:text-white tracking-tight">{{ formatCurrency(xReport.by_payment[method]) }}</p>
                  <p class="text-[10px] font-semibold text-slate-400 mt-0.5">{{ calculatePercent(xReport.by_payment[method]) }}%</p>
+                 <div v-if="(method === 'mixed' || method === 'debt') && xReport.by_payment[method + '_cash'] !== undefined" class="mt-2.5 pt-2.5 border-t border-slate-200/60 dark:border-slate-700/60 space-y-1.5 flex-none">
+                    <div class="flex items-center justify-between">
+                       <span class="text-[9px] font-semibold text-slate-400">{{ $t('shifts.payment.cash_part') }}:</span>
+                       <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(xReport.by_payment[method + '_cash']) }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                       <span class="text-[9px] font-semibold text-slate-400">{{ $t('shifts.payment.card_part') }}:</span>
+                       <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(xReport.by_payment[method + '_card']) }}</span>
+                    </div>
+                 </div>
               </div>
            </div>
         </div>
