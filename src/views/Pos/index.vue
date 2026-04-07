@@ -13,9 +13,11 @@
         <div class="hidden lg:flex w-[400px] relative group">
           <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-emerald-500 transition-colors" />
           <input 
+            ref="searchRef"
             v-model="searchQueryGlobal" 
             type="text" 
-            placeholder="Barcode yoki mahsulot nomi..." 
+            placeholder="Skanerlang yoki mahsulot nomi..." 
+            @keyup.enter="handleSearchEnter"
             class="w-full bg-[#f4f7fa] dark:bg-slate-950/40 border-none rounded-2xl pl-12 pr-4 py-3.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 dark:focus:ring-emerald-500/10 placeholder:text-slate-300 dark:placeholder:text-slate-800 dark:text-slate-200"
           />
         </div>
@@ -179,6 +181,7 @@ const showReceipt = ref(false)
 const lastTransaction = ref(null)
 const barcodeBuffer = ref('')
 const barcodeInput = ref(null)
+const searchRef = ref(null)
 const searchQueryGlobal = ref('')
 const catalogRef = ref(null)
 
@@ -188,7 +191,9 @@ onMounted(async () => {
     fetchCustomers()
   ])
   window.addEventListener('keydown', handleGlobalKey)
-  if (activeShift.value) focusScanning()
+  if (activeShift.value) {
+    setTimeout(() => searchRef.value?.focus(), 500)
+  }
 })
 
 onBeforeUnmount(() => window.removeEventListener('keydown', handleGlobalKey))
@@ -206,6 +211,24 @@ const handleBarcodeScan = async () => {
   const success = await scanAndAdd(code)
   if (success) { barcodeBuffer.value = '' } 
   else { setTimeout(() => { barcodeBuffer.value = '' }, 500) }
+}
+
+const handleSearchEnter = async () => {
+  const query = searchQueryGlobal.value.trim()
+  if (!query) return
+
+  // Agar matn barkod kabi ko'rinsa (masalan: 13 ta raqam bo'lib, uning bir qismi har xil bo'lishi mumkin deb, faqat raqam tekshiramiz)
+  // Barkod skanerlar odatda ENTER ni avtomatik yuboradi.
+  if (/^\d{5,18}$/.test(query)) {
+    const success = await scanAndAdd(query)
+    if (success) {
+      searchQueryGlobal.value = ''
+      return
+    }
+  }
+  
+  // Agar barkod sifatida topilmasa, lekin qidiruv natijasida faqat 1 ta mahsulot bo'lsa, 
+  // ENTER bosilganda o'shani qo'shib yuborish mantiqan to'g'ri (ixtiyoriy, foydalanuvchi doimiy ishi uchun)
 }
 
 const handleShiftAction = () => {
