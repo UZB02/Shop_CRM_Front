@@ -143,7 +143,12 @@
 
       <!-- Right Column: Trade History -->
       <div class="lg:col-span-8 flex flex-col min-h-[400px]">
-        <CustomerTradesTable :trades="trades" class="flex-grow" />
+        <CustomerTradesTable 
+          :purchases="purchaseHistory" 
+          :debts="debtHistory" 
+          :total-debt="totalDebt"
+          class="flex-grow" 
+        />
       </div>
 
     </div>
@@ -190,6 +195,9 @@ const saving = ref(false)
 const submitted = ref(false)
 const customer = ref(null)
 const trades = ref([])
+const purchaseHistory = ref([])
+const debtHistory = ref([])
+const totalDebt = ref(0)
 const groups = ref([])
 
 const editDialog = ref(false)
@@ -200,17 +208,25 @@ const loadCustomerData = async () => {
   try {
     const id = route.params.id
     if (!id) return
-    const response = await customersAPI.getById(id)
-    console.log('Customer Data from Backend:', response.data)
     
-    // Support different response structures
+    // Load base customer data
+    const response = await customersAPI.getById(id)
     if (response.data.customer) {
         customer.value = response.data.customer
-        trades.value = response.data.trades || []
     } else {
         customer.value = response.data
-        trades.value = [] // For now, handle separately if API split
     }
+
+    // Load purchases and debts in parallel
+    const [purchasesRes, debtsRes] = await Promise.all([
+      customersAPI.getPurchases(id),
+      customersAPI.getDebtSales(id)
+    ])
+
+    purchaseHistory.value = purchasesRes.data.results || []
+    debtHistory.value = debtsRes.data.results || []
+    totalDebt.value = debtsRes.data.total_debt || 0
+    
   } catch (error) {
     console.error('Error loading customer details:', error)
     toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 5000 })

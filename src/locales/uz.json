@@ -802,11 +802,18 @@
         "trades": {
             "title": "Xaridlar Tarixi",
             "count": "{count} ta savdo",
+            "tabs": {
+                "purchases": "Xaridlar",
+                "debts": "Qarzlar"
+            },
             "col_id_date": "ID / Sana",
             "col_products": "Mahsulotlar",
             "col_total": "Summa",
+            "col_paid_debt": "To'lov / Qarz",
             "col_status": "Holat",
             "no_history": "Xaridlar tarixi topilmadi.",
+            "detail_title": "Savdo Ma'lumotlari",
+            "items_title": "Mahsulotlar Savatdagi",
             "product_placeholder": "Mahsulot",
             "more_products": "+ yana {count} ta",
             "no_products": "Mahsulotlar yo'q"

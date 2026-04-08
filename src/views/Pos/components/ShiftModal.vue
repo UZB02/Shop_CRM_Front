@@ -33,7 +33,7 @@
         <div class="p-3 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-500/10 flex items-center gap-3">
           <i class="pi pi-info-circle text-emerald-500"></i>
           <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight">
-            Smena joriy filialda ({{ authStore.user?.branch_name || 'Aniqlanmagan' }}) ochiladi
+            Smena joriy filialda ({{ authStore.user?.branch_name || authStore.user?.worker?.branch_name || 'Tanlanmagan' }}) ochiladi
           </span>
         </div>
       </div>
@@ -180,8 +180,18 @@ const handleSubmit = () => {
   if (props.isClosing) {
     emit('confirm', cashCounted.value)
   } else {
+    // Backend advice: get branch from user data
+    // Usually it's in user.branch_id or user.worker.branch
+    const branchId = authStore.user?.branch_id || 
+                     authStore.user?.worker?.branch || 
+                     authStore.user?.branch;
+
+    if (!branchId) {
+      console.error('❌ FATAL: Branch ID not found in user profile');
+    }
+
     emit('confirm', { 
-      branch: authStore.user?.branch_id, 
+      branch: branchId, 
       cash_start: cashStart.value 
     })
   }

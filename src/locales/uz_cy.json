@@ -800,11 +800,18 @@
         "trades": {
             "title": "Харидлар Тарихи",
             "count": "{count} та савдо",
+            "tabs": {
+                "purchases": "Харидлар",
+                "debts": "Қарзлар"
+            },
             "col_id_date": "ID / Сана",
             "col_products": "Маҳсулотлар",
             "col_total": "Сумма",
+            "col_paid_debt": "Тўлов / Қарз",
             "col_status": "Ҳолат",
             "no_history": "Харидлар тарихи топилмади.",
+            "detail_title": "Савдо Маълумотлари",
+            "items_title": "Маҳсулотлар Саватдаги",
             "product_placeholder": "Маҳсулот",
             "more_products": "+ яна {count} та",
             "no_products": "Маҳсулотлар йўқ"

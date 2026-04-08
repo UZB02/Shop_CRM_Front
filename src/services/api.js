@@ -105,7 +105,9 @@ export const customersAPI = {
     getById: (id) => api.get(`/customers/${id}/`),
     create: (data) => api.post('/customers/', data),
     update: (id, data) => api.patch(`/customers/${id}/`, data),
-    delete: (id) => api.delete(`/customers/${id}/`)
+    delete: (id) => api.delete(`/customers/${id}/`),
+    getPurchases: (id, params) => api.get(`/customers/${id}/purchases/`, { params }),
+    getDebtSales: (id, params) => api.get(`/customers/${id}/debt-sales/`, { params })
 }
 
 // Customer Groups API

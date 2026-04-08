@@ -27,20 +27,20 @@
            <div class="flex flex-col">
               <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Do'kon</span>
               <span class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase truncate max-w-[120px]">
-                {{ activeShift?.branch_name || 'Tanlanmagan' }}
+                {{ activeShift?.branch_name || authStore.user?.branch_name || authStore.user?.worker?.branch_name || 'Tanlanmagan' }}
               </span>
            </div>
         </div>
 
         <!-- Xodim Info -->
         <div class="hidden sm:flex items-center gap-3">
-           <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold uppercase">
-              {{ authStore.user?.full_name?.charAt(0) || 'U' }}
+           <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold uppercase transition-transform hover:scale-105">
+              {{ (activeShift?.worker_open_name || authStore.user?.full_name || 'U').charAt(0) }}
            </div>
            <div class="flex flex-col">
               <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Xodim</span>
               <span class="text-xs font-black text-slate-800 dark:text-slate-200">
-                {{ authStore.user?.full_name || 'Foydalanuvchi' }}
+                {{ activeShift?.worker_open_name || authStore.user?.full_name || 'Foydalanuvchi' }}
               </span>
            </div>
         </div>
