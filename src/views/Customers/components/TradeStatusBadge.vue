@@ -6,17 +6,28 @@
     ]"
   >
     <div class="w-1.5 h-1.5 rounded-full bg-current opacity-75 animate-pulse"></div>
-    {{ displayLabel }}
+    {{ translatedLabel }}
   </span>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useTradeUtils } from '../composables/useTradeUtils'
 
-defineProps({
+const props = defineProps({
   status: { type: String, required: true },
   displayLabel: { type: String, required: true }
 })
 
+const { t } = useI18n()
 const { getStatusClass } = useTradeUtils()
+
+const translatedLabel = computed(() => {
+  const s = props.status?.toLowerCase()
+  if (s === 'cash') return t('common.cash_label')
+  if (s === 'card') return t('common.card_label')
+  if (s === 'debt') return t('common.debt_status')
+  return props.displayLabel
+})
 </script>

@@ -94,49 +94,61 @@
           </div>
         </div>
 
-        <!-- Financial Overview Cards -->
-        <div class="grid grid-cols-2 gap-3 md:gap-4">
-          <!-- Total Spent Card -->
-          <div class="bg-emerald-50 border border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20 rounded-2xl p-4 relative overflow-hidden group">
-            <div class="absolute -right-4 -top-4 w-16 h-16 bg-emerald-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
-            <div class="relative z-10 flex flex-col h-full justify-between gap-3">
-              <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-md bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-500">
-                  <i class="pi pi-wallet text-[10px]"></i>
+        <!-- Financial Overview Cards Container -->
+        <div class="flex flex-col gap-3 md:gap-4">
+          <div class="grid grid-cols-2 gap-3 md:gap-4">
+            <!-- Total Spent Card -->
+            <div class="bg-emerald-50 border border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20 rounded-2xl p-4 relative overflow-hidden group">
+              <div class="absolute -right-4 -top-4 w-16 h-16 bg-emerald-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+              <div class="relative z-10 flex flex-col h-full justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-md bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-500">
+                    <i class="pi pi-wallet text-[10px]"></i>
+                  </div>
+                  <span class="text-[8px] font-black text-emerald-400 uppercase tracking-widest">{{ $t('customers.details.total_spent') }}</span>
                 </div>
-                <span class="text-[8px] font-black text-emerald-400 uppercase tracking-widest">{{ $t('customers.details.total_spent') }}</span>
+                <div>
+                  <span class="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">{{ formatCurrency(customer.totalSpent) }}</span>
+                  <p class="text-[8px] text-slate-400 mt-0.5 uppercase font-bold tracking-wider">{{ $t('customers.details.trades_count', { count: customer.tradesCount }) }}</p>
+                </div>
               </div>
-              <div>
-                <span class="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">{{ formatCurrency(customer.totalSpent) }}</span>
-                <p class="text-[8px] text-slate-400 mt-0.5 uppercase font-bold tracking-wider">{{ $t('customers.details.trades_count', { count: customer.tradesCount }) }}</p>
+            </div>
+
+            <!-- Debt Card -->
+            <div :class="[
+                'rounded-2xl p-4 border relative overflow-hidden group',
+                Number(customer.debt_balance) > 0 ? 'bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20' : 'bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+              ]"
+            >
+              <div class="absolute -left-4 -bottom-4 w-16 h-16 bg-white/40 dark:bg-white/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+              <div class="relative z-10 flex flex-col h-full justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <div :class="['w-6 h-6 rounded-md flex items-center justify-center', Number(customer.debt_balance) > 0 ? 'bg-rose-100 text-rose-500 dark:bg-rose-500/20' : 'bg-emerald-100 text-emerald-500 dark:bg-emerald-500/20']">
+                    <i :class="['text-[10px] pi', Number(customer.debt_balance) > 0 ? 'pi-exclamation-triangle' : 'pi-check-circle']"></i>
+                  </div>
+                  <span :class="['text-[8px] font-black uppercase tracking-widest', Number(customer.debt_balance) > 0 ? 'text-rose-400' : 'text-emerald-400']">{{ Number(customer.debt_balance) > 0 ? $t('customers.details.debt') : $t('customers.details.financial_status') }}</span>
+                </div>
+                <div>
+                  <template v-if="Number(customer.debt_balance) > 0">
+                    <span class="text-sm font-black text-rose-600 dark:text-rose-400 tracking-tighter">{{ formatCurrency(customer.debt_balance) }}</span>
+                  </template>
+                  <template v-else>
+                    <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide block pt-1.5">{{ $t('customers.details.no_debt') }}</span>
+                  </template>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Debt Card -->
-          <div :class="[
-              'rounded-2xl p-4 border relative overflow-hidden group',
-              Number(customer.debt_balance) > 0 ? 'bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20' : 'bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20'
-            ]"
+          <!-- Quick Actions Below Cards -->
+          <button 
+            v-if="Number(customer.debt_balance) > 0"
+            @click="payDebtDialog = true"
+            class="w-full py-4 rounded-2xl bg-slate-900 dark:bg-rose-500 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:shadow-rose-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
           >
-            <div class="absolute -left-4 -bottom-4 w-16 h-16 bg-white/40 dark:bg-white/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
-            <div class="relative z-10 flex flex-col h-full justify-between gap-3">
-              <div class="flex items-center gap-2">
-                <div :class="['w-6 h-6 rounded-md flex items-center justify-center', Number(customer.debt_balance) > 0 ? 'bg-rose-100 text-rose-500 dark:bg-rose-500/20' : 'bg-emerald-100 text-emerald-500 dark:bg-emerald-500/20']">
-                  <i :class="['text-[10px] pi', Number(customer.debt_balance) > 0 ? 'pi-exclamation-triangle' : 'pi-check-circle']"></i>
-                </div>
-                <span :class="['text-[8px] font-black uppercase tracking-widest', Number(customer.debt_balance) > 0 ? 'text-rose-400' : 'text-emerald-400']">{{ Number(customer.debt_balance) > 0 ? $t('customers.details.debt') : $t('customers.details.financial_status') }}</span>
-              </div>
-              <div>
-                <template v-if="Number(customer.debt_balance) > 0">
-                  <span class="text-sm font-black text-rose-600 dark:text-rose-400 tracking-tighter">{{ formatCurrency(customer.debt_balance) }}</span>
-                </template>
-                <template v-else>
-                  <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide block pt-1.5">{{ $t('customers.details.no_debt') }}</span>
-                </template>
-              </div>
-            </div>
-          </div>
+            <i class="pi pi-wallet text-sm"></i>
+            {{ $t('customers.details.pay_debt_title') }}
+          </button>
         </div>
 
       </div>
@@ -172,6 +184,15 @@
         :submitted="submitted"
         @save="saveUpdate"
     />
+
+    <!-- Pay Debt Dialog -->
+    <PayDebtDialog 
+        v-if="customer?.id"
+        v-model:visible="payDebtDialog"
+        :customer-id="customer.id"
+        :customer-debt="customer.debt_balance"
+        @success="loadCustomerData"
+    />
   </div>
 </template>
 
@@ -185,6 +206,7 @@ import { useI18n } from 'vue-i18n'
 
 import CustomerTradesTable from './components/CustomerTradesTable.vue'
 import CustomerDialog from './components/CustomerDialog.vue'
+import PayDebtDialog from './components/PayDebtDialog.vue'
 
 const route = useRoute()
 const toast = useToast()
@@ -201,6 +223,7 @@ const totalDebt = ref(0)
 const groups = ref([])
 
 const editDialog = ref(false)
+const payDebtDialog = ref(false)
 const customerToEdit = ref({})
 
 const loadCustomerData = async () => {

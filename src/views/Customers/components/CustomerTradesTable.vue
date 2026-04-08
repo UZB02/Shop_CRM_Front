@@ -65,7 +65,7 @@
               <div class="flex flex-col"><span class="text-xs font-black text-slate-800 dark:text-white">{{ formatCurrency(t.net_price) }}</span><span v-if="parseFloat(t.discount_amount) > 0" class="text-[8px] font-black text-emerald-500 uppercase">-{{ formatCurrency(t.discount_amount) }}</span></div>
             </td>
             <td v-if="activeTab === 'debts'" class="px-5 py-3.5 text-[10px]">
-              <div class="flex flex-col gap-0.5"><span class="font-bold text-emerald-600">{{ formatCurrency(t.paid_amount) }}</span><span class="font-black text-rose-500">{{ formatCurrency(t.debt_amount) }} qarz</span></div>
+              <div class="flex flex-col gap-0.5"><span class="font-bold text-emerald-600">{{ formatCurrency(t.paid_amount) }}</span><span class="font-black text-rose-500">{{ formatCurrency(t.debt_amount) }} {{ $t('common.debt_label') }}</span></div>
             </td>
             <td class="px-5 py-3.5 text-right"><TradeStatusBadge :status="t.payment_type" :display-label="t.payment_type_display" /></td>
           </tr>

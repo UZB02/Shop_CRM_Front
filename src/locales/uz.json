@@ -38,6 +38,7 @@
         "required_field": "Maydonni to'ldirish shart",
         "success": "Muvaffaqiyatli",
         "error_message": "Xatolik yuz berdi",
+        "saving": "Ishlanmoqda...",
         "confirm_title": "Tasdiqlash",
         "pcs": "dona",
         "date": "Sana",
@@ -45,7 +46,11 @@
         "filters": "Filtrlar",
         "date_from": "Sanadan",
         "date_to": "Sanagacha",
-        "reset": "Tozalash"
+        "reset": "Tozalash",
+        "debt_label": "qarz",
+        "cash_label": "Naqd",
+        "card_label": "Karta",
+        "debt_status": "Nasiya"
     },
     "workers": {
         "title": "Xodimlar",
@@ -797,7 +802,12 @@
             "no_debt": "Qarzlar mavjud emas",
             "not_found": "Mijoz topilmadi",
             "not_found_desc": "Balki u o'chirib yuborilgan yoki ID xato kiritilgan.",
-            "back": "Ortga qaytish"
+            "back": "Ortga qaytish",
+            "pay_debt_title": "QARZNI TO'LASH",
+            "current_debt": "Joriy qarz qoldig'i",
+            "payment_amount": "To'lov summasi",
+            "pay_all": "Hammasini to'lash",
+            "payment_method": "To'lov usuli"
         },
         "trades": {
             "title": "Xaridlar Tarixi",
