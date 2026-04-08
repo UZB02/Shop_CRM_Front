@@ -16,7 +16,7 @@
     <div class="space-y-5">
       <!-- Create New Group Section (Ultra Compact) -->
       <div class="relative group">
-        <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-[1.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+        <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-emerald-500/5 rounded-[1.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
         <div class="relative p-4 bg-slate-50 dark:bg-slate-800/40 rounded-[1.5rem] border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
           <div class="flex items-center gap-2 mb-3">
             <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>

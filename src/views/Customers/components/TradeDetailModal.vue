@@ -2,148 +2,150 @@
   <Teleport to="body">
     <Transition 
       enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 scale-95"
-      enter-to-class="opacity-100 scale-100"
+      enter-from-class="opacity-0 translate-y-4"
+      enter-to-class="opacity-100 translate-y-0"
       leave-active-class="transition duration-200 ease-in"
-      leave-from-class="opacity-100 scale-100"
-      leave-to-class="opacity-0 scale-95"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 translate-y-4"
     >
-      <div v-if="visible" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-        <!-- Backdrop -->
+      <div v-if="visible" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <!-- Minimalist Backdrop -->
         <div 
-          class="absolute inset-0 bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm"
+          class="absolute inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-[6px] transition-opacity"
           @click="$emit('update:visible', false)"
         ></div>
 
-        <!-- Modal Container -->
-        <div class="relative w-full max-w-[620px] bg-slate-50 dark:bg-slate-950 rounded-[32px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] border border-white/10 dark:border-slate-800 flex flex-col max-h-[90vh]">
+        <!-- Premium Modal Wrapper -->
+        <div class="relative w-full max-w-[850px] bg-white dark:bg-slate-900 rounded-[24px] overflow-hidden shadow-[0_32px_128px_-16px_rgba(0,0,0,0.15)] dark:shadow-[0_32px_128px_-16px_rgba(0,0,0,0.5)] border border-slate-100 dark:border-slate-800 flex flex-col max-h-[90vh]">
           
-          <!-- Close Button -->
-          <button 
-            @click="$emit('update:visible', false)"
-            class="absolute top-5 right-5 z-50 w-10 h-10 rounded-full bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-all duration-300 backdrop-blur-md border border-white/10"
-          >
-            <i class="pi pi-times text-xs"></i>
-          </button>
-
-          <!-- Header -->
-          <div class="p-6 pb-10 bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-800 dark:from-indigo-950 dark:via-slate-900 dark:to-slate-950 relative overflow-hidden shrink-0">
-            <div class="absolute inset-0 opacity-[0.03] pointer-events-none">
-              <svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#grid-custom)" /></svg>
+          <!-- Header: Clean & Informative -->
+          <div class="px-8 py-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                <i class="pi pi-receipt text-xl"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-0.5">
+                  <h2 class="text-base font-bold text-slate-800 dark:text-white">{{ $t('customers.trades.detail_title') }}</h2>
+                  <span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-500 tracking-tight">#{{ trade.id }}</span>
+                </div>
+                <p class="text-xs text-slate-400 font-medium">{{ trade.created_on }}</p>
+              </div>
             </div>
             
-            <div class="relative z-10 flex flex-col items-center">
-              <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3 shadow-xl">
-                <i class="pi pi-receipt text-lg text-white"></i>
-              </div>
-              <h2 class="text-[10px] font-black text-white uppercase tracking-[4px] mb-1.5 drop-shadow-sm">{{ $t('customers.trades.detail_title') }}</h2>
-              <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-[10px] font-black text-indigo-200 tracking-tight">#{{ trade.id }}</span>
-                <div class="w-1 h-1 rounded-full bg-white/20"></div>
-                <span class="text-[10px] font-bold text-white/50 tracking-tight">{{ trade.created_on }}</span>
-              </div>
-            </div>
+            <button 
+              @click="$emit('update:visible', false)"
+              class="w-9 h-9 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 text-slate-400 flex items-center justify-center transition-all duration-200"
+            >
+              <i class="pi pi-times text-[10px]"></i>
+            </button>
           </div>
 
-          <!-- Content -->
-          <div class="px-6 -mt-6 pb-6 relative z-20 overflow-y-auto custom-scrollbar flex-grow">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
-              <!-- Items -->
-              <div class="md:col-span-7 flex flex-col gap-4">
-                <div class="bg-white dark:bg-slate-900 rounded-[24px] shadow-sm border border-slate-100 dark:border-slate-800/50 flex flex-col h-full min-h-[300px]">
-                  <div class="px-5 py-3.5 border-b border-slate-50 dark:border-slate-800/40 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between">
-                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-[2px]">{{ $t('customers.trades.items_title') }}</span>
-                    <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-[9px] font-black text-indigo-500 uppercase">{{ trade.items?.length || 0 }}</span>
-                  </div>
-                  <div class="flex-grow">
-                    <div v-for="(item, idx) in trade.items" :key="idx" 
-                         class="flex items-start justify-between p-4 border-b border-slate-50 last:border-0">
-                      <div class="flex flex-col gap-0.5 min-w-0 pr-4">
-                        <span class="text-[11px] font-black text-slate-800 dark:text-white mb-1">{{ item.product_name }}</span>
-                        <div class="flex items-center gap-2 text-[9px] font-bold text-slate-400">
-                          <span class="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800">{{ parseFloat(item.quantity) }} {{ item.unit }}</span>
-                          <span>×</span>
-                          <span>{{ formatCurrency(item.unit_price) }}</span>
-                        </div>
-                      </div>
-                      <span class="text-[11px] font-black text-slate-900 dark:text-white shrink-0 mt-0.5">{{ formatCurrency(item.total_price) }}</span>
-                    </div>
-                  </div>
-                </div>
+          <!-- Layout Body -->
+          <div class="flex flex-col md:flex-row overflow-hidden flex-grow">
+            
+            <!-- Left Side: Product List -->
+            <div class="flex-grow p-8 overflow-y-auto custom-scrollbar">
+              <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.trades.items_title') }}</h3>
+                <span class="text-[10px] font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-lg">{{ trade.items?.length }} element</span>
               </div>
 
-              <!-- Financials -->
-              <div class="md:col-span-5 flex flex-col gap-5">
-                <div class="bg-white dark:bg-slate-900 rounded-[24px] p-6 shadow-sm border border-slate-100 flex flex-col gap-4">
-                  <div class="space-y-3.5 text-[10px] font-bold text-slate-400">
-                    <div class="flex justify-between uppercase"><span>{{ $t('customers.trades.col_total') }}</span><span>{{ formatCurrency(trade.total_price) }}</span></div>
-                    <div v-if="parseFloat(trade.discount_amount) > 0" class="flex justify-between text-emerald-500 uppercase"><span>Chegirma</span><span>-{{ formatCurrency(trade.discount_amount) }}</span></div>
-                    <div class="h-px bg-slate-50 dark:bg-slate-800"></div>
-                    <div class="flex flex-col gap-1.5">
-                      <span class="uppercase tracking-[2px]">To'lov Summasi</span>
-                      <span class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">{{ formatCurrency(trade.net_price) }}</span>
-                    </div>
+              <div class="space-y-1">
+                <div v-for="(item, idx) in trade.items" :key="idx" 
+                     class="group flex items-center gap-5 p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+                  <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 shrink-0 group-hover:scale-105 transition-transform">
+                    <i class="pi pi-box text-xs"></i>
+                  </div>
+                  <div class="flex-grow min-w-0">
+                    <h4 class="text-[13px] font-bold text-slate-700 dark:text-slate-200 truncate">{{ item.product_name }}</h4>
+                    <p class="text-[11px] text-slate-400 font-medium">
+                      {{ parseFloat(item.quantity) }} {{ item.unit }} <span class="mx-1.5 opacity-30">×</span> {{ formatCurrency(item.unit_price) }}
+                    </p>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <span class="text-[13px] font-bold text-slate-800 dark:text-white">{{ formatCurrency(item.total_price) }}</span>
                   </div>
                 </div>
-
-                <div class="bg-indigo-600 rounded-[24px] p-6 text-white shadow-xl flex flex-col gap-4 relative overflow-hidden">
-                  <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
-                   <div class="flex items-center justify-between">
-                    <div class="flex flex-col gap-1">
-                      <span class="text-[9px] font-black text-white/50 uppercase tracking-widest">To'landi</span>
-                      <span class="text-base font-black">{{ formatCurrency(trade.paid_amount) }}</span>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
-                      <i class="pi pi-check text-base"></i>
-                    </div>
-                  </div>
-
-                  <!-- Mixed Payment Breakdown -->
-                  <div v-if="trade.payment_type === 'mixed'" class="flex flex-col gap-2 p-3 bg-white/10 rounded-xl border border-white/10">
-                    <div class="flex justify-between items-center text-[10px] font-bold">
-                      <span class="opacity-60 uppercase">Naqd</span>
-                      <span>{{ formatCurrency(trade.cash_amount) }}</span>
-                    </div>
-                    <div class="flex justify-between items-center text-[10px] font-bold">
-                      <span class="opacity-60 uppercase">Karta</span>
-                      <span>{{ formatCurrency(trade.card_amount) }}</span>
-                    </div>
-                  </div>
-                  <div v-if="parseFloat(trade.debt_amount) > 0" class="h-px bg-white/10"></div>
-                  <div v-if="parseFloat(trade.debt_amount) > 0" class="flex items-center justify-between text-rose-100 font-black">
-                    <div class="flex flex-col gap-1">
-                      <span class="text-[9px] text-rose-200/60 uppercase">Qarz Qoldig'i</span>
-                      <span class="text-base">{{ formatCurrency(trade.debt_amount) }}</span>
-                    </div>
-                    <i class="pi pi-exclamation-triangle text-base opacity-50"></i>
-                  </div>
-                </div>
-
-                <div class="bg-white dark:bg-slate-900 rounded-[20px] p-4.5 border border-slate-100 flex flex-col gap-3.5">
-                  <div class="flex items-center justify-between text-[9px] font-black uppercase text-slate-400">
-                    <span>Sotuvchi</span><span class="text-slate-700 dark:text-slate-200">{{ trade.worker_name }}</span>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <span class="text-[9px] font-black text-slate-400 uppercase">Holati</span>
-                    <TradeStatusBadge :status="trade.payment_type" :display-label="trade.payment_type_display" />
-                  </div>
-                </div>
-
-                <button class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-[20px] text-[11px] font-black uppercase tracking-[3px] transition-all flex items-center justify-center gap-3 active:scale-95">
-                  <i class="pi pi-print"></i>{{ $t('shifts.print') }}
-                </button>
               </div>
             </div>
+
+            <!-- Right Side: Sidebar with Financial Summary -->
+            <div class="w-full md:w-[320px] bg-slate-50/50 dark:bg-slate-900/40 border-l border-slate-100 dark:border-slate-800 p-8 flex flex-col justify-between shrink-0">
+              
+              <div class="space-y-8">
+                <!-- Summary Section -->
+                <div>
+                  <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-5">To'lov Xulosasi</h3>
+                  <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                      <span class="text-[11px] font-semibold text-slate-500">Umumiy summa</span>
+                      <span class="text-[12px] font-bold text-slate-700 dark:text-slate-200">{{ formatCurrency(trade.total_price) }}</span>
+                    </div>
+                    <div v-if="parseFloat(trade.discount_amount) > 0" class="flex justify-between items-center">
+                      <span class="text-[11px] font-semibold text-emerald-500">Chegirma</span>
+                      <span class="text-[12px] font-bold text-emerald-500">-{{ formatCurrency(trade.discount_amount) }}</span>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800">
+                      <div class="flex justify-between items-baseline">
+                        <span class="text-[11px] font-black text-slate-800 dark:text-white uppercase tracking-wider">Net Summa</span>
+                        <span class="text-xl font-black text-slate-900 dark:text-white tracking-tighter">{{ formatCurrency(trade.net_price) }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Payment Progress / Breakdown -->
+                <div class="p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+                  <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1">
+                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">To'landi</span>
+                      <div class="flex items-center justify-between">
+                        <span class="text-lg font-black text-emerald-500">{{ formatCurrency(trade.paid_amount) }}</span>
+                        <TradeStatusBadge :status="trade.payment_type" :display-label="trade.payment_type_display" />
+                      </div>
+                    </div>
+
+                    <div v-if="parseFloat(trade.debt_amount) > 0" class="pt-3 border-t border-slate-100 dark:border-slate-700/50">
+                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Qarz Qoldig'i</span>
+                      <p class="text-lg font-black text-rose-500 mt-0.5">{{ formatCurrency(trade.debt_amount) }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mixed Payment Breakdown Small -->
+                <div v-if="trade.payment_type === 'mixed'" class="flex gap-4">
+                   <div class="flex flex-col flex-1">
+                      <span class="text-[9px] font-black text-slate-400 uppercase mb-1">Naqd</span>
+                      <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(trade.cash_amount) }}</span>
+                   </div>
+                   <div class="flex flex-col flex-1 border-l border-slate-200 dark:border-slate-800 pl-4">
+                      <span class="text-[9px] font-black text-slate-400 uppercase mb-1">Karta</span>
+                      <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(trade.card_amount) }}</span>
+                   </div>
+                </div>
+              </div>
+
+              <!-- Action Footer -->
+              <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-center justify-between px-1 mb-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Sotuvchi</span>
+                    <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ trade.worker_name }}</span>
+                  </div>
+                  <button class="w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-[12px] font-bold transition-all hover:bg-slate-800 dark:hover:bg-slate-100 active:scale-95 flex items-center justify-center gap-2">
+                    <i class="pi pi-print text-xs"></i>
+                    {{ $t('shifts.print') }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </Transition>
   </Teleport>
-
-  <!-- Shared patterns -->
-  <svg style="display: none">
-    <pattern id="grid-custom" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="0.5"/></pattern>
-  </svg>
 </template>
 
 <script setup>
@@ -161,8 +163,19 @@ const { formatCurrency } = useTradeUtils()
 </script>
 
 <style scoped>
-.custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #f1f5f9; border-radius: 10px; }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
+
+@media (max-width: 768px) {
+  .md\:w-\[320px\] { 
+    width: 100% !important; 
+    border-left-width: 0 !important;
+    border-top: 1px solid #f1f5f9; 
+  }
+  .dark .md\:w-\[320px\] {
+    border-top-color: rgba(30, 41, 59, 0.5);
+  }
+}
 </style>

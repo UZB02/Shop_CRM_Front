@@ -4,7 +4,7 @@
     <div class="px-1 border-b border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-800/30">
       <div class="flex items-center justify-between px-4 py-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
+          <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
             <i class="pi pi-shopping-bag text-xs"></i>
           </div>
           <h3 class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">{{ $t('customers.trades.title') }}</h3>
@@ -21,7 +21,7 @@
       <div class="flex gap-1 px-4 pb-0">
         <button 
           v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
-          :class="['px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 outline-none', activeTab === tab.id ? 'text-indigo-600 border-indigo-600' : 'text-slate-400 border-transparent hover:text-slate-600']"
+          :class="['px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 outline-none', activeTab === tab.id ? 'text-emerald-600 border-emerald-600' : 'text-slate-400 border-transparent hover:text-slate-600']"
         >
           {{ $t(`customers.trades.tabs.${tab.id}`) }} <span class="ml-1 opacity-50">({{ tab.count }})</span>
         </button>
@@ -58,7 +58,7 @@
                 <div v-for="(item, idx) in t.items.slice(0, 2)" :key="idx" class="text-[10px] font-bold text-slate-700 dark:text-slate-200 truncate max-w-[200px]">
                    <span class="text-slate-400 mr-1">{{ parseFloat(item.quantity) }}{{ item.unit }}</span>{{ item.product_name }}
                 </div>
-                <span v-if="t.items.length > 2" class="text-[8px] font-black text-indigo-500 mt-0.5 uppercase">+ {{ t.items.length - 2 }}</span>
+                <span v-if="t.items.length > 2" class="text-[8px] font-black text-emerald-500 mt-0.5 uppercase">+ {{ t.items.length - 2 }}</span>
               </div>
             </td>
             <td class="px-5 py-3.5">

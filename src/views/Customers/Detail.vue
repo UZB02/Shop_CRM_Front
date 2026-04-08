@@ -97,17 +97,17 @@
         <!-- Financial Overview Cards -->
         <div class="grid grid-cols-2 gap-3 md:gap-4">
           <!-- Total Spent Card -->
-          <div class="bg-indigo-50 border border-indigo-100 dark:bg-indigo-500/10 dark:border-indigo-500/20 rounded-2xl p-4 relative overflow-hidden group">
-            <div class="absolute -right-4 -top-4 w-16 h-16 bg-indigo-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+          <div class="bg-emerald-50 border border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20 rounded-2xl p-4 relative overflow-hidden group">
+            <div class="absolute -right-4 -top-4 w-16 h-16 bg-emerald-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
             <div class="relative z-10 flex flex-col h-full justify-between gap-3">
               <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-md bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-500">
+                <div class="w-6 h-6 rounded-md bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-500">
                   <i class="pi pi-wallet text-[10px]"></i>
                 </div>
-                <span class="text-[8px] font-black text-indigo-400 uppercase tracking-widest">{{ $t('customers.details.total_spent') }}</span>
+                <span class="text-[8px] font-black text-emerald-400 uppercase tracking-widest">{{ $t('customers.details.total_spent') }}</span>
               </div>
               <div>
-                <span class="text-sm font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">{{ formatCurrency(customer.totalSpent) }}</span>
+                <span class="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">{{ formatCurrency(customer.totalSpent) }}</span>
                 <p class="text-[8px] text-slate-400 mt-0.5 uppercase font-bold tracking-wider">{{ $t('customers.details.trades_count', { count: customer.tradesCount }) }}</p>
               </div>
             </div>
