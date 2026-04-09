@@ -149,8 +149,8 @@
 </template>
 
 <script setup>
-import TradeStatusBadge from './TradeStatusBadge.vue'
-import { useTradeUtils } from '../composables/useTradeUtils'
+import TradeStatusBadge from '@/views/Customers/components/TradeStatusBadge.vue'
+import { useTradeUtils } from '@/views/Customers/composables/useTradeUtils'
 
 defineProps({
   visible: Boolean,

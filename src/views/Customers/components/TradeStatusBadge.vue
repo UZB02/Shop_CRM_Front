@@ -13,7 +13,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useTradeUtils } from '../composables/useTradeUtils'
+import { useTradeUtils } from '@/views/Customers/composables/useTradeUtils'
 
 const props = defineProps({
   status: { type: String, required: true },
