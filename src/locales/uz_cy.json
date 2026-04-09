@@ -13,6 +13,11 @@
         "view": "Кўриш",
         "back": "Қайтиш",
         "search": "Қидириш",
+        "overview": "Обзор",
+        "payments": "Тўловлар",
+        "profile": "Профил",
+        "history": "Тарих",
+        "stats": "Статистика",
         "actions": "Амаллар",
         "status": "Ҳолати",
         "active": "Фаол",
@@ -49,7 +54,12 @@
         "debt_label": "қарз",
         "cash_label": "Нақд",
         "card_label": "Карта",
-        "debt_status": "Насия"
+        "debt_status": "Насия",
+        "recent_activity": "Сўнгги фаолият",
+        "view_all": "Барчасини кўриш",
+        "more": "Яна",
+        "net_price": "Тан нархи",
+        "fullName": "Ф.И.Ш."
     },
     "workers": {
         "title": "Ходимлар",
@@ -807,7 +817,11 @@
             "current_debt": "Жорий қарз қолдиғи",
             "payment_amount": "Тўлов суммаси",
             "pay_all": "Ҳаммасини тўлаш",
-            "payment_method": "Тўлов усули"
+            "payment_method": "Тўлов усули",
+            "loyalty_points": "Кэшбек баллари",
+            "full_info": "Тўлиқ маълумотлар",
+            "group": "Мижоз гуруҳи",
+            "payments_history_desc": "Тўловлар тарихи тез кунда қўшилади. Ҳозирча барча операцияларни \"Савдолар\" табида кўришингиз мумкин."
         },
         "trades": {
             "title": "Харидлар Тарихи",

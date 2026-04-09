@@ -50,7 +50,12 @@
         "debt_label": "qarz",
         "cash_label": "Naqd",
         "card_label": "Karta",
-        "debt_status": "Nasiya"
+        "debt_status": "Nasiya",
+        "recent_activity": "So'nggi faoliyat",
+        "view_all": "Barchasini ko'rish",
+        "more": "Yana",
+        "net_price": "Tan narxi",
+        "fullName": "F.I.SH."
     },
     "workers": {
         "title": "Xodimlar",
@@ -807,7 +812,11 @@
             "current_debt": "Joriy qarz qoldig'i",
             "payment_amount": "To'lov summasi",
             "pay_all": "Hammasini to'lash",
-            "payment_method": "To'lov usuli"
+            "payment_method": "To'lov usuli",
+            "loyalty_points": "Cashback ballari",
+            "full_info": "To'liq ma'lumotlar",
+            "group": "Mijoz guruhi",
+            "payments_history_desc": "To'lovlar tarixi tez kunda qo'shiladi. Hozircha barcha operatsiyalarni \"Savdolar\" tabida ko'rishingiz mumkin."
         },
         "trades": {
             "title": "Xaridlar Tarixi",
