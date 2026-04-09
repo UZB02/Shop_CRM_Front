@@ -22,7 +22,7 @@
         <div class="flex items-center gap-6 px-4">
           <div class="hidden sm:flex flex-col items-end">
             <span class="text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">{{ $t('customers.details.total_spent') }}</span>
-            <span class="text-[10px] font-black text-emerald-500 tracking-tight">{{ formatCurrency(customer?.total_purchases) }}</span>
+            <span class="text-[10px] font-black text-emerald-500 tracking-tight">{{ formatCurrency(customer?.total_purchases_amount) }}</span>
           </div>
           <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
           <div class="flex flex-col items-end">

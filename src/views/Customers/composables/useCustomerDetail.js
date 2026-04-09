@@ -40,7 +40,9 @@ export function useCustomerDetail() {
       if (!id) return
       
       const response = await customersAPI.getById(id)
-      customer.value = response.data.customer || response.data
+      const data = response.data.customer || response.data
+      customer.value = data
+      purchaseCount.value = data.total_purchases_count || 0
 
       await Promise.all([
         loadPurchases(1),

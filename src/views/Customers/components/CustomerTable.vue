@@ -90,7 +90,7 @@
                   {{ data.status_display || data.status }}
                 </span>
                 <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 text-[11px] font-black text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
-                  {{ data.tradesCount || 0 }}
+                  {{ data.total_purchases_count || 0 }}
                 </span>
               </div>
             </td>
@@ -102,7 +102,7 @@
                   class="text-[12px] font-black tracking-tighter"
                   :class="mode === 'debtors' ? 'text-rose-500' : 'text-emerald-600 dark:text-emerald-400'"
                 >
-                  {{ formatCurrency(mode === 'debtors' ? data.debt_balance : data.totalSpent) }}
+                  {{ formatCurrency(mode === 'debtors' ? data.debt_balance : data.total_purchases_amount) }}
                 </span>
                 <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-0.5">
                   {{ mode === 'debtors' ? ($t('customers.table.debt_status') || 'To\'lanmagan') : $t('customers.table.total_spent_label') }}

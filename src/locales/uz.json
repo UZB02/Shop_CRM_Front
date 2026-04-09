@@ -57,7 +57,12 @@
         "view_all": "Barchasini ko'rish",
         "more": "Yana",
         "net_price": "Tan narxi",
-        "fullName": "F.I.SH."
+        "fullName": "F.I.SH.",
+        "payment_summary": "To'lov Xulosasi",
+        "total_amount": "Umumiy summa",
+        "discount": "Chegirma",
+        "total_to_pay": "Jami Summa",
+        "paid": "To'landi"
     },
     "workers": {
         "title": "Xodimlar",

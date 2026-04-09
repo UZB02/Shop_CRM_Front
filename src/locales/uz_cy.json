@@ -59,7 +59,12 @@
         "view_all": "Барчасини кўриш",
         "more": "Яна",
         "net_price": "Тан нархи",
-        "fullName": "Ф.И.Ш."
+        "fullName": "Ф.И.Ш.",
+        "payment_summary": "Тўлов Хулосаси",
+        "total_amount": "Умумий сумма",
+        "discount": "Чегирма",
+        "total_to_pay": "Жами Сумма",
+        "paid": "Тўланди"
     },
     "workers": {
         "title": "Ходимлар",

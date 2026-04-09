@@ -48,7 +48,7 @@
             <div class="flex-grow p-8 overflow-y-auto custom-scrollbar">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.trades.items_title') }}</h3>
-                <span class="text-[10px] font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-lg">{{ trade.items?.length }} element</span>
+                <span class="text-[10px] font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-lg">{{ trade.items?.length }} {{ $t('common.pcs') }}</span>
               </div>
 
               <div class="space-y-1">
@@ -76,19 +76,19 @@
               <div class="space-y-8">
                 <!-- Summary Section -->
                 <div>
-                  <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-5">To'lov Xulosasi</h3>
+                  <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-5">{{ $t('common.payment_summary') }}</h3>
                   <div class="space-y-4">
                     <div class="flex justify-between items-center">
-                      <span class="text-[11px] font-semibold text-slate-500">Umumiy summa</span>
+                      <span class="text-[11px] font-semibold text-slate-500">{{ $t('common.total_amount') }}</span>
                       <span class="text-[12px] font-bold text-slate-700 dark:text-slate-200">{{ formatCurrency(trade.total_price) }}</span>
                     </div>
                     <div v-if="parseFloat(trade.discount_amount) > 0" class="flex justify-between items-center">
-                      <span class="text-[11px] font-semibold text-emerald-500">Chegirma</span>
+                      <span class="text-[11px] font-semibold text-emerald-500">{{ $t('common.discount') }}</span>
                       <span class="text-[12px] font-bold text-emerald-500">-{{ formatCurrency(trade.discount_amount) }}</span>
                     </div>
                     <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800">
                       <div class="flex justify-between items-baseline">
-                        <span class="text-[11px] font-black text-slate-800 dark:text-white uppercase tracking-wider">Net Summa</span>
+                        <span class="text-[11px] font-black text-slate-800 dark:text-white uppercase tracking-wider">{{ $t('common.total_to_pay') }}</span>
                         <span class="text-xl font-black text-slate-900 dark:text-white tracking-tighter">{{ formatCurrency(trade.net_price) }}</span>
                       </div>
                     </div>
@@ -99,7 +99,7 @@
                 <div class="p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
                   <div class="flex flex-col gap-4">
                     <div class="flex flex-col gap-1">
-                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">To'landi</span>
+                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('common.paid') }}</span>
                       <div class="flex items-center justify-between">
                         <span class="text-lg font-black text-emerald-500">{{ formatCurrency(trade.paid_amount) }}</span>
                         <TradeStatusBadge :status="trade.payment_type" :display-label="trade.payment_type_display" />
@@ -107,7 +107,7 @@
                     </div>
 
                     <div v-if="parseFloat(trade.debt_amount) > 0" class="pt-3 border-t border-slate-100 dark:border-slate-700/50">
-                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Qarz Qoldig'i</span>
+                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('customers.details.debt') }}</span>
                       <p class="text-lg font-black text-rose-500 mt-0.5">{{ formatCurrency(trade.debt_amount) }}</p>
                     </div>
                   </div>
@@ -116,11 +116,11 @@
                 <!-- Mixed Payment Breakdown Small -->
                 <div v-if="trade.payment_type === 'mixed'" class="flex gap-4">
                    <div class="flex flex-col flex-1">
-                      <span class="text-[9px] font-black text-slate-400 uppercase mb-1">Naqd</span>
+                      <span class="text-[9px] font-black text-slate-400 uppercase mb-1">{{ $t('shifts.payment.cash_part') }}</span>
                       <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(trade.cash_amount) }}</span>
                    </div>
                    <div class="flex flex-col flex-1 border-l border-slate-200 dark:border-slate-800 pl-4">
-                      <span class="text-[9px] font-black text-slate-400 uppercase mb-1">Karta</span>
+                      <span class="text-[9px] font-black text-slate-400 uppercase mb-1">{{ $t('shifts.payment.card_part') }}</span>
                       <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(trade.card_amount) }}</span>
                    </div>
                 </div>
@@ -130,7 +130,7 @@
               <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
                 <div class="flex flex-col gap-3">
                   <div class="flex items-center justify-between px-1 mb-2">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Sotuvchi</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{{ $t('shifts.workers.col_worker') }}</span>
                     <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ trade.worker_name }}</span>
                   </div>
                   <button class="w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-[12px] font-bold transition-all hover:bg-slate-800 dark:hover:bg-slate-100 active:scale-95 flex items-center justify-center gap-2">
