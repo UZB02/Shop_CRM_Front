@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-4">
 
-    <!-- Add new category -->
-    <div class="flex gap-2">
+    <!-- Add new category: faqat Manager+ -->
+    <div v-if="isManager" class="flex gap-2">
       <div class="relative flex-1 group/input">
         <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-rose-500 transition-colors pointer-events-none"></i>
         <input
@@ -92,9 +92,9 @@
               </span>
             </td>
 
-            <!-- Actions -->
+            <!-- Actions: faqat Manager+ -->
             <td class="px-4 py-2.5 text-right">
-              <div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div v-if="isManager" class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <!-- Edit -->
                 <button
                   @click="startEdit(cat)"
@@ -136,6 +136,10 @@
 import { ref, onMounted } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import useExpenses from '@/composables/useExpenses'
+
+const props = defineProps({
+  isManager: { type: Boolean, default: false }
+})
 
 const { categories, fetchCategories, createCategory, updateCategory, deleteCategory } = useExpenses()
 const confirm = useConfirm()

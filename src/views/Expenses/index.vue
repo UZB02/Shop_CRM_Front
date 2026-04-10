@@ -17,13 +17,16 @@
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
+        <!-- Kategoriyalar: Manager+ -->
         <button
+          v-if="userIsManager"
           @click="showCategories = true"
           class="h-8 px-3 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-1.5 whitespace-nowrap"
         >
           <i class="pi pi-briefcase text-[10px]"></i>
           Kategoriyalar
         </button>
+        <!-- Xarajat qo'shish: barcha ruxsatli xodimlar -->
         <button
           @click="openNew"
           class="h-8 px-3 rounded-lg text-xs font-medium bg-rose-500 hover:bg-rose-600 text-white transition-all flex items-center gap-1.5 whitespace-nowrap"
@@ -36,7 +39,7 @@
 
     <!-- ── Stats ──────────────────────────────────────────────── -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      <!-- Total -->
+      <!-- Total (Manager+ uchun financial report dan, boshqalar uchun local hisob) -->
       <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm flex items-center gap-4">
         <div class="w-9 h-9 rounded-lg bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center text-rose-500 border border-rose-100 dark:border-rose-500/20 shrink-0">
           <i class="pi pi-wallet text-sm"></i>
@@ -45,7 +48,7 @@
           <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Jami xarajat</p>
           <p class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">
             <span v-if="loading" class="inline-block w-20 h-4 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></span>
-            <span v-else>{{ formatCurrency(summaryData.totalExpenses) }}</span>
+            <span v-else>{{ formatCurrency(totalFromList) }}</span>
           </p>
         </div>
       </div>
@@ -64,7 +67,7 @@
         </div>
       </div>
 
-      <!-- Last Expense -->
+      <!-- Last Expense Date -->
       <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm flex items-center gap-4">
         <div class="w-9 h-9 rounded-lg bg-sky-50 dark:bg-sky-500/10 flex items-center justify-center text-sky-500 border border-sky-100 dark:border-sky-500/20 shrink-0">
           <i class="pi pi-calendar text-sm"></i>
@@ -81,29 +84,18 @@
 
     <!-- ── Filters ─────────────────────────────────────────────── -->
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-sm flex flex-wrap items-center gap-2">
-      <!-- Date from -->
+
+      <!-- Sana filter (list: ?date=YYYY-MM-DD) -->
       <div class="relative">
         <i class="pi pi-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
         <input
-          v-model="filters.date_from"
+          v-model="filters.date"
           type="date"
           class="h-8 pl-8 pr-3 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all w-36"
         />
       </div>
 
-      <span class="text-slate-300 dark:text-slate-600 text-xs">—</span>
-
-      <!-- Date to -->
-      <div class="relative">
-        <i class="pi pi-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
-        <input
-          v-model="filters.date_to"
-          type="date"
-          class="h-8 pl-8 pr-3 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all w-36"
-        />
-      </div>
-
-      <!-- Category -->
+      <!-- Kategoriya -->
       <select
         v-model="filters.category"
         class="h-8 px-3 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all min-w-[160px]"
@@ -112,7 +104,7 @@
         <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
       </select>
 
-      <!-- Apply -->
+      <!-- Qidirish -->
       <button
         @click="fetchExpenses"
         class="h-8 px-4 rounded-lg text-xs font-medium bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white transition-all flex items-center gap-1.5"
@@ -121,20 +113,42 @@
         Qidirish
       </button>
 
-      <!-- Clear -->
+      <!-- Filtrni tozalash -->
       <button
-        v-if="filters.date_from || filters.date_to || filters.category"
+        v-if="filters.date || filters.category"
         @click="clearFilters"
         class="h-8 px-3 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+        title="Filtrni tozalash"
       >
         <i class="pi pi-times text-[10px]"></i>
       </button>
 
-      <!-- Spacer -->
       <div class="flex-1"></div>
 
-      <!-- Export -->
+      <!-- Export (date_from/date_to rangi faqat export uchun) -->
       <div class="flex items-center gap-2">
+        <!-- Export date range (Manager+) -->
+        <template v-if="userIsManager">
+          <div class="relative">
+            <input
+              v-model="exportFilters.date_from"
+              type="date"
+              placeholder="dan"
+              title="Export: boshlanish sanasi"
+              class="h-8 px-2 text-[10px] rounded-lg border border-dashed border-slate-300 dark:border-slate-600 bg-transparent text-slate-500 dark:text-slate-400 focus:outline-none focus:border-rose-400 transition-all w-32"
+            />
+          </div>
+          <span class="text-slate-300 dark:text-slate-600 text-xs">—</span>
+          <div class="relative">
+            <input
+              v-model="exportFilters.date_to"
+              type="date"
+              title="Export: tugash sanasi"
+              class="h-8 px-2 text-[10px] rounded-lg border border-dashed border-slate-300 dark:border-slate-600 bg-transparent text-slate-500 dark:text-slate-400 focus:outline-none focus:border-rose-400 transition-all w-32"
+            />
+          </div>
+        </template>
+
         <button
           @click="exportExpenses('excel')"
           class="h-8 px-3 rounded-lg text-xs font-medium text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all flex items-center gap-1.5"
@@ -156,11 +170,12 @@
     <ExpenseTable
       :expenses="expenses"
       :loading="loading"
+      :is-manager="userIsManager"
       @edit="editExpense"
       @delete="confirmDelete"
     />
 
-    <!-- ── Category Modal ─────────────────────────────────────── -->
+    <!-- ── Category Modal (Manager+) ─────────────────────────── -->
     <Teleport to="body">
       <Transition
         enter-active-class="transition duration-200 ease-out"
@@ -183,7 +198,6 @@
       >
         <div v-if="showCategories" class="fixed inset-0 z-[1000] flex items-center justify-center p-4 pointer-events-none">
           <div class="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl flex flex-col pointer-events-auto max-h-[80vh] overflow-hidden">
-            <!-- Modal header -->
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
                 <h3 class="text-sm font-black uppercase tracking-widest text-rose-500">Xarajat kategoriyalari</h3>
@@ -196,9 +210,8 @@
                 <i class="pi pi-times text-[10px]"></i>
               </button>
             </div>
-            <!-- Modal body -->
             <div class="flex-1 overflow-y-auto p-6">
-              <CategoryList @updated="fetchCategories" />
+              <CategoryList :is-manager="userIsManager" />
             </div>
           </div>
         </div>
@@ -221,7 +234,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import ConfirmDialog from 'primevue/confirmdialog'
 
@@ -236,14 +249,17 @@ const {
   expenses,
   categories,
   loading,
-  summaryData,
   filters,
+  exportFilters,
+  isManager,
   fetchCategories,
   fetchExpenses,
   saveExpense,
   deleteExpense,
   exportExpenses
 } = useExpenses()
+
+const userIsManager = computed(() => isManager())
 
 const expenseDialog = ref(false)
 const showCategories = ref(false)
@@ -258,13 +274,22 @@ const expense = ref({
   receipt_image: null
 })
 
+// Jami summa — list dan hisoblangan (barcha rollar uchun ishlaydi)
+const totalFromList = computed(() =>
+  expenses.value.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0)
+)
+
 const topCategoryName = computed(() => {
-  if (!summaryData.value.summary?.length) return null
-  return summaryData.value.summary[0]?.category || null
+  if (!expenses.value.length) return null
+  const counts = {}
+  expenses.value.forEach(e => {
+    counts[e.category_name] = (counts[e.category_name] || 0) + parseFloat(e.amount || 0)
+  })
+  return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || null
 })
 
 const lastExpenseDate = computed(() => {
-  if (!expenses.value?.length) return '—'
+  if (!expenses.value.length) return '—'
   const latest = [...expenses.value].sort((a, b) => new Date(b.date) - new Date(a.date))[0]
   return new Date(latest.date).toLocaleDateString('uz-UZ', { day: '2-digit', month: '2-digit', year: 'numeric' })
 })
@@ -273,14 +298,19 @@ const formatCurrency = (val) =>
   new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 
 const clearFilters = () => {
-  filters.value.date_from = null
-  filters.value.date_to = null
+  filters.value.date = null
   filters.value.category = null
   fetchExpenses()
 }
 
 const openNew = () => {
-  expense.value = { category: null, amount: null, date: new Date().toISOString().split('T')[0], description: '', receipt_image: null }
+  expense.value = {
+    category: null,
+    amount: null,
+    date: new Date().toISOString().split('T')[0],
+    description: '',
+    receipt_image: null
+  }
   submitted.value = false
   expenseDialog.value = true
 }
@@ -313,7 +343,7 @@ const handleSave = async (payload) => {
 
 const confirmDelete = (data) => {
   confirm.require({
-    message: "Ushbu xarajatni o'chirishni tasdiqlaysizmi?",
+    message: "Ushbu xarajatni o'chirishni tasdiqlaysizmi? Bu amal qaytarib bo'lmaydi.",
     header: 'Tasdiqlash',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',

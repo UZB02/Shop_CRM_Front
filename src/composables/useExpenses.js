@@ -1,23 +1,43 @@
 import { ref } from 'vue'
 import { expensesAPI, expenseCategoriesAPI, reportsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
+import { useAuthStore } from '@/store/auth'
 
 export default function useExpenses() {
     const toast = useToast()
+    const authStore = useAuthStore()
 
     const expenses = ref([])
     const categories = ref([])
     const loading = ref(false)
     const summaryData = ref({ totalExpenses: 0, summary: [] })
 
+    // List endpoint accepts: branch, category, smena, date (YYYY-MM-DD — single date)
     const filters = ref({
         branch: null,
         category: null,
         smena: null,
-        date_from: null,
-        date_to: null,
         date: null
     })
+
+    // Export uses separate date range params (only for export endpoints)
+    const exportFilters = ref({
+        date_from: null,
+        date_to: null
+    })
+
+    // ─── Helpers ────────────────────────────────────────────────────────────────
+
+    const isManager = () => {
+        const user = authStore.user
+        if (!user) return false
+        return (
+            user.is_owner ||
+            user.is_superuser ||
+            user.is_staff ||
+            ['owner', 'manager'].includes((user.role || user.worker?.role || '').toLowerCase())
+        )
+    }
 
     // ─── Category CRUD ──────────────────────────────────────────────────────────
 
@@ -25,8 +45,8 @@ export default function useExpenses() {
         try {
             const res = await expenseCategoriesAPI.getAll({ status })
             categories.value = Array.isArray(res.data) ? res.data : (res.data.results || res.data.data || [])
-        } catch (error) {
-            console.error('Error fetching categories:', error)
+        } catch {
+            // Silent fail — categories not critical for basic page load
         }
     }
 
@@ -75,26 +95,48 @@ export default function useExpenses() {
     const fetchExpenses = async () => {
         loading.value = true
         try {
-            const res = await expensesAPI.getAll(filters.value)
+            // List endpoint params: branch, category, smena, date (single date)
+            const params = {}
+            if (filters.value.branch) params.branch = filters.value.branch
+            if (filters.value.category) params.category = filters.value.category
+            if (filters.value.smena) params.smena = filters.value.smena
+            if (filters.value.date) params.date = filters.value.date
+
+            const res = await expensesAPI.getAll(params)
             expenses.value = Array.isArray(res.data) ? res.data : (res.data.results || res.data.data || [])
 
-            // Financial report for stats cards
-            const reportRes = await reportsAPI.getFinancialReport(filters.value)
-            const report = reportRes.data
-            summaryData.value = {
-                totalExpenses: parseFloat(report.expenses?.total || 0),
-                summary: report.expenses?.items || []
+            // Financial report is Manager+ only — silently skip for sellers
+            if (isManager()) {
+                try {
+                    const reportParams = {}
+                    if (exportFilters.value.date_from) reportParams.date_from = exportFilters.value.date_from
+                    if (exportFilters.value.date_to) reportParams.date_to = exportFilters.value.date_to
+                    if (filters.value.branch) reportParams.branch = filters.value.branch
+
+                    const reportRes = await reportsAPI.getFinancialReport(reportParams)
+                    const report = reportRes.data
+                    summaryData.value = {
+                        totalExpenses: parseFloat(report.expenses?.total || 0),
+                        summary: report.expenses?.items || []
+                    }
+                } catch {
+                    // Financial report failed silently — stats cards will show 0
+                }
             }
         } catch (error) {
             console.error('Error fetching expenses:', error)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Xarajatlarni yuklashda xatolik yuz berdi', life: 3000 })
+            toast.add({
+                severity: 'error',
+                summary: 'Xatolik',
+                detail: 'Xarajatlarni yuklashda xatolik yuz berdi',
+                life: 3000
+            })
         } finally {
             loading.value = false
         }
     }
 
     const saveExpense = async (data) => {
-        // FormData uchun id ni to'g'ri olish
         const id = data instanceof FormData ? data.get('id') : data.id
         const isUpdate = !!id
         try {
@@ -112,8 +154,8 @@ export default function useExpenses() {
             await fetchExpenses()
             return true
         } catch (error) {
-            console.error('Error saving expense:', error)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Saqlashda xatolik yuz berdi', life: 3000 })
+            const detail = error.response?.data?.detail || error.response?.data?.amount?.[0] || 'Saqlashda xatolik yuz berdi'
+            toast.add({ severity: 'error', summary: 'Xatolik', detail, life: 3000 })
             return false
         }
     }
@@ -121,19 +163,26 @@ export default function useExpenses() {
     const deleteExpense = async (id) => {
         try {
             await expensesAPI.delete(id)
-            toast.add({ severity: 'success', summary: "O'chirildi", detail: "Xarajat muvaffaqiyatli o'chirildi", life: 3000 })
+            toast.add({ severity: 'success', summary: "O'chirildi", detail: "Xarajat o'chirildi", life: 3000 })
             await fetchExpenses()
             return true
         } catch (error) {
-            console.error('Error deleting expense:', error)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: "O'chirishda xatolik yuz berdi", life: 3000 })
+            const detail = error.response?.data?.detail || "O'chirishda xatolik"
+            toast.add({ severity: 'error', summary: 'Xatolik', detail, life: 3000 })
             return false
         }
     }
 
+    // Export uses date_from/date_to (range) — separate from list filters
     const exportExpenses = async (format = 'excel') => {
         try {
-            const res = await reportsAPI.exportExpenses({ ...filters.value, format })
+            const params = { format }
+            if (exportFilters.value.date_from) params.date_from = exportFilters.value.date_from
+            if (exportFilters.value.date_to) params.date_to = exportFilters.value.date_to
+            if (filters.value.branch) params.branch = filters.value.branch
+            if (filters.value.category) params.category = filters.value.category
+
+            const res = await reportsAPI.exportExpenses(params)
             const url = window.URL.createObjectURL(new Blob([res.data]))
             const link = document.createElement('a')
             link.href = url
@@ -143,8 +192,11 @@ export default function useExpenses() {
             link.remove()
             window.URL.revokeObjectURL(url)
         } catch (error) {
-            console.error('Export error:', error)
-            toast.add({ severity: 'error', summary: 'Eksportda xatolik', detail: 'Faylni tayyorlashda texnik xatolik yuz berdi', life: 3000 })
+            const status = error.response?.status
+            const detail = status === 403
+                ? 'Export uchun obuna talab qilinadi'
+                : 'Faylni tayyorlashda xatolik yuz berdi'
+            toast.add({ severity: 'error', summary: 'Eksport xatoligi', detail, life: 4000 })
         }
     }
 
@@ -154,6 +206,8 @@ export default function useExpenses() {
         loading,
         summaryData,
         filters,
+        exportFilters,
+        isManager,
         // Category
         fetchCategories,
         createCategory,

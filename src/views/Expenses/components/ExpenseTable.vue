@@ -105,6 +105,7 @@
             <!-- Amallar -->
             <td class="px-4 py-2.5 text-right">
               <div class="flex justify-end gap-1">
+                <!-- Chekni ko'rish: hammaga -->
                 <button
                   v-if="item.receipt_image"
                   @click="viewReceipt(item.receipt_image)"
@@ -113,15 +114,21 @@
                 >
                   <i class="pi pi-image text-[10px]"></i>
                 </button>
+                <!-- Tahrirlash: faqat Manager+ -->
                 <button
+                  v-if="isManager"
                   @click="$emit('edit', item)"
                   class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/20"
+                  title="Tahrirlash"
                 >
                   <i class="pi pi-pencil text-[10px]"></i>
                 </button>
+                <!-- O'chirish: faqat Manager+ -->
                 <button
+                  v-if="isManager"
                   @click="$emit('delete', item)"
                   class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all border border-transparent hover:border-rose-100 dark:hover:border-rose-500/20"
+                  title="O'chirish"
                 >
                   <i class="pi pi-trash text-[10px]"></i>
                 </button>
@@ -173,7 +180,8 @@ import { ref, computed } from 'vue'
 
 const props = defineProps({
   expenses: { type: Array, default: () => [] },
-  loading: { type: Boolean, default: false }
+  loading: { type: Boolean, default: false },
+  isManager: { type: Boolean, default: false }
 })
 
 defineEmits(['edit', 'delete'])
