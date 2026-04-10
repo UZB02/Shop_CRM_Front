@@ -1,29 +1,29 @@
 <template>
   <div class="px-3 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
     <!-- Premium Header Section -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pt-4">
+    <div class="mb-6 pt-4">
       <div class="space-y-1">
         <div class="flex items-center gap-3 mb-1">
           <div class="w-10 h-10 rounded-2xl bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-slate-900 shadow-lg shadow-slate-900/10 dark:shadow-white/5">
             <i class="pi pi-receipt text-lg"></i>
           </div>
-          <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight uppercase">{{ $t('menu.trades') }}</h1>
+          <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight uppercase">{{ $t('menu.trades') || 'Savdolar' }}</h1>
         </div>
         <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest pl-1">
-          {{ totalRecords }} {{ $t('customers.trades.count', { count: '' }).trim() }} tizimda qayd etilgan
+          {{ totalRecords }} {{ $t('customers.trades.count', { count: '' }).trim() || 'ta savdo tizimda qayd etilgan' }}
         </p>
       </div>
+    </div>
 
-      <!-- Quick Stats / Actions Row -->
-      <div class="flex items-center gap-3">
-        <TradeFilter 
-          v-model:searchQuery="searchQuery"
-          :filters="filters"
-          @update:filter="filters = { ...filters, ...$event }"
-          @search="handleSearch"
-          @reset="resetFilters"
-        />
-      </div>
+    <!-- Filter Component -->
+    <div class="mb-6">
+      <TradeFilter 
+        v-model:searchQuery="searchQuery"
+        :filters="filters"
+        @update:filter="filters = { ...filters, ...$event }"
+        @search="handleSearch"
+        @reset="resetFilters"
+      />
     </div>
 
     <!-- Main Content: Trades Table -->

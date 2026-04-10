@@ -53,27 +53,48 @@
 
               <div class="space-y-1">
                 <div v-for="(item, idx) in trade.items" :key="idx" 
-                     class="group flex items-center gap-5 p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+                     class="group flex items-center gap-5 p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 border-b border-slate-50 dark:border-slate-800/50 last:border-0 relative">
                   <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 shrink-0 group-hover:scale-105 transition-transform">
                     <i class="pi pi-box text-xs"></i>
                   </div>
                   <div class="flex-grow min-w-0">
-                    <h4 class="text-[13px] font-bold text-slate-700 dark:text-slate-200 truncate">{{ item.product_name }}</h4>
-                    <p class="text-[11px] text-slate-400 font-medium">
-                      {{ parseFloat(item.quantity) }} {{ item.unit }} <span class="mx-1.5 opacity-30">×</span> {{ formatCurrency(item.unit_price) }}
+                    <div class="flex items-center gap-2 mb-0.5">
+                      <h4 class="text-[13px] font-bold text-slate-700 dark:text-slate-200 truncate">{{ item.product_name }}</h4>
+                      <span v-if="parseFloat(item.item_discount_amt) > 0" class="text-[8px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-1.5 py-0.5 rounded uppercase tracking-wider">Chegirma</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-medium flex items-center">
+                      {{ parseFloat(item.quantity) }} {{ item.unit }} <span class="mx-1.5 opacity-30">×</span> 
+                      <template v-if="parseFloat(item.item_discount_amt) > 0">
+                        <span class="line-through text-slate-300 dark:text-slate-600 mr-1.5">{{ formatCurrency(item.original_price) }}</span>
+                        <span class="text-rose-500">{{ formatCurrency(item.unit_price) }}</span>
+                      </template>
+                      <template v-else>
+                        {{ formatCurrency(item.unit_price) }}
+                      </template>
                     </p>
                   </div>
-                  <div class="text-right shrink-0">
+                  <div class="text-right shrink-0 flex flex-col items-end">
                     <span class="text-[13px] font-bold text-slate-800 dark:text-white">{{ formatCurrency(item.total_price) }}</span>
+                    <span v-if="parseFloat(item.item_discount_amt) > 0" class="text-[9px] font-bold text-slate-400">-{{ formatCurrency(item.item_discount_amt * item.quantity) }}</span>
                   </div>
                 </div>
               </div>
+
+              <!-- Description if exists -->
+              <div v-if="trade.description && trade.description.trim() !== ''" class="mt-6 p-4 rounded-2xl bg-amber-50/50 border border-amber-100/50 dark:bg-amber-500/5 dark:border-amber-500/10 flex gap-3">
+                <i class="pi pi-comment text-amber-500 mt-0.5"></i>
+                <div>
+                   <h5 class="text-[10px] font-black uppercase text-amber-600/70 tracking-widest mb-1">Izoh</h5>
+                   <p class="text-xs text-amber-700/80 dark:text-amber-500/80 leading-relaxed">{{ trade.description }}</p>
+                </div>
+              </div>
+
             </div>
 
             <!-- Right Side: Sidebar with Financial Summary -->
-            <div class="w-full md:w-[320px] bg-slate-50/50 dark:bg-slate-900/40 border-l border-slate-100 dark:border-slate-800 p-8 flex flex-col justify-between shrink-0">
+            <div class="w-full md:w-[320px] bg-slate-50/50 dark:bg-slate-900/40 border-l border-slate-100 dark:border-slate-800 flex flex-col shrink-0">
               
-              <div class="space-y-8">
+              <div class="p-8 pb-4 flex-grow overflow-y-auto custom-scrollbar space-y-8">
                 <!-- Summary Section -->
                 <div>
                   <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-5">{{ $t('common.payment_summary') }}</h3>
@@ -89,7 +110,7 @@
                     <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800">
                       <div class="flex justify-between items-baseline">
                         <span class="text-[11px] font-black text-slate-800 dark:text-white uppercase tracking-wider">{{ $t('common.total_to_pay') }}</span>
-                        <span class="text-xl font-black text-slate-900 dark:text-white tracking-tighter">{{ formatCurrency(trade.net_price) }}</span>
+                        <span class="text-xl font-black text-slate-900 dark:text-white tracking-tighter">{{ formatCurrency(parseFloat(trade.total_price || 0) - parseFloat(trade.discount_amount || 0)) }}</span>
                       </div>
                     </div>
                   </div>
@@ -129,10 +150,22 @@
               <!-- Action Footer -->
               <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
                 <div class="flex flex-col gap-3">
-                  <div class="flex items-center justify-between px-1 mb-2">
+                  
+                  <div class="flex items-center justify-between px-1 mb-1">
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{{ $t('shifts.workers.col_worker') }}</span>
-                    <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ trade.worker_name }}</span>
+                    <div class="flex flex-col items-end leading-tight">
+                      <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ trade.worker_name }}</span>
+                      <span v-if="trade.smena_id" class="text-[8px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Smena #{{ trade.smena_id }}</span>
+                    </div>
                   </div>
+
+                  <div v-if="trade.ofd_status" class="flex items-center justify-between px-1 mb-3 pt-3 border-t border-dashed border-slate-200 dark:border-slate-800">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fiskal Holat</span>
+                    <span v-if="trade.ofd_status === 'disabled'" class="text-[9px] font-bold text-slate-400 px-2 py-0.5 rounded flex items-center gap-1"><i class="pi pi-ban text-[8px]"></i> O'chirilgan</span>
+                    <span v-else-if="trade.ofd_status === 'success'" class="text-[9px] font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded flex items-center gap-1"><i class="pi pi-check text-[8px]"></i> Yuborildi</span>
+                    <span v-else class="text-[9px] font-bold text-amber-500 px-2 py-0.5 rounded">{{ trade.ofd_status }}</span>
+                  </div>
+
                   <button class="w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-[12px] font-bold transition-all hover:bg-slate-800 dark:hover:bg-slate-100 active:scale-95 flex items-center justify-center gap-2">
                     <i class="pi pi-print text-xs"></i>
                     {{ $t('shifts.print') }}
