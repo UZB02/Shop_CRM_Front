@@ -205,7 +205,7 @@
         "workers": "Xodimlar",
         "trades": "Savdolar",
         "expenses": "Xarajatlar",
-        "reports": "Hisobotlar",
+        "reports": "Xarajatlar",
         "customers": "Mijozlar",
         "settings": "Sozlamalar"
     },
@@ -957,8 +957,7 @@
             "confirmed": "Tasdiqlangan",
             "cancelled": "Bekor qilingan"
         }
-    }
-,
+    },
     "expenses": {
         "title": "Xarajatlar",
         "management": "Xarajatlar boshqaruvi",
