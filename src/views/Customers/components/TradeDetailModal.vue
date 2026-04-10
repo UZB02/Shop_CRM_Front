@@ -166,10 +166,48 @@
                     <span v-else class="text-[9px] font-bold text-amber-500 px-2 py-0.5 rounded">{{ trade.ofd_status }}</span>
                   </div>
 
-                  <button class="w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-[12px] font-bold transition-all hover:bg-slate-800 dark:hover:bg-slate-100 active:scale-95 flex items-center justify-center gap-2">
-                    <i class="pi pi-print text-xs"></i>
-                    {{ $t('shifts.print') }}
-                  </button>
+                  <div class="px-1">
+                    <template v-if="!showCancelConfirm">
+                      <button 
+                        v-if="trade.status === 'completed'" 
+                        @click="showCancelConfirm = true"
+                        class="w-full h-10 bg-rose-50/50 dark:bg-rose-500/5 text-rose-500 hover:bg-rose-100 dark:hover:bg-rose-500/10 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center gap-2 mb-2"
+                      >
+                        <i class="pi pi-times-circle text-[10px]"></i>
+                        Savdoni bekor qilish
+                      </button>
+                    </template>
+                    
+                    <div v-else class="p-3 mb-3 bg-slate-100/50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700 animate-in fade-in duration-200">
+                      <p class="text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-3 text-center leading-tight">Savdoni bekor qilmoqchimisiz? <br/> Ombor va qarzlar yangilanadi.</p>
+                      <div class="flex gap-2">
+                        <button 
+                          @click="showCancelConfirm = false"
+                          class="flex-1 h-8 rounded-lg bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-bold border border-slate-200 dark:border-slate-600 hover:bg-slate-50"
+                        >
+                          Ortga
+                        </button>
+                        <button 
+                          @click="executeCancel"
+                          :disabled="isCancelling"
+                          class="flex-1 h-8 rounded-lg bg-rose-500 text-white text-[10px] font-bold hover:bg-rose-600 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-1"
+                        >
+                          <i v-if="isCancelling" class="pi pi-spinner pi-spin text-[9px]"></i>
+                          Tasdiqlash
+                        </button>
+                      </div>
+                    </div>
+
+                    <button 
+                      @click="printReceipt"
+                      :disabled="isPrinting"
+                      class="w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-[12px] font-bold transition-all hover:bg-slate-800 dark:hover:bg-slate-100 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                      <i v-if="isPrinting" class="pi pi-spinner pi-spin text-xs"></i>
+                      <i v-else class="pi pi-print text-xs"></i>
+                      {{ $t('shifts.print') }}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -182,17 +220,79 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useToast } from 'primevue/usetoast'
 import TradeStatusBadge from '@/views/Customers/components/TradeStatusBadge.vue'
 import { useTradeUtils } from '@/views/Customers/composables/useTradeUtils'
+import { salesAPI } from '@/services/api'
 
-defineProps({
+const props = defineProps({
   visible: Boolean,
   trade: { type: Object, required: true }
 })
 
-defineEmits(['update:visible'])
+const emit = defineEmits(['update:visible', 'trade-cancelled'])
 
 const { formatCurrency } = useTradeUtils()
+const toast = useToast()
+
+const isCancelling = ref(false)
+const isPrinting = ref(false)
+const showCancelConfirm = ref(false)
+
+const printReceipt = async () => {
+  try {
+    isPrinting.value = true
+    const response = await salesAPI.getReceipt(props.trade.id)
+    
+    // Create a Blob from the PDF stream
+    const file = new Blob([response.data], { type: 'application/pdf' })
+    
+    // Build a temporary URL for the file
+    const fileURL = URL.createObjectURL(file)
+    
+    // Open the PDF in a new tab
+    const printWindow = window.open(fileURL, '_blank')
+    
+    // Optional: Auto-trigger print dialog after load (might be blocked by browsers)
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print()
+        // Clean up memory after print
+        setTimeout(() => URL.revokeObjectURL(fileURL), 100)
+      }
+    }
+    
+    toast.add({ severity: 'info', summary: 'Chop etish', detail: 'Chek tayyorlanmoqda...', life: 2000 })
+  } catch (error) {
+    console.error('Error printing receipt:', error)
+    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Chekni yuklashda xatolik yuz berdi', life: 5000 })
+  } finally {
+    isPrinting.value = false
+  }
+}
+
+const executeCancel = async () => {
+  try {
+    isCancelling.value = true
+    await salesAPI.cancel(props.trade.id)
+    
+    // Notify parent to refresh list, update UI
+    toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Savdo muvaffaqiyatli bekor qilindi', life: 3000 })
+    emit('trade-cancelled', props.trade.id)
+    emit('update:visible', false) // Close modal
+    showCancelConfirm.value = false
+  } catch (error) {
+    console.error('Error cancelling trade:', error)
+    let alertMsg = "Savdoni bekor qilishning iloji bo'lmadi! Faqat oxirgi holati yakunlangan savdolar bekor qilinadi."
+    if (error.response && error.response.data && error.response.data.detail) {
+      alertMsg = error.response.data.detail
+    }
+    toast.add({ severity: 'error', summary: 'Xatolik', detail: alertMsg, life: 5000 })
+  } finally {
+    isCancelling.value = false
+  }
+}
 </script>
 
 <style scoped>

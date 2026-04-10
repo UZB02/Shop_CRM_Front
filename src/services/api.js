@@ -244,6 +244,7 @@ export const salesAPI = {
     getAll: (params) => api.get('/sales/', { params }),
     getById: (id) => api.get(`/sales/${id}/`),
     create: (data) => api.post('/sales/', data),
+    cancel: (id) => api.patch(`/sales/${id}/cancel/`),
     getReceipt: (id) => api.get(`/sales/${id}/receipt/`, { responseType: 'blob' }),
     scanProduct: (barcode) => api.get(`/warehouse/products/scan/`, { params: { code: barcode } })
 }
