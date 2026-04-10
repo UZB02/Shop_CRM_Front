@@ -144,12 +144,20 @@ export function useTransfers() {
             return true
         } catch (error) {
             console.error('Error creating transfer:', error)
+            const errorData = error.response?.data
+            
+            // If it's a validation error from our backend (zero_stock or insufficient_stock)
+            if (errorData && (errorData.zero_stock || errorData.insufficient_stock)) {
+                return { success: false, validationErrors: errorData }
+            }
+
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.error || t('common.error_message'),
-                life: 3000
+                detail: errorData?.detail || errorData?.error || t('common.error_message'),
+                life: 5000
             })
+            return { success: false }
         } finally {
             subLoading.value = false
         }

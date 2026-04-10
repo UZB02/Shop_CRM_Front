@@ -94,10 +94,19 @@ export function useTransferCreate() {
     }
   }
 
+  const stockErrors = ref(null)
+
   const submitTransfer = async () => {
     if (!isValid.value) return
-    const success = await createTransfer()
-    if (success) router.back()
+    stockErrors.value = null
+    
+    const result = await createTransfer()
+    
+    if (result === true) {
+      router.back()
+    } else if (result && result.validationErrors) {
+      stockErrors.value = result.validationErrors
+    }
   }
 
   const resetForm = () => {
@@ -126,6 +135,7 @@ export function useTransferCreate() {
     loadSourceData,
     submitTransfer,
     fetchLocations,
-    resetForm
+    resetForm,
+    stockErrors
   }
 }

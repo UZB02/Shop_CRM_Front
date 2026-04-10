@@ -23,22 +23,39 @@
         </button>
       </div>
       <button 
+        v-if="hasActiveFilters"
+        @click="onReset"
+        class="h-11 px-4 rounded-xl border border-rose-100 dark:border-rose-900/30 bg-rose-50/50 dark:bg-rose-500/5 text-rose-500 flex items-center justify-center gap-2 hover:bg-rose-100 dark:hover:bg-rose-500/10 transition-all shrink-0 shadow-sm group"
+        title="Filtrlarni tozalash"
+      >
+        <i class="pi pi-refresh text-[12px] group-hover:rotate-180 transition-transform duration-500"></i>
+      </button>
+
+      <button 
         @click="showFilters = !showFilters"
-        class="h-11 px-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-white shrink-0 shadow-sm"
+        :class="[
+          'h-11 px-5 rounded-xl border flex items-center justify-center gap-2 transition-all shrink-0 shadow-sm',
+          showFilters 
+            ? 'bg-slate-900 border-slate-900 text-white dark:bg-white dark:border-white dark:text-slate-900' 
+            : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+        ]"
       >
         <i class="pi pi-filter text-[13px]"></i>
         <span class="text-[13px] font-bold">Filtr</span>
-        <i :class="['pi text-[10px] ml-1 transition-transform dark:text-slate-400', showFilters ? 'pi-chevron-up' : 'pi-chevron-down']"></i>
+        <i :class="['pi text-[10px] ml-1 transition-transform', showFilters ? 'pi-chevron-up opacity-50' : 'pi-chevron-down dark:text-slate-400']"></i>
       </button>
     </div>
 
-    <!-- Filter Panel -->
-    <div v-show="showFilters" class="mt-3 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 animate-in slide-in-from-top-2 duration-200 shadow-sm relative z-20">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-5">
+    <!-- Filter Panel (Absolute Positioned Menu) -->
+    <div 
+      v-show="showFilters" 
+      class="absolute right-0 top-full mt-2 p-6 rounded-[24px] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-in slide-in-from-top-2 duration-200 z-[100] w-[320px] md:w-[600px]"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         
         <!-- Row 1 -->
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold text-slate-700 dark:text-white">Holat</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Holat</label>
           <Dropdown 
             :modelValue="filters.status"
             @update:modelValue="$emit('update:filter', { status: $event })"
@@ -46,12 +63,12 @@
             optionLabel="label"
             optionValue="value"
             placeholder="Tanlang..."
-            class="w-full !rounded-xl !border-slate-200 dark:!border-slate-800 !bg-slate-50/50 dark:!bg-slate-900/50 !h-10 text-[13px]"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
           />
         </div>
         
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold text-slate-700 dark:text-white">To'lov turi</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">To'lov turi</label>
           <Dropdown 
             :modelValue="filters.payment_type"
             @update:modelValue="$emit('update:filter', { payment_type: $event })"
@@ -59,12 +76,12 @@
             optionLabel="label"
             optionValue="value"
             placeholder="Tanlang..."
-            class="w-full !rounded-xl !border-slate-200 dark:!border-slate-800 !bg-slate-50/50 dark:!bg-slate-900/50 !h-10 text-[13px]"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
           />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold text-slate-700 dark:text-white">Filial</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Filial</label>
           <Dropdown 
             :modelValue="filters.branch"
             @update:modelValue="$emit('update:filter', { branch: $event })"
@@ -73,12 +90,12 @@
             optionValue="id"
             placeholder="Barchasi"
             filter
-            class="w-full !rounded-xl !border-slate-200 dark:!border-slate-800 !bg-slate-50/50 dark:!bg-slate-900/50 !h-10 text-[13px]"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
           />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold text-slate-700 dark:text-white">Xodim</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Xodim</label>
           <Dropdown 
             :modelValue="filters.worker"
             @update:modelValue="$emit('update:filter', { worker: $event })"
@@ -87,54 +104,49 @@
             optionValue="id"
             placeholder="Barchasi"
             filter
-            class="w-full !rounded-xl !border-slate-200 dark:!border-slate-800 !bg-slate-50/50 dark:!bg-slate-900/50 !h-10 text-[13px]"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
           />
         </div>
         
-        <!-- Row 2 -->
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold text-slate-700 dark:text-white">Sanadan</label>
-          <div class="relative">
-            <input 
-              type="date"
-              :value="filters.date_from"
-              @input="$emit('update:filter', { date_from: $event.target.value })"
-              class="w-full h-10 px-3 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all [&::-webkit-calendar-picker-indicator]:opacity-50 [&::-webkit-calendar-picker-indicator]:hover:opacity-100"
-            >
-          </div>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Sanadan</label>
+          <input 
+            type="date"
+            :value="filters.date_from"
+            @input="$emit('update:filter', { date_from: $event.target.value })"
+            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all"
+          >
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold text-slate-700 dark:text-white">Sanagacha</label>
-          <div class="relative">
-            <input 
-              type="date"
-              :value="filters.date_to"
-              @input="$emit('update:filter', { date_to: $event.target.value })"
-              class="w-full h-10 px-3 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all [&::-webkit-calendar-picker-indicator]:opacity-50 [&::-webkit-calendar-picker-indicator]:hover:opacity-100"
-            >
-          </div>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Sanagacha</label>
+          <input 
+            type="date"
+            :value="filters.date_to"
+            @input="$emit('update:filter', { date_to: $event.target.value })"
+            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all"
+          >
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold text-slate-700 dark:text-white">Min. summa</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Min. summa</label>
           <input 
             type="number"
             :value="filters.min_amount"
             @input="$emit('update:filter', { min_amount: $event.target.value })"
             placeholder="0"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
+            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
           >
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold text-slate-700 dark:text-white">Maks. summa</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Maks. summa</label>
           <input 
             type="number"
             :value="filters.max_amount"
             @input="$emit('update:filter', { max_amount: $event.target.value })"
             placeholder="0"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
+            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
           >
         </div>
       </div>
@@ -149,7 +161,7 @@
           <span class="text-[13px] font-bold">Tozalash</span>
         </button>
         <button 
-          @click="$emit('search')" 
+          @click="onApply" 
           class="h-10 px-6 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
         >
           <i class="pi pi-filter text-[11px]"></i>
@@ -161,7 +173,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import Dropdown from 'primevue/dropdown'
 import AutoComplete from 'primevue/autocomplete'
 import { customersAPI, branchesAPI, workersAPI } from '@/services/api'
@@ -180,6 +192,18 @@ const customerSuggestions = ref([])
 
 const branchOptions = ref([{ id: '', name: 'Barchasi' }])
 const workerOptions = ref([{ id: '', full_name: 'Barchasi' }])
+
+const hasActiveFilters = computed(() => {
+  return Object.keys(props.filters).some(key => {
+    if (key === 'search') return false // Ignore general search
+    return props.filters[key] !== '' && props.filters[key] !== null && props.filters[key] !== undefined
+  })
+})
+
+const onApply = () => {
+  emit('search')
+  showFilters.value = false
+}
 
 const statusOptions = [
   { label: 'Barchasi', value: '' },
