@@ -1,215 +1,328 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
+  <div class="space-y-4">
+
+    <!-- ── Header ─────────────────────────────────────────────── -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Xarajatlar Boshqaruvi</h1>
-        <p class="text-slate-500 text-sm mt-1">Barcha korxona xarajatlarini kuzatib boring</p>
+        <div class="flex items-center gap-1.5 mb-1">
+          <router-link to="/dashboard" class="text-[10px] font-bold text-slate-400 hover:text-rose-500 transition-colors uppercase tracking-widest flex items-center gap-1">
+            <i class="pi pi-home text-[9px]"></i>
+            Bosh sahifa
+          </router-link>
+          <i class="pi pi-chevron-right text-[8px] text-slate-300 dark:text-slate-600"></i>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Xarajatlar</span>
+        </div>
+        <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100">Xarajatlar boshqaruvi</h1>
+        <p class="text-xs text-slate-400 mt-0.5">{{ expenses.length }} ta xarajat yozuvi</p>
       </div>
-      <Button label="Xarajat qo'shish" icon="pi pi-plus" severity="danger" class="shadow-sm" @click="openNew" />
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button
+          @click="showCategories = true"
+          class="h-8 px-3 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-1.5 whitespace-nowrap"
+        >
+          <i class="pi pi-briefcase text-[10px]"></i>
+          Kategoriyalar
+        </button>
+        <button
+          @click="openNew"
+          class="h-8 px-3 rounded-lg text-xs font-medium bg-rose-500 hover:bg-rose-600 text-white transition-all flex items-center gap-1.5 whitespace-nowrap"
+        >
+          <i class="pi pi-plus text-[10px]"></i>
+          Xarajat qo'shish
+        </button>
+      </div>
     </div>
 
-    <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-       <Card class="bg-rose-50 border-rose-100 dark:bg-rose-950/20 border-none shadow-sm">
-         <template #content>
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-rose-600">
-                    <i class="pi pi-wallet text-xl"></i>
-                </div>
-                <div>
-                   <p class="text-sm text-rose-600 font-medium">Shu oydagi xarajat</p>
-                   <h3 v-if="loading" class="mt-1"><Skeleton width="8rem" height="1.5rem" /></h3>
-                   <h3 v-else class="text-2xl font-bold text-rose-700 mt-1">{{ formatCurrency(summaryData.totalExpenses) }}</h3>
-                </div>
-            </div>
-         </template>
-       </Card>
+    <!-- ── Stats ──────────────────────────────────────────────── -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <!-- Total -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm flex items-center gap-4">
+        <div class="w-9 h-9 rounded-lg bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center text-rose-500 border border-rose-100 dark:border-rose-500/20 shrink-0">
+          <i class="pi pi-wallet text-sm"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Jami xarajat</p>
+          <p class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">
+            <span v-if="loading" class="inline-block w-20 h-4 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></span>
+            <span v-else>{{ formatCurrency(summaryData.totalExpenses) }}</span>
+          </p>
+        </div>
+      </div>
 
-       <Card class="bg-amber-50 border-amber-100 dark:bg-amber-950/20 border-none shadow-sm">
-         <template #content>
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-amber-600">
-                    <i class="pi pi-chart-pie text-xl"></i>
-                </div>
-                <div>
-                   <p class="text-sm text-amber-600 font-medium">Top kategoriya</p>
-                   <h3 v-if="loading" class="mt-1"><Skeleton width="6rem" height="1.5rem" /></h3>
-                   <h3 v-else class="text-2xl font-bold text-amber-700 mt-1">{{ topCategory || 'Mavjud emas' }}</h3>
-                </div>
-            </div>
-         </template>
-       </Card>
+      <!-- Top Category -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm flex items-center gap-4">
+        <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-100 dark:border-amber-500/20 shrink-0">
+          <i class="pi pi-chart-pie text-sm"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Eng ko'p xarajat</p>
+          <p class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">
+            <span v-if="loading" class="inline-block w-24 h-4 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></span>
+            <span v-else>{{ topCategoryName || '—' }}</span>
+          </p>
+        </div>
+      </div>
 
-       <Card class="bg-sky-50 border-sky-100 dark:bg-sky-950/20 border-none shadow-sm">
-         <template #content>
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-full bg-sky-100 dark:bg-sky-900/40 flex items-center justify-center text-sky-600">
-                    <i class="pi pi-calendar text-xl"></i>
-                </div>
-                <div>
-                   <p class="text-sm text-sky-600 font-medium">Oxirgi xarajat</p>
-                   <h3 v-if="loading" class="mt-1"><Skeleton width="7rem" height="1.5rem" /></h3>
-                   <h3 v-else class="text-lg font-bold text-sky-700 mt-1">{{ lastExpenseDate }}</h3>
-                </div>
-            </div>
-         </template>
-       </Card>
+      <!-- Last Expense -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm flex items-center gap-4">
+        <div class="w-9 h-9 rounded-lg bg-sky-50 dark:bg-sky-500/10 flex items-center justify-center text-sky-500 border border-sky-100 dark:border-sky-500/20 shrink-0">
+          <i class="pi pi-calendar text-sm"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Oxirgi xarajat</p>
+          <p class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">
+            <span v-if="loading" class="inline-block w-20 h-4 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></span>
+            <span v-else>{{ lastExpenseDate }}</span>
+          </p>
+        </div>
+      </div>
     </div>
 
-    <!-- Expenses Table Component -->
-    <ExpenseTable 
-        :expenses="expenses" 
-        :loading="loading" 
-        @edit="editExpense" 
-        @delete="confirmDelete" 
+    <!-- ── Filters ─────────────────────────────────────────────── -->
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-sm flex flex-wrap items-center gap-2">
+      <!-- Date from -->
+      <div class="relative">
+        <i class="pi pi-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
+        <input
+          v-model="filters.date_from"
+          type="date"
+          class="h-8 pl-8 pr-3 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all w-36"
+        />
+      </div>
+
+      <span class="text-slate-300 dark:text-slate-600 text-xs">—</span>
+
+      <!-- Date to -->
+      <div class="relative">
+        <i class="pi pi-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
+        <input
+          v-model="filters.date_to"
+          type="date"
+          class="h-8 pl-8 pr-3 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all w-36"
+        />
+      </div>
+
+      <!-- Category -->
+      <select
+        v-model="filters.category"
+        class="h-8 px-3 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all min-w-[160px]"
+      >
+        <option :value="null">Barcha kategoriyalar</option>
+        <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+      </select>
+
+      <!-- Apply -->
+      <button
+        @click="fetchExpenses"
+        class="h-8 px-4 rounded-lg text-xs font-medium bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white transition-all flex items-center gap-1.5"
+      >
+        <i class="pi pi-search text-[10px]"></i>
+        Qidirish
+      </button>
+
+      <!-- Clear -->
+      <button
+        v-if="filters.date_from || filters.date_to || filters.category"
+        @click="clearFilters"
+        class="h-8 px-3 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+      >
+        <i class="pi pi-times text-[10px]"></i>
+      </button>
+
+      <!-- Spacer -->
+      <div class="flex-1"></div>
+
+      <!-- Export -->
+      <div class="flex items-center gap-2">
+        <button
+          @click="exportExpenses('excel')"
+          class="h-8 px-3 rounded-lg text-xs font-medium text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all flex items-center gap-1.5"
+        >
+          <i class="pi pi-file-excel text-[10px]"></i>
+          Excel
+        </button>
+        <button
+          @click="exportExpenses('pdf')"
+          class="h-8 px-3 rounded-lg text-xs font-medium text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all flex items-center gap-1.5"
+        >
+          <i class="pi pi-file-pdf text-[10px]"></i>
+          PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Table ──────────────────────────────────────────────── -->
+    <ExpenseTable
+      :expenses="expenses"
+      :loading="loading"
+      @edit="editExpense"
+      @delete="confirmDelete"
     />
 
-    <!-- Expense Dialog Component -->
-    <ExpenseDialog 
-        v-model:visible="expenseDialog"
-        :expense="expense"
-        :categories="categories"
-        :saving="saving"
-        :submitted="submitted"
-        @save="saveExpense"
-        @hide="hideDialog"
+    <!-- ── Category Modal ─────────────────────────────────────── -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div v-if="showCategories" @click="showCategories = false" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-[999]"></div>
+      </Transition>
+
+      <Transition
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="opacity-0 scale-95 translate-y-4"
+        enter-to-class="opacity-100 scale-100 translate-y-0"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100 scale-100 translate-y-0"
+        leave-to-class="opacity-0 scale-95 translate-y-4"
+      >
+        <div v-if="showCategories" class="fixed inset-0 z-[1000] flex items-center justify-center p-4 pointer-events-none">
+          <div class="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl flex flex-col pointer-events-auto max-h-[80vh] overflow-hidden">
+            <!-- Modal header -->
+            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-black uppercase tracking-widest text-rose-500">Xarajat kategoriyalari</h3>
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">Boshqaruv paneli</p>
+              </div>
+              <button
+                @click="showCategories = false"
+                class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+              >
+                <i class="pi pi-times text-[10px]"></i>
+              </button>
+            </div>
+            <!-- Modal body -->
+            <div class="flex-1 overflow-y-auto p-6">
+              <CategoryList @updated="fetchCategories" />
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
+    <!-- ── Expense Dialog ─────────────────────────────────────── -->
+    <ExpenseDialog
+      v-model:visible="expenseDialog"
+      :expense="expense"
+      :categories="categories"
+      :saving="saving"
+      :submitted="submitted"
+      @save="handleSave"
+      @hide="hideDialog"
     />
 
-
+    <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { expensesAPI } from '@/services/api'
-import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
-import Button from 'primevue/button'
-import Card from 'primevue/card'
-import Skeleton from 'primevue/skeleton'
 import ConfirmDialog from 'primevue/confirmdialog'
 
+import useExpenses from '@/composables/useExpenses'
 import ExpenseTable from './components/ExpenseTable.vue'
 import ExpenseDialog from './components/ExpenseDialog.vue'
+import CategoryList from './components/CategoryList.vue'
 
-const toast = useToast()
 const confirm = useConfirm()
 
-const expenses = ref([])
-const summaryData = ref({ totalExpenses: 0, summary: [] })
-const loading = ref(false)
-const saving = ref(false)
+const {
+  expenses,
+  categories,
+  loading,
+  summaryData,
+  filters,
+  fetchCategories,
+  fetchExpenses,
+  saveExpense,
+  deleteExpense,
+  exportExpenses
+} = useExpenses()
+
 const expenseDialog = ref(false)
+const showCategories = ref(false)
+const saving = ref(false)
 const submitted = ref(false)
 
 const expense = ref({
-    name: '',
-    category: 'Boshqa',
-    amount: null,
-    date: new Date(),
-    seller: '',
-    description: ''
+  category: null,
+  amount: null,
+  date: new Date().toISOString().split('T')[0],
+  description: '',
+  receipt_image: null
 })
 
-const categories = ['Ijara', 'Kommunal', 'Soliq', 'Maosh', 'Transport', 'Marketing', 'Boshqa']
-
-const topCategory = computed(() => {
-    if (!summaryData.value.summary || summaryData.value.summary.length === 0) return null
-    return summaryData.value.summary[0]._id
+const topCategoryName = computed(() => {
+  if (!summaryData.value.summary?.length) return null
+  return summaryData.value.summary[0]?.category || null
 })
 
 const lastExpenseDate = computed(() => {
-    if (!expenses.value || expenses.value.length === 0) return '-'
-    const date = new Date(expenses.value[0].date)
-    return date.toLocaleDateString('uz-UZ')
+  if (!expenses.value?.length) return '—'
+  const latest = [...expenses.value].sort((a, b) => new Date(b.date) - new Date(a.date))[0]
+  return new Date(latest.date).toLocaleDateString('uz-UZ', { day: '2-digit', month: '2-digit', year: 'numeric' })
 })
 
-const formatCurrency = (val) => {
-    return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
-}
+const formatCurrency = (val) =>
+  new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 
-const loadData = async () => {
-    loading.value = true
-    try {
-        const [expensesRes, summaryRes] = await Promise.all([
-            expensesAPI.getAll(),
-            expensesAPI.getSummary()
-        ])
-        expenses.value = expensesRes.data.expenses || expensesRes.data
-        summaryData.value = summaryRes.data
-    } catch (error) {
-        console.error('Error loading expenses:', error)
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Ma\'lumotlarni yuklashda xatolik yuz berdi', life: 5000 })
-    } finally {
-        loading.value = false
-    }
+const clearFilters = () => {
+  filters.value.date_from = null
+  filters.value.date_to = null
+  filters.value.category = null
+  fetchExpenses()
 }
 
 const openNew = () => {
-    expense.value = {
-        name: '',
-        category: 'Boshqa',
-        amount: null,
-        date: new Date(),
-        seller: 'Admin',
-        description: ''
-    }
-    submitted.value = false
-    expenseDialog.value = true
+  expense.value = { category: null, amount: null, date: new Date().toISOString().split('T')[0], description: '', receipt_image: null }
+  submitted.value = false
+  expenseDialog.value = true
 }
 
 const hideDialog = () => {
-    expenseDialog.value = false
-    submitted.value = false
+  expenseDialog.value = false
+  submitted.value = false
 }
 
 const editExpense = (data) => {
-    expense.value = { ...data, date: new Date(data.date) }
-    expenseDialog.value = true
+  expense.value = {
+    ...data,
+    category: data.category_id,
+    date: data.date
+  }
+  expenseDialog.value = true
 }
 
-const saveExpense = async () => {
-    submitted.value = true
-    if (!expense.value.name?.trim() || !expense.value.amount) return
+const handleSave = async (payload) => {
+  submitted.value = true
+  const cat = payload instanceof FormData ? payload.get('category') : payload.category
+  const amt = payload instanceof FormData ? payload.get('amount') : payload.amount
+  if (!cat || !amt) return
 
-    saving.value = true
-    try {
-        if (expense.value._id) {
-            await expensesAPI.update(expense.value._id, expense.value)
-            toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Xarajat yangilandi', life: 5000 })
-        } else {
-            await expensesAPI.create(expense.value)
-            toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi xarajat saqlandi', life: 5000 })
-        }
-        expenseDialog.value = false
-        loadData()
-    } catch (error) {
-        console.error('Error saving expense:', error)
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Saqlashda xatolik yuz berdi', life: 5000 })
-    } finally {
-        saving.value = false
-    }
+  saving.value = true
+  const success = await saveExpense(payload)
+  if (success) expenseDialog.value = false
+  saving.value = false
 }
 
 const confirmDelete = (data) => {
-    confirm.require({
-        message: `"${data.name}" xarajatini o'chirishni tasdiqlaysizmi?`,
-        header: 'Tasdiqlash',
-        icon: 'pi pi-exclamation-triangle',
-        acceptClass: 'p-button-danger',
-        accept: async () => {
-            try {
-                await expensesAPI.delete(data._id)
-                toast.add({ severity: 'success', summary: 'O\'chirildi', detail: 'Xarajat muvaffaqiyatli o\'chirildi', life: 5000 })
-                loadData()
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 5000 })
-            }
-        }
-    })
+  confirm.require({
+    message: "Ushbu xarajatni o'chirishni tasdiqlaysizmi?",
+    header: 'Tasdiqlash',
+    icon: 'pi pi-exclamation-triangle',
+    acceptClass: 'p-button-danger',
+    accept: () => deleteExpense(data.id)
+  })
 }
 
 onMounted(() => {
-    loadData()
+  fetchCategories()
+  fetchExpenses()
 })
 </script>

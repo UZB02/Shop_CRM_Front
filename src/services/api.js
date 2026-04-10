@@ -141,14 +141,53 @@ export const workersAPI = {
     updateMe: (data) => api.patch('/workers/me/', data)
 }
 
+// Expense Categories API
+export const expenseCategoriesAPI = {
+    getAll: (params) => api.get('/expense-categories/', { params }),
+    getById: (id) => api.get(`/expense-categories/${id}/`),
+    create: (data) => api.post('/expense-categories/', data),
+    update: (id, data) => api.patch(`/expense-categories/${id}/`, data),
+    delete: (id) => api.delete(`/expense-categories/${id}/`)
+}
+
 // Expenses API
 export const expensesAPI = {
     getAll: (params) => api.get('/expenses/', { params }),
     getById: (id) => api.get(`/expenses/${id}/`),
-    create: (data) => api.post('/expenses/', data),
-    update: (id, data) => api.patch(`/expenses/${id}/`, data),
-    delete: (id) => api.delete(`/expenses/${id}/`),
-    getSummary: (params) => api.get('/expenses/summary/', { params })
+    create: (data) => {
+        // Handle multipart/form-data if image is present
+        if (data instanceof FormData) {
+            return api.post('/expenses/', data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+        }
+        return api.post('/expenses/', data)
+    },
+    update: (id, data) => {
+        if (data instanceof FormData) {
+            return api.patch(`/expenses/${id}/`, data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+        }
+        return api.patch(`/expenses/${id}/`, data)
+    },
+    delete: (id) => api.delete(`/expenses/${id}/`)
+}
+
+// Reports & Exports API
+export const reportsAPI = {
+    // Excel/PDF Exports (Binary)
+    exportExpenses: (params) => api.get('/export/expenses/', { params, responseType: 'blob' }),
+    exportWastages: (params) => api.get('/export/wastages/', { params, responseType: 'blob' }),
+    
+    // JSON Reports
+    getFinancialReport: (params) => api.get('/export/financial-report/', { params }),
+    getProfitLoss: (params) => api.get('/export/profit-loss/', { params }),
+    getProductTurnover: (params) => api.get('/export/product-turnover/', { params }),
+    getDebtorReport: (params) => api.get('/export/debtor-report/', { params }),
+    getWorkerPerformance: (params) => api.get('/export/worker-performance/', { params }),
+    getInventoryValue: (params) => api.get('/export/inventory-value/', { params }),
+    getTaxReport: (params) => api.get('/export/tax-report/', { params })
 }
 
 // Stores / Branches API

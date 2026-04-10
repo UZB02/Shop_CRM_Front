@@ -1,137 +1,217 @@
 <template>
-  <Card class="border-none shadow-sm overflow-hidden">
-    <template #content>
-      <DataTable 
-        :value="expenses" 
-        :loading="loading"
-        paginator 
-        :rows="10" 
-        dataKey="_id"
-        responsiveLayout="stack" 
-        breakpoint="960px"
-        class="p-datatable-sm"
-        v-model:filters="filters"
-        :globalFilterFields="['name', 'category', 'description', 'seller']"
-        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-        currentPageReportTemplate="{first} - {last} / {totalRecords}"
+  <div class="bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden shadow-sm backdrop-blur-xl border border-slate-100/50 dark:border-slate-800/30">
+
+    <!-- Table header: search -->
+    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50/50 dark:bg-slate-800/30">
+      <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+        Xarajatlar ro'yxati
+      </span>
+      <div class="relative w-full sm:w-64 group/search">
+        <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-[10px] group-focus-within/search:text-rose-500 transition-colors"></i>
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Qidirish..."
+          class="w-full h-8 pl-8 pr-4 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all outline-none text-slate-700 dark:text-slate-200 placeholder-slate-400"
+        />
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse min-w-[700px]">
+        <thead>
+          <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Sana</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Kategoriya</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden md:table-cell">Filial</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden sm:table-cell">Xodim</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Summa</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">Amallar</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
+
+          <!-- Loading skeleton -->
+          <template v-if="loading">
+            <tr v-for="i in 6" :key="i">
+              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-20 animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-24 animate-pulse"></div></td>
+              <td class="px-4 py-3 hidden md:table-cell"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-28 animate-pulse"></div></td>
+              <td class="px-4 py-3 hidden sm:table-cell"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-24 animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-20 animate-pulse"></div></td>
+              <td class="px-4 py-3"><div class="h-7 bg-slate-100 dark:bg-slate-800 rounded-lg w-20 ml-auto animate-pulse"></div></td>
+            </tr>
+          </template>
+
+          <!-- Empty state -->
+          <template v-else-if="!filteredExpenses.length">
+            <tr>
+              <td colspan="6" class="px-6 py-14 text-center">
+                <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3">
+                  <i class="pi pi-wallet text-xl text-slate-400"></i>
+                </div>
+                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Xarajatlar topilmadi</p>
+              </td>
+            </tr>
+          </template>
+
+          <!-- Data rows -->
+          <tr
+            v-for="item in filteredExpenses"
+            :key="item.id"
+            class="group hover:bg-rose-50/30 dark:hover:bg-rose-500/5 transition-all border-b border-slate-50 dark:border-slate-800 last:border-0"
+          >
+            <!-- Sana -->
+            <td class="px-4 py-2.5">
+              <div class="flex flex-col">
+                <span class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-tight">{{ formatDate(item.date) }}</span>
+                <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-0.5">{{ formatTime(item.created_on) }}</span>
+              </div>
+            </td>
+
+            <!-- Kategoriya -->
+            <td class="px-4 py-2.5">
+              <div class="flex flex-col">
+                <span class="text-[12px] font-black text-slate-800 dark:text-slate-200 group-hover:text-rose-500 transition-colors">{{ item.category_name }}</span>
+                <p v-if="item.description" class="text-[9px] font-medium text-slate-400 truncate max-w-[180px] mt-0.5 italic">{{ item.description }}</p>
+              </div>
+            </td>
+
+            <!-- Filial -->
+            <td class="px-4 py-2.5 hidden md:table-cell">
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                {{ item.branch_name || '—' }}
+              </span>
+            </td>
+
+            <!-- Xodim -->
+            <td class="px-4 py-2.5 hidden sm:table-cell">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[10px] font-black text-slate-500 shrink-0">
+                  {{ item.worker_name?.charAt(0)?.toUpperCase() || '?' }}
+                </div>
+                <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[120px]">{{ item.worker_name || '—' }}</span>
+              </div>
+            </td>
+
+            <!-- Summa -->
+            <td class="px-4 py-2.5">
+              <div class="flex flex-col">
+                <span class="text-[13px] font-black text-rose-500 tracking-tight">{{ formatCurrency(item.amount) }}</span>
+              </div>
+            </td>
+
+            <!-- Amallar -->
+            <td class="px-4 py-2.5 text-right">
+              <div class="flex justify-end gap-1">
+                <button
+                  v-if="item.receipt_image"
+                  @click="viewReceipt(item.receipt_image)"
+                  class="w-7 h-7 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/20"
+                  title="Chekni ko'rish"
+                >
+                  <i class="pi pi-image text-[10px]"></i>
+                </button>
+                <button
+                  @click="$emit('edit', item)"
+                  class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/20"
+                >
+                  <i class="pi pi-pencil text-[10px]"></i>
+                </button>
+                <button
+                  @click="$emit('delete', item)"
+                  class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all border border-transparent hover:border-rose-100 dark:hover:border-rose-500/20"
+                >
+                  <i class="pi pi-trash text-[10px]"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer info -->
+    <div v-if="filteredExpenses.length > 0" class="px-4 py-2.5 bg-slate-50/50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+        {{ filteredExpenses.length }} ta natija
+      </span>
+      <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+        Jami: <span class="text-rose-500">{{ formatCurrency(totalAmount) }}</span>
+      </span>
+    </div>
+
+    <!-- Receipt preview overlay -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
       >
-        <template #header>
-          <div class="flex flex-wrap gap-2 justify-between items-center px-2">
-            <span class="text-xl font-bold text-slate-800 dark:text-slate-100">Xarajatlar Ro'yxati</span>
-            <IconField iconPosition="left">
-                <InputIcon class="pi pi-search" />
-                <InputText v-model="filters['global'].value" placeholder="Qidiruv..." class="w-full md:w-auto" />
-            </IconField>
-          </div>
-        </template>
-
-        <template #empty>
-          <div class="flex flex-col items-center justify-center p-8 text-slate-500">
-            <i class="pi pi-folder-open text-4xl mb-4"></i>
-            <p>Xarajatlar topilmadi</p>
-          </div>
-        </template>
-
-        <Column field="date" header="Sana" sortable class="w-32">
-          <template #body="slotProps">
-            <div class="flex items-center gap-2 text-slate-600">
-              <i class="pi pi-calendar text-slate-400"></i>
-              <span>{{ formatDate(slotProps.data.date) }}</span>
+        <div v-if="receiptVisible" @click="receiptVisible = false" class="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-slate-900/90 backdrop-blur-sm">
+          <div class="relative max-w-2xl w-full" @click.stop>
+            <button @click="receiptVisible = false" class="absolute -top-10 right-0 w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-all">
+              <i class="pi pi-times text-xs"></i>
+            </button>
+            <div class="bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl">
+              <img :src="receiptUrl" class="w-full h-auto rounded-xl max-h-[70vh] object-contain" alt="Chek rasmi" />
             </div>
-          </template>
-        </Column>
-
-        <Column field="name" header="Nomi" sortable>
-          <template #body="slotProps">
-            <span class="font-semibold text-slate-700 dark:text-slate-200">{{ slotProps.data.name }}</span>
-          </template>
-        </Column>
-
-        <Column field="category" header="Kategoriya" sortable>
-          <template #body="slotProps">
-            <Tag :value="slotProps.data.category" :severity="getCategorySeverity(slotProps.data.category)" class="px-3" />
-          </template>
-        </Column>
-
-        <Column field="amount" header="Summa" sortable>
-          <template #body="slotProps">
-            <span class="font-bold text-rose-600">{{ formatCurrency(slotProps.data.amount) }}</span>
-          </template>
-        </Column>
-
-        <Column field="seller" header="Mas'ul" sortable></Column>
-
-        <Column header="Amallar" class="w-24 text-right" :exportable="false">
-          <template #body="slotProps">
-            <div class="flex justify-end gap-1">
-              <Button icon="pi pi-pencil" text rounded severity="info" v-tooltip.top="'Tahrirlash'" @click="$emit('edit', slotProps.data)" />
-              <Button icon="pi pi-trash" text rounded severity="danger" v-tooltip.top="'O\'chirish'" @click="$emit('delete', slotProps.data)" />
-            </div>
-          </template>
-        </Column>
-      </DataTable>
-    </template>
-  </Card>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import Button from 'primevue/button'
-import Tag from 'primevue/tag'
-import Card from 'primevue/card'
-import InputText from 'primevue/inputtext'
-import IconField from 'primevue/iconfield'
-import InputIcon from 'primevue/inputicon'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
-  expenses: {
-    type: Array,
-    required: true
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  }
+  expenses: { type: Array, default: () => [] },
+  loading: { type: Boolean, default: false }
 })
 
 defineEmits(['edit', 'delete'])
 
-const filters = ref({
-    global: { value: null, matchMode: 'contains' }
+const searchQuery = ref('')
+const receiptVisible = ref(false)
+const receiptUrl = ref('')
+
+const filteredExpenses = computed(() => {
+  if (!searchQuery.value.trim()) return props.expenses
+  const q = searchQuery.value.toLowerCase()
+  return props.expenses.filter(item =>
+    item.category_name?.toLowerCase().includes(q) ||
+    item.description?.toLowerCase().includes(q) ||
+    item.worker_name?.toLowerCase().includes(q) ||
+    item.branch_name?.toLowerCase().includes(q)
+  )
 })
 
-const formatCurrency = (val) => {
-  return new Intl.NumberFormat('uz-UZ', { 
-    style: 'currency', 
-    currency: 'UZS', 
-    maximumFractionDigits: 0 
-  }).format(val || 0)
-}
+const totalAmount = computed(() =>
+  filteredExpenses.value.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
+)
+
+const formatCurrency = (val) =>
+  new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 
 const formatDate = (date) => {
-  if (!date) return '-'
-  return new Date(date).toLocaleDateString('uz-UZ')
+  if (!date) return '—'
+  return new Date(date).toLocaleDateString('uz-UZ', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
-const getCategorySeverity = (category) => {
-  switch (category) {
-    case 'Ijara': return 'danger';
-    case 'Kommunal': return 'info';
-    case 'Soliq': return 'warning';
-    case 'Maosh': return 'success';
-    case 'Transport': return 'help';
-    case 'Marketing': return 'primary';
-    default: return 'secondary';
-  }
+const formatTime = (dateStr) => {
+  if (!dateStr) return ''
+  return new Date(dateStr).toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' })
+}
+
+const viewReceipt = (url) => {
+  receiptUrl.value = url
+  receiptVisible.value = true
 }
 </script>
-
-<style scoped>
-:deep(.p-datatable-header) {
-  background: transparent;
-  padding: 1rem 0;
-  border: none;
-}
-</style>

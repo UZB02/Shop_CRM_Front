@@ -204,7 +204,8 @@
         "products": "Mahsulotlar",
         "workers": "Xodimlar",
         "trades": "Savdolar",
-        "reports": "Xarajatlar",
+        "expenses": "Xarajatlar",
+        "reports": "Hisobotlar",
         "customers": "Mijozlar",
         "settings": "Sozlamalar"
     },
@@ -956,5 +957,63 @@
             "confirmed": "Tasdiqlangan",
             "cancelled": "Bekor qilingan"
         }
+    }
+,
+    "expenses": {
+        "title": "Xarajatlar",
+        "management": "Xarajatlar boshqaruvi",
+        "new": "Yangi xarajat",
+        "add": "Xarajat qo'shish",
+        "edit": "Xarajatni tahrirlash",
+        "list": "Xarajatlar ro'yxati",
+        "categories": "Xarajat kategoriyalari",
+        "amount": "Summa",
+        "date": "Sana",
+        "category": "Kategoriya",
+        "description": "Izoh",
+        "receipt": "Kvitansiya / Rasm",
+        "worker": "Xodim",
+        "branch": "Filial",
+        "smena": "Smena",
+        "total_monthly": "Shu oydagi jami xarajat",
+        "top_category": "Eng ko'p xarajat",
+        "last_expense": "Oxirgi xarajat",
+        "no_expenses": "Xarajatlar topilmadi",
+        "delete_confirm": "Ushbu xarajatni o'chirishni tasdiqlaysizmi?",
+        "category_form": {
+            "title": "Kategoriya qo'shish/tahrirlash",
+            "name": "Kategoriya nomi",
+            "status": "Holati",
+            "active": "Faol",
+            "inactive": "Nofaol",
+            "expense_count": "Xarajatlar soni"
+        },
+        "messages": {
+            "category_added": "Kategoriya muvaffaqiyatli qo'shildi",
+            "category_updated": "Kategoriya yangilandi",
+            "added": "Xarajat muvaffaqiyatli saqlandi",
+            "updated": "Xarajat yangilandi",
+            "deleted": "Xarajat o'chirildi"
+        }
+    },
+    "reports": {
+        "title": "Moliya va Hisobotlar",
+        "financial_report": "Moliyaviy hisobot",
+        "profit_loss": "Foyda va zarar (P&L)",
+        "product_turnover": "Mahsulot aylanmasi",
+        "debtors": "Qarzdorlar hisoboti",
+        "worker_performance": "Xodimlar samaradorligi",
+        "inventory_value": "Inventar qiymati",
+        "tax_report": "Soliq hisoboti",
+        "revenue": "Sof tushum",
+        "cogs": "Sotilgan tovar tan narxi",
+        "gross_profit": "Yalpi foyda",
+        "net_profit": "Sof foyda",
+        "margin": "Rentabellik",
+        "wastage_loss": "Isrof zarari",
+        "total_debt": "Umumiy qarz",
+        "export_excel": "Excelga yuklash",
+        "export_pdf": "PDFga yuklash",
+        "filters": "Hisobot filtrlar"
     }
 }
