@@ -8,6 +8,7 @@
         "save_worker": "Xodimni Saqlash",
         "cancel": "Bekor qilish",
         "choose": "Tanlang",
+        "select": "Tanlang",
         "edit": "Tahrirlash",
         "delete": "O'chirish",
         "view": "Ko'rish",
@@ -57,12 +58,14 @@
         "view_all": "Barchasini ko'rish",
         "more": "Yana",
         "net_price": "Tan narxi",
+        "created_at": "Kiritilgan vaqti",
         "fullName": "F.I.SH.",
         "payment_summary": "To'lov Xulosasi",
         "total_amount": "Umumiy summa",
         "discount": "Chegirma",
         "total_to_pay": "Jami Summa",
-        "paid": "To'landi"
+        "paid": "To'landi",
+        "close": "Yopish"
     },
     "workers": {
         "title": "Xodimlar",
@@ -421,7 +424,7 @@
         "warehouse_name": "Ombor nomi",
         "warehouse_address": "Manzil",
         "no_warehouses": "Omborlar mavjud emas",
-        "no_warehouses_desc": "Hali hech qanday ombor yaratilmagan",
+        "no_warehouses_desc": "Hali hech qanday ombor kiritilmagan",
         "no_results": "Natija topilmadi",
         "search_no_data": "Qidiruv bo'yicha hech qanday ma'lumot mavjud emas",
         "clear_filter": "Filtrni tozalash",
@@ -856,6 +859,7 @@
         }
     },
     "shifts": {
+        "title": "Smena",
         "report_title": "Smena hisoboti",
         "print": "Chop etish",
         "branch": "Filial",
@@ -937,7 +941,7 @@
         "title": "O'tkazmalar",
         "not_found": "O'tkazmalar topilmadi",
         "empty_status": "Bu holatda o'tkazmalar yo'q",
-        "empty_all": "Hali birorta o'tkazma yaratilmagan",
+        "empty_all": "Hali birorta o'tkazma kiritilmagan",
         "col_id_date": "ID / Sana",
         "col_direction": "Yo'nalish",
         "col_product": "Mahsulot",
@@ -961,6 +965,7 @@
     "expenses": {
         "title": "Xarajatlar",
         "management": "Xarajatlar boshqaruvi",
+        "details": "Xarajat Tafsilotlari",
         "new": "Yangi xarajat",
         "add": "Xarajat qo'shish",
         "edit": "Xarajatni tahrirlash",
@@ -970,7 +975,7 @@
         "date": "Sana",
         "category": "Kategoriya",
         "description": "Izoh",
-        "receipt": "Kvitansiya / Rasm",
+        "receipt": "Chek/Rasm",
         "worker": "Xodim",
         "branch": "Filial",
         "smena": "Smena",
@@ -982,11 +987,25 @@
         "category_form": {
             "title": "Kategoriya qo'shish/tahrirlash",
             "name": "Kategoriya nomi",
+            "name_ph": "Yangi kategoriya nomi",
             "status": "Holati",
             "active": "Faol",
             "inactive": "Nofaol",
-            "expense_count": "Xarajatlar soni"
+            "expense_count": "Xarajatlar soni",
+            "no_categories": "Kategoriyalar mavjud emas",
+            "toggle_active": "Faollashtirish",
+            "toggle_inactive": "Nofaol qilish",
+            "delete_msg": "\"{name}\" kategoriyasini nofaol qilishni tasdiqlaysizmi?"
         },
+        "all_records": "{count} ta xarajat yozuvi",
+        "search_ph": "Qidirish...",
+        "no_results": "Xarajatlar topilmadi",
+        "results_count": "{count} ta natija",
+        "receipt_view": "Chekni ko'rish",
+        "delete_msg": "Ushbu xarajatni o'chirishni tasdiqlaysizmi? Bu amal qaytarib bo'lmaydi.",
+        "category_required": "Kategoriya tanlash majburiy",
+        "amount_required": "Summa kiritish majburiy",
+        "upload_image": "Rasm yuklash",
         "messages": {
             "category_added": "Kategoriya muvaffaqiyatli qo'shildi",
             "category_updated": "Kategoriya yangilandi",

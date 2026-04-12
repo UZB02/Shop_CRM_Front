@@ -4,14 +4,14 @@
     <!-- Table header: search -->
     <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50/50 dark:bg-slate-800/30">
       <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-        Xarajatlar ro'yxati
+        {{ $t('expenses.list') }}
       </span>
       <div class="relative w-full sm:w-64 group/search">
         <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-[10px] group-focus-within/search:text-rose-500 transition-colors"></i>
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Qidirish..."
+          :placeholder="$t('expenses.search_ph')"
           class="w-full h-8 pl-8 pr-4 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all outline-none text-slate-700 dark:text-slate-200 placeholder-slate-400"
         />
       </div>
@@ -22,12 +22,12 @@
       <table class="w-full text-left border-collapse min-w-[700px]">
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Sana</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Kategoriya</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden md:table-cell">Filial</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden sm:table-cell">Xodim</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Summa</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">Amallar</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('expenses.date') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('expenses.category') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden md:table-cell">{{ $t('expenses.branch') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden sm:table-cell">{{ $t('expenses.worker') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('expenses.amount') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('common.actions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -51,7 +51,7 @@
                 <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3">
                   <i class="pi pi-wallet text-xl text-slate-400"></i>
                 </div>
-                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Xarajatlar topilmadi</p>
+                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('expenses.no_results') }}</p>
               </td>
             </tr>
           </template>
@@ -60,7 +60,8 @@
           <tr
             v-for="item in filteredExpenses"
             :key="item.id"
-            class="group hover:bg-rose-50/30 dark:hover:bg-rose-500/5 transition-all border-b border-slate-50 dark:border-slate-800 last:border-0"
+            @click="$emit('view', item)"
+            class="group hover:bg-rose-50/30 dark:hover:bg-rose-500/5 transition-all border-b border-slate-50 dark:border-slate-800 last:border-0 cursor-pointer"
           >
             <!-- Sana -->
             <td class="px-4 py-2.5">
@@ -108,27 +109,27 @@
                 <!-- Chekni ko'rish: hammaga -->
                 <button
                   v-if="item.receipt_image"
-                  @click="viewReceipt(item.receipt_image)"
+                  @click.stop="viewReceipt(item.receipt_image)"
                   class="w-7 h-7 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/20"
-                  title="Chekni ko'rish"
+                  :title="$t('expenses.receipt_view')"
                 >
                   <i class="pi pi-image text-[10px]"></i>
                 </button>
                 <!-- Tahrirlash: faqat Manager+ -->
                 <button
                   v-if="isManager"
-                  @click="$emit('edit', item)"
+                  @click.stop="$emit('edit', item)"
                   class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/20"
-                  title="Tahrirlash"
+                  :title="$t('common.edit')"
                 >
                   <i class="pi pi-pencil text-[10px]"></i>
                 </button>
                 <!-- O'chirish: faqat Manager+ -->
                 <button
                   v-if="isManager"
-                  @click="$emit('delete', item)"
+                  @click.stop="$emit('delete', item)"
                   class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all border border-transparent hover:border-rose-100 dark:hover:border-rose-500/20"
-                  title="O'chirish"
+                  :title="$t('common.delete')"
                 >
                   <i class="pi pi-trash text-[10px]"></i>
                 </button>
@@ -143,10 +144,10 @@
     <!-- Footer info -->
     <div v-if="filteredExpenses.length > 0" class="px-4 py-2.5 bg-slate-50/50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
       <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-        {{ filteredExpenses.length }} ta natija
+        {{ $t('expenses.results_count', { count: filteredExpenses.length }) }}
       </span>
       <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-        Jami: <span class="text-rose-500">{{ formatCurrency(totalAmount) }}</span>
+        {{ $t('common.total_amount') }}: <span class="text-rose-500">{{ formatCurrency(totalAmount) }}</span>
       </span>
     </div>
 
@@ -166,7 +167,7 @@
               <i class="pi pi-times text-xs"></i>
             </button>
             <div class="bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl">
-              <img :src="receiptUrl" class="w-full h-auto rounded-xl max-h-[70vh] object-contain" alt="Chek rasmi" />
+              <img :src="receiptUrl" class="w-full h-auto rounded-xl max-h-[70vh] object-contain" :alt="$t('expenses.receipt')" />
             </div>
           </div>
         </div>
@@ -184,7 +185,7 @@ const props = defineProps({
   isManager: { type: Boolean, default: false }
 })
 
-defineEmits(['edit', 'delete'])
+defineEmits(['edit', 'delete', 'view'])
 
 const searchQuery = ref('')
 const receiptVisible = ref(false)

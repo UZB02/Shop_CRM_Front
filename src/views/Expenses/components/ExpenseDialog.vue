@@ -27,9 +27,9 @@
         <div class="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
           <div>
             <span class="text-sm font-black uppercase tracking-widest text-rose-500">
-              {{ expense.id ? 'Xarajatni tahrirlash' : 'Yangi xarajat' }}
+              {{ expense.id ? $t('expenses.edit') : $t('expenses.new') }}
             </span>
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Xarajatlar bo'limi</p>
+            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">{{ $t('expenses.management') }}</p>
           </div>
           <button
             @click="$emit('update:visible', false)"
@@ -45,7 +45,7 @@
           <!-- Category -->
           <div class="field">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
-              Kategoriya <span class="text-rose-500">*</span>
+              {{ $t('expenses.category') }} <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !expense.category }">
               <i class="pi pi-tag absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
@@ -54,19 +54,41 @@
                 :options="categories"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Kategoriyani tanlang"
+                :placeholder="$t('products.form.select_category')"
                 class="flex-1 h-full w-full"
                 pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
                 pt:label:class="!pl-12 !pr-4 !text-[13px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
               />
             </div>
-            <small v-if="submitted && !expense.category" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">Kategoriya tanlash majburiy</small>
+            <small v-if="submitted && !expense.category" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">{{ $t('expenses.category_required') }}</small>
+          </div>
+
+          <!-- Branch (Optional) -->
+          <div v-if="branches?.length > 0" class="field">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+              {{ $t('expenses.branch') }}
+            </label>
+            <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
+              <i class="pi pi-map-marker absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
+              <Select
+                v-model="expense.branch"
+                :options="branches"
+                optionLabel="name"
+                optionValue="id"
+                :placeholder="$t('common.select')"
+                class="flex-1 h-full w-full"
+                showClear
+                pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
+                pt:label:class="!pl-12 !pr-4 !text-[13px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
+              />
+            </div>
+            <p class="text-[8px] font-bold text-slate-400 uppercase ml-1 mt-1 block">Ko'rsatmasangiz, o'z filialingiz avtomatik tanlanadi</p>
           </div>
 
           <!-- Amount -->
           <div class="field">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
-              Summa (UZS) <span class="text-rose-500">*</span>
+              {{ $t('expenses.amount') }} (UZS) <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !expense.amount }">
               <i class="pi pi-wallet absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
@@ -80,13 +102,13 @@
                 pt:input:class="!bg-transparent !border-none !shadow-none !text-[15px] !font-black !h-full !pl-12 !pr-4 !w-full !outline-none !text-slate-800 dark:!text-slate-100"
               />
             </div>
-            <small v-if="submitted && !expense.amount" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">Summa kiritish majburiy</small>
+            <small v-if="submitted && !expense.amount" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">{{ $t('expenses.amount_required') }}</small>
           </div>
 
           <!-- Date -->
           <div class="field">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
-              Sana <span class="text-rose-500">*</span>
+              {{ $t('expenses.date') }} <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
               <i class="pi pi-calendar absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
@@ -103,7 +125,7 @@
           </div>
 
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">Izoh (ixtiyoriy)</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('expenses.description') }}</label>
             <div class="custom-input-wrapper relative group/input flex items-start rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
               <Textarea
                 v-model="expense.description"
@@ -118,7 +140,7 @@
 
           <!-- Receipt Image Upload -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">Chek yoki rasm (ixtiyoriy)</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('expenses.receipt') }}</label>
 
             <div class="flex items-start gap-4">
               <!-- Preview -->
@@ -145,7 +167,7 @@
                   <i class="pi pi-cloud-upload text-slate-400 group-hover/upload:text-rose-500 transition-colors"></i>
                 </div>
                 <div class="text-center">
-                  <span class="text-[9px] font-black text-slate-400 group-hover/upload:text-rose-500 uppercase tracking-widest transition-colors block">Rasm yuklash</span>
+                  <span class="text-[9px] font-black text-slate-400 group-hover/upload:text-rose-500 uppercase tracking-widest transition-colors block">{{ $t('expenses.upload_image') }}</span>
                   <span class="text-[8px] text-slate-300 dark:text-slate-600 font-bold">JPG, PNG, WEBP</span>
                 </div>
               </div>
@@ -161,7 +183,7 @@
               @click="$emit('update:visible', false)"
               class="flex-1 h-10 rounded-2xl text-xs font-black uppercase tracking-widest text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
             >
-              Bekor qilish
+              {{ $t('common.cancel') }}
             </button>
             <button
               @click="handleSave"
@@ -170,7 +192,7 @@
             >
               <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
               <i v-else class="pi pi-check text-xs"></i>
-              {{ saving ? 'Saqlanmoqda...' : 'Saqlash' }}
+              {{ saving ? $t('common.saving') : $t('common.save') }}
             </button>
           </div>
         </div>
@@ -191,6 +213,7 @@ const props = defineProps({
   visible: Boolean,
   expense: Object,
   categories: Array,
+  branches: { type: Array, default: () => [] },
   saving: Boolean,
   submitted: Boolean
 })
@@ -233,6 +256,7 @@ const handleSave = () => {
   if (selectedFile.value) {
     const fd = new FormData()
     fd.append('category', data.category)
+    if (data.branch) fd.append('branch', data.branch)
     fd.append('amount', data.amount)
     fd.append('date', data.date)
     if (data.description) fd.append('description', data.description)

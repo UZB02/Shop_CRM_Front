@@ -1,11 +1,13 @@
 import { ref } from 'vue'
-import { expensesAPI, expenseCategoriesAPI, reportsAPI } from '@/services/api'
+import { expensesAPI, expenseCategoriesAPI, reportsAPI, branchesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
+import i18n from '@/i18n'
 import { useAuthStore } from '@/store/auth'
 
 // Shared state to ensure consistency across components
 const expenses = ref([])
 const categories = ref([])
+const branches = ref([])
 const loading = ref(false)
 const summaryData = ref({ totalExpenses: 0, summary: [] })
 
@@ -25,6 +27,7 @@ const exportFilters = ref({
 
 export default function useExpenses() {
     const toast = useToast()
+    const { t } = i18n.global
     const authStore = useAuthStore()
 
     // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -60,12 +63,12 @@ export default function useExpenses() {
     const createCategory = async (data) => {
         try {
             await expenseCategoriesAPI.create(data)
-            toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya yaratildi', life: 3000 })
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('expenses.messages.category_added'), life: 3000 })
             await fetchCategories()
             return true
         } catch (error) {
-            const detail = error.response?.data?.name?.[0] || error.response?.data?.detail || 'Kategoriya yaratishda xatolik'
-            toast.add({ severity: 'error', summary: 'Xatolik', detail, life: 4000 })
+            const detail = error.response?.data?.name?.[0] || error.response?.data?.detail || t('expenses.messages.save_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
             return false
         }
     }
@@ -73,12 +76,12 @@ export default function useExpenses() {
     const updateCategory = async (id, data) => {
         try {
             await expenseCategoriesAPI.update(id, data)
-            toast.add({ severity: 'success', summary: 'Yangilandi', detail: 'Kategoriya yangilandi', life: 3000 })
+            toast.add({ severity: 'success', summary: t('common.updated'), detail: t('expenses.messages.category_updated'), life: 3000 })
             await fetchCategories()
             return true
         } catch (error) {
-            const detail = error.response?.data?.detail || 'Yangilashda xatolik'
-            toast.add({ severity: 'error', summary: 'Xatolik', detail, life: 4000 })
+            const detail = error.response?.data?.detail || t('expenses.messages.save_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
             return false
         }
     }
@@ -86,12 +89,12 @@ export default function useExpenses() {
     const deleteCategory = async (id) => {
         try {
             await expenseCategoriesAPI.delete(id)
-            toast.add({ severity: 'success', summary: 'Nofaol qilindi', detail: 'Kategoriya nofaol qilindi', life: 3000 })
+            toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('expenses.messages.deleted'), life: 3000 })
             await fetchCategories()
             return true
         } catch (error) {
-            const detail = error.response?.data?.detail || "O'chirishda xatolik"
-            toast.add({ severity: 'error', summary: 'Xatolik', detail, life: 4000 })
+            const detail = error.response?.data?.detail || t('expenses.messages.delete_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
             return false
         }
     }
@@ -131,12 +134,37 @@ export default function useExpenses() {
             console.error('Error fetching expenses:', error)
             toast.add({
                 severity: 'error',
-                summary: 'Xatolik',
-                detail: 'Xarajatlarni yuklashda xatolik yuz berdi',
+                summary: t('common.error'),
+                detail: t('expenses.messages.load_error'),
                 life: 3000
             })
         } finally {
             loading.value = false
+        }
+    }
+
+    const getExpenseById = async (id) => {
+        try {
+            const res = await expensesAPI.getById(id)
+            return res.data
+        } catch (error) {
+            console.error('Error fetching expense detail:', error)
+            toast.add({
+                severity: 'error',
+                summary: t('common.error'),
+                detail: t('expenses.messages.load_error'),
+                life: 3000
+            })
+            return null
+        }
+    }
+
+    const fetchBranches = async () => {
+        try {
+            const res = await branchesAPI.getAll()
+            branches.value = Array.isArray(res.data) ? res.data : (res.data.results || res.data.data || [])
+        } catch {
+            // Silent fail
         }
     }
 
@@ -151,15 +179,15 @@ export default function useExpenses() {
             }
             toast.add({
                 severity: 'success',
-                summary: 'Muvaffaqiyatli',
-                detail: isUpdate ? 'Xarajat yangilandi' : 'Xarajat saqlandi',
+                summary: t('common.success'),
+                detail: isUpdate ? t('expenses.messages.updated') : t('expenses.messages.added'),
                 life: 3000
             })
             await fetchExpenses()
             return true
         } catch (error) {
-            const detail = error.response?.data?.detail || error.response?.data?.amount?.[0] || 'Saqlashda xatolik yuz berdi'
-            toast.add({ severity: 'error', summary: 'Xatolik', detail, life: 3000 })
+            const detail = error.response?.data?.detail || error.response?.data?.amount?.[0] || t('expenses.messages.save_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
             return false
         }
     }
@@ -167,12 +195,12 @@ export default function useExpenses() {
     const deleteExpense = async (id) => {
         try {
             await expensesAPI.delete(id)
-            toast.add({ severity: 'success', summary: "O'chirildi", detail: "Xarajat o'chirildi", life: 3000 })
+            toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('expenses.messages.deleted'), life: 3000 })
             await fetchExpenses()
             return true
         } catch (error) {
-            const detail = error.response?.data?.detail || "O'chirishda xatolik"
-            toast.add({ severity: 'error', summary: 'Xatolik', detail, life: 3000 })
+            const detail = error.response?.data?.detail || t('expenses.messages.delete_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
             return false
         }
     }
@@ -206,6 +234,7 @@ export default function useExpenses() {
     return {
         expenses,
         categories,
+        branches,
         loading,
         summaryData,
         filters,
@@ -218,8 +247,10 @@ export default function useExpenses() {
         deleteCategory,
         // Expense
         fetchExpenses,
+        getExpenseById,
         saveExpense,
         deleteExpense,
-        exportExpenses
+        exportExpenses,
+        fetchBranches
     }
 }

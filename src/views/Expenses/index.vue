@@ -7,13 +7,13 @@
         <div class="flex items-center gap-1.5 mb-1">
           <router-link to="/dashboard" class="text-[10px] font-bold text-slate-400 hover:text-rose-500 transition-colors uppercase tracking-widest flex items-center gap-1">
             <i class="pi pi-home text-[9px]"></i>
-            Bosh sahifa
+            {{ $t('common.back') }}
           </router-link>
           <i class="pi pi-chevron-right text-[8px] text-slate-300 dark:text-slate-600"></i>
-          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Xarajatlar</span>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{{ $t('expenses.title') }}</span>
         </div>
-        <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100">Xarajatlar boshqaruvi</h1>
-        <p class="text-xs text-slate-400 mt-0.5">{{ expenses.length }} ta xarajat yozuvi</p>
+        <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100">{{ $t('expenses.management') }}</h1>
+        <p class="text-xs text-slate-400 mt-0.5">{{ $t('expenses.all_records', { count: expenses.length }) }}</p>
       </div>
 
       <div class="flex items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
@@ -24,7 +24,7 @@
           class="flex-1 sm:flex-initial h-9 sm:h-8 px-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap bg-white dark:bg-slate-900 shadow-sm"
         >
           <i class="pi pi-briefcase text-[10px]"></i>
-          Kategoriyalar
+          {{ $t('expenses.categories') }}
         </button>
         <!-- Xarajat qo'shish: barcha ruxsatli xodimlar -->
         <button
@@ -32,7 +32,7 @@
           class="flex-1 sm:flex-initial h-9 sm:h-8 px-4 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-lg shadow-rose-500/20 active:scale-95"
         >
           <i class="pi pi-plus text-[10px]"></i>
-          Xarajat qo'shish
+          {{ $t('expenses.add') }}
         </button>
       </div>
     </div>
@@ -45,7 +45,7 @@
           <i class="pi pi-wallet text-sm"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Jami xarajat</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">{{ $t('expenses.total_monthly') }}</p>
           <p class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">
             <span v-if="loading" class="inline-block w-20 h-4 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></span>
             <span v-else>{{ formatCurrency(totalFromList) }}</span>
@@ -59,7 +59,7 @@
           <i class="pi pi-chart-pie text-sm"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Eng ko'p xarajat</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">{{ $t('expenses.top_category') }}</p>
           <p class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">
             <span v-if="loading" class="inline-block w-24 h-4 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></span>
             <span v-else>{{ topCategoryName || '—' }}</span>
@@ -73,7 +73,7 @@
           <i class="pi pi-calendar text-sm"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Oxirgi xarajat</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">{{ $t('expenses.last_expense') }}</p>
           <p class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">
             <span v-if="loading" class="inline-block w-20 h-4 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></span>
             <span v-else>{{ lastExpenseDate }}</span>
@@ -90,7 +90,7 @@
           <DatePicker
             v-model="filters.date"
             dateFormat="yy-mm-dd"
-            placeholder="Sana"
+            :placeholder="$t('common.date')"
             showIcon
             iconDisplay="input"
             class="w-full"
@@ -106,7 +106,7 @@
             :options="categories"
             optionLabel="name"
             optionValue="id"
-            placeholder="Barcha kategoriyalar"
+            :placeholder="$t('categories.all')"
             showClear
             class="w-full"
             pt:root:class="!h-9 sm:!h-8 !rounded-xl !border !border-slate-200 dark:!border-slate-700 focus:!border-rose-400 !bg-slate-50/50 dark:!bg-slate-800/40"
@@ -135,7 +135,7 @@
           :class="showExportOptions ? 'text-rose-500 bg-rose-50 dark:bg-rose-500/10' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'"
         >
           <i class="pi pi-sliders-h text-[10px]"></i>
-          {{ showExportOptions ? 'Yopish' : 'Eksport' }}
+          {{ showExportOptions ? $t('common.close') : $t('reports.title') }}
         </button>
       </div>
 
@@ -150,12 +150,12 @@
       >
         <div v-if="showExportOptions" class="pt-3 border-t border-slate-50 dark:border-slate-800/50 flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2 w-full sm:w-auto">
-            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-1 hidden sm:inline">Export:</span>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-1 hidden sm:inline">{{ $t('reports.title') }}:</span>
             <div class="flex items-center gap-2 flex-1 sm:flex-none">
               <DatePicker
                 v-model="exportFilters.date_from"
                 dateFormat="yy-mm-dd"
-                placeholder="dan"
+                :placeholder="$t('common.date_from')"
                 class="flex-1 sm:w-32"
                 pt:root:class="!h-8 !rounded-lg !border !border-slate-200 dark:!border-slate-700 bg-slate-50/50 dark:bg-slate-800/40"
                 pt:input:class="!bg-transparent !border-none !shadow-none !text-[10px] !font-bold !h-full"
@@ -164,7 +164,7 @@
               <DatePicker
                 v-model="exportFilters.date_to"
                 dateFormat="yy-mm-dd"
-                placeholder="gacha"
+                :placeholder="$t('common.date_to')"
                 class="flex-1 sm:w-32"
                 pt:root:class="!h-8 !rounded-lg !border !border-slate-200 dark:!border-slate-700 bg-slate-50/50 dark:bg-slate-800/40"
                 pt:input:class="!bg-transparent !border-none !shadow-none !text-[10px] !font-bold !h-full"
@@ -197,6 +197,7 @@
       :expenses="expenses"
       :loading="loading"
       :is-manager="userIsManager"
+      @view="viewExpense"
       @edit="editExpense"
       @delete="confirmDelete"
     />
@@ -227,8 +228,8 @@
             <!-- Modal Header -->
             <div class="px-5 py-4 sm:px-6 sm:py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white/50 dark:bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
               <div>
-                <h3 class="text-xs sm:text-sm font-black uppercase tracking-widest text-rose-500">Xarajat kategoriyalari</h3>
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">Boshqaruv paneli</p>
+                <h3 class="text-xs sm:text-sm font-black uppercase tracking-widest text-rose-500">{{ $t('expenses.categories') }}</h3>
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">{{ $t('expenses.management') }}</p>
               </div>
               <button
                 @click="showCategories = false"
@@ -251,10 +252,19 @@
       v-model:visible="expenseDialog"
       :expense="expense"
       :categories="categories"
+      :branches="branches"
       :saving="saving"
       :submitted="submitted"
       @save="handleSave"
       @hide="hideDialog"
+    />
+
+    <!-- ── Expense Detail Modal ───────────────────────────────── -->
+    <ExpenseDetailModal
+      v-model:visible="detailVisible"
+      :expense="expense"
+      :is-manager="userIsManager"
+      @edit="onEditFromDetail"
     />
 
     <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
@@ -271,6 +281,7 @@ import DatePicker from 'primevue/datepicker'
 import Select from 'primevue/select'
 import ExpenseTable from './components/ExpenseTable.vue'
 import ExpenseDialog from './components/ExpenseDialog.vue'
+import ExpenseDetailModal from './components/ExpenseDetailModal.vue'
 import CategoryList from './components/CategoryList.vue'
 
 const confirm = useConfirm()
@@ -278,20 +289,24 @@ const confirm = useConfirm()
 const {
   expenses,
   categories,
+  branches,
   loading,
   filters,
   exportFilters,
   isManager,
   fetchCategories,
   fetchExpenses,
+  getExpenseById,
   saveExpense,
   deleteExpense,
-  exportExpenses
+  exportExpenses,
+  fetchBranches
 } = useExpenses()
 
 const userIsManager = computed(() => isManager())
 
 const expenseDialog = ref(false)
+const detailVisible = ref(false)
 const showCategories = ref(false)
 const showExportOptions = ref(false)
 const saving = ref(false)
@@ -299,6 +314,7 @@ const submitted = ref(false)
 
 const expense = ref({
   category: null,
+  branch: null,
   amount: null,
   date: new Date().toISOString().split('T')[0],
   description: '',
@@ -336,6 +352,7 @@ const clearFilters = () => {
 const openNew = () => {
   expense.value = {
     category: null,
+    branch: null,
     amount: null,
     date: new Date().toISOString().split('T')[0],
     description: '',
@@ -350,13 +367,43 @@ const hideDialog = () => {
   submitted.value = false
 }
 
-const editExpense = (data) => {
-  expense.value = {
-    ...data,
-    category: data.category_id,
-    date: data.date
+const viewExpense = async (data) => {
+  loading.value = true
+  const detail = await getExpenseById(data.id)
+  loading.value = false
+  
+  if (detail) {
+    expense.value = {
+      ...detail,
+      category: detail.category_id,
+      branch: detail.branch_id,
+      date: detail.date
+    }
+    detailVisible.value = true
   }
-  expenseDialog.value = true
+}
+
+const onEditFromDetail = (data) => {
+  detailVisible.value = false
+  setTimeout(() => {
+    expenseDialog.value = true
+  }, 300)
+}
+
+const editExpense = async (data) => {
+  loading.value = true
+  const detail = await getExpenseById(data.id)
+  loading.value = false
+  
+  if (detail) {
+    expense.value = {
+      ...detail,
+      category: detail.category_id,
+      branch: detail.branch_id,
+      date: detail.date
+    }
+    expenseDialog.value = true
+  }
 }
 
 const handleSave = async (payload) => {
@@ -373,8 +420,8 @@ const handleSave = async (payload) => {
 
 const confirmDelete = (data) => {
   confirm.require({
-    message: "Ushbu xarajatni o'chirishni tasdiqlaysizmi? Bu amal qaytarib bo'lmaydi.",
-    header: 'Tasdiqlash',
+    message: t('expenses.delete_msg'),
+    header: t('common.confirm_title'),
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: () => deleteExpense(data.id)
@@ -407,6 +454,9 @@ watch(exportFilters, () => {
 onMounted(() => {
   fetchCategories()
   fetchExpenses()
+  if (userIsManager.value) {
+    fetchBranches()
+  }
 })
 </script>
 
