@@ -1032,6 +1032,7 @@
         "total_debt": "Umumiy qarz",
         "export_excel": "Excelga yuklash",
         "export_pdf": "PDFga yuklash",
+        "wastage_export": "Isroflar Excel",
         "filters": "Hisobot filtrlar"
     }
 }

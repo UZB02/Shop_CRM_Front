@@ -1,5 +1,6 @@
 import { ref } from 'vue'
-import { expensesAPI, expenseCategoriesAPI, reportsAPI, branchesAPI } from '@/services/api'
+import { expensesAPI, expenseCategoriesAPI, reportsAPI, branchesAPI, shiftsAPI } from '@/services/api'
+import api from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import i18n from '@/i18n'
 import { useAuthStore } from '@/store/auth'
@@ -8,6 +9,7 @@ import { useAuthStore } from '@/store/auth'
 const expenses = ref([])
 const categories = ref([])
 const branches = ref([])
+const shifts = ref([])
 const loading = ref(false)
 const summaryData = ref({ totalExpenses: 0, summary: [] })
 
@@ -168,6 +170,16 @@ export default function useExpenses() {
         }
     }
 
+    const fetchShifts = async () => {
+        try {
+            // Faqat ochiq smenalar emas, filtrlash uchun barchasi kerak bo'lishi mumkin
+            const res = await api.get('/shifts/') // shiftsAPI.getAll or direct call
+            shifts.value = Array.isArray(res.data) ? res.data : (res.data.results || res.data.data || [])
+        } catch {
+            // Silent fail
+        }
+    }
+
     const saveExpense = async (data) => {
         const id = data instanceof FormData ? data.get('id') : data.id
         const isUpdate = !!id
@@ -212,6 +224,7 @@ export default function useExpenses() {
             if (exportFilters.value.date_to) params.date_to = exportFilters.value.date_to
             if (filters.value.branch) params.branch = filters.value.branch
             if (filters.value.category) params.category = filters.value.category
+            if (filters.value.smena) params.smena = filters.value.smena
 
             const res = await reportsAPI.exportExpenses(params)
             const url = window.URL.createObjectURL(new Blob([res.data]))
@@ -231,10 +244,33 @@ export default function useExpenses() {
         }
     }
 
+    const exportWastages = async () => {
+        try {
+            const params = {}
+            if (exportFilters.value.date_from) params.date_from = exportFilters.value.date_from
+            if (exportFilters.value.date_to) params.date_to = exportFilters.value.date_to
+            if (filters.value.branch) params.branch = filters.value.branch
+            if (filters.value.smena) params.smena = filters.value.smena
+
+            const res = await reportsAPI.exportWastages(params)
+            const url = window.URL.createObjectURL(new Blob([res.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', `isroflar_${new Date().toISOString().split('T')[0]}.xlsx`)
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            window.URL.revokeObjectURL(url)
+        } catch (error) {
+            toast.add({ severity: 'error', summary: 'Eksport xatoligi', detail: 'Isroflar hisobotini tayyorlashda xatolik', life: 4000 })
+        }
+    }
+
     return {
         expenses,
         categories,
         branches,
+        shifts,
         loading,
         summaryData,
         filters,
@@ -251,6 +287,8 @@ export default function useExpenses() {
         saveExpense,
         deleteExpense,
         exportExpenses,
-        fetchBranches
+        exportWastages,
+        fetchBranches,
+        fetchShifts
     }
 }

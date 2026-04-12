@@ -185,8 +185,8 @@ export const expensesAPI = {
 // Reports & Exports API
 export const reportsAPI = {
     // Excel/PDF Exports (Binary)
-    exportExpenses: (params) => api.get('/export/expenses/', { params, responseType: 'blob' }),
-    exportWastages: (params) => api.get('/export/wastages/', { params, responseType: 'blob' }),
+    exportExpenses: (params) => api.get('/export/expenses', { params, responseType: 'blob' }),
+    exportWastages: (params) => api.get('/export/wastages', { params, responseType: 'blob' }),
     
     // JSON Reports
     getFinancialReport: (params) => api.get('/export/financial-report/', { params }),

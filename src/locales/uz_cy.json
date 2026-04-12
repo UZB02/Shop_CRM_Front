@@ -1012,6 +1012,7 @@
         "total_debt": "Умумий қарз",
         "export_excel": "Excelга юклаш",
         "export_pdf": "PDFга юклаш",
+        "wastage_export": "Исрофлар Excel",
         "filters": "Ҳисобот филтрлар"
     }
 }
