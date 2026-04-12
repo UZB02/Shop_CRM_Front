@@ -47,7 +47,9 @@ api.interceptors.response.use(
     (error) => {
         console.error(`❌ API ERROR [${error.config?.method?.toUpperCase()}] ${error.config?.url}:`, error.response?.data || error.message)
         
-        if (error.response?.status === 401) {
+        const status = error.response?.status
+
+        if (status === 401) {
             // Token expired or invalid — clear session data
             clearApiToken()
             const preservedKeys = ['theme', 'lang']
@@ -58,7 +60,13 @@ api.interceptors.response.use(
             })
             // Use Vue Router instead of hard redirect to preserve SPA state
             router.push({ name: 'login' })
+        } else if (status === 429) {
+            console.log('🔘 Dispatching rate-limit-error event');
+            window.dispatchEvent(new CustomEvent('rate-limit-error', { 
+                detail: error.response?.data?.detail || "So'rovlar soni limitdan oshdi. Biroz kuting va qayta urinib ko'ring." 
+            }))
         }
+        
         return Promise.reject(error)
     }
 )

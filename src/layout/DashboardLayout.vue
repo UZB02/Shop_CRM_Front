@@ -59,9 +59,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterView } from 'vue-router'
 import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
 import { useDashboardLayout } from './composables/useDashboardLayout'
@@ -72,6 +73,7 @@ import DashboardHeader from './components/DashboardHeader.vue'
 import UserProfileDialog from '@/components/UserProfileDialog.vue'
 
 const confirm = useConfirm()
+const toast = useToast()
 const { 
   router, t, locale, setLang,
   sidebarOpen, desktopCollapsed, showProfileDialog, subscriptionWarning,
@@ -79,6 +81,31 @@ const {
   isFullscreen, toggleFullscreen,
   user, filteredMenu, currentPageTitle, authStore
 } = useDashboardLayout()
+
+/* --- Global API Error Handling (Rate Limit) --- */
+let lastRateLimitToastTime = 0
+const handleRateLimitError = (event) => {
+  console.log('🔔 Received rate-limit-error event in layout:', event.detail);
+  const now = Date.now()
+  // 5 soniya cooldown — spamni oldini olish uchun
+  if (now - lastRateLimitToastTime < 5000) return
+  lastRateLimitToastTime = now
+
+  toast.add({
+    severity: 'warn',
+    summary: 'Limitdan oshildi',
+    detail: event.detail || "So'rovlar soni limitdan oshdi. Birozdan so'ng urinib ko'ring.",
+    life: 5000
+  })
+}
+
+onMounted(() => {
+  window.addEventListener('rate-limit-error', handleRateLimitError)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('rate-limit-error', handleRateLimitError)
+})
 
 /* --- Logout with confirmation --- */
 const isConfirmingLogout = ref(false)
