@@ -16,12 +16,12 @@
         <p class="text-xs text-slate-400 mt-0.5">{{ expenses.length }} ta xarajat yozuvi</p>
       </div>
 
-      <div class="flex items-center gap-2 shrink-0">
+      <div class="flex items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
         <!-- Kategoriyalar: Manager+ -->
         <button
           v-if="userIsManager"
           @click="showCategories = true"
-          class="h-8 px-3 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-1.5 whitespace-nowrap"
+          class="flex-1 sm:flex-initial h-9 sm:h-8 px-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap bg-white dark:bg-slate-900 shadow-sm"
         >
           <i class="pi pi-briefcase text-[10px]"></i>
           Kategoriyalar
@@ -29,7 +29,7 @@
         <!-- Xarajat qo'shish: barcha ruxsatli xodimlar -->
         <button
           @click="openNew"
-          class="h-8 px-3 rounded-lg text-xs font-medium bg-rose-500 hover:bg-rose-600 text-white transition-all flex items-center gap-1.5 whitespace-nowrap"
+          class="flex-1 sm:flex-initial h-9 sm:h-8 px-4 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-lg shadow-rose-500/20 active:scale-95"
         >
           <i class="pi pi-plus text-[10px]"></i>
           Xarajat qo'shish
@@ -83,87 +83,113 @@
     </div>
 
     <!-- ── Filters ─────────────────────────────────────────────── -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-sm flex flex-wrap items-center gap-2">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 shadow-sm flex flex-col gap-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Sana filter -->
+        <div class="relative flex-1 min-w-[140px] sm:flex-none sm:w-44">
+          <DatePicker
+            v-model="filters.date"
+            dateFormat="yy-mm-dd"
+            placeholder="Sana"
+            showIcon
+            iconDisplay="input"
+            class="w-full"
+            pt:root:class="!h-9 sm:!h-8 !rounded-xl !border !border-slate-200 dark:!border-slate-700 focus-within:!border-rose-400 bg-slate-50/50 dark:bg-slate-800/40 transition-all"
+            pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-bold !pl-9 !h-full"
+          />
+        </div>
 
-      <!-- Sana filter (list: ?date=YYYY-MM-DD) -->
-      <div class="relative">
-        <i class="pi pi-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
-        <input
-          v-model="filters.date"
-          type="date"
-          class="h-8 pl-8 pr-3 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all w-36"
-        />
-      </div>
+        <!-- Kategoriya -->
+        <div class="relative flex-1 min-w-[160px] sm:flex-none sm:w-56">
+          <Select
+            v-model="filters.category"
+            :options="categories"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Barcha kategoriyalar"
+            showClear
+            class="w-full"
+            pt:root:class="!h-9 sm:!h-8 !rounded-xl !border !border-slate-200 dark:!border-slate-700 focus:!border-rose-400 !bg-slate-50/50 dark:!bg-slate-800/40"
+            pt:label:class="!text-xs !font-bold !flex !items-center !py-0 !px-3"
+          />
+        </div>
 
-      <!-- Kategoriya -->
-      <select
-        v-model="filters.category"
-        class="h-8 px-3 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all min-w-[160px]"
-      >
-        <option :value="null">Barcha kategoriyalar</option>
-        <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-      </select>
+        <!-- Qidirish tugmasi olib tashlandi, filtrlar avtomatik ishlaydi -->
 
-      <!-- Qidirish -->
-      <button
-        @click="fetchExpenses"
-        class="h-8 px-4 rounded-lg text-xs font-medium bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white transition-all flex items-center gap-1.5"
-      >
-        <i class="pi pi-search text-[10px]"></i>
-        Qidirish
-      </button>
-
-      <!-- Filtrni tozalash -->
-      <button
-        v-if="filters.date || filters.category"
-        @click="clearFilters"
-        class="h-8 px-3 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
-        title="Filtrni tozalash"
-      >
-        <i class="pi pi-times text-[10px]"></i>
-      </button>
-
-      <div class="flex-1"></div>
-
-      <!-- Export (date_from/date_to rangi faqat export uchun) -->
-      <div class="flex items-center gap-2">
-        <!-- Export date range (Manager+) -->
-        <template v-if="userIsManager">
-          <div class="relative">
-            <input
-              v-model="exportFilters.date_from"
-              type="date"
-              placeholder="dan"
-              title="Export: boshlanish sanasi"
-              class="h-8 px-2 text-[10px] rounded-lg border border-dashed border-slate-300 dark:border-slate-600 bg-transparent text-slate-500 dark:text-slate-400 focus:outline-none focus:border-rose-400 transition-all w-32"
-            />
-          </div>
-          <span class="text-slate-300 dark:text-slate-600 text-xs">—</span>
-          <div class="relative">
-            <input
-              v-model="exportFilters.date_to"
-              type="date"
-              title="Export: tugash sanasi"
-              class="h-8 px-2 text-[10px] rounded-lg border border-dashed border-slate-300 dark:border-slate-600 bg-transparent text-slate-500 dark:text-slate-400 focus:outline-none focus:border-rose-400 transition-all w-32"
-            />
-          </div>
-        </template>
-
+        <!-- Filtrni tozalash -->
         <button
-          @click="exportExpenses('excel')"
-          class="h-8 px-3 rounded-lg text-xs font-medium text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all flex items-center gap-1.5"
+          v-if="filters.date || filters.category"
+          @click="clearFilters"
+          class="h-9 sm:h-8 w-9 sm:w-8 rounded-xl flex items-center justify-center text-slate-500 hover:text-rose-500 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 transition-all active:scale-95"
+          title="Filtrni tozalash"
         >
-          <i class="pi pi-file-excel text-[10px]"></i>
-          Excel
+          <i class="pi pi-times text-[10px]"></i>
         </button>
+
+        <div class="flex-1"></div>
+
+        <!-- Advanced toggle -->
         <button
-          @click="exportExpenses('pdf')"
-          class="h-8 px-3 rounded-lg text-xs font-medium text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all flex items-center gap-1.5"
+          @click="showExportOptions = !showExportOptions"
+          class="h-9 sm:h-8 px-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
+          :class="showExportOptions ? 'text-rose-500 bg-rose-50 dark:bg-rose-500/10' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'"
         >
-          <i class="pi pi-file-pdf text-[10px]"></i>
-          PDF
+          <i class="pi pi-sliders-h text-[10px]"></i>
+          {{ showExportOptions ? 'Yopish' : 'Eksport' }}
         </button>
       </div>
+
+      <!-- Export options panel -->
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0 -translate-y-2"
+        enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="opacity-0 -translate-y-2"
+      >
+        <div v-if="showExportOptions" class="pt-3 border-t border-slate-50 dark:border-slate-800/50 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-1 hidden sm:inline">Export:</span>
+            <div class="flex items-center gap-2 flex-1 sm:flex-none">
+              <DatePicker
+                v-model="exportFilters.date_from"
+                dateFormat="yy-mm-dd"
+                placeholder="dan"
+                class="flex-1 sm:w-32"
+                pt:root:class="!h-8 !rounded-lg !border !border-slate-200 dark:!border-slate-700 bg-slate-50/50 dark:bg-slate-800/40"
+                pt:input:class="!bg-transparent !border-none !shadow-none !text-[10px] !font-bold !h-full"
+              />
+              <span class="text-slate-300 dark:text-slate-600">—</span>
+              <DatePicker
+                v-model="exportFilters.date_to"
+                dateFormat="yy-mm-dd"
+                placeholder="gacha"
+                class="flex-1 sm:w-32"
+                pt:root:class="!h-8 !rounded-lg !border !border-slate-200 dark:!border-slate-700 bg-slate-50/50 dark:bg-slate-800/40"
+                pt:input:class="!bg-transparent !border-none !shadow-none !text-[10px] !font-bold !h-full"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <button
+              @click="exportExpenses('excel')"
+              class="flex-1 sm:flex-none h-8 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all flex items-center justify-center gap-2 active:scale-95"
+            >
+              <i class="pi pi-file-excel text-[10px]"></i>
+              Excel
+            </button>
+            <button
+              @click="exportExpenses('pdf')"
+              class="flex-1 sm:flex-none h-8 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all flex items-center justify-center gap-2 active:scale-95"
+            >
+              <i class="pi pi-file-pdf text-[10px]"></i>
+              PDF
+            </button>
+          </div>
+        </div>
+      </Transition>
     </div>
 
     <!-- ── Table ──────────────────────────────────────────────── -->
@@ -196,21 +222,23 @@
         leave-from-class="opacity-100 scale-100 translate-y-0"
         leave-to-class="opacity-0 scale-95 translate-y-4"
       >
-        <div v-if="showCategories" class="fixed inset-0 z-[1000] flex items-center justify-center p-4 pointer-events-none">
-          <div class="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl flex flex-col pointer-events-auto max-h-[80vh] overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div v-if="showCategories" class="fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4 pointer-events-none">
+          <div class="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col pointer-events-auto max-h-[92vh] sm:max-h-[85vh] overflow-hidden transition-all duration-300">
+            <!-- Modal Header -->
+            <div class="px-5 py-4 sm:px-6 sm:py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white/50 dark:bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
               <div>
-                <h3 class="text-sm font-black uppercase tracking-widest text-rose-500">Xarajat kategoriyalari</h3>
+                <h3 class="text-xs sm:text-sm font-black uppercase tracking-widest text-rose-500">Xarajat kategoriyalari</h3>
                 <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">Boshqaruv paneli</p>
               </div>
               <button
                 @click="showCategories = false"
-                class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                class="w-9 h-9 sm:w-8 sm:h-8 rounded-xl sm:rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-90"
               >
                 <i class="pi pi-times text-[10px]"></i>
               </button>
             </div>
-            <div class="flex-1 overflow-y-auto p-6">
+            <!-- Modal Content -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
               <CategoryList :is-manager="userIsManager" />
             </div>
           </div>
@@ -234,11 +262,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import ConfirmDialog from 'primevue/confirmdialog'
 
 import useExpenses from '@/composables/useExpenses'
+import DatePicker from 'primevue/datepicker'
+import Select from 'primevue/select'
 import ExpenseTable from './components/ExpenseTable.vue'
 import ExpenseDialog from './components/ExpenseDialog.vue'
 import CategoryList from './components/CategoryList.vue'
@@ -263,6 +293,7 @@ const userIsManager = computed(() => isManager())
 
 const expenseDialog = ref(false)
 const showCategories = ref(false)
+const showExportOptions = ref(false)
 const saving = ref(false)
 const submitted = ref(false)
 
@@ -300,7 +331,6 @@ const formatCurrency = (val) =>
 const clearFilters = () => {
   filters.value.date = null
   filters.value.category = null
-  fetchExpenses()
 }
 
 const openNew = () => {
@@ -351,8 +381,50 @@ const confirmDelete = (data) => {
   })
 }
 
+const formatDateToString = (date) => {
+  if (!date || typeof date === 'string') return date
+  const d = new Date(date)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+watch(filters, () => {
+  if (filters.value.date instanceof Date) {
+    filters.value.date = formatDateToString(filters.value.date)
+    return
+  }
+  fetchExpenses()
+}, { deep: true })
+
+watch(exportFilters, () => {
+  if (exportFilters.value.date_from instanceof Date) {
+    exportFilters.value.date_from = formatDateToString(exportFilters.value.date_from)
+  }
+  if (exportFilters.value.date_to instanceof Date) {
+    exportFilters.value.date_to = formatDateToString(exportFilters.value.date_to)
+  }
+}, { deep: true })
+
 onMounted(() => {
   fetchCategories()
   fetchExpenses()
 })
 </script>
+
+<style scoped>
+:deep(.p-datepicker-input),
+:deep(.p-select-label) {
+  background: transparent !important;
+  border: none !important;
+}
+
+:deep(.p-datepicker),
+:deep(.p-select) {
+  background: transparent !important;
+}
+
+/* Ensure dark mode colors are correct for internal components */
+.dark :deep(.p-datepicker-input),
+.dark :deep(.p-select-label) {
+  color: #e2e8f0 !important; /* slate-200 */
+}
+</style>

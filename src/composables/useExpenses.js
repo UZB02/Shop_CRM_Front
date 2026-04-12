@@ -3,28 +3,29 @@ import { expensesAPI, expenseCategoriesAPI, reportsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useAuthStore } from '@/store/auth'
 
+// Shared state to ensure consistency across components
+const expenses = ref([])
+const categories = ref([])
+const loading = ref(false)
+const summaryData = ref({ totalExpenses: 0, summary: [] })
+
+// List endpoint accepts: branch, category, smena, date (YYYY-MM-DD — single date)
+const filters = ref({
+    branch: null,
+    category: null,
+    smena: null,
+    date: null
+})
+
+// Export uses separate date range params (only for export endpoints)
+const exportFilters = ref({
+    date_from: null,
+    date_to: null
+})
+
 export default function useExpenses() {
     const toast = useToast()
     const authStore = useAuthStore()
-
-    const expenses = ref([])
-    const categories = ref([])
-    const loading = ref(false)
-    const summaryData = ref({ totalExpenses: 0, summary: [] })
-
-    // List endpoint accepts: branch, category, smena, date (YYYY-MM-DD — single date)
-    const filters = ref({
-        branch: null,
-        category: null,
-        smena: null,
-        date: null
-    })
-
-    // Export uses separate date range params (only for export endpoints)
-    const exportFilters = ref({
-        date_from: null,
-        date_to: null
-    })
 
     // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -41,12 +42,18 @@ export default function useExpenses() {
 
     // ─── Category CRUD ──────────────────────────────────────────────────────────
 
-    const fetchCategories = async (status = 'active') => {
+    const fetchCategories = async (statusArg = null) => {
         try {
-            const res = await expenseCategoriesAPI.getAll({ status })
+            // Agar statusArg passed bo'lmasa, barchasini oladi (yoki backend defaultiga ko'ra)
+            const params = {}
+            if (statusArg && typeof statusArg === 'string') {
+                params.status = statusArg
+            }
+            
+            const res = await expenseCategoriesAPI.getAll(params)
             categories.value = Array.isArray(res.data) ? res.data : (res.data.results || res.data.data || [])
         } catch {
-            // Silent fail — categories not critical for basic page load
+            // Silent fail
         }
     }
 
@@ -54,7 +61,7 @@ export default function useExpenses() {
         try {
             await expenseCategoriesAPI.create(data)
             toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Kategoriya yaratildi', life: 3000 })
-            await fetchCategories('active')
+            await fetchCategories()
             return true
         } catch (error) {
             const detail = error.response?.data?.name?.[0] || error.response?.data?.detail || 'Kategoriya yaratishda xatolik'
@@ -67,7 +74,7 @@ export default function useExpenses() {
         try {
             await expenseCategoriesAPI.update(id, data)
             toast.add({ severity: 'success', summary: 'Yangilandi', detail: 'Kategoriya yangilandi', life: 3000 })
-            await fetchCategories('active')
+            await fetchCategories()
             return true
         } catch (error) {
             const detail = error.response?.data?.detail || 'Yangilashda xatolik'
@@ -76,12 +83,11 @@ export default function useExpenses() {
         }
     }
 
-    // DELETE = soft delete (backend nofaol qiladi)
     const deleteCategory = async (id) => {
         try {
             await expenseCategoriesAPI.delete(id)
             toast.add({ severity: 'success', summary: 'Nofaol qilindi', detail: 'Kategoriya nofaol qilindi', life: 3000 })
-            await fetchCategories('active')
+            await fetchCategories()
             return true
         } catch (error) {
             const detail = error.response?.data?.detail || "O'chirishda xatolik"
@@ -95,7 +101,6 @@ export default function useExpenses() {
     const fetchExpenses = async () => {
         loading.value = true
         try {
-            // List endpoint params: branch, category, smena, date (single date)
             const params = {}
             if (filters.value.branch) params.branch = filters.value.branch
             if (filters.value.category) params.category = filters.value.category
@@ -105,7 +110,6 @@ export default function useExpenses() {
             const res = await expensesAPI.getAll(params)
             expenses.value = Array.isArray(res.data) ? res.data : (res.data.results || res.data.data || [])
 
-            // Financial report is Manager+ only — silently skip for sellers
             if (isManager()) {
                 try {
                     const reportParams = {}
@@ -120,7 +124,7 @@ export default function useExpenses() {
                         summary: report.expenses?.items || []
                     }
                 } catch {
-                    // Financial report failed silently — stats cards will show 0
+                    // Silent fail
                 }
             }
         } catch (error) {
@@ -173,7 +177,6 @@ export default function useExpenses() {
         }
     }
 
-    // Export uses date_from/date_to (range) — separate from list filters
     const exportExpenses = async (format = 'excel') => {
         try {
             const params = { format }

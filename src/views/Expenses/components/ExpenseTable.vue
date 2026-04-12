@@ -208,14 +208,18 @@ const totalAmount = computed(() =>
 const formatCurrency = (val) =>
   new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 
-const formatDate = (date) => {
-  if (!date) return '—'
-  return new Date(date).toLocaleDateString('uz-UZ', { day: '2-digit', month: '2-digit', year: 'numeric' })
+const formatDate = (dateStr) => {
+  if (!dateStr) return '—'
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return dateStr // Return original string if invalid
+  return date.toLocaleDateString('uz-UZ', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 const formatTime = (dateStr) => {
   if (!dateStr) return ''
-  return new Date(dateStr).toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' })
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return ''
+  return date.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' })
 }
 
 const viewReceipt = (url) => {

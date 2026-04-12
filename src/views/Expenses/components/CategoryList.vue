@@ -2,7 +2,7 @@
   <div class="space-y-4">
 
     <!-- Add new category: faqat Manager+ -->
-    <div v-if="isManager" class="flex gap-2">
+    <div v-if="isManager" class="flex flex-col sm:flex-row gap-2">
       <div class="relative flex-1 group/input">
         <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-rose-500 transition-colors pointer-events-none"></i>
         <input
@@ -10,13 +10,13 @@
           type="text"
           placeholder="Yangi kategoriya nomi"
           @keyup.enter="addCategory"
-          class="w-full h-9 pl-9 pr-4 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:bg-white dark:focus:bg-slate-900 focus:ring-1 focus:ring-rose-400 transition-all outline-none placeholder:text-slate-400"
+          class="w-full h-10 sm:h-9 pl-9 pr-4 text-[13px] sm:text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:bg-white dark:focus:bg-slate-900 focus:ring-1 focus:ring-rose-400 transition-all outline-none placeholder:text-slate-400"
         />
       </div>
       <button
         @click="addCategory"
         :disabled="adding || !newCategoryName.trim()"
-        class="h-9 px-4 rounded-lg text-xs font-medium bg-rose-500 hover:bg-rose-600 text-white transition-all flex items-center gap-1.5 disabled:opacity-40 shrink-0"
+        class="h-10 sm:h-9 px-4 rounded-xl text-[13px] sm:text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all flex items-center justify-center gap-1.5 disabled:opacity-40 shrink-0 shadow-lg shadow-rose-500/10 active:scale-95"
       >
         <i v-if="adding" class="pi pi-spin pi-spinner text-[10px]"></i>
         <i v-else class="pi pi-plus text-[10px]"></i>
@@ -25,14 +25,14 @@
     </div>
 
     <!-- Category table -->
-    <div class="bg-white dark:bg-slate-900/50 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm">
-      <table class="w-full text-left border-collapse">
+    <div class="bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm overflow-x-auto custom-scrollbar">
+      <table class="w-full text-left border-collapse min-w-[450px]">
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Nomi</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">Xarajatlar</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">Holat</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">Amallar</th>
+            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Nomi</th>
+            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">Xarajatlar</th>
+            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">Holat</th>
+            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">Amallar</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -94,11 +94,11 @@
 
             <!-- Actions: faqat Manager+ -->
             <td class="px-4 py-2.5 text-right">
-              <div v-if="isManager" class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div v-if="isManager" class="flex justify-end gap-1">
                 <!-- Edit -->
                 <button
                   @click="startEdit(cat)"
-                  class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all"
+                  class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all active:scale-90"
                   title="Tahrirlash"
                 >
                   <i class="pi pi-pencil text-[10px]"></i>
@@ -106,7 +106,7 @@
                 <!-- Toggle status -->
                 <button
                   @click="toggleStatus(cat)"
-                  class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 transition-all"
+                  class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 transition-all active:scale-90"
                   :class="cat.status === 'active'
                     ? 'hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-500/10'
                     : 'hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10'"
@@ -117,7 +117,7 @@
                 <!-- Delete (soft) -->
                 <button
                   @click="confirmDelete(cat)"
-                  class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all"
+                  class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all active:scale-90"
                   title="Nofaol qilish"
                 >
                   <i class="pi pi-trash text-[10px]"></i>
@@ -191,3 +191,19 @@ const confirmDelete = (cat) => {
 
 onMounted(fetchCategories)
 </script>
+<style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+</style>

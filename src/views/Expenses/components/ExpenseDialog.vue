@@ -47,17 +47,18 @@
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
               Kategoriya <span class="text-rose-500">*</span>
             </label>
-            <div class="relative group/input">
-              <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10"></i>
-              <select
+            <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !expense.category }">
+              <i class="pi pi-tag absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
+              <Select
                 v-model="expense.category"
-                class="w-full h-11 pl-9 pr-4 text-sm font-semibold rounded-2xl bg-slate-50 dark:bg-slate-800/40 border-2 border-transparent focus:border-rose-400 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none text-slate-800 dark:text-slate-200 appearance-none"
-                :class="{ '!border-rose-400': submitted && !expense.category }"
-              >
-                <option :value="null" disabled>Kategoriyani tanlang</option>
-                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-              </select>
-              <i class="pi pi-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 pointer-events-none"></i>
+                :options="categories"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Kategoriyani tanlang"
+                class="flex-1 h-full w-full"
+                pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
+                pt:label:class="!pl-12 !pr-4 !text-[13px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
+              />
             </div>
             <small v-if="submitted && !expense.category" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">Kategoriya tanlash majburiy</small>
           </div>
@@ -67,15 +68,16 @@
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
               Summa (UZS) <span class="text-rose-500">*</span>
             </label>
-            <div class="relative group/input">
-              <i class="pi pi-wallet absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-rose-500 transition-colors pointer-events-none"></i>
-              <input
+            <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !expense.amount }">
+              <i class="pi pi-wallet absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
+              <InputNumber
                 v-model="expense.amount"
-                type="number"
+                mode="decimal"
+                :useGrouping="true"
                 placeholder="0"
-                min="0"
-                class="w-full h-11 pl-9 pr-4 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-800/40 border-2 border-transparent focus:border-rose-400 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none text-slate-800 dark:text-slate-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                :class="{ '!border-rose-400': submitted && !expense.amount }"
+                class="flex-1 h-full w-full"
+                pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
+                pt:input:class="!bg-transparent !border-none !shadow-none !text-[15px] !font-black !h-full !pl-12 !pr-4 !w-full !outline-none !text-slate-800 dark:!text-slate-100"
               />
             </div>
             <small v-if="submitted && !expense.amount" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">Summa kiritish majburiy</small>
@@ -86,36 +88,43 @@
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
               Sana <span class="text-rose-500">*</span>
             </label>
-            <div class="relative group/input">
-              <i class="pi pi-calendar absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-rose-500 transition-colors pointer-events-none"></i>
-              <input
+            <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
+              <i class="pi pi-calendar absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
+              <DatePicker
                 v-model="expense.date"
-                type="date"
-                class="w-full h-11 pl-9 pr-4 text-sm font-semibold rounded-2xl bg-slate-50 dark:bg-slate-800/40 border-2 border-transparent focus:border-rose-400 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none text-slate-800 dark:text-slate-200"
+                dateFormat="yy-mm-dd"
+                showIcon
+                iconDisplay="input"
+                class="flex-1 h-full w-full"
+                pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
+                pt:input:class="!bg-transparent !border-none !shadow-none !text-[13px] !font-semibold !h-full !pl-12 !pr-4 !w-full !text-slate-700 dark:!text-slate-200"
               />
             </div>
           </div>
 
-          <!-- Description -->
           <div class="field">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">Izoh (ixtiyoriy)</label>
-            <textarea
-              v-model="expense.description"
-              rows="3"
-              placeholder="Xarajat haqida qo'shimcha ma'lumot..."
-              class="w-full p-4 text-sm font-medium rounded-2xl bg-slate-50 dark:bg-slate-800/40 border-2 border-transparent focus:border-rose-400 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none text-slate-800 dark:text-slate-200 resize-none placeholder:text-slate-400"
-            ></textarea>
+            <div class="custom-input-wrapper relative group/input flex items-start rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
+              <Textarea
+                v-model="expense.description"
+                rows="4"
+                placeholder="Xarajat haqida qo'shimcha ma'lumot..."
+                class="w-full h-full"
+                pt:root:class="!bg-transparent !border-none !shadow-none !w-full"
+                pt:textarea:class="!bg-transparent !border-none !shadow-none !text-[13px] !font-semibold !p-4 !px-4 !w-full !text-slate-700 dark:!text-slate-200 !outline-none !resize-none !min-h-[100px]"
+              />
+            </div>
           </div>
 
           <!-- Receipt Image Upload -->
           <div class="field">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">Chek yoki rasm (ixtiyoriy)</label>
 
-            <div class="flex items-start gap-3">
+            <div class="flex items-start gap-4">
               <!-- Preview -->
               <div
                 v-if="previewUrl || expense.receipt_image"
-                class="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-200 dark:border-slate-700 group/preview shrink-0"
+                class="relative w-24 h-24 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 group/preview shrink-0 shadow-sm"
               >
                 <img :src="previewUrl || expense.receipt_image" class="w-full h-full object-cover" alt="Chek" />
                 <button
@@ -129,12 +138,16 @@
               <!-- Upload zone -->
               <div
                 @click="$refs.fileInput.click()"
-                class="flex-1 h-20 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-500/5 transition-all group/upload"
+                class="flex-1 h-24 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-500/10 transition-all group/upload shadow-sm"
               >
                 <input ref="fileInput" type="file" @change="onFileChange" accept="image/jpeg,image/png,image/webp" class="hidden" />
-                <i class="pi pi-cloud-upload text-lg text-slate-400 group-hover/upload:text-rose-500 transition-colors"></i>
-                <span class="text-[9px] font-bold text-slate-400 group-hover/upload:text-rose-500 uppercase tracking-widest transition-colors">Rasm yuklash</span>
-                <span class="text-[8px] text-slate-300 dark:text-slate-600">JPG, PNG, WEBP</span>
+                <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover/upload:bg-rose-100 dark:group-hover/upload:bg-rose-900/30 transition-colors">
+                  <i class="pi pi-cloud-upload text-slate-400 group-hover/upload:text-rose-500 transition-colors"></i>
+                </div>
+                <div class="text-center">
+                  <span class="text-[9px] font-black text-slate-400 group-hover/upload:text-rose-500 uppercase tracking-widest transition-colors block">Rasm yuklash</span>
+                  <span class="text-[8px] text-slate-300 dark:text-slate-600 font-bold">JPG, PNG, WEBP</span>
+                </div>
               </div>
             </div>
           </div>
@@ -168,7 +181,11 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
+import Select from 'primevue/select'
+import DatePicker from 'primevue/datepicker'
+import InputNumber from 'primevue/inputnumber'
+import Textarea from 'primevue/textarea'
 
 const props = defineProps({
   visible: Boolean,
@@ -183,6 +200,18 @@ const emit = defineEmits(['update:visible', 'save', 'hide'])
 const fileInput = ref(null)
 const selectedFile = ref(null)
 const previewUrl = ref(null)
+
+const formatDateToString = (date) => {
+  if (!date || typeof date === 'string') return date
+  const d = new Date(date)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+watch(() => props.expense?.date, (val) => {
+  if (val instanceof Date) {
+    props.expense.date = formatDateToString(val)
+  }
+})
 
 const onFileChange = (e) => {
   const file = e.target.files[0]
@@ -222,3 +251,52 @@ watch(() => props.visible, (val) => {
   }
 })
 </script>
+
+<style scoped>
+/* Ikonkalar markazlashuvi */
+.custom-input-wrapper i {
+  z-index: 20;
+  position: absolute !important;
+  left: 1rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+}
+
+/* Universal shaffoflik va hamma effektlarni (border, shadow, outline) o'chirish */
+.custom-input-wrapper :deep(*),
+.custom-input-wrapper :deep(*:hover),
+.custom-input-wrapper :deep(*:focus),
+.custom-input-wrapper :deep(*::before),
+.custom-input-wrapper :deep(*::after) {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Professional darajadagi ichki elementlar sozlamasi */
+:deep(.p-select-label), 
+:deep(.p-inputnumber-input), 
+:deep(.p-datepicker-input),
+:deep(.p-inputtext) {
+  padding-left: 3rem !important; /* pl-12 equivalent */
+  padding-right: 1rem !important;
+  font-family: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+}
+
+/* Dark mode matn ranglari */
+.dark :deep(.p-inputtext),
+.dark :deep(.p-select-label) {
+  color: #f8fafc !important;
+}
+
+:deep(.p-select-dropdown) {
+  width: 2.5rem !important;
+}
+</style>
