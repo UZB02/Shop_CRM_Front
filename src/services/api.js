@@ -195,7 +195,8 @@ export const reportsAPI = {
     getDebtorReport: (params) => api.get('/export/debtor-report/', { params }),
     getWorkerPerformance: (params) => api.get('/export/worker-performance/', { params }),
     getInventoryValue: (params) => api.get('/export/inventory-value/', { params }),
-    getTaxReport: (params) => api.get('/export/tax-report/', { params })
+    getTaxReport: (params) => api.get('/export/tax-report/', { params }),
+    getMonthlyProfitLoss: (params) => api.get('/export/profit-loss/monthly-chart/', { params })
 }
 
 // Stores / Branches API

@@ -11,8 +11,8 @@ export default function useExpenseTabLogic() {
   } = useExpenses()
   
   const { 
-    profitLoss, debtors, performance, 
-    fetchProfitLoss, fetchDebtors, fetchPerformance 
+    profitLoss, debtors, performance, monthlyReport,
+    fetchProfitLoss, fetchDebtors, fetchPerformance, fetchMonthlyChart
   } = useReports()
 
   const activeTab = ref('expenses')
@@ -42,7 +42,35 @@ export default function useExpenseTabLogic() {
       branch: filters.value.branch
     }
 
-    if (activeTab.value === 'profit-loss') fetchProfitLoss(params)
+    if (activeTab.value === 'profit-loss') {
+      fetchProfitLoss(params)
+
+      // Grafik uchun parametrlarni tayyorlash
+      const chartParams = { branch: filters.value.branch }
+      
+      if (exportFilters.value.date_from) {
+        const dateFrom = new Date(exportFilters.value.date_from)
+        chartParams.year = dateFrom.getFullYear()
+        
+        if (exportFilters.value.date_to) {
+          const dateTo = new Date(exportFilters.value.date_to)
+          const startMonth = dateFrom.getMonth() + 1
+          const endMonth = dateTo.getMonth() + 1
+          
+          // Oylarni massiv ko'rinishida yig'ish (masalan: 1,2,3)
+          const months = []
+          for (let m = startMonth; m <= endMonth; m++) {
+            months.push(m)
+          }
+          if (months.length > 0) chartParams.months = months.join(',')
+        }
+      } else {
+         // Agar sana tanlanmagan bo'lsa — joriy yil
+         chartParams.year = new Date().getFullYear()
+      }
+
+      fetchMonthlyChart(chartParams)
+    }
     if (activeTab.value === 'debtors') fetchDebtors(params)
     if (activeTab.value === 'performance') fetchPerformance(params)
   }
@@ -107,6 +135,6 @@ export default function useExpenseTabLogic() {
   return {
     activeTab, tabs, userIsManager,
     totalFromList, topCategoryName, lastExpenseDate,
-    profitLoss, debtors, performance, refreshData
+    profitLoss, debtors, performance, monthlyReport, refreshData
   }
 }

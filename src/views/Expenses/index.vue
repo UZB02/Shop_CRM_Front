@@ -13,6 +13,19 @@
       :tabs="tabs" 
     />
 
+    <!-- ── Global Filters & Export (Visible for all tabs) ────── -->
+    <ExpenseFilters 
+      v-if="activeTab === 'expenses' || userIsManager"
+      :filters="filters"
+      :export-filters="exportFilters"
+      :categories="categories"
+      :shifts="shifts"
+      :is-manager="userIsManager"
+      @clear="clearFilters"
+      @export="exportExpenses"
+      @export-wastage="exportWastages"
+    />
+
     <!-- ── Tab Content: Expenses ────────────────────────────── -->
     <div v-show="activeTab === 'expenses'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
       <ExpenseTabStats 
@@ -23,17 +36,6 @@
         :top-category-name="topCategoryName"
         :last-expense-date="lastExpenseDate"
         @view-report="showExportOptions = true"
-      />
-
-      <ExpenseFilters 
-        :filters="filters"
-        :export-filters="exportFilters"
-        :categories="categories"
-        :shifts="shifts"
-        :is-manager="userIsManager"
-        @clear="clearFilters"
-        @export="exportExpenses"
-        @export-wastage="exportWastages"
       />
 
     <!-- ── Table ──────────────────────────────────────────────── -->
@@ -51,7 +53,7 @@
     <div v-if="activeTab !== 'expenses'" class="animate-in fade-in slide-in-from-bottom-2 duration-300">
         <!-- Profit & Loss -->
         <div v-if="activeTab === 'profit-loss'" class="space-y-4">
-           <ProfitLossReport :data="profitLoss" />
+           <ProfitLossReport :data="profitLoss" :monthly-data="monthlyReport" />
         </div>
 
         <!-- Debtors -->
@@ -169,7 +171,7 @@ const {
 const {
   activeTab, tabs, userIsManager,
   totalFromList, topCategoryName, lastExpenseDate,
-  profitLoss, debtors, performance, refreshData
+  profitLoss, debtors, performance, monthlyReport, refreshData
 } = useExpenseTabLogic()
 
 const expenseDialog = ref(false)

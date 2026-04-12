@@ -16,6 +16,7 @@ export default function useReports() {
     const performance = ref([])
     const inventoryValue = ref({ items: [], total_value: 0 })
     const taxReport = ref(null)
+    const monthlyReport = ref(null)
 
     const fetchFinancialSummary = async (params) => {
         loading.value = true
@@ -101,6 +102,18 @@ export default function useReports() {
         }
     }
 
+    const fetchMonthlyChart = async (params) => {
+        loading.value = true
+        try {
+            const res = await reportsAPI.getMonthlyProfitLoss(params)
+            monthlyReport.value = res.data
+        } catch (error) {
+            console.error('Monthly Chart Error:', error)
+        } finally {
+            loading.value = false
+        }
+    }
+
     return {
         loading,
         financialSummary,
@@ -116,6 +129,8 @@ export default function useReports() {
         fetchDebtors,
         fetchPerformance,
         fetchInventoryValue,
-        fetchTaxReport
+        fetchTaxReport,
+        fetchMonthlyChart,
+        monthlyReport
     }
 }
