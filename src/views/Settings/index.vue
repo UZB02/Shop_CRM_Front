@@ -11,7 +11,7 @@
           {{ settings?.store_name }}
         </p>
       </div>
-      <button @click="saveSettings" :disabled="saving || !isDirty" class="save-btn flex-shrink-0">
+      <button @click="saveSettings" :disabled="saving || !isDirty || !isOwner" class="save-btn flex-shrink-0">
         <i :class="saving ? 'pi pi-spin pi-spinner' : 'pi pi-save'" class="text-xs"></i>
         <span>{{ saving ? $t('settings.saving') : $t('settings.save') }}</span>
       </button>
@@ -108,7 +108,7 @@ import SettingsTelegramTab from './components/tabs/SettingsTelegramTab.vue'
 
 const { t } = useI18n()
 const activeTab = ref('modules')
-const { loading, saving, settings, form, isDirty, saveSettings } = useSettings()
+const { loading, saving, settings, form, isDirty, isOwner, saveSettings } = useSettings()
 </script>
 
 <!-- ─────────────────────────────────────────────────

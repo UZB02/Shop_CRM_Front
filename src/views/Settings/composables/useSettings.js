@@ -39,6 +39,9 @@ export function useSettings() {
     const form = reactive({})
     const originalForm = ref({})
 
+    const authStore = useAuthStore()
+    const isOwner = computed(() => authStore.user?.role === 'owner')
+
     const isDirty = computed(() =>
         FORM_FIELDS.some(f => String(form[f]) !== String(originalForm.value[f]))
     )
@@ -85,13 +88,20 @@ export function useSettings() {
 
         // Validation: At least one payment method must be enabled
         if (!form.allow_cash && !form.allow_card) {
-            toast.add({
-                severity: 'warn',
-                summary: t('common.validation_error'),
-                detail: t('settings.payment.error_at_least_one'),
-                life: 5000
-            })
+            toast.add({ severity: 'warn', summary: t('common.validation_error'), detail: t('settings.payment.error_at_least_one'), life: 5000 })
             return
+        }
+
+        // Validation: Telegram Chat ID
+        if (form.telegram_enabled && (!form.telegram_chat_id || !form.telegram_chat_id.trim())) {
+            toast.add({ severity: 'warn', summary: t('common.validation_error'), detail: t('settings.telegram.chat_id_label') + ' requried', life: 5000 })
+            return
+        }
+
+        // Validation: TIN (STIR)
+        if (form.tax_enabled && form.tin && !/^\d{9}$/.test(form.tin)) {
+           toast.add({ severity: 'warn', summary: t('common.validation_error'), detail: t('settings.tax.tin_desc'), life: 5000 })
+           return
         }
 
         saving.value = true
@@ -106,7 +116,12 @@ export function useSettings() {
                     // Skip if it's a sensitive write-only field and is empty
                     if (f === 'ofd_token' && !val) return
                     
-                    dataToSave[f] = val
+                    // Handle nullables
+                    if ((f === 'tax_percent' || f === 'telegram_chat_id') && val === '') {
+                        dataToSave[f] = null
+                    } else {
+                        dataToSave[f] = val
+                    }
                 }
             })
 
@@ -125,7 +140,14 @@ export function useSettings() {
             
             console.log('✅ API RESPONSE (update):', res.data)
 
-            originalForm.value = { ...form }
+            if (res.data) {
+                // Update local state with fresh data from backend
+                const newData = Array.isArray(res.data) ? res.data[0] : res.data
+                Object.assign(form, newData)
+                originalForm.value = { ...form }
+                settings.value = newData
+            }
+
             toast.add({
                 severity: 'success',
                 summary: t('common.updated'),
@@ -146,5 +168,5 @@ export function useSettings() {
 
     onMounted(loadSettings)
 
-    return { loading, saving, settings, form, isDirty, saveSettings }
+    return { loading, saving, settings, form, isDirty, isOwner, saveSettings }
 }

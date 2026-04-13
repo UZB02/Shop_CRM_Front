@@ -2,7 +2,7 @@
   <div v-show="active === 'tax'" class="settings-section">
     <SectionHeader icon="pi-percentage" color="text-rose-500">{{ $t('settings.tax.title') }}</SectionHeader>
     <SettingRow v-model="form.tax_enabled" :label="$t('settings.tax.tax_label')" :desc="$t('settings.tax.tax_desc')" />
-    <div v-if="form.tax_enabled" class="settings-row">
+    <div class="settings-row" :class="{'opacity-40 pointer-events-none': !form.tax_enabled}">
       <div class="flex-1">
         <p class="row-label">{{ $t('settings.tax.tax_percent_label') }}</p>
         <p class="row-desc">{{ $t('settings.tax.tax_percent_desc') }}</p>
@@ -12,48 +12,53 @@
         </p>
       </div>
       <div class="flex items-center gap-1.5">
-        <input v-model.number="form.tax_percent" type="number" min="0" max="100" step="0.01" class="settings-input w-20 text-center" placeholder="Global" />
+        <input v-model.number="form.tax_percent" type="number" min="0" max="100" step="0.01" class="settings-input w-24" placeholder="Global" />
         <span class="text-xs font-black text-slate-400">%</span>
       </div>
     </div>
 
-    <SectionHeader icon="pi-server" color="text-slate-500">{{ $t('settings.tax.ofd_title') }}</SectionHeader>
-    <div class="settings-row">
-      <div class="flex-1">
-        <p class="row-label">{{ $t('settings.tax.tin_label') }}</p>
-        <p class="row-desc">{{ $t('settings.tax.tin_desc') }}</p>
-      </div>
-      <input v-model="form.tin" type="text" maxlength="9" :placeholder="$t('settings.tax.tin_placeholder')" class="settings-input w-full max-w-[240px]" />
-    </div>
+    <!-- OFD Section -->
+    <SectionHeader icon="pi-shield" color="text-rose-500" class="mt-6">{{ $t('settings.tax.ofd_title') }}</SectionHeader>
+    
+    <div class="space-y-1" :class="{'opacity-40 pointer-events-none': !form.tax_enabled}">
+        <div class="settings-row">
+          <div class="flex-1">
+            <p class="row-label">{{ $t('settings.tax.tin_label') }}</p>
+            <p class="row-desc">{{ $t('settings.tax.tin_desc') }}</p>
+          </div>
+          <input v-model.trim="form.tin" type="text" maxlength="9" :placeholder="$t('settings.tax.tin_placeholder')" class="settings-input w-40 font-mono tracking-widest" />
+        </div>
 
-    <SettingRow v-model="form.ofd_enabled" :label="$t('settings.tax.ofd_label')" :desc="$t('settings.tax.ofd_desc')" />
-    <template v-if="form.ofd_enabled">
-      <div class="settings-row">
-        <div class="flex-1">
-          <p class="row-label">{{ $t('settings.tax.ofd_provider_label') }}</p>
-          <p class="row-desc">{{ $t('settings.tax.ofd_provider_desc') }}</p>
+        <SettingRow v-model="form.ofd_enabled" :label="$t('settings.tax.ofd_label')" :desc="$t('settings.tax.ofd_desc')" />
+
+        <div class="space-y-4 pt-2" :class="{'opacity-40 pointer-events-none': !form.ofd_enabled}">
+          <div class="settings-row">
+            <div class="flex-1">
+              <p class="row-label">{{ $t('settings.tax.ofd_provider_label') }}</p>
+              <p class="row-desc">{{ $t('settings.tax.ofd_provider_desc') }}</p>
+            </div>
+            <select v-model="form.ofd_provider" class="settings-input w-40">
+              <option value="click">Click</option>
+              <option value="payze">Payze</option>
+              <option value="multikassa">Multikassa</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <div class="flex-1">
+              <p class="row-label">{{ $t('settings.tax.ofd_token_label') }}</p>
+              <p class="row-desc">{{ $t('settings.tax.ofd_token_desc') }}</p>
+            </div>
+            <input v-model.trim="form.ofd_token" type="password" :placeholder="$t('settings.tax.ofd_token_placeholder')" class="settings-input w-64" />
+          </div>
+          <div class="settings-row">
+            <div class="flex-1">
+              <p class="row-label">{{ $t('settings.tax.ofd_device_label') }}</p>
+              <p class="row-desc">{{ $t('settings.tax.ofd_device_desc') }}</p>
+            </div>
+            <input v-model.trim="form.ofd_device_id" type="text" placeholder="—" class="settings-input w-64" />
+          </div>
         </div>
-        <select v-model="form.ofd_provider" class="settings-input w-full max-w-[240px]">
-          <option value="click">Click</option>
-          <option value="payze">Payze</option>
-          <option value="multikassa">Multikassa</option>
-        </select>
-      </div>
-      <div class="settings-row">
-        <div class="flex-1">
-          <p class="row-label">{{ $t('settings.tax.ofd_token_label') }}</p>
-          <p class="row-desc">{{ $t('settings.tax.ofd_token_desc') }}</p>
-        </div>
-        <input v-model="form.ofd_token" type="password" :placeholder="$t('settings.tax.ofd_token_placeholder')" class="settings-input" style="width:100%;max-width:240px;" />
-      </div>
-      <div class="settings-row">
-        <div class="flex-1">
-          <p class="row-label">{{ $t('settings.tax.ofd_device_label') }}</p>
-          <p class="row-desc">{{ $t('settings.tax.ofd_device_desc') }}</p>
-        </div>
-        <input v-model="form.ofd_device_id" type="text" placeholder="—" class="settings-input" style="width:100%;max-width:240px;" />
-      </div>
-    </template>
+    </div>
   </div>
 </template>
 

@@ -11,13 +11,19 @@
 
     <SectionHeader icon="pi-clock" color="text-indigo-500">{{ $t('settings.modules.shift_title') }}</SectionHeader>
     <SettingRow v-model="form.shift_enabled" :label="$t('settings.modules.shift_label')" :desc="$t('settings.modules.shift_desc')" />
-    <div v-if="form.shift_enabled" class="settings-row">
+    
+    <div class="settings-row" :class="{'opacity-40 pointer-events-none': !form.shift_enabled}">
       <div class="flex-1">
         <p class="row-label">{{ $t('settings.modules.shifts_per_day_label') }}</p>
         <p class="row-desc">{{ $t('settings.modules.shifts_per_day_desc') }}</p>
       </div>
-      <input v-model.number="form.shifts_per_day" type="number" min="1" max="4" class="settings-input w-16 text-center" />
+      <select v-model="form.shifts_per_day" class="settings-input w-24">
+        <option :value="1">1 Smena</option>
+        <option :value="2">2 Smena</option>
+        <option :value="3">3 Smena</option>
+      </select>
     </div>
+
     <SettingRow v-model="form.require_cash_count" :label="$t('settings.modules.cash_count_label')" :desc="$t('settings.modules.cash_count_desc')" :disabled="!form.shift_enabled" />
     <SettingRow v-model="form.auto_pdf_on_smena_close" :label="$t('settings.modules.auto_pdf_label')" :desc="$t('settings.modules.auto_pdf_desc')" :disabled="!form.shift_enabled" />
   </div>
