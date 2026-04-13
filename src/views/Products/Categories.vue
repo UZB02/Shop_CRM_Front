@@ -32,12 +32,13 @@
           :key="c.id || c._id"
           :category="c"
           :is-expanded="expandedId === (c.id || c._id)"
-          :sub-count="getSubcategories(c.id || c._id).length"
+          :sub-count="settingsStore.isSubcategoryEnabled ? getSubcategories(c.id || c._id).length : 0"
+          :show-expand="settingsStore.isSubcategoryEnabled"
           @expand="toggleExpand"
           @edit="startEdit"
           @delete="confirmDeleteCategory"
         >
-          <template #expanded>
+          <template #expanded v-if="settingsStore.isSubcategoryEnabled">
             <SubcategoryList 
               :subcategories="getSubcategories(c.id || c._id)"
               v-model:search-query="subSearchQuery"
@@ -60,6 +61,7 @@
     />
 
     <SubcategorySlideOver 
+      v-if="settingsStore.isSubcategoryEnabled"
       v-model:visible="subPanelVisible"
       :is-editing="isEditingSub"
       :subcategory="activeSubcategory"
@@ -73,6 +75,9 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useCategoryManager } from './composables/useCategoryManager'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 // Components
 import CategoryHeader from './components/categories/CategoryHeader.vue'

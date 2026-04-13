@@ -1,9 +1,11 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { shiftsAPI } from '@/services/api'
+import { useSettingsStore } from '@/store/settings'
 
 export function useShiftDetail() {
   const route = useRoute()
+  const settingsStore = useSettingsStore()
   const loading = ref(true)
   const data = ref(null)
 
@@ -43,13 +45,15 @@ export function useShiftDetail() {
     }
   }
 
+  // Settings dan valyuta dinamik olinadi
   const formatCurrency = (val) => {
     if (!val) return '0'
     const num = parseFloat(val)
-    return new Intl.NumberFormat('uz-UZ', { 
+    const formatted = new Intl.NumberFormat('uz-UZ', { 
       minimumFractionDigits: 0, 
       maximumFractionDigits: 0 
     }).format(num)
+    return `${formatted} ${settingsStore.currency}`
   }
 
   const calculatePercent = (val) => {

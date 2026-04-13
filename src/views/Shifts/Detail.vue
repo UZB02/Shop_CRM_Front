@@ -139,7 +139,7 @@
                        <i class="pi pi-receipt text-slate-400"></i> {{ $t('shifts.expenses.title') }}
                     </h3>
                     <div class="p-8 text-center text-slate-400 italic text-sm border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-800/10">
-                       {{ formatCurrency(data.x_report.expenses_total) }} UZS
+                       {{ formatCurrency(data.x_report.expenses_total) }}
                     </div>
                  </div>
               </div>

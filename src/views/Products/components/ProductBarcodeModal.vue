@@ -45,9 +45,17 @@
               />
             </div>
 
-            <code class="text-sm font-mono text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-lg tracking-widest border border-slate-200 dark:border-slate-700">
-              {{ product?.barcode }}
-            </code>
+            <div class="flex flex-col items-center gap-1">
+              <span v-if="settingsStore.get.show_name_on_barcode" class="text-xs font-bold text-slate-800 dark:text-white text-center">
+                {{ product?.name }}
+              </span>
+              <code class="text-sm font-mono text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-lg tracking-widest border border-slate-200 dark:border-slate-700">
+                {{ product?.barcode }}
+              </code>
+              <span v-if="settingsStore.get.show_price_on_barcode" class="text-sm font-black text-emerald-500">
+                {{ formatNumber(product?.sale_price) }} {{ settingsStore.currency }}
+              </span>
+            </div>
 
             <div class="flex items-center gap-2 text-xs text-slate-400">
               <span class="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-medium">
@@ -83,7 +91,9 @@
 </template>
 
 <script setup>
-defineProps({
+import { useSettingsStore } from '@/store/settings'
+
+const props = defineProps({
   visible: Boolean,
   product: Object,
   barcodeUrl: String,
@@ -92,6 +102,10 @@ defineProps({
 })
 
 defineEmits(['close', 'download', 'print'])
+
+const settingsStore = useSettingsStore()
+
+const formatNumber = (val) => new Intl.NumberFormat('uz-UZ').format(val || 0)
 </script>
 
 <style scoped>

@@ -37,7 +37,7 @@
             <p class="text-[7px] font-black uppercase tracking-[0.2em] text-white/70 mb-0.5 m-0 leading-none">Jami to'lanishi lozim</p>
             <div class="flex items-baseline justify-center gap-1.5">
               <span class="text-3xl font-black text-white font-outfit tracking-tight leading-none">{{ formatNum(total) }}</span>
-              <span class="text-[9px] font-black text-white/60">UZS</span>
+              <span class="text-[9px] font-black text-white/60">{{ settingsStore.currency }}</span>
             </div>
           </div>
         </div>
@@ -65,24 +65,50 @@
           </div>
 
           <!-- Chegirma miqdori (Barcha to'lov turlari uchun) -->
-          <div class="flex flex-col gap-1.5 animate-fadein">
+          <div v-if="allowDiscount" class="flex flex-col gap-1.5 animate-fadein">
             <div class="flex items-center justify-between">
               <label class="lbl">Chegirma miqdori</label>
-              <button @click="discountAmount = 0"
-                class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 uppercase tracking-widest transition-colors">
-                × Tozalash
-              </button>
+              <div class="flex items-center gap-2">
+                <!-- Max limit badge -->
+                <span v-if="maxDiscountPct > 0"
+                  class="text-[7.5px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md"
+                  :class="isDiscountValid ? 'bg-slate-100 dark:bg-slate-800 text-slate-400' : 'bg-rose-100 dark:bg-rose-900/20 text-rose-500'"
+                >
+                  Max: {{ maxDiscountPct }}%
+                </span>
+                <button @click="discountAmount = 0"
+                  class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 uppercase tracking-widest transition-colors">
+                  × Tozalash
+                </button>
+              </div>
             </div>
             <div class="relative group">
-              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors z-10 select-none">UZS</span>
-              <InputNumber v-model="discountAmount" inputId="discount_amount" class="w-full co-amount-input" :min="0" :max="total" placeholder="0" :use-grouping="true" />
+              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors z-10 select-none">{{ settingsStore.currency }}</span>
+              <InputNumber
+                v-model="discountAmount"
+                inputId="discount_amount"
+                class="w-full co-amount-input"
+                :class="!isDiscountValid ? 'co-amount-input--error' : ''"
+                :min="0"
+                :max="maxDiscountPct > 0 ? maxDiscountAmount : total"
+                placeholder="0"
+                :use-grouping="true"
+              />
+            </div>
+            <!-- Max chegirimadan oshib ketganda ogohlantirish -->
+            <div v-if="!isDiscountValid"
+              class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-100 dark:border-rose-800/30 animate-fadein">
+              <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">
+                Chegirma limitdan oshdi! Maksimal: {{ formatNum(maxDiscountAmount) }} {{ settingsStore.currency }} ({{ maxDiscountPct }}%)
+              </span>
             </div>
             <!-- Yakuniy to'lanadigan summa (Chegirma berilsa chiqadi, Nasiyadan tashqari) -->
             <div v-if="discountAmount > 0 && paymentType !== 'debt'"
               class="flex items-center justify-between px-3.5 py-3 rounded-2xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 animate-fadein">
               <div>
                 <span class="text-[8px] font-black uppercase tracking-widest block opacity-80">To'lanishi kerak</span>
-                <span class="text-xl font-black font-outfit leading-none">{{ formatNum(paidAmount) }} <span class="text-xs">UZS</span></span>
+                <span class="text-xl font-black font-outfit leading-none">{{ formatNum(paidAmount) }} <span class="text-xs">{{ settingsStore.currency }}</span></span>
               </div>
               <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                 <i class="pi pi-tag text-base text-white" />
@@ -113,7 +139,7 @@
              <div class="flex items-center justify-between px-3.5 py-3 rounded-2xl bg-rose-500 text-white shadow-lg shadow-rose-500/20">
                <div>
                  <span class="text-[8px] font-black uppercase tracking-widest block opacity-80">Mijoz qarzi bo'ladi</span>
-                 <span class="text-xl font-black font-outfit leading-none">{{ formatNum(remainingDebt) }} <span class="text-xs">UZS</span></span>
+                 <span class="text-xl font-black font-outfit leading-none">{{ formatNum(remainingDebt) }} <span class="text-xs">{{ settingsStore.currency }}</span></span>
                </div>
                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                  <i class="pi pi-history text-base text-white" />
@@ -173,7 +199,7 @@
               :class="isMixedValid ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40' : isSumOverflow ? 'bg-rose-50 dark:bg-rose-950/10 border-rose-200 dark:border-rose-800/30' : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800'">
               <div>
                 <span class="text-[7.5px] font-black uppercase tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">Jami kiritildi</span>
-                <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">{{ formatNum(cashAmount + cardAmount) }} <span class="text-xs">UZS</span></span>
+                <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">{{ formatNum(cashAmount + cardAmount) }} <span class="text-xs">{{ settingsStore.currency }}</span></span>
               </div>
               <div class="w-7 h-7 rounded-full flex items-center justify-center"
                 :class="isMixedValid ? 'bg-emerald-500 text-white' : isSumOverflow ? 'bg-rose-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'">
@@ -261,8 +287,11 @@
 
 <script setup>
 import { useCheckout } from '@/composables/useCheckout'
+import { useSettingsStore } from '@/store/settings'
 import InputNumber from 'primevue/inputnumber'
 import Select from 'primevue/select'
+
+const settingsStore = useSettingsStore()
 
 const props = defineProps({
   visible: Boolean,
@@ -285,6 +314,10 @@ const {
   remainingDebt,
   description, 
   methods, 
+  allowDiscount,
+  maxDiscountPct,
+  maxDiscountAmount,
+  isDiscountValid,
   isMixedValid, 
   isCashOverflow, 
   isCardOverflow, 

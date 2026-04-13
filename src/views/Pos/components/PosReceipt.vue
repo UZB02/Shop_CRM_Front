@@ -33,8 +33,19 @@
             <!-- Store Header -->
             <div class="text-center py-4 border-b-2 border-dashed border-slate-300 dark:border-slate-600 mb-3">
               <p class="text-[10px] font-black tracking-[0.3em] text-slate-400 dark:text-slate-500 uppercase mb-1">★ ★ ★</p>
-              <h2 class="text-lg font-black tracking-tighter text-slate-900 dark:text-white font-outfit uppercase">Sirius CRM</h2>
+              
+              <p v-if="settingsStore.receiptConfig.header" class="text-[9px] font-bold text-slate-500 mb-1 whitespace-pre-line">{{ settingsStore.receiptConfig.header }}</p>
+              
+              <h2 class="text-lg font-black tracking-tighter text-slate-900 dark:text-white font-outfit uppercase">
+                {{ settingsStore.storeName }}
+              </h2>
+              
               <p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5">{{ t.branch_name || 'Do\'kon' }}</p>
+              
+              <div v-if="settingsStore.receiptConfig.address || settingsStore.receiptConfig.phone" class="mt-2 text-[8px] text-slate-400 font-bold uppercase leading-tight">
+                <p v-if="settingsStore.receiptConfig.address">{{ settingsStore.receiptConfig.address }}</p>
+                <p v-if="settingsStore.receiptConfig.phone">Tel: {{ settingsStore.receiptConfig.phone }}</p>
+              </div>
             </div>
 
             <!-- Meta Info -->
@@ -43,11 +54,11 @@
                 <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Sana:</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black">{{ t.created_on || '—' }}</span>
               </div>
-              <div class="flex justify-between">
+              <div v-if="settingsStore.receiptConfig.showWorker" class="flex justify-between">
                 <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Kassir:</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black">{{ t.worker_name || '—' }}</span>
               </div>
-              <div class="flex justify-between">
+              <div v-if="settingsStore.isShiftEnabled" class="flex justify-between">
                 <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Smena:</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black">#{{ t.smena_id || '—' }}</span>
               </div>
@@ -136,8 +147,11 @@
 
             <!-- Footer -->
             <div class="text-center border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 pb-2">
+               <p v-if="settingsStore.receiptConfig.promo" class="text-[9px] font-black text-emerald-600 dark:text-emerald-400 mb-2 italic">
+                {{ settingsStore.receiptConfig.promo }}
+              </p>
               <p class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-relaxed">
-                Xarid uchun rahmat!<br/>
+                {{ settingsStore.receiptConfig.footer || 'Xarid uchun rahmat!' }}<br/>
                 <span class="text-[8px]">★ ★ ★</span>
               </p>
             </div>
@@ -173,20 +187,23 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useSettingsStore } from '@/store/settings'
 
 const props = defineProps({
-  visible: Boolean,
-  transaction: Object
+  transaction: Object,
+  visible: Boolean
 })
 
 defineEmits(['update:visible', 'print', 'download'])
+
+const settingsStore = useSettingsStore()
 
 // Safe numeric conversion (handles string values from backend)
 const num = (val) => parseFloat(val) || 0
 
 // Currency formatter
 const fmt = (val) =>
-  new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(num(val)) + ' UZS'
+  new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(num(val)) + ' ' + settingsStore.currency
 
 // Shorthand for cleaner template
 const t = computed(() => props.transaction || {})

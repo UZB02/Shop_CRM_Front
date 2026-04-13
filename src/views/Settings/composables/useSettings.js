@@ -3,6 +3,7 @@ import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 import { settingsAPI } from '@/services/api'
 import { useAuthStore } from '@/store/auth'
+import { useSettingsStore } from '@/store/settings'
 
 const FORM_FIELDS = [
     'subcategory_enabled', 'sale_return_enabled', 'wastage_enabled',
@@ -38,7 +39,8 @@ export function useSettings() {
     const settings = ref(null)
     const form = reactive({})
     const originalForm = ref({})
-
+    
+    const settingsStore = useSettingsStore()
     const authStore = useAuthStore()
     const isOwner = computed(() => authStore.user?.role === 'owner')
 
@@ -50,6 +52,18 @@ export function useSettings() {
         loading.value = true
         console.group('⚙️ Settings Page Loading Process')
         try {
+            // Agar global store allaqachon to'ldirilgan bo'lsa, API so'rovi yubormasdan foydalanaiz
+            if (settingsStore.initialized && settingsStore.settings) {
+                console.log('⚡ Using cached settings from store (no API call needed)')
+                const data = settingsStore.settings
+                settings.value = data
+                FORM_FIELDS.forEach(f => { form[f] = data[f] })
+                originalForm.value = { ...form }
+                loading.value = false
+                console.groupEnd()
+                return
+            }
+
             console.log('📡 Fetching settings from /settings/...')
             const res = await settingsAPI.getAll()
             console.log('📦 API RAW RESPONSE:', res)
@@ -64,6 +78,13 @@ export function useSettings() {
                 settings.value = data
                 FORM_FIELDS.forEach(f => { form[f] = data[f] })
                 originalForm.value = { ...form }
+                
+                // Global store ni ham yangilash
+                settingsStore.updateLocalSettings(data)
+                if (!settingsStore.initialized) {
+                    settingsStore.settings = data
+                    settingsStore.initialized = true
+                }
                 
                 if (data.id) {
                     console.log('ℹ️ Settings ID loaded:', data.id)
@@ -146,6 +167,9 @@ export function useSettings() {
                 Object.assign(form, newData)
                 originalForm.value = { ...form }
                 settings.value = newData
+
+                // Sync with global store
+                settingsStore.updateLocalSettings(newData)
             }
 
             toast.add({

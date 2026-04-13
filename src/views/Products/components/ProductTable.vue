@@ -78,7 +78,7 @@
                       <span v-if="item.category_name" class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 ring-1 ring-inset ring-emerald-500/20 dark:ring-emerald-500/30">
                         {{ item.category_name }}
                       </span>
-                      <span v-if="item.subcategory_name" class="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate max-w-[120px]">
+                      <span v-if="item.subcategory_name && settingsStore.isSubcategoryEnabled" class="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate max-w-[120px]">
                         {{ item.subcategory_name }}
                       </span>
                     </div>
@@ -97,14 +97,14 @@
               <!-- Price -->
               <td class="px-6 py-4 align-middle">
                 <!-- If there is a promotion -->
-                <template v-if="item.active_promotion">
+                  <template v-if="item.active_promotion">
                   <div class="flex flex-col">
                     <div class="flex items-baseline gap-1.5">
                       <span class="text-[13px] font-semibold text-slate-500 dark:text-slate-500 line-through">{{ formatNumber(item.sale_price) }}</span>
                       <span class="text-xs font-semibold text-rose-500 dark:text-rose-400">(-{{ item.active_promotion.discount_pct }}%)</span>
                     </div>
                     <div class="flex items-baseline gap-1 mt-0.5">
-                      <span class="text-xs font-medium text-slate-400">{{ item.currency_code || 'UZS' }}</span>
+                      <span class="text-xs font-medium text-slate-400">{{ item.currency_code || settingsStore.currency }}</span>
                       <span class="text-base font-bold text-slate-900 dark:text-white">{{ formatNumber(item.active_promotion.discounted_price) }}</span>
                     </div>
                   </div>
@@ -113,7 +113,7 @@
                 <!-- Normal Price -->
                 <template v-else>
                   <div class="flex items-baseline gap-1.5">
-                    <span class="text-xs font-medium text-slate-400 dark:text-slate-400">{{ item.currency_code || 'UZS' }}</span>
+                    <span class="text-xs font-medium text-slate-400 dark:text-slate-400">{{ item.currency_code || settingsStore.currency }}</span>
                     <span class="text-base font-bold text-slate-900 dark:text-white">{{ formatNumber(item.sale_price) }}</span>
                   </div>
                 </template>
@@ -128,7 +128,7 @@
                 <div class="flex flex-col">
                   <span 
                     class="text-[15px] font-black tracking-tight"
-                    :class="Number(item.quantity) < 10 ? 'text-rose-500' : 'text-slate-900 dark:text-white'"
+                    :class="(settingsStore.get.low_stock_enabled && Number(item.quantity) <= (item.low_stock_threshold || settingsStore.get.low_stock_threshold || 5)) ? 'text-rose-500' : 'text-slate-900 dark:text-white'"
                   >
                     {{ formatNumber(item.quantity) || 0 }}
                   </span>
@@ -214,6 +214,7 @@
 <script setup>
 import { toRefs } from 'vue'
 import { useRouter } from 'vue-router'
+import { useSettingsStore } from '@/store/settings'
 import ProductBarcodeModal from './ProductBarcodeModal.vue'
 import TablePagination from '@/components/TablePagination.vue'
 import { useProductTable } from '../composables/useProductTable'
@@ -227,6 +228,7 @@ const props = defineProps({
 
 const { products } = toRefs(props)
 const router = useRouter()
+const settingsStore = useSettingsStore()
 
 const {
   imageErrors, handleImageError, formatNumber, formatImageUrl,

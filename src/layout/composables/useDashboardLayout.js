@@ -2,6 +2,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/store/auth'
+import { useSettingsStore } from '@/store/settings'
 
 export function useDashboardLayout() {
   const router = useRouter()
@@ -82,6 +83,11 @@ export function useDashboardLayout() {
     window.addEventListener('keydown', onKeydown)
     document.addEventListener('fullscreenchange', onFullscreenChange)
     checkSubscriptionStatus()
+
+    // Initialize global settings (faqat birinchi marta fetch qilinadi)
+    if (!settingsStore.initialized) {
+        settingsStore.fetchSettings()
+    }
   })
   onUnmounted(() => {
     window.removeEventListener('subscription-warning', handleSubscriptionWarning)
@@ -90,20 +96,31 @@ export function useDashboardLayout() {
   })
 
   /* --- Menu --- */
-  const menuItems = computed(() => [
-    { label: t('menu.dashboard'),    icon: 'pi pi-home',          to: '/dashboard',            key: 'dashboard' },
-    { label: t('menu.sales'),        icon: 'pi pi-calculator',    to: '/dashboard/pos',        key: 'pos'       },
-    { label: t('menu.stores'),       icon: 'pi pi-shop',          to: '/dashboard/stores',     key: 'stores'    },
-    { label: t('menu.inventory'),    icon: 'pi pi-database',      to: '/dashboard/warehouse',  key: 'warehouse' },
-    { label: t('menu.products'),     icon: 'pi pi-tag',           to: '/dashboard/products',   key: 'products'  },
-    { label: t('menu.workers'),      icon: 'pi pi-users',         to: '/dashboard/workers',    key: 'workers'   },
-    { label: t('menu.trades'),       icon: 'pi pi-shopping-cart', to: '/dashboard/trades',     key: 'trades'    },
-    { label: t('menu.reports'),      icon: 'pi pi-wallet',        to: '/dashboard/expenses',   key: 'expenses'  },
-    { label: t('menu.customers'),    icon: 'pi pi-id-card',       to: '/dashboard/customers',  key: 'customers' },
-    { label: t('menu.settings'),     icon: 'pi pi-cog',           to: '/dashboard/settings',   key: 'settings'  },
-  ])
+  const settingsStore = useSettingsStore()
 
-  const filteredMenu = computed(() => menuItems.value.filter(i => authStore.hasAccess(i.key)))
+  const menuItems = computed(() => {
+    const list = [
+      { label: t('menu.dashboard'),    icon: 'pi pi-home',          to: '/dashboard',            key: 'dashboard' },
+      { label: t('menu.sales'),        icon: 'pi pi-calculator',    to: '/dashboard/pos',        key: 'pos'       },
+      { label: t('menu.stores'),       icon: 'pi pi-shop',          to: '/dashboard/stores',     key: 'stores'    },
+      { label: t('menu.inventory'),    icon: 'pi pi-database',      to: '/dashboard/warehouse',  key: 'warehouse' },
+      { label: t('menu.products'),     icon: 'pi pi-tag',           to: '/dashboard/products',   key: 'products'  },
+      { label: t('menu.workers'),      icon: 'pi pi-users',         to: '/dashboard/workers',    key: 'workers'   },
+      { label: t('menu.trades'),       icon: 'pi pi-shopping-cart', to: '/dashboard/trades',     key: 'trades'    },
+      { label: t('menu.reports'),      icon: 'pi pi-wallet',        to: '/dashboard/expenses',   key: 'expenses'  },
+      { label: t('menu.customers'),    icon: 'pi pi-id-card',       to: '/dashboard/customers',  key: 'customers' },
+      { label: t('menu.settings'),     icon: 'pi pi-cog',           to: '/dashboard/settings',   key: 'settings'  },
+    ]
+    return list
+  })
+
+  const filteredMenu = computed(() => {
+    return menuItems.value.filter(item => {
+      // 1. Permission Check
+      if (!authStore.hasAccess(item.key)) return false
+      return true
+    })
+  })
 
   const currentPageTitle = computed(() => {
     const item = menuItems.value.find(i => route.path.startsWith(i.to) && i.to !== '/dashboard')

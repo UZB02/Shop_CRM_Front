@@ -1,6 +1,8 @@
 import { ref, computed, watch } from 'vue'
+import { useSettingsStore } from '@/store/settings'
 
 export function useCheckout(props, emit) {
+  const settingsStore = useSettingsStore()
   const paymentType = ref('cash')
   const discountAmount = ref(0)
   const cashAmount = ref(0)
@@ -9,17 +11,25 @@ export function useCheckout(props, emit) {
   const debtCardAmount = ref(0)
   const description = ref('')
 
-  const methods = [
-    { id: 'cash', label: 'Naqd', icon: 'pi pi-money-bill' },
-    { id: 'card', label: 'Karta', icon: 'pi pi-credit-card' },
-    { id: 'mixed', label: 'Aralash', icon: 'pi pi-percentage' },
-    { id: 'debt', label: 'Nasiya', icon: 'pi pi-history' }
-  ]
+  const methods = computed(() => {
+    const list = []
+    if (settingsStore.allowCash) list.push({ id: 'cash', label: 'Naqd', icon: 'pi pi-money-bill' })
+    if (settingsStore.allowCard) list.push({ id: 'card', label: 'Karta', icon: 'pi pi-credit-card' })
+    
+    // Mixed only if both card and cash are allowed
+    if (settingsStore.allowCash && settingsStore.allowCard) {
+        list.push({ id: 'mixed', label: 'Aralash', icon: 'pi pi-percentage' })
+    }
+    
+    if (settingsStore.allowDebt) list.push({ id: 'debt', label: 'Nasiya', icon: 'pi pi-history' })
+    return list
+  })
 
   // Reset & initialize on open
   watch(() => props.visible, (newVal) => {
     if (newVal) {
-      paymentType.value = 'cash'
+      // Default to first available method or 'cash'
+      paymentType.value = methods.value.length > 0 ? methods.value[0].id : 'cash'
       description.value = ''
       emit('update:selected-customer', null)
       discountAmount.value = 0
@@ -28,6 +38,25 @@ export function useCheckout(props, emit) {
       cashAmount.value = props.total || 0
       cardAmount.value = 0
     }
+  })
+
+  const allowDiscount = computed(() => settingsStore.allowDiscount)
+
+  // Settings dan chegirma limiti (0 = cheksiz)
+  const maxDiscountPct = computed(() => settingsStore.get?.max_discount_percent ?? 0)
+
+  // Maksimal chegirma summasi (chegirma yoqilgan va limit bor bo'lganda)
+  const maxDiscountAmount = computed(() => {
+    if (!allowDiscount.value) return 0
+    if (!maxDiscountPct.value) return props.total || 0  // cheksiz
+    return Math.floor(((props.total || 0) * maxDiscountPct.value) / 100)
+  })
+
+  // Chegirma limiti tekshiruvi
+  const isDiscountValid = computed(() => {
+    if (!allowDiscount.value || !discountAmount.value) return true
+    if (!maxDiscountPct.value) return true  // 0 = cheksiz
+    return discountAmount.value <= maxDiscountAmount.value
   })
 
   // Haqiqiy to'lanadigan summa = asl narx - chegirma
@@ -54,6 +83,9 @@ export function useCheckout(props, emit) {
   })
 
   const isValid = computed(() => {
+    // Chegirma limit tekshiruvi (barcha to'lov turlari uchun)
+    if (!isDiscountValid.value) return false
+
     if (paymentType.value === 'mixed') {
       return isMixedValid.value && !isCashOverflow.value && !isCardOverflow.value && !isSumOverflow.value
     }
@@ -123,6 +155,10 @@ export function useCheckout(props, emit) {
     remainingDebt,
     description,
     methods,
+    allowDiscount,
+    maxDiscountPct,
+    maxDiscountAmount,
+    isDiscountValid,
     isMixedValid,
     isCashOverflow,
     isCardOverflow,
