@@ -6,22 +6,45 @@
       <div class="flex-1">
         <p class="row-label">{{ $t('settings.tax.tax_percent_label') }}</p>
         <p class="row-desc">{{ $t('settings.tax.tax_percent_desc') }}</p>
+        <p v-if="form.tax_percent === null || form.tax_percent === ''" class="text-[10px] text-amber-500 font-bold mt-1">
+          <i class="pi pi-info-circle text-[9px] mr-1"></i>
+          {{ $t('settings.tax.using_global_tax') }}
+        </p>
       </div>
       <div class="flex items-center gap-1.5">
-        <input v-model.number="form.tax_percent" type="number" min="0" max="100" step="0.01" class="settings-input w-20 text-center" />
+        <input v-model.number="form.tax_percent" type="number" min="0" max="100" step="0.01" class="settings-input w-20 text-center" placeholder="Global" />
         <span class="text-xs font-black text-slate-400">%</span>
       </div>
     </div>
 
     <SectionHeader icon="pi-server" color="text-slate-500">{{ $t('settings.tax.ofd_title') }}</SectionHeader>
+    <div class="settings-row">
+      <div class="flex-1">
+        <p class="row-label">{{ $t('settings.tax.tin_label') }}</p>
+        <p class="row-desc">{{ $t('settings.tax.tin_desc') }}</p>
+      </div>
+      <input v-model="form.tin" type="text" maxlength="9" :placeholder="$t('settings.tax.tin_placeholder')" class="settings-input w-full max-w-[240px]" />
+    </div>
+
     <SettingRow v-model="form.ofd_enabled" :label="$t('settings.tax.ofd_label')" :desc="$t('settings.tax.ofd_desc')" />
     <template v-if="form.ofd_enabled">
+      <div class="settings-row">
+        <div class="flex-1">
+          <p class="row-label">{{ $t('settings.tax.ofd_provider_label') }}</p>
+          <p class="row-desc">{{ $t('settings.tax.ofd_provider_desc') }}</p>
+        </div>
+        <select v-model="form.ofd_provider" class="settings-input w-full max-w-[240px]">
+          <option value="click">Click</option>
+          <option value="payze">Payze</option>
+          <option value="multikassa">Multikassa</option>
+        </select>
+      </div>
       <div class="settings-row">
         <div class="flex-1">
           <p class="row-label">{{ $t('settings.tax.ofd_token_label') }}</p>
           <p class="row-desc">{{ $t('settings.tax.ofd_token_desc') }}</p>
         </div>
-        <input v-model="form.ofd_token" type="text" placeholder="—" class="settings-input" style="width:100%;max-width:240px;" />
+        <input v-model="form.ofd_token" type="password" :placeholder="$t('settings.tax.ofd_token_placeholder')" class="settings-input" style="width:100%;max-width:240px;" />
       </div>
       <div class="settings-row">
         <div class="flex-1">

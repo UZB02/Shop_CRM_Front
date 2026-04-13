@@ -25,3 +25,4 @@ dist-ssr
 
 .env
 .claude
+store_settings_guide.md

@@ -10,11 +10,12 @@ const FORM_FIELDS = [
     'default_currency', 'show_usd_price', 'show_rub_price', 'show_eur_price', 'show_cny_price',
     'allow_cash', 'allow_card', 'allow_debt', 'allow_discount',
     'max_discount_percent', 'receipt_header', 'receipt_footer',
+    'receipt_address', 'receipt_phone', 'receipt_promo_text',
     'show_store_logo', 'show_worker_name', 'low_stock_enabled',
     'low_stock_threshold', 'shift_enabled', 'shifts_per_day',
     'require_cash_count', 'telegram_enabled', 'telegram_chat_id',
     'tax_enabled', 'tax_percent', 'ofd_enabled', 'ofd_token',
-    'ofd_device_id', 'supplier_credit_enabled',
+    'ofd_device_id', 'tin', 'ofd_provider', 'supplier_credit_enabled',
     'show_name_on_barcode', 'show_price_on_barcode', 'auto_pdf_on_smena_close'
 ]
 
@@ -81,12 +82,32 @@ export function useSettings() {
 
     const saveSettings = async () => {
         if (!isDirty.value) return
+
+        // Validation: At least one payment method must be enabled
+        if (!form.allow_cash && !form.allow_card) {
+            toast.add({
+                severity: 'warn',
+                summary: t('common.validation_error'),
+                detail: t('settings.payment.error_at_least_one'),
+                life: 5000
+            })
+            return
+        }
+
         saving.value = true
         console.group('💾 Save Settings Process')
         try {
             const dataToSave = {}
             FORM_FIELDS.forEach(f => {
-                if (String(form[f]) !== String(originalForm.value[f])) dataToSave[f] = form[f]
+                const val = form[f]
+                const orig = originalForm.value[f]
+                
+                if (String(val) !== String(orig)) {
+                    // Skip if it's a sensitive write-only field and is empty
+                    if (f === 'ofd_token' && !val) return
+                    
+                    dataToSave[f] = val
+                }
             })
 
             console.log('📡 Payload being sent:', dataToSave)

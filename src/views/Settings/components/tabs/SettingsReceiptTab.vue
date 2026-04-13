@@ -4,6 +4,29 @@
     <SettingRow v-model="form.show_store_logo"  :label="$t('settings.receipt.logo_label')"        :desc="$t('settings.receipt.logo_desc')" />
     <SettingRow v-model="form.show_worker_name" :label="$t('settings.receipt.worker_name_label')" :desc="$t('settings.receipt.worker_name_desc')" />
 
+    <SectionHeader icon="pi-map-marker" color="text-slate-500">{{ $t('settings.receipt.info_title') }}</SectionHeader>
+    <div class="settings-row">
+      <div class="flex-1">
+        <p class="row-label">{{ $t('settings.receipt.address_label') }}</p>
+        <p class="row-desc">{{ $t('settings.receipt.address_desc') }}</p>
+      </div>
+      <input v-model="form.receipt_address" type="text" class="settings-input w-full max-w-[280px]" :placeholder="$t('settings.receipt.address_placeholder')" />
+    </div>
+    <div class="settings-row">
+      <div class="flex-1">
+        <p class="row-label">{{ $t('settings.receipt.phone_label') }}</p>
+        <p class="row-desc">{{ $t('settings.receipt.phone_desc') }}</p>
+      </div>
+      <input v-model="form.receipt_phone" type="text" class="settings-input w-full max-w-[280px]" :placeholder="$t('settings.receipt.phone_placeholder')" />
+    </div>
+    <div class="settings-row">
+      <div class="flex-1">
+        <p class="row-label">{{ $t('settings.receipt.promo_label') }}</p>
+        <p class="row-desc">{{ $t('settings.receipt.promo_desc') }}</p>
+      </div>
+      <input v-model="form.receipt_promo_text" type="text" class="settings-input w-full max-w-[280px]" :placeholder="$t('settings.receipt.promo_placeholder')" />
+    </div>
+
     <SectionHeader icon="pi-align-left" color="text-slate-500">{{ $t('settings.receipt.text_title') }}</SectionHeader>
     <div class="settings-row" style="align-items: flex-start; flex-wrap: wrap;">
       <div class="flex-1" style="min-width: 140px;">

@@ -11,6 +11,10 @@
       <div class="flex-1">
         <p class="row-label">{{ $t('settings.payment.max_discount_label') }}</p>
         <p class="row-desc">{{ $t('settings.payment.max_discount_desc') }}</p>
+        <p v-if="form.max_discount_percent === 0" class="text-[10px] text-emerald-500 font-bold mt-1">
+          <i class="pi pi-infinity text-[9px] mr-1"></i>
+          {{ $t('settings.payment.unlimited_discount') }}
+        </p>
       </div>
       <div class="flex items-center gap-1.5">
         <input v-model.number="form.max_discount_percent" type="number" min="0" max="100" step="1" class="settings-input w-16 text-center" />
