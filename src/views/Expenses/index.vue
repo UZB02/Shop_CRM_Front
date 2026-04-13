@@ -15,7 +15,7 @@
 
     <!-- ── Global Filters & Export (Visible for all tabs) ────── -->
     <ExpenseFilters 
-      v-if="activeTab === 'expenses' || userIsManager"
+      v-if="activeTab !== 'profit-loss' && (activeTab === 'expenses' || userIsManager)"
       :filters="filters"
       :export-filters="exportFilters"
       :categories="categories"
@@ -24,6 +24,15 @@
       @clear="clearFilters"
       @export="exportExpenses"
       @export-wastage="exportWastages"
+    />
+
+    <!-- ── Profit & Loss Specialized Filters ────────────────── -->
+    <ProfitLossFilters
+      v-if="activeTab === 'profit-loss' && userIsManager"
+      :filters="plFilters"
+      :branches="branches"
+      :is-manager="userIsManager"
+      @refresh="refreshData"
     />
 
     <!-- ── Tab Content: Expenses ────────────────────────────── -->
@@ -53,7 +62,7 @@
     <div v-if="activeTab !== 'expenses'" class="animate-in fade-in slide-in-from-bottom-2 duration-300">
         <!-- Profit & Loss -->
         <div v-if="activeTab === 'profit-loss'" class="space-y-4">
-           <ProfitLossReport :data="profitLoss" :monthly-data="monthlyReport" />
+           <ProfitLossReport :monthly-data="monthlyReport" />
         </div>
 
         <!-- Debtors -->
@@ -154,6 +163,7 @@ import ExpenseTable from './components/ExpenseTable.vue'
 import ExpenseDialog from './components/ExpenseDialog.vue'
 import ExpenseDetailModal from './components/ExpenseDetailModal.vue'
 import CategoryList from './components/CategoryList.vue'
+import ProfitLossFilters from './components/ProfitLossFilters.vue'
 import ProfitLossReport from './components/reports/ProfitLossReport.vue'
 import DebtorReport from './components/reports/DebtorReport.vue'
 import WorkerPerformanceReport from './components/reports/WorkerPerformanceReport.vue'
@@ -171,7 +181,8 @@ const {
 const {
   activeTab, tabs, userIsManager,
   totalFromList, topCategoryName, lastExpenseDate,
-  profitLoss, debtors, performance, monthlyReport, refreshData
+  debtors, performance, monthlyReport, refreshData,
+  plFilters
 } = useExpenseTabLogic()
 
 const expenseDialog = ref(false)

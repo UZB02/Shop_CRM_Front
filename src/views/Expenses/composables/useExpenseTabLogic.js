@@ -6,14 +6,21 @@ import i18n from '@/i18n'
 export default function useExpenseTabLogic() {
   const { 
     expenses, loading, filters, exportFilters, isManager, 
+    branches, categories,
     fetchExpenses, fetchCategories, fetchBranches, fetchShifts,
     summaryData
   } = useExpenses()
   
   const { 
-    profitLoss, debtors, performance, monthlyReport,
-    fetchProfitLoss, fetchDebtors, fetchPerformance, fetchMonthlyChart
+    debtors, performance, monthlyReport,
+    fetchDebtors, fetchPerformance, fetchMonthlyChart
   } = useReports()
+
+  const plFilters = ref({
+    year: new Date().getFullYear(),
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    branch: filters.value.branch
+  })
 
   const activeTab = ref('expenses')
   const userIsManager = computed(() => isManager())
@@ -43,32 +50,11 @@ export default function useExpenseTabLogic() {
     }
 
     if (activeTab.value === 'profit-loss') {
-      fetchProfitLoss(params)
-
-      // Grafik uchun parametrlarni tayyorlash
-      const chartParams = { branch: filters.value.branch }
-      
-      if (exportFilters.value.date_from) {
-        const dateFrom = new Date(exportFilters.value.date_from)
-        chartParams.year = dateFrom.getFullYear()
-        
-        if (exportFilters.value.date_to) {
-          const dateTo = new Date(exportFilters.value.date_to)
-          const startMonth = dateFrom.getMonth() + 1
-          const endMonth = dateTo.getMonth() + 1
-          
-          // Oylarni massiv ko'rinishida yig'ish (masalan: 1,2,3)
-          const months = []
-          for (let m = startMonth; m <= endMonth; m++) {
-            months.push(m)
-          }
-          if (months.length > 0) chartParams.months = months.join(',')
-        }
-      } else {
-         // Agar sana tanlanmagan bo'lsa — joriy yil
-         chartParams.year = new Date().getFullYear()
+      const chartParams = { 
+        year: plFilters.value.year,
+        months: (plFilters.value.months || []).join(','),
+        branch: plFilters.value.branch
       }
-
       fetchMonthlyChart(chartParams)
     }
     if (activeTab.value === 'debtors') fetchDebtors(params)
@@ -103,6 +89,10 @@ export default function useExpenseTabLogic() {
     if (activeTab.value !== 'expenses') fetchTabReport()
   }, { deep: true })
 
+  watch(plFilters, () => {
+    if (activeTab.value === 'profit-loss') fetchTabReport()
+  }, { deep: true })
+
   // Summary Computations
   const totalFromList = computed(() =>
     expenses.value.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0)
@@ -135,6 +125,7 @@ export default function useExpenseTabLogic() {
   return {
     activeTab, tabs, userIsManager,
     totalFromList, topCategoryName, lastExpenseDate,
-    profitLoss, debtors, performance, monthlyReport, refreshData
+    debtors, performance, monthlyReport, refreshData,
+    plFilters, branches, categories
   }
 }

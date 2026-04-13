@@ -89,7 +89,6 @@ import { computed, ref, onMounted } from 'vue'
 import Chart from 'primevue/chart'
 
 const props = defineProps({
-  data: Object, // General report
   monthlyData: Object // Monthly chart data
 })
 
