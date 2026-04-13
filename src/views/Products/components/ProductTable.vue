@@ -9,6 +9,7 @@
               <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
               <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ $t('products.form.barcode') }}</th>
               <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_price') }}</th>
+              <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_inventory') }}</th>
               <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap text-right">{{ $t('products.col_actions') }}</th>
             </tr>
           </thead>
@@ -32,6 +33,7 @@
                   <div class="h-3 w-16 bg-slate-200 dark:bg-slate-800 rounded"></div>
                 </div>
               </td>
+              <td class="px-6 py-4"><div class="h-4 w-12 bg-slate-200 dark:bg-slate-800 rounded"></div></td>
               <td class="px-6 py-4"><div class="h-8 w-32 bg-slate-200 dark:bg-slate-800 rounded ml-auto"></div></td>
             </tr>
 
@@ -121,6 +123,19 @@
                 </div>
               </td>
 
+              <!-- Stock Quantity -->
+              <td class="px-6 py-4 align-middle">
+                <div class="flex flex-col">
+                  <span 
+                    class="text-[15px] font-black tracking-tight"
+                    :class="Number(item.quantity) < 10 ? 'text-rose-500' : 'text-slate-900 dark:text-white'"
+                  >
+                    {{ formatNumber(item.quantity) || 0 }}
+                  </span>
+                  <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ item.unit_display }}</span>
+                </div>
+              </td>
+
               <!-- Actions -->
               <td class="px-6 py-4 align-middle">
                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-70 group-hover:opacity-100 transition-opacity">
@@ -159,7 +174,7 @@
 
             <!-- Empty state -->
             <tr v-if="!loading && products.length === 0">
-              <td colspan="4" class="py-24 text-center">
+              <td colspan="5" class="py-24 text-center">
                 <div class="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mx-auto mb-4 border border-slate-100 dark:border-slate-800">
                   <i class="pi pi-box text-2xl text-slate-300 dark:text-slate-600"></i>
                 </div>

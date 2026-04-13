@@ -46,6 +46,17 @@
         <p class="text-[11px] font-black text-slate-800 dark:text-white uppercase leading-tight">{{ product?.created_on?.split('|')[0] || '---' }}</p>
       </div>
     </div>
+
+    <!-- IKPU Card -->
+    <div v-if="product?.ikpu_code" class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-1">
+      <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2">IKPU / MXIK</span>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-rose-500/5 text-rose-500 flex items-center justify-center border border-rose-500/10">
+          <i class="pi pi-shield text-[10px]"></i>
+        </div>
+        <p class="text-[11px] font-black text-slate-900 dark:text-white tracking-wider">{{ product.ikpu_code }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
