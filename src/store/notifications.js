@@ -57,7 +57,7 @@ export const useNotificationStore = defineStore('notifications', {
                 state.lowStockItems.slice(0, 10).forEach(item => {
                     list.push({
                         id: `low-stock-${item.stock_id || item.product_id}`,
-                        type: 'system',
+                        type: 'stock',
                         title: item.product_name,
                         body: `${item.location_name}da qoldiq kamaygan: ${item.quantity} ${item.product_unit || 'dona'} (Limit: ${item.threshold})`,
                         date: new Date().toISOString(),
@@ -70,7 +70,7 @@ export const useNotificationStore = defineStore('notifications', {
                 if (state.lowStockItems.length > 10) {
                     list.push({
                         id: 'low-stock-summary',
-                        type: 'system',
+                        type: 'stock',
                         title: 'Boshqa kam qolgan tovarlar',
                         body: `Yana ${state.lowStockItems.length - 10} ta mahsulotda qoldiq kamaygan.`,
                         severity: 'info',
@@ -84,7 +84,7 @@ export const useNotificationStore = defineStore('notifications', {
             if (state.subscription && state.subscription.days_left <= 10) {
                 list.push({
                     id: 'sub-alert',
-                    type: 'system',
+                    type: 'subscription',
                     title: 'Obuna muddati tugamoqda',
                     body: state.subscription.status === 'expired' 
                         ? 'Obuna muddati tugagan! Iltimos, to\'lov qiling.' 

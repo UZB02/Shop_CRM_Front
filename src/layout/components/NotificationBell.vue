@@ -118,10 +118,14 @@ const getSeverityClass = (sev) => {
 }
 
 const getIcon = (type, severity) => {
-    if (type === 'announcement') return 'pi pi-megaphone'
-    if (severity === 'error') return 'pi pi-exclamation-circle'
-    if (severity === 'warn') return 'pi pi-shopping-cart'
-    return 'pi pi-info-circle'
+    switch(type) {
+        case 'announcement': return 'pi pi-megaphone'
+        case 'stock': return 'pi pi-shopping-cart'
+        case 'subscription': return 'pi pi-shield' // Or 'pi pi-credit-card'
+        default: 
+            if (severity === 'error') return 'pi pi-exclamation-circle'
+            return 'pi pi-info-circle'
+    }
 }
 
 const formatTime = (dateStr) => {
