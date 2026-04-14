@@ -98,7 +98,12 @@
 
         <!-- Money Input (Only if open and trying to close) -->
         <div v-if="shift?.status === 'open'" class="space-y-2 animate-fadein">
-          <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block ml-1">Kassada sanalgan pul</label>
+          <div class="flex items-center justify-between ml-1 mb-1">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Kassada sanalgan pul</label>
+            <span v-if="settingsStore.requireCashCount" class="text-[8px] font-black text-rose-500 uppercase tracking-tighter bg-rose-50 dark:bg-rose-950/20 px-1.5 py-0.5 rounded-md border border-rose-100 dark:border-rose-800/30 animate-pulse">
+              Majburiy
+            </span>
+          </div>
           <InputNumber 
             v-model="cashCounted" 
             class="w-full sr-input text-lg"
@@ -132,7 +137,7 @@
         <button 
           v-else
           @click="handleSubmit"
-          :disabled="loading || (!isClosing && !authStore.user?.branch_id)"
+          :disabled="loading || (!isClosing && !authStore.user?.branch_id) || (settingsStore.requireCashCount && (isClosing ? cashCounted === null : cashStart === null))"
           class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl disabled:opacity-50"
           :class="[
              isClosing ? 'bg-rose-500 hover:bg-rose-600 hover:shadow-rose-400/30' : 'bg-[#10b981] hover:bg-[#059669] hover:shadow-emerald-500/30'

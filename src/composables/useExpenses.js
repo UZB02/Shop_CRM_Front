@@ -171,6 +171,9 @@ export default function useExpenses() {
     }
 
     const fetchShifts = async () => {
+        const settingsStore = (await import('@/store/settings')).useSettingsStore()
+        if (!settingsStore.isShiftEnabled) return
+
         try {
             // Faqat ochiq smenalar emas, filtrlash uchun barchasi kerak bo'lishi mumkin
             const res = await api.get('/shifts/') // shiftsAPI.getAll or direct call

@@ -261,6 +261,18 @@ router.beforeEach(async (to, from, next) => {
         return
     }
 
+    // Special Check: Shift related routes should be blocked if disabled in settings
+    const settingsStore = (await import('@/store/settings')).useSettingsStore()
+    
+    // Ensure settings are loaded before making a decision on shift routes
+    if (to.path.includes('/shifts')) {
+        if (!settingsStore.initialized) await settingsStore.fetchSettings()
+        if (!settingsStore.isShiftEnabled) {
+            next({ name: 'dashboard' })
+            return
+        }
+    }
+
     next()
 })
 

@@ -50,12 +50,13 @@
 
         <!-- Shift & Actions -->
         <div class="flex items-center gap-3">
-          <div v-if="activeShift" class="px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl flex items-center gap-2 border border-emerald-100 dark:border-emerald-500/20">
+          <div v-if="activeShift && settingsStore.isShiftEnabled" class="px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl flex items-center gap-2 border border-emerald-100 dark:border-emerald-500/20">
              <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-pulse"></span>
              <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Smena #{{ activeShift.id }}</span>
           </div>
 
           <button 
+            v-if="settingsStore.isShiftEnabled"
             @click="handleShiftAction"
             class="px-6 py-3.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-xl active:scale-95"
             :class="activeShift && activeShift.status === 'open' ? 'bg-[#151c2f] text-white hover:bg-[#0f1422]' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20'"
@@ -67,7 +68,7 @@
     </header>
 
     <!-- Main Dynamic Layout -->
-    <main v-if="activeShift" class="flex-1 overflow-hidden flex">
+    <main v-if="activeShift || !settingsStore.isShiftEnabled" class="flex-1 overflow-hidden flex">
       <!-- Left side: Product Library -->
       <section class="flex-1 h-full relative overflow-hidden flex flex-col p-8">
         <input ref="barcodeInput" type="text" v-model="barcodeBuffer" @keyup.enter="handleBarcodeScan" class="opacity-0 absolute -top-8 left-0"/>
@@ -101,8 +102,8 @@
       </section>
     </main>
 
-    <!-- Closed State -->
-    <div v-else class="flex-1 flex flex-col items-center justify-center py-20 px-8">
+    <!-- Closed State (Only if shifts are enabled but none is active) -->
+    <div v-else-if="settingsStore.isShiftEnabled && !activeShift" class="flex-1 flex flex-col items-center justify-center py-20 px-8">
       <div class="w-24 h-24 rounded-[40px] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center shadow-xl">
          <i class="pi pi-lock text-4xl text-slate-200 dark:text-slate-800"></i>
       </div>

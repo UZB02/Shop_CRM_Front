@@ -94,7 +94,10 @@ import SmenasTab         from './components/detail/SmenasTab.vue'
 import StoreDialog       from './components/StoreDialog.vue'
 import BranchDialog      from './components/BranchDialog.vue'
 
+import { useSettingsStore } from '@/store/settings'
+
 const { t } = useI18n()
+const settingsStore = useSettingsStore()
 
 const {
   store, storeForm, storeDialog, submitted, loading, saving,
@@ -107,10 +110,15 @@ const {
 const storeDetail = ref(null)
 const activeTab   = ref('branches')
 
-const tabs = computed(() => [
-  { id: 'branches', label: t('stores.detail.tab_branches'), icon: 'pi pi-sitemap' },
-  { id: 'smenas',   label: t('stores.detail.tab_shifts'), icon: 'pi pi-clock' },
-])
+const tabs = computed(() => {
+  const list = [
+    { id: 'branches', label: t('stores.detail.tab_branches'), icon: 'pi pi-sitemap' }
+  ]
+  if (settingsStore.isShiftEnabled) {
+    list.push({ id: 'smenas', label: t('stores.detail.tab_shifts'), icon: 'pi pi-clock' })
+  }
+  return list
+})
 
 const loadDetail = async () => {
   if (!store.value?.id && !store.value?._id) return
