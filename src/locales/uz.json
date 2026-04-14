@@ -4,6 +4,7 @@
     },
     "common": {
         "all": "Barchasi",
+        "loading": "Yuklanmoqda...",
         "save": "Saqlash",
         "save_worker": "Xodimni Saqlash",
         "cancel": "Bekor qilish",
@@ -86,7 +87,9 @@
         "plans": {
             "free": "Bepul",
             "standard": "Standard",
-            "premium": "Premium"
+            "premium": "Premium",
+            "trial": "Sinov rejasi",
+            "enterprise": "Korporativ (Pro)"
         },
         "features": {
             "title": "Tarif Imkoniyatlari",

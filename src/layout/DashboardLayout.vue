@@ -72,7 +72,7 @@ import { useNotificationStore } from '@/store/notifications'
 // Layout Components
 import DashboardSidebar from './components/DashboardSidebar.vue'
 import DashboardHeader from './components/DashboardHeader.vue'
-import UserProfileDialog from '@/components/UserProfileDialog.vue'
+import UserProfileDialog from '@/components/UserProfileDialog.vue'  
 import SubscriptionBarrier from '@/components/SubscriptionBarrier.vue'
 
 const confirm = useConfirm()
@@ -103,31 +103,67 @@ const handleRateLimitError = (event) => {
 }
 
 const notificationStore = useNotificationStore()
+let initialAnnouncementsHandled = false
+let initialStockHandled = false
 
 // Watch for unread announcements to show toast
 watch(() => notificationStore.unreadCount, (newCount, oldCount) => {
-  if (newCount > oldCount) {
-    const latest = notificationStore.announcements.find(a => !a.is_read)
-    if (latest) {
+  if (initialAnnouncementsHandled) {
+    if (newCount > oldCount) {
+      const latest = notificationStore.announcements.find(a => !a.is_read)
+      if (latest) {
+        toast.add({
+          severity: latest.type === 'critical' ? 'error' : 'info',
+          summary: 'Yangi xabar',
+          detail: latest.title,
+          life: 5000
+        })
+      }
+    }
+    return
+  }
+
+  // Initial session check
+  if (newCount > 0) {
+    initialAnnouncementsHandled = true
+    if (!sessionStorage.getItem('session_notified_announcements')) {
       toast.add({
-        severity: latest.type === 'critical' ? 'error' : 'info',
-        summary: 'Yangi xabar',
-        detail: latest.title,
+        severity: 'info',
+        summary: 'Bildirishnomalar',
+        detail: `${newCount} ta yangi xabar mavjud`,
         life: 5000
       })
+      sessionStorage.setItem('session_notified_announcements', 'true')
     }
   }
 })
 
 // Watch for low stock
 watch(() => notificationStore.lowStockItems.length, (newLen, oldLen) => {
-  if (newLen > oldLen) {
-    toast.add({
-      severity: 'warn',
-      summary: 'Kam qolgan tovarlar',
-      detail: `${newLen} ta mahsulot qoldig'i kamaygan!`,
-      life: 7000
-    })
+  if (initialStockHandled) {
+    if (newLen > oldLen) {
+      toast.add({
+        severity: 'warn',
+        summary: 'Kam qolgan tovarlar',
+        detail: `${newLen} ta mahsulot qoldig'i kamaygan!`,
+        life: 7000
+      })
+    }
+    return
+  }
+
+  // Initial session check
+  if (newLen > 0) {
+    initialStockHandled = true
+    if (!sessionStorage.getItem('session_notified_stock')) {
+      toast.add({
+        severity: 'warn',
+        summary: 'Kam qolgan tovarlar',
+        detail: `${newLen} ta mahsulot qoldig'i kamaygan!`,
+        life: 7000
+      })
+      sessionStorage.setItem('session_notified_stock', 'true')
+    }
   }
 })
 
@@ -157,6 +193,10 @@ const handleLogout = () => {
     acceptClass: 'p-button-danger',
     accept: () => {
       isConfirmingLogout.value = false
+      // Tozalash: Keyingi safar kirganda yana Toast chiqishi uchun
+      sessionStorage.removeItem('session_notified_announcements')
+      sessionStorage.removeItem('session_notified_stock')
+      
       authStore.logout()
       router.push('/')
     },

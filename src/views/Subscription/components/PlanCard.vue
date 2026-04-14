@@ -1,81 +1,92 @@
 <template>
   <div 
-    class="relative group rounded-2xl p-6 transition-all duration-300 flex flex-col h-full border border-slate-100 dark:border-slate-800"
+    class="relative group rounded-3xl p-6 transition-all duration-500 flex flex-col h-full border overflow-hidden"
     :class="[
-      cardClass,
       isCurrent 
-        ? 'bg-slate-900 shadow-xl border-emerald-500/50' 
-        : 'bg-white dark:bg-slate-900 hover:shadow-lg'
+        ? 'bg-slate-900 border-emerald-500/30 shadow-2xl' 
+        : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-emerald-500/20 shadow-sm hover:shadow-xl'
     ]"
   >
-    <!-- Popular Badge -->
-    <div v-if="popular" class="absolute -top-3 left-6 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-md shadow-md z-20">
+    <!-- Premium Glow Effects (Toned down) -->
+    <div v-if="popular || isCurrent" class="absolute -top-16 -right-16 w-32 h-32 bg-emerald-500/5 rounded-full blur-[60px] pointer-events-none group-hover:bg-emerald-500/10 transition-all duration-700" />
+
+    <!-- Popular Badge (More compact) -->
+    <div v-if="popular" class="absolute top-4 right-4 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full z-20 flex items-center gap-1 shadow-lg shadow-emerald-500/20">
+      <i class="pi pi-bolt text-[7px]"></i>
       {{ $t('subscription.popular') }}
     </div>
 
-    <!-- Plan Header (Utility Style) -->
-    <div class="mb-6 flex flex-col items-start">
+    <!-- Card Header (More compact) -->
+    <div class="relative z-10 mb-6 flex items-start gap-4">
       <div 
-        class="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
+        class="w-11 h-11 rounded-1.5xl flex-shrink-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105"
         :class="getIconBgClass"
       >
-        <i :class="[getPlanIcon, 'text-base text-white']"></i>
+        <i :class="[getPlanIcon, 'text-lg text-white']"></i>
       </div>
-      <h3 class="text-xs font-bold uppercase tracking-widest mb-1" :class="isCurrent ? 'text-slate-400' : 'text-slate-500 dark:text-slate-400'">
-        {{ $t(`subscription.plans.${plan}`) }}
-      </h3>
-      <div class="flex items-baseline gap-1">
-        <span class="text-2xl font-black tracking-tight" :class="isCurrent ? 'text-white' : 'text-slate-800 dark:text-slate-100'">
-          {{ priceLabel.split(' ')[0] }}
-        </span>
-        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ priceLabel.split(' ')[1] }} / {{ $t('subscription.per_month') }}</span>
+      
+      <div class="flex-1 min-w-0">
+        <h3 class="text-[10px] font-black uppercase tracking-widest mb-1 truncate" :class="isCurrent ? 'text-emerald-500' : 'text-slate-500 dark:text-slate-400'">
+          {{ $t(`subscription.plans.${plan}`) }}
+        </h3>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-2xl font-black tracking-tighter" :class="isCurrent ? 'text-white' : 'text-slate-900 dark:text-slate-100'">
+            {{ priceLabel.split(' ')[0] }}
+          </span>
+          <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+            {{ priceLabel.split(' ')[1] }} <span class="opacity-50 font-medium">/ oy</span>
+          </span>
+        </div>
       </div>
     </div>
 
-    <!-- Plan Features (Compact List) -->
-    <ul class="space-y-2 mb-6 flex-1">
-      <li v-for="(feature, index) in features" :key="index" class="flex items-center gap-2">
-        <i class="pi pi-check text-[9px] font-bold text-emerald-500"></i>
-        <span class="text-[10px] font-medium leading-tight" :class="isCurrent ? 'text-slate-300' : 'text-slate-600 dark:text-slate-400'">
+    <!-- Current Plan Badge (Inline) -->
+    <div v-if="isCurrent" class="mb-4 px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/10 inline-flex items-center gap-1 z-10">
+        <span class="w-1 h-1 rounded-full bg-emerald-500"></span>
+        <span class="text-[8px] font-black uppercase tracking-tighter text-emerald-500">{{ $t('subscription.current_plan') }}</span>
+    </div>
+
+    <!-- Features List (GRID for compactness) -->
+    <div class="relative z-10 grid grid-cols-1 gap-x-3 gap-y-2 mb-8 flex-1">
+      <div v-for="(feature, index) in features" :key="index" class="flex items-center gap-2 group/item">
+        <i class="pi pi-check text-[7px] font-bold text-emerald-500 flex-shrink-0"></i>
+        <span class="text-[10px] font-medium leading-none truncate transition-colors" :class="isCurrent ? 'text-slate-400 group-hover/item:text-slate-200' : 'text-slate-500 dark:text-slate-400 group-hover/item:text-slate-800 dark:group-hover/item:text-slate-200'">
           {{ feature }}
         </span>
-      </li>
-    </ul>
+      </div>
+    </div>
 
-    <!-- Action Buttons (Standard size) -->
-    <div class="mt-auto pt-4 border-t border-slate-50 dark:border-slate-800">
-      <Button 
+    <!-- Action Button (Streamlined) -->
+    <div class="relative z-10 pt-4 border-t border-slate-50 dark:border-slate-800/30">
+      <button 
         v-if="!isCurrent"
-        :label="plan === 'free' ? $t('subscription.otish') : $t('subscription.sotib_olish')" 
-        :severity="isCurrent ? 'success' : 'primary'" 
-        rounded 
-        size="small"
-        class="w-full !text-[10px] !font-bold !uppercase !tracking-widest"
         @click="$emit('select')"
-      />
+        class="w-full h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
+        :class="plan === 'free' 
+          ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700' 
+          : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-md shadow-emerald-500/20'"
+      >
+        <span>{{ plan === 'free' ? $t('subscription.otish') : $t('subscription.sotib_olish') }}</span>
+        <i class="pi pi-arrow-right text-[8px]"></i>
+      </button>
       
-      <div v-else class="space-y-2 w-full">
-         <div class="flex items-center justify-center gap-2 text-emerald-500 mb-1">
-            <i class="pi pi-check-circle text-[10px]"></i>
-            <span class="text-[9px] font-bold uppercase tracking-widest">{{ $t('subscription.current_plan') }}</span>
-         </div>
-         <Button 
-            v-if="plan !== 'free'"
-            :label="$t('subscription.uzaytirish')" 
-            severity="success" 
-            outlined 
-            rounded 
-            size="small"
-            class="w-full !text-[10px] !font-bold !uppercase !tracking-widest"
-            @click="$emit('extend')"
-          />
+      <button 
+        v-else-if="plan !== 'free'"
+        @click="$emit('extend')"
+        class="w-full h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 active:scale-95"
+      >
+         <i class="pi pi-refresh text-[8px]"></i>
+         <span>{{ $t('subscription.uzaytirish') }}</span>
+      </button>
+      
+      <div v-else class="text-center py-2">
+         <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest italic opacity-60">{{ $t('subscription.current_plan') }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import Button from 'primevue/button'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -84,8 +95,7 @@ const props = defineProps({
   features: { type: Array, default: () => [] },
   isCurrent: { type: Boolean, default: false },
   popular: { type: Boolean, default: false },
-  cardClass: { type: String, default: '' },
-  buttonSeverity: { type: String, default: 'primary' }
+  cardClass: { type: String, default: '' }
 })
 
 defineEmits(['select', 'extend'])
@@ -93,18 +103,29 @@ defineEmits(['select', 'extend'])
 const getPlanIcon = computed(() => {
     switch(props.plan) {
         case 'free': return 'pi pi-compass'
+        case 'trial': return 'pi pi-calendar'
         case 'standard': return 'pi pi-bolt'
-        case 'premium': return 'pi pi-crown'
+        case 'premium': 
+        case 'enterprise': return 'pi pi-crown'
         default: return 'pi pi-star'
     }
 })
 
 const getIconBgClass = computed(() => {
+    if (props.isCurrent) return 'bg-emerald-500 shadow-md shadow-emerald-500/20'
+    
     switch(props.plan) {
-        case 'free': return 'bg-slate-500'
+        case 'free': return 'bg-slate-100 dark:bg-slate-800 text-slate-400'
+        case 'trial': return 'bg-blue-500'
         case 'standard': return 'bg-emerald-500'
-        case 'premium': return 'bg-amber-500'
-        default: return 'bg-blue-500'
+        case 'enterprise': return 'bg-amber-500'
+        default: return 'bg-slate-500'
     }
 })
 </script>
+
+<style scoped>
+.group:hover {
+  transform: translateY(-4px);
+}
+</style>

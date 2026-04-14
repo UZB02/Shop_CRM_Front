@@ -24,11 +24,11 @@ export const useNotificationStore = defineStore('notifications', {
                 ? state.announcements.filter(a => !a.is_read).length 
                 : 0
             
-            const lowStockUnread = Array.isArray(state.lowStockItems) && state.lowStockItems.length > 0 ? 1 : 0
+            const lowStockCount = Array.isArray(state.lowStockItems) ? state.lowStockItems.length : 0
             
             const subscriptionUnread = (state.subscription && state.subscription.days_left <= 10) ? 1 : 0
             
-            return announcementsUnread + lowStockUnread + subscriptionUnread
+            return announcementsUnread + lowStockCount + subscriptionUnread
         },
         isSubscriptionExpired: (state) => state.subscription?.status === 'expired',
         daysLeft: (state) => state.subscription?.days_left ?? 0,
@@ -63,7 +63,9 @@ export const useNotificationStore = defineStore('notifications', {
                         date: new Date().toISOString(),
                         severity: 'warn',
                         read: false,
-                        link: '/dashboard/products'
+                        link: item.location_type === 'branch' 
+                            ? `/dashboard/branches/${item.location_id}` 
+                            : `/dashboard/warehouse/${item.location_id}`
                     })
                 })
 

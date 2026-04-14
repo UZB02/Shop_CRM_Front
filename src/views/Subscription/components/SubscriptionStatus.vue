@@ -2,30 +2,30 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
     <!-- Left Column: Primary Status & Limits -->
     <div class="lg:col-span-12 xl:col-span-4 flex flex-col gap-4">
-      <Card class="border-none shadow-sm bg-slate-900 text-white !rounded-2xl overflow-hidden relative flex-1 min-h-[160px]">
-        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-slate-900 to-emerald-500/10" />
+      <Card class="border-none shadow-sm !bg-white dark:!bg-slate-900 !text-slate-900 dark:!text-white !rounded-2xl overflow-hidden relative flex-1 min-h-[160px]">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-emerald-500/[0.03] dark:from-indigo-500/10 dark:to-emerald-500/10" />
         <template #content>
           <div class="relative z-10 flex flex-col h-full justify-between">
             <div class="flex justify-between items-start">
                <div class="space-y-0.5">
                   <div class="flex items-center gap-1.5 mb-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,1)]" />
-                    <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">{{ subscription.store_name }}</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ subscription.store_name }}</span>
                   </div>
-                  <h2 class="text-2xl font-black tracking-tighter">{{ displayPlanName }}</h2>
-                  <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{{ subscription.plan?.plan_type_display }}</p>
+                  <h2 class="text-2xl font-black tracking-tighter text-slate-900 dark:text-white">{{ displayPlanName }}</h2>
+                  <p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{{ subscription.plan?.plan_type_display }}</p>
                </div>
                <Tag :value="getStatusLabel(subscription.status)" :severity="getStatusSeverity(subscription.status)" class="!text-[9px] !font-black !px-3 !py-1 !rounded-md" />
             </div>
 
-            <div class="mt-4 flex flex-wrap gap-3 pt-4 border-t border-white/5">
-               <div v-if="remainingDays !== null" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5">
-                  <i class="pi pi-clock text-amber-400 text-[9px]" />
-                  <span class="text-[10px] font-bold text-amber-50">{{ $t('subscription.days_left', { days: remainingDays }) }}</span>
+            <div class="mt-4 flex flex-wrap gap-3 pt-4 border-t border-slate-100 dark:border-white/5">
+               <div v-if="remainingDays !== null" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                  <i class="pi pi-clock text-amber-500 dark:text-amber-400 text-[10px]" />
+                  <span class="text-[10px] font-black text-amber-700 dark:text-amber-200">{{ $t('subscription.days_left', { days: remainingDays }) }}</span>
                </div>
-               <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5">
-                  <i class="pi pi-calendar text-emerald-400 text-[9px]" />
-                  <span class="text-[10px] font-bold text-emerald-50">{{ formatDate(subscription.end_date) }}</span>
+               <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                  <i class="pi pi-calendar text-emerald-500 dark:text-emerald-400 text-[10px]" />
+                  <span class="text-[10px] font-black text-emerald-700 dark:text-emerald-200">{{ formatDate(subscription.end_date) }}</span>
                </div>
             </div>
           </div>
@@ -37,11 +37,11 @@
         <template #content>
            <div class="grid grid-cols-2 gap-x-4 gap-y-3">
               <div v-for="(label, key) in limits" :key="key" class="space-y-1">
-                 <div class="flex justify-between text-[9px] font-bold uppercase tracking-tight text-slate-400">
+                 <div class="flex justify-between text-[9px] font-bold uppercase tracking-tight text-slate-400 dark:text-slate-500">
                     <span>{{ label }}</span>
-                    <span class="text-slate-800 dark:text-slate-200">{{ subscription.plan?.[key] === 0 ? '∞' : subscription.plan?.[key] }}</span>
+                    <span class="text-slate-900 dark:text-slate-100">{{ subscription.plan?.[key] === 0 ? '∞' : subscription.plan?.[key] }}</span>
                  </div>
-                 <div class="h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                 <div class="h-1 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div class="h-full bg-emerald-500 rounded-full" :style="{ width: subscription.plan?.[key] === 0 ? '100%' : '65%' }" />
                  </div>
               </div>
@@ -66,7 +66,7 @@
               :key="key"
               class="flex items-center gap-2 p-2 rounded-xl border transition-all duration-300"
               :class="subscription.plan?.[key] 
-                ? 'bg-emerald-50/30 dark:bg-emerald-500/5 border-emerald-50 dark:border-emerald-500/10' 
+                ? 'bg-emerald-50/50 dark:bg-emerald-500/5 border-emerald-100 dark:border-emerald-500/10' 
                 : 'bg-slate-50/50 dark:bg-slate-800/50 border-slate-50 dark:border-slate-800 opacity-20'"
             >
               <div 

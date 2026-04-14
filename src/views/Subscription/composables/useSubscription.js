@@ -10,29 +10,33 @@ export const useSubscription = () => {
     const authStore = useAuthStore()
 
     const subscription = ref({
-        plan: { plan_type: 'free', name: 'Bepul' },
+        plan: null,
+        plans: [],
         status: 'active',
         end_date: null,
-        store_name: 'Yuklanmoqda...'
+        store_name: 'Yuklanmoqda...',
+        days_left: 0
     })
 
     const loading = ref(false)
     const paymentDialog = ref(false)
     const processing = ref(false)
-    const selectedPlan = ref('')
+    const selectedPlanId = ref(null)
     const paymentMethod = ref('click')
     const isExtending = ref(false)
+
+    const availablePlans = computed(() => subscription.value.plans || [])
+
+    const selectedPlanObject = computed(() => {
+        return availablePlans.value.find(p => p.id === selectedPlanId.value) || null
+    })
 
     const dialogHeader = computed(() => isExtending.value ? t('subscription.uzaytirish') : t('subscription.sotib_olish'))
 
     const getSelectedPriceLabel = computed(() => {
-        switch(selectedPlan.value) {
-            case 'free': return '0 so\'m';
-            case 'standard': return '150,000 so\'m';
-            case 'premium':
-            case 'enterprise': return '300,000 so\'m';
-            default: return '';
-        }
+        if (!selectedPlanObject.value) return ''
+        const price = selectedPlanObject.value.price_monthly
+        return `${new Intl.NumberFormat('uz-UZ').format(price)} so'm`
     })
 
     const loadSubscription = async () => {
@@ -45,7 +49,7 @@ export const useSubscription = () => {
             toast.add({ 
                 severity: 'error', 
                 summary: t('common.error'), 
-                detail: t('warehouse.messages.load_error'), 
+                detail: t('common.error_message'), 
                 life: 5000 
             })
         } finally {
@@ -53,55 +57,57 @@ export const useSubscription = () => {
         }
     }
 
-    const confirmChangePlan = (plan) => {
-        selectedPlan.value = plan
+    const confirmChangePlan = (planId) => {
+        selectedPlanId.value = planId
         isExtending.value = false
         paymentDialog.value = true
     }
 
     const openExtendDialog = () => {
-        selectedPlan.value = subscription.value.plan?.plan_type || 'standard'
-        isExtending.value = true
-        paymentDialog.value = true
+        if (subscription.value.plan) {
+            selectedPlanId.value = subscription.value.plan.id
+            isExtending.value = true
+            paymentDialog.value = true
+        }
     }
 
     const processPayment = async () => {
+        if (!selectedPlanId.value) return
+        
         processing.value = true
         try {
-            // Simulate payment processing delay
-            await new Promise(resolve => setTimeout(resolve, 2000))
+            // In a real app, this would involve a redirect or specific payment API call
+            const payload = {
+                plan_id: selectedPlanId.value,
+                duration: 30, // Default 30 days
+                method: paymentMethod.value
+            }
 
             let response;
             if (isExtending.value) {
-                response = await subscriptionAPI.extend({ durationInDays: 30 })
+                // Assuming there's an extend endpoint or changePlan handles it
+                response = await subscriptionAPI.extend(payload)
             } else {
-                response = await subscriptionAPI.changePlan({ plan: selectedPlan.value, durationInDays: 30 })
+                response = await subscriptionAPI.changePlan(payload)
             }
 
-            subscription.value = response.data.subscription
-            
-            // Sync with auth store if needed
-            if (authStore.user && authStore.user.subscription) {
-                authStore.user.subscription = response.data.subscription
-            }
-
+            // Successfully processed
             toast.add({ 
                 severity: 'success', 
                 summary: t('common.success'), 
                 detail: t('common.updated'), 
                 life: 5000 
             })
-            paymentDialog.value = false
             
-            // Trigger global event for components listening to subscription changes
-            window.dispatchEvent(new CustomEvent('subscription-updated'))
+            await loadSubscription() // Reload fresh data
+            paymentDialog.value = false
 
         } catch (error) {
             console.error('Payment error:', error)
             toast.add({ 
                 severity: 'error', 
                 summary: t('common.error'), 
-                detail: t('common.error_message'), 
+                detail: error.response?.data?.message || t('common.error_message'), 
                 life: 5000 
             })
         } finally {
@@ -109,12 +115,34 @@ export const useSubscription = () => {
         }
     }
 
+    const getPlanFeatures = (plan) => {
+        if (!plan) return []
+        const features = []
+        
+        // Map boolean flags to localized feature names
+        if (plan.has_subcategory) features.push(t('subscription.features.has_subcategory'))
+        if (plan.has_sale_return) features.push(t('subscription.features.has_sale_return'))
+        if (plan.has_wastage) features.push(t('subscription.features.has_wastage'))
+        if (plan.has_stock_audit) features.push(t('subscription.features.has_stock_audit'))
+        if (plan.has_kpi) features.push(t('subscription.features.has_kpi'))
+        if (plan.has_multi_currency) features.push(t('subscription.features.has_multi_currency'))
+        if (plan.has_supplier) features.push(t('subscription.features.has_supplier'))
+        if (plan.has_export) features.push(t('subscription.features.has_export'))
+        if (plan.has_dashboard) features.push(t('subscription.features.has_dashboard'))
+        if (plan.has_qr_bulk) features.push(t('subscription.features.has_qr_bulk'))
+        if (plan.has_audit_log) features.push(t('subscription.features.has_audit_log'))
+        if (plan.has_telegram) features.push(t('subscription.features.has_telegram'))
+        
+        return features
+    }
+
     return {
         subscription,
+        availablePlans,
         loading,
         paymentDialog,
         processing,
-        selectedPlan,
+        selectedPlanId,
         paymentMethod,
         isExtending,
         dialogHeader,
@@ -122,6 +150,7 @@ export const useSubscription = () => {
         loadSubscription,
         confirmChangePlan,
         openExtendDialog,
-        processPayment
+        processPayment,
+        getPlanFeatures
     }
 }

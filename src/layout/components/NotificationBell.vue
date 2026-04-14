@@ -19,13 +19,13 @@
     <Popover ref="op" class="!border-none !shadow-2xl !bg-transparent">
         <div class="w-80 sm:w-96 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl">
             <!-- Header -->
-            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
-                <h3 class="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                    <i class="pi pi-bell text-emerald-500" />
+            <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
+                <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <i class="pi pi-bell text-emerald-500 text-xs" />
                     Bildirishnomalar
                 </h3>
-                <span v-if="store.unreadCount > 0" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">
-                    {{ store.unreadCount }} yangi
+                <span v-if="store.unreadCount > 0" class="text-[9px] px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-bold uppercase tracking-wider">
+                    {{ store.unreadCount }}
                 </span>
             </div>
 
@@ -41,14 +41,14 @@
                 <div 
                     v-for="item in notifications" 
                     :key="item.id" 
-                    class="p-4 border-b border-slate-50 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer relative group"
+                    class="px-4 py-3 border-b border-slate-50 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer relative group"
                     @click="handleItemClick(item)"
                     :class="{ 'bg-emerald-50/30 dark:bg-emerald-500/5': !item.read && item.type === 'announcement' }"
                 >
                     <div class="flex gap-3">
-                        <div class="flex-shrink-0 mt-1">
+                        <div class="flex-shrink-0 mt-0.5">
                             <div :class="[ 
-                                'w-9 h-9 rounded-xl flex items-center justify-center text-sm shadow-sm',
+                                'w-8 h-8 rounded-lg flex items-center justify-center text-xs shadow-sm',
                                 getSeverityClass(item.severity)
                             ]">
                                 <i :class="getIcon(item.type, item.severity)" />
@@ -56,21 +56,21 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-start justify-between gap-2">
-                                <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-0.5 truncate group-hover:text-emerald-500 transition-colors">
+                                <h4 class="text-[13px] font-bold text-slate-700 dark:text-slate-200 mb-0.5 truncate group-hover:text-emerald-500 transition-colors">
                                     {{ item.title }}
                                 </h4>
                                 <span v-if="!item.read && item.type === 'announcement'" class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0 animate-pulse mt-1.5" />
                             </div>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-1.5 line-clamp-2">
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight mb-1 line-clamp-2">
                                 {{ item.body }}
                             </p>
                             <div class="flex items-center gap-3">
-                                <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1">
-                                    <i class="pi pi-clock text-[9px]" />
+                                <span class="text-[9px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1">
+                                    <i class="pi pi-clock text-[8px]" />
                                     {{ formatTime(item.date) }}
                                 </span>
-                                <span v-if="item.link" class="text-[10px] font-bold text-emerald-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Ko'rish <i class="pi pi-arrow-right text-[8px]" />
+                                <span v-if="item.link" class="text-[9px] font-bold text-emerald-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Ko'rish <i class="pi pi-arrow-right text-[7px]" />
                                 </span>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
             </div>
 
             <!-- Footer -->
-            <div v-if="notifications.length > 0" class="p-3 bg-slate-50/50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800">
+            <div v-if="notifications.length > 0" class="p-2 border-t border-slate-100 dark:border-slate-800">
                 <button 
                   @click="store.fetchAnnouncements()"
                   class="w-full py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-emerald-500 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all active:scale-[0.98]"

@@ -1,22 +1,34 @@
 <template>
   <div class="space-y-4">
-    <!-- Header: Consistent with WorkerPageHeader -->
+    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
         <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
           {{ $t('subscription.title') }}
-          <span class="text-[9px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded border border-emerald-500/20">PRO</span>
+          <span v-if="subscription.plan" class="text-[9px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded border border-emerald-500/20">
+            {{ subscription.plan.name }}
+          </span>
         </h1>
         <p class="text-xs text-slate-400 mt-0.5">{{ subscription.store_name }}</p>
       </div>
-      <div class="flex items-center gap-2">
-         <Button icon="pi pi-history" :label="$t('subscription.history')" text class="!text-[10px] !font-bold !uppercase !tracking-widest !rounded-lg !text-slate-500 !py-1.5" />
-         <Button icon="pi pi-question-circle" :label="$t('subscription.help')" text class="!text-[10px] !font-bold !uppercase !tracking-widest !rounded-lg !text-emerald-500 !py-1.5" />
+      <div class="flex items-center gap-2 shrink-0">
+         <Button 
+            v-if="!loading"
+            icon="pi pi-question-circle" 
+            :label="$t('subscription.help')" 
+            text 
+            class="!text-[10px] !font-bold !uppercase !tracking-widest !rounded-lg !text-emerald-500 !py-1.5" 
+         />
       </div>
     </div>
 
-    <!-- Main Content: Simplified Layout -->
-    <div class="space-y-4 animate-in">
+    <!-- Main Content -->
+    <div v-if="loading" class="flex flex-col gap-6 py-20 items-center justify-center">
+        <i class="pi pi-spin pi-spinner text-3xl text-emerald-500"></i>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Ma'lumotlar yuklanmoqda...</p>
+    </div>
+
+    <div v-else class="space-y-4 animate-in">
         <Tabs value="overview" class="!bg-transparent border-none">
             <TabList class="!bg-slate-100/80 dark:!bg-slate-800/80 !p-1 !rounded-xl !border-none !inline-flex !mb-4">
                 <Tab value="overview" class="!text-[10px] !font-bold !uppercase !tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
@@ -62,32 +74,22 @@
                     </div>
                 </TabPanel>
 
-                <!-- Tab: Plans -->
+                <!-- Tab: Plans (Dynamic) -->
                 <TabPanel value="plans">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="mb-6">
+                        <h2 class="text-sm font-black uppercase tracking-[0.2em] text-slate-800 dark:text-slate-200">{{ $t('subscription.tabs.plans') }}</h2>
+                        <p class="text-[10px] text-slate-400 font-medium uppercase tracking-widest mt-1">Biznesingiz uchun eng mos variantni tanlang</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
                         <PlanCard 
-                            plan="free"
-                            priceLabel="0 UZS"
-                            :features="['1 ta do\'kon', 'Asosiy hisobotlar', 'Cheklangan savdolar']"
-                            :isCurrent="subscription.plan?.plan_type === 'free'"
-                            @select="confirmChangePlan('free')"
-                        />
-                        <PlanCard 
-                            plan="standard"
-                            priceLabel="150,000 UZS"
-                            :features="['3 ta do\'kon', 'Ombor nazorati', 'Savdo qaytarish', 'Eksport (Excel)']"
-                            :isCurrent="subscription.plan?.plan_type === 'standard'"
-                            :popular="true"
-                            @select="confirmChangePlan('standard')"
-                            @extend="openExtendDialog"
-                        />
-                        <PlanCard 
-                            plan="premium"
-                            priceLabel="300,000 UZS"
-                            :features="['Cheksiz do\'konlar', 'KPI & Audit', 'Ko\'p valyuta', 'VIP 24/7']"
-                            :isCurrent="subscription.plan?.plan_type === 'enterprise' || subscription.plan?.plan_type === 'premium'"
-                            buttonSeverity="help"
-                            @select="confirmChangePlan('premium')"
+                            v-for="plan in availablePlans"
+                            :key="plan.id"
+                            :plan="plan.plan_type"
+                            :priceLabel="formatCurrency(plan.price_monthly)"
+                            :features="getPlanFeatures(plan)"
+                            :isCurrent="subscription.plan?.id === plan.id"
+                            :popular="plan.plan_type === 'enterprise'"
+                            @select="confirmChangePlan(plan.id)"
                             @extend="openExtendDialog"
                         />
                     </div>
@@ -116,7 +118,7 @@
     <PaymentDialog 
       v-model:visible="paymentDialog"
       :header="dialogHeader"
-      :plan="selectedPlan"
+      :plan="selectedPlanId"
       :priceLabel="getSelectedPriceLabel"
       v-model:method="paymentMethod"
       :loading="processing"
@@ -140,17 +142,24 @@ import { useSubscription } from './composables/useSubscription'
 
 const {
     subscription,
+    availablePlans,
+    loading,
     paymentDialog,
     processing,
-    selectedPlan,
+    selectedPlanId,
     paymentMethod,
     dialogHeader,
     getSelectedPriceLabel,
     loadSubscription,
     confirmChangePlan,
     openExtendDialog,
-    processPayment
+    processPayment,
+    getPlanFeatures
 } = useSubscription()
+
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('uz-UZ').format(value) + ' UZS'
+}
 
 onMounted(() => {
     loadSubscription()
