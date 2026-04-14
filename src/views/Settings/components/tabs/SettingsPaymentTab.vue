@@ -25,9 +25,31 @@
 </template>
 
 <script setup>
+import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import SettingRow from './SettingRow.vue'
 import SectionHeader from './SectionHeader.vue'
+
 const { t } = useI18n()
-defineProps({ form: Object, active: String })
+const toast = useToast()
+
+const props = defineProps({ form: Object, active: String })
+
+// 🟢 Kritik qoida: allow_cash=false VA allow_card=false bir vaqtda bo'lishi mumkin emas.
+// Foydalanuvchi ikkalasini ham o'chirmoqchi bo'lsa, darhol to'xtatamiz va ogohlantiramiz.
+watch(() => [props.form.allow_cash, props.form.allow_card], ([newCash, newCard], [oldCash, oldCard]) => {
+  if (!newCash && !newCard) {
+    // Qaysi biri oxirgi o'chirilgan bo'lsa, o'shani qayta yoqamiz
+    if (oldCash !== newCash) props.form.allow_cash = true
+    if (oldCard !== newCard) props.form.allow_card = true
+
+    toast.add({
+      severity: 'warn',
+      summary: t('common.validation_error'),
+      detail: t('settings.payment.error_at_least_one'),
+      life: 5000
+    })
+  }
+})
 </script>
