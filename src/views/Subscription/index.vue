@@ -41,7 +41,7 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div class="md:col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
-                                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-slate-800 pb-3">{{ $t('subscription.faq' || 'Ko\'p so\'raladigan savollar') }}</h3>
+                                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-slate-800 pb-3">{{ $t('subscription.faq') }}</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     <div v-for="i in 4" :key="i" class="p-3 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border border-transparent hover:border-slate-100 dark:hover:border-slate-800 transition-all cursor-pointer flex justify-between items-center group">
                                         <span class="text-[11px] font-medium text-slate-600 dark:text-slate-300">Tarifni qanday o'zgartirish mumkin?</span>
@@ -98,7 +98,7 @@
                     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
                         <div class="px-5 py-4 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
                             <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">To'lovlar tarixi</h3>
-                            <Button icon="pi pi-download" :label="$t('subscription.export_history' || 'Excel')" text class="!text-[10px] !font-bold !uppercase !tracking-widest !rounded-lg !py-1" />
+                            <Button icon="pi pi-download" :label="$t('subscription.export_history')" text class="!text-[10px] !font-bold !uppercase !tracking-widest !rounded-lg !py-1" />
                         </div>
                         <div class="p-16 text-center space-y-4">
                             <div class="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto">

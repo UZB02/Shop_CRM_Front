@@ -122,7 +122,9 @@
             "overview": "Menejment",
             "plans": "Tariflar",
             "billing": "To'lovlar"
-        }
+        },
+        "faq": "Ko'p so'raladigan savollar",
+        "export_history": "Excelga yuklash"
     },
     "workers": {
         "title": "Xodimlar",
