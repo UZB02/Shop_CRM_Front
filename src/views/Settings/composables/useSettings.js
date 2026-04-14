@@ -37,58 +37,54 @@ export function useSettings() {
     const loading = ref(false)
     const saving = ref(false)
     const settings = ref(null)
+    const settingsId = ref(null) // ⚠️ Backend: PATCH faqat /settings/{id}/ bilan ishlaydi
     const form = reactive({})
     const originalForm = ref({})
     
     const settingsStore = useSettingsStore()
     const authStore = useAuthStore()
-    const isOwner = computed(() => authStore.user?.role === 'owner')
+    const isOwner = computed(() => {
+        const role = (authStore.user?.role || authStore.user?.worker?.role || '').toLowerCase()
+        return role === 'owner' || authStore.user?.is_owner
+    })
 
     const isDirty = computed(() =>
-        FORM_FIELDS.some(f => String(form[f]) !== String(originalForm.value[f]))
+        FORM_FIELDS.some(f => {
+            const val = form[f] ?? ''
+            const orig = originalForm.value[f] ?? ''
+            return String(val) !== String(orig)
+        })
     )
 
     const loadSettings = async () => {
         loading.value = true
-        console.group('⚙️ Settings Page Loading Process')
         try {
-            // Agar global store allaqachon to'ldirilgan bo'lsa, API so'rovi yubormasdan foydalanaiz
+            // Keshdan foydalanish — store allaqachon to'ldirilgan bo'lsa API so'rovi yubormaymiz
             if (settingsStore.initialized && settingsStore.settings) {
-                console.log('⚡ Using cached settings from store (no API call needed)')
                 const data = settingsStore.settings
                 settings.value = data
-                FORM_FIELDS.forEach(f => { form[f] = data[f] })
+                settingsId.value = data.id || null // ✅ ID ni alohida saqlab qo'yamiz
+                FORM_FIELDS.forEach(f => { form[f] = data[f] ?? null })
                 originalForm.value = { ...form }
                 loading.value = false
-                console.groupEnd()
                 return
             }
 
-            console.log('📡 Fetching settings from /settings/...')
+            // Birinchi marta: backend'dan yuklaymiz
+            // Backend hujjati: GET /settings/ → to'g'ridan-to'g'ri array qaytaradi (pagination yo'q)
             const res = await settingsAPI.getAll()
-            console.log('📦 API RAW RESPONSE:', res)
-            
-            const data = Array.isArray(res.data) 
-                ? res.data[0] 
+            const data = Array.isArray(res.data)
+                ? res.data[0]
                 : (res.data?.results?.[0] || res.data)
-                
-            console.log('📉 SETTINGS DATA (processed):', data)
 
             if (data) {
                 settings.value = data
-                FORM_FIELDS.forEach(f => { form[f] = data[f] })
+                settingsId.value = data.id || null // ✅ ID ni alohida saqlab qo'yamiz
+                FORM_FIELDS.forEach(f => { form[f] = data[f] ?? null })
                 originalForm.value = { ...form }
-                
-                // Global store ni ham yangilash
+
+                // Global Pinia store'ni yangilash → butun ilova bo'ylab reaktiv yangilanish
                 settingsStore.updateLocalSettings(data)
-                if (!settingsStore.initialized) {
-                    settingsStore.settings = data
-                    settingsStore.initialized = true
-                }
-                
-                if (data.id) {
-                    console.log('ℹ️ Settings ID loaded:', data.id)
-                }
             }
         } catch (e) {
             console.error('❌ Settings load error:', e)
@@ -99,7 +95,6 @@ export function useSettings() {
                 life: 5000
             })
         } finally {
-            console.groupEnd()
             loading.value = false
         }
     }
@@ -148,28 +143,51 @@ export function useSettings() {
 
             console.log('📡 Payload being sent:', dataToSave)
             
-            let res;
-            const settingsId = settings.value?.id
-            
-            if (settingsId) {
-                console.log(`📡 Updating settings via ID: ${settingsId}...`)
-                res = await settingsAPI.update(settingsId, dataToSave)
-            } else {
-                console.warn('⚠️ No Settings ID found for update, attempting singleton PATCH /settings/')
-                res = await settingsAPI.update(dataToSave)
+            // Backend hujjati: PATCH faqat /settings/{id}/ bilan (singleton /settings/ → 405)
+            if (!settingsId.value) {
+                // ID yo'q bo'lsa — APIdan qayta olib, ID ni aniqlab olamiz
+                const fallback = await settingsAPI.getAll()
+                const fallbackData = Array.isArray(fallback.data)
+                    ? fallback.data[0]
+                    : (fallback.data?.results?.[0] || fallback.data)
+                if (fallbackData?.id) {
+                    settingsId.value = fallbackData.id
+                    settings.value = fallbackData
+                    settingsStore.updateLocalSettings(fallbackData)
+                } else {
+                    throw new Error('Settings ID topilmadi — PATCH yuborib bo\'lmaydi')
+                }
             }
+
+            console.log(`📡 PATCH /settings/${settingsId.value}/`, dataToSave)
+            const res = await settingsAPI.update(settingsId.value, dataToSave)
             
             console.log('✅ API RESPONSE (update):', res.data)
 
             if (res.data) {
-                // Update local state with fresh data from backend
-                const newData = Array.isArray(res.data) ? res.data[0] : res.data
-                Object.assign(form, newData)
-                originalForm.value = { ...form }
-                settings.value = newData
+                // ⚠️ Backend PATCH javobi ikki xil formatda kelishi mumkin:
+                //   Format 1: { message: "...", data: { ...sozlamalar } }  ← wrapper
+                //   Format 2: { id, allow_cash, ... }                      ← to'g'ridan-to'g'ri
+                const raw = res.data
+                const newData = raw?.data && raw.data?.id
+                    ? raw.data                                          // wrapper ichidan chiqaramiz
+                    : (Array.isArray(raw) ? raw[0] : raw)              // to'g'ridan-to'g'ri
 
-                // Sync with global store
-                settingsStore.updateLocalSettings(newData)
+                console.log('📦 Parsed settings after PATCH:', newData)
+
+                if (!newData?.id) {
+                    // ID yo'q bo'lsa — backend noto'g'ri javob qaytardi, formni o'zgartirmaymiz
+                    console.warn('⚠️ PATCH response has no id — skipping form update')
+                } else {
+                    // Mahalliy holat yangilanadi — faqat FORM_FIELDS dan o'tgan maydonlar
+                    settingsId.value = newData.id
+                    FORM_FIELDS.forEach(f => { form[f] = newData[f] ?? null })
+                    originalForm.value = { ...form }
+                    settings.value = newData
+
+                    // ✅ Global Pinia Store yangilanadi — barcha sahifalar refresh'siz ko'radi
+                    settingsStore.updateLocalSettings(newData)
+                }
             }
 
             toast.add({

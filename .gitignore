@@ -27,3 +27,4 @@ dist-ssr
 .claude
 store_settings_guide.md
 settings_frontend_integration.md
+settings_audit_report.md
