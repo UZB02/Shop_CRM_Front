@@ -99,7 +99,7 @@
             <!-- Summa -->
             <td class="px-4 py-2.5">
               <div class="flex flex-col">
-                <span class="text-[13px] font-black text-rose-500 tracking-tight">{{ formatCurrency(item.amount) }}</span>
+                <span class="text-[13px] font-black text-rose-500 tracking-tight">{{ settingsStore.formatPrice(item.amount) }}</span>
               </div>
             </td>
 
@@ -147,7 +147,7 @@
         {{ $t('expenses.results_count', { count: filteredExpenses.length }) }}
       </span>
       <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-        {{ $t('common.total_amount') }}: <span class="text-rose-500">{{ formatCurrency(totalAmount) }}</span>
+        {{ $t('common.total_amount') }}: <span class="text-rose-500">{{ settingsStore.formatPrice(totalAmount) }}</span>
       </span>
     </div>
 
@@ -178,6 +178,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 const props = defineProps({
   expenses: { type: Array, default: () => [] },
@@ -205,9 +208,6 @@ const filteredExpenses = computed(() => {
 const totalAmount = computed(() =>
   filteredExpenses.value.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0)
 )
-
-const formatCurrency = (val) =>
-  new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '—'

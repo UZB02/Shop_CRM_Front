@@ -100,12 +100,11 @@
                   <template v-if="item.active_promotion">
                   <div class="flex flex-col">
                     <div class="flex items-baseline gap-1.5">
-                      <span class="text-[13px] font-semibold text-slate-500 dark:text-slate-500 line-through">{{ formatNumber(item.sale_price) }}</span>
+                      <span class="text-[13px] font-semibold text-slate-500 dark:text-slate-500 line-through">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
                       <span class="text-xs font-semibold text-rose-500 dark:text-rose-400">(-{{ item.active_promotion.discount_pct }}%)</span>
                     </div>
                     <div class="flex items-baseline gap-1 mt-0.5">
-                      <span class="text-xs font-medium text-slate-400">{{ item.currency_code || settingsStore.currency }}</span>
-                      <span class="text-base font-bold text-slate-900 dark:text-white">{{ formatNumber(item.active_promotion.discounted_price) }}</span>
+                      <span class="text-base font-bold text-slate-900 dark:text-white">{{ settingsStore.formatPrice(item.active_promotion.discounted_price, item.currency_code) }}</span>
                     </div>
                   </div>
                 </template>
@@ -113,8 +112,7 @@
                 <!-- Normal Price -->
                 <template v-else>
                   <div class="flex items-baseline gap-1.5">
-                    <span class="text-xs font-medium text-slate-400 dark:text-slate-400">{{ item.currency_code || settingsStore.currency }}</span>
-                    <span class="text-base font-bold text-slate-900 dark:text-white">{{ formatNumber(item.sale_price) }}</span>
+                    <span class="text-base font-bold text-slate-900 dark:text-white">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
                   </div>
                 </template>
 
@@ -130,7 +128,7 @@
                     class="text-[15px] font-black tracking-tight"
                     :class="(settingsStore.isLowStockEnabled && Number(item.quantity) <= (item.low_stock_threshold || settingsStore.lowStockThreshold)) ? 'text-rose-500' : 'text-slate-900 dark:text-white'"
                   >
-                    {{ formatNumber(item.quantity) || 0 }}
+                    {{ settingsStore.formatNumber(item.quantity) || 0 }}
                   </span>
                   <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ item.unit_display }}</span>
                 </div>
@@ -231,7 +229,7 @@ const router = useRouter()
 const settingsStore = useSettingsStore()
 
 const {
-  imageErrors, handleImageError, formatNumber, formatImageUrl,
+  imageErrors, handleImageError, formatImageUrl,
   showBarcodeModal, selectedBarcodeItem, barcodeUrl, barcodeLoading, barcodeError,
   viewBarcode, closeBarcodeModal, downloadBarcode, printBarcode
 } = useProductTable(products)

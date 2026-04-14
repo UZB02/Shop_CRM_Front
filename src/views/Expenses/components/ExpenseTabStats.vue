@@ -45,6 +45,9 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 const props = defineProps({
   loading: Boolean,
@@ -57,7 +60,7 @@ const props = defineProps({
 
 defineEmits(['view-report'])
 
-const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
+const formatCurrency = (val) => settingsStore.formatPrice(val)
 
 const mainStats = computed(() => [
   {

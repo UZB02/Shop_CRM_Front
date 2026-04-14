@@ -80,14 +80,43 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   }
 
-  /**
-   * Sozlamalar sahifasida PATCH muvaffaqiyatli bo'lganda chaqiriladi.
-   * Yangi obyekt yaratish Pinia / Vue reaktivligini to'liq kafolatlaydi.
-   */
   function updateLocalSettings(newData) {
     settings.value = { ...(settings.value || {}), ...newData }
     initialized.value = true
     console.log('🔄 Settings store: updated with new data', newData)
+  }
+
+  /**
+   * Global narx formatlovchi funksiya.
+   * Sozlamalardagi default_currency ni hisobga oladi.
+   */
+  function formatPrice(amount, code = null) {
+    const curr = code || currency.value
+    const value = parseFloat(amount || 0)
+    
+    try {
+      if (curr === 'UZS') {
+        return new Intl.NumberFormat('uz-UZ', { 
+          maximumFractionDigits: 0 
+        }).format(value) + " so'm"
+      }
+      
+      return new Intl.NumberFormat('en-US', { 
+        style: 'currency', 
+        currency: curr,
+        maximumFractionDigits: (curr === 'UZS' || curr === 'JPY') ? 0 : 2
+      }).format(value)
+    } catch (e) {
+      return value + ' ' + curr
+    }
+  }
+
+  /**
+   * Umumiy sonlarni formatlovchi funksiya (masalan, qoldiqlar uchun).
+   */
+  function formatNumber(value) {
+    if (value === null || value === undefined) return '0'
+    return new Intl.NumberFormat('uz-UZ').format(value)
   }
 
   return {
@@ -129,5 +158,7 @@ export const useSettingsStore = defineStore('settings', () => {
     // actions
     fetchSettings,
     updateLocalSettings,
+    formatPrice,
+    formatNumber,
   }
 })

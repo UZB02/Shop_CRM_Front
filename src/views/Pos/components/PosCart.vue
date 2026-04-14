@@ -67,7 +67,7 @@
             <h4 class="text-[12px] font-bold text-slate-800 dark:text-white truncate font-outfit uppercase tracking-tight">{{ item.name }}</h4>
             <div class="flex items-center gap-2 mt-1">
               <span class="text-[12px] font-black text-emerald-500 font-outfit">
-                {{ formatCurrency(item.sale_price || item.price || 0) }}
+                {{ settingsStore.formatPrice(item.sale_price || item.price || 0, item.currency_code) }}
               </span>
             </div>
           </div>
@@ -87,8 +87,8 @@
       <div class="flex items-center justify-between px-1 mb-4">
         <span class="text-[10px] font-black text-slate-400 dark:text-slate-700 uppercase tracking-widest">JAMI:</span>
         <div class="flex items-baseline gap-1.5 text-right">
-           <span class="text-2xl font-black text-emerald-500 font-outfit uppercase">{{ formatCurrency(totals.finalTotal).replace('UZS','') }}</span>
-           <span class="text-[8px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest">UZS</span>
+           <span class="text-2xl font-black text-emerald-500 font-outfit uppercase">{{ settingsStore.formatNumber(totals.finalTotal) }}</span>
+           <span class="text-[8px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest">{{ (totals.currency || settingsStore.currency) === 'UZS' ? "so'm" : (totals.currency || settingsStore.currency) }}</span>
         </div>
       </div>
 
@@ -105,7 +105,9 @@
 </template>
 
 <script setup>
-import Select from 'primevue/select'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 const props = defineProps({
   cart: Array,
@@ -127,8 +129,6 @@ defineEmits([
   'switch-order',
   'remove-order'
 ])
-
-const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 </script>
 
 <style>

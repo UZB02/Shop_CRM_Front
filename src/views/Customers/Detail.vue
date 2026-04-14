@@ -127,6 +127,10 @@ import CustomerRecentActivity from './components/CustomerRecentActivity.vue'
 import CustomerProfileSidebar from './components/CustomerProfileSidebar.vue'
 import TradeDetailModal from './components/TradeDetailModal.vue'
 
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
+
 const { t } = useI18n()
 const {
   loading, saving, submitted, customer, purchaseHistory, debtHistory,
@@ -143,7 +147,7 @@ const tabs = [
   { id: 'trades', icon: 'pi-shopping-bag', label: t('customers.trades.title') }
 ]
 
-const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
+const formatCurrency = (val) => settingsStore.formatPrice(val)
 
 onMounted(() => {
   loadCustomerData()

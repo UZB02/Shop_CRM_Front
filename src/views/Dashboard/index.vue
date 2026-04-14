@@ -29,6 +29,9 @@ import Card from 'primevue/card'
 import StatsGrid from './components/StatsGrid.vue'
 import RecentActivity from './components/RecentActivity.vue'
 import { dashboardAPI } from '@/services/api'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 const loading = ref(true)
 const stats = ref([
@@ -41,7 +44,7 @@ const stats = ref([
 const activity = ref([])
 
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(value / 1000000) + 'M'
+  return settingsStore.formatNumber(Math.floor((value || 0) / 1000000)) + 'M'
 }
 
 onMounted(async () => {

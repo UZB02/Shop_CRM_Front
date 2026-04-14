@@ -152,6 +152,10 @@ import Dialog from 'primevue/dialog'
 import InputNumber from 'primevue/inputnumber'
 import { useAuthStore } from '@/store/auth'
 
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
+
 const props = defineProps({
   visible: Boolean,
   isClosing: Boolean,
@@ -166,7 +170,7 @@ const authStore = useAuthStore()
 const cashStart = ref(0)
 const cashCounted = ref(0)
 
-const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
+const formatCurrency = (val) => settingsStore.formatPrice(val)
 
 // Backend logic: cash_end bo'lmasa, x-report dagi expected_cash ni ko'rsatamiz
 const displayCash = computed(() => {

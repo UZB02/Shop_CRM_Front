@@ -139,6 +139,10 @@ export function useCart() {
     const cartTotals = computed(() => {
         let subtotal = 0
         let itemsDiscountTotal = 0
+        
+        // Determine cart currency
+        let dominantCurrency = null
+        let isMixed = false
 
         cart.value.forEach(item => {
             const price = item.sale_price || item.price || 0
@@ -146,6 +150,15 @@ export function useCart() {
             const discount = (itemTotal * (item.item_discount_pct || 0)) / 100
             subtotal += itemTotal
             itemsDiscountTotal += discount
+            
+            const itemCurr = item.currency_code || item.currency
+            if (itemCurr) {
+                if (dominantCurrency === null) {
+                    dominantCurrency = itemCurr
+                } else if (dominantCurrency !== itemCurr) {
+                    isMixed = true
+                }
+            }
         })
 
         const totalAfterItemsDiscount = subtotal - itemsDiscountTotal
@@ -157,7 +170,8 @@ export function useCart() {
             globalDiscount: discountAmount.value || 0,
             totalDiscount: itemsDiscountTotal + (discountAmount.value || 0),
             finalTotal,
-            totalQty: cart.value.reduce((acc, item) => acc + item.qty, 0)
+            totalQty: cart.value.reduce((acc, item) => acc + item.qty, 0),
+            currency: isMixed ? null : dominantCurrency
         }
     })
 

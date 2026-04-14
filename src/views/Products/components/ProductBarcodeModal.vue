@@ -53,7 +53,7 @@
                 {{ product?.barcode }}
               </code>
               <span v-if="settingsStore.showPriceOnBarcode" class="text-sm font-black text-emerald-500">
-                {{ formatNumber(product?.sale_price) }} {{ settingsStore.currency }}
+                {{ settingsStore.formatPrice(product?.sale_price) }}
               </span>
             </div>
 
@@ -104,8 +104,6 @@ const props = defineProps({
 defineEmits(['close', 'download', 'print'])
 
 const settingsStore = useSettingsStore()
-
-const formatNumber = (val) => new Intl.NumberFormat('uz-UZ').format(val || 0)
 </script>
 
 <style scoped>

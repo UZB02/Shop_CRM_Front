@@ -1,12 +1,14 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
-import { productsAPI, categoriesAPI, subcategoriesAPI, warehousesAPI } from '@/services/api'
+import { productsAPI, categoriesAPI, subcategoriesAPI } from '@/services/api'
+import { useSettingsStore } from '@/store/settings'
 
 export function useProductForm() {
     const route = useRoute()
     const router = useRouter()
     const toast = useToast()
+    const settingsStore = useSettingsStore()
 
     const loading = ref(false)
     const saving = ref(false)
@@ -20,7 +22,7 @@ export function useProductForm() {
         unit: 'dona',
         purchase_price: 0,
         sale_price: 0,
-        price_currency: 'UZS',
+        price_currency: settingsStore.settings?.default_currency || 'UZS',
         barcode: '',
         imageUrl: ''
     })
@@ -38,13 +40,24 @@ export function useProductForm() {
         { value: 'qop', label: 'Qop' },
         { value: 'quti', label: 'Quti' },
     ]
-    const currencies = ref([
-        { id: "UZS", name: "UZS", symbol: "so'm" },
-        { id: "USD", name: "USD", symbol: "$" },
-        { id: "EUR", name: "EUR", symbol: "€" },
-        { id: "RUB", name: "RUB", symbol: "₽" },
-        { id: "CNY", name: "CNY", symbol: "¥" }
-    ])
+
+    const currencies = computed(() => {
+        const list = [
+            { id: "UZS", name: "UZS", symbol: "so'm", show: true },
+            { id: "USD", name: "USD", symbol: "$", show: settingsStore.settings?.show_usd_price },
+            { id: "EUR", name: "EUR", symbol: "€", show: settingsStore.settings?.show_eur_price },
+            { id: "RUB", name: "RUB", symbol: "₽", show: settingsStore.settings?.show_rub_price },
+            { id: "CNY", name: "CNY", symbol: "¥", show: settingsStore.settings?.show_cny_price }
+        ]
+        
+        // Return only enabled ones OR the current default_currency OR the product's own currency
+        return list.filter(c => 
+            c.show || 
+            c.id === settingsStore.settings?.default_currency || 
+            c.id === product.value.price_currency ||
+            c.id === 'UZS'
+        )
+    })
 
     const fileInput = ref(null)
     const selectedFile = ref(null)
@@ -64,8 +77,8 @@ export function useProductForm() {
                     ...data,
                     category: data.category_id || data.category?._id || data.category?.id || data.category,
                     subcategory: data.subcategory_id || data.subcategory?._id || data.subcategory?.id || data.subcategory,
-                    price_currency: data.currency_code || data.price_currency || 'UZS',
-                    unit: data.unit || 'piece',
+                    price_currency: data.currency_code || data.price_currency || settingsStore.settings?.default_currency || 'UZS',
+                    unit: data.unit || 'dona',
                     imageUrl: data.image || data.imageUrl,
                     purchase_price: Number(data.purchase_price) || 0,
                     sale_price: Number(data.sale_price) || 0
@@ -132,7 +145,6 @@ export function useProductForm() {
         try {
             const formData = new FormData()
 
-            // Map the product object to the required API field names
             const payload = {
                 name: product.value.name,
                 category: product.value.category,
@@ -143,8 +155,6 @@ export function useProductForm() {
                 currency_code: product.value.price_currency,
                 barcode: product.value.barcode || ''
             }
-
-            console.log('Sending Product Data:', payload)
 
             Object.keys(payload).forEach(key => {
                 if (payload[key] !== null && payload[key] !== undefined) {

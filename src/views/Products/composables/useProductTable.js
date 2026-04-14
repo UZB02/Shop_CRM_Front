@@ -12,10 +12,6 @@ export function useProductTable(products) {
     imageErrors.value = {}
   })
   
-  const formatNumber = (value) => {
-    if (!value) return '0'
-    return new Intl.NumberFormat('uz-UZ').format(value)
-  }
   
   const formatImageUrl = (url) => {
     if (!url) return null
@@ -88,7 +84,6 @@ export function useProductTable(products) {
   return {
     imageErrors,
     handleImageError,
-    formatNumber,
     formatImageUrl,
     showBarcodeModal,
     selectedBarcodeItem,

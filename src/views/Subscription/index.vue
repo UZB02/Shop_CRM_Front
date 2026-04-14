@@ -138,7 +138,10 @@ import TabPanel from 'primevue/tabpanel'
 import SubscriptionStatus from './components/SubscriptionStatus.vue'
 import PlanCard from './components/PlanCard.vue'
 import PaymentDialog from './components/PaymentDialog.vue'
+import { useSettingsStore } from '@/store/settings'
 import { useSubscription } from './composables/useSubscription'
+
+const settingsStore = useSettingsStore()
 
 const {
     subscription,
@@ -157,9 +160,7 @@ const {
     getPlanFeatures
 } = useSubscription()
 
-const formatCurrency = (value) => {
-    return new Intl.NumberFormat('uz-UZ').format(value) + ' UZS'
-}
+const formatCurrency = (value) => settingsStore.formatPrice(value)
 
 onMounted(() => {
     loadSubscription()

@@ -165,6 +165,9 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 const props = defineProps({
   visible: Boolean,
@@ -176,8 +179,7 @@ const emit = defineEmits(['update:visible', 'edit'])
 
 const zoomImage = ref(false)
 
-const formatCurrency = (val) =>
-  new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
+const formatCurrency = (val) => settingsStore.formatPrice(val)
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '—'

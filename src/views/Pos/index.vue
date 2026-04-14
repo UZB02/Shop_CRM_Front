@@ -131,6 +131,7 @@
       <CheckoutModal 
         v-model:visible="showCheckout" 
         :total="cartTotals.finalTotal" 
+        :currency-code="cartTotals.currency"
         :customers="customers"
         v-model:selected-customer="selectedCustomer" 
         :loading="posLoading" 
@@ -145,7 +146,8 @@
   import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { usePOS } from '@/composables/usePOS'
   import { useAuthStore } from '@/store/auth'
-  import { shiftsAPI } from '@/services/api' // Export uchun to'g'ridan-to'g'ri chaqiramiz
+  import { useSettingsStore } from '@/store/settings'
+  import { shiftsAPI } from '@/services/api' 
   import { useToast } from 'primevue/usetoast'
   import PosCatalog from './components/PosCatalog.vue'
   import PosCart from './components/PosCart.vue'
@@ -154,6 +156,7 @@
   import ShiftModal from './components/ShiftModal.vue'
   
   const authStore = useAuthStore()
+  const settingsStore = useSettingsStore()
   const toast = useToast()
   
   const {
@@ -342,7 +345,6 @@ const printReceipt = () => {
   iframe.contentWindow.print()
   setTimeout(() => document.body.removeChild(iframe), 1000)
 }
-const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
 </script>
 
 <style scoped>

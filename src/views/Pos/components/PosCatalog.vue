@@ -86,12 +86,12 @@
               <div class="flex flex-col justify-end leading-none gap-1">
                 <!-- Promo Price Logic -->
                 <div v-if="product.active_promotion" class="flex flex-col gap-0.5">
-                  <span class="text-[10px] font-bold text-slate-400 line-through">{{ formatCurrency(product.sale_price, product.currency_code) }}</span>
-                  <span class="text-lg font-black text-rose-500 font-outfit">{{ formatCurrency(product.active_promotion.discounted_price, product.currency_code) }}</span>
+                  <span class="text-[10px] font-bold text-slate-400 line-through">{{ settingsStore.formatPrice(product.sale_price, product.currency_code) }}</span>
+                  <span class="text-lg font-black text-rose-500 font-outfit">{{ settingsStore.formatPrice(product.active_promotion.discounted_price, product.currency_code) }}</span>
                 </div>
                 <div v-else class="flex flex-col gap-0.5">
                   <span class="text-[10px] font-bold text-transparent select-none">&nbsp;</span>
-                  <span class="text-lg font-black text-slate-800 dark:text-slate-100 font-outfit">{{ formatCurrency(product.sale_price, product.currency_code) }}</span>
+                  <span class="text-lg font-black text-slate-800 dark:text-slate-100 font-outfit">{{ settingsStore.formatPrice(product.sale_price, product.currency_code) }}</span>
                 </div>
                 
                 <!-- Stock Details instead of Unit -->
@@ -114,11 +114,13 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { productsAPI, categoriesAPI, branchesAPI } from '@/services/api'
 import { useAuthStore } from '@/store/auth'
+import { useSettingsStore } from '@/store/settings'
 
 const props = defineProps(['externalSearch', 'cart'])
 const emit = defineEmits(['add-to-cart', 'focus-barcode'])
 
 const authStore = useAuthStore()
+const settingsStore = useSettingsStore()
 const products = ref([])
 
 // Compute stock relative to cart
@@ -205,22 +207,6 @@ onMounted(async () => {
   await fetchProducts()
 })
 
-const formatCurrency = (val, currency = 'UZS') => {
-  try {
-    return new Intl.NumberFormat('uz-UZ', { 
-      style: 'currency', 
-      currency: currency || 'UZS', 
-      maximumFractionDigits: 0 
-    }).format(val || 0)
-  } catch (e) {
-    // Fallback if currency code is invalid
-    return new Intl.NumberFormat('uz-UZ', { 
-      style: 'currency', 
-      currency: 'UZS', 
-      maximumFractionDigits: 0 
-    }).format(val || 0)
-  }
-}
 // Expose fetchProducts for manual triggers (e.g. after checkout)
 defineExpose({ fetchProducts })
 </script>

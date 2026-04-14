@@ -75,6 +75,10 @@
 </template>
 
 <script setup>
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
+
 const props = defineProps({
   data: {
     type: Object,
@@ -82,7 +86,5 @@ const props = defineProps({
   }
 })
 
-const formatCurrency = (value) => {
-  return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(value || 0)
-}
+const formatCurrency = (value) => settingsStore.formatPrice(value)
 </script>

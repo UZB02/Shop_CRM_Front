@@ -202,8 +202,7 @@ const settingsStore = useSettingsStore()
 const num = (val) => parseFloat(val) || 0
 
 // Currency formatter
-const fmt = (val) =>
-  new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(num(val)) + ' ' + settingsStore.currency
+const fmt = (val) => settingsStore.formatPrice(num(val))
 
 // Shorthand for cleaner template
 const t = computed(() => props.transaction || {})

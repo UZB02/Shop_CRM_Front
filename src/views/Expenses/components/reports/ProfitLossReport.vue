@@ -14,7 +14,7 @@
         </div>
         <p class="text-[8px] font-black uppercase tracking-widest text-slate-400 mb-0.5">{{ card.label }}</p>
         <p class="text-xs font-black tracking-tight" :class="card.textColor">
-           {{ formatCurrency(card.value) }}
+           {{ settingsStore.formatPrice(card.value) }}
         </p>
         <i :class="card.icon" class="absolute -right-1.5 -bottom-1.5 text-2xl opacity-[0.03] rotate-12"></i>
       </div>
@@ -63,11 +63,11 @@
              <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
                 <tr v-for="item in monthlyData?.data" :key="item.month" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                    <td class="px-6 py-4 text-xs font-bold text-slate-800 dark:text-slate-100">{{ item.month_name }}</td>
-                   <td class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(item.revenue) }}</td>
-                   <td class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(item.cogs) }}</td>
+                   <td class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300">{{ settingsStore.formatPrice(item.revenue) }}</td>
+                   <td class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300">{{ settingsStore.formatPrice(item.cogs) }}</td>
                    <td class="px-6 py-4 text-right">
                       <span class="text-xs font-black" :class="parseFloat(item.net_profit) >= 0 ? 'text-emerald-500' : 'text-rose-500'">
-                         {{ formatCurrency(item.net_profit) }}
+                         {{ settingsStore.formatPrice(item.net_profit) }}
                       </span>
                    </td>
                    <td class="px-6 py-4 text-center">
@@ -87,13 +87,13 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import Chart from 'primevue/chart'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 const props = defineProps({
   monthlyData: Object // Monthly chart data
 })
-
-const formatCurrency = (value) => 
-  new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(value || 0)
 
 const summaryCards = computed(() => {
   const sum = props.monthlyData?.summary || {}
@@ -196,7 +196,7 @@ const chartOptions = computed(() => {
             label: function(context) {
                let label = context.dataset.label || '';
                if (label) label += ': ';
-               label += formatCurrency(context.parsed.y);
+               label += settingsStore.formatPrice(context.parsed.y);
                return label;
             }
          }

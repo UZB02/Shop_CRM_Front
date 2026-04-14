@@ -146,6 +146,10 @@
 </template>
 
 <script setup>
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
+
 const props = defineProps({
   trades: Array,
   loading: Boolean,
@@ -156,7 +160,7 @@ const props = defineProps({
 
 defineEmits(['view', 'page-change'])
 
-const formatCurrency = (val) => new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(val || 0)
+const formatCurrency = (val) => settingsStore.formatPrice(val)
 
 const getPaymentStyle = (type) => {
   switch (type) {
