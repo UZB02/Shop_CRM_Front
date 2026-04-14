@@ -104,7 +104,7 @@
           <i class="text-sm" :class="isFullscreen ? 'pi pi-window-minimize text-emerald-500' : 'pi pi-window-maximize'"></i>
         </button>
 
-        <Button icon="pi pi-bell" text rounded severity="secondary" class="!w-9 !h-9" />
+        <NotificationBell />
       </div>
     </div>
   </header>
@@ -114,6 +114,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
+import NotificationBell from './NotificationBell.vue'
 
 const router = useRouter()
 const isReloading = ref(false)

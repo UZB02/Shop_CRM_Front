@@ -86,7 +86,7 @@ export const productsAPI = {
     create: (data) => api.post('/warehouse/products/', data),
     update: (id, data) => api.patch(`/warehouse/products/${id}/`, data),
     delete: (id) => api.delete(`/warehouse/products/${id}/`),
-    getLowStock: () => api.get('/warehouse/products/lowstock/'),
+    getLowStock: () => api.get('/warehouse/stocks/low-stock/'),
     getBarcode: (id) => api.get(`/products/${id}/barcode/`, { responseType: 'blob' })
 }
 
@@ -249,11 +249,21 @@ export const dashboardAPI = {
     getSalesChart: (params) => api.get('/dashboard/sales-chart', { params })
 }
 
+// Announcements API
+export const announcementsAPI = {
+    getAll: (params) => api.get('/announcements/', { params }),
+    markRead: (id) => api.post(`/announcements/${id}/mark-read/`),
+    getSuperadminAll: (params) => api.get('/superadmin/announcements/', { params }),
+    createSuperadmin: (data) => api.post('/superadmin/announcements/', data),
+    updateSuperadmin: (id, data) => api.patch(`/superadmin/announcements/${id}/`, data),
+    deleteSuperadmin: (id) => api.delete(`/superadmin/announcements/${id}/`)
+}
+
 // Subscription API
 export const subscriptionAPI = {
-    getStatus: () => api.get('/subscription/status'),
-    extend: (data) => api.post('/subscription/extend', data),
-    changePlan: (data) => api.post('/subscription/plan', data)
+    getStatus: () => api.get('/subscription/'),
+    extend: (data) => api.post('/subscription/extend/', data),
+    changePlan: (data) => api.post('/subscription/plan/', data)
 }
 
 // Settings API

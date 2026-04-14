@@ -34,6 +34,8 @@
         "logout_yes": "Ha, chiqish",
         "subscription_warning": "Obuna muddati tugagan. 3 kun ichida to'lov qiling.",
         "subscription_warning_title": "Obuna Ogohlantirishi",
+        "subscription_warning_days": "Obuna tugashiga {days} kun qoldi.",
+        "subscription_expired": "Obuna muddati tugagan! To'lov qiling.",
         "no_results": "Hech nima topilmadi",
         "no_results_desc": "Hozircha hech qanday ma'lumot mavjud emas.",
         "pay": "To'lov",
@@ -66,6 +68,61 @@
         "total_to_pay": "Jami Summa",
         "paid": "To'landi",
         "close": "Yopish"
+    },
+    "subscription": {
+        "title": "Obuna Sozlamalari",
+        "status_active": "Faol",
+        "status_warning": "Tugamoqda",
+        "status_expired": "Muddati o'tgan",
+        "current_plan": "Joriy Tarif",
+        "expires_at": "Tugash muddati",
+        "days_left": "{days} kun qoldi",
+        "popular": "Ommabop",
+        "per_month": "/oy",
+        "tanlangan": "Tanlangan",
+        "sotib_olish": "Sotib Olish",
+        "uzaytirish": "Uzaytirish",
+        "otish": "O'tish",
+        "plans": {
+            "free": "Bepul",
+            "standard": "Standard",
+            "premium": "Premium"
+        },
+        "features": {
+            "title": "Tarif Imkoniyatlari",
+            "has_subcategory": "Subkategoriyalar",
+            "has_sale_return": "Savdo qaytarish",
+            "has_wastage": "Chiqit nazorati",
+            "has_stock_audit": "Inventarizatsiya",
+            "has_kpi": "KPI tizimi",
+            "has_multi_currency": "Ko'p valyutalilik",
+            "has_supplier": "Ta'minotchilar",
+            "has_export": "Eksport (Excel/PDF)",
+            "has_dashboard": "Dashboard tahlili",
+            "has_qr_bulk": "Ommaviy QR yaratish",
+            "has_audit_log": "Audit jurnali",
+            "has_telegram": "Telegram xabarnomalar"
+        },
+        "limits": {
+            "title": "Tarif Chegaralari",
+            "max_branches": "Filiallar",
+            "max_products": "Mahsulotlar",
+            "max_warehouses": "Omborlar",
+            "max_workers": "Xodimlar",
+            "unlimited": "Cheksiz"
+        },
+        "info": {
+            "store": "Do'kon",
+            "start_date": "Boshlanish",
+            "updated_at": "Oxirgi yangilanish"
+        },
+        "history": "To'lovlar tarixi",
+        "help": "Yordam markazi",
+        "tabs": {
+            "overview": "Menejment",
+            "plans": "Tariflar",
+            "billing": "To'lovlar"
+        }
     },
     "workers": {
         "title": "Xodimlar",

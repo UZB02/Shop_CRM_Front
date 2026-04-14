@@ -3,18 +3,27 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/store/auth'
 import { useSettingsStore } from '@/store/settings'
+import { useNotificationStore } from '@/store/notifications'
 
 export function useDashboardLayout() {
   const router = useRouter()
   const route = useRoute()
   const authStore = useAuthStore()
+  const notificationStore = useNotificationStore()
   const { t, locale } = useI18n()
 
   /* --- UI state --- */
   const sidebarOpen = ref(false)   // mobile drawer
   const desktopCollapsed = ref(false)   // desktop icon-only mode
   const showProfileDialog = ref(false)
-  const subscriptionWarning = ref('')
+  
+  const subscriptionWarning = computed(() => {
+    const sub = notificationStore.subscription
+    if (!sub) return ''
+    if (sub.status === 'expired') return t('common.subscription_expired') || 'Obuna muddati tugagan!'
+    if (sub.days_left <= 10) return t('common.subscription_warning_days', { days: sub.days_left }) || `Obuna tugashiga ${sub.days_left} kun qoldi.`
+    return ''
+  })
 
   /* --- Dark / Light Mode --- */
   const isDark = ref(false)
@@ -63,26 +72,13 @@ export function useDashboardLayout() {
   /* --- User --- */
   const user = computed(() => authStore.user)
 
-  /* --- Subscription --- */
-  const checkSubscriptionStatus = () => {
-    if (authStore.user?.subscription?.status === 'warning') {
-      subscriptionWarning.value = t('common.subscription_warning') || "Obuna muddati tugagan. 3 kun ichida to'lov qiling."
-    }
-  }
-  const handleSubscriptionWarning = (e) => {
-    subscriptionWarning.value = e.detail
-    if (authStore.user?.subscription) authStore.user.subscription.status = 'warning'
-  }
-
   /* --- Escape key closes sidebar --- */
   const onKeydown = (e) => { if (e.key === 'Escape') sidebarOpen.value = false }
 
   onMounted(() => {
     initTheme()
-    window.addEventListener('subscription-warning', handleSubscriptionWarning)
     window.addEventListener('keydown', onKeydown)
     document.addEventListener('fullscreenchange', onFullscreenChange)
-    checkSubscriptionStatus()
 
     // Initialize global settings (faqat birinchi marta fetch qilinadi)
     if (!settingsStore.initialized) {
@@ -90,7 +86,6 @@ export function useDashboardLayout() {
     }
   })
   onUnmounted(() => {
-    window.removeEventListener('subscription-warning', handleSubscriptionWarning)
     window.removeEventListener('keydown', onKeydown)
     document.removeEventListener('fullscreenchange', onFullscreenChange)
   })

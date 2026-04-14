@@ -2,6 +2,7 @@
   <div class="min-h-screen bg-slate-50 dark:bg-slate-950 flex overflow-hidden">
     <Toast />
     <ConfirmDialog />
+    <SubscriptionBarrier />
 
     <!-- MOBILE OVERLAY -->
     <Transition name="overlay">
@@ -59,18 +60,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { RouterView } from 'vue-router'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
 import { useDashboardLayout } from './composables/useDashboardLayout'
+import { useNotificationStore } from '@/store/notifications'
 
 // Layout Components
 import DashboardSidebar from './components/DashboardSidebar.vue'
 import DashboardHeader from './components/DashboardHeader.vue'
 import UserProfileDialog from '@/components/UserProfileDialog.vue'
+import SubscriptionBarrier from '@/components/SubscriptionBarrier.vue'
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -99,12 +102,43 @@ const handleRateLimitError = (event) => {
   })
 }
 
+const notificationStore = useNotificationStore()
+
+// Watch for unread announcements to show toast
+watch(() => notificationStore.unreadCount, (newCount, oldCount) => {
+  if (newCount > oldCount) {
+    const latest = notificationStore.announcements.find(a => !a.is_read)
+    if (latest) {
+      toast.add({
+        severity: latest.type === 'critical' ? 'error' : 'info',
+        summary: 'Yangi xabar',
+        detail: latest.title,
+        life: 5000
+      })
+    }
+  }
+})
+
+// Watch for low stock
+watch(() => notificationStore.lowStockItems.length, (newLen, oldLen) => {
+  if (newLen > oldLen) {
+    toast.add({
+      severity: 'warn',
+      summary: 'Kam qolgan tovarlar',
+      detail: `${newLen} ta mahsulot qoldig'i kamaygan!`,
+      life: 7000
+    })
+  }
+})
+
 onMounted(() => {
   window.addEventListener('rate-limit-error', handleRateLimitError)
+  notificationStore.startPolling()
 })
 
 onUnmounted(() => {
   window.removeEventListener('rate-limit-error', handleRateLimitError)
+  notificationStore.stopPolling()
 })
 
 /* --- Logout with confirmation --- */

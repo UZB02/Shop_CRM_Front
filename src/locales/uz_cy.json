@@ -37,6 +37,8 @@
     "logout_yes": "Ҳа, чиқиш",
     "subscription_warning": "Обуна муддати тугаган. 3 кун ичида тўлов қилинг.",
     "subscription_warning_title": "Обуна Огоҳлантириши",
+    "subscription_warning_days": "Обуна тугашига {days} кун қолди.",
+    "subscription_expired": "Обуна муддати тугаган! Тўлов қилинг.",
     "no_results": "Ҳеч нима топилмади",
     "no_results_desc": "Ҳозирча ҳеч қандай маълумот мавжуд эмас.",
     "pay": "Тўлов",
@@ -68,6 +70,61 @@
     "total_to_pay": "Жами Сумма",
     "paid": "Тўланди",
     "close": "Ёпиш"
+  },
+  "subscription": {
+    "title": "Обуна Созламалари",
+    "status_active": "Фаол",
+    "status_warning": "Тугамоқда",
+    "status_expired": "Муддати ўтган",
+    "current_plan": "Жорий Тариф",
+    "expires_at": "Тугаш муддати",
+    "days_left": "{days} кун қолди",
+    "popular": "Оммабоп",
+    "per_month": "/ой",
+    "tanlangan": "Танланган",
+    "sotib_olish": "Сотиб Олиш",
+    "uzaytirish": "Узайтириш",
+    "otish": "Ўтиш",
+    "plans": {
+      "free": "Бепул",
+      "standard": "Стандарт",
+      "premium": "Премиум"
+    },
+    "features": {
+      "title": "Тариф Имкониятлари",
+      "has_subcategory": "Субкатегориялар",
+      "has_sale_return": "Савдо қайтариш",
+      "has_wastage": "Чиқит назорати",
+      "has_stock_audit": "Инвентаризация",
+      "has_kpi": "KPI тизими",
+      "has_multi_currency": "Кўп валюталилик",
+      "has_supplier": "Таъминотчилар",
+      "has_export": "Экспорт (Excel/PDF)",
+      "has_dashboard": "Dashboard таҳлили",
+      "has_qr_bulk": "Оммавий QR яратиш",
+      "has_audit_log": "Аудит журнали",
+      "has_telegram": "Telegram хабарномалар"
+    },
+    "limits": {
+      "title": "Тариф Чегаралари",
+      "max_branches": "Филиаллар",
+      "max_products": "Маҳсулотлар",
+      "max_warehouses": "Омборлар",
+      "max_workers": "Ходимлар",
+      "unlimited": "Чексиз"
+    },
+    "info": {
+      "store": "Дўкон",
+      "start_date": "Бошланиш",
+      "updated_at": "Охирги янгиланиш"
+    },
+    "history": "Тўловлар тарихи",
+    "help": "Ёрдам маркази",
+    "tabs": {
+      "overview": "Менежмент",
+      "plans": "Тарифлар",
+      "billing": "Тўловlar"
+    }
   },
   "workers": {
     "title": "Ходимлар",

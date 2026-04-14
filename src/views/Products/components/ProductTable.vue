@@ -128,7 +128,7 @@
                 <div class="flex flex-col">
                   <span 
                     class="text-[15px] font-black tracking-tight"
-                    :class="(settingsStore.get.low_stock_enabled && Number(item.quantity) <= (item.low_stock_threshold || settingsStore.get.low_stock_threshold || 5)) ? 'text-rose-500' : 'text-slate-900 dark:text-white'"
+                    :class="(settingsStore.isLowStockEnabled && Number(item.quantity) <= (item.low_stock_threshold || settingsStore.lowStockThreshold)) ? 'text-rose-500' : 'text-slate-900 dark:text-white'"
                   >
                     {{ formatNumber(item.quantity) || 0 }}
                   </span>

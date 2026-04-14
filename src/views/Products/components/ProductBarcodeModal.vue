@@ -46,13 +46,13 @@
             </div>
 
             <div class="flex flex-col items-center gap-1">
-              <span v-if="settingsStore.get.show_name_on_barcode" class="text-xs font-bold text-slate-800 dark:text-white text-center">
+              <span v-if="settingsStore.showNameOnBarcode" class="text-xs font-bold text-slate-800 dark:text-white text-center">
                 {{ product?.name }}
               </span>
               <code class="text-sm font-mono text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-lg tracking-widest border border-slate-200 dark:border-slate-700">
                 {{ product?.barcode }}
               </code>
-              <span v-if="settingsStore.get.show_price_on_barcode" class="text-sm font-black text-emerald-500">
+              <span v-if="settingsStore.showPriceOnBarcode" class="text-sm font-black text-emerald-500">
                 {{ formatNumber(product?.sale_price) }} {{ settingsStore.currency }}
               </span>
             </div>

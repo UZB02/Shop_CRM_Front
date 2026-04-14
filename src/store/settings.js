@@ -23,6 +23,8 @@ export const useSettingsStore = defineStore('settings', () => {
   const isTaxEnabled           = computed(() => !!settings.value?.tax_enabled)
   const isOfdEnabled           = computed(() => !!settings.value?.ofd_enabled)
   const isAutoPdfEnabled       = computed(() => !!settings.value?.auto_pdf_on_smena_close)
+  const isLowStockEnabled      = computed(() => !!settings.value?.low_stock_enabled)
+  const lowStockThreshold      = computed(() => parseInt(settings.value?.low_stock_threshold || 5))
 
   // Payment methods
   const allowCash     = computed(() => settings.value?.allow_cash !== false)
@@ -107,6 +109,8 @@ export const useSettingsStore = defineStore('settings', () => {
     isTaxEnabled,
     isOfdEnabled,
     isAutoPdfEnabled,
+    isLowStockEnabled,
+    lowStockThreshold,
     allowCash,
     allowCard,
     allowDebt,

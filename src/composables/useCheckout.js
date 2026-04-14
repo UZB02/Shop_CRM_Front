@@ -43,7 +43,7 @@ export function useCheckout(props, emit) {
   const allowDiscount = computed(() => settingsStore.allowDiscount)
 
   // Settings dan chegirma limiti (0 = cheksiz)
-  const maxDiscountPct = computed(() => settingsStore.get?.max_discount_percent ?? 0)
+  const maxDiscountPct = computed(() => settingsStore.maxDiscount)
 
   // Maksimal chegirma summasi (chegirma yoqilgan va limit bor bo'lganda)
   const maxDiscountAmount = computed(() => {
