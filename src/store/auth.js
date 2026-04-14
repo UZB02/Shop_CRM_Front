@@ -3,7 +3,7 @@ import { authAPI, workersAPI, setApiToken, clearApiToken } from '../services/api
 
 const ALL_PERMISSIONS = [
     'dashboard', 'stores', 'warehouse', 'products',
-    'workers', 'trades', 'expenses', 'customers', 'settings', 'pos'
+    'workers', 'trades', 'expenses', 'customers', 'settings', 'pos', 'subscription'
 ]
 
 const PERMISSION_MAP = {

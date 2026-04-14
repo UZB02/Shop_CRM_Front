@@ -169,7 +169,7 @@
                   <div class="px-1">
                     <template v-if="!showCancelConfirm">
                       <button 
-                        v-if="trade.status === 'completed'" 
+                        v-if="trade.status === 'completed' && settingsStore.isSaleReturnEnabled" 
                         @click="showCancelConfirm = true"
                         class="w-full h-10 bg-rose-50/50 dark:bg-rose-500/5 text-rose-500 hover:bg-rose-100 dark:hover:bg-rose-500/10 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center gap-2 mb-2"
                       >
@@ -224,7 +224,10 @@ import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import TradeStatusBadge from '@/views/Customers/components/TradeStatusBadge.vue'
 import { useTradeUtils } from '@/views/Customers/composables/useTradeUtils'
+import { useSettingsStore } from '@/store/settings'
 import { salesAPI } from '@/services/api'
+
+const settingsStore = useSettingsStore()
 
 const props = defineProps({
   visible: Boolean,

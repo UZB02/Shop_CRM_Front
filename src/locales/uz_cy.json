@@ -270,9 +270,11 @@
     "products": "Маҳсулотлар",
     "workers": "Ходимлар",
     "trades": "Савдолар",
+    "expenses": "Харажатлар",
     "reports": "Харажатлар",
     "customers": "Мижозлар",
-    "settings": "Созламалар"
+    "settings": "Созламалар",
+    "subscription": "Обуна"
   },
   "landing": {
     "nav": {

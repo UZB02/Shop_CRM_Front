@@ -31,7 +31,7 @@
 
       <div class="grid grid-cols-2 gap-4">
         <!-- Category -->
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2" :class="{ 'col-span-2': !settingsStore.isSubcategoryEnabled }">
           <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">
             {{ $t('products.form.category') }} <span class="text-rose-500 ml-0.5">*</span>
           </label>
@@ -51,7 +51,7 @@
         </div>
 
         <!-- Subcategory -->
-        <div class="flex flex-col gap-2">
+        <div v-if="settingsStore.isSubcategoryEnabled" class="flex flex-col gap-2">
           <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">
             {{ $t('subcategories.title') }}
           </label>
@@ -91,6 +91,9 @@
 
 <script setup>
 import Select from 'primevue/select'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 defineProps({
   modelValue: Object,
