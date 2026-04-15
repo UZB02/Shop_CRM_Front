@@ -1,62 +1,149 @@
 <template>
-  <div class="px-3 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+  <div class="space-y-4 animate-in">
     <!-- Premium Header Section -->
-    <div class="mb-6 pt-4 flex flex-col md:flex-row md:items-end justify-between gap-4 relative">
-      <div class="space-y-1 shrink-0">
-        <div class="flex items-center gap-3 mb-1">
-          <div class="w-10 h-10 rounded-2xl bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-slate-900 shadow-lg shadow-slate-900/10 dark:shadow-white/5">
-            <i class="pi pi-receipt text-lg"></i>
-          </div>
-          <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight uppercase">{{ $t('menu.trades') || 'Savdolar' }}</h1>
-        </div>
-        <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest pl-1">
-          {{ totalRecords }} {{ $t('customers.trades.count', { count: '' }).trim() || 'ta savdo' }}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div>
+        <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <i :class="activeTab === 'sales' ? 'pi pi-receipt' : 'pi pi-refresh'" class="text-emerald-500"></i>
+          {{ activeTab === 'sales' ? ($t('menu.trades') || 'Savdolar') : 'Qaytarishlar' }}
+          <span class="text-[9px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded border border-emerald-500/20">
+            {{ activeTab === 'sales' ? totalRecords : returnRecords }} ta
+          </span>
+        </h1>
+        <p class="text-xs text-slate-400 mt-0.5 uppercase tracking-widest font-bold text-[9px]">
+          {{ activeTab === 'sales' ? 'Barcha amalga oshirilgan savdolar' : 'Mijozlardan qaytarilgan tovarlar tarixi' }}
         </p>
       </div>
 
-      <!-- Filter Component Integrated into Header -->
-      <div class="flex-grow max-w-[600px] w-full">
-        <TradeFilter 
-          v-model:searchQuery="searchQuery"
-          :filters="filters"
-          @update:filter="filters = { ...filters, ...$event }"
-          @search="handleSearch"
-          @reset="resetFilters"
+      <div class="flex items-center gap-2 shrink-0">
+        <Button 
+          v-if="settingsStore.isSaleReturnEnabled"
+          @click="openReturnModal"
+          icon="pi pi-plus"
+          label="Yangi Qaytarish"
+          class="!text-[10px] !font-bold !uppercase !tracking-widest !rounded-lg !bg-emerald-500 !border-none !px-4 !py-2 !shadow-sm hover:!bg-emerald-600 active:scale-95 transition-all text-white"
         />
       </div>
     </div>
 
-    <!-- Main Content: Trades Table -->
-    <TradeTable 
-      :trades="trades"
-      :loading="loading"
-      :total-records="totalRecords"
-      :page="page"
-      :page-size="pageSize"
-      @view="viewTrade"
-      @page-change="onPageChange"
-    />
+    <!-- Tab Switcher & Main Content -->
+    <div class="space-y-4">
+      <Tabs v-model:value="activeTab" class="!bg-transparent border-none">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <TabList class="!bg-slate-100/80 dark:!bg-slate-800/80 !p-1 !rounded-xl !border-none !inline-flex">
+            <Tab value="sales" class="!text-[10px] !font-bold !uppercase !tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
+              <i class="pi pi-receipt mr-2 !text-[9px]"></i>
+              Savdolar
+            </Tab>
+            <Tab value="returns" class="!text-[10px] !font-bold !uppercase !tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
+              <i class="pi pi-refresh mr-2 !text-[9px]"></i>
+              Qaytarishlar
+            </Tab>
+          </TabList>
 
-    <!-- Transaction Detail Modal -->
+          <!-- Search & Filter Container Integrated into same row as Tabs -->
+          <div class="flex-grow max-w-[500px] w-full">
+            <TradeFilter 
+              v-if="activeTab === 'sales'"
+              v-model:searchQuery="searchQuery"
+              :filters="filters"
+              @update:filter="filters = { ...filters, ...$event }"
+              @search="handleSearch"
+              @reset="resetFilters"
+            />
+            <div v-else class="relative group">
+              <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] group-focus-within:text-emerald-500 transition-colors"></i>
+              <input 
+                v-model="returnSearch"
+                type="text"
+                placeholder="Qaytarishlardan qidirish..."
+                class="w-full h-10 pl-10 pr-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl text-[11px] font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all placeholder:text-slate-400 shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+
+        <TabPanels class="!bg-transparent !p-0">
+          <!-- Tab: Sales -->
+          <TabPanel value="sales">
+            <TradeTable 
+              :trades="trades"
+              :loading="loading"
+              :total-records="totalRecords"
+              :page="page"
+              :page-size="pageSize"
+              @view="viewTrade"
+              @page-change="onPageChange"
+            />
+          </TabPanel>
+
+          <!-- Tab: Returns -->
+          <TabPanel value="returns">
+            <ReturnTable 
+              :returns="returns"
+              :loading="returnLoading"
+              :total-records="returnRecords"
+              :page="returnPage"
+              :page-size="returnPageSize"
+              @view="viewReturnItem"
+              @page-change="onReturnPageChange"
+            />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </div>
+
+    <!-- Transaction Detail Modals -->
     <TradeDetailModal 
       v-if="selectedTrade"
       v-model:visible="displayDetail"
       :trade="selectedTrade"
+      @init-return="handleInitReturn"
+      @trade-cancelled="loadTrades"
+    />
+
+    <ReturnDetailModal 
+      v-if="selectedReturn"
+      v-model:visible="displayReturnDetail"
+      :return-item="selectedReturn"
+    />
+
+    <SaleReturnModal 
+      v-model:visible="displayCreateReturn"
+      :initial-sale="returnInitialSale"
+      @success="handleReturnSuccess"
     />
     
     <!-- Loading Overlay for Detail Fetch -->
-    <div v-if="loadingDetail" class="fixed inset-0 z-[110] bg-slate-900/10 backdrop-blur-[2px] flex items-center justify-center">
+    <div v-if="loadingDetail || returnLoadingDetail" class="fixed inset-0 z-[110] bg-slate-900/10 backdrop-blur-[2px] flex items-center justify-center">
       <ProgressSpinner style="width: 40px; height: 40px" strokeWidth="6" />
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
+import Button from 'primevue/button'
+import Tabs from 'primevue/tabs'
+import TabList from 'primevue/tablist'
+import Tab from 'primevue/tab'
+import TabPanels from 'primevue/tabpanels'
+import TabPanel from 'primevue/tabpanel'
+import ProgressSpinner from 'primevue/progressspinner'
+
 import { useTrades } from './composables/useTrades'
+import { useSaleReturns } from './composables/useSaleReturns'
+import { useSettingsStore } from '@/store/settings'
+
 import TradeTable from './components/TradeTable.vue'
+import ReturnTable from './components/ReturnTable.vue'
 import TradeFilter from './components/TradeFilter.vue'
 import TradeDetailModal from '@/views/Customers/components/TradeDetailModal.vue'
-import ProgressSpinner from 'primevue/progressspinner'
+import SaleReturnModal from './components/SaleReturnModal.vue'
+import ReturnDetailModal from './components/ReturnDetailModal.vue'
+
+const settingsStore = useSettingsStore()
+const activeTab = ref('sales')
 
 const {
   loading,
@@ -72,17 +159,67 @@ const {
   handleSearch,
   resetFilters,
   viewTrade,
-  onPageChange
+  onPageChange,
+  loadTrades
 } = useTrades()
+
+const {
+  loading: returnLoading,
+  returns,
+  totalRecords: returnRecords,
+  page: returnPage,
+  pageSize: returnPageSize,
+  searchQuery: returnSearch,
+  selectedReturn,
+  displayDetail: displayReturnDetail,
+  loadingDetail: returnLoadingDetail,
+  loadReturns,
+  viewReturn: viewReturnItem,
+  onPageChange: onReturnPageChange
+} = useSaleReturns()
+
+const displayCreateReturn = ref(false)
+const returnInitialSale = ref(null)
+
+const openReturnModal = () => {
+  returnInitialSale.value = null
+  displayCreateReturn.value = true
+}
+
+const handleInitReturn = (sale) => {
+  returnInitialSale.value = sale
+  displayDetail.value = false
+  displayCreateReturn.value = true
+}
+
+const handleReturnSuccess = () => {
+  if (activeTab.value === 'returns') {
+    loadReturns()
+  } else {
+    loadTrades()
+  }
+}
+
+watch(activeTab, (newTab) => {
+  if (newTab === 'returns' && returns.value.length === 0) {
+    loadReturns()
+  }
+})
 </script>
 
 <style scoped>
 .animate-in {
-  animation: fadeIn 0.5s ease-out;
+  animation: animate-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes animate-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

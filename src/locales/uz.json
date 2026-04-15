@@ -68,7 +68,10 @@
         "discount": "Chegirma",
         "total_to_pay": "Jami Summa",
         "paid": "To'landi",
-        "close": "Yopish"
+        "close": "Yopish",
+        "return": "Qaytarish",
+        "returns": "Qaytarishlar",
+        "reason": "Sabab"
     },
     "subscription": {
         "title": "Obuna Sozlamalari",
@@ -928,7 +931,12 @@
             "items_title": "Mahsulotlar Savatdagi",
             "product_placeholder": "Mahsulot",
             "more_products": "+ yana {count} ta",
-            "no_products": "Mahsulotlar yo'q"
+            "no_products": "Mahsulotlar yo'q",
+            "return_items": "Mahsulotlarni qaytarish",
+            "return_history": "Qaytarishlar tarixi",
+            "new_return": "Yangi qaytarish",
+            "return_reason": "Qaytarish sababi",
+            "return_success": "Qaytarish muvaffaqiyatli bajarildi"
         },
         "messages": {
             "updated": "Mijoz ma'lumotlari yangilandi",

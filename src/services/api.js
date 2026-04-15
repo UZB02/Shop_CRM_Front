@@ -307,4 +307,13 @@ export const salesAPI = {
     scanProduct: (barcode) => api.get(`/warehouse/products/scan/`, { params: { code: barcode } })
 }
 
+// Sale Returns API
+export const saleReturnsAPI = {
+    getAll: (params) => api.get('/sale-returns/', { params }),
+    getById: (id) => api.get(`/sale-returns/${id}/`),
+    create: (data) => api.post('/sale-returns/', data),
+    confirm: (id) => api.patch(`/sale-returns/${id}/confirm/`),
+    cancel: (id) => api.patch(`/sale-returns/${id}/cancel/`)
+}
+
 export default api

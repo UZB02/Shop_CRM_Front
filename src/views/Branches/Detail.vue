@@ -108,8 +108,8 @@ const openNewTransferHandler = () => {
 
 // Prepare tabs with counts and icons
 const navTabs = computed(() => [
-  { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: branch.value?.workers?.length },
   { id: 'products', label: t('menu.products'), icon: 'pi pi-box', count: branch.value?.products?.length },
+  { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: branch.value?.workers?.length },
   { id: 'transfers', label: t('warehouse.detail.transfers'), icon: 'pi pi-arrow-right-arrow-left' },
   { id: 'incoming', label: t('warehouse.detail.incoming_history'), icon: 'pi pi-history' },
   { id: 'customers', label: t('menu.customers'), icon: 'pi pi-user', count: branch.value?.customers?.length },

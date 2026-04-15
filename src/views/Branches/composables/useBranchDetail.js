@@ -12,7 +12,7 @@ export function useBranchDetail() {
     const branch = ref(null)
     const loading = ref(true)
     const tabLoading = ref(false)
-    const activeTab = ref('workers')
+    const activeTab = ref('products')
 
     // Refresh only the relevant tab when changed
     watch(activeTab, (tab) => {
@@ -27,8 +27,8 @@ export function useBranchDetail() {
     const saving = ref(false)
 
     const tabs = computed(() => [
-        { id: 'workers', label: t('menu.workers') },
         { id: 'products', label: t('menu.products') },
+        { id: 'workers', label: t('menu.workers') },
         { id: 'transfers', label: t('warehouse.detail.transfers') },
         { id: 'incoming', label: t('warehouse.detail.incoming_history') },
         { id: 'customers', label: t('menu.customers') }
@@ -40,7 +40,7 @@ export function useBranchDetail() {
             else if (!branch.value) loading.value = true
 
             const res = await branchesAPI.getById(route.params.id, tab ? { tab } : {})
-            
+
             if (tab && branch.value) {
                 // Merge only the specific tab data to keep other tab counts alive
                 if (res.data[tab]) {

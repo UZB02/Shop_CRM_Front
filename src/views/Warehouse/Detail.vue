@@ -83,7 +83,12 @@
                         </code>
                       </td>
                       <td class="px-4 py-2 text-right">
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">
+                        <span 
+                          class="inline-flex items-center px-1.5 py-0.5 rounded-md font-bold text-[10px]"
+                          :class="settingsStore.isLowStockEnabled && item.quantity <= settingsStore.lowStockThreshold 
+                            ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' 
+                            : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'"
+                        >
                           {{ item.quantity }}
                         </span>
                       </td>
@@ -229,6 +234,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { warehousesAPI } from '@/services/api'
+import { useSettingsStore } from '@/store/settings'
 import TablePagination from '@/components/TablePagination.vue'
 import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 import WarehouseDetailPageHeader from './components/WarehouseDetailPageHeader.vue'
@@ -237,6 +243,7 @@ import i18n from '@/i18n'
 
 const route = useRoute()
 const router = useRouter()
+const settingsStore = useSettingsStore()
 
 const warehouse = ref(null)
 const loading = ref(true)
