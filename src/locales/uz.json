@@ -662,20 +662,31 @@
         },
         "detail": {
             "title": "Mahsulot Tafsilotlari",
+            "tabs": {
+                "overview": "Asosiy",
+                "inventory": "Zahira",
+                "financial": "Moliya"
+            },
             "category": "Turkum",
             "store": "Asosiy do'kon",
             "unit": "Birlik",
-            "created_at": "Kirishtilgan sana",
-            "pricing_title": "Moliya & Narxlar Panel",
-            "purchase_price": "Xarid Narxi",
-            "sale_price": "Sotuv Narxi",
+            "created_at": "Kiritilgan sana",
+            "ikpu": "IKPU / MXIK",
+            "pricing_title": "Moliya & Narxlar Paneli",
+            "purchase_price": "Xarid narxi",
+            "sale_price": "Sotuv narxi",
             "expected_margin": "Sof foyda (Taxminiy)",
             "barcode": "Shtrix-kod",
             "promo_duration": "Aksiya muddati",
-            "stock_status": "Holat",
+            "stock_status": "Holati",
             "sufficient": "Yetarli",
+            "out_of_stock": "Tugagan",
             "no_image_tip": "Surat mavjud emas",
-            "stock_label": "Zahira Miqdori"
+            "stock_label": "Zahira miqdori",
+            "stock_locations": "Zahira joylari",
+            "warehouse": "Ombor",
+            "branch": "Filial",
+            "total": "Umumiy"
         }
     },
     "units": {

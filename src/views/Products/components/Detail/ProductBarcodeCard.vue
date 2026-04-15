@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/80 p-6 shadow-sm flex flex-col justify-between">
+  <div class="bg-white dark:bg-[#131d31] rounded-[18px] border border-slate-200 dark:border-transparent p-6 shadow-sm flex flex-col justify-between h-full">
     <div class="space-y-6">
       <div class="flex items-center justify-between">
         <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('products.detail.barcode') }}</span>

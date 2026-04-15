@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6 max-w-md mx-auto md:max-w-none md:mx-0">
-    <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 p-3 shadow-sm relative overflow-hidden group">
-      <div class="relative aspect-square rounded-[1.5rem] overflow-hidden bg-white dark:bg-white flex items-center justify-center p-2 lg:p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800/60 p-3 shadow-sm relative overflow-hidden group">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-white dark:bg-white flex items-center justify-center p-2 lg:p-4">
         <template v-if="!loading">
           <img 
             v-if="product?.image" 
@@ -20,23 +20,6 @@
           <span class="text-[7px] font-black uppercase tracking-widest leading-tight mb-0.5 opacity-80 line-clamp-2">{{ product.active_promotion.name }}</span>
           <span class="text-xs font-black leading-none">{{ Math.round(product.active_promotion.discount_pct) }}%</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Inventory Stats In-Place -->
-    <div class="bg-emerald-500 rounded-[2rem] p-6 text-white shadow-xl shadow-emerald-500/20 relative overflow-hidden group">
-      <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-1000"></div>
-      <div class="flex items-center justify-between mb-2">
-        <span class="text-[9px] font-black uppercase tracking-widest opacity-70">{{ $t('products.detail.stock_label') }}</span>
-        <i class="pi pi-box text-xs opacity-50"></i>
-      </div>
-      <div class="flex items-baseline gap-2">
-        <h2 class="text-3xl font-black">{{ product?.stock_total || 0 }}</h2>
-        <span class="text-[10px] font-bold uppercase tracking-widest opacity-80 leading-none">{{ product?.unit_display }}</span>
-      </div>
-      <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between text-[9px] font-black uppercase tracking-widest opacity-60">
-        <span>{{ $t('products.detail.stock_status') }}:</span>
-        <span class="text-white opacity-100">{{ $t('products.detail.sufficient') }} ✅</span>
       </div>
     </div>
   </div>

@@ -21,7 +21,7 @@
           {{ product.status_display || product.status }}
         </span>
       </div>
-      <p class="text-xs text-slate-400 mt-0.5 truncate">{{ product?.category?.name || $t('common.not_specified') }} • SKU: {{ product?.sku || product?.barcode || '—' }}</p>
+      <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 font-medium truncate">{{ product?.category_name || $t('common.not_specified') }} • SKU: {{ product?.sku || product?.barcode || '—' }}</p>
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <button

@@ -635,20 +635,31 @@
     },
     "detail": {
       "title": "Маҳсулот Тафсилотлари",
+      "tabs": {
+        "overview": "Асосий",
+        "inventory": "Захира",
+        "financial": "Молия"
+      },
       "category": "Туркум",
       "store": "Асосий дўкон",
       "unit": "Бирлик",
-      "created_at": "Кириштилган сана",
-      "pricing_title": "Молия & Нархлар Панел",
-      "purchase_price": "Харид Нархи",
-      "sale_price": "Сотув Нархи",
+      "created_at": "Киритилган сана",
+      "ikpu": "IKPU / MXIK",
+      "pricing_title": "Молия ва Нархлар Панели",
+      "purchase_price": "Харид нархи",
+      "sale_price": "Сотув нархи",
       "expected_margin": "Соф фойда (Тахминий)",
       "barcode": "Штрих-код",
       "promo_duration": "Акция муддати",
-      "stock_status": "Ҳолат",
+      "stock_status": "Ҳолати",
       "sufficient": "Етарли",
+      "out_of_stock": "Тугаган",
       "no_image_tip": "Сурат мавжуд эмас",
-      "stock_label": "Захира Миқдори"
+      "stock_label": "Захира миқдори",
+      "stock_locations": "Захира жойлари",
+      "warehouse": "Омбор",
+      "branch": "Филиал",
+      "total": "Умумий"
     }
   },
   "categories": {

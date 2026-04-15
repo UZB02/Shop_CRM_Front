@@ -1,5 +1,5 @@
 <template>
-  <div class="md:col-span-2 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/80 p-6 sm:p-8 flex flex-col shadow-sm">
+  <div class="md:col-span-2 bg-white dark:bg-[#131d31] rounded-[18px] border border-slate-200 dark:border-transparent p-6 sm:p-8 flex flex-col shadow-sm">
     <h3 class="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] flex items-center gap-3 mb-8">
       <span class="w-1 h-1 rounded-full bg-emerald-500"></span>
       {{ $t('products.detail.pricing_title') }}
