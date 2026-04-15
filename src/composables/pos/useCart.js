@@ -77,7 +77,16 @@ export function useCart() {
     const addToCart = (product) => {
         const existing = cart.value.find(item => item.id === product.id)
         if (existing) {
-            existing.qty++
+            if (existing.quantity === undefined || existing.qty < existing.quantity) {
+                existing.qty++
+            } else {
+                toast.add({
+                    severity: 'warn',
+                    summary: 'Limit',
+                    detail: 'Omborda yetarli mahsulot yo\'q',
+                    life: 2000
+                })
+            }
         } else {
             const effectivePrice = product.active_promotion?.discounted_price || product.sale_price || product.price || 0
             cart.value.push({
@@ -97,7 +106,19 @@ export function useCart() {
 
     const updateQty = (productId, qty) => {
         const item = cart.value.find(item => item.id === productId)
-        if (item) item.qty = Math.max(1, qty)
+        if (item) {
+            let newQty = Math.max(0, qty)
+            if (item.quantity !== undefined && newQty > item.quantity) {
+                newQty = item.quantity
+                toast.add({
+                    severity: 'warn',
+                    summary: 'Limit',
+                    detail: `Omborda faqat ${item.quantity} dona mavjud`,
+                    life: 2000
+                })
+            }
+            item.qty = newQty
+        }
     }
 
     const updateItemDiscount = (productId, pct) => {

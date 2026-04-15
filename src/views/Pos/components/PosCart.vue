@@ -75,8 +75,23 @@
           <!-- Vertical/Compact Qty Controller -->
           <div class="flex items-center gap-3 bg-slate-50 dark:bg-slate-900 p-1 rounded-lg border border-slate-100/30 dark:border-slate-800/50">
             <button @click="item.qty > 1 ? $emit('update-qty', item.id, item.qty - 1) : $emit('remove', item.id)" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">-</button>
-            <span class="text-[11px] font-black w-3 text-center dark:text-slate-300">{{ item.qty }}</span>
-            <button @click="$emit('update-qty', item.id, item.qty + 1)" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-emerald-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">+</button>
+            <input 
+              type="number" 
+              :value="item.qty"
+              @focus="(e) => e.target.select()"
+              @change="(e) => {
+                let val = parseFloat(e.target.value);
+                if (val > 0) $emit('update-qty', item.id, val);
+                else if (val === 0) $emit('remove', item.id);
+                else e.target.value = item.qty;
+              }"
+              class="w-10 text-[11px] font-black text-center bg-transparent border-none outline-none dark:text-slate-300 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            />
+            <button 
+              @click="item.quantity === undefined || item.qty < item.quantity ? $emit('update-qty', item.id, item.qty + 1) : null" 
+              :disabled="item.quantity !== undefined && item.qty >= item.quantity"
+              class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-emerald-500 disabled:opacity-30 disabled:hover:text-slate-400 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800"
+            >+</button>
           </div>
         </div>
       </div>
