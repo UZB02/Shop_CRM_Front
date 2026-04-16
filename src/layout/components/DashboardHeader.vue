@@ -104,6 +104,15 @@
           <i class="text-sm" :class="isFullscreen ? 'pi pi-window-minimize text-emerald-500' : 'pi pi-window-maximize'"></i>
         </button>
 
+        <!-- Calculator Toggle -->
+        <button
+          v-tooltip.bottom="'Kalkulyator'"
+          @click="$emit('toggleCalculator')"
+          class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95"
+        >
+          <i class="pi pi-calculator text-sm"></i>
+        </button>
+
         <NotificationBell />
       </div>
     </div>
@@ -134,7 +143,7 @@ defineProps({
   isFullscreen: Boolean
 })
 
-defineEmits(['update:sidebarOpen', 'update:locale', 'toggleTheme', 'toggleFullscreen'])
+defineEmits(['update:sidebarOpen', 'update:locale', 'toggleTheme', 'toggleFullscreen', 'toggleCalculator'])
 </script>
 
 <style scoped>

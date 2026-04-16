@@ -35,6 +35,7 @@
         :is-fullscreen="isFullscreen"
         @toggleTheme="toggleTheme"
         @toggleFullscreen="toggleFullscreen"
+        @toggleCalculator="isCalculatorOpen = !isCalculatorOpen"
       />
 
       <!-- PAGE CONTENT -->
@@ -56,6 +57,7 @@
 
     <!-- GLOBAL DIALOGS -->
     <UserProfileDialog v-model:visible="showProfileDialog" :user="user" @logout="handleLogout" />
+    <CalculatorWidget v-model:visible="isCalculatorOpen" />
   </div>
 </template>
 
@@ -74,6 +76,7 @@ import DashboardSidebar from './components/DashboardSidebar.vue'
 import DashboardHeader from './components/DashboardHeader.vue'
 import UserProfileDialog from '@/components/UserProfileDialog.vue'  
 import SubscriptionBarrier from '@/components/SubscriptionBarrier.vue'
+import CalculatorWidget from '@/components/CalculatorWidget.vue'
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -179,6 +182,8 @@ onUnmounted(() => {
 
 /* --- Logout with confirmation --- */
 const isConfirmingLogout = ref(false)
+const isCalculatorOpen = ref(false)
+
 const handleLogout = () => {
   if (isConfirmingLogout.value) return
   isConfirmingLogout.value = true
