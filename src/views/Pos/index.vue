@@ -134,6 +134,7 @@
         :total="cartTotals.finalTotal" 
         :currency-code="cartTotals.currency"
         :customers="customers"
+        :customer-groups="customerGroups"
         v-model:selected-customer="selectedCustomer" 
         :loading="posLoading" 
         @search-customers="fetchCustomers"
@@ -171,6 +172,7 @@
     discountAmount,
     selectedCustomer,
     customers,
+    customerGroups,
     cartTotals,
     createNewOrder,
     switchOrder,
@@ -185,6 +187,7 @@
     scanAndAdd,
     clearCart,
     fetchCustomers,
+    fetchCustomerGroups,
     performCheckout,
     downloadReceipt
   } = usePOS()
@@ -221,7 +224,8 @@ const catalogRef = ref(null)
 onMounted(async () => {
   await Promise.all([
     fetchShiftStatus(),
-    fetchCustomers()
+    fetchCustomers(),
+    fetchCustomerGroups()
   ])
   window.addEventListener('keydown', handleGlobalKey)
   if (activeShift.value) {

@@ -47,6 +47,7 @@ export function usePOS() {
         discountAmount:     cart.discountAmount,
         selectedCustomer:   cart.selectedCustomer,
         customers:          cart.customers,
+        customerGroups:     cart.customerGroups,
         cartTotals:         cart.cartTotals,
         createNewOrder:     cart.createNewOrder,
         switchOrder:        cart.switchOrder,
@@ -58,6 +59,7 @@ export function usePOS() {
         clearCart:          cart.clearCart,
         scanAndAdd:         cart.scanAndAdd,
         fetchCustomers:     cart.fetchCustomers,
+        fetchCustomerGroups:cart.fetchCustomerGroups,
 
         // --- Checkout ---
         posLoading:      checkout.posLoading,

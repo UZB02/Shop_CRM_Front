@@ -1,5 +1,5 @@
 import { ref, computed, watch } from 'vue'
-import { salesAPI, customersAPI } from '@/services/api'
+import { salesAPI, customersAPI, customerGroupsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
 export function useCart() {
@@ -42,6 +42,16 @@ export function useCart() {
     })
 
     const customers = ref([])
+    const customerGroups = ref([])
+
+    const fetchCustomerGroups = async () => {
+        try {
+            const res = await customerGroupsAPI.getAll()
+            customerGroups.value = res.data.results || res.data
+        } catch (error) {
+            console.error('Error fetching customer groups:', error)
+        }
+    }
 
     // --- Order Tab Management ---
     const createNewOrder = () => {
@@ -214,6 +224,7 @@ export function useCart() {
         selectedCustomer,
         discountAmount,
         customers,
+        customerGroups,
         cartTotals,
         posLoading,
         createNewOrder,
@@ -225,6 +236,7 @@ export function useCart() {
         updateItemDiscount,
         clearCart,
         scanAndAdd,
-        fetchCustomers
+        fetchCustomers,
+        fetchCustomerGroups
     }
 }

@@ -10,6 +10,7 @@ export function useCheckout(props, emit) {
   const debtCashAmount = ref(0)
   const debtCardAmount = ref(0)
   const description = ref('')
+  const vipMessage = ref('')
 
   const methods = computed(() => {
     const list = []
@@ -33,6 +34,7 @@ export function useCheckout(props, emit) {
       description.value = ''
       emit('update:selected-customer', null)
       discountAmount.value = 0
+      vipMessage.value = ''
       debtCashAmount.value = 0
       debtCardAmount.value = 0
       cashAmount.value = props.total || 0
@@ -82,6 +84,35 @@ export function useCheckout(props, emit) {
     return rem > 0 ? rem : 0
   })
 
+  // VIP Mijoz Chegirma Mantiq
+  watch(() => props.selectedCustomer, (val) => {
+    vipMessage.value = ''
+    if (!val || !props.customerGroups || props.customerGroups.length === 0) return
+
+    let groupObj = null
+    if (typeof val.customer_group === 'object' && val.customer_group !== null) {
+      groupObj = val.customer_group
+    } else if (typeof val.group === 'object' && val.group !== null) {
+      groupObj = val.group
+    } else {
+      const gid = val.group_id || val.group || val.customer_group
+      groupObj = props.customerGroups.find(g => g.id === gid)
+    }
+
+    if (groupObj && groupObj.discount && parseFloat(groupObj.discount) > 0) {
+      const pct = parseFloat(groupObj.discount)
+      let calculatedDiscount = Math.floor(((props.total || 0) * pct) / 100)
+      
+      // Limitdan oshib ketmasligi uchun
+      if (maxDiscountAmount.value > 0 && calculatedDiscount > maxDiscountAmount.value) {
+        calculatedDiscount = maxDiscountAmount.value
+      }
+
+      discountAmount.value = calculatedDiscount
+      vipMessage.value = `${groupObj.name} VIP mijoz! ${pct}% chegirma avtomat hisoblandi.`
+    }
+  })
+
   const isValid = computed(() => {
     // Chegirma limit tekshiruvi (barcha to'lov turlari uchun)
     if (!isDiscountValid.value) return false
@@ -102,6 +133,7 @@ export function useCheckout(props, emit) {
   const resetValues = () => {
     paymentType.value = 'cash'
     discountAmount.value = 0
+    vipMessage.value = ''
     cashAmount.value = 0
     cardAmount.value = 0
     debtCashAmount.value = 0
@@ -164,6 +196,7 @@ export function useCheckout(props, emit) {
     isCardOverflow,
     isSumOverflow,
     isValid,
+    vipMessage,
     handleConfirm,
     resetValues
   }

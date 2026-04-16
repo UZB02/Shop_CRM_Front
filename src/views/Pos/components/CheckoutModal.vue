@@ -247,6 +247,13 @@
                 :class="paymentType === 'debt' && !selectedCustomer ? 'co-customer-select--required' : ''"
               />
             </div>
+            
+            <!-- VIP Message -->
+            <div v-if="vipMessage" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-800/30">
+              <i class="pi pi-verified text-indigo-500 text-xs" />
+              <span class="text-[7.5px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{{ vipMessage }}</span>
+            </div>
+
             <div v-if="paymentType === 'debt' && !selectedCustomer"
               class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-800/30">
               <i class="pi pi-user-minus text-rose-500 text-xs" />
@@ -298,6 +305,7 @@ const props = defineProps({
   total: Number,
   currencyCode: String,
   customers: Array,
+  customerGroups: Array,
   selectedCustomer: Object,
   loading: Boolean
 })
@@ -324,6 +332,7 @@ const {
   isCardOverflow, 
   isSumOverflow, 
   isValid, 
+  vipMessage,
   handleConfirm 
 } = useCheckout(props, emit)
 

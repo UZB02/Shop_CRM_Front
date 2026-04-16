@@ -106,6 +106,17 @@ export const subcategoriesAPI = {
     delete: (id) => api.delete(`/warehouse/subcategories/${id}/`)
 }
 
+// Promotions API
+export const promotionsAPI = {
+    getAll: (params) => api.get('/warehouse/promotions/', { params }),
+    getById: (id) => api.get(`/warehouse/promotions/${id}/`),
+    create: (data) => api.post('/warehouse/promotions/', data),
+    update: (id, data) => api.patch(`/warehouse/promotions/${id}/`, data),
+    delete: (id) => api.delete(`/warehouse/promotions/${id}/`),
+    activate: (id) => api.post(`/warehouse/promotions/${id}/activate/`),
+    deactivate: (id) => api.post(`/warehouse/promotions/${id}/deactivate/`)
+}
+
 // Customers API
 export const customersAPI = {
     getAll: (params) => api.get('/customers/', { params }),
