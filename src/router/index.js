@@ -104,6 +104,12 @@ const routes = [
                 meta: { permission: 'products' }
             },
             {
+                path: 'products/promotions',
+                name: 'product-promotions',
+                component: () => import('@/views/Products/Promotions/index.vue'),
+                meta: { permission: 'products' }
+            },
+            {
                 path: 'products/:id',
                 name: 'product-detail',
                 component: () => import('@/views/Products/Detail.vue'),

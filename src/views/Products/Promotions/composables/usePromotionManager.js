@@ -76,13 +76,20 @@ export function usePromotionManager() {
         loadDependencies()
     }
 
+    const parseSafeDate = (dateStr) => {
+        if (!dateStr) return null
+        const clean = dateStr.toString().replace(' | ', ' ')
+        const d = new Date(clean)
+        return isNaN(d.getTime()) ? null : d
+    }
+
     const openEdit = (item) => {
         activeItem.value = {
             id: item.id,
             name: item.name,
             discount_pct: Number(item.discount_pct),
-            valid_from: new Date(item.valid_from),
-            valid_to: new Date(item.valid_to),
+            valid_from: parseSafeDate(item.valid_from),
+            valid_to: parseSafeDate(item.valid_to),
             is_active: item.is_active,
             // ID larni MultiSelect uchun massivga otamiz
             categories: item.categories || [],
