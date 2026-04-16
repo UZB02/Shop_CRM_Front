@@ -66,6 +66,10 @@
                 <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Mijoz:</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black">{{ t.customer_name }}</span>
               </div>
+              <div v-if="num(t.customer_group_discount) > 0" class="flex justify-between">
+                <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Guruh chegirmasi:</span>
+                <span class="text-rose-500 font-black">{{ num(t.customer_group_discount) }}%</span>
+              </div>
               <div v-if="t.receipt_number" class="flex justify-between">
                 <span class="text-slate-400 dark:text-slate-500 uppercase font-bold">Chek №:</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black">{{ t.receipt_number }}</span>

@@ -16,14 +16,10 @@
       </div>
 
       <!-- Modern Filter Bar -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-white dark:bg-slate-900/40 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800/50 shadow-inner">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-white dark:bg-slate-900/40 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800/50 shadow-inner">
         <Select v-model="historyFilters.action" :options="actionOptions" showClear optionLabel="label" optionValue="value" 
                   class="!text-[10px] !font-black !uppercase !tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-2"
                   placeholder="Amal turi" />
-        
-        <Select v-model="historyFilters.model" :options="modelOptions" showClear optionLabel="label" optionValue="value" 
-                  class="!text-[10px] !font-black !uppercase !tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-2"
-                  placeholder="Modul" />
 
         <DatePicker v-model="historyFilters.date_from" dateFormat="yy-mm-dd" showIcon iconDisplay="input" 
                     class="!h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 !w-full" 
