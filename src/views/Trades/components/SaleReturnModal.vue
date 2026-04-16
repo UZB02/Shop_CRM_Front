@@ -44,175 +44,45 @@
             <div class="flex-grow p-6 flex flex-col gap-5 overflow-y-auto custom-scrollbar h-full">
               
               <!-- Product Search (Only if not from specific sale) -->
-              <div v-if="!initialSale" class="space-y-2">
-                <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Mahsulotlarni qidirish</h3>
-                <div class="relative group">
-                  <i class="pi pi-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                  <input 
-                    v-model="productQuery"
-                    type="text"
-                    placeholder="Nomi yoki barkodi bo'yicha..."
-                    class="w-full h-11 pl-10 pr-4 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-white/10 rounded-[14px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 dark:focus:border-rose-500/50 transition-all text-slate-800 dark:text-slate-200 placeholder-slate-400"
-                    @input="onSearchProducts"
-                  />
-                  <!-- Search Results Dropdown -->
-                  <div v-if="searchResults.length" class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#131d31] rounded-[16px] shadow-xl border border-slate-200 dark:border-white/10 z-50 overflow-hidden max-h-[250px] overflow-y-auto custom-scrollbar">
-                    <div 
-                      v-for="p in searchResults" 
-                      :key="p.id"
-                      @click="addProduct(p)"
-                      class="p-3 hover:bg-slate-50 dark:hover:bg-white/[0.03] cursor-pointer flex justify-between items-center transition-colors border-b border-slate-100 dark:border-white/5 last:border-0"
-                    >
-                      <div class="flex flex-col">
-                        <span class="text-xs font-bold text-slate-800 dark:text-white">{{ p.name }}</span>
-                        <span class="text-[9px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Qoldiq: {{ p.quantity }} {{ p.unit }}</span>
-                      </div>
-                      <span class="text-[11px] font-black text-slate-900 dark:text-emerald-400">{{ formatCurrency(p.selling_price) }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <SaleReturnSearch 
+                 v-if="!initialSale"
+                 v-model:query="productQuery"
+                 :search-results="searchResults"
+                 :format-currency="formatCurrency"
+                 @search="onSearchProducts"
+                 @add="addProduct"
+              />
 
               <!-- Initial Sale Items List -->
-              <div v-if="initialSale" class="space-y-3">
-                 <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">Savdodagi mahsulotlar</h3>
-                 <div class="grid grid-cols-1 gap-2.5">
-                    <div v-for="item in initialSale.items" :key="item.id" 
-                         class="p-3 rounded-[14px] border border-slate-100 dark:border-white/5 bg-white dark:bg-transparent flex items-center justify-between hover:bg-slate-50/50 dark:hover:bg-white/[0.02] shadow-sm transition-all group">
-                       <div class="flex flex-col">
-                         <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ item.product_name }}</span>
-                         <span class="text-[9px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">Sotilgan: {{ parseFloat(item.quantity) }} {{ item.unit }} <span class="mx-1 text-slate-300 dark:text-slate-600">|</span> Narxi: {{ formatCurrency(item.unit_price) }}</span>
-                       </div>
-                       <button 
-                         @click="addFromSale(item)"
-                         :disabled="isAlreadyAdded(item.product_id || item.product)"
-                         class="h-7 px-3 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all
-                                disabled:opacity-50 disabled:grayscale 
-                                bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white 
-                                border border-emerald-100 dark:border-emerald-500/10"
-                       >
-                         {{ isAlreadyAdded(item.product_id || item.product) ? 'Qo\'shilgan' : 'Tanlash' }}
-                       </button>
-                    </div>
-                 </div>
-              </div>
+              <SaleReturnInitialItems 
+                 v-if="initialSale"
+                 :initial-sale="initialSale"
+                 :format-currency="formatCurrency"
+                 :is-already-added="isAlreadyAdded"
+                 @add="addFromSale"
+              />
 
               <!-- Selected Items (The Return Cart) -->
-              <div class="mt-2 flex-grow flex flex-col min-h-0">
-                <div class="flex items-center justify-between mb-3 shrink-0">
-                  <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">Qaytariladigan mahsulotlar</h3>
-                  <span class="text-[9px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 px-2 py-1 rounded-md border border-rose-100 dark:border-rose-500/10 leading-none">{{ returnItems.length }} xil</span>
-                </div>
-                
-                <div class="space-y-2.5 flex-grow overflow-y-auto pr-1 custom-scrollbar">
-                  <div v-if="!returnItems.length" class="h-full flex flex-col items-center justify-center opacity-40 py-16">
-                    <i class="pi pi-box text-3xl mb-3 dark:text-slate-500"></i>
-                    <p class="text-[11px] font-bold dark:text-slate-400">Hech narsa tanlanmagan</p>
-                  </div>
-
-                  <div v-for="(item, idx) in returnItems" :key="idx" 
-                       class="group flex items-center gap-3 p-3 rounded-[14px] transition-all duration-200 border border-slate-100 dark:border-white/5 bg-white dark:bg-transparent shadow-sm">
-                    <div class="w-9 h-9 rounded-[10px] bg-slate-50 dark:bg-[#1a2333] flex items-center justify-center text-slate-400 dark:text-slate-500 shrink-0 border border-slate-200/50 dark:border-white/5">
-                      <i class="pi pi-box text-xs"></i>
-                    </div>
-                    <div class="flex-grow min-w-0">
-                      <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate mb-0.5">{{ item.product_name }}</h4>
-                      <p class="text-[9px] text-slate-500 dark:text-slate-400 font-medium">Birlik: {{ formatCurrency(item.unit_price) }}</p>
-                    </div>
-                    
-                    <div class="flex items-center gap-1.5 shrink-0 px-2 py-1 bg-slate-50 dark:bg-[#131d31] rounded-lg border border-slate-100 dark:border-white/5">
-                       <button @click="updateQty(idx, -1)" class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-white dark:hover:bg-white/5 text-slate-400 hover:text-rose-500 transition-colors">
-                         <i class="pi pi-minus text-[8px] font-bold"></i>
-                       </button>
-                       <input 
-                         v-model="item.quantity"
-                         type="number" 
-                         step="0.01"
-                         class="w-12 h-6 bg-transparent text-center text-xs font-black text-slate-800 dark:text-white focus:outline-none"
-                       />
-                       <button @click="updateQty(idx, 1)" class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-white dark:hover:bg-white/5 text-slate-400 hover:text-emerald-500 transition-colors">
-                         <i class="pi pi-plus text-[8px] font-bold"></i>
-                       </button>
-                    </div>
-
-                    <div class="w-20 text-right shrink-0">
-                      <span class="text-[12px] font-black text-slate-900 dark:text-white leading-none">{{ formatCurrency(item.unit_price * item.quantity) }}</span>
-                    </div>
-
-                    <button @click="removeItem(idx)" class="w-7 h-7 rounded-lg text-slate-300 dark:text-slate-500 hover:text-rose-500 dark:hover:text-rose-400 transition-colors border border-transparent hover:border-rose-100 dark:hover:border-rose-500/20 hover:bg-rose-50 dark:hover:bg-rose-500/10 shrink-0 flex items-center justify-center ml-1">
-                      <i class="pi pi-trash text-[10px]"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <SaleReturnCart 
+                 :items="returnItems"
+                 :format-currency="formatCurrency"
+                 @update-qty="updateQty"
+                 @remove="removeItem"
+              />
             </div>
 
             <!-- Right Side: Confirmation & Details -->
-            <div class="w-full md:w-[320px] lg:w-[340px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0">
-              <div class="flex-grow flex flex-col gap-6 overflow-y-auto custom-scrollbar p-6">
-                
-                <!-- Customer Section -->
-                <div v-if="!initialSale" class="space-y-2">
-                  <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">Mijoz (Ixtiyoriy)</label>
-                  <div class="relative group">
-                    <i class="pi pi-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <select 
-                      v-model="selectedCustomerId" 
-                      class="w-full h-11 pl-10 pr-4 bg-white dark:bg-[#131d31] border border-slate-200 dark:border-white/10 rounded-[14px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 appearance-none transition-all text-slate-800 dark:text-slate-200 shadow-sm"
-                    >
-                      <option :value="null">Noma'lum mijoz</option>
-                      <option v-for="c in customers" :key="c.id" :value="c.id">{{ c.full_name }}</option>
-                    </select>
-                    <i class="pi pi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-500 text-[9px] pointer-events-none"></i>
-                  </div>
-                </div>
-                <!-- Customer Display (Static) -->
-                <div v-else class="p-3 rounded-[14px] bg-white dark:bg-[#131d31] border border-slate-100 dark:border-white/5 shadow-sm">
-                   <h5 class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1.5 ml-1">Mijoz</h5>
-                   <div class="flex items-center gap-2.5 px-1 pb-1">
-                     <div class="w-6 h-6 rounded-md bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center shrink-0">
-                        <i class="pi pi-user text-[10px] text-rose-500"></i>
-                     </div>
-                     <span class="text-[12px] font-bold text-slate-800 dark:text-slate-200">{{ initialSale.customer_name || 'Noma\'lum mijoz' }}</span>
-                   </div>
-                </div>
-
-                <!-- Reason Section -->
-                <div class="space-y-2">
-                  <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">Qaytarish Sababi</label>
-                  <textarea 
-                    v-model="reason"
-                    placeholder="Masalan: Mahsulot nuqsonli chiqqan..."
-                    class="w-full min-h-[90px] p-3.5 bg-white dark:bg-[#131d31] border border-slate-200 dark:border-white/10 rounded-[14px] text-xs font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all resize-none shadow-sm placeholder-slate-400"
-                  ></textarea>
-                </div>
-
-                <!-- Spacer -->
-                <div class="flex-grow"></div>
-
-                <!-- Total Amount Summary & Finalize -->
-                <div class="space-y-4">
-                  <div class="space-y-3 px-1">
-                     <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Jami summa</h3>
-                     <div class="flex justify-between items-baseline pt-1">
-                        <span class="text-[24px] font-black text-slate-900 dark:text-white tracking-tighter leading-none">{{ formatCurrency(totalAmount) }}</span>
-                     </div>
-                  </div>
-
-                  <button 
-                    @click="submitReturn"
-                    :disabled="loading || !returnItems.length"
-                    class="w-full h-12 bg-rose-500 hover:bg-rose-600 dark:bg-rose-500/90 dark:hover:bg-rose-500 disabled:opacity-50 disabled:bg-slate-200 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 text-white rounded-[14px] text-xs font-black uppercase tracking-widest transition-all duration-200 hover:shadow-lg hover:shadow-rose-500/20 active:scale-95 flex items-center justify-center gap-2 border border-rose-600/20 leading-none"
-                  >
-                    <i v-if="loading" class="pi pi-spinner pi-spin"></i>
-                    <i v-else class="pi pi-check-circle"></i>
-                    Tasdiqlash va Qaytarish
-                  </button>
-                  <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 text-center leading-relaxed">"Tasdiqlash" tugmasini bossangiz, mahsulotlar stokga qaytadi va tranzaksiya saqlanadi.</p>
-                </div>
-
-              </div>
-            </div>
+            <SaleReturnDetails 
+               :initial-sale="initialSale"
+               :customers="customers"
+               v-model:customer-id="selectedCustomerId"
+               v-model:reason="reason"
+               :total-amount="totalAmount"
+               :loading="loading"
+               :disabled="!returnItems.length"
+               :format-currency="formatCurrency"
+               @submit="submitReturn"
+            />
           </div>
         </div>
       </div>
@@ -221,11 +91,14 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { productsAPI, customersAPI } from '@/services/api'
-import { useSaleReturns } from '../composables/useSaleReturns'
+import { watch } from 'vue'
 import { useSettingsStore } from '@/store/settings'
-import { useToast } from 'primevue/usetoast'
+import { useReturnCart } from '../composables/useReturnCart'
+
+import SaleReturnSearch from './SaleReturn/SaleReturnSearch.vue'
+import SaleReturnInitialItems from './SaleReturn/SaleReturnInitialItems.vue'
+import SaleReturnCart from './SaleReturn/SaleReturnCart.vue'
+import SaleReturnDetails from './SaleReturn/SaleReturnDetails.vue'
 
 const props = defineProps({
   visible: Boolean,
@@ -235,142 +108,37 @@ const props = defineProps({
 const emit = defineEmits(['update:visible', 'success'])
 
 const settingsStore = useSettingsStore()
-const toast = useToast()
-const { createReturn, loading } = useSaleReturns()
-
-const productQuery = ref('')
-const searchResults = ref([])
-const returnItems = ref([])
-const reason = ref('')
-const selectedCustomerId = ref(null)
-const customers = ref([])
-
 const formatCurrency = (val) => settingsStore.formatPrice(val)
-
-const totalAmount = computed(() => {
-  return returnItems.value.reduce((acc, item) => acc + (item.unit_price * item.quantity), 0)
-})
-
-// Lifecycle & Init
-watch(() => props.visible, (newVal) => {
-  if (newVal) {
-    reason.value = ''
-    returnItems.value = []
-    productQuery.value = ''
-    searchResults.value = []
-    
-    if (props.initialSale) {
-      selectedCustomerId.value = props.initialSale.customer_id
-    } else {
-      selectedCustomerId.value = null
-      loadCustomers()
-    }
-  }
-})
-
-const loadCustomers = async () => {
-    try {
-        const response = await customersAPI.getAll({ page_size: 100 })
-        customers.value = response.data.results || []
-    } catch (e) {
-        console.error('Failed to load customers')
-    }
-}
-
-// Search Logic
-let searchTimeout = null
-const onSearchProducts = () => {
-  if (searchTimeout) clearTimeout(searchTimeout)
-  if (!productQuery.value.trim()) {
-    searchResults.value = []
-    return
-  }
-  
-  searchTimeout = setTimeout(async () => {
-    try {
-      const response = await productsAPI.getAll({ search: productQuery.value, page_size: 5 })
-      searchResults.value = response.data.results || []
-    } catch (e) {
-      console.error('Search failed')
-    }
-  }, 400)
-}
-
-// Add Item Logic
-const addProduct = (p) => {
-  const existing = returnItems.value.find(item => item.product === p.id)
-  if (existing) {
-    existing.quantity += 1
-  } else {
-    returnItems.value.push({
-      product: p.id,
-      product_name: p.name,
-      quantity: 1,
-      unit_price: p.selling_price,
-      unit: p.unit
-    })
-  }
-  productQuery.value = ''
-  searchResults.value = []
-}
-
-const addFromSale = (saleItem) => {
-    returnItems.value.push({
-      product: saleItem.product_id || saleItem.product,
-      product_name: saleItem.product_name,
-      quantity: parseFloat(saleItem.quantity),
-      unit_price: parseFloat(saleItem.unit_price),
-      unit: saleItem.unit || 'dona',
-      max_qty: parseFloat(saleItem.quantity) // Track original qty to prevent over-returning if needed
-    })
-}
-
-const isAlreadyAdded = (productId) => {
-    return returnItems.value.some(item => item.product === productId)
-}
-
-const removeItem = (idx) => {
-  returnItems.value.splice(idx, 1)
-}
-
-const updateQty = (idx, delta) => {
-  const item = returnItems.value[idx]
-  const newVal = parseFloat(item.quantity) + delta
-  if (newVal > 0) {
-    item.quantity = newVal
-  }
-}
-
-const submitReturn = async () => {
-  if (!returnItems.value.length) return
-  
-  const payload = {
-    reason: reason.value || undefined,
-    items: returnItems.value.map(it => ({
-      product: it.product,
-      quantity: it.quantity.toString(),
-      unit_price: it.unit_price.toString()
-    }))
-  }
-  
-  if (props.initialSale?.id) payload.sale = props.initialSale.id
-  if (selectedCustomerId.value) payload.customer = selectedCustomerId.value
-
-  try {
-    await createReturn(payload)
-    emit('success')
-    close()
-  } catch (e) {
-    // Error handled in composable toast
-  }
-}
 
 const close = () => {
   emit('update:visible', false)
 }
 
-const formatDate = (d) => new Date(d).toLocaleString()
+const {
+  productQuery,
+  searchResults,
+  returnItems,
+  reason,
+  selectedCustomerId,
+  customers,
+  totalAmount,
+  loading,
+  resetForm,
+  onSearchProducts,
+  addProduct,
+  addFromSale,
+  isAlreadyAdded,
+  removeItem,
+  updateQty,
+  submitReturn
+} = useReturnCart(props, emit, close)
 
+// Lifecycle
+watch(() => props.visible, (newVal) => {
+  if (newVal) {
+    resetForm()
+  }
+})
 </script>
 
 <style scoped>
