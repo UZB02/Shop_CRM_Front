@@ -80,6 +80,7 @@
               @update:purchasePage="loadPurchases"
               @update:debtPage="loadDebts"
               @filter="handleFilters"
+              @select-trade="showTradeDetail"
               class="h-full" 
             />
           </div>
@@ -108,12 +109,20 @@
         v-if="selectedTrade"
         v-model:visible="displayTradeDetail"
         :trade="selectedTrade"
+        @init-return="handleInitReturn"
+        @trade-cancelled="loadCustomerData"
+    />
+
+    <SaleReturnModal 
+      v-model:visible="displayCreateReturn"
+      :initial-sale="returnInitialSale"
+      @success="handleReturnSuccess"
     />
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCustomerDetail } from './composables/useCustomerDetail'
 
@@ -126,6 +135,7 @@ import CustomerStatsCards from './components/CustomerStatsCards.vue'
 import CustomerRecentActivity from './components/CustomerRecentActivity.vue'
 import CustomerProfileSidebar from './components/CustomerProfileSidebar.vue'
 import TradeDetailModal from './components/TradeDetailModal.vue'
+import SaleReturnModal from '@/views/Trades/components/SaleReturnModal.vue'
 
 import { useSettingsStore } from '@/store/settings'
 
@@ -141,6 +151,19 @@ const {
   loadCustomerData, loadPurchases, loadDebts, loadGroups,
   handleFilters, editCustomer, saveUpdate, showTradeDetail
 } = useCustomerDetail()
+
+const displayCreateReturn = ref(false)
+const returnInitialSale = ref(null)
+
+const handleInitReturn = (sale) => {
+  returnInitialSale.value = sale
+  displayTradeDetail.value = false
+  displayCreateReturn.value = true
+}
+
+const handleReturnSuccess = () => {
+  loadCustomerData()
+}
 
 const tabs = [
   { id: 'overview', icon: 'pi-user', label: t('common.profile') },

@@ -245,15 +245,13 @@
       </div>
     </div>
 
-    <!-- Modals -->
-    <TradeDetailModal v-if="selectedTrade" v-model:visible="displayDetail" :trade="selectedTrade" />
+    <!-- Modals removed, delegated to parent -->
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import TradeStatusBadge from './TradeStatusBadge.vue'
-import TradeDetailModal from './TradeDetailModal.vue'
 import { useTradeUtils } from '../composables/useTradeUtils'
 
 const props = defineProps({
@@ -268,7 +266,7 @@ const props = defineProps({
   totalDebt: { type: [Number, String], default: 0 }
 })
 
-const emit = defineEmits(['update:purchasePage', 'update:debtPage', 'filter'])
+const emit = defineEmits(['update:purchasePage', 'update:debtPage', 'filter', 'selectTrade'])
 
 const filters = ref({
   payment_type: '',
@@ -315,8 +313,6 @@ const resetFilters = () => {
 }
 
 const activeTab = ref('purchases')
-const displayDetail = ref(false)
-const selectedTrade = ref(null)
 
 const { formatCurrency } = useTradeUtils()
 
@@ -359,8 +355,7 @@ const changePage = (page) => {
 const currentData = computed(() => activeTab.value === 'purchases' ? props.purchases : props.debts)
 
 const showTradeDetails = (trade) => {
-  selectedTrade.value = trade
-  displayDetail.value = true
+  emit('selectTrade', trade)
 }
 </script>
 
