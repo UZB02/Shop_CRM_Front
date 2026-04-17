@@ -86,7 +86,34 @@ export const useAuthStore = defineStore('auth', {
                 return { success: true }
             } catch (error) {
                 console.error('❌ Login error:', error)
-                return { success: false, message: error.response?.data || 'Login failed' }
+                
+                // Detailed handling for different error types
+                let errorMsg = 'Login failed'
+
+                if (!error.response) {
+                    // Network error, timeout, or server is down
+                    if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+                        errorMsg = 'So\'rov vaqti tugadi. Internet aloqasi juda sekin yoki server javob bermayapti.'
+                    } else if (error.message === 'Network Error') {
+                        errorMsg = 'Internet aloqasi mavjud emas yoki serverga ulanib bo\'lmadi. Aloqani tekshiring.'
+                    } else {
+                        errorMsg = 'Tizimga ulanishda kutilmagan xatolik yuz berdi.'
+                    }
+                } else {
+                    // Server responded with an error (4xx, 5xx)
+                    const status = error.response.status
+                    if (status === 401 || status === 403) {
+                        errorMsg = 'Login yoki parol noto\'g\'ri.'
+                    } else if (status === 429) {
+                        errorMsg = 'So\'rovlar soni limitdan oshdi. Biroz kuting va qayta urinib ko\'ring.'
+                    } else if (status >= 500) {
+                        errorMsg = 'Serverda xatolik yuz berdi. Texnik xizmat ko\'rsatilayotgan bo\'lishi mumkin.'
+                    } else {
+                        errorMsg = error.response.data || 'Login xato.'
+                    }
+                }
+
+                return { success: false, message: errorMsg }
             }
         },
 
