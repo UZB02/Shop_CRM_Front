@@ -3,11 +3,13 @@ import { subscriptionAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/store/auth'
+import { useNotificationStore } from '@/store/notifications'
 
 export const useSubscription = () => {
     const toast = useToast()
     const { t } = useI18n()
     const authStore = useAuthStore()
+    const notificationStore = useNotificationStore()
 
     const subscription = ref({
         plan: null,
@@ -44,6 +46,11 @@ export const useSubscription = () => {
         try {
             const response = await subscriptionAPI.getStatus()
             subscription.value = response.data
+            
+            // Sync with global notification store usage
+            if (response.data?.usage) {
+                notificationStore.usage = response.data.usage
+            }
         } catch (error) {
             console.error('Error loading subscription:', error)
             toast.add({ 
