@@ -11,7 +11,7 @@ export function useSaleReturns() {
   const returns = ref([])
   const totalRecords = ref(0)
   const page = ref(1)
-  const pageSize = ref(10)
+  const pageSize = ref(20)
   const searchQuery = ref('')
   
   const filters = ref({
@@ -31,6 +31,7 @@ export function useSaleReturns() {
     try {
       const params = {
         page: page.value,
+        page_size: pageSize.value,
         search: searchQuery.value || undefined,
         status: filters.value.status || undefined,
         branch: filters.value.branch || undefined,

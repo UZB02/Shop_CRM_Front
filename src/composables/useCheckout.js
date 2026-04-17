@@ -84,32 +84,26 @@ export function useCheckout(props, emit) {
     return rem > 0 ? rem : 0
   })
 
-  // VIP Mijoz Chegirma Mantiq
+  // VIP Mijoz Chegirma Mantiq - Soddalashtirilgan (Backend ma'lumotlariga tayanadi)
   watch(() => props.selectedCustomer, (val) => {
     vipMessage.value = ''
-    if (!val || !props.customerGroups || props.customerGroups.length === 0) return
+    if (!val) return
 
-    let groupObj = null
-    if (typeof val.customer_group === 'object' && val.customer_group !== null) {
-      groupObj = val.customer_group
-    } else if (typeof val.group === 'object' && val.group !== null) {
-      groupObj = val.group
-    } else {
-      const gid = val.group_id || val.group || val.customer_group
-      groupObj = props.customerGroups.find(g => g.id === gid)
-    }
+    // Backenddan to'g'ridan-to'g'ri kelayotgan group_discount dan foydalanamiz
+    const discountPct = val.group_discount || (val.group_info?.discount) || 0
+    const groupName = val.group_name || (val.group_info?.name) || ''
 
-    if (groupObj && groupObj.discount && parseFloat(groupObj.discount) > 0) {
-      const pct = parseFloat(groupObj.discount)
+    if (discountPct && parseFloat(discountPct) > 0) {
+      const pct = parseFloat(discountPct)
       let calculatedDiscount = Math.floor(((props.total || 0) * pct) / 100)
       
-      // Limitdan oshib ketmasligi uchun
+      // Limitdan oshib ketmasligi uchun (Global Settings)
       if (maxDiscountAmount.value > 0 && calculatedDiscount > maxDiscountAmount.value) {
         calculatedDiscount = maxDiscountAmount.value
       }
 
       discountAmount.value = calculatedDiscount
-      vipMessage.value = `${groupObj.name} VIP mijoz! ${pct}% chegirma avtomat hisoblandi.`
+      vipMessage.value = `${groupName || 'VIP'} mijoz! ${pct}% chegirma avtomat hisoblandi.`
     }
   })
 

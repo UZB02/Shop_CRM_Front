@@ -11,7 +11,7 @@ export function useTrades() {
   const trades = ref([])
   const totalRecords = ref(0)
   const page = ref(1)
-  const pageSize = ref(10)
+  const pageSize = ref(20)
   const searchQuery = ref('')
   
   const filters = ref({
@@ -36,6 +36,7 @@ export function useTrades() {
     try {
       const params = {
         page: page.value,
+        page_size: pageSize.value,
         search: searchQuery.value || undefined,
         status: filters.value.status || undefined,
         payment_type: filters.value.payment_type || undefined,
