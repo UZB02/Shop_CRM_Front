@@ -3,11 +3,13 @@ import { useI18n } from 'vue-i18n'
 import { workersAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
+import { useNotificationStore } from '@/store/notifications'
 
 export function useWorkerActions(loadWorkersCallback) {
     const { t } = useI18n()
     const toast = useToast()
     const confirm = useConfirm()
+    const notificationStore = useNotificationStore()
 
     const worker = ref({
         first_name: '',
@@ -174,6 +176,8 @@ export function useWorkerActions(loadWorkersCallback) {
                     life: 5000
                 })
             }
+            // Real-time sync of subscription limits
+            notificationStore.fetchSubscription()
             workerDialog.value = false
             if (loadWorkersCallback) loadWorkersCallback()
         } catch (error) {
@@ -210,6 +214,10 @@ export function useWorkerActions(loadWorkersCallback) {
                 try {
                     await workersAPI.delete(data.id || data._id)
                     toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('workers.messages.deleted', { name }), life: 5000 })
+                    
+                    // Real-time sync of subscription limits after deletion
+                    notificationStore.fetchSubscription()
+                    
                     if (loadWorkersCallback) loadWorkersCallback()
                 } catch (error) {
                     toast.add({ severity: 'error', summary: t('common.error'), detail: t('workers.messages.delete_error'), life: 5000 })

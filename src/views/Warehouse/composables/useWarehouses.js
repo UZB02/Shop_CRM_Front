@@ -3,11 +3,13 @@ import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
 import { warehousesAPI } from '@/services/api'
+import { useNotificationStore } from '@/store/notifications'
 
 export function useWarehouses() {
     const toast = useToast()
     const confirm = useConfirm()
     const { t } = useI18n()
+    const notificationStore = useNotificationStore()
 
     const warehouses = ref([])
     const loading = ref(false)
@@ -87,6 +89,8 @@ export function useWarehouses() {
             } else {
                 await warehousesAPI.create(payload)
                 toast.add({ severity: 'success', summary: t('warehouse.messages.success'), detail: t('warehouse.messages.added'), life: 5000 })
+                // Real-time sync of subscription limits
+                notificationStore.fetchSubscription()
             }
 
             warehouseDialog.value = false
@@ -109,6 +113,10 @@ export function useWarehouses() {
                 try {
                     await warehousesAPI.delete(data.id || data._id)
                     toast.add({ severity: 'success', summary: t('warehouse.messages.success'), detail: t('warehouse.messages.deleted'), life: 5000 })
+                    
+                    // Sync limits after deletion
+                    notificationStore.fetchSubscription()
+                    
                     loadWarehouses(currentPage.value)
                 } catch (error) {
                     toast.add({ severity: 'error', summary: t('warehouse.messages.error'), detail: t('warehouse.messages.delete_error'), life: 5000 })

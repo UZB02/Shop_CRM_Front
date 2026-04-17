@@ -2,10 +2,12 @@ import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { productsAPI } from '@/services/api'
+import { useNotificationStore } from '@/store/notifications'
 
 export function useProducts() {
     const toast = useToast()
     const confirm = useConfirm()
+    const notificationStore = useNotificationStore()
 
     const loading = ref(false)
     const products = ref([])
@@ -105,6 +107,10 @@ export function useProducts() {
                     const id = data.id || data._id
                     await productsAPI.delete(id)
                     toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot o\'chirildi', life: 5000 })
+                    
+                    // Sync limits after deletion
+                    notificationStore.fetchSubscription()
+                    
                     loadProducts()
                 } catch (error) {
                     console.error('Product deletion error:', error)

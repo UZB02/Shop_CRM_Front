@@ -3,12 +3,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { productsAPI, categoriesAPI, subcategoriesAPI } from '@/services/api'
 import { useSettingsStore } from '@/store/settings'
+import { useNotificationStore } from '@/store/notifications'
 
 export function useProductForm() {
     const route = useRoute()
     const router = useRouter()
     const toast = useToast()
     const settingsStore = useSettingsStore()
+    const notificationStore = useNotificationStore()
 
     const loading = ref(false)
     const saving = ref(false)
@@ -172,6 +174,8 @@ export function useProductForm() {
             } else {
                 await productsAPI.create(formData)
                 toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi mahsulot qo\'shildi', life: 5000 })
+                // Refresh subscription limits
+                notificationStore.fetchSubscription()
             }
             router.push('/dashboard/products')
         } catch (err) {

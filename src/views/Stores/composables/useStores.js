@@ -3,11 +3,13 @@ import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
 import { storesAPI, branchesAPI } from '@/services/api'
+import { useNotificationStore } from '@/store/notifications'
 
 export function useStores() {
     const { t } = useI18n()
     const toast = useToast()
     const confirm = useConfirm()
+    const notificationStore = useNotificationStore()
 
     // Store State
     const store = ref({})
@@ -201,6 +203,8 @@ export function useStores() {
             } else {
                 await branchesAPI.create(payload)
                 toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_added'), life: 5000 })
+                // Real-time sync of subscription limits
+                notificationStore.fetchSubscription()
             }
             branchDialog.value = false
             loadData()
@@ -221,6 +225,8 @@ export function useStores() {
                 try {
                     await branchesAPI.delete(data.id || data._id)
                     toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_deleted'), life: 5000 })
+                    // Real-time sync of subscription limits after deletion
+                    notificationStore.fetchSubscription()
                     loadData()
                 } catch {
                     toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.delete_error'), life: 5000 })
