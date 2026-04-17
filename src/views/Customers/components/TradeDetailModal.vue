@@ -54,16 +54,21 @@
               <div class="flex-grow">
                  <div class="space-y-2.5">
                    <div v-for="(item, idx) in processedItems" :key="idx" 
-                        class="group flex items-center gap-4 p-3 rounded-[14px] transition-all duration-200 border border-slate-100 dark:border-white/5 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-white/[0.02] shadow-sm hover:shadow-md">
-                     <div class="w-10 h-10 rounded-[10px] bg-slate-50 dark:bg-[#1a2333] flex items-center justify-center text-slate-400 dark:text-slate-500 shrink-0 group-hover:scale-105 group-hover:text-emerald-500 transition-all border border-slate-200/50 dark:border-white/5">
+                        class="group flex items-center gap-4 p-3 rounded-[14px] transition-all duration-200 border border-slate-100 dark:border-white/5 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-white/[0.02] shadow-sm hover:shadow-md"
+                        :class="{'opacity-40 grayscale-[50%]': item.isFullyReturned}">
+                     <div class="w-10 h-10 rounded-[10px] bg-slate-50 dark:bg-[#1a2333] flex items-center justify-center text-slate-400 dark:text-slate-500 shrink-0 transition-all border border-slate-200/50 dark:border-white/5"
+                          :class="{'group-hover:scale-105 group-hover:text-emerald-500': !item.isFullyReturned}">
                        <i class="pi pi-box text-sm"></i>
                      </div>
                      <div class="flex-grow min-w-0">
                        <div class="flex items-center gap-2 mb-1">
-                         <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">{{ item.product_name }}</h4>
+                         <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate" :class="{'line-through opacity-60': item.isFullyReturned}">{{ item.product_name }}</h4>
+                         <span v-if="item.isReturned" class="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-500/10 px-1 py-0.5 rounded border border-amber-100 dark:border-amber-500/10 uppercase tracking-widest leading-none">
+                           {{ item.isFullyReturned ? 'Qaytarilgan' : `Qaytarildi (${item.returned_qty})` }}
+                         </span>
                          <span v-if="item.hasDiscount" class="text-[8px] font-black text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-1 py-0.5 rounded border border-rose-100 dark:border-rose-500/10 uppercase tracking-widest leading-none">Chegirma</span>
                        </div>
-                       <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium flex items-center">
+                       <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium flex items-center flex-wrap gap-y-1">
                          <span class="text-slate-700 dark:text-slate-300">{{ item.quantity }} {{ item.unit }}</span>
                          <span class="mx-1.5 text-slate-300 dark:text-slate-600">×</span> 
                          <template v-if="item.hasDiscount">
@@ -73,10 +78,19 @@
                          <template v-else>
                            {{ formatCurrency(item.unit_price) }}
                          </template>
+
+                         <!-- Detail breakdown for returns -->
+                         <template v-if="item.isReturned && !item.isFullyReturned">
+                           <span class="mx-2 text-slate-300 dark:text-slate-700">|</span>
+                           <span class="text-amber-500 font-bold">Qaytarilgan: {{ item.returned_qty }}</span>
+                           <span class="mx-2 text-slate-300 dark:text-slate-700">|</span>
+                           <span class="text-emerald-500 font-bold">Qolgan: {{ item.net_qty }}</span>
+                         </template>
                        </p>
                      </div>
                      <div class="text-right shrink-0 flex flex-col items-end justify-center">
-                       <span class="text-[13px] font-black text-slate-900 dark:text-white tracking-tight leading-none">{{ formatCurrency(item.total_price) }}</span>
+                       <span class="text-[13px] font-black text-slate-900 dark:text-white tracking-tight leading-none" :class="{'opacity-60': item.isFullyReturned}">{{ formatCurrency(item.total_price) }}</span>
+                       <span v-if="item.isReturned && !item.isFullyReturned" class="text-[9px] font-bold text-emerald-500 mt-1 leading-none">Haqiqiy: {{ formatCurrency(item.net_total_price) }}</span>
                        <span v-if="item.hasDiscount" class="text-[9px] font-bold text-slate-400 dark:text-slate-500 mt-1 leading-none">-{{ formatCurrency(item.discountAmount) }}</span>
                      </div>
                    </div>
@@ -264,13 +278,21 @@ const processedItems = computed(() => {
   if (!props.trade.items) return []
   return props.trade.items.map(item => {
     const qty = parseFloat(item.quantity || 0)
+    const returnedQty = parseFloat(item.returned_qty || 0)
+    const netQty = parseFloat(item.net_qty || (qty - returnedQty))
     const discAmt = parseFloat(item.item_discount_amt || 0)
+    
     return {
       ...item,
       quantity: qty,
+      returned_qty: returnedQty,
+      net_qty: netQty,
+      isReturned: returnedQty > 0,
+      isFullyReturned: netQty <= 0,
       hasDiscount: discAmt > 0,
       discountAmount: discAmt * qty,
-      total_price: parseFloat(item.total_price || 0)
+      total_price: parseFloat(item.total_price || 0),
+      net_total_price: netQty * parseFloat(item.unit_price || 0)
     }
   })
 })
@@ -287,11 +309,11 @@ const summary = computed(() => {
 })
 
 const canInitReturn = computed(() => 
-  props.trade.status === 'completed' && settingsStore.isSaleReturnEnabled
+  (props.trade.status === 'completed' || props.trade.status === 'partially_returned') && settingsStore.isSaleReturnEnabled
 )
 
 const canFullCancel = computed(() => 
-  props.trade.status === 'completed' && settingsStore.isSaleReturnEnabled
+  (props.trade.status === 'completed' || props.trade.status === 'partially_returned') && settingsStore.isSaleReturnEnabled
 )
 
 // Actions

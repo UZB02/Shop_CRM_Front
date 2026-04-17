@@ -75,13 +75,17 @@ export function useReturnCart(props, emit, close) {
   }
 
   const addFromSale = (saleItem) => {
+    const qty = parseFloat(saleItem.quantity || 0)
+    const returnedQty = parseFloat(saleItem.returned_qty || 0)
+    const netQty = parseFloat(saleItem.net_qty || (qty - returnedQty))
+
     returnItems.value.push({
       product: saleItem.product_id || saleItem.product,
       product_name: saleItem.product_name,
-      quantity: parseFloat(saleItem.quantity),
+      quantity: netQty,
       unit_price: parseFloat(saleItem.unit_price),
       unit: saleItem.unit || 'dona',
-      max_qty: parseFloat(saleItem.quantity)
+      max_qty: netQty
     })
   }
 
@@ -96,10 +100,14 @@ export function useReturnCart(props, emit, close) {
   const updateQty = (idx, delta) => {
     const item = returnItems.value[idx]
     const newVal = parseFloat(item.quantity) + delta
+    
+    // Enforce 0 < newVal <= max_qty (if max_qty exists)
     if (newVal > 0) {
+      if (item.max_qty !== undefined && newVal > item.max_qty) {
+        return
+      }
       item.quantity = newVal
     }
-    // Note: Can check max_qty here if needed
   }
 
   const submitReturn = async () => {
