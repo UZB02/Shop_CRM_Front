@@ -195,19 +195,32 @@ const getFeatureIcon = (key) => {
 
 const getStatusLabel = (status) => {
     const s = String(status || '').toLowerCase()
-    switch(s) {
-        case 'active': return t('subscription.status_active')
-        case 'warning': return t('subscription.status_warning')
-        default: return t('subscription.status_expired')
+    const days = props.subscription.days_left
+    
+    // Logic: Even if status is unknown, if we have days left, it's NOT expired
+    if (s === 'active' || s === 'trial' || s === 'trialing' || (days > 0)) {
+        return t('subscription.status_active')
     }
+    
+    if (s === 'warning' || (days > 0 && days <= 3)) {
+        return t('subscription.status_warning')
+    }
+    
+    return t('subscription.status_expired')
 }
 
 const getStatusSeverity = (status) => {
     const s = String(status || '').toLowerCase()
-    switch(s) {
-        case 'active': return 'success'
-        case 'warning': return 'warning'
-        default: return 'danger'
+    const days = props.subscription.days_left
+    
+    if (s === 'active' || s === 'trial' || s === 'trialing' || (days > 0)) {
+        return 'success'
     }
+    
+    if (s === 'warning' || (days > 0 && days <= 3)) {
+        return 'warning'
+    }
+    
+    return 'danger'
 }
 </script>
