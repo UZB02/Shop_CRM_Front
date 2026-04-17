@@ -14,10 +14,17 @@
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <button 
-        @click="$emit('add')"
-        class="h-8 px-3 rounded-lg text-xs font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center gap-1.5 whitespace-nowrap"
+        @click="notificationStore.canAddWarehouse ? $emit('add') : null"
+        :disabled="!notificationStore.canAddWarehouse"
+        :title="!notificationStore.canAddWarehouse ? 'Obuna limitingiz tugagan. Iltimos, tarifni yangilang.' : ''"
+        class="h-8 px-3 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 whitespace-nowrap"
+        :class="[
+          notificationStore.canAddWarehouse 
+            ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm active:scale-95' 
+            : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50'
+        ]"
       >
-        <i class="pi pi-plus text-[10px]"></i>
+        <i :class="notificationStore.canAddWarehouse ? 'pi pi-plus' : 'pi pi-lock'" class="text-[10px]"></i>
         <span>{{ $t('warehouse.new_warehouse') }}</span>
       </button>
     </div>
@@ -25,5 +32,8 @@
 </template>
 
 <script setup>
+import { useNotificationStore } from '@/store/notifications'
+const notificationStore = useNotificationStore()
+
 defineEmits(['add'])
 </script>

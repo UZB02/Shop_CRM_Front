@@ -22,10 +22,17 @@
         <span>Aksiyalar</span>
       </button>
       <button
-        @click="router.push('/dashboard/products/create')"
-        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+        @click="notificationStore.canAddProduct ? router.push('/dashboard/products/create') : null"
+        :disabled="!notificationStore.canAddProduct"
+        :title="!notificationStore.canAddProduct ? 'Obuna limitingiz tugagan. Iltimos, tarifni yangilang.' : ''"
+        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+        :class="[
+          notificationStore.canAddProduct 
+            ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm active:scale-95' 
+            : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50'
+        ]"
       >
-        <i class="pi pi-plus text-xs"></i>
+        <i :class="notificationStore.canAddProduct ? 'pi pi-plus' : 'pi pi-lock'" class="text-xs"></i>
         <span>{{ $t('products.new_product') }}</span>
       </button>
     </div>
@@ -34,7 +41,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useNotificationStore } from '@/store/notifications'
+
 const router = useRouter()
+const notificationStore = useNotificationStore()
+
 defineProps({ totalProducts: Number })
 defineEmits(['add-category', 'add-product'])
 </script>

@@ -23,10 +23,17 @@
       </button>
       <button
         v-if="hasStore && showAddBranch"
-        @click="$emit('add-branch')"
-        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+        @click="notificationStore.canAddBranch ? $emit('add-branch') : null"
+        :disabled="!notificationStore.canAddBranch"
+        :title="!notificationStore.canAddBranch ? 'Obuna limitingiz tugagan. Iltimos, tarifni yangilang.' : ''"
+        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+        :class="[
+          notificationStore.canAddBranch 
+            ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm active:scale-95' 
+            : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50'
+        ]"
       >
-        <i class="pi pi-plus text-xs"></i>
+        <i :class="notificationStore.canAddBranch ? 'pi pi-plus' : 'pi pi-lock'" class="text-xs"></i>
         <span>{{ $t('stores.new_branch') }}</span>
       </button>
     </div>
@@ -34,6 +41,9 @@
 </template>
 
 <script setup>
+import { useNotificationStore } from '@/store/notifications'
+const notificationStore = useNotificationStore()
+
 defineProps({
   storeName: String,
   branchCount: Number,

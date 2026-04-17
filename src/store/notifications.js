@@ -6,6 +6,12 @@ export const useNotificationStore = defineStore('notifications', {
         announcements: [],
         lowStockItems: [],
         subscription: null,
+        usage: {
+            branches: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
+            warehouses: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
+            workers: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
+            products: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true }
+        },
         intervals: {
             announcements: null,
             lowStock: null,
@@ -33,6 +39,29 @@ export const useNotificationStore = defineStore('notifications', {
         isSubscriptionExpired: (state) => state.subscription?.status === 'expired',
         daysLeft: (state) => state.subscription?.days_left ?? 0,
         hasLowStock: (state) => Array.isArray(state.lowStockItems) && state.lowStockItems.length > 0,
+        
+        // Usage getters
+        canAddBranch: (state) => state.usage?.branches?.can_add ?? true,
+        canAddWarehouse: (state) => state.usage?.warehouses?.can_add ?? true,
+        canAddWorker: (state) => state.usage?.workers?.can_add ?? true,
+        canAddProduct: (state) => state.usage?.products?.can_add ?? true,
+        
+        branchUsagePct: (state) => {
+            const b = state.usage?.branches
+            if (!b || b.unlimited) return 0
+            return (b.used / b.limit) * 100
+        },
+        workerUsagePct: (state) => {
+            const w = state.usage?.workers
+            if (!w || w.unlimited) return 0
+            return (w.used / w.limit) * 100
+        },
+        productUsagePct: (state) => {
+            const p = state.usage?.products
+            if (!p || p.unlimited) return 0
+            return (p.used / p.limit) * 100
+        },
+
         allNotifications: (state) => {
             const list = []
             
@@ -137,6 +166,10 @@ export const useNotificationStore = defineStore('notifications', {
             try {
                 const res = await subscriptionAPI.getStatus()
                 this.subscription = res.data || null
+                // Store the new usage info
+                if (res.data?.usage) {
+                    this.usage = res.data.usage
+                }
             } catch (err) {
                 console.error('Subscription error:', err)
             } finally {

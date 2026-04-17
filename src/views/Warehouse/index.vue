@@ -38,10 +38,16 @@
         </button>
         <button
           v-else
-          @click="openNewDialog"
-          class="flex items-center gap-2 h-9 px-6 rounded-lg bg-emerald-500 text-white text-xs font-semibold hover:bg-emerald-600 transition-all shadow-sm shadow-emerald-500/20"
+          @click="notificationStore.canAddWarehouse ? openNewDialog : null"
+          :disabled="!notificationStore.canAddWarehouse"
+          class="flex items-center gap-2 h-9 px-6 rounded-lg text-xs font-semibold transition-all shadow-sm"
+          :class="[
+            notificationStore.canAddWarehouse 
+              ? 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20' 
+              : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50'
+          ]"
         >
-          <i class="pi pi-plus text-[10px]"></i>
+          <i :class="notificationStore.canAddWarehouse ? 'pi pi-plus' : 'pi pi-lock'" class="text-[10px]"></i>
           {{ $t('warehouse.add_first') }}
         </button>
       </div>
@@ -108,6 +114,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Paginator from 'primevue/paginator'
 import ConfirmDialog from 'primevue/confirmdialog'
+import { useNotificationStore } from '@/store/notifications'
 
 import WarehousePageHeader from './components/WarehousePageHeader.vue'
 import WarehouseMinimalFilters from './components/WarehouseMinimalFilters.vue'
@@ -118,6 +125,8 @@ import WarehouseDialog from './components/WarehouseDialog.vue'
 import { useWarehouses } from './composables/useWarehouses'
 
 const router = useRouter()
+const notificationStore = useNotificationStore()
+
 const {
   warehouses, loading, saving, warehouseDialog, submitted,
   viewMode, searchQuery, currentPage, rows, totalRecords,
