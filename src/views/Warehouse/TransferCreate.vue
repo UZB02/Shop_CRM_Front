@@ -44,53 +44,62 @@
       :visible="!!stockErrors" 
       @update:visible="stockErrors = null"
       modal 
-      header="Ombor qoldig'i tekshiruvi" 
-      :style="{ width: '500px' }"
+      :draggable="false"
       class="stock-error-dialog"
+      :style="{ width: '440px' }"
       :pt="{
-        header: { class: 'dark:bg-slate-900 border-b dark:border-slate-800' },
-        content: { class: 'dark:bg-slate-900' },
-        footer: { class: 'dark:bg-slate-900 border-t dark:border-slate-800' }
+        root: { class: '!bg-[#0f172a] !border-white/5 !rounded-[24px] !shadow-2xl overflow-hidden' },
+        header: { class: '!bg-[#0f172a] !border-b !border-white/5 !p-5' },
+        title: { class: '!text-sm !font-black !text-white !uppercase !tracking-[3px]' },
+        content: { class: '!bg-[#0f172a] !p-6' },
+        footer: { class: '!bg-[#0f172a] !border-t !border-white/5 !p-4' },
+        closeButton: { class: '!bg-white/5 !rounded-full hover:!bg-white/10 !transition-all' }
       }"
+      :header="$t('warehouse.validation.title')"
     >
-      <div class="space-y-4 py-2">
-        <div v-if="stockErrors?.detail" class="p-3 rounded-lg bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20">
-          <p class="text-sm font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-2">
-            <i class="pi pi-exclamation-triangle"></i>
-            {{ stockErrors.detail }}
-          </p>
+      <div class="space-y-4">
+        <!-- Main Error Banner -->
+        <div v-if="stockErrors?.detail" class="px-4 py-3 rounded-xl bg-rose-500/5 border border-rose-500/10 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center shrink-0 border border-rose-500/20">
+            <i class="pi pi-exclamation-triangle text-rose-500 text-xs"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[8px] font-black text-rose-500 uppercase tracking-widest leading-none mb-1">{{ $t('warehouse.validation.error_header') }}</span>
+            <p class="text-[11px] font-bold text-slate-300 leading-tight">{{ stockErrors.detail }}</p>
+          </div>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-2.5">
           <!-- Zero Stock Errors -->
-          <div v-for="(err, i) in stockErrors?.zero_stock" :key="'z-'+i" class="flex gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-            <div class="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-500/20 flex items-center justify-center shrink-0">
-              <i class="pi pi-times-circle text-rose-500"></i>
+          <div v-for="(err, i) in stockErrors?.zero_stock" :key="'z-'+i" class="flex gap-3 p-3 rounded-[14px] bg-slate-900/50 border border-white/5 group hover:border-rose-500/20 transition-all">
+            <div class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/10 flex items-center justify-center shrink-0">
+              <i class="pi pi-times-circle text-rose-500 text-[10px]"></i>
             </div>
-            <div>
-              <p class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">Qoldiq yo'q</p>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ err }}</p>
+            <div class="flex flex-col justify-center min-w-0">
+              <span class="text-[8px] font-black text-rose-500/70 uppercase tracking-[2px] mb-0.5">{{ $t('warehouse.validation.no_stock') }}</span>
+              <p class="text-[10px] font-bold text-slate-400 truncate tracking-tight">{{ err }}</p>
             </div>
           </div>
 
           <!-- Insufficient Stock Errors -->
-          <div v-for="(err, i) in stockErrors?.insufficient_stock" :key="'in-'+i" class="flex gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-            <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center shrink-0">
-              <i class="pi pi-exclamation-circle text-amber-500"></i>
+          <div v-for="(err, i) in stockErrors?.insufficient_stock" :key="'in-'+i" class="flex gap-3 p-3 rounded-[14px] bg-slate-900/50 border border-white/5 group hover:border-amber-500/20 transition-all">
+            <div class="w-[34px] h-[34px] rounded-lg bg-amber-500/10 border border-amber-500/10 flex items-center justify-center shrink-0">
+              <i class="pi pi-exclamation-circle text-amber-500 text-[10px]"></i>
             </div>
-            <div>
-              <p class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">Qoldiq yetarli emas</p>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ err }}</p>
+            <div class="flex flex-col justify-center min-w-0">
+              <span class="text-[8px] font-black text-amber-500/70 uppercase tracking-[2px] mb-0.5">{{ $t('warehouse.validation.low_stock') }}</span>
+              <p class="text-[11px] font-bold text-slate-400 leading-snug">{{ err }}</p>
             </div>
           </div>
         </div>
       </div>
+      
       <template #footer>
         <button 
           @click="stockErrors = null"
-          class="px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold hover:opacity-90 active:scale-95 transition-all"
+          class="w-full h-10 rounded-xl bg-white hover:bg-slate-50 text-slate-950 text-[10px] font-black uppercase tracking-[3px] shadow-lg active:scale-[0.98] transition-all"
         >
-          Tushunarli
+          {{ $t('warehouse.validation.understand') }}
         </button>
       </template>
     </Dialog>

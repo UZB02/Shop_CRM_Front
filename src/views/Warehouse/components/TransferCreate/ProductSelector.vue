@@ -13,8 +13,8 @@
       <!-- Dialog header -->
       <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">Mahsulot tanlang</h3>
-          <p class="text-xs text-slate-400 mt-0.5">{{ sourceName }} omboridagi mahsulotlar</p>
+          <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">{{ $t('warehouse.transfer.select_product') }}</h3>
+          <p class="text-xs text-slate-400 mt-0.5">{{ $t('warehouse.transfer.warehouse_products', { name: sourceName }) }}</p>
         </div>
         <button
           @click="$emit('update:visible', false)"
@@ -32,7 +32,7 @@
             :value="productSearch"
             @input="$emit('update:productSearch', $event.target.value)"
             type="text"
-            placeholder="Nomi yoki shtrix kodi..."
+            :placeholder="$t('warehouse.transfer.name_or_barcode')"
             class="w-full h-9 pl-9 pr-4 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all"
             autofocus
           />
@@ -49,7 +49,7 @@
           <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
             <i class="pi pi-search text-slate-400"></i>
           </div>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Mahsulot topilmadi</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400">{{ $t('warehouse.transfer.no_product_found') }}</p>
         </div>
 
         <!-- Product rows -->
@@ -69,7 +69,7 @@
               </div>
               <div class="flex items-center gap-2 mt-0.5">
                 <code v-if="p.barcode" class="text-xs text-slate-400">{{ p.barcode }}</code>
-                <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">{{ p.quantity }} mavjud</span>
+                <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">{{ $t('warehouse.transfer.available_qty', { qty: p.quantity }) }}</span>
               </div>
             </div>
             <i class="pi pi-plus text-xs text-slate-300 group-hover:text-emerald-500 transition-colors shrink-0"></i>

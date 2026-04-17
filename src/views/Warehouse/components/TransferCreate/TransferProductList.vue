@@ -4,7 +4,7 @@
     <!-- Panel toolbar -->
     <div class="flex items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 shrink-0">
       <div class="flex items-center gap-2">
-        <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Mahsulotlar</h3>
+        <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ $t('warehouse.transfer.products') }}</h3>
         <span
           v-if="items.length"
           class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
@@ -15,7 +15,7 @@
         class="flex items-center gap-1.5 h-8 px-3 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-medium hover:opacity-90 transition-all"
       >
         <i class="pi pi-plus text-[11px]"></i>
-        Mahsulot qo'shish
+        {{ $t('warehouse.transfer.add_product') }}
       </button>
     </div>
 
@@ -28,15 +28,15 @@
         <i class="pi pi-inbox text-2xl text-slate-300 dark:text-slate-600"></i>
       </div>
       <div>
-        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Mahsulotlar qo'shilmagan</p>
-        <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Yuqoridagi tugma orqali mahsulot tanlang</p>
+        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ $t('warehouse.transfer.no_items') }}</p>
+        <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{{ $t('warehouse.transfer.no_items_desc') }}</p>
       </div>
       <button
         @click="$emit('openSearch')"
         class="flex items-center gap-1.5 h-8 px-4 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-500 dark:text-slate-400 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
       >
         <i class="pi pi-plus text-xs"></i>
-        Mahsulot qo'shish
+        {{ $t('warehouse.transfer.add_product') }}
       </button>
     </div>
 
@@ -46,10 +46,10 @@
         <thead class="sticky top-0 z-10">
           <tr class="bg-slate-50/90 dark:bg-slate-800/90 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800">
             <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide w-8">#</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Mahsulot</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Shtrix-kod</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center w-36">Mavjud</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center w-36">Miqdor</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('warehouse.transfer.col_product') }}</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('warehouse.transfer.col_barcode') }}</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center w-36">{{ $t('warehouse.transfer.col_available') }}</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center w-36">{{ $t('warehouse.transfer.col_quantity') }}</th>
             <th class="px-5 py-3 w-12"></th>
           </tr>
         </thead>
@@ -118,14 +118,14 @@
       <!-- Table footer summary -->
       <div class="sticky bottom-0 px-5 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-800/60 backdrop-blur-sm flex items-center justify-between">
         <span class="text-xs text-slate-400">
-          Jami {{ items.length }} turdagi mahsulot
+          {{ $t('warehouse.transfer.total_items', { count: items.length }) }}
         </span>
         <button
           @click="$emit('openSearch')"
           class="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 hover:underline"
         >
           <i class="pi pi-plus text-[10px]"></i>
-          Yana qo'shish
+          {{ $t('warehouse.transfer.add_more') }}
         </button>
       </div>
     </div>

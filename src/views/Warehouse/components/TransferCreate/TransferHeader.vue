@@ -9,12 +9,12 @@
       </button>
       <div>
         <div class="flex items-center gap-1.5 text-xs text-slate-400 mb-0.5">
-          <span class="hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer" @click="$emit('back')">O'tkazmalar</span>
+          <span class="hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer" @click="$emit('back')">{{ $t('warehouse.detail.transfers') }}</span>
           <i class="pi pi-chevron-right text-[9px]"></i>
-          <span class="text-slate-600 dark:text-slate-300">Yangi o'tkazma</span>
+          <span class="text-slate-600 dark:text-slate-300">{{ $t('warehouse.transfer.create') }}</span>
         </div>
         <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100">
-          {{ sourceName || '...' }} → O'tkazma yaratish
+          {{ sourceName || '...' }} → {{ $t('warehouse.transfer.create') }}
         </h1>
       </div>
     </div>
@@ -24,7 +24,7 @@
         @click="$emit('back')"
         class="h-8 px-4 rounded-lg text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
       >
-        Bekor qilish
+        {{ $t('common.cancel') }}
       </button>
       <button
         @click="$emit('submit')"
@@ -33,7 +33,7 @@
       >
         <i v-if="loading" class="pi pi-spin pi-spinner text-xs"></i>
         <i v-else class="pi pi-send text-xs"></i>
-        Yuborish
+        {{ $t('warehouse.transfer.send') }}
       </button>
     </div>
   </div>
