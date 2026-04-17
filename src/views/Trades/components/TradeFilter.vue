@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full">
+  <div class="flex flex-col w-full relative">
     <!-- Top Row: Customer AutoComplete and Toggle -->
     <div class="flex items-center gap-3 w-full">
       <div class="relative flex-1">
@@ -55,61 +55,62 @@
         
         <!-- Row 1 -->
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Holat</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.status') }}</label>
           <Dropdown 
             :modelValue="filters.status"
             @update:modelValue="$emit('update:filter', { status: $event })"
             :options="statusOptions"
             optionLabel="label"
             optionValue="value"
-            placeholder="Tanlang..."
+            :placeholder="$t('common.select')"
             class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
           />
         </div>
         
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">To'lov turi</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.payment.all') }}</label>
           <Dropdown 
             :modelValue="filters.payment_type"
             @update:modelValue="$emit('update:filter', { payment_type: $event })"
             :options="paymentOptions"
             optionLabel="label"
             optionValue="value"
-            placeholder="Tanlang..."
+            :placeholder="$t('common.select')"
             class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
           />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Filial</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.branch') }}</label>
           <Dropdown 
             :modelValue="filters.branch"
             @update:modelValue="$emit('update:filter', { branch: $event })"
             :options="branchOptions"
             optionLabel="name"
             optionValue="id"
-            placeholder="Barchasi"
+            :placeholder="$t('common.all')"
             filter
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
+            :disabled="isSeller"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px] disabled:opacity-50"
           />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Xodim</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.worker') }}</label>
           <Dropdown 
             :modelValue="filters.worker"
             @update:modelValue="$emit('update:filter', { worker: $event })"
             :options="workerOptions"
             optionLabel="full_name"
             optionValue="id"
-            placeholder="Barchasi"
+            :placeholder="$t('common.all')"
             filter
             class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
           />
         </div>
         
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Sanadan</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_from') }}</label>
           <input 
             type="date"
             :value="filters.date_from"
@@ -119,7 +120,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Sanagacha</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_to') }}</label>
           <input 
             type="date"
             :value="filters.date_to"
@@ -129,7 +130,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Min. summa</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.min_amount') }}</label>
           <input 
             type="number"
             :value="filters.min_amount"
@@ -140,7 +141,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Maks. summa</label>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.max_amount') }}</label>
           <input 
             type="number"
             :value="filters.max_amount"
@@ -158,14 +159,14 @@
           class="h-10 px-5 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300"
         >
           <i class="pi pi-times text-[10px]"></i>
-          <span class="text-[13px] font-bold">Tozalash</span>
+          <span class="text-[13px] font-bold">{{ $t('common.reset') }}</span>
         </button>
         <button 
           @click="onApply" 
           class="h-10 px-6 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
         >
           <i class="pi pi-filter text-[11px]"></i>
-          <span class="text-[13px] font-bold">Filtrni qo'llash</span>
+          <span class="text-[13px] font-bold">{{ $t('trades.filters.apply') }}</span>
         </button>
       </div>
     </div>
@@ -177,6 +178,8 @@ import { ref, watch, onMounted, computed } from 'vue'
 import Dropdown from 'primevue/dropdown'
 import AutoComplete from 'primevue/autocomplete'
 import { customersAPI, branchesAPI, workersAPI } from '@/services/api'
+import { useAuthStore } from '@/store/auth'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   searchQuery: String,
@@ -185,13 +188,21 @@ const props = defineProps({
 
 const emit = defineEmits(['update:searchQuery', 'update:filter', 'search', 'reset'])
 
+const authStore = useAuthStore()
+const { t } = useI18n()
+
 const showFilters = ref(false)
 
 const selectedCustomer = ref(null)
 const customerSuggestions = ref([])
 
-const branchOptions = ref([{ id: '', name: 'Barchasi' }])
-const workerOptions = ref([{ id: '', full_name: 'Barchasi' }])
+const branchOptions = ref([{ id: '', name: t('common.all') }])
+const workerOptions = ref([{ id: '', full_name: t('common.all') }])
+
+const isSeller = computed(() => {
+  const role = (authStore.user?.role || authStore.user?.worker?.role || '').toLowerCase()
+  return role === 'seller'
+})
 
 const hasActiveFilters = computed(() => {
   return Object.keys(props.filters).some(key => {
@@ -205,19 +216,21 @@ const onApply = () => {
   showFilters.value = false
 }
 
-const statusOptions = [
-  { label: 'Barchasi', value: '' },
-  { label: 'Yakunlangan', value: 'completed' },
-  { label: 'Bekor qilingan', value: 'cancelled' }
-]
+const statusOptions = computed(() => [
+  { label: t('trades.status.all'), value: '' },
+  { label: t('trades.status.completed'), value: 'completed' },
+  { label: t('trades.status.cancelled'), value: 'cancelled' },
+  { label: t('trades.status.returned'), value: 'returned' },
+  { label: t('trades.status.partially_returned'), value: 'partially_returned' }
+])
 
-const paymentOptions = [
-  { label: 'Barchasi', value: '' },
-  { label: 'Naqd', value: 'cash' },
-  { label: 'Karta', value: 'card' },
-  { label: 'Aralash', value: 'mixed' },
-  { label: 'Nasiya', value: 'debt' }
-]
+const paymentOptions = computed(() => [
+  { label: t('trades.payment.all'), value: '' },
+  { label: t('trades.payment.cash'), value: 'cash' },
+  { label: t('trades.payment.card'), value: 'card' },
+  { label: t('trades.payment.mixed'), value: 'mixed' },
+  { label: t('trades.payment.debt'), value: 'debt' }
+])
 
 onMounted(async () => {
   try {
@@ -229,15 +242,15 @@ onMounted(async () => {
     const loadedWorkers = wRes.data.results || wRes.data || []
     
     branchOptions.value = [
-      { id: '', name: 'Barchasi' },
+      { id: '', name: t('common.all') },
       ...loadedBranches
     ]
     
     workerOptions.value = [
-      { id: '', full_name: 'Barchasi' },
+      { id: '', full_name: t('common.all') },
       ...loadedWorkers.map(w => ({
         id: w.id,
-        full_name: w.full_name || `${w.first_name || ''} ${w.last_name || ''}`.trim() || w.name || 'Nomsiz Xodim'
+        full_name: w.full_name || `${w.first_name || ''} ${w.last_name || ''}`.trim() || w.name || t('workers.unknown')
       }))
     ]
   } catch (error) {

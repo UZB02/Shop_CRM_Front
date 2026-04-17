@@ -1159,5 +1159,28 @@
     "export_pdf": "PDFга юклаш",
     "wastage_export": "Исрофлар Excel",
     "filters": "Ҳисобот филтрлар"
+  },
+  "trades": {
+    "status": {
+      "all": "Барчаси",
+      "completed": "Якунланган",
+      "cancelled": "Бекор қилинган",
+      "returned": "Қайтарилган",
+      "partially_returned": "Қисман қайтарилган"
+    },
+    "payment": {
+      "all": "Барчаси",
+      "cash": "Нақд",
+      "card": "Карта",
+      "mixed": "Аралаш",
+      "debt": "Насия"
+    },
+    "filters": {
+      "min_amount": "Мин. сумма",
+      "max_amount": "Макс. сумма",
+      "worker": "Ходим",
+      "branch": "Филиал",
+      "apply": "Филтрни қўллаш"
+    }
   }
 }

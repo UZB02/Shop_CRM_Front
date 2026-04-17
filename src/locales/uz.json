@@ -1105,6 +1105,29 @@
             "cancelled": "Bekor qilingan"
         }
     },
+    "trades": {
+        "status": {
+            "all": "Barchasi",
+            "completed": "Yakunlangan",
+            "cancelled": "Bekor qilingan",
+            "returned": "Qaytarilgan",
+            "partially_returned": "Qisman qaytarilgan"
+        },
+        "payment": {
+            "all": "Barchasi",
+            "cash": "Naqd",
+            "card": "Karta",
+            "mixed": "Aralash",
+            "debt": "Nasiya"
+        },
+        "filters": {
+            "min_amount": "Min. summa",
+            "max_amount": "Maks. summa",
+            "worker": "Xodim",
+            "branch": "Filial",
+            "apply": "Filtrni qo'llash"
+        }
+    },
     "expenses": {
         "title": "Xarajatlar",
         "management": "Xarajatlar boshqaruvi",
