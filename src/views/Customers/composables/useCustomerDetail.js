@@ -39,6 +39,9 @@ export function useCustomerDetail() {
       const id = route.params.id
       if (!id) return
       
+      console.log(`%c[CustomerDetail] %cFetching customer basic data`, 'color: #3b82f6; font-weight: bold', 'color: inherit');
+      console.log(`%cAPI Call:%c GET /customers/${id}/`, 'font-weight: bold', 'color: #10b981');
+
       const response = await customersAPI.getById(id)
       const data = response.data.customer || response.data
       customer.value = data
@@ -59,6 +62,10 @@ export function useCustomerDetail() {
   const loadPurchases = async (page = 1) => {
     try {
       const id = route.params.id
+      
+      console.log(`%c[CustomerDetail] %cFetching purchase history`, 'color: #3b82f6; font-weight: bold', 'color: inherit');
+      console.log(`%cAPI Call:%c GET /customers/${id}/purchases/`, 'font-weight: bold', 'color: #10b981');
+
       const response = await customersAPI.getPurchases(id, { 
         page, 
         page_size: 10,
@@ -76,6 +83,10 @@ export function useCustomerDetail() {
   const loadDebts = async (page = 1) => {
     try {
       const id = route.params.id
+      
+      console.log(`%c[CustomerDetail] %cFetching debt sales history`, 'color: #3b82f6; font-weight: bold', 'color: inherit');
+      console.log(`%cAPI Call:%c GET /customers/${id}/debt-sales/`, 'font-weight: bold', 'color: #10b981');
+
       const response = await customersAPI.getDebtSales(id, { 
         page, 
         page_size: 10,

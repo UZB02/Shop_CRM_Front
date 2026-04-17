@@ -44,7 +44,7 @@
 
             <TabPanels class="!bg-transparent !p-0">
                 <TabPanel value="overview">
-                   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
                       <div class="flex flex-col gap-4 lg:gap-6 md:col-span-1 border border-transparent">
                          <ProductInventoryCard :product="product" />
                          <ProductBarcodeCard 
@@ -54,7 +54,11 @@
                          />
                       </div>
                       <div class="md:col-span-1 lg:col-span-2">
-                         <ProductInfoGrid :product="product" />
+                          <ProductInfoGrid 
+                             :product="product" 
+                             :formatPrice="formatPrice" 
+                             :calculateMargin="calculateMargin" 
+                          />
                       </div>
                    </div>
                 </TabPanel>
