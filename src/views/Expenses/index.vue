@@ -140,15 +140,12 @@
       :is-manager="userIsManager"
       @edit="onEditFromDetail"
     />
-
-    <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
-import ConfirmDialog from 'primevue/confirmdialog'
 
 // Composables
 import useExpenses from '@/composables/useExpenses'

@@ -135,8 +135,6 @@
         </div>
       </Transition>
     </Teleport>
-
-    <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
   </div>
 </template>
 
@@ -149,7 +147,6 @@ import { useConfirm } from 'primevue/useconfirm'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
-import ConfirmDialog from 'primevue/confirmdialog'
 import { customerGroupsAPI } from '@/services/api'
 import GroupPageHeader from './components/GroupPageHeader.vue'
 

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-50 dark:bg-slate-950 flex overflow-hidden">
     <Toast />
-    <ConfirmDialog />
+    <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
     <SubscriptionBarrier />
 
     <!-- MOBILE OVERLAY -->

@@ -79,8 +79,6 @@
       </div>
     </div>
   </div>
-
-  <ConfirmDialog pt:root:class="!rounded-[1.5rem] !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
 </template>
 
 <script setup>
@@ -98,7 +96,6 @@ import ProductInventoryCard from './components/Detail/ProductInventoryCard.vue'
 import ProductPricingCard from './components/Detail/ProductPricingCard.vue'
 import ProductBarcodeCard from './components/Detail/ProductBarcodeCard.vue'
 import ProductStockLocations from './components/Detail/ProductStockLocations.vue'
-import ConfirmDialog from 'primevue/confirmdialog'
 
 const {
   product,

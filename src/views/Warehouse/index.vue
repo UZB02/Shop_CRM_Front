@@ -96,7 +96,6 @@
       </div>
     </div>
 
-    <!-- Warehouse Dialog -->
     <WarehouseDialog
       v-model:visible="warehouseDialog"
       :warehouse="warehouse"
@@ -104,8 +103,6 @@
       :saving="saving"
       @save="saveWarehouse"
     />
-
-    <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
   </div>
 </template>
 
@@ -113,7 +110,6 @@
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Paginator from 'primevue/paginator'
-import ConfirmDialog from 'primevue/confirmdialog'
 import { useNotificationStore } from '@/store/notifications'
 
 import WarehousePageHeader from './components/WarehousePageHeader.vue'

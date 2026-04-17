@@ -41,13 +41,10 @@
       @save="saveCustomer"
       @hide="hideDialog"
     />
-
-    <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
   </div>
 </template>
 
 <script setup>
-import ConfirmDialog from 'primevue/confirmdialog'
 import CustomerTable from './components/CustomerTable.vue'
 import CustomerDialog from './components/CustomerDialog.vue'
 import CustomerPageHeader from './components/CustomerPageHeader.vue'
