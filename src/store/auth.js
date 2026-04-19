@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { authAPI, workersAPI, setApiToken, clearApiToken } from '../services/api'
+import { useNotificationStore } from './notifications'
 
 const ALL_PERMISSIONS = [
     'dashboard', 'stores', 'warehouse', 'products',
@@ -164,6 +165,14 @@ export const useAuthStore = defineStore('auth', {
         },
 
         logout() {
+            // Clear notifications state first
+            try {
+                const notificationStore = useNotificationStore()
+                notificationStore.reset()
+            } catch (e) {
+                console.warn('Could not reset notification store:', e)
+            }
+
             this.user = null
             this.token = null
             this.userPermissions = []

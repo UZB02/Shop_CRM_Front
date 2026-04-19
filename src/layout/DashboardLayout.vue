@@ -111,6 +111,9 @@ let initialStockHandled = false
 
 // Watch for unread announcements to show toast
 watch(() => notificationStore.unreadCount, (newCount, oldCount) => {
+  // Only proceed if the first fetch for this session is complete
+  if (!notificationStore.initialFetchDone) return
+
   if (initialAnnouncementsHandled) {
     if (newCount > oldCount) {
       const latest = notificationStore.announcements.find(a => !a.is_read)
@@ -126,7 +129,7 @@ watch(() => notificationStore.unreadCount, (newCount, oldCount) => {
     return
   }
 
-  // Initial session check
+  // Initial session check — only show if we actually have notifications
   if (newCount > 0) {
     initialAnnouncementsHandled = true
     if (!sessionStorage.getItem('session_notified_announcements')) {
@@ -141,8 +144,10 @@ watch(() => notificationStore.unreadCount, (newCount, oldCount) => {
   }
 })
 
-// Watch for low stock
+// Watch for low stock — more specific toast
 watch(() => notificationStore.lowStockItems.length, (newLen, oldLen) => {
+  if (!notificationStore.initialFetchDone) return
+
   if (initialStockHandled) {
     if (newLen > oldLen) {
       toast.add({
@@ -202,6 +207,7 @@ const handleLogout = () => {
       sessionStorage.removeItem('session_notified_announcements')
       sessionStorage.removeItem('session_notified_stock')
       
+      notificationStore.reset()
       authStore.logout()
       router.push('/')
     },

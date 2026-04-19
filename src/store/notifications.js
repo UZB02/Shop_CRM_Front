@@ -21,7 +21,8 @@ export const useNotificationStore = defineStore('notifications', {
             announcements: false,
             lowStock: false,
             subscription: false
-        }
+        },
+        initialFetchDone: false
     }),
 
     getters: {
@@ -140,6 +141,7 @@ export const useNotificationStore = defineStore('notifications', {
             try {
                 const res = await announcementsAPI.getAll()
                 this.announcements = Array.isArray(res.data) ? res.data : []
+                if (!silent) this.initialFetchDone = true
             } catch (err) {
                 console.error('Announcements error:', err)
                 this.announcements = []
@@ -218,6 +220,22 @@ export const useNotificationStore = defineStore('notifications', {
             
             this.intervals = { announcements: null, lowStock: null, subscription: null }
             console.log('🔕 Notification polling stopped')
+        },
+
+        reset() {
+            console.log('🧹 Resetting Notification Store')
+            this.stopPolling()
+            this.announcements = []
+            this.lowStockItems = []
+            this.subscription = null
+            this.usage = {
+                branches: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
+                warehouses: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
+                workers: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
+                products: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true }
+            }
+            this.loading = { announcements: false, lowStock: false, subscription: false }
+            this.initialFetchDone = false
         }
     }
 })
