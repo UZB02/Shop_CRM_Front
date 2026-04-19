@@ -38,8 +38,8 @@
         </button>
         <button
           v-else
-          @click="notificationStore.canAddWarehouse ? openNewDialog : null"
-          :disabled="!notificationStore.canAddWarehouse"
+          @click="notificationStore.canAddWarehouse ? openNewDialog() : null"
+          v-tooltip.bottom="limitTooltip"
           class="flex items-center gap-2 h-9 px-6 rounded-lg text-xs font-semibold transition-all shadow-sm"
           :class="[
             notificationStore.canAddWarehouse 
@@ -107,9 +107,10 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Paginator from 'primevue/paginator'
+import { useI18n } from 'vue-i18n'
 import { useNotificationStore } from '@/store/notifications'
 
 import WarehousePageHeader from './components/WarehousePageHeader.vue'
@@ -129,6 +130,14 @@ const {
   warehouse, filteredWarehouses,
   loadWarehouses, saveWarehouse, confirmDelete, openNewDialog, editWarehouse, onPageChange
 } = useWarehouses()
+
+const { t } = useI18n()
+
+const limitTooltip = computed(() => {
+  const w = notificationStore.usage?.warehouses
+  if (!w || w.can_add) return null
+  return t('subscription.limit_reached', { used: w.used, limit: w.limit })
+})
 
 const goToBulk = (w) => {
   router.push({ name: 'warehouse-bulk', params: { id: w.id || w._id } })

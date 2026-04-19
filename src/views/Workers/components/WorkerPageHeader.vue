@@ -7,8 +7,7 @@
     <div class="flex items-center gap-2 shrink-0">
       <button
         @click="notificationStore.canAddWorker ? $emit('add') : null"
-        :disabled="!notificationStore.canAddWorker"
-        :title="!notificationStore.canAddWorker ? 'Obuna limitingiz tugagan. Iltimos, tarifni yangilang.' : ''"
+        v-tooltip.bottom="limitTooltip"
         class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
         :class="[
           notificationStore.canAddWorker 
@@ -24,8 +23,18 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useNotificationStore } from '@/store/notifications'
+
+const { t } = useI18n()
 const notificationStore = useNotificationStore()
+
+const limitTooltip = computed(() => {
+  const w = notificationStore.usage?.workers
+  if (!w || w.can_add) return null
+  return t('subscription.limit_reached', { used: w.used, limit: w.limit })
+})
 
 defineProps({ totalWorkers: Number })
 defineEmits(['add'])

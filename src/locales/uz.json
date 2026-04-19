@@ -124,6 +124,7 @@
         },
         "history": "To'lovlar tarixi",
         "help": "Yordam markazi",
+        "limit_reached": "Limitga yetildi: {used} / {limit}. Iltimos, obunani yangilang.",
         "tabs": {
             "overview": "Menejment",
             "plans": "Tariflar",

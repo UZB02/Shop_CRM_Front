@@ -51,10 +51,16 @@
         </div>
         <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-4">{{ $t('stores.no_store') }}</h3>
         <button
-          @click="openNewStoreDialog"
-          class="inline-flex items-center gap-2 h-9 px-6 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition-all"
+          @click="notificationStore.canAddBranch ? openNewStoreDialog() : null"
+          v-tooltip.bottom="limitTooltip"
+          class="inline-flex items-center gap-2 h-9 px-6 rounded-lg text-sm font-medium transition-all"
+          :class="[
+            notificationStore.canAddBranch 
+              ? 'bg-emerald-500 hover:bg-emerald-600 text-white' 
+              : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50'
+          ]"
         >
-          <i class="pi pi-plus text-xs"></i>
+          <i :class="notificationStore.canAddBranch ? 'pi pi-plus' : 'pi pi-lock'" class="text-xs"></i>
           <span>{{ $t('stores.add_store') }}</span>
         </button>
       </div>
@@ -95,9 +101,17 @@ import StoreDialog       from './components/StoreDialog.vue'
 import BranchDialog      from './components/BranchDialog.vue'
 
 import { useSettingsStore } from '@/store/settings'
+import { useNotificationStore } from '@/store/notifications'
 
 const { t } = useI18n()
 const settingsStore = useSettingsStore()
+const notificationStore = useNotificationStore()
+
+const limitTooltip = computed(() => {
+  const b = notificationStore.usage?.branches
+  if (!b || b.can_add) return null
+  return t('subscription.limit_reached', { used: b.used, limit: b.limit })
+})
 
 const {
   store, storeForm, storeDialog, submitted, loading, saving,

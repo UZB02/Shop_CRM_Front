@@ -23,8 +23,7 @@
       </button>
       <button
         @click="notificationStore.canAddProduct ? router.push('/dashboard/products/create') : null"
-        :disabled="!notificationStore.canAddProduct"
-        :title="!notificationStore.canAddProduct ? 'Obuna limitingiz tugagan. Iltimos, tarifni yangilang.' : ''"
+        v-tooltip.bottom="limitTooltip"
         class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
         :class="[
           notificationStore.canAddProduct 
@@ -40,11 +39,20 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useNotificationStore } from '@/store/notifications'
 
+const { t } = useI18n()
 const router = useRouter()
 const notificationStore = useNotificationStore()
+
+const limitTooltip = computed(() => {
+  const p = notificationStore.usage?.products
+  if (!p || p.can_add) return null
+  return t('subscription.limit_reached', { used: p.used, limit: p.limit })
+})
 
 defineProps({ totalProducts: Number })
 defineEmits(['add-category', 'add-product'])

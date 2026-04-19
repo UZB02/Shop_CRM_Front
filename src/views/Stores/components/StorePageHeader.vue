@@ -15,17 +15,22 @@
       </button>
       <button
         v-if="!hasStore"
-        @click="$emit('add-store')"
-        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+        @click="notificationStore.canAddBranch ? $emit('add-store') : null"
+        v-tooltip.bottom="limitTooltip"
+        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+        :class="[
+          notificationStore.canAddBranch 
+            ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm active:scale-95' 
+            : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50'
+        ]"
       >
-        <i class="pi pi-plus text-xs"></i>
+        <i :class="notificationStore.canAddBranch ? 'pi pi-plus' : 'pi pi-lock'" class="text-xs"></i>
         <span>{{ $t('stores.add_store') }}</span>
       </button>
       <button
         v-if="hasStore && showAddBranch"
         @click="notificationStore.canAddBranch ? $emit('add-branch') : null"
-        :disabled="!notificationStore.canAddBranch"
-        :title="!notificationStore.canAddBranch ? 'Obuna limitingiz tugagan. Iltimos, tarifni yangilang.' : ''"
+        v-tooltip.bottom="limitTooltip"
         class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
         :class="[
           notificationStore.canAddBranch 
@@ -41,8 +46,18 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useNotificationStore } from '@/store/notifications'
+
+const { t } = useI18n()
 const notificationStore = useNotificationStore()
+
+const limitTooltip = computed(() => {
+  const b = notificationStore.usage?.branches
+  if (!b || b.can_add) return null
+  return t('subscription.limit_reached', { used: b.used, limit: b.limit })
+})
 
 defineProps({
   storeName: String,

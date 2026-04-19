@@ -15,8 +15,7 @@
     <div class="flex items-center gap-2 shrink-0">
       <button 
         @click="notificationStore.canAddWarehouse ? $emit('add') : null"
-        :disabled="!notificationStore.canAddWarehouse"
-        :title="!notificationStore.canAddWarehouse ? 'Obuna limitingiz tugagan. Iltimos, tarifni yangilang.' : ''"
+        v-tooltip.bottom="limitTooltip"
         class="h-8 px-3 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 whitespace-nowrap"
         :class="[
           notificationStore.canAddWarehouse 
@@ -32,8 +31,18 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useNotificationStore } from '@/store/notifications'
+
+const { t } = useI18n()
 const notificationStore = useNotificationStore()
+
+const limitTooltip = computed(() => {
+  const w = notificationStore.usage?.warehouses
+  if (!w || w.can_add) return null
+  return t('subscription.limit_reached', { used: w.used, limit: w.limit })
+})
 
 defineEmits(['add'])
 </script>
