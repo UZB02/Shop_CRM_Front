@@ -109,9 +109,7 @@ const notificationStore = useNotificationStore()
 let initialAnnouncementsHandled = false
 let initialStockHandled = false
 
-// Watch for unread announcements to show toast
-watch(() => notificationStore.unreadCount, (newCount, oldCount) => {
-  // Only proceed if the first fetch for this session is complete
+const handleAnnouncements = (newCount, oldCount) => {
   if (!notificationStore.initialFetchDone) return
 
   if (initialAnnouncementsHandled) {
@@ -129,7 +127,7 @@ watch(() => notificationStore.unreadCount, (newCount, oldCount) => {
     return
   }
 
-  // Initial session check — only show if we actually have notifications
+  // Initial session check
   if (newCount > 0) {
     initialAnnouncementsHandled = true
     if (!sessionStorage.getItem('session_notified_announcements')) {
@@ -142,10 +140,9 @@ watch(() => notificationStore.unreadCount, (newCount, oldCount) => {
       sessionStorage.setItem('session_notified_announcements', 'true')
     }
   }
-})
+}
 
-// Watch for low stock — more specific toast
-watch(() => notificationStore.lowStockItems.length, (newLen, oldLen) => {
+const handleLowStock = (newLen, oldLen) => {
   if (!notificationStore.initialFetchDone) return
 
   if (initialStockHandled) {
@@ -173,7 +170,21 @@ watch(() => notificationStore.lowStockItems.length, (newLen, oldLen) => {
       sessionStorage.setItem('session_notified_stock', 'true')
     }
   }
-})
+}
+
+// Watch for unread announcements to show toast
+watch(() => notificationStore.unreadCount, handleAnnouncements)
+
+// Watch for low stock — more specific toast
+watch(() => notificationStore.lowStockItems.length, handleLowStock)
+
+// Handle initial load once all data is present
+watch(() => notificationStore.initialFetchDone, (done) => {
+  if (done) {
+    handleAnnouncements(notificationStore.unreadCount, 0)
+    handleLowStock(notificationStore.lowStockItems.length, 0)
+  }
+}, { immediate: true })
 
 onMounted(() => {
   window.addEventListener('rate-limit-error', handleRateLimitError)

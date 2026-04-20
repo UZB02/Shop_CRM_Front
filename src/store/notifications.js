@@ -141,7 +141,6 @@ export const useNotificationStore = defineStore('notifications', {
             try {
                 const res = await announcementsAPI.getAll()
                 this.announcements = Array.isArray(res.data) ? res.data : []
-                if (!silent) this.initialFetchDone = true
             } catch (err) {
                 console.error('Announcements error:', err)
                 this.announcements = []
@@ -191,26 +190,20 @@ export const useNotificationStore = defineStore('notifications', {
             }
         },
 
-        startPolling() {
+        async startPolling() {
             this.stopPolling()
+            this.initialFetchDone = false
             
             console.log('🔔 Notification polling started')
             
-            this.fetchAnnouncements()
-            this.fetchLowStock()
-            this.fetchSubscription()
-
-            this.intervals.announcements = setInterval(() => {
-                if (document.visibilityState === 'visible') this.fetchAnnouncements(true)
-            }, 5 * 60 * 1000)
-
-            this.intervals.lowStock = setInterval(() => {
-                if (document.visibilityState === 'visible') this.fetchLowStock(true)
-            }, 60 * 1000)
-
-            this.intervals.subscription = setInterval(() => {
-                if (document.visibilityState === 'visible') this.fetchSubscription(true)
-            }, 10 * 60 * 1000)
+            await Promise.allSettled([
+                this.fetchAnnouncements(),
+                this.fetchLowStock(),
+                this.fetchSubscription()
+            ])
+            
+            this.initialFetchDone = true
+            console.log('✅ Initial notifications loaded')
         },
 
         stopPolling() {
