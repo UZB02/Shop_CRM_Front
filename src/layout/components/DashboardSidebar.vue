@@ -14,30 +14,40 @@
     }"
   >
     <!-- Logo row -->
-    <div class="h-16 flex items-center justify-between px-4
-                border-b border-slate-100 dark:border-slate-800 flex-shrink-0 overflow-hidden">
-      <span
-        class="text-xl font-black text-emerald-500 whitespace-nowrap transition-all duration-200"
-        :class="desktopCollapsed ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden' : 'opacity-100'"
-      >
-        Shop Searem
-      </span>
+    <div class="h-16 flex items-center border-b border-slate-100 dark:border-slate-800 flex-shrink-0 relative group/header transition-all duration-300"
+         :class="desktopCollapsed ? 'px-2 justify-center' : 'px-4'">
+      
+      <!-- Logo Section -->
+      <div class="flex items-center gap-3 overflow-hidden transition-all duration-300"
+           :class="desktopCollapsed ? 'justify-center' : ''">
+        <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20 group-hover/header:rotate-6 transition-transform">
+          <i class="pi pi-star-fill text-white text-base"></i>
+        </div>
+        <span
+          class="text-xl font-black text-slate-900 dark:text-white whitespace-nowrap transition-all duration-500"
+          :class="desktopCollapsed ? 'opacity-0 w-0 -translate-x-4' : 'opacity-100 translate-x-0'"
+        >
+          Sirius <span class="text-emerald-500 italic">POS</span>
+        </span>
+      </div>
 
-      <!-- Desktop collapse btn (icon only) -->
+      <!-- Enterprise Style Toggle Handle (On the Border) -->
       <button
-        class="hidden lg:flex w-8 h-8 rounded-lg items-center justify-center
-               text-slate-400 hover:text-emerald-500 hover:bg-emerald-50
-               dark:hover:bg-emerald-900/20 transition-all ml-auto flex-shrink-0"
+        class="hidden lg:flex absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-6 rounded-full 
+               bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700
+               items-center justify-center text-slate-400 hover:text-emerald-500 
+               shadow-sm hover:shadow-md z-[60] transition-all
+               active:scale-90"
         @click="$emit('update:desktopCollapsed', !desktopCollapsed)"
       >
-        <i :class="desktopCollapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'" class="text-xs" />
+        <i :class="desktopCollapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'" class="text-[8px] font-bold" />
       </button>
 
       <!-- Mobile close btn -->
       <button
-        class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center
+        class="lg:hidden w-9 h-9 rounded-xl flex items-center justify-center
                text-slate-400 hover:text-slate-600 dark:hover:text-white
-               hover:bg-slate-100 dark:hover:bg-slate-800 transition-all ml-auto flex-shrink-0"
+               hover:bg-slate-100 dark:hover:bg-slate-800 transition-all ml-auto"
         @click="$emit('update:sidebarOpen', false)"
       >
         <i class="pi pi-times text-xs" />

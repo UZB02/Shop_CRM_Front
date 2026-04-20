@@ -4,9 +4,16 @@
     <div class="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 border border-slate-200 dark:border-slate-800 relative z-10">
 
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-emerald-500 mb-2">Shop Searem</h1>
-        <p class="text-slate-500 dark:text-slate-400">Yangi akkaunt yarating</p>
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+            <i class="pi pi-star-fill text-white text-2xl"></i>
+          </div>
+          <span class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
+            Sirius <span class="text-emerald-500 italic">POS</span>
+          </span>
+        </div>
+        <p class="text-slate-500 dark:text-slate-400 font-medium">Yangi akkaunt yarating</p>
       </div>
 
       <!-- Form Content -->
