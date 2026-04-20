@@ -26,7 +26,14 @@
             <p class="row-label">{{ $t('settings.tax.tin_label') }}</p>
             <p class="row-desc">{{ $t('settings.tax.tin_desc') }}</p>
           </div>
-          <input v-model.trim="form.tin" type="text" maxlength="9" :placeholder="$t('settings.tax.tin_placeholder')" class="settings-input w-40 font-mono tracking-widest" />
+          <input 
+            v-model.trim="form.tin" 
+            type="text" 
+            maxlength="9" 
+            @input="form.tin = ($event.target.value.replace(/\D/g, ''))"
+            :placeholder="$t('settings.tax.tin_placeholder')" 
+            class="settings-input w-40 font-mono tracking-widest" 
+          />
         </div>
 
         <SettingRow v-model="form.ofd_enabled" :label="$t('settings.tax.ofd_label')" :desc="$t('settings.tax.ofd_desc')" />
