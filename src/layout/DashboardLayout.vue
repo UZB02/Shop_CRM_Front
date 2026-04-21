@@ -1,6 +1,22 @@
 <template>
   <div class="min-h-screen bg-slate-50 dark:bg-slate-950 flex overflow-hidden">
-    <Toast />
+    <Toast :pt="{
+        root: { class: 'w-[22rem] md:w-[26rem] !pt-4' },
+        message: ({ props }) => ({
+            class: [
+                'rounded-2xl border-none shadow-2xl backdrop-blur-xl transition-all duration-300 p-4 mb-3',
+                props.message.severity === 'info' ? 'bg-slate-900/90 text-blue-400 border border-blue-500/20' : 
+                props.message.severity === 'success' ? 'bg-emerald-950/90 text-emerald-400 border border-emerald-500/20' :
+                props.message.severity === 'warn' ? 'bg-amber-950/90 text-amber-400 border border-amber-500/20' :
+                'bg-red-950/90 text-red-400 border border-red-500/20'
+            ]
+        }),
+        summary: { class: 'text-[11px] font-black mb-1 opacity-60 tracking-[0.05em] uppercase leading-none' },
+        detail: { class: 'text-sm font-bold text-slate-100 leading-tight block' },
+        icon: { class: 'text-lg mr-4 mt-0.5' },
+        closeButton: { class: 'hover:bg-white/10 rounded-full transition-colors w-8 h-8 flex items-center justify-center p-0' },
+        closeIcon: { class: 'text-sm' }
+    }" />
     <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
     <SubscriptionBarrier />
 

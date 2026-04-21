@@ -1,5 +1,5 @@
 import axios from 'axios'
-import router from '@/router'
+// Router dynamically imported inside interceptors to avoid circular dependency
 
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL ||
@@ -22,6 +22,9 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
     (config) => {
+        // Start global loading bar
+        if (typeof window !== 'undefined' && window.startLoader) window.startLoader()
+
         const token = _memToken || localStorage.getItem('token')
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
@@ -34,6 +37,9 @@ api.interceptors.request.use(
 // Response interceptor to handle errors and warnings
 api.interceptors.response.use(
     (response) => {
+        // Stop global loading bar
+        if (typeof window !== 'undefined' && window.stopLoader) window.stopLoader()
+
         // Log all incoming API data to console for monitoring
         console.log(`🌐 API RESPONSE [${response.config.method.toUpperCase()}] ${response.config.url}:`, response.data)
 
@@ -44,7 +50,10 @@ api.interceptors.response.use(
         }
         return response
     },
-    (error) => {
+    async (error) => {
+        // Stop global loading bar
+        if (typeof window !== 'undefined' && window.stopLoader) window.stopLoader()
+
         console.error(`❌ API ERROR [${error.config?.method?.toUpperCase()}] ${error.config?.url}:`, error.response?.data || error.message)
         
         const status = error.response?.status
@@ -58,7 +67,9 @@ api.interceptors.response.use(
                     localStorage.removeItem(key)
                 }
             })
-            // Use Vue Router instead of hard redirect to preserve SPA state
+            
+            // Dynamic import to avoid circular dependency
+            const router = (await import('@/router')).default
             router.push({ name: 'login' })
         } else if (status === 429) {
             console.log('🔘 Dispatching rate-limit-error event');

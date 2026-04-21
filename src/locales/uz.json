@@ -71,7 +71,11 @@
         "close": "Yopish",
         "return": "Qaytarish",
         "returns": "Qaytarishlar",
-        "reason": "Sabab"
+        "reason": "Sabab",
+        "notifications": "Bildirishnomalar"
+    },
+    "notifications": {
+        "unread_count": "Sizda {count} ta yangi xabar bor"
     },
     "subscription": {
         "title": "Obuna Sozlamalari",

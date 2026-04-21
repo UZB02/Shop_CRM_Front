@@ -70,7 +70,11 @@
     "discount": "Чегирма",
     "total_to_pay": "Жами Сумма",
     "paid": "Тўланди",
-    "close": "Ёпиш"
+    "close": "Ёпиш",
+    "notifications": "Билдиришномалар"
+  },
+  "notifications": {
+    "unread_count": "Сизда {count} та янги хабар бор"
   },
   "subscription": {
     "title": "Обуна Созламалари",

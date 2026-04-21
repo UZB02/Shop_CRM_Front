@@ -42,3 +42,6 @@ app.use(ConfirmationService)
 app.directive('tooltip', Tooltip)
 
 app.mount('#app')
+
+// Ensure initial overlay hides even if no API calls were triggered
+setTimeout(() => { if (window.stopLoader) window.stopLoader(); }, 2000);

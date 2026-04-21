@@ -215,6 +215,9 @@ const router = createRouter({
 //     and subsequent navigations are instant (no extra API call).
 //  3. If /auth/me returns 401 the user is logged out regardless of what localStorage contains.
 router.beforeEach(async (to, from, next) => {
+    // Start global loading bar
+    if (window.startLoader) window.startLoader()
+
     const authStore = useAuthStore()
     const isLoggedIn = !!authStore.token
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth !== false)
@@ -278,6 +281,11 @@ router.beforeEach(async (to, from, next) => {
     }
 
     next()
+})
+
+router.afterEach(() => {
+    // Stop global loading bar
+    if (window.stopLoader) window.stopLoader()
 })
 
 export default router
