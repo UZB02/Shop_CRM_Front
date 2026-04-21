@@ -4,6 +4,7 @@ import { workersAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { useNotificationStore } from '@/store/notifications'
+import { ROLE_PERMISSIONS } from './useWorkerForm'
 
 export function useWorkerActions(loadWorkersCallback) {
     const { t } = useI18n()
@@ -22,7 +23,7 @@ export function useWorkerActions(loadWorkersCallback) {
         salary: 0,
         branch: null,
         status: 'active',
-        permissions: ['sotuv', 'savdolar', 'mijozlar', 'ombor', 'mahsulotlar']
+        permissions: [...ROLE_PERMISSIONS.seller]
     })
 
     const workerDialog = ref(false)
@@ -43,7 +44,7 @@ export function useWorkerActions(loadWorkersCallback) {
             salary: 0,
             branch: null,
             status: 'active',
-            permissions: ['sotuv', 'savdolar', 'mijozlar', 'ombor', 'mahsulotlar']
+            permissions: [...ROLE_PERMISSIONS.seller]
         }
         createLogin.value = true
         submitted.value = false

@@ -24,3 +24,9 @@ export const PERMISSIONS_LIST = [
     { label: 'Xodimlar', value: 'xodimlar', icon: 'pi-id-card', desc: 'Xodimlarni boshqarish' },
     { label: 'Sozlamalar', value: 'sozlamalar', icon: 'pi-cog', desc: 'Tizim sozlamalari' },
 ]
+
+export const ROLE_PERMISSIONS = {
+    owner: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'xarajatlar', 'mijozlar', 'sozlamalar'],
+    manager: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'xarajatlar', 'mijozlar'],
+    seller: ['sotuv', 'savdolar', 'mijozlar', 'ombor', 'mahsulotlar']
+}

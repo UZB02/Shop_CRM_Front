@@ -74,13 +74,13 @@
 
         <!-- Tab panels -->
         <template v-else-if="settings">
-          <SettingsModulesTab  :form="form" :active="activeTab" />
-          <SettingsStockTab    :form="form" :active="activeTab" />
-          <SettingsPaymentTab  :form="form" :active="activeTab" />
-          <SettingsCurrencyTab :form="form" :active="activeTab" />
-          <SettingsReceiptTab  :form="form" :active="activeTab" />
-          <SettingsTaxTab      :form="form" :active="activeTab" />
-          <SettingsTelegramTab :form="form" :active="activeTab" />
+          <SettingsModulesTab  :form="form" :active="activeTab" :readonly="!isOwner" />
+          <SettingsStockTab    :form="form" :active="activeTab" :readonly="!isOwner" />
+          <SettingsPaymentTab  :form="form" :active="activeTab" :readonly="!isOwner" />
+          <SettingsCurrencyTab :form="form" :active="activeTab" :readonly="!isOwner" />
+          <SettingsReceiptTab  :form="form" :active="activeTab" :readonly="!isOwner" />
+          <SettingsTaxTab      :form="form" :active="activeTab" :readonly="!isOwner" />
+          <SettingsTelegramTab :form="form" :active="activeTab" :readonly="!isOwner" />
         </template>
 
         <!-- Error state -->

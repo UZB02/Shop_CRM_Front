@@ -1,13 +1,13 @@
 <template>
   <div v-show="active === 'payment'" class="settings-section">
     <SectionHeader icon="pi-wallet" color="text-emerald-500">{{ $t('settings.payment.title') }}</SectionHeader>
-    <SettingRow v-model="form.allow_cash" :label="$t('settings.payment.cash_label')" :desc="$t('settings.payment.cash_desc')" />
-    <SettingRow v-model="form.allow_card" :label="$t('settings.payment.card_label')" :desc="$t('settings.payment.card_desc')" />
-    <SettingRow v-model="form.allow_debt" :label="$t('settings.payment.debt_label')" :desc="$t('settings.payment.debt_desc')" />
+    <SettingRow v-model="form.allow_cash" :label="$t('settings.payment.cash_label')" :desc="$t('settings.payment.cash_desc')" :disabled="readonly" />
+    <SettingRow v-model="form.allow_card" :label="$t('settings.payment.card_label')" :desc="$t('settings.payment.card_desc')" :disabled="readonly" />
+    <SettingRow v-model="form.allow_debt" :label="$t('settings.payment.debt_label')" :desc="$t('settings.payment.debt_desc')" :disabled="readonly" />
 
     <SectionHeader icon="pi-percentage" color="text-purple-500">{{ $t('settings.payment.discount_title') }}</SectionHeader>
-    <SettingRow v-model="form.allow_discount" :label="$t('settings.payment.discount_label')" :desc="$t('settings.payment.discount_desc')" />
-    <div v-if="form.allow_discount" class="settings-row">
+    <SettingRow v-model="form.allow_discount" :label="$t('settings.payment.discount_label')" :desc="$t('settings.payment.discount_desc')" :disabled="readonly" />
+    <div v-if="form.allow_discount" class="settings-row" :class="{'opacity-40 pointer-events-none': readonly}">
       <div class="flex-1">
         <p class="row-label">{{ $t('settings.payment.max_discount_label') }}</p>
         <p class="row-desc">{{ $t('settings.payment.max_discount_desc') }}</p>
@@ -17,7 +17,7 @@
         </p>
       </div>
       <div class="flex items-center gap-1.5">
-        <input v-model.number="form.max_discount_percent" type="number" min="0" max="100" step="1" class="settings-input w-16 text-center" />
+        <input v-model.number="form.max_discount_percent" type="number" min="0" max="100" step="1" class="settings-input w-16 text-center" :disabled="readonly" />
         <span class="text-xs font-black text-slate-400">%</span>
       </div>
     </div>
@@ -34,7 +34,7 @@ import SectionHeader from './SectionHeader.vue'
 const { t } = useI18n()
 const toast = useToast()
 
-const props = defineProps({ form: Object, active: String })
+const props = defineProps({ form: Object, active: String, readonly: Boolean })
 
 // 🟢 Kritik qoida: allow_cash=false VA allow_card=false bir vaqtda bo'lishi mumkin emas.
 // Foydalanuvchi ikkalasini ham o'chirmoqchi bo'lsa, darhol to'xtatamiz va ogohlantiramiz.

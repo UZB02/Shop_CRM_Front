@@ -75,19 +75,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:visible', 'save', 'hide', 'update:createLogin'])
 
-// Role-based permissions mapping
-const ROLE_PERMISSIONS = {
-  owner: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'xarajatlar', 'mijozlar', 'sozlamalar'],
-  manager: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'xarajatlar', 'mijozlar'],
-  seller: ['sotuv', 'savdolar', 'mijozlar', 'ombor', 'mahsulotlar']
-}
-
-// Watch role change to set default permissions (only for new workers)
-watch(() => props.worker.role, (newRole) => {
-  if (!props.worker.id && newRole && ROLE_PERMISSIONS[newRole]) {
-    props.worker.permissions = [...ROLE_PERMISSIONS[newRole]]
-  }
-})
+// Role-based permissions mapping deleted - moved to WorkInfoSection.vue
 
 const createLoginLocal = ref(props.createLogin)
 watch(() => props.createLogin, v => { createLoginLocal.value = v })

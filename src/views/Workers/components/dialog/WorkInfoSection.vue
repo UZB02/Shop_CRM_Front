@@ -17,7 +17,8 @@
                   optionLabel="label"
                   optionValue="value"
                   class="sr-select"
-                  :placeholder="$t('common.choose')" />
+                  :placeholder="$t('common.choose')"
+                  @change="handleRoleChange" />
       </FormField>
     </div>
 
@@ -48,7 +49,7 @@ import Select from 'primevue/select'
 import InputNumber from 'primevue/inputnumber'
 import SectionTitle from './SectionTitle.vue'
 import FormField from './FormField.vue'
-import { WORKER_STATUSES as statuses, WORKER_ROLES as roles } from '../../composables/useWorkerForm.js'
+import { WORKER_STATUSES as statuses, WORKER_ROLES as roles, ROLE_PERMISSIONS } from '../../composables/useWorkerForm.js'
 
 const { t } = useI18n()
 
@@ -66,4 +67,11 @@ const localizedStatuses = computed(() => statuses.map(s => ({
   ...s,
   label: t(`workers.statuses.${s.value}`)
 })))
+
+const handleRoleChange = (e) => {
+  const newRole = e.value
+  if (newRole && ROLE_PERMISSIONS[newRole]) {
+    props.worker.permissions = [...ROLE_PERMISSIONS[newRole]]
+  }
+}
 </script>
