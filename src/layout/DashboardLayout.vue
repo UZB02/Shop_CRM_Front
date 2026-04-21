@@ -106,83 +106,75 @@ const handleRateLimitError = (event) => {
 }
 
 const notificationStore = useNotificationStore()
-let initialAnnouncementsHandled = false
-let initialStockHandled = false
+let initialSessionNotified = false
 
-const handleAnnouncements = (newCount, oldCount) => {
+const handleNotifications = (newItems, oldItems) => {
   if (!notificationStore.initialFetchDone) return
+  if (!Array.isArray(newItems)) return
 
-  if (initialAnnouncementsHandled) {
-    if (newCount > oldCount) {
-      const latest = notificationStore.announcements.find(a => !a.is_read)
-      if (latest) {
+  const oldLen = Array.isArray(oldItems) ? oldItems.length : 0
+  const newLen = newItems.length
+
+  // Yangi kelgan xabarni Toast orqali ko'rsatish
+  if (initialSessionNotified) {
+    if (newLen > oldLen) {
+      const latest = newItems[0] // Sortlangan bo'lgani uchun 0-chi eng yangisi
+      if (latest && !latest.is_read) {
+        
+        let severity = 'info'
+        let summary = latest.title || 'Yangi xabar'
+        
+        // 1. Tizim Bildirishnomalari (Notification)
+        if (latest.source === 'notification') {
+          if (latest.type === 'low_stock') severity = 'warn'
+          if (latest.type === 'subscription_expiry') severity = 'warn' // To'q sariq
+          if (latest.type === 'subscription_expired') severity = 'error' // Qizil
+        } 
+        // 2. Announcement (Admin xabarlari)
+        else if (latest.source === 'announcement') {
+          if (latest.type === 'info') severity = 'info' // Ko'k
+          if (latest.type === 'warning') severity = 'warn' // Sariq
+          if (latest.type === 'maintenance') severity = 'warn' // To'q sariq (PrimeVue warn ishlatsa bo'ladi)
+          if (latest.type === 'new_feature') severity = 'success' // Yashil
+        }
+
         toast.add({
-          severity: latest.type === 'critical' ? 'error' : 'info',
-          summary: 'Yangi xabar',
-          detail: latest.title,
-          life: 5000
+          severity,
+          summary: latest.title || summary,
+          detail: latest.message || latest.body,
+          life: severity === 'error' ? 10000 : 5000 
         })
       }
     }
     return
   }
 
-  // Initial session check
-  if (newCount > 0) {
-    initialAnnouncementsHandled = true
-    if (!sessionStorage.getItem('session_notified_announcements')) {
-      toast.add({
-        severity: 'info',
-        summary: 'Bildirishnomalar',
-        detail: `${newCount} ta yangi xabar mavjud`,
-        life: 5000
-      })
-      sessionStorage.setItem('session_notified_announcements', 'true')
+  // Sahifa yuklanganda (Initial session load)
+  if (newLen > 0 && !initialSessionNotified) {
+    initialSessionNotified = true
+    
+    if (!sessionStorage.getItem('session_notified_any')) {
+      const unread = newItems.filter(i => !i.is_read).length
+      if (unread > 0) {
+        toast.add({
+          severity: 'info',
+          summary: t('common.notifications') || 'Bildirishnomalar',
+          detail: t('notifications.unread_count', { count: unread }) || `${unread} ta o'qilmagan xabar mavjud`,
+          life: 5000
+        })
+      }
+      sessionStorage.setItem('session_notified_any', 'true')
     }
   }
 }
 
-const handleLowStock = (newLen, oldLen) => {
-  if (!notificationStore.initialFetchDone) return
+// Watch for items change (real-time or initial)
+watch(() => notificationStore.items, handleNotifications, { deep: true })
 
-  if (initialStockHandled) {
-    if (newLen > oldLen) {
-      toast.add({
-        severity: 'warn',
-        summary: 'Kam qolgan tovarlar',
-        detail: `${newLen} ta mahsulot qoldig'i kamaygan!`,
-        life: 7000
-      })
-    }
-    return
-  }
-
-  // Initial session check
-  if (newLen > 0) {
-    initialStockHandled = true
-    if (!sessionStorage.getItem('session_notified_stock')) {
-      toast.add({
-        severity: 'warn',
-        summary: 'Kam qolgan tovarlar',
-        detail: `${newLen} ta mahsulot qoldig'i kamaygan!`,
-        life: 7000
-      })
-      sessionStorage.setItem('session_notified_stock', 'true')
-    }
-  }
-}
-
-// Watch for unread announcements to show toast
-watch(() => notificationStore.unreadCount, handleAnnouncements)
-
-// Watch for low stock — more specific toast
-watch(() => notificationStore.lowStockItems.length, handleLowStock)
-
-// Handle initial load once all data is present
+// Handle initial load
 watch(() => notificationStore.initialFetchDone, (done) => {
   if (done) {
-    handleAnnouncements(notificationStore.unreadCount, 0)
-    handleLowStock(notificationStore.lowStockItems.length, 0)
+    handleNotifications(notificationStore.items, [])
   }
 }, { immediate: true })
 

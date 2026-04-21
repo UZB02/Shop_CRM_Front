@@ -260,14 +260,22 @@ export const dashboardAPI = {
     getSalesChart: (params) => api.get('/dashboard/sales-chart', { params })
 }
 
+// Notifications API (SSE & Shared list)
+export const notificationsAPI = {
+    getAll: (params) => api.get('/notifications/', { params }),
+    markRead: () => api.post('/notifications/mark-read/', {}), // Body bo'sh yuboriladi
+    getStreamUrl: (token) => {
+        // Domainni olish (https://.../api/v1 qismini)
+        const base = API_BASE_URL.replace(/\/$/, '') // Oxiridagi slashni olib tashlash (xavfsizlik uchun)
+        return `${base}/notifications/stream/?token=${token}` // /api/v1/notifications/stream/
+    }
+}
+
 // Announcements API
 export const announcementsAPI = {
     getAll: (params) => api.get('/announcements/', { params }),
-    markRead: (id) => api.post(`/announcements/${id}/mark-read/`),
-    getSuperadminAll: (params) => api.get('/superadmin/announcements/', { params }),
-    createSuperadmin: (data) => api.post('/superadmin/announcements/', data),
-    updateSuperadmin: (id, data) => api.patch(`/superadmin/announcements/${id}/`, data),
-    deleteSuperadmin: (id) => api.delete(`/superadmin/announcements/${id}/`)
+    markRead: (id) => api.post(`/announcements/${id}/mark-read/`, {}),
+    markReadAll: () => api.post('/announcements/mark-read/', {})
 }
 
 // Subscription API

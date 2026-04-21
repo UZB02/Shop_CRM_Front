@@ -1,25 +1,19 @@
 import { defineStore } from 'pinia'
-import { announcementsAPI, productsAPI, subscriptionAPI } from '../services/api'
+import { notificationsAPI, subscriptionAPI, announcementsAPI } from '../services/api'
 
 export const useNotificationStore = defineStore('notifications', {
     state: () => ({
-        announcements: [],
-        lowStockItems: [],
-        subscription: null,
+        items: [], 
+        subscription: null, 
         usage: {
             branches: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
             warehouses: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
             workers: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
             products: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true }
         },
-        intervals: {
-            announcements: null,
-            lowStock: null,
-            subscription: null
-        },
+        eventSource: null,
         loading: {
-            announcements: false,
-            lowStock: false,
+            notifications: false,
             subscription: false
         },
         initialFetchDone: false
@@ -27,138 +21,57 @@ export const useNotificationStore = defineStore('notifications', {
 
     getters: {
         unreadCount: (state) => {
-            const announcementsUnread = Array.isArray(state.announcements) 
-                ? state.announcements.filter(a => !a.is_read).length 
-                : 0
-            
-            const lowStockCount = Array.isArray(state.lowStockItems) ? state.lowStockItems.length : 0
-            
-            const subscriptionUnread = (state.subscription && state.subscription.days_left <= 10) ? 1 : 0
-            
-            return announcementsUnread + lowStockCount + subscriptionUnread
+            return Array.isArray(state.items) ? state.items.filter(i => !i.is_read).length : 0
         },
         isSubscriptionExpired: (state) => state.subscription?.status === 'expired',
         daysLeft: (state) => state.subscription?.days_left ?? 0,
-        hasLowStock: (state) => Array.isArray(state.lowStockItems) && state.lowStockItems.length > 0,
-        
-        // Usage getters
+        hasLowStock: (state) => Array.isArray(state.items) && state.items.some(i => i.type === 'low_stock' && !i.is_read),
+
         canAddBranch: (state) => state.usage?.branches?.can_add ?? true,
         canAddWarehouse: (state) => state.usage?.warehouses?.can_add ?? true,
         canAddWorker: (state) => state.usage?.workers?.can_add ?? true,
         canAddProduct: (state) => state.usage?.products?.can_add ?? true,
-        
-        branchUsagePct: (state) => {
-            const b = state.usage?.branches
-            if (!b || b.unlimited) return 0
-            return (b.used / b.limit) * 100
-        },
-        workerUsagePct: (state) => {
-            const w = state.usage?.workers
-            if (!w || w.unlimited) return 0
-            return (w.used / w.limit) * 100
-        },
-        productUsagePct: (state) => {
-            const p = state.usage?.products
-            if (!p || p.unlimited) return 0
-            return (p.used / p.limit) * 100
-        },
 
         allNotifications: (state) => {
-            const list = []
+            if (!Array.isArray(state.items)) return []
             
-            // Add announcements safely
-            if (Array.isArray(state.announcements)) {
-                state.announcements.forEach(a => {
-                    list.push({
-                        id: `ann-${a.id}`,
-                        originalId: a.id,
-                        type: 'announcement',
-                        title: a.title,
-                        body: a.body,
-                        date: a.created_at,
-                        read: a.is_read,
-                        severity: a.type === 'critical' ? 'error' : 'info'
-                    })
-                })
-            }
-
-            // Add individual low stock alerts safely
-            if (Array.isArray(state.lowStockItems)) {
-                state.lowStockItems.slice(0, 10).forEach(item => {
-                    list.push({
-                        id: `low-stock-${item.stock_id || item.product_id}`,
-                        type: 'stock',
-                        title: item.product_name,
-                        body: `${item.location_name}da qoldiq kamaygan: ${item.quantity} ${item.product_unit || 'dona'} (Limit: ${item.threshold})`,
-                        date: new Date().toISOString(),
-                        severity: 'warn',
-                        read: false,
-                        link: item.location_type === 'branch' 
-                            ? `/dashboard/branches/${item.location_id}` 
-                            : `/dashboard/warehouse/${item.location_id}`
-                    })
-                })
-
-                if (state.lowStockItems.length > 10) {
-                    list.push({
-                        id: 'low-stock-summary',
-                        type: 'stock',
-                        title: 'Boshqa kam qolgan tovarlar',
-                        body: `Yana ${state.lowStockItems.length - 10} ta mahsulotda qoldiq kamaygan.`,
-                        severity: 'info',
-                        read: false,
-                        link: '/dashboard/products'
-                    })
+            // Backend formatini UI formatiga o'girish (Mapping)
+            return state.items.map(item => {
+                const source = item.source || item.event || 'notification'
+                return {
+                    ...item,
+                    source: source,
+                    read: item.is_read,      // UI mask: item.read ishlatadi
+                    date: item.time,         // UI mask: item.date ishlatadi
+                    body: item.message || item.body       // Backend 'message' yuboradi, UI 'body' kutadi
                 }
-            }
-
-            // Add subscription status if critical
-            if (state.subscription && state.subscription.days_left <= 10) {
-                list.push({
-                    id: 'sub-alert',
-                    type: 'subscription',
-                    title: 'Obuna muddati tugamoqda',
-                    body: state.subscription.status === 'expired' 
-                        ? 'Obuna muddati tugagan! Iltimos, to\'lov qiling.' 
-                        : `Obuna tugashiga ${state.subscription.days_left} kun qoldi.`,
-                    severity: state.subscription.status === 'expired' ? 'error' : 'warn',
-                    read: false,
-                    link: '/dashboard/subscription'
-                })
-            }
-
-            return list.sort((a, b) => {
-                const timeA = a.date ? new Date(a.date).getTime() : 0
-                const timeB = b.date ? new Date(b.date).getTime() : 0
-                return (timeB || 0) - (timeA || 0)
+            }).sort((a, b) => {
+                const timeA = a.time ? new Date(a.time).getTime() : 0
+                const timeB = b.time ? new Date(b.time).getTime() : 0
+                return timeB - timeA
             })
         }
     },
 
     actions: {
-        async fetchAnnouncements(silent = false) {
-            if (!silent) this.loading.announcements = true
+        async fetchNotifications(silent = false) {
+            if (!silent) this.loading.notifications = true
             try {
-                const res = await announcementsAPI.getAll()
-                this.announcements = Array.isArray(res.data) ? res.data : []
+                const res = await notificationsAPI.getAll()
+                // Rasmga ko'ra: { unread_count: 1, results: [...] }
+                if (res.data?.results) {
+                    this.items = res.data.results
+                } else if (Array.isArray(res.data)) {
+                    this.items = res.data
+                } else {
+                    this.items = []
+                }
+                console.log('📦 Notifications loaded:', this.items.length)
             } catch (err) {
-                console.error('Announcements error:', err)
-                this.announcements = []
+                console.error('❌ Fetch notifications error:', err)
+                this.items = []
             } finally {
-                this.loading.announcements = false
-            }
-        },
-
-        async fetchLowStock(silent = false) {
-            if (!silent) this.loading.lowStock = true
-            try {
-                const res = await productsAPI.getLowStock()
-                this.lowStockItems = Array.isArray(res.data) ? res.data : []
-            } catch (err) {
-                console.error('Low stock error:', err)
-                this.lowStockItems = []
-            } finally {
-                this.loading.lowStock = false
+                this.loading.notifications = false
             }
         },
 
@@ -167,59 +80,129 @@ export const useNotificationStore = defineStore('notifications', {
             try {
                 const res = await subscriptionAPI.getStatus()
                 this.subscription = res.data || null
-                // Store the new usage info
                 if (res.data?.usage) {
                     this.usage = res.data.usage
                 }
             } catch (err) {
-                console.error('Subscription error:', err)
+                console.error('❌ Subscription stats error:', err)
             } finally {
                 this.loading.subscription = false
             }
         },
 
-        async markAsRead(id) {
+        setupSSE() {
+            this.stopSSE()
+
+            const token = localStorage.getItem('access_token') || localStorage.getItem('token')
+            if (!token) return
+
+            const url = notificationsAPI.getStreamUrl(token)
+            console.log('📡 SSE connecting to:', url)
+            
             try {
-                await announcementsAPI.markRead(id)
-                const ann = this.announcements.find(a => a.id === id)
-                if (ann && !ann.is_read) {
-                    ann.is_read = true
+                this.eventSource = new EventSource(url)
+
+                this.eventSource.onmessage = (e) => {
+                    try {
+                        const data = JSON.parse(e.data)
+                        
+                        // Heartbeat va connected — ignore
+                        if (data.event === 'heartbeat' || data.event === 'connected') return
+
+                        console.log('🔔 Received SSE event:', data.event, data)
+
+                        // SSE dan kelgan 'event'ni 'source' sifatida saqlaymiz, 
+                        // chunki HTTP dan 'source' bo'lib keladi.
+                        if (data.event === 'notification' || data.event === 'announcement') {
+                            const newItem = {
+                                ...data,
+                                source: data.event,
+                                is_read: data.is_read !== undefined ? data.is_read : false,
+                                time: data.time || new Date().toISOString()
+                            }
+                            
+                            // Dublikatni tekshirish
+                            const exists = newItem.id ? this.items.find(i => i.id === newItem.id) : false
+                            if (!exists) {
+                                this.items.unshift(newItem)
+                            }
+                        }
+
+                        // Obuna holati o'zgarsa statistikani yangilash
+                        if (data.event === 'subscription_update') {
+                            this.fetchSubscription(true)
+                        }
+                    } catch (err) {
+                        console.error('❌ SSE message parse error:', err)
+                    }
+                }
+
+                this.eventSource.onerror = (err) => {
+                    console.warn('⚠️ SSE Connection error (automatic retry by browser)', err)
+                }
+
+            } catch (err) {
+                console.error('❌ SSE Setup error:', err)
+            }
+        },
+
+        stopSSE() {
+            if (this.eventSource) {
+                this.eventSource.close()
+                this.eventSource = null
+            }
+        },
+
+        async markAsRead() {
+            try {
+                // Ham tizim, ham e'lonlarni bir vaqtda o'qilgan deb belgilaymiz
+                await Promise.allSettled([
+                    notificationsAPI.markRead(),
+                    announcementsAPI.markReadAll()
+                ])
+                
+                // Front-end state'ni yangilaymiz
+                this.items.forEach(item => {
+                    item.is_read = true
+                })
+            } catch (err) {
+                console.error('❌ Mark all as read error:', err)
+            }
+        },
+
+        async markItemAsRead(item) {
+            if (!item || item.is_read) return
+            try {
+                if (item.source === 'announcement' && item.id) {
+                    await announcementsAPI.markRead(item.id)
+                    item.is_read = true
+                } else {
+                    // Tizim xabarlari uchun hozircha faqat global bor
+                    await notificationsAPI.markRead()
+                    this.items.forEach(i => { i.is_read = true })
                 }
             } catch (err) {
-                console.error('Mark as read error:', err)
+                console.error('❌ Mark item as read error:', err)
             }
         },
 
         async startPolling() {
-            this.stopPolling()
             this.initialFetchDone = false
-            
-            console.log('🔔 Notification polling started')
-            
             await Promise.allSettled([
-                this.fetchAnnouncements(),
-                this.fetchLowStock(),
+                this.fetchNotifications(),
                 this.fetchSubscription()
             ])
-            
+            this.setupSSE()
             this.initialFetchDone = true
-            console.log('✅ Initial notifications loaded')
         },
 
         stopPolling() {
-            if (this.intervals.announcements) clearInterval(this.intervals.announcements)
-            if (this.intervals.lowStock) clearInterval(this.intervals.lowStock)
-            if (this.intervals.subscription) clearInterval(this.intervals.subscription)
-            
-            this.intervals = { announcements: null, lowStock: null, subscription: null }
-            console.log('🔕 Notification polling stopped')
+            this.stopSSE()
         },
 
         reset() {
-            console.log('🧹 Resetting Notification Store')
-            this.stopPolling()
-            this.announcements = []
-            this.lowStockItems = []
+            this.stopSSE()
+            this.items = []
             this.subscription = null
             this.usage = {
                 branches: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
@@ -227,7 +210,7 @@ export const useNotificationStore = defineStore('notifications', {
                 workers: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
                 products: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true }
             }
-            this.loading = { announcements: false, lowStock: false, subscription: false }
+            this.loading = { notifications: false, subscription: false }
             this.initialFetchDone = false
         }
     }

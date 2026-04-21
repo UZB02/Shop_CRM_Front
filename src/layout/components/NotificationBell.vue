@@ -43,15 +43,15 @@
                     :key="item.id" 
                     class="px-4 py-3 border-b border-slate-50 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer relative group"
                     @click="handleItemClick(item)"
-                    :class="{ 'bg-emerald-50/30 dark:bg-emerald-500/5': !item.read && item.type === 'announcement' }"
+                    :class="{ 'bg-emerald-50/30 dark:bg-emerald-500/5': !item.read }"
                 >
                     <div class="flex gap-3">
                         <div class="flex-shrink-0 mt-0.5">
                             <div :class="[ 
                                 'w-8 h-8 rounded-lg flex items-center justify-center text-xs shadow-sm',
-                                getSeverityClass(item.severity)
+                                getSeverityClass(getSeverity(item))
                             ]">
-                                <i :class="getIcon(item.type, item.severity)" />
+                                <i :class="getIcon(item.type, getSeverity(item))" />
                             </div>
                         </div>
                         <div class="flex-1 min-w-0">
@@ -59,7 +59,17 @@
                                 <h4 class="text-[13px] font-bold text-slate-700 dark:text-slate-200 mb-0.5 truncate group-hover:text-emerald-500 transition-colors">
                                     {{ item.title }}
                                 </h4>
-                                <span v-if="!item.read && item.type === 'announcement'" class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0 animate-pulse mt-1.5" />
+                                <div class="flex items-center gap-2 flex-shrink-0 mt-1">
+                                    <button 
+                                        v-if="!item.read" 
+                                        @click.stop="store.markItemAsRead(item)"
+                                        class="w-6 h-6 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all duration-300"
+                                        v-tooltip.left="'O\'qilgan deb belgilash'"
+                                    >
+                                        <i class="pi pi-check text-[10px]" />
+                                    </button>
+                                    <span v-if="!item.read" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                </div>
                             </div>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight mb-1 line-clamp-2">
                                 {{ item.body }}
@@ -79,16 +89,105 @@
             </div>
 
             <!-- Footer -->
-            <div v-if="notifications.length > 0" class="p-2 border-t border-slate-100 dark:border-slate-800">
+            <div v-if="store.unreadCount > 0" class="p-2 border-t border-slate-100 dark:border-slate-800">
                 <button 
-                  @click="store.fetchAnnouncements()"
-                  class="w-full py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-emerald-500 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all active:scale-[0.98]"
+                  @click="store.markAsRead()"
+                  class="w-full py-2 rounded-xl text-xs font-bold text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border border-transparent transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                 >
-                    Barchasini yangilash
+                    <i class="pi pi-check-circle" />
+                    Barchasini o'qilgan deb belgilash
                 </button>
             </div>
         </div>
     </Popover>
+
+    <!-- Custom Premium Modal -->
+    <Teleport to="body">
+        <Transition name="fade-scale">
+            <div v-if="showDetailModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                <!-- Backdrop -->
+                <div @click="showDetailModal = false" class="absolute inset-0 bg-slate-900/40 backdrop-blur-md" />
+                
+                <!-- Modal Content -->
+                <div class="relative w-full max-w-[480px] bg-white dark:bg-slate-900 rounded-[32px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] overflow-hidden border border-white/20 dark:border-slate-800 transition-all duration-500">
+                    
+                    <!-- Close Button (Top Right) -->
+                    <button 
+                        @click="showDetailModal = false"
+                        class="absolute top-6 right-6 w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-rose-500 hover:text-white dark:text-slate-400 flex items-center justify-center transition-all duration-300 z-10 group"
+                    >
+                        <i class="pi pi-times text-lg group-hover:rotate-90 transition-transform duration-300" />
+                    </button>
+
+                    <div v-if="selectedNotification" class="p-8">
+                        <!-- Header Section -->
+                        <div class="flex items-center gap-4 mb-8">
+                            <div :class="[
+                                'w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-xl shadow-current/10',
+                                getSeverityClass(getSeverity(selectedNotification))
+                            ]">
+                                <i :class="getIcon(selectedNotification.type)" />
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 mb-1 block">
+                                    {{ selectedNotification.type_display || selectedNotification.source }}
+                                </span>
+                                <div class="text-[10px] font-bold text-slate-400">
+                                    XABAR #{{ selectedNotification.id }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Section -->
+                        <div class="space-y-6">
+                            <h2 class="text-2xl font-black text-slate-800 dark:text-white leading-tight">
+                                {{ selectedNotification.title }}
+                            </h2>
+                            
+                            <div class="relative">
+                                <div class="absolute -left-4 top-0 bottom-0 w-1 bg-emerald-500/20 rounded-full" />
+                                <div class="text-[15px] font-medium text-slate-600 dark:text-slate-300 leading-relaxed break-words whitespace-pre-wrap max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+                                    {{ selectedNotification.message || selectedNotification.body }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer / Meta -->
+                        <div class="mt-10 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <div class="flex items-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                <span class="flex items-center gap-2">
+                                    <i class="pi pi-calendar opacity-50" />
+                                    {{ selectedNotification.date }}
+                                </span>
+                                <span v-if="selectedNotification.time" class="flex items-center gap-2">
+                                    <i class="pi pi-clock opacity-50" />
+                                    {{ selectedNotification.time }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div class="mt-8 flex flex-col gap-3">
+                            <button 
+                                v-if="selectedNotification.link"
+                                @click="router.push(selectedNotification.link); showDetailModal = false; op.hide()"
+                                class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-black text-sm shadow-[0_12px_24px_-6px_rgba(16,185,129,0.3)] transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+                            >
+                                <i class="pi pi-external-link" />
+                                BATAFSIL KO'RISH
+                            </button>
+                            <button 
+                                @click="showDetailModal = false"
+                                class="w-full py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 font-black text-sm transition-all active:scale-[0.98]"
+                            >
+                                YOPISH
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -102,53 +201,90 @@ const store = useNotificationStore()
 const router = useRouter()
 const op = ref()
 
+const showDetailModal = ref(false)
+const selectedNotification = ref(null)
+
 const notifications = computed(() => store.allNotifications)
 
 const toggle = (event) => {
     op.value.toggle(event)
 }
 
+// Backend mantiqi bo'yicha severity (rang) aniqlash
+const getSeverity = (item) => {
+    if (item.severity) return item.severity
+
+    // 1. Tizim Bildirishnomalari (Notification)
+    if (item.source === 'notification') {
+        if (item.type === 'subscription_expired') return 'error'
+        if (item.type === 'subscription_expiry' || item.type === 'low_stock') return 'warn'
+    } 
+    
+    // 2. Announcement (Admin xabarlari)
+    if (item.source === 'announcement') {
+        if (item.type === 'warning' || item.type === 'maintenance') return 'warn'
+        if (item.type === 'new_feature') return 'success'
+        if (item.type === 'info') return 'info'
+    }
+
+    return 'info'
+}
+
 const getSeverityClass = (sev) => {
     switch(sev) {
-        case 'error': return 'bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400'
-        case 'warn': return 'bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400'
+        case 'error':   return 'bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400'
+        case 'warn':    return 'bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400'
         case 'success': return 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
-        default: return 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400'
+        default:        return 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400'
     }
 }
 
-const getIcon = (type, severity) => {
+const getIcon = (type) => {
     switch(type) {
-        case 'announcement': return 'pi pi-megaphone'
-        case 'stock': return 'pi pi-shopping-cart'
-        case 'subscription': return 'pi pi-shield' // Or 'pi pi-credit-card'
-        default: 
-            if (severity === 'error') return 'pi pi-exclamation-circle'
-            return 'pi pi-info-circle'
+        // Tizim
+        case 'low_stock':            return 'pi pi-exclamation-triangle'
+        case 'subscription_expiry':  return 'pi pi-clock'
+        case 'subscription_expired': return 'pi pi-ban'
+        
+        // Announcement
+        case 'info':                 return 'pi pi-info-circle'
+        case 'warning':              return 'pi pi-megaphone'
+        case 'maintenance':          return 'pi pi-wrench'
+        case 'new_feature':          return 'pi pi-sparkles'
+        
+        default:                     return 'pi pi-bell'
     }
 }
 
 const formatTime = (dateStr) => {
     if (!dateStr) return 'Yaqunda'
-    const date = new Date(dateStr)
+    
+    // Backend "2026-04-21 11:26" (UTC) formatda yuboradi
+    // Uni brauzer tushunishi uchun ISO formatga keltiramiz (Z qo'shamiz)
+    const normalizedDate = dateStr.includes('T') ? dateStr : dateStr.replace(' ', 'T') + 'Z'
+    const date = new Date(normalizedDate)
     const now = new Date()
     const diff = now - date
     
+    // Agar xabar juda yangi bo'lsa (1 daqiqadan kam)
     if (diff < 60000) return 'Hozirgina'
-    if (diff < 3600000) return Math.floor(diff/60000) + ' daqiqa oldin'
-    if (diff < 86400000) return Math.floor(diff/3600000) + ' soat oldin'
     
+    // Agar bugun bo'lsa — aniq vaqtini ko'rsatamiz (masalan: 11:26)
+    const isToday = date.toDateString() === now.toDateString()
+    if (isToday) {
+        return date.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit', hour12: false })
+    }
+    
+    // Kecha yoki undan oldin bo'lsa — sanasini ko'rsatamiz
     return date.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short' })
 }
 
 const handleItemClick = async (item) => {
-    if (item.type === 'announcement' && !item.read) {
-        await store.markAsRead(item.originalId)
-    }
+    selectedNotification.value = item
+    showDetailModal.value = true
     
-    if (item.link) {
-        router.push(item.link)
-        op.value.hide()
+    if (!item.read) {
+        await store.markItemAsRead(item)
     }
 }
 </script>
@@ -166,5 +302,25 @@ const handleItemClick = async (item) => {
 }
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
     background: rgba(148, 163, 184, 0.2);
+}
+
+/* Modal Animations */
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fade-scale-enter-from,
+.fade-scale-leave-to {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+    backdrop-filter: blur(0px);
+}
+
+.fade-scale-enter-to,
+.fade-scale-leave-from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    backdrop-filter: blur(12px);
 }
 </style>
