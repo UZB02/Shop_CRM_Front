@@ -33,6 +33,7 @@
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('products.form.category') }}</th>
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-right">{{ $t('products.col_price') }}</th>
+              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 w-12 text-center">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -83,6 +84,15 @@
                   {{ Number(product.sale_price).toLocaleString() }} <span class="text-[9px] opacity-40 uppercase">{{ product.currency_code || 'UZS' }}</span>
                 </span>
               </td>
+              <td class="px-6 py-4 text-center">
+                <button 
+                  @click="$emit('create-wastage', product)"
+                  v-tooltip.left="$t('warehouse.wastage.create_title')"
+                  class="w-8 h-8 rounded-xl bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 hover:shadow-lg hover:shadow-rose-500/10 transition-all flex items-center justify-center active:scale-90"
+                >
+                  <i class="pi pi-trash text-[10px]"></i>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -132,6 +142,8 @@ import Dialog from 'primevue/dialog'
 const props = defineProps({
   products: Array
 })
+
+const emit = defineEmits(['create-wastage'])
 
 const barcodeVisible = ref(false)
 const selectedProduct = ref(null)

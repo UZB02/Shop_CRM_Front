@@ -604,6 +604,22 @@
       "no_warehouse_products": "Омборда маҳсулотлар мавжуд эмас",
       "no_search_results": "Қидирув натижаси топилмади",
       "total_count": "{count} та жами ёзув"
+    },
+    "wastage": {
+      "title": "Чиқитлар",
+      "create_title": "Янги чиқит яратиш",
+      "reason_label": "Чиқит сабаби",
+      "reason_placeholder": "Сабабни танланг",
+      "desc_placeholder": "Ташиш пайтида синган, ўрамига шикаст етган ва ҳ.к.",
+      "created_success": "Чиқит муваффақиятли қайд этилди",
+      "reasons": {
+        "expired": "Муддати ўтган",
+        "damaged": "Шикастланган",
+        "stolen": "Ўғирланган",
+        "other": "Бошқа"
+      },
+      "no_data": "Ҳозирча чиқитлар тарихи мавжуд эмас",
+      "export": "Excel'га юклаш"
     }
   },
   "products": {

@@ -58,7 +58,7 @@ export const useNotificationStore = defineStore('notifications', {
         async fetchNotifications(silent = false) {
             if (!silent) this.loading.notifications = true
             try {
-                const res = await notificationsAPI.getAll()
+                const res = await notificationsAPI.getAll(null, silent ? { silent: true } : {})
                 // Backend guide: { unread_count: 3, results: [...] }
                 if (res.data) {
                     this.items = res.data.results || (Array.isArray(res.data) ? res.data : [])
@@ -75,7 +75,7 @@ export const useNotificationStore = defineStore('notifications', {
         async fetchSubscription(silent = false) {
             if (!silent) this.loading.subscription = true
             try {
-                const res = await subscriptionAPI.getStatus()
+                const res = await subscriptionAPI.getStatus(silent ? { silent: true } : {})
                 this.subscription = res.data || null
                 if (res.data?.usage) {
                     this.usage = res.data.usage

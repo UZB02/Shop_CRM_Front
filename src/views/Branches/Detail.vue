@@ -40,6 +40,7 @@
             v-else-if="activeTab === 'products'" 
             key="products" 
             :products="branch?.products" 
+            @create-wastage="openWastageModal"
           />
           <TransfersTab 
             v-else-if="activeTab === 'transfers'" 
@@ -60,6 +61,14 @@
             key="incoming" 
             :branch-id="branch?.id || branch?._id"
           />
+
+          <WastagesTab 
+            v-else-if="activeTab === 'wastages'" 
+            key="wastages" 
+            ref="wastagesTabRef"
+            :location-id="branch?.id || branch?._id"
+            location-type="branch"
+          />
         </Transition>
       </div>
     </div>
@@ -73,11 +82,20 @@
       @save="handleSave"
       @hide="editModalVisible = false"
     />
+
+    <!-- Wastage Modal -->
+    <CreateWastageModal
+      v-model:visible="wastageModalVisible"
+      :product="selectedProductForWastage"
+      :location-id="branch?.id || branch?._id"
+      location-type="branch"
+      @saved="onWastageSaved"
+    />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBranchDetail } from './composables/useBranchDetail'
 import { useI18n } from 'vue-i18n'
@@ -90,13 +108,15 @@ import BranchIncomingTab from './components/BranchIncomingTab.vue'
 import BranchCustomersTab from './components/BranchCustomersTab.vue'
 import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 import BranchDialog from '../Stores/components/BranchDialog.vue'
+import WastagesTab from '@/components/Warehouse/WastagesTab.vue'
+import CreateWastageModal from '@/components/Warehouse/CreateWastageModal.vue'
 
 const { t } = useI18n()
 const router = useRouter()
 const {
   branch, loading, tabLoading, activeTab,
   editModalVisible, branchForm, submitted, saving,
-  openEditModal, handleSave
+  openEditModal, handleSave, fetchBranch
 } = useBranchDetail()
 
 const openNewTransferHandler = () => {
@@ -112,8 +132,28 @@ const navTabs = computed(() => [
   { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: branch.value?.workers?.length },
   { id: 'transfers', label: t('warehouse.detail.transfers'), icon: 'pi pi-arrow-right-arrow-left' },
   { id: 'incoming', label: t('warehouse.detail.incoming_history'), icon: 'pi pi-history' },
+  { id: 'wastages', label: t('warehouse.wastage.title'), icon: 'pi pi-exclamation-triangle' },
   { id: 'customers', label: t('menu.customers'), icon: 'pi pi-user', count: branch.value?.customers?.length },
 ])
+
+const wastageModalVisible = ref(false)
+const selectedProductForWastage = ref(null)
+const wastagesTabRef = ref(null)
+
+const openWastageModal = (product) => {
+  selectedProductForWastage.value = product
+  wastageModalVisible.value = true
+}
+
+const onWastageSaved = () => {
+  // Refresh branch data to update stock
+  fetchBranch()
+  // If we are currently on the wastages tab, refresh it too
+  if (activeTab.value === 'wastages' && wastagesTabRef.value) {
+    wastagesTabRef.value.refresh()
+  }
+}
+
 </script>
 
 <style scoped>

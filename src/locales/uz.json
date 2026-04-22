@@ -606,6 +606,22 @@
             "no_warehouse_products": "Omborda mahsulotlar mavjud emas",
             "no_search_results": "Qidiruv natijasi topilmadi",
             "total_count": "{count} ta jami yozuv"
+        },
+        "wastage": {
+            "title": "Chiqitlar",
+            "create_title": "Yangi chiqit yaratish",
+            "reason_label": "Chiqit sababi",
+            "reason_placeholder": "Sababni tanlang",
+            "desc_placeholder": "Tashish paytida singan, o'ramiga shikast yetgan va h.k.",
+            "created_success": "Chiqit muvaffaqiyatli qayd etildi",
+            "reasons": {
+                "expired": "Muddati o'tgan",
+                "damaged": "Shikastlangan",
+                "stolen": "O'g'irlangan",
+                "other": "Boshqa"
+            },
+            "no_data": "Hozircha chiqitlar tarixi mavjud emas",
+            "export": "Excelga yuklash"
         }
     },
     "categories": {

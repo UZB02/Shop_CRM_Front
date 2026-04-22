@@ -63,6 +63,7 @@
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.col_price') }}</th>
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.date') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -88,7 +89,7 @@
                           :class="settingsStore.isLowStockEnabled && item.quantity <= settingsStore.lowStockThreshold 
                             ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' 
                             : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'"
-                        >
+                         >
                           {{ item.quantity }}
                         </span>
                       </td>
@@ -100,6 +101,15 @@
                       </td>
                       <td class="px-4 py-2 text-right text-[10px] text-slate-400">
                         {{ item.added_on?.split('|')[0]?.trim() || '—' }}
+                      </td>
+                      <td class="px-4 py-2 text-center">
+                        <button 
+                          @click="openWastageModal(item)"
+                          v-tooltip.left="$t('warehouse.wastage.create_title')"
+                          class="w-7 h-7 rounded-lg bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 transition-all flex items-center justify-center active:scale-90 opacity-0 group-hover:opacity-100"
+                        >
+                          <i class="pi pi-trash text-[9px]"></i>
+                        </button>
                       </td>
                     </tr>
                   </tbody>
@@ -224,9 +234,27 @@
             </div>
           </div>
 
+          <!-- ===== CHIQUITLAR TAB ===== -->
+          <div v-else-if="activeTab === 'wastages'" key="wastages">
+            <WastagesTab
+              ref="wastagesTabRef"
+              :location-id="warehouse?.id || warehouse?._id"
+              location-type="warehouse"
+            />
+          </div>
+
         </Transition>
       </div>
     </div>
+
+    <!-- Wastage Modal -->
+    <CreateWastageModal
+      v-model:visible="wastageModalVisible"
+      :product="selectedProductForWastage"
+      :location-id="warehouse?.id || warehouse?._id"
+      location-type="warehouse"
+      @saved="onWastageSaved"
+    />
   </div>
 </template>
 
@@ -239,6 +267,8 @@ import TablePagination from '@/components/TablePagination.vue'
 import TransfersTab from '@/components/Transfers/TransfersTab.vue'
 import WarehouseDetailPageHeader from './components/WarehouseDetailPageHeader.vue'
 import WarehouseTabsSidebar from './components/WarehouseTabsSidebar.vue'
+import WastagesTab from '@/components/Warehouse/WastagesTab.vue'
+import CreateWastageModal from '@/components/Warehouse/CreateWastageModal.vue'
 import i18n from '@/i18n'
 
 const route = useRoute()
@@ -276,8 +306,27 @@ const filteredProducts = computed(() => {
 const navTabs = computed(() => [
   { id: 'products', label: i18n.global.t('warehouse.detail.products'), icon: 'pi-box', count: warehouse.value?.products?.length ?? 0 },
   { id: 'transfers', label: i18n.global.t('warehouse.detail.transfers'), icon: 'pi-arrows-h', count: pendingCount.value > 0 ? pendingCount.value : undefined },
-  { id: 'incoming', label: i18n.global.t('warehouse.detail.incoming_history'), icon: 'pi-history', count: incomingHistory.value?.length > 0 ? incomingHistory.value.length : undefined }
+  { id: 'incoming', label: i18n.global.t('warehouse.detail.incoming_history'), icon: 'pi-history', count: incomingHistory.value?.length > 0 ? incomingHistory.value.length : undefined },
+  { id: 'wastages', label: i18n.global.t('warehouse.wastage.title'), icon: 'pi-exclamation-triangle' }
 ])
+
+const wastageModalVisible = ref(false)
+const selectedProductForWastage = ref(null)
+const wastagesTabRef = ref(null)
+
+const openWastageModal = (product) => {
+  selectedProductForWastage.value = product
+  wastageModalVisible.value = true
+}
+
+const onWastageSaved = () => {
+  // Refresh warehouse data to update stock
+  fetchWarehouseDetails()
+  // If we are currently on the wastages tab, refresh it too
+  if (activeTab.value === 'wastages' && wastagesTabRef.value) {
+    wastagesTabRef.value.refresh()
+  }
+}
 
 const fetchWarehouseDetails = async (tab = null) => {
   if (tab) tabLoading.value = true

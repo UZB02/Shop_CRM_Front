@@ -23,7 +23,7 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) => {
         // Start global loading bar
-        if (typeof window !== 'undefined' && window.startLoader) window.startLoader()
+        if (!config.silent && typeof window !== 'undefined' && window.startLoader) window.startLoader()
 
         const token = _memToken || localStorage.getItem('token')
         if (token) {
@@ -38,7 +38,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => {
         // Stop global loading bar
-        if (typeof window !== 'undefined' && window.stopLoader) window.stopLoader()
+        if (!response.config.silent && typeof window !== 'undefined' && window.stopLoader) window.stopLoader()
 
         // Log all incoming API data to console for monitoring
         console.log(`🌐 API RESPONSE [${response.config.method.toUpperCase()}] ${response.config.url}:`, response.data)
@@ -52,7 +52,7 @@ api.interceptors.response.use(
     },
     async (error) => {
         // Stop global loading bar
-        if (typeof window !== 'undefined' && window.stopLoader) window.stopLoader()
+        if (!error.config?.silent && typeof window !== 'undefined' && window.stopLoader) window.stopLoader()
 
         console.error(`❌ API ERROR [${error.config?.method?.toUpperCase()}] ${error.config?.url}:`, error.response?.data || error.message)
         
@@ -264,6 +264,14 @@ export const movementsAPI = {
     bulkCreate: (data) => api.post('/warehouse/movements/bulk/', data)
 }
 
+// Wastages API
+export const wastagesAPI = {
+    getAll: (params) => api.get('/warehouse/wastages/', { params }),
+    getById: (id) => api.get(`/warehouse/wastages/${id}/`),
+    create: (data) => api.post('/warehouse/wastages/', data),
+    export: (params) => api.get('/export/wastages/', { params, responseType: 'blob' })
+}
+
 // Dashboard API
 export const dashboardAPI = {
     getStats: () => api.get('/dashboard/stats'),
@@ -271,10 +279,10 @@ export const dashboardAPI = {
     getSalesChart: (params) => api.get('/dashboard/sales-chart', { params })
 }
 
-// Notifications API (SSE & Shared list)
+// Notifications API (Polling & Shared list)
 export const notificationsAPI = {
-    getAll: (params) => api.get('/notifications/', { params }),
-    markRead: () => api.post('/notifications/mark-read/', {}) // Body bo'sh yuboriladi
+    getAll: (params, config = {}) => api.get('/notifications/', { params, ...config }),
+    markRead: (config = {}) => api.post('/notifications/mark-read/', {}, config) // Body bo'sh yuboriladi
 }
 
 // Announcements API
@@ -286,7 +294,7 @@ export const announcementsAPI = {
 
 // Subscription API
 export const subscriptionAPI = {
-    getStatus: () => api.get('/subscription/'),
+    getStatus: (config = {}) => api.get('/subscription/', config),
     extend: (data) => api.post('/subscription/extend/', data),
     changePlan: (data) => api.post('/subscription/plan/', data)
 }
