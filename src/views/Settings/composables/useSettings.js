@@ -20,6 +20,17 @@ const FORM_FIELDS = [
     'show_name_on_barcode', 'show_price_on_barcode', 'auto_pdf_on_smena_close'
 ]
 
+// Mapping fields to tabs for precise change tracking
+export const TAB_FIELDS = {
+    modules: ['subcategory_enabled', 'sale_return_enabled', 'wastage_enabled', 'stock_audit_enabled', 'kpi_enabled', 'price_list_enabled', 'supplier_credit_enabled', 'shift_enabled', 'shifts_per_day', 'require_cash_count', 'auto_pdf_on_smena_close'],
+    stock: ['low_stock_enabled', 'low_stock_threshold'],
+    payment: ['allow_cash', 'allow_card', 'allow_debt', 'allow_discount', 'max_discount_percent'],
+    currency: ['default_currency', 'show_usd_price', 'show_rub_price', 'show_eur_price', 'show_cny_price'],
+    receipt: ['receipt_header', 'receipt_footer', 'receipt_address', 'receipt_phone', 'receipt_promo_text', 'show_store_logo', 'show_worker_name', 'show_name_on_barcode', 'show_price_on_barcode'],
+    tax: ['tax_enabled', 'tax_percent', 'ofd_enabled', 'ofd_token', 'ofd_device_id', 'tin', 'ofd_provider'],
+    telegram: ['telegram_enabled', 'telegram_chat_id']
+}
+
 // Tab config — tKey used in index.vue via $t()
 export const SETTINGS_TABS = [
     { key: 'modules', icon: 'pi-th-large', tKey: 'settings.tabs.modules' },
@@ -48,13 +59,24 @@ export function useSettings() {
         return role === 'owner' || authStore.user?.is_owner
     })
 
+    const isFieldDirty = (field) => {
+        const val = form[field] ?? ''
+        const orig = originalForm.value[field] ?? ''
+        return String(val) !== String(orig)
+    }
+
     const isDirty = computed(() =>
-        FORM_FIELDS.some(f => {
-            const val = form[f] ?? ''
-            const orig = originalForm.value[f] ?? ''
-            return String(val) !== String(orig)
-        })
+        FORM_FIELDS.some(f => isFieldDirty(f))
     )
+
+    // Compute which tabs have unsaved changes
+    const dirtyTabs = computed(() => {
+        const res = {}
+        Object.entries(TAB_FIELDS).forEach(([tab, fields]) => {
+            res[tab] = fields.some(f => isFieldDirty(f))
+        })
+        return res
+    })
 
     const loadSettings = async () => {
         loading.value = true
@@ -125,10 +147,9 @@ export function useSettings() {
         try {
             const dataToSave = {}
             FORM_FIELDS.forEach(f => {
-                const val = form[f]
-                const orig = originalForm.value[f]
-                
-                if (String(val) !== String(orig)) {
+                if (isFieldDirty(f)) {
+                    const val = form[f]
+                    
                     // Skip if it's a sensitive write-only field and is empty
                     if (f === 'ofd_token' && !val) return
                     
@@ -165,21 +186,16 @@ export function useSettings() {
             console.log('✅ API RESPONSE (update):', res.data)
 
             if (res.data) {
-                // ⚠️ Backend PATCH javobi ikki xil formatda kelishi mumkin:
-                //   Format 1: { message: "...", data: { ...sozlamalar } }  ← wrapper
-                //   Format 2: { id, allow_cash, ... }                      ← to'g'ridan-to'g'ri
                 const raw = res.data
                 const newData = raw?.data && raw.data?.id
-                    ? raw.data                                          // wrapper ichidan chiqaramiz
-                    : (Array.isArray(raw) ? raw[0] : raw)              // to'g'ridan-to'g'ri
+                    ? raw.data
+                    : (Array.isArray(raw) ? raw[0] : raw)
 
                 console.log('📦 Parsed settings after PATCH:', newData)
 
                 if (!newData?.id) {
-                    // ID yo'q bo'lsa — backend noto'g'ri javob qaytardi, formni o'zgartirmaymiz
                     console.warn('⚠️ PATCH response has no id — skipping form update')
                 } else {
-                    // Mahalliy holat yangilanadi — faqat FORM_FIELDS dan o'tgan maydonlar
                     settingsId.value = newData.id
                     FORM_FIELDS.forEach(f => { form[f] = newData[f] ?? null })
                     originalForm.value = { ...form }
@@ -210,5 +226,5 @@ export function useSettings() {
 
     onMounted(loadSettings)
 
-    return { loading, saving, settings, form, isDirty, isOwner, saveSettings }
+    return { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwner, saveSettings }
 }

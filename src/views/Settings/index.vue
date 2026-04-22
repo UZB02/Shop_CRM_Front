@@ -19,9 +19,18 @@
 
     <!-- Unsaved changes banner -->
     <transition name="slide-down">
-      <div v-if="isDirty && !saving" class="mb-4 px-4 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 flex items-center gap-2 text-amber-700 dark:text-amber-400 text-xs font-semibold">
-        <i class="pi pi-exclamation-triangle text-xs"></i>
-        {{ $t('settings.unsaved_changes') }}
+      <div v-if="isDirty && !saving" class="mb-4 px-4 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 flex items-center gap-3 text-amber-700 dark:text-amber-400 text-xs font-semibold">
+        <i class="pi pi-exclamation-triangle text-sm"></i>
+        <div class="flex-1">
+          <p>{{ $t('settings.unsaved_changes') }}</p>
+          <div class="flex flex-wrap gap-1 mt-1 opacity-80">
+            <template v-for="tab in SETTINGS_TABS" :key="tab.key">
+              <span v-if="dirtyTabs[tab.key]" class="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-400/10 text-[9px] uppercase tracking-wider">
+                {{ $t(tab.tKey) }}
+              </span>
+            </template>
+          </div>
+        </div>
       </div>
     </transition>
 
@@ -30,13 +39,14 @@
       <button
         v-for="tab in SETTINGS_TABS" :key="tab.key"
         @click="activeTab = tab.key"
-        class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border"
+        class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border relative"
         :class="activeTab === tab.key
           ? 'bg-emerald-500 border-emerald-500 text-white'
           : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'"
       >
         <i :class="['pi', tab.icon, 'mr-1 text-[10px]']"></i>
         {{ $t(tab.tKey) }}
+        <span v-if="dirtyTabs[tab.key]" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-500 border-2 border-white dark:border-slate-900 rounded-full animate-pulse"></span>
       </button>
     </div>
 
@@ -49,11 +59,12 @@
           <button
             v-for="tab in SETTINGS_TABS" :key="tab.key"
             @click="activeTab = tab.key"
-            class="nav-btn w-full text-left"
+            class="nav-btn w-full text-left relative"
             :class="activeTab === tab.key ? 'nav-btn--active' : 'nav-btn--inactive'"
           >
             <i :class="['pi', tab.icon, 'text-xs w-4 flex-shrink-0']"></i>
             <span class="truncate">{{ $t(tab.tKey) }}</span>
+            <span v-if="dirtyTabs[tab.key]" class="ml-auto w-2 h-2 bg-amber-500 rounded-full animate-pulse shadow-sm shadow-amber-500/50"></span>
           </button>
         </nav>
       </aside>
@@ -74,13 +85,13 @@
 
         <!-- Tab panels -->
         <template v-else-if="settings">
-          <SettingsModulesTab  :form="form" :active="activeTab" :readonly="!isOwner" />
-          <SettingsStockTab    :form="form" :active="activeTab" :readonly="!isOwner" />
-          <SettingsPaymentTab  :form="form" :active="activeTab" :readonly="!isOwner" />
-          <SettingsCurrencyTab :form="form" :active="activeTab" :readonly="!isOwner" />
-          <SettingsReceiptTab  :form="form" :active="activeTab" :readonly="!isOwner" />
-          <SettingsTaxTab      :form="form" :active="activeTab" :readonly="!isOwner" />
-          <SettingsTelegramTab :form="form" :active="activeTab" :readonly="!isOwner" />
+          <SettingsModulesTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsStockTab    :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsPaymentTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsCurrencyTab :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsReceiptTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsTaxTab      :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsTelegramTab :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
         </template>
 
         <!-- Error state -->
@@ -108,7 +119,7 @@ import SettingsTelegramTab from './components/tabs/SettingsTelegramTab.vue'
 
 const { t } = useI18n()
 const activeTab = ref('modules')
-const { loading, saving, settings, form, isDirty, isOwner, saveSettings } = useSettings()
+const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwner, saveSettings } = useSettings()
 </script>
 
 <!-- ─────────────────────────────────────────────────

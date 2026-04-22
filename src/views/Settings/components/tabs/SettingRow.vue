@@ -1,7 +1,10 @@
 <template>
-  <div class="settings-row">
+  <div class="settings-row" :class="{ 'settings-row--dirty': isDirty }">
     <div class="flex-1">
-      <p class="row-label">{{ label }}</p>
+      <div class="flex items-center gap-2">
+        <p class="row-label">{{ label }}</p>
+        <span v-if="isDirty" class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+      </div>
       <p v-if="desc" class="row-desc">{{ desc }}</p>
     </div>
     <button 
@@ -11,7 +14,8 @@
       class="toggle-switch flex-shrink-0" 
       :class="[
         modelValue ? 'toggle-on' : 'toggle-off',
-        disabled ? 'opacity-40 cursor-not-allowed' : ''
+        disabled ? 'opacity-40 cursor-not-allowed' : '',
+        isDirty ? 'ring-2 ring-amber-500/20' : ''
       ]"
     >
       <span class="toggle-knob" :class="modelValue ? 'knob-on' : 'knob-off'"></span>
@@ -24,7 +28,8 @@ defineProps({
   modelValue: { type: Boolean, default: false },
   label: { type: String, required: true },
   desc:  { type: String, default: '' },
-  disabled: { type: Boolean, default: false }
+  disabled: { type: Boolean, default: false },
+  isDirty: { type: Boolean, default: false }
 })
 defineEmits(['update:modelValue'])
 </script>

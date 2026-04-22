@@ -1,15 +1,18 @@
 <template>
   <div v-show="active === 'payment'" class="settings-section">
     <SectionHeader icon="pi-wallet" color="text-emerald-500">{{ $t('settings.payment.title') }}</SectionHeader>
-    <SettingRow v-model="form.allow_cash" :label="$t('settings.payment.cash_label')" :desc="$t('settings.payment.cash_desc')" :disabled="readonly" />
-    <SettingRow v-model="form.allow_card" :label="$t('settings.payment.card_label')" :desc="$t('settings.payment.card_desc')" :disabled="readonly" />
-    <SettingRow v-model="form.allow_debt" :label="$t('settings.payment.debt_label')" :desc="$t('settings.payment.debt_desc')" :disabled="readonly" />
+    <SettingRow v-model="form.allow_cash" :label="$t('settings.payment.cash_label')" :desc="$t('settings.payment.cash_desc')" :disabled="readonly" :is-dirty="isFieldDirty('allow_cash')" />
+    <SettingRow v-model="form.allow_card" :label="$t('settings.payment.card_label')" :desc="$t('settings.payment.card_desc')" :disabled="readonly" :is-dirty="isFieldDirty('allow_card')" />
+    <SettingRow v-model="form.allow_debt" :label="$t('settings.payment.debt_label')" :desc="$t('settings.payment.debt_desc')" :disabled="readonly" :is-dirty="isFieldDirty('allow_debt')" />
 
     <SectionHeader icon="pi-percentage" color="text-purple-500">{{ $t('settings.payment.discount_title') }}</SectionHeader>
-    <SettingRow v-model="form.allow_discount" :label="$t('settings.payment.discount_label')" :desc="$t('settings.payment.discount_desc')" :disabled="readonly" />
+    <SettingRow v-model="form.allow_discount" :label="$t('settings.payment.discount_label')" :desc="$t('settings.payment.discount_desc')" :disabled="readonly" :is-dirty="isFieldDirty('allow_discount')" />
     <div v-if="form.allow_discount" class="settings-row" :class="{'opacity-40 pointer-events-none': readonly}">
       <div class="flex-1">
-        <p class="row-label">{{ $t('settings.payment.max_discount_label') }}</p>
+        <div class="flex items-center gap-2">
+          <p class="row-label">{{ $t('settings.payment.max_discount_label') }}</p>
+          <span v-if="isFieldDirty('max_discount_percent')" class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+        </div>
         <p class="row-desc">{{ $t('settings.payment.max_discount_desc') }}</p>
         <p v-if="form.max_discount_percent === 0" class="text-[10px] text-emerald-500 font-bold mt-1">
           <i class="pi pi-infinity text-[9px] mr-1"></i>
@@ -17,7 +20,7 @@
         </p>
       </div>
       <div class="flex items-center gap-1.5">
-        <input v-model.number="form.max_discount_percent" type="number" min="0" max="100" step="1" class="settings-input w-16 text-center" :disabled="readonly" />
+        <input v-model.number="form.max_discount_percent" type="number" min="0" max="100" step="1" class="settings-input w-16 text-center" :class="{'ring-2 ring-amber-500/20 border-amber-500/50': isFieldDirty('max_discount_percent')}" :disabled="readonly" />
         <span class="text-xs font-black text-slate-400">%</span>
       </div>
     </div>
@@ -34,7 +37,7 @@ import SectionHeader from './SectionHeader.vue'
 const { t } = useI18n()
 const toast = useToast()
 
-const props = defineProps({ form: Object, active: String, readonly: Boolean })
+const props = defineProps({ form: Object, active: String, readonly: Boolean, isFieldDirty: Function })
 
 // 🟢 Kritik qoida: allow_cash=false VA allow_card=false bir vaqtda bo'lishi mumkin emas.
 // Foydalanuvchi ikkalasini ham o'chirmoqchi bo'lsa, darhol to'xtatamiz va ogohlantiramiz.
