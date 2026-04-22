@@ -4,6 +4,7 @@ import { notificationsAPI, subscriptionAPI, announcementsAPI } from '../services
 export const useNotificationStore = defineStore('notifications', {
     state: () => ({
         items: [], 
+        unreadCountFromBackend: 0,
         subscription: null, 
         usage: {
             branches: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
@@ -11,7 +12,7 @@ export const useNotificationStore = defineStore('notifications', {
             workers: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
             products: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true }
         },
-        eventSource: null,
+        pollingTimer: null,
         loading: {
             notifications: false,
             subscription: false
@@ -21,7 +22,8 @@ export const useNotificationStore = defineStore('notifications', {
 
     getters: {
         unreadCount: (state) => {
-            return Array.isArray(state.items) ? state.items.filter(i => !i.is_read).length : 0
+            // Backend dan kelgan unread_count ustivor, aks holda local filter
+            return state.unreadCountFromBackend || (Array.isArray(state.items) ? state.items.filter(i => !i.is_read).length : 0)
         },
         isSubscriptionExpired: (state) => state.subscription?.status === 'expired',
         daysLeft: (state) => state.subscription?.days_left ?? 0,
@@ -37,12 +39,11 @@ export const useNotificationStore = defineStore('notifications', {
             
             // Backend formatini UI formatiga o'girish (Mapping)
             return state.items.map(item => {
-                const source = item.source || item.event || 'notification'
                 return {
                     ...item,
-                    source: source,
-                    read: item.is_read,      // UI mask: item.read ishlatadi
-                    date: item.time,         // UI mask: item.date ishlatadi
+                    source: item.source || 'system',
+                    read: item.is_read,                    // UI mask: item.read ishlatadi
+                    date: item.time,                       // UI mask: item.date ishlatadi
                     body: item.message || item.body       // Backend 'message' yuboradi, UI 'body' kutadi
                 }
             }).sort((a, b) => {
@@ -58,18 +59,14 @@ export const useNotificationStore = defineStore('notifications', {
             if (!silent) this.loading.notifications = true
             try {
                 const res = await notificationsAPI.getAll()
-                // Rasmga ko'ra: { unread_count: 1, results: [...] }
-                if (res.data?.results) {
-                    this.items = res.data.results
-                } else if (Array.isArray(res.data)) {
-                    this.items = res.data
-                } else {
-                    this.items = []
+                // Backend guide: { unread_count: 3, results: [...] }
+                if (res.data) {
+                    this.items = res.data.results || (Array.isArray(res.data) ? res.data : [])
+                    this.unreadCountFromBackend = res.data.unread_count || 0
                 }
-                console.log('📦 Notifications loaded:', this.items.length)
+                console.log('📦 Notifications loaded:', this.items.length, 'Unread:', this.unreadCountFromBackend)
             } catch (err) {
                 console.error('❌ Fetch notifications error:', err)
-                this.items = []
             } finally {
                 this.loading.notifications = false
             }
@@ -90,81 +87,28 @@ export const useNotificationStore = defineStore('notifications', {
             }
         },
 
-        setupSSE() {
-            this.stopSSE()
-
-            const token = localStorage.getItem('access_token') || localStorage.getItem('token')
-            if (!token) return
-
-            const url = notificationsAPI.getStreamUrl(token)
-            console.log('📡 SSE connecting to:', url)
-            
-            try {
-                this.eventSource = new EventSource(url)
-
-                this.eventSource.onmessage = (e) => {
-                    try {
-                        const data = JSON.parse(e.data)
-                        
-                        // Heartbeat va connected — ignore
-                        if (data.event === 'heartbeat' || data.event === 'connected') return
-
-                        console.log('🔔 Received SSE event:', data.event, data)
-
-                        // SSE dan kelgan 'event'ni 'source' sifatida saqlaymiz, 
-                        // chunki HTTP dan 'source' bo'lib keladi.
-                        if (data.event === 'notification' || data.event === 'announcement') {
-                            const newItem = {
-                                ...data,
-                                source: data.event,
-                                is_read: data.is_read !== undefined ? data.is_read : false,
-                                time: data.time || new Date().toISOString()
-                            }
-                            
-                            // Dublikatni tekshirish
-                            const exists = newItem.id ? this.items.find(i => i.id === newItem.id) : false
-                            if (!exists) {
-                                this.items.unshift(newItem)
-                            }
-                        }
-
-                        // Obuna holati o'zgarsa statistikani yangilash
-                        if (data.event === 'subscription_update') {
-                            this.fetchSubscription(true)
-                        }
-                    } catch (err) {
-                        console.error('❌ SSE message parse error:', err)
-                    }
-                }
-
-                this.eventSource.onerror = (err) => {
-                    console.warn('⚠️ SSE Connection error (automatic retry by browser)', err)
-                }
-
-            } catch (err) {
-                console.error('❌ SSE Setup error:', err)
-            }
-        },
-
-        stopSSE() {
-            if (this.eventSource) {
-                this.eventSource.close()
-                this.eventSource = null
-            }
-        },
-
         async markAsRead() {
             try {
-                // Ham tizim, ham e'lonlarni bir vaqtda o'qilgan deb belgilaymiz
-                await Promise.allSettled([
-                    notificationsAPI.markRead(),
-                    announcementsAPI.markReadAll()
-                ])
+                // Backend: POST /notifications/mark-read/ marks only source: "system"
+                const res = await notificationsAPI.markRead()
+                console.log('✅ Marked as read (system):', res.data)
                 
-                // Front-end state'ni yangilaymiz
+                // Front-end state'ni yangilaymiz — faqat system xabarlarini
                 this.items.forEach(item => {
-                    item.is_read = true
+                    if (item.source !== 'announcement') {
+                        item.is_read = true
+                    }
                 })
+                
+                // Announcement'lar uchun alohida endpoint bo'lsa ham chaqirib qo'yamiz
+                await announcementsAPI.markReadAll()
+                this.items.forEach(item => {
+                    if (item.source === 'announcement') {
+                        item.is_read = true
+                    }
+                })
+
+                this.unreadCountFromBackend = 0
             } catch (err) {
                 console.error('❌ Mark all as read error:', err)
             }
@@ -179,30 +123,51 @@ export const useNotificationStore = defineStore('notifications', {
                 } else {
                     // Tizim xabarlari uchun hozircha faqat global bor
                     await notificationsAPI.markRead()
-                    this.items.forEach(i => { i.is_read = true })
+                    this.items.forEach(i => { 
+                        if (i.source !== 'announcement') i.is_read = true 
+                    })
                 }
+                if (this.unreadCountFromBackend > 0) this.unreadCountFromBackend--
             } catch (err) {
                 console.error('❌ Mark item as read error:', err)
             }
         },
 
         async startPolling() {
+            this.stopPolling() // Har ehtimolga qarshi oldingisini to'xtatamiz
+            
             this.initialFetchDone = false
+            
+            // Dastlabki yuklash
             await Promise.allSettled([
                 this.fetchNotifications(),
                 this.fetchSubscription()
             ])
-            this.setupSSE()
+            
             this.initialFetchDone = true
+
+            // Polling boshlash (User xohishiga ko'ra 60 soniya)
+            console.log('⏱️ Starting notification polling (60s)...')
+            this.pollingTimer = setInterval(async () => {
+                await Promise.allSettled([
+                    this.fetchNotifications(true),
+                    this.fetchSubscription(true)
+                ])
+            }, 60000)
         },
 
         stopPolling() {
-            this.stopSSE()
+            if (this.pollingTimer) {
+                console.log('🛑 Stopping notification polling.')
+                clearInterval(this.pollingTimer)
+                this.pollingTimer = null
+            }
         },
 
         reset() {
-            this.stopSSE()
+            this.stopPolling()
             this.items = []
+            this.unreadCountFromBackend = 0
             this.subscription = null
             this.usage = {
                 branches: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },

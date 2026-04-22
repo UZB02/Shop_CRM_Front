@@ -274,12 +274,7 @@ export const dashboardAPI = {
 // Notifications API (SSE & Shared list)
 export const notificationsAPI = {
     getAll: (params) => api.get('/notifications/', { params }),
-    markRead: () => api.post('/notifications/mark-read/', {}), // Body bo'sh yuboriladi
-    getStreamUrl: (token) => {
-        // Domainni olish (https://.../api/v1 qismini)
-        const base = API_BASE_URL.replace(/\/$/, '') // Oxiridagi slashni olib tashlash (xavfsizlik uchun)
-        return `${base}/notifications/stream/?token=${token}` // /api/v1/notifications/stream/
-    }
+    markRead: () => api.post('/notifications/mark-read/', {}) // Body bo'sh yuboriladi
 }
 
 // Announcements API
