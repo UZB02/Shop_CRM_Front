@@ -63,7 +63,7 @@
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.col_price') }}</th>
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.date') }}</th>
-                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
+                      <th v-if="settingsStore.isWastageEnabled" class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -102,7 +102,7 @@
                       <td class="px-4 py-2 text-right text-[10px] text-slate-400">
                         {{ item.added_on?.split('|')[0]?.trim() || '—' }}
                       </td>
-                      <td class="px-4 py-2 text-center">
+                      <td v-if="settingsStore.isWastageEnabled" class="px-4 py-2 text-center">
                         <button 
                           @click="openWastageModal(item)"
                           v-tooltip.left="$t('warehouse.wastage.create_title')"
@@ -249,6 +249,7 @@
 
     <!-- Wastage Modal -->
     <CreateWastageModal
+      v-if="settingsStore.isWastageEnabled"
       v-model:visible="wastageModalVisible"
       :product="selectedProductForWastage"
       :location-id="warehouse?.id || warehouse?._id"
@@ -303,12 +304,19 @@ const filteredProducts = computed(() => {
 })
 
 // Prepare tabs
-const navTabs = computed(() => [
-  { id: 'products', label: i18n.global.t('warehouse.detail.products'), icon: 'pi-box', count: warehouse.value?.products?.length ?? 0 },
-  { id: 'transfers', label: i18n.global.t('warehouse.detail.transfers'), icon: 'pi-arrows-h', count: pendingCount.value > 0 ? pendingCount.value : undefined },
-  { id: 'incoming', label: i18n.global.t('warehouse.detail.incoming_history'), icon: 'pi-history', count: incomingHistory.value?.length > 0 ? incomingHistory.value.length : undefined },
-  { id: 'wastages', label: i18n.global.t('warehouse.wastage.title'), icon: 'pi-exclamation-triangle' }
-])
+const navTabs = computed(() => {
+  const tabs = [
+    { id: 'products', label: i18n.global.t('warehouse.detail.products'), icon: 'pi-box', count: warehouse.value?.products?.length ?? 0 },
+    { id: 'transfers', label: i18n.global.t('warehouse.detail.transfers'), icon: 'pi-arrows-h', count: pendingCount.value > 0 ? pendingCount.value : undefined },
+    { id: 'incoming', label: i18n.global.t('warehouse.detail.incoming_history'), icon: 'pi-history', count: incomingHistory.value?.length > 0 ? incomingHistory.value.length : undefined },
+  ]
+
+  if (settingsStore.isWastageEnabled) {
+    tabs.push({ id: 'wastages', label: i18n.global.t('warehouse.wastage.title'), icon: 'pi-exclamation-triangle' })
+  }
+
+  return tabs
+})
 
 const wastageModalVisible = ref(false)
 const selectedProductForWastage = ref(null)

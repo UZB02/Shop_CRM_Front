@@ -13,7 +13,7 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <Calendar 
+        <DatePicker 
           v-model="dates" 
           selectionMode="range" 
           :manualInput="false" 
@@ -123,7 +123,7 @@
     <Dialog 
       v-model:visible="detailVisible" 
       modal 
-      :header="$t('warehouse.detail.tab_incoming_history')" 
+      :header="$t('warehouse.wastage.detail_title')" 
       :style="{ width: '500px' }" 
       class="p-fluid bypass-loading"
     >
@@ -177,7 +177,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { wastagesAPI } from '@/services/api'
-import Calendar from 'primevue/calendar'
+import DatePicker from 'primevue/datepicker'
 import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'
 import Dialog from 'primevue/dialog'

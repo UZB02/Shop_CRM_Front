@@ -33,7 +33,7 @@
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('products.form.category') }}</th>
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
               <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-right">{{ $t('products.col_price') }}</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 w-12 text-center">{{ $t('common.actions') }}</th>
+              <th v-if="settingsStore.isWastageEnabled" class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 w-12 text-center">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -84,7 +84,7 @@
                   {{ Number(product.sale_price).toLocaleString() }} <span class="text-[9px] opacity-40 uppercase">{{ product.currency_code || 'UZS' }}</span>
                 </span>
               </td>
-              <td class="px-6 py-4 text-center">
+              <td v-if="settingsStore.isWastageEnabled" class="px-6 py-4 text-center">
                 <button 
                   @click="$emit('create-wastage', product)"
                   v-tooltip.left="$t('warehouse.wastage.create_title')"
@@ -138,6 +138,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import Dialog from 'primevue/dialog'
+import { useSettingsStore } from '@/store/settings'
 
 const props = defineProps({
   products: Array
@@ -145,6 +146,7 @@ const props = defineProps({
 
 const emit = defineEmits(['create-wastage'])
 
+const settingsStore = useSettingsStore()
 const barcodeVisible = ref(false)
 const selectedProduct = ref(null)
 const searchQuery = ref('')

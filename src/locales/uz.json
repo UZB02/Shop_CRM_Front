@@ -610,6 +610,7 @@
         "wastage": {
             "title": "Chiqitlar",
             "create_title": "Yangi chiqit yaratish",
+            "detail_title": "Chiqit tafsilotlari",
             "reason_label": "Chiqit sababi",
             "reason_placeholder": "Sababni tanlang",
             "desc_placeholder": "Tashish paytida singan, o'ramiga shikast yetgan va h.k.",
@@ -661,7 +662,7 @@
         "page_title": "Mahsulotlar",
         "title": "Mahsulotlar Boshqaruvi",
         "title_header": "Mahsulotlar Boshqaruvi",
-        "subtitle": "{count} ta mahsulot boshqarishga tayyor",
+        "subtitle": "ta mahsulot chiqitga chiqarilgan",
         "new_product": "Yangi mahsulot",
         "new_category": "Kategoriya qo'shish",
         "search_placeholder": "Qidiruv (Nomi, Barcode...)",

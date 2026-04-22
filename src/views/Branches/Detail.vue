@@ -85,6 +85,7 @@
 
     <!-- Wastage Modal -->
     <CreateWastageModal
+      v-if="settingsStore.isWastageEnabled"
       v-model:visible="wastageModalVisible"
       :product="selectedProductForWastage"
       :location-id="branch?.id || branch?._id"
@@ -99,6 +100,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBranchDetail } from './composables/useBranchDetail'
 import { useI18n } from 'vue-i18n'
+import { useSettingsStore } from '@/store/settings'
 
 import BranchPageHeader from './components/BranchPageHeader.vue'
 import BranchTabsSidebar from './components/BranchTabsSidebar.vue'
@@ -113,10 +115,11 @@ import CreateWastageModal from '@/components/Warehouse/CreateWastageModal.vue'
 
 const { t } = useI18n()
 const router = useRouter()
+const settingsStore = useSettingsStore()
 const {
   branch, loading, tabLoading, activeTab,
   editModalVisible, branchForm, submitted, saving,
-  openEditModal, handleSave, fetchBranch
+  openEditModal, handleSave, fetchDetail: fetchBranch
 } = useBranchDetail()
 
 const openNewTransferHandler = () => {
@@ -127,14 +130,22 @@ const openNewTransferHandler = () => {
 }
 
 // Prepare tabs with counts and icons
-const navTabs = computed(() => [
-  { id: 'products', label: t('menu.products'), icon: 'pi pi-box', count: branch.value?.products?.length },
-  { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: branch.value?.workers?.length },
-  { id: 'transfers', label: t('warehouse.detail.transfers'), icon: 'pi pi-arrow-right-arrow-left' },
-  { id: 'incoming', label: t('warehouse.detail.incoming_history'), icon: 'pi pi-history' },
-  { id: 'wastages', label: t('warehouse.wastage.title'), icon: 'pi pi-exclamation-triangle' },
-  { id: 'customers', label: t('menu.customers'), icon: 'pi pi-user', count: branch.value?.customers?.length },
-])
+const navTabs = computed(() => {
+  const tabs = [
+    { id: 'products', label: t('menu.products'), icon: 'pi pi-box', count: branch.value?.products?.length },
+    { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: branch.value?.workers?.length },
+    { id: 'transfers', label: t('warehouse.detail.transfers'), icon: 'pi pi-arrow-right-arrow-left' },
+    { id: 'incoming', label: t('warehouse.detail.incoming_history'), icon: 'pi pi-history' },
+  ]
+
+  if (settingsStore.isWastageEnabled) {
+    tabs.push({ id: 'wastages', label: t('warehouse.wastage.title'), icon: 'pi pi-exclamation-triangle' })
+  }
+
+  tabs.push({ id: 'customers', label: t('menu.customers'), icon: 'pi pi-user', count: branch.value?.customers?.length })
+  
+  return tabs
+})
 
 const wastageModalVisible = ref(false)
 const selectedProductForWastage = ref(null)

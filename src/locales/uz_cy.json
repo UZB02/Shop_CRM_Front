@@ -608,6 +608,7 @@
     "wastage": {
       "title": "Чиқитлар",
       "create_title": "Янги чиқит яратиш",
+      "detail_title": "Чиқит тафсилотлари",
       "reason_label": "Чиқит сабаби",
       "reason_placeholder": "Сабабни танланг",
       "desc_placeholder": "Ташиш пайтида синган, ўрамига шикаст етган ва ҳ.к.",
@@ -626,7 +627,7 @@
     "page_title": "Маҳсулотлар",
     "title": "Маҳсулотлар Бошқаруви",
     "title_header": "Маҳсулотлар Бошқаруви",
-    "subtitle": "{count} та маҳсулот бошқаришга тайёр",
+    "subtitle": "та маҳсулот чиқитга чиқарилган",
     "new_product": "Янги маҳсулот",
     "new_category": "Категория қўшиш",
     "search_placeholder": "Қидирув (Номи, Barcode...)",
