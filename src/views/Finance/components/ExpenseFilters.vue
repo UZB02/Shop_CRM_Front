@@ -31,7 +31,7 @@
       </div>
 
       <!-- Shift Filter -->
-      <div v-if="settingsStore.isShiftEnabled && shifts.length > 0" class="relative flex-1 min-w-[140px] sm:flex-none sm:w-44">
+      <div v-if="settingsStore.isShiftEnabled && shifts?.length > 0" class="relative flex-1 min-w-[140px] sm:flex-none sm:w-44">
          <Select
           v-model="filters.smena"
           :options="shifts"

@@ -217,8 +217,19 @@ export const reportsAPI = {
     getDebtorReport: (params) => api.get('/export/debtor-report/', { params }),
     getWorkerPerformance: (params) => api.get('/export/worker-performance/', { params }),
     getInventoryValue: (params) => api.get('/export/inventory-value/', { params }),
+    getInventoryValue: (params) => api.get('/export/inventory-value/', { params }),
     getTaxReport: (params) => api.get('/export/tax-report/', { params }),
     getMonthlyProfitLoss: (params) => api.get('/export/profit-loss/monthly-chart/', { params })
+}
+
+// Finance API (Reports & Dashboard)
+export const financeReportsAPI = {
+    getRevenue: (params) => api.get('/finance/revenue/', { params }),
+    getExpenses: (params) => api.get('/finance/expenses/', { params }),
+    getPaymentMethods: (params) => api.get('/finance/payment-methods/', { params }),
+    getCategoryProfit: (params) => api.get('/finance/category-profit/', { params }),
+    getProfitLoss: (params) => api.get('/finance/profit-loss/', { params }),
+    getDebtorReport: (params) => api.get('/finance/debtor-report/', { params })
 }
 
 // Stores / Branches API
