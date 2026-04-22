@@ -83,22 +83,34 @@ export function usePromotionManager() {
         return isNaN(d.getTime()) ? null : d
     }
 
-    const openEdit = (item) => {
-        activeItem.value = {
-            id: item.id,
-            name: item.name,
-            discount_pct: Number(item.discount_pct),
-            valid_from: parseSafeDate(item.valid_from),
-            valid_to: parseSafeDate(item.valid_to),
-            is_active: item.is_active,
-            // ID larni MultiSelect uchun massivga otamiz
-            categories: item.categories || [],
-            subcategories: item.subcategories || [],
-            products: item.products || []
+    const openEdit = async (item) => {
+        isFetchingDeps.value = true
+        try {
+            // Full ma'lumotlarni olish (ayniqsa bog'langan mahsulot/kategoriyalar uchun)
+            const res = await promotionsAPI.getById(item.id)
+            const fullItem = res.data
+
+            activeItem.value = {
+                id: fullItem.id,
+                name: fullItem.name,
+                discount_pct: Number(fullItem.discount_pct),
+                valid_from: parseSafeDate(fullItem.valid_from),
+                valid_to: parseSafeDate(fullItem.valid_to),
+                is_active: fullItem.is_active,
+                // ID larni MultiSelect uchun massivga otamiz (agar ob'ekt bo'lsa ID sini olamiz)
+                categories: (fullItem.categories || []).map(c => typeof c === 'object' ? c.id : c),
+                subcategories: (fullItem.subcategories || []).map(s => typeof s === 'object' ? s.id : s),
+                products: (fullItem.products || []).map(p => typeof p === 'object' ? p.id : p)
+            }
+            isEditing.value = true
+            isSlideOverOpen.value = true
+            await loadDependencies()
+        } catch (e) {
+            console.error('Failed to load promotion details:', e)
+            toast.add({ severity: 'error', summary: 'Xatolik', detail: "Aksiya ma'lumotlarini yuklab bo'lmadi" })
+        } finally {
+            isFetchingDeps.value = false
         }
-        isEditing.value = true
-        isSlideOverOpen.value = true
-        loadDependencies()
     }
 
     const confirmDelete = async (id) => {
