@@ -8,7 +8,7 @@
         <input
           v-model="newCategoryName"
           type="text"
-          :placeholder="$t('expenses.category_form.name_ph')"
+          :placeholder="$t('finance.category_form.name_ph')"
           @keyup.enter="addCategory"
           class="w-full h-10 sm:h-9 pl-9 pr-4 text-[13px] sm:text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:bg-white dark:focus:bg-slate-900 focus:ring-1 focus:ring-rose-400 transition-all outline-none placeholder:text-slate-400"
         />
@@ -29,9 +29,9 @@
       <table class="w-full text-left border-collapse min-w-[450px]">
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('expenses.category_form.name') }}</th>
-            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('expenses.category_form.expense_count') }}</th>
-            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('expenses.category_form.status') }}</th>
+            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.category_form.name') }}</th>
+            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('finance.category_form.expense_count') }}</th>
+            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('finance.category_form.status') }}</th>
             <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('common.actions') }}</th>
           </tr>
         </thead>
@@ -43,7 +43,7 @@
               <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-2">
                 <i class="pi pi-tag text-lg text-slate-400"></i>
               </div>
-              <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('expenses.category_form.no_categories') }}</p>
+              <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('finance.category_form.no_categories') }}</p>
             </td>
           </tr>
 
@@ -88,7 +88,7 @@
                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'"
               >
-                {{ cat.status === 'active' ? $t('expenses.category_form.active') : $t('expenses.category_form.inactive') }}
+                {{ cat.status === 'active' ? $t('finance.category_form.active') : $t('finance.category_form.inactive') }}
               </span>
             </td>
 
@@ -110,7 +110,7 @@
                   :class="cat.status === 'active'
                     ? 'hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-500/10'
                     : 'hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10'"
-                  :title="cat.status === 'active' ? $t('expenses.category_form.toggle_inactive') : $t('expenses.category_form.toggle_active')"
+                  :title="cat.status === 'active' ? $t('finance.category_form.toggle_inactive') : $t('finance.category_form.toggle_active')"
                 >
                   <i :class="cat.status === 'active' ? 'pi pi-eye-slash' : 'pi pi-eye'" class="text-[10px]"></i>
                 </button>
@@ -118,7 +118,7 @@
                 <button
                   @click="confirmDelete(cat)"
                   class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all active:scale-90"
-                  :title="$t('expenses.category_form.toggle_inactive')"
+                  :title="$t('finance.category_form.toggle_inactive')"
                 >
                   <i class="pi pi-trash text-[10px]"></i>
                 </button>
@@ -183,7 +183,7 @@ const toggleStatus = async (cat) => {
 
 const confirmDelete = (cat) => {
   confirm.require({
-    message: t('expenses.category_form.delete_msg', { name: cat.name }),
+    message: t('finance.category_form.delete_msg', { name: cat.name }),
     header: t('common.confirm_title'),
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',

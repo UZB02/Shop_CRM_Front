@@ -4,7 +4,7 @@ import { useNotificationStore } from './notifications'
 
 const ALL_PERMISSIONS = [
     'dashboard', 'stores', 'warehouse', 'products',
-    'workers', 'trades', 'expenses', 'customers', 'settings', 'pos', 'subscription'
+    'workers', 'trades', 'finance', 'customers', 'settings', 'pos', 'subscription'
 ]
 
 const PERMISSION_MAP = {
@@ -16,7 +16,7 @@ const PERMISSION_MAP = {
     'ombor': 'warehouse',
     'sotuv': 'pos',
     'sozlamalar': 'settings',
-    'xarajatlar': 'expenses',
+    'xarajatlar': 'finance',
     'xodimlar': 'workers'
 }
 

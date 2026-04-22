@@ -102,7 +102,7 @@ export function useDashboardLayout() {
       { label: t('menu.products'), icon: 'pi pi-tag', to: '/dashboard/products', key: 'products' },
       { label: t('menu.workers'), icon: 'pi pi-users', to: '/dashboard/workers', key: 'workers' },
       { label: t('menu.trades'), icon: 'pi pi-shopping-cart', to: '/dashboard/trades', key: 'trades' },
-      { label: t('menu.reports'), icon: 'pi pi-wallet', to: '/dashboard/expenses', key: 'expenses' },
+      { label: t('menu.finance'), icon: 'pi pi-wallet', to: '/dashboard/finance', key: 'finance' },
       { label: t('menu.customers'), icon: 'pi pi-id-card', to: '/dashboard/customers', key: 'customers' },
       { label: t('menu.settings'), icon: 'pi pi-cog', to: '/dashboard/settings', key: 'settings' },
       { label: t('menu.subscription'), icon: 'pi pi-verified', to: '/dashboard/subscription', key: 'subscription' },

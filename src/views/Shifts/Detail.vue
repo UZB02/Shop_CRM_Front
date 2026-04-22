@@ -136,7 +136,7 @@
                  <!-- Expenses Card -->
                  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-5 flex items-center gap-2">
-                       <i class="pi pi-receipt text-slate-400"></i> {{ $t('shifts.expenses.title') }}
+                       <i class="pi pi-receipt text-slate-400"></i> {{ $t('shifts.finance.title') }}
                     </h3>
                     <div class="p-8 text-center text-slate-400 italic text-sm border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-800/10">
                        {{ formatCurrency(data.x_report.expenses_total) }}
@@ -148,8 +148,8 @@
               <div class="space-y-4">
                  <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
                     <div class="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 mb-4"><i class="pi pi-trash"></i></div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('shifts.expenses.wastage') }}</p>
-                    <p class="text-sm font-semibold text-slate-800 dark:text-white">{{ data.x_report.wastage_count }} <span class="text-[10px] font-medium text-slate-400">{{ $t('shifts.expenses.docs', { count: data.x_report.wastage_count }) }}</span></p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('shifts.finance.wastage') }}</p>
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">{{ data.x_report.wastage_count }} <span class="text-[10px] font-medium text-slate-400">{{ $t('shifts.finance.docs', { count: data.x_report.wastage_count }) }}</span></p>
                  </div>
               </div>
            </template>

@@ -20,7 +20,7 @@ export const PERMISSIONS_LIST = [
     { label: 'Savdolar', value: 'savdolar', icon: 'pi-shopping-cart', desc: "Savdolar tarixini ko'rish" },
     { label: 'Ombor', value: 'ombor', icon: 'pi-warehouse', desc: 'Omborxona boshqaruvi' },
     { label: 'Sotuv (POS)', value: 'sotuv', icon: 'pi-desktop', desc: 'Kassa va sotuv oynasiga kirish' },
-    { label: 'Xarajatlar', value: 'xarajatlar', icon: 'pi-wallet', desc: 'Xarajatlar va moliya' },
+    { label: 'Moliya', value: 'xarajatlar', icon: 'pi-wallet', desc: 'Moliya va xarajatlar' },
     { label: 'Xodimlar', value: 'xodimlar', icon: 'pi-id-card', desc: 'Xodimlarni boshqarish' },
     { label: 'Sozlamalar', value: 'sozlamalar', icon: 'pi-cog', desc: 'Tizim sozlamalari' },
 ]

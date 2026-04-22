@@ -245,8 +245,8 @@
                 "desc": "Kassa va sotuv oynasiga kirish"
             },
             "xarajatlar": {
-                "label": "Xarajatlar",
-                "desc": "Xarajatlar va moliya"
+                "label": "Moliya",
+                "desc": "Moliya va xarajatlar"
             },
             "xodimlar": {
                 "label": "Xodimlar",
@@ -277,8 +277,8 @@
         "products": "Mahsulotlar",
         "workers": "Xodimlar",
         "trades": "Savdolar",
-        "expenses": "Xarajatlar",
-        "reports": "Xarajatlar",
+        "finance": "Moliya",
+        "reports": "Hisobotlar",
         "customers": "Mijozlar",
         "settings": "Sozlamalar",
         "subscription": "Obuna"
@@ -1059,9 +1059,9 @@
             "col_sales": "Savdolar soni",
             "col_amount": "Summa (UZS)"
         },
-        "expenses": {
-            "title": "Xarajatlar",
-            "wastage": "Spisaniya",
+        "finance": {
+            "title": "Moliya",
+            "wastage": "Isroflar",
             "docs": "{count} ta hujjat"
         },
         "discounts": {
@@ -1094,7 +1094,7 @@
         "tabs": {
             "general": "Umumiy",
             "debts": "Nasiyalar",
-            "finance": "Moliya & Xarajat"
+            "finance": "Moliya"
         },
         "error": {
             "not_found": "Ma'lumot topilmadi",
@@ -1150,8 +1150,8 @@
             "apply": "Filtrni qo'llash"
         }
     },
-    "expenses": {
-        "title": "Xarajatlar",
+    "finance": {
+        "title": "Moliya",
         "management": "Xarajatlar boshqaruvi",
         "details": "Xarajat Tafsilotlari",
         "new": "Yangi xarajat",

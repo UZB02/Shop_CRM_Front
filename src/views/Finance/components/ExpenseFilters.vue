@@ -37,7 +37,7 @@
           :options="shifts"
           optionLabel="id"
           optionValue="id"
-          :placeholder="$t('expenses.smena')"
+          :placeholder="$t('finance.smena')"
           showClear
           class="w-full"
           pt:root:class="!h-9 sm:!h-8 !rounded-xl !border !border-slate-200 dark:!border-slate-700 focus:!border-rose-400 !bg-slate-50/50 dark:!bg-slate-800/40"

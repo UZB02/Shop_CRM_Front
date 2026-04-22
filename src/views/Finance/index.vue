@@ -102,8 +102,8 @@
             <!-- Modal Header -->
             <div class="px-5 py-4 sm:px-6 sm:py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white/50 dark:bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
               <div>
-                <h3 class="text-xs sm:text-sm font-black uppercase tracking-widest text-rose-500">{{ $t('expenses.categories') }}</h3>
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">{{ $t('expenses.management') }}</p>
+                <h3 class="text-xs sm:text-sm font-black uppercase tracking-widest text-rose-500">{{ $t('finance.categories') }}</h3>
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">{{ $t('finance.management') }}</p>
               </div>
               <button
                 @click="showCategories = false"
@@ -251,7 +251,7 @@ const handleSave = async (payload) => {
 
 const confirmDelete = (data) => {
   confirm.require({
-    message: i18n.global.t('expenses.delete_msg'),
+    message: i18n.global.t('finance.delete_msg'),
     header: i18n.global.t('common.confirm_title'),
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',

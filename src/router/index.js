@@ -132,10 +132,10 @@ const routes = [
                 meta: { permission: 'trades' }
             },
             {
-                path: 'expenses',
-                name: 'expenses',
-                component: () => import('@/views/Expenses/index.vue'),
-                meta: { permission: 'expenses' }
+                path: 'finance',
+                name: 'finance',
+                component: () => import('@/views/Finance/index.vue'),
+                meta: { permission: 'finance' }
             },
             {
                 path: 'customers',

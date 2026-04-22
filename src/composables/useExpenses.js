@@ -65,11 +65,11 @@ export default function useExpenses() {
     const createCategory = async (data) => {
         try {
             await expenseCategoriesAPI.create(data)
-            toast.add({ severity: 'success', summary: t('common.success'), detail: t('expenses.messages.category_added'), life: 3000 })
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('finance.messages.category_added'), life: 3000 })
             await fetchCategories()
             return true
         } catch (error) {
-            const detail = error.response?.data?.name?.[0] || error.response?.data?.detail || t('expenses.messages.save_error')
+            const detail = error.response?.data?.name?.[0] || error.response?.data?.detail || t('finance.messages.save_error')
             toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
             return false
         }
@@ -78,11 +78,11 @@ export default function useExpenses() {
     const updateCategory = async (id, data) => {
         try {
             await expenseCategoriesAPI.update(id, data)
-            toast.add({ severity: 'success', summary: t('common.updated'), detail: t('expenses.messages.category_updated'), life: 3000 })
+            toast.add({ severity: 'success', summary: t('common.updated'), detail: t('finance.messages.category_updated'), life: 3000 })
             await fetchCategories()
             return true
         } catch (error) {
-            const detail = error.response?.data?.detail || t('expenses.messages.save_error')
+            const detail = error.response?.data?.detail || t('finance.messages.save_error')
             toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
             return false
         }
@@ -91,11 +91,11 @@ export default function useExpenses() {
     const deleteCategory = async (id) => {
         try {
             await expenseCategoriesAPI.delete(id)
-            toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('expenses.messages.deleted'), life: 3000 })
+            toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('finance.messages.deleted'), life: 3000 })
             await fetchCategories()
             return true
         } catch (error) {
-            const detail = error.response?.data?.detail || t('expenses.messages.delete_error')
+            const detail = error.response?.data?.detail || t('finance.messages.delete_error')
             toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
             return false
         }
@@ -137,7 +137,7 @@ export default function useExpenses() {
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: t('expenses.messages.load_error'),
+                detail: t('finance.messages.load_error'),
                 life: 3000
             })
         } finally {
@@ -154,7 +154,7 @@ export default function useExpenses() {
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: t('expenses.messages.load_error'),
+                detail: t('finance.messages.load_error'),
                 life: 3000
             })
             return null
@@ -195,13 +195,13 @@ export default function useExpenses() {
             toast.add({
                 severity: 'success',
                 summary: t('common.success'),
-                detail: isUpdate ? t('expenses.messages.updated') : t('expenses.messages.added'),
+                detail: isUpdate ? t('finance.messages.updated') : t('finance.messages.added'),
                 life: 3000
             })
             await fetchExpenses()
             return true
         } catch (error) {
-            const detail = error.response?.data?.detail || error.response?.data?.amount?.[0] || t('expenses.messages.save_error')
+            const detail = error.response?.data?.detail || error.response?.data?.amount?.[0] || t('finance.messages.save_error')
             toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
             return false
         }
@@ -210,11 +210,11 @@ export default function useExpenses() {
     const deleteExpense = async (id) => {
         try {
             await expensesAPI.delete(id)
-            toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('expenses.messages.deleted'), life: 3000 })
+            toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('finance.messages.deleted'), life: 3000 })
             await fetchExpenses()
             return true
         } catch (error) {
-            const detail = error.response?.data?.detail || t('expenses.messages.delete_error')
+            const detail = error.response?.data?.detail || t('finance.messages.delete_error')
             toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
             return false
         }

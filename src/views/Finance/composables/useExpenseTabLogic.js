@@ -28,7 +28,7 @@ export default function useExpenseTabLogic() {
 
   const tabs = computed(() => {
     const tList = [
-      { id: 'expenses', label: t('expenses.title'), icon: 'pi pi-wallet' }
+      { id: 'expenses', label: t('finance.title'), icon: 'pi pi-wallet' }
     ]
     if (userIsManager.value) {
       tList.push(
