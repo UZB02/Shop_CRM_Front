@@ -1,64 +1,59 @@
 <template>
-  <div class="space-y-6 pb-10">
+  <div class="space-y-4 pb-4">
     <!-- Summary Cards (Payment types) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <div v-for="card in paymentCards" :key="card.label" class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm relative group overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none">
-        <div :class="['absolute -right-4 -bottom-4 w-20 h-20 opacity-10 group-hover:scale-150 transition-transform duration-700 blur-2xl rounded-full', card.bg]"></div>
-        <div class="flex items-center gap-3 mb-4 relative z-10">
-           <div :class="['w-1 h-6 rounded-full', card.bg]"></div>
-           <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ t(card.label) }}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div v-for="card in paymentCards" :key="card.label" class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group">
+        <div :class="['absolute -right-2 -bottom-2 w-16 h-16 opacity-5 group-hover:scale-150 transition-transform duration-500 rounded-full', card.bg]"></div>
+        <div class="flex items-center gap-1.5 mb-2 relative z-10">
+           <div :class="['w-1.5 h-1.5 rounded-full', card.bg]"></div>
+           <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">{{ t(card.label) }}</p>
         </div>
-        <h3 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight mb-2 relative z-10">{{ card.value }}</h3>
-        <div class="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest relative z-10">
+        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight mb-1 relative z-10">{{ card.value }}</h3>
+        <div class="flex items-center gap-2 text-[9px] font-bold text-slate-400 uppercase tracking-widest relative z-10">
           <i :class="['pi', card.icon, 'text-[8px]']"></i>
           <span>{{ card.count }} {{ t('finance.sales_count').toLowerCase() }}</span>
+          <span v-if="card.mixed" class="text-emerald-500 ml-auto">+{{ card.mixed }} aralash</span>
         </div>
       </div>
     </div>
 
     <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 auto-rows-fr">
        <!-- Cumulative Bar Chart -->
-       <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 sm:p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-          <div class="flex items-center justify-between mb-10">
-             <div>
-                <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">To'lov Usullari</h3>
-                <p class="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Tushumlar strukturasi</p>
-             </div>
-             <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                   <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-                   <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cash</span>
-                </div>
-                <div class="flex items-center gap-2">
-                   <div class="w-3 h-3 rounded-full bg-blue-500"></div>
-                   <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Card</span>
-                </div>
-             </div>
+       <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col h-full">
+          <div class="mb-4">
+             <h3 class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">To'lov Usullari</h3>
+             <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">Tushumlar strukturasi</p>
           </div>
-          <div class="h-[300px] sm:h-[400px]">
-             <Chart type="bar" :data="chartData" :options="chartOptions" />
+          <div class="flex-1 min-h-[220px] sm:min-h-[250px]">
+             <Chart type="bar" :data="chartData" :options="chartOptions" class="h-full" />
           </div>
        </div>
 
        <!-- Distribution Pie Chart -->
-       <div class="bg-white dark:bg-slate-900 p-5 sm:p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
-          <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 mb-8 border-b border-slate-50 dark:border-slate-800 pb-4">Umumiy Taqsimot</h3>
-          <div class="h-[220px] sm:h-[250px] relative mb-10 flex items-center justify-center">
-             <Chart type="doughnut" :data="donutData" :options="donutOptions" class="relative z-10" />
-             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ t('common.total') }}</span>
-                <span class="text-xl font-black text-slate-800 dark:text-slate-100">{{ formatPrice(props.data.summary?.total_revenue || 0).split('.')[0] }}</span>
+       <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col h-full">
+          <h3 class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-6 border-b border-slate-50 dark:border-slate-800 pb-2">Ulushi Taqsimoti</h3>
+          <div class="h-[180px] relative mb-6 flex items-center justify-center">
+             <Chart type="doughnut" :data="donutData" :options="donutOptions" class="relative z-10 w-full h-full" />
+             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1 leading-none">{{ t('common.total') }}</span>
+                <span class="text-lg font-black text-slate-800 dark:text-white leading-none">
+                  {{ Math.floor(props.data.summary?.total_revenue || 0).toLocaleString() }}
+                </span>
+                <span class="text-[8px] font-black text-slate-400 mt-1">SO'M</span>
              </div>
           </div>
-          <div class="space-y-5 flex-1">
-             <div v-for="method in distribution" :key="method.label" class="space-y-2">
-                <div class="flex justify-between items-center">
-                   <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ t(method.label) }}</span>
-                   <span class="text-xs font-black text-slate-800 dark:text-slate-100">{{ method.pct }}%</span>
+          <div class="space-y-4 flex-1">
+             <div v-for="method in distribution" :key="method.label" class="group">
+                <div class="flex items-center justify-between mb-1.5">
+                   <div class="flex items-center gap-2">
+                      <div :class="['w-1.5 h-1.5 rounded-full shadow-sm', method.bg]"></div>
+                      <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{{ t(method.label) }}</span>
+                   </div>
+                   <span class="text-[10px] font-black text-slate-800 dark:text-slate-100">{{ method.pct }}%</span>
                 </div>
-                <div class="h-2 w-full bg-slate-100 dark:bg-slate-800/50 rounded-full overflow-hidden shadow-inner">
-                   <div :class="['h-full rounded-full transition-all duration-1000', method.bg]" :style="{ width: method.pct + '%' }"></div>
+                <div class="h-1 w-full bg-slate-50 dark:bg-slate-800/50 rounded-full overflow-hidden">
+                   <div :class="['h-full rounded-full transition-all duration-1000 shadow-sm', method.bg]" :style="{ width: method.pct + '%' }"></div>
                 </div>
              </div>
           </div>
@@ -66,38 +61,41 @@
     </div>
 
     <!-- Table: Branches breakdown -->
-    <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
-       <div class="px-8 py-6 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
-          <div class="flex items-center gap-3">
-             <div class="w-2 h-6 bg-emerald-500 rounded-full"></div>
-             <span class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">Filiallar bo'yicha tahlil</span>
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
+       <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
+          <div class="flex items-center gap-2">
+             <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
+             <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Filiallar bo'yicha tahlil</span>
           </div>
        </div>
-       <div class="overflow-x-auto">
+       <div class="overflow-x-auto max-h-[400px] custom-scrollbar overflow-y-auto">
           <table class="w-full text-left border-collapse">
              <thead>
-                <tr class="text-[10px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">
-                   <th class="px-8 py-5">{{ t('finance.branch') }}</th>
-                   <th class="px-8 py-5 text-right">{{ t('finance.total_revenue') }}</th>
-                   <th class="px-8 py-5 text-right">Naqd (Cash)</th>
-                   <th class="px-8 py-5 text-right">Karta (Card)</th>
-                   <th class="px-8 py-5 text-right">Nasiya (Debt)</th>
-                   <th class="px-8 py-5 text-center">{{ t('finance.share') }}</th>
+                <tr class="text-[9px] font-bold uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
+                   <th class="px-4 py-3">{{ t('finance.branch') }}</th>
+                   <th class="px-4 py-3 text-right">{{ t('finance.total_revenue') }}</th>
+                   <th class="px-4 py-3 text-center">Sotuvlar</th>
+                   <th class="px-4 py-3 text-right">Naqd</th>
+                   <th class="px-4 py-3 text-right">Karta</th>
+                   <th class="px-4 py-3 text-right">Nasiya</th>
+                   <th class="px-4 py-3 text-center">{{ t('finance.share') }}</th>
                 </tr>
              </thead>
-             <tbody class="divide-y divide-slate-50 dark:divide-slate-800/40">
-                <tr v-for="item in tableData" :key="item.branch_id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-all duration-300 group">
-                   <td class="px-8 py-5">
-                      <span class="text-sm font-black text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 transition-colors">{{ item.branch_name }}</span>
-                   </td>
-                   <td class="px-8 py-5 text-right">
-                      <span class="text-sm font-black text-emerald-600">{{ formatPrice(item.total) }}</span>
-                   </td>
-                   <td class="px-8 py-5 text-right text-xs font-bold text-slate-600 dark:text-slate-400">{{ formatPrice(item.cash) }}</td>
-                   <td class="px-8 py-5 text-right text-xs font-bold text-blue-600/80">{{ formatPrice(item.card) }}</td>
-                   <td class="px-8 py-5 text-right text-xs font-bold text-amber-500/80">{{ formatPrice(item.debt) }}</td>
-                   <td class="px-8 py-5 text-center">
-                      <div class="inline-flex px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-[10px] font-black text-slate-500">{{ item.share_pct }}%</div>
+             <tbody class="divide-y divide-slate-50 dark:divide-slate-800/30">
+                <tr v-for="item in tableData" :key="item.branch_id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-colors group">
+                   <td class="px-4 py-3 text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">{{ item.branch_name }}</td>
+                   <td class="px-4 py-3 text-right text-xs font-bold text-emerald-600">{{ formatPrice(item.total) }}</td>
+                   <td class="px-4 py-3 text-center text-[11px] text-slate-500">{{ item.sales_count }}</td>
+                   <td class="px-4 py-3 text-right text-[11px] text-slate-500">{{ formatPrice(item.cash) }}</td>
+                   <td class="px-4 py-3 text-right text-[11px] text-slate-500">{{ formatPrice(item.card) }}</td>
+                   <td class="px-4 py-3 text-right text-[11px] text-slate-500">{{ formatPrice(item.debt) }}</td>
+                   <td class="px-4 py-3">
+                      <div class="flex items-center gap-2">
+                         <div class="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-slate-400 dark:bg-slate-500 rounded-full" :style="{ width: item.share_pct + '%' }"></div>
+                         </div>
+                         <span class="text-[10px] font-medium text-slate-400 w-8">{{ item.share_pct }}%</span>
+                      </div>
                    </td>
                 </tr>
              </tbody>
@@ -128,16 +126,24 @@ const paymentCards = computed(() => {
     { label: 'common.cash', value: formatPrice(sum.cash?.amount || 0), count: sum.cash?.count || 0, icon: 'pi-money-bill', color: 'text-emerald-500', bg: 'bg-emerald-500' },
     { label: 'common.card', value: formatPrice(sum.card?.amount || 0), count: sum.card?.count || 0, icon: 'pi-credit-card', color: 'text-blue-500', bg: 'bg-blue-500' },
     { label: 'common.debt', value: formatPrice(sum.debt?.amount || 0), count: sum.debt?.count || 0, icon: 'pi-history', color: 'text-amber-500', bg: 'bg-amber-500' },
-    { label: 'common.total', value: formatPrice(sum.total_revenue || 0), count: sum.sales_count || 0, icon: 'pi-wallet', color: 'text-emerald-600', bg: 'bg-emerald-600' }
+    { 
+      label: 'common.total', 
+      value: formatPrice(sum.total_revenue || 0), 
+      count: sum.sales_count || 0, 
+      mixed: sum.mixed_count || 0,
+      icon: 'pi-wallet', 
+      color: 'text-emerald-600', 
+      bg: 'bg-emerald-600' 
+    }
   ]
 })
 
 const chartData = computed(() => ({
   labels: props.data.chart?.map(i => i.label) || [],
   datasets: [
-    { label: 'Naqd', data: props.data.chart?.map(i => parseFloat(i.cash)) || [], backgroundColor: '#10b981', borderRadius: 8, barThickness: 20 },
-    { label: 'Karta', data: props.data.chart?.map(i => parseFloat(i.card)) || [], backgroundColor: '#3b82f6', borderRadius: 8, barThickness: 20 },
-    { label: 'Nasiya', data: props.data.chart?.map(i => parseFloat(i.debt)) || [], backgroundColor: '#f59e0b', borderRadius: 8, barThickness: 20 }
+    { label: 'Naqd', data: props.data.chart?.map(i => parseFloat(i.cash)) || [], backgroundColor: '#10b981', borderRadius: 8, barThickness: 30 },
+    { label: 'Karta', data: props.data.chart?.map(i => parseFloat(i.card)) || [], backgroundColor: '#3b82f6', borderRadius: 8, barThickness: 30 },
+    { label: 'Nasiya', data: props.data.chart?.map(i => parseFloat(i.debt)) || [], backgroundColor: '#f59e0b', borderRadius: 8, barThickness: 30 }
   ]
 }))
 
@@ -179,21 +185,30 @@ const donutData = computed(() => {
     datasets: [{
       data: [sum.cash?.share_pct || 0, sum.card?.share_pct || 0, sum.debt?.share_pct || 0],
       backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
-      borderWidth: 8,
+      borderWidth: 0,
       borderColor: 'transparent',
-      borderRadius: 10,
+      borderRadius: 12,
       hoverOffset: 15
     }]
   }
 })
 
-const donutOptions = {
+const donutOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
-  plugins: { legend: { display: false } },
-  cutout: '80%',
-  spacing: 5
-}
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#1e293b',
+      padding: 12,
+      borderRadius: 12,
+      titleFont: { size: 11, weight: 'bold' },
+      bodyFont: { size: 12, weight: 'black' }
+    }
+  },
+  cutout: '75%',
+  spacing: 4
+}))
 
 const distribution = computed(() => {
   const sum = props.data.summary || {}

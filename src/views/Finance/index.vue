@@ -31,22 +31,15 @@
 
     <!-- ── Tab Content: Expenses (Original + Analytics) ─────── -->
     <div v-if="activeTab === 'expenses'" class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-400">
-      <FinanceExpensesReport :data="reports.expenses" />
-      
-      <div class="flex items-center justify-between px-1 pt-2 border-t border-slate-100 dark:border-slate-800">
-         <h3 class="text-[10px] font-bold uppercase tracking-widest text-slate-400">{{ $t('finance.list') }}</h3>
-      </div>
-      
-      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <ExpenseTable
-          :expenses="expenseList"
-          :loading="loading"
-          :is-manager="userIsManager"
-          @view="viewExpense"
-          @edit="editExpense"
-          @delete="confirmDelete"
-        />
-      </div>
+      <FinanceExpensesReport 
+        :data="reports.expenses" 
+        :expenses="expenseList"
+        :loading="loading"
+        :is-manager="userIsManager"
+        @view="viewExpense"
+        @edit="editExpense"
+        @delete="confirmDelete"
+      />
     </div>
 
     <!-- ── Tab Content: Revenue ──────────────────────────────── -->
