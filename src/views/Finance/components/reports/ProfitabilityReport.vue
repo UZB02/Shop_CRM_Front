@@ -6,7 +6,12 @@
           <div class="flex items-center justify-between mb-10">
              <div>
                 <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">{{ t('finance.profitability') }} Matritsasi</h3>
-                <p class="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Kategoriyalar bo'yicha tahlil</p>
+                <p class="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-3">
+                   Kategoriyalar bo'yicha tahlil
+                   <span v-if="props.data.subcategory_enabled" class="px-2 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-widest border border-emerald-100 dark:border-emerald-500/20">
+                     {{ t('finance.subcategory') }} faol
+                   </span>
+                </p>
              </div>
              <div class="flex items-center gap-4">
                 <div class="flex items-center gap-2">

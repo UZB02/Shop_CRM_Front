@@ -1,93 +1,86 @@
 <template>
-  <div class="space-y-6 pb-10">
+  <div class="space-y-4 pb-4">
     <!-- Summary Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <div v-for="card in summaryCards" :key="card.label" class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none transition-all duration-500 relative overflow-hidden group">
-        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-        <div class="flex items-center gap-2 mb-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div v-for="card in summaryCards" :key="card.label" class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group">
+        <div class="absolute -right-2 -bottom-2 w-16 h-16 bg-emerald-500/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+        <div class="flex items-center gap-1.5 mb-2">
           <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-          <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ t(card.label) }}</p>
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">{{ t(card.label) }}</p>
         </div>
-        <h3 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight relative z-10">{{ card.value }}</h3>
+        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight relative z-10">{{ card.value }}</h3>
       </div>
     </div>
 
     <!-- Chart & Table Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <!-- Line Chart -->
-      <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 sm:p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
-        <div class="flex items-center justify-between mb-10">
+      <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between mb-4">
            <div>
-             <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">{{ t('finance.revenue') }} Dynamika</h3>
-             <p class="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Vaqt o'tishi bilan tushumlar</p>
-           </div>
-           <div class="flex items-center gap-4">
-              <div class="flex items-center gap-2">
-                 <div class="w-3 h-1 rounded-full bg-emerald-500"></div>
-                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Revenue</span>
-              </div>
+             <h3 class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">{{ t('finance.revenue') }} Dynamika</h3>
+             <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">Vaqt o'tishi bilan tushumlar</p>
            </div>
         </div>
-        <div class="h-[280px] sm:h-[350px]">
+        <div class="h-[180px] sm:h-[220px]">
            <Chart type="line" :data="chartData" :options="chartOptions" />
         </div>
       </div>
 
       <!-- Donut Chart / Top Categories -->
-      <div class="bg-white dark:bg-slate-900 p-5 sm:p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
-        <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 mb-8 border-b border-slate-50 dark:border-slate-800 pb-4">{{ t('finance.share') }} Taqsimoti</h3>
-        <div class="h-[200px] sm:h-[220px] mb-8 relative flex items-center justify-center">
+      <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
+        <h3 class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-50 dark:border-slate-800 pb-2">{{ t('finance.share') }} Taqsimoti</h3>
+        <div class="h-[150px] mb-4 relative flex items-center justify-center">
            <Chart type="doughnut" :data="donutData" :options="donutOptions" class="relative z-10" />
            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Top 5</span>
-              <span class="text-xl font-black text-slate-800 dark:text-slate-100">Kategoriya</span>
+              <span class="text-[9px] font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Top 5</span>
            </div>
         </div>
-        <div class="space-y-4 flex-1">
-           <div v-for="(item, index) in tableData.slice(0, 5)" :key="item.id" class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
-              <div class="flex items-center gap-3">
-                 <div class="w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 shadow-sm" :style="{ backgroundColor: colors[index % colors.length] }"></div>
-                 <span class="text-xs font-black text-slate-600 dark:text-slate-300 truncate max-w-[120px] group-hover:text-emerald-500 transition-colors">{{ item.name }}</span>
+        <div class="space-y-1.5 flex-1 overflow-y-auto max-h-[120px] custom-scrollbar">
+           <div v-for="(item, index) in tableData.slice(0, 5)" :key="item.id" class="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center gap-2">
+                 <div class="w-2 h-2 rounded-full" :style="{ backgroundColor: colors[index % colors.length] }"></div>
+                 <span class="text-[11px] font-medium text-slate-600 dark:text-slate-300 truncate max-w-[100px]">{{ item.name }}</span>
               </div>
-              <div class="text-right">
-                <span class="text-xs font-black text-slate-800 dark:text-slate-100">{{ item.share_pct }}%</span>
-              </div>
+              <span class="text-[11px] font-bold text-slate-800 dark:text-slate-100">{{ item.share_pct }}%</span>
            </div>
         </div>
       </div>
     </div>
 
     <!-- Details Table -->
-    <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
-       <div class="px-8 py-6 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
-          <div class="flex items-center gap-3">
-            <div class="w-2 h-6 bg-emerald-500 rounded-full"></div>
-            <span class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">{{ t('finance.list') }} Batafsil</span>
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
+       <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
+          <div class="flex items-center gap-2">
+            <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">{{ t('finance.list') }}</span>
           </div>
        </div>
-       <div class="overflow-x-auto">
+       <div class="overflow-x-auto max-h-[400px] custom-scrollbar overflow-y-auto">
           <table class="w-full text-left border-collapse">
              <thead>
-                <tr class="text-[10px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">
-                   <th class="px-8 py-5">#</th>
-                   <th class="px-8 py-5">{{ t('finance.category') }}</th>
-                   <th class="px-8 py-5">{{ t('finance.revenue') }}</th>
-                   <th class="px-8 py-5">{{ t('finance.sales_count') }}</th>
-                   <th class="px-8 py-5">{{ t('finance.share') }}</th>
+                <tr class="text-[9px] font-bold uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
+                   <th class="px-4 py-3">#</th>
+                   <th class="px-4 py-3">Mahsulot / Kategoriya</th>
+                   <th class="px-4 py-3" v-if="tableData[0]?.quantity">{{ t('common.quantity') }}</th>
+                   <th class="px-4 py-3">{{ t('finance.revenue') }}</th>
+                   <th class="px-4 py-3">{{ t('finance.sales_count') }}</th>
+                   <th class="px-4 py-3">{{ t('finance.share') }} (%)</th>
                 </tr>
              </thead>
              <tbody class="divide-y divide-slate-50 dark:divide-slate-800/30">
-                <tr v-for="(item, idx) in tableData" :key="item.id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-all duration-300 group">
-                   <td class="px-8 py-5 text-xs font-bold text-slate-400">{{ idx + 1 }}</td>
-                   <td class="px-8 py-5 text-sm font-black text-slate-700 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">{{ item.name }}</td>
-                   <td class="px-8 py-5 text-sm font-black text-emerald-600">{{ formatPrice(item.revenue) }}</td>
-                   <td class="px-8 py-5 text-sm font-bold text-slate-500">{{ item.sales_count }}</td>
-                   <td class="px-8 py-5 min-w-[200px]">
-                      <div class="flex items-center gap-4">
-                         <div class="flex-1 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                            <div class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-1000" :style="{ width: item.share_pct + '%' }"></div>
+                <tr v-for="(item, idx) in tableData" :key="item.id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-colors group">
+                   <td class="px-4 py-3 text-[10px] text-slate-400">{{ idx + 1 }}</td>
+                   <td class="px-4 py-3 text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">{{ item.name }}</td>
+                   <td class="px-4 py-3 text-xs font-black text-slate-500" v-if="item.quantity">{{ item.quantity }}</td>
+                   <td class="px-4 py-3 text-xs font-bold text-emerald-600">{{ formatPrice(item.revenue) }}</td>
+                   <td class="px-4 py-3 text-[11px] text-slate-500">{{ item.sales_count }}</td>
+                   <td class="px-4 py-3">
+                      <div class="flex items-center gap-2">
+                         <div class="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-500 rounded-full" :style="{ width: item.share_pct + '%' }"></div>
                          </div>
-                         <span class="text-xs font-black text-slate-400 w-10">{{ item.share_pct }}%</span>
+                         <span class="text-[10px] font-medium text-slate-400 w-8">{{ item.share_pct }}%</span>
                       </div>
                    </td>
                 </tr>

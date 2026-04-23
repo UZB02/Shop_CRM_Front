@@ -1,6 +1,6 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import useExpenses from '@/composables/useExpenses'
-import useFinanceReports from '@/composables/useFinanceReports'
+import useFinanceReports, { getInitialFilters } from '@/composables/useFinanceReports'
 import i18n from '@/i18n'
 
 export default function useExpenseTabLogic() {
@@ -47,17 +47,7 @@ export default function useExpenseTabLogic() {
     return tList
   })
 
-  // Sync filters between useExpenses and useFinanceReports
-  watch(() => crudFilters.value, (newVal) => {
-      reportsFilters.branch = newVal.branch
-      reportsFilters.category = newVal.category
-  }, { deep: true })
-
-  watch(() => exportFilters.value, (newVal) => {
-      reportsFilters.date_from = newVal.date_from
-      reportsFilters.date_to = newVal.date_to
-  }, { deep: true })
-
+  // 1. First, define the fetch function to avoid ReferenceErrors
   const fetchTabReport = async () => {
     if (!userIsManager.value) return
     
@@ -83,25 +73,79 @@ export default function useExpenseTabLogic() {
     }
   }
 
-  // Watchers for automatic refresh
-  watch(activeTab, fetchTabReport)
-  
-  // Refresh on filter changes
-  watch([() => crudFilters.value.branch, () => crudFilters.value.category, () => crudFilters.value.date], () => {
+  // 2. Define the refresh function
+  const refreshData = () => {
+    // Reset all filters to default
+    crudFilters.value.branch = null
+    crudFilters.value.category = null
+    crudFilters.value.date = null
+    crudFilters.value.search = ''
+    crudFilters.value.min_debt = 0
+    crudFilters.value.group_by = 'day'
+    
+    // Refresh data
+    fetchCategories()
+    fetchTabReport()
+    if (activeTab.value === 'expenses') fetchExpenseList()
+    
+    if (userIsManager.value) {
+        fetchShifts()
+        fetchBranches()
+    }
+  }
+
+  // 3. Define watchers
+  watch(crudFilters, (newVal) => {
+      reportsFilters.branch = newVal.branch
+      reportsFilters.category = newVal.category
+      reportsFilters.search = newVal.search
+      reportsFilters.group_by = newVal.group_by || 'day'
+      reportsFilters.year = newVal.year
+      reportsFilters.months = newVal.months
+      reportsFilters.min_debt = newVal.min_debt
+
+      // Date Range Sync
+      if (Array.isArray(newVal.date)) {
+        const [start, end] = newVal.date
+        if (start) {
+            reportsFilters.date_from = new Date(start).toLocaleDateString('en-CA')
+        }
+        if (end) {
+            reportsFilters.date_to = new Date(end).toLocaleDateString('en-CA')
+        } else if (start) {
+            reportsFilters.date_to = new Date(start).toLocaleDateString('en-CA')
+        }
+      } else if (newVal.date) {
+        const d = new Date(newVal.date).toLocaleDateString('en-CA')
+        reportsFilters.date_from = d
+        reportsFilters.date_to = d
+      } else {
+        const defaults = getInitialFilters()
+        reportsFilters.date_from = defaults.date_from
+        reportsFilters.date_to = defaults.date_to
+      }
+
       if (activeTab.value === 'expenses') fetchExpenseList()
+      fetchTabReport()
+  }, { deep: true, flush: 'sync' })
+
+  watch(activeTab, (newTab) => {
+    crudFilters.value.group_by = 'day'
+    fetchTabReport()
+  })
+
+  watch(exportFilters, (newVal) => {
+      if (newVal.date_from) reportsFilters.date_from = newVal.date_from
+      if (newVal.date_to) reportsFilters.date_to = newVal.date_to
       fetchTabReport()
   }, { deep: true })
 
-  watch([() => exportFilters.value.date_from, () => exportFilters.value.date_to], fetchTabReport)
-
-  const refreshData = () => {
-    fetchCategories()
-    fetchTabReport()
-    if (userIsManager.value) {
-      fetchBranches()
-      fetchShifts()
-    }
-  }
+  onMounted(() => {
+      refreshData()
+      if (userIsManager.value) {
+          fetchProfitLoss()
+      }
+  })
 
   return {
     activeTab, tabs, userIsManager,
@@ -110,8 +154,10 @@ export default function useExpenseTabLogic() {
     refreshData,
     branches, categories, shifts,
     expenseList, crudFilters, exportFilters,
-    // Add these for backward compatibility if needed in index.vue
-    summaryData: reports.expenses?.summary || {},
-    totalFromList: computed(() => parseFloat(reports.expenses?.summary?.expenses_total || 0))
+    summaryData: computed(() => reports.expenses?.summary || {}),
+    totalFromList: computed(() => parseFloat(reports.expenses?.summary?.expenses_total || 0)),
+    netProfit: computed(() => {
+      return parseFloat(reports.profitLoss?.summary?.total_net_profit || 0)
+    })
   }
 }

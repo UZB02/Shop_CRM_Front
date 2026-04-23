@@ -1,20 +1,32 @@
 <template>
   <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col gap-3 sm:gap-4">
     <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-      <!-- Date Filter -->
-      <div class="relative flex-1 min-w-[150px] sm:flex-none sm:w-48 group">
+      <!-- Search Filter -->
+      <div v-if="activeTab !== 'payments'" class="relative flex-1 min-w-[200px] sm:w-64 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-calendar text-[10px]"></i>
+          <i class="pi pi-search text-[10px]"></i>
         </div>
+        <input
+          v-model="filters.search"
+          type="text"
+          :placeholder="activeTab === 'revenue' && filters.category ? 'Mahsulot nomi...' : $t('common.search')"
+          class="w-full h-10 pl-9 pr-4 text-xs font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all uppercase tracking-wider placeholder:text-slate-400"
+        />
+      </div>
+
+      <!-- Date Range Filter -->
+      <div class="relative flex-1 min-w-[200px] sm:flex-none sm:w-64 group">
         <DatePicker
           v-model="filters.date"
+          selectionMode="range"
+          :manualInput="false"
           dateFormat="yy-mm-dd"
           :placeholder="$t('common.date')"
           showIcon
           iconDisplay="input"
           class="w-full"
-          pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus-within:!border-emerald-500/50 focus-within:!ring-4 focus-within:!ring-emerald-500/10 bg-slate-50/50 dark:bg-slate-800/40 transition-all"
-          pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-black !pl-9 !h-full select-none !uppercase !tracking-wider"
+          pt:root:class="!h-10 !rounded-xl !bg-transparent !border-none transition-all"
+          pt:input:class="!w-full !h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 !bg-slate-50/50 dark:!bg-slate-800/40 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !text-xs !font-black !pl-4 !shadow-none select-none !uppercase !tracking-wider !text-slate-700 dark:!text-slate-200 placeholder:!text-slate-400"
         />
       </div>
 
@@ -36,30 +48,66 @@
         />
       </div>
 
-      <!-- Shift Filter -->
-      <div v-if="settingsStore.isShiftEnabled && shifts?.length > 0" class="relative flex-1 min-w-[150px] sm:flex-none sm:w-48 group">
-         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-clock text-[10px]"></i>
+      <!-- Group By Filter (Only for Reports) -->
+      <div v-if="activeTab && ['revenue', 'payments', 'expenses'].includes(activeTab)" class="relative flex-1 min-w-[140px] sm:flex-none sm:w-40 group">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+          <i class="pi pi-th-large text-[10px]"></i>
         </div>
-         <Select
-          v-model="filters.smena"
-          :options="shifts"
-          optionLabel="id"
-          optionValue="id"
-          :placeholder="$t('finance.smena')"
-          showClear
+        <Select
+          v-model="filters.group_by"
+          :options="[
+            { label: $t('finance.day'), value: 'day' },
+            { label: $t('finance.month'), value: 'month' }
+          ]"
+          optionLabel="label"
+          optionValue="value"
+          :placeholder="$t('finance.group_by')"
           class="w-full"
           pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
           pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !uppercase !tracking-wider"
-        >
-          <template #option="slotProps">
-             <div class="flex flex-col gap-0.5">
-                <span class="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">ID: {{ slotProps.option.id }}</span>
-                <span class="text-[8px] font-bold text-slate-400">{{ slotProps.option.opened_at }}</span>
-             </div>
-          </template>
-        </Select>
+        />
       </div>
+
+      <!-- Year Filter (P&L only) -->
+      <div v-if="activeTab === 'profit-loss'" class="relative flex-1 min-w-[100px] sm:flex-none sm:w-32 group">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+          <i class="pi pi-calendar-plus text-[10px]"></i>
+        </div>
+        <input
+          v-model.number="filters.year"
+          type="number"
+          :placeholder="$t('finance.year')"
+          class="w-full h-10 pl-9 pr-4 text-xs font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all uppercase tracking-wider placeholder:text-slate-400"
+        />
+      </div>
+
+      <!-- Months Filter (P&L only) - Simple Comma Separated for now -->
+      <div v-if="activeTab === 'profit-loss'" class="relative flex-1 min-w-[150px] sm:w-48 group">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+          <i class="pi pi-list text-[10px]"></i>
+        </div>
+        <input
+          v-model="filters.months"
+          type="text"
+          :placeholder="$t('finance.months')"
+          class="w-full h-10 pl-9 pr-4 text-xs font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all uppercase tracking-wider placeholder:text-slate-400"
+          title="1,2,3... shaklida kiriting"
+        />
+      </div>
+
+      <!-- Min Debt Filter (Debtors only) -->
+      <div v-if="activeTab === 'debtors'" class="relative flex-1 min-w-[150px] sm:w-48 group">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+          <i class="pi pi-money-bill text-[10px]"></i>
+        </div>
+        <input
+          v-model.number="filters.min_debt"
+          type="number"
+          :placeholder="$t('finance.min_debt')"
+          class="w-full h-10 pl-9 pr-4 text-xs font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all uppercase tracking-wider placeholder:text-slate-400"
+        />
+      </div>
+
 
       <!-- Clear Filters -->
       <button
@@ -164,7 +212,8 @@ const props = defineProps({
   exportFilters: Object,
   categories: Array,
   shifts: Array,
-  isManager: Boolean
+  isManager: Boolean,
+  activeTab: String
 })
 
 const emit = defineEmits(['clear', 'export', 'export-wastage'])
@@ -172,6 +221,29 @@ const emit = defineEmits(['clear', 'export', 'export-wastage'])
 const showExport = ref(false)
 
 const hasActiveFilters = computed(() => {
-  return props.filters.date || props.filters.category || props.filters.smena
+  return props.filters.date || props.filters.category || props.filters.search || props.filters.group_by !== 'day'
 })
 </script>
+
+<style scoped>
+:deep(.p-datepicker-input) {
+  background-color: rgb(30 41 59 / 0.4) !important; /* dark:bg-slate-800/40 */
+  border-color: rgb(51 65 85 / 0.5) !important; /* dark:border-slate-700/50 */
+  color: #e2e8f0 !important; /* text-slate-200 */
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.75rem !important;
+  box-shadow: none !important;
+}
+
+:deep(.p-datepicker:not(.p-datepicker-inline) .p-datepicker-input) {
+   background-color: rgb(30 41 59 / 0.4) !important;
+}
+
+html:not(.dark) :deep(.p-datepicker-input) {
+  background-color: rgb(248 250 252 / 0.5) !important; /* bg-slate-50/50 */
+  border-color: rgb(226 232 240 / 0.6) !important; /* border-slate-200/60 */
+  color: #334155 !important; /* text-slate-700 */
+}
+</style>

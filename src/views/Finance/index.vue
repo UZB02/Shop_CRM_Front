@@ -1,45 +1,52 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
     <!-- ── Header ─────────────────────────────────────────────── -->
     <ExpenseHeader 
       :is-manager="userIsManager" 
+      :loading="loading"
       @manage-categories="showCategories = true"
       @add-expense="openNew"
     />
 
-    <!-- ── Tab Navigation ────────────────────────────────────── -->
-    <ExpenseTabs 
-      v-model="activeTab" 
-      :tabs="tabs" 
+    <!-- ── Stats & Tabs Component ────────────────────────────── -->
+    <MinimalFinanceStatsTabs 
+      :tabs="tabs"
+      v-model="activeTab"
+       :netProfit="netProfit"
+       :showSummary="userIsManager"
+    />
+
+    <!-- ── Common Filters ────────────────────────────────────── -->
+    <ExpenseFilters 
+      :filters="crudFilters"
+      :export-filters="exportFilters"
+      :categories="categories"
+      :shifts="shifts"
+      :is-manager="userIsManager"
+      :active-tab="activeTab"
+      @clear="refreshData"
+      @export="exportExpenses"
+      @export-wastage="exportWastages"
     />
 
     <!-- ── Tab Content: Expenses (Original + Analytics) ─────── -->
-    <div v-if="activeTab === 'expenses'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-400">
+    <div v-if="activeTab === 'expenses'" class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-400">
       <FinanceExpensesReport :data="reports.expenses" />
       
-      <div class="flex items-center justify-between px-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-         <h3 class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">{{ $t('finance.list') }}</h3>
+      <div class="flex items-center justify-between px-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+         <h3 class="text-[10px] font-bold uppercase tracking-widest text-slate-400">{{ $t('finance.list') }}</h3>
       </div>
       
-      <ExpenseFilters 
-        :filters="crudFilters"
-        :export-filters="exportFilters"
-        :categories="categories"
-        :shifts="shifts"
-        :is-manager="userIsManager"
-        @clear="refreshData"
-        @export="exportExpenses"
-        @export-wastage="exportWastages"
-      />
-
-      <ExpenseTable
-        :expenses="expenseList"
-        :loading="loading"
-        :is-manager="userIsManager"
-        @view="viewExpense"
-        @edit="editExpense"
-        @delete="confirmDelete"
-      />
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+        <ExpenseTable
+          :expenses="expenseList"
+          :loading="loading"
+          :is-manager="userIsManager"
+          @view="viewExpense"
+          @edit="editExpense"
+          @delete="confirmDelete"
+        />
+      </div>
     </div>
 
     <!-- ── Tab Content: Revenue ──────────────────────────────── -->
@@ -138,7 +145,7 @@ import useExpenseTabLogic from './composables/useExpenseTabLogic'
 
 // Components (Layout & CRUD)
 import ExpenseHeader from './components/ExpenseHeader.vue'
-import ExpenseTabs from './components/ExpenseTabs.vue'
+import MinimalFinanceStatsTabs from './components/MinimalFinanceStatsTabs.vue'
 import ExpenseFilters from './components/ExpenseFilters.vue'
 import ExpenseTable from './components/ExpenseTable.vue'
 import ExpenseDialog from './components/ExpenseDialog.vue'
@@ -160,7 +167,8 @@ const {
   activeTab, tabs, userIsManager,
   loading, reports, refreshData,
   branches, categories, shifts,
-  expenseList, crudFilters, exportFilters
+  expenseList, crudFilters, exportFilters,
+  netProfit
 } = useExpenseTabLogic()
 
 // Local state for CRUD operations

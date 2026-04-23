@@ -1190,6 +1190,13 @@
         "total_returns": "Umumiy qaytarishlar",
         "sales_count": "Savdolar soni",
         "avg_sale": "O'rtacha chek",
+        "group_by": "Guruhlash",
+        "day": "Kunlik",
+        "month": "Oylik",
+        "year": "Yil",
+        "months": "Oylar",
+        "min_debt": "Minimal qarz",
+        "subcategory": "Subkategoriya",
         "category_form": {
             "title": "Kategoriya qo'shish/tahrirlash",
             "name": "Kategoriya nomi",

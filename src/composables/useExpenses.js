@@ -18,7 +18,12 @@ const filters = ref({
     branch: null,
     category: null,
     smena: null,
-    date: null
+    date: null,
+    search: '',
+    group_by: 'day',
+    year: new Date().getFullYear(),
+    months: '1,2,3,4,5,6,7,8,9,10,11,12',
+    min_debt: 0
 })
 
 // Export uses separate date range params (only for export endpoints)
@@ -111,9 +116,11 @@ export default function useExpenses() {
             if (filters.value.category) params.category = filters.value.category
             if (filters.value.smena) params.smena = filters.value.smena
             if (filters.value.date) params.date = filters.value.date
+            if (filters.value.search) params.search = filters.value.search
 
             const res = await expensesAPI.getAll(params)
             expenses.value = Array.isArray(res.data) ? res.data : (res.data.results || res.data.data || [])
+            console.log('💸 FINANCE: Raw Expenses List:', expenses.value)
 
             if (isManager()) {
                 try {
@@ -124,6 +131,7 @@ export default function useExpenses() {
 
                     const reportRes = await reportsAPI.getFinancialReport(reportParams)
                     const report = reportRes.data
+                    console.log('📒 FINANCE: Financial Report (v1):', report)
                     summaryData.value = {
                         totalExpenses: parseFloat(report.expenses?.total || 0),
                         summary: report.expenses?.items || []
