@@ -20,7 +20,7 @@
     <ExpenseFilters 
       :filters="crudFilters"
       :export-filters="exportFilters"
-      :categories="categories"
+      :categories="dynamicCategories"
       :shifts="shifts"
       :is-manager="userIsManager"
       :active-tab="activeTab"
@@ -49,7 +49,7 @@
 
     <!-- ── Tab Content: Payments ─────────────────────────────── -->
     <div v-else-if="activeTab === 'payments'" class="animate-in fade-in slide-in-from-bottom-2 duration-400">
-       <PaymentMethodsReport :data="reports.payments" />
+       <PaymentMethodsReport :data="reports.payments" :active-method="reportsFilters.payment_method" />
     </div>
 
     <!-- ── Tab Content: Profitability ────────────────────────── -->
@@ -155,12 +155,12 @@ import DebtorReport from './components/reports/DebtorReport.vue'
 
 const confirm = useConfirm()
 
-// Unified Logic
 const {
   activeTab, tabs, userIsManager,
   loading, reports, refreshData,
   branches, categories, shifts,
   expenseList, crudFilters, exportFilters,
+  reportsFilters, dynamicCategories,
   netProfit
 } = useExpenseTabLogic()
 

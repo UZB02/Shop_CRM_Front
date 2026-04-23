@@ -2,7 +2,19 @@
   <div class="space-y-4 pb-4">
     <!-- Summary Cards (Payment types) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-      <div v-for="card in paymentCards" :key="card.label" class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group">
+      <div
+        v-for="card in paymentCards"
+        :key="card.label"
+        :class="[
+          'bg-white dark:bg-slate-900 p-4 rounded-xl border shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group',
+          activeMethod && card.key !== 'total' && card.key !== activeMethod
+            ? 'opacity-40 border-slate-100 dark:border-slate-800'
+            : 'border-slate-100 dark:border-slate-800',
+          activeMethod && card.key === activeMethod
+            ? 'ring-2 ring-offset-1 ring-emerald-400/50 dark:ring-offset-slate-900'
+            : ''
+        ]"
+      >
         <div :class="['absolute -right-2 -bottom-2 w-16 h-16 opacity-5 group-hover:scale-150 transition-transform duration-500 rounded-full', card.bg]"></div>
         <div class="flex items-center gap-1.5 mb-2 relative z-10">
            <div :class="['w-1.5 h-1.5 rounded-full', card.bg]"></div>
@@ -115,37 +127,57 @@ const { t } = useI18n()
 const settingsStore = useSettingsStore()
 
 const props = defineProps({
-  data: { type: Object, default: () => ({ summary: {}, chart: [], table: [] }) }
+  data:         { type: Object, default: () => ({ summary: {}, chart: [], table: [] }) },
+  activeMethod: { type: String,  default: null }  // 'cash' | 'card' | 'debt' | null
 })
 
 const formatPrice = (val) => settingsStore.formatPrice(val)
 
+// Visibility helper
+const isActive = (key) => !props.activeMethod || props.activeMethod === key
+
 const paymentCards = computed(() => {
   const sum = props.data.summary || {}
   return [
-    { label: 'common.cash', value: formatPrice(sum.cash?.amount || 0), count: sum.cash?.count || 0, icon: 'pi-money-bill', color: 'text-emerald-500', bg: 'bg-emerald-500' },
-    { label: 'common.card', value: formatPrice(sum.card?.amount || 0), count: sum.card?.count || 0, icon: 'pi-credit-card', color: 'text-blue-500', bg: 'bg-blue-500' },
-    { label: 'common.debt', value: formatPrice(sum.debt?.amount || 0), count: sum.debt?.count || 0, icon: 'pi-history', color: 'text-amber-500', bg: 'bg-amber-500' },
-    { 
-      label: 'common.total', 
-      value: formatPrice(sum.total_revenue || 0), 
-      count: sum.sales_count || 0, 
+    { key: 'cash', label: 'common.cash', value: formatPrice(sum.cash?.amount || 0), count: sum.cash?.count || 0, icon: 'pi-money-bill', color: 'text-emerald-500', bg: 'bg-emerald-500' },
+    { key: 'card', label: 'common.card', value: formatPrice(sum.card?.amount || 0), count: sum.card?.count || 0, icon: 'pi-credit-card', color: 'text-blue-500', bg: 'bg-blue-500' },
+    { key: 'debt', label: 'common.debt', value: formatPrice(sum.debt?.amount || 0), count: sum.debt?.count || 0, icon: 'pi-history', color: 'text-amber-500', bg: 'bg-amber-500' },
+    {
+      key: 'total',
+      label: 'common.total',
+      value: formatPrice(sum.total_revenue || 0),
+      count: sum.sales_count || 0,
       mixed: sum.mixed_count || 0,
-      icon: 'pi-wallet', 
-      color: 'text-emerald-600', 
-      bg: 'bg-emerald-600' 
+      icon: 'pi-wallet',
+      color: 'text-emerald-600',
+      bg: 'bg-emerald-600'
     }
   ]
 })
 
-const chartData = computed(() => ({
-  labels: props.data.chart?.map(i => i.label) || [],
-  datasets: [
-    { label: 'Naqd', data: props.data.chart?.map(i => parseFloat(i.cash)) || [], backgroundColor: '#10b981', borderRadius: 8, barThickness: 30 },
-    { label: 'Karta', data: props.data.chart?.map(i => parseFloat(i.card)) || [], backgroundColor: '#3b82f6', borderRadius: 8, barThickness: 30 },
-    { label: 'Nasiya', data: props.data.chart?.map(i => parseFloat(i.debt)) || [], backgroundColor: '#f59e0b', borderRadius: 8, barThickness: 30 }
-  ]
-}))
+// All method definitions
+const ALL_METHODS = [
+  { key: 'cash',  label: 'Naqd',   color: '#10b981' },
+  { key: 'card',  label: 'Karta',  color: '#3b82f6' },
+  { key: 'debt',  label: 'Nasiya', color: '#f59e0b' },
+]
+
+const chartData = computed(() => {
+  const methods = props.activeMethod
+    ? ALL_METHODS.filter(m => m.key === props.activeMethod)
+    : ALL_METHODS
+
+  return {
+    labels: props.data.chart?.map(i => i.label) || [],
+    datasets: methods.map(m => ({
+      label: m.label,
+      data: props.data.chart?.map(i => parseFloat(i[m.key])) || [],
+      backgroundColor: m.color,
+      borderRadius: 8,
+      barThickness: 30
+    }))
+  }
+})
 
 const chartOptions = {
   responsive: true,
@@ -180,11 +212,15 @@ const chartOptions = {
 
 const donutData = computed(() => {
   const sum = props.data.summary || {}
+  const methods = props.activeMethod
+    ? ALL_METHODS.filter(m => m.key === props.activeMethod)
+    : ALL_METHODS
+
   return {
-    labels: ['Naqd', 'Karta', 'Nasiya'],
+    labels: methods.map(m => m.label),
     datasets: [{
-      data: [sum.cash?.share_pct || 0, sum.card?.share_pct || 0, sum.debt?.share_pct || 0],
-      backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+      data: methods.map(m => sum[m.key]?.share_pct || 0),
+      backgroundColor: methods.map(m => m.color),
       borderWidth: 0,
       borderColor: 'transparent',
       borderRadius: 12,
@@ -212,11 +248,15 @@ const donutOptions = computed(() => ({
 
 const distribution = computed(() => {
   const sum = props.data.summary || {}
-  return [
-    { label: 'common.cash', pct: sum.cash?.share_pct || 0, bg: 'bg-emerald-500' },
-    { label: 'common.card', pct: sum.card?.share_pct || 0, bg: 'bg-blue-500' },
-    { label: 'common.debt', pct: sum.debt?.share_pct || 0, bg: 'bg-amber-500' }
-  ]
+  const methods = props.activeMethod
+    ? ALL_METHODS.filter(m => m.key === props.activeMethod)
+    : ALL_METHODS
+  const bgMap = { cash: 'bg-emerald-500', card: 'bg-blue-500', debt: 'bg-amber-500' }
+  return methods.map(m => ({
+    label: 'common.' + m.key,
+    pct: sum[m.key]?.share_pct || 0,
+    bg: bgMap[m.key]
+  }))
 })
 
 const tableData = computed(() => props.data.table || [])

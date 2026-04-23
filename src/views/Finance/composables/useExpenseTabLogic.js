@@ -1,6 +1,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import useExpenses from '@/composables/useExpenses'
 import useFinanceReports, { getInitialFilters } from '@/composables/useFinanceReports'
+import { categoriesAPI } from '@/services/api'
 import i18n from '@/i18n'
 
 export default function useExpenseTabLogic() {
@@ -23,6 +24,8 @@ export default function useExpenseTabLogic() {
       fetchDebtors,
       clearFilters: clearReportsFilters
   } = useFinanceReports()
+
+  const productCategories = ref([])
 
   // Synced loading state
   const loading = computed(() => crudLoading.value || reportsLoading.value)
@@ -85,6 +88,7 @@ export default function useExpenseTabLogic() {
     
     // Refresh data
     fetchCategories()
+    categoriesAPI.getAll().then(res => productCategories.value = res.data)
     fetchTabReport()
     if (activeTab.value === 'expenses') fetchExpenseList()
     
@@ -103,6 +107,7 @@ export default function useExpenseTabLogic() {
       reportsFilters.year = newVal.year
       reportsFilters.months = newVal.months
       reportsFilters.min_debt = newVal.min_debt
+      reportsFilters.payment_method = newVal.payment_method ?? null
 
       // Date Range Sync
       if (Array.isArray(newVal.date)) {
@@ -154,6 +159,8 @@ export default function useExpenseTabLogic() {
     refreshData,
     branches, categories, shifts,
     expenseList, crudFilters, exportFilters,
+    reportsFilters,
+    dynamicCategories: computed(() => activeTab.value === 'expenses' ? categories.value : productCategories.value),
     summaryData: computed(() => reports.expenses?.summary || {}),
     totalFromList: computed(() => parseFloat(reports.expenses?.summary?.expenses_total || 0)),
     netProfit: computed(() => {

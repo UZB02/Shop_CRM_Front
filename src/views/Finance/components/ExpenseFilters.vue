@@ -31,7 +31,7 @@
       </div>
 
       <!-- Category Filter -->
-      <div class="relative flex-1 min-w-[180px] sm:flex-none sm:w-60 group">
+      <div v-if="!['profit-loss', 'debtors'].includes(activeTab)" class="relative flex-1 min-w-[180px] sm:flex-none sm:w-60 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
           <i class="pi pi-tag text-[10px]"></i>
         </div>
@@ -42,6 +42,9 @@
           optionValue="id"
           :placeholder="$t('categories.all')"
           showClear
+          filter
+          :filterPlaceholder="$t('common.search')"
+          fluid
           class="w-full"
           pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
           pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !uppercase !tracking-wider"
@@ -108,6 +111,24 @@
         />
       </div>
 
+
+      <!-- Payment Method Filter (Payments tab only) -->
+      <div v-if="activeTab === 'payments'" class="relative flex-1 min-w-[150px] sm:flex-none sm:w-48 group">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+          <i class="pi pi-credit-card text-[10px]"></i>
+        </div>
+        <Select
+          v-model="filters.payment_method"
+          :options="allowedPaymentMethods"
+          optionLabel="label"
+          optionValue="value"
+          :placeholder="$t('finance.payment_method')"
+          showClear
+          class="w-full"
+          pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
+          pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !uppercase !tracking-wider"
+        />
+      </div>
 
       <!-- Clear Filters -->
       <button
@@ -201,10 +222,12 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import DatePicker from 'primevue/datepicker'
 import Select from 'primevue/select'
 import { useSettingsStore } from '@/store/settings'
 
+const { t } = useI18n()
 const settingsStore = useSettingsStore()
 
 const props = defineProps({
@@ -221,8 +244,15 @@ const emit = defineEmits(['clear', 'export', 'export-wastage'])
 const showExport = ref(false)
 
 const hasActiveFilters = computed(() => {
-  return props.filters.date || props.filters.category || props.filters.search || props.filters.group_by !== 'day'
+  return props.filters.date || props.filters.category || props.filters.search ||
+    props.filters.group_by !== 'day' || props.filters.payment_method
 })
+
+const allowedPaymentMethods = computed(() => [
+  ...(settingsStore.allowCash ? [{ label: t('common.cash'), value: 'cash' }] : []),
+  ...(settingsStore.allowCard ? [{ label: t('common.card'), value: 'card' }] : []),
+  ...(settingsStore.allowDebt ? [{ label: t('common.debt'), value: 'debt' }] : []),
+])
 </script>
 
 <style scoped>

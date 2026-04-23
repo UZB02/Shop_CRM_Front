@@ -96,7 +96,7 @@
                    <th class="px-4 py-3 text-right">{{ t('finance.revenue') }}</th>
                    <th class="px-4 py-3 text-right">COGS</th>
                    <th class="px-4 py-3 text-right">Yalpi Foyda</th>
-                   <th class="px-4 py-3 text-right">Zarar</th>
+                   <th v-if="settingsStore.isWastageEnabled" class="px-4 py-3 text-right">Zarar (Isrof)</th>
                    <th class="px-4 py-3 text-right">Xarajatlar</th>
                    <th class="px-4 py-3 text-right">Sof Foyda</th>
                    <th class="px-4 py-3 text-center">Margin %</th>
@@ -112,7 +112,7 @@
                    <td class="px-4 py-3 text-right">
                       <span class="font-black text-emerald-500">{{ formatPrice(row.gross_profit) }}</span>
                    </td>
-                   <td class="px-4 py-3 text-right text-rose-400/80 font-bold">({{ formatPrice(row.wastage_loss) }})</td>
+                   <td v-if="settingsStore.isWastageEnabled" class="px-4 py-3 text-right text-rose-400/80 font-bold">({{ formatPrice(row.wastage_loss) }})</td>
                    <td class="px-4 py-3 text-right text-slate-400">{{ formatPrice(row.expenses) }}</td>
                    <td class="px-4 py-3 text-right">
                       <span :class="['font-black', parseFloat(row.net_profit) >= 0 ? 'text-emerald-600' : 'text-rose-500']">

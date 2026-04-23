@@ -23,7 +23,8 @@ const filters = ref({
     group_by: 'day',
     year: new Date().getFullYear(),
     months: '1,2,3,4,5,6,7,8,9,10,11,12',
-    min_debt: 0
+    min_debt: 0,
+    payment_method: null
 })
 
 // Export uses separate date range params (only for export endpoints)

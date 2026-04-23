@@ -1178,6 +1178,7 @@
         "delete_confirm": "Ushbu xarajatni o'chirishni tasdiqlaysizmi?",
         "revenue_report": "Tushum hisoboti",
         "payment_methods": "To'lov usullari",
+        "payment_method": "To'lov usuli",
         "profitability": "Rentabellik",
         "grand_total": "Umumiy yakun",
         "gross_profit": "Yalpi foyda",
@@ -1229,7 +1230,8 @@
             "category_updated": "Kategoriya yangilandi",
             "added": "Xarajat muvaffaqiyatli saqlandi",
             "updated": "Xarajat yangilandi",
-            "deleted": "Xarajat o'chirildi"
+            "deleted": "Xarajat o'chirildi",
+            "load_error": "Ma'lumotlarni yuklashda xatolik"
         }
     },
     "reports": {

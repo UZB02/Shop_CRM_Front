@@ -16,7 +16,8 @@ export const getInitialFilters = () => {
         group_by: 'day',
         year: today.getFullYear(),
         months: '1,2,3,4,5,6,7,8,9,10,11,12',
-        min_debt: 0
+        min_debt: 0,
+        payment_method: null
     }
 }
 
@@ -51,7 +52,9 @@ export default function useFinanceReports() {
             })
             reports.revenue = res.data
         } catch (error) {
-            toast.add({ severity: 'error', summary: t('common.error'), detail: t('finance.messages.load_error'), life: 3000 })
+            if (error.response?.status === 429) return
+            const detail = error.response?.data?.detail || error.response?.data?.message || t('finance.messages.load_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
         } finally {
             loading.value = false
         }
@@ -69,7 +72,9 @@ export default function useFinanceReports() {
             })
             reports.expenses = res.data
         } catch (error) {
-            toast.add({ severity: 'error', summary: t('common.error'), detail: t('finance.messages.load_error'), life: 3000 })
+            if (error.response?.status === 429) return
+            const detail = error.response?.data?.detail || error.response?.data?.message || t('finance.messages.load_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
         } finally {
             loading.value = false
         }
@@ -87,7 +92,9 @@ export default function useFinanceReports() {
             })
             reports.payments = res.data
         } catch (error) {
-            toast.add({ severity: 'error', summary: t('common.error'), detail: t('finance.messages.load_error'), life: 3000 })
+            if (error.response?.status === 429) return
+            const detail = error.response?.data?.detail || error.response?.data?.message || t('finance.messages.load_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
         } finally {
             loading.value = false
         }
@@ -108,7 +115,9 @@ export default function useFinanceReports() {
                 reports.profitability.subcategory_enabled = res.data.filters.subcategory_enabled
             }
         } catch (error) {
-            toast.add({ severity: 'error', summary: t('common.error'), detail: t('finance.messages.load_error'), life: 3000 })
+            if (error.response?.status === 429) return
+            const detail = error.response?.data?.detail || error.response?.data?.message || t('finance.messages.load_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
         } finally {
             loading.value = false
         }
@@ -126,7 +135,9 @@ export default function useFinanceReports() {
             })
             reports.profitLoss = res.data
         } catch (error) {
-            toast.add({ severity: 'error', summary: t('common.error'), detail: t('finance.messages.load_error'), life: 3000 })
+            if (error.response?.status === 429) return
+            const detail = error.response?.data?.detail || error.response?.data?.message || t('finance.messages.load_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
         } finally {
             loading.value = false
         }
@@ -141,7 +152,9 @@ export default function useFinanceReports() {
             })
             reports.debtors = res.data
         } catch (error) {
-            toast.add({ severity: 'error', summary: t('common.error'), detail: t('finance.messages.load_error'), life: 3000 })
+            if (error.response?.status === 429) return
+            const detail = error.response?.data?.detail || error.response?.data?.message || t('finance.messages.load_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
         } finally {
             loading.value = false
         }
