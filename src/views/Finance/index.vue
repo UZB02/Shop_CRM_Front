@@ -64,7 +64,7 @@
 
     <!-- ── Tab Content: Debtors ──────────────────────────────── -->
     <div v-else-if="activeTab === 'debtors'" class="animate-in fade-in slide-in-from-bottom-2 duration-400">
-       <FinanceDebtorReport :data="reports.debtors" />
+       <DebtorReport :data="reports.debtors" />
     </div>
 
     <!-- ── Shared Modals ─────────────────────────────────────── -->
@@ -151,7 +151,7 @@ import PaymentMethodsReport from './components/reports/PaymentMethodsReport.vue'
 import ProfitabilityReport from './components/reports/ProfitabilityReport.vue'
 import ProfitLossReport from './components/reports/ProfitLossReport.vue'
 import FinanceExpensesReport from './components/reports/FinanceExpensesReport.vue'
-import FinanceDebtorReport from './components/reports/FinanceDebtorReport.vue'
+import DebtorReport from './components/reports/DebtorReport.vue'
 
 const confirm = useConfirm()
 
