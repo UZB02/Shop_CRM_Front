@@ -16,8 +16,9 @@ const PERMISSION_MAP = {
     'ombor': 'warehouse',
     'sotuv': 'pos',
     'sozlamalar': 'settings',
-    'xarajatlar': 'finance',
-    'xodimlar': 'workers'
+    'moliya': 'finance',
+    'xodimlar': 'workers',
+    'obuna': 'subscription'
 }
 
 function buildPermissions(userData) {

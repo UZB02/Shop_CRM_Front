@@ -248,9 +248,13 @@
                 "label": "Sotuv (POS)",
                 "desc": "Kassa va sotuv oynasiga kirish"
             },
-            "xarajatlar": {
+            "moliya": {
                 "label": "Moliya",
                 "desc": "Moliya va xarajatlar"
+            },
+            "obuna": {
+                "label": "Obuna",
+                "desc": "Obuna va tarif rejalari"
             },
             "xodimlar": {
                 "label": "Xodimlar",

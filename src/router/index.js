@@ -195,7 +195,7 @@ const routes = [
                 path: 'subscription',
                 name: 'subscription',
                 component: () => import('@/views/Subscription/index.vue'),
-                meta: { permission: 'dashboard' }
+                meta: { permission: 'subscription' }
             }
         ]
     }
