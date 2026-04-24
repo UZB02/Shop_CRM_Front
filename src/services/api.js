@@ -284,9 +284,8 @@ export const wastagesAPI = {
 
 // Dashboard API
 export const dashboardAPI = {
-    getStats: () => api.get('/dashboard/stats'),
-    getActivities: (params) => api.get('/dashboard/activities', { params }),
-    getSalesChart: (params) => api.get('/dashboard/sales-chart', { params })
+    getData: (params) => api.get('/dashboard/', { params }),
+    getRevenueChart: (params) => api.get('/dashboard/revenue-chart/', { params })
 }
 
 // Notifications API (Polling & Shared list)
