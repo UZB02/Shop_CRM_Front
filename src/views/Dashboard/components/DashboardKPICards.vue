@@ -1,8 +1,8 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
 
     <!-- ── 1. Revenue Card ── -->
-    <div class="enterprise-kpi group relative p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col gap-3">
+    <div class="enterprise-kpi group relative p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col gap-2 sm:gap-3">
       <div class="absolute -top-8 -right-8 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors pointer-events-none"></div>
       
       <!-- Header -->
@@ -55,7 +55,7 @@
     </div>
 
     <!-- ── 2. Profit Card ── -->
-    <div class="enterprise-kpi group relative p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col gap-3">
+    <div class="enterprise-kpi group relative p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col gap-2 sm:gap-3">
       <div class="absolute -top-8 -right-8 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors pointer-events-none"></div>
 
       <div class="flex items-center justify-between">
@@ -91,7 +91,7 @@
     </div>
 
     <!-- ── 3. Inventory Card ── -->
-    <div class="enterprise-kpi group relative p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col gap-3">
+    <div class="enterprise-kpi group relative p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col gap-2 sm:gap-3">
       <div class="absolute -top-8 -right-8 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl group-hover:bg-purple-500/10 transition-colors pointer-events-none"></div>
 
       <div class="flex items-center justify-between">
@@ -116,7 +116,7 @@
     </div>
 
     <!-- ── 4. Customers Card ── -->
-    <div class="enterprise-kpi group relative p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col gap-3">
+    <div class="enterprise-kpi group relative p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col gap-2 sm:gap-3">
       <div class="absolute -top-8 -right-8 w-24 h-24 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-colors pointer-events-none"></div>
 
       <div class="flex items-center justify-between">

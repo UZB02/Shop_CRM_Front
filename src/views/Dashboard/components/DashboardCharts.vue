@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
     <!-- Main Sales Chart (Overview mode) -->
-    <div v-if="mode === 'overview'" class="lg:col-span-3 p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col">
+    <div v-if="mode === 'overview'" class="lg:col-span-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col">
       <div class="flex items-center justify-between mb-4">
         <div>
           <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Savdo Dinamikasi</h3>
@@ -12,13 +12,16 @@
           <span class="text-[9px] font-black uppercase tracking-widest">Tushum</span>
         </div>
       </div>
-      <div class="flex-1 min-h-[300px] relative">
+      <div v-if="dailySales.length" class="flex-1 min-h-[300px] relative">
         <Chart type="line" :data="lineChartData" :options="lineChartOptions" class="h-full w-full" />
+      </div>
+      <div v-else class="flex-1 min-h-[300px] flex items-center justify-center bg-slate-50/50 dark:bg-white/5 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ma'lumot yuklanmoqda...</p>
       </div>
     </div>
 
     <!-- 3-Month Trend (Overview mode) -->
-    <div v-if="mode === 'overview' && trend3months.length" class="lg:col-span-3 p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div v-if="mode === 'overview' && trend3months.length" class="lg:col-span-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-4">
         <div>
           <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">3 Oylik Trend</h3>
@@ -31,7 +34,7 @@
     </div>
 
     <!-- Payment Breakdown (Sales mode) -->
-    <div v-if="mode === 'sales'" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col">
+    <div v-if="mode === 'sales'" class="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col">
       <div class="mb-4">
         <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">To'lov Taqsimoti</h3>
         <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mt-0.5">Kredit / Naqd / Karta</p>
@@ -58,7 +61,7 @@
     </div>
 
     <!-- Hourly Activity (Sales mode) -->
-    <div v-if="mode === 'sales'" class="lg:col-span-2 p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
+    <div v-if="mode === 'sales'" class="lg:col-span-2 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
       <div class="flex items-center justify-between mb-4">
         <div>
           <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Soatlik Faollik</h3>
@@ -66,13 +69,16 @@
         </div>
         <i class="pi pi-clock text-[10px] text-slate-300"></i>
       </div>
-      <div class="flex-1 min-h-[220px] w-full">
+      <div v-if="hourlyHeatmap.length" class="flex-1 min-h-[220px] w-full">
         <Chart type="bar" :data="hourlyData" :options="hourlyOptions" class="h-full w-full" />
+      </div>
+      <div v-else class="flex-1 min-h-[220px] flex items-center justify-center">
+        <p class="text-[9px] font-black text-slate-400 uppercase">Soatlik tahlil yuklanmoqda...</p>
       </div>
     </div>
 
     <!-- Expense Categories (Finance mode) -->
-    <div v-if="mode === 'finance'" class="lg:col-span-3 p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col lg:flex-row gap-8">
+    <div v-if="mode === 'finance'" class="lg:col-span-3 p-5 sm:p-8 rounded-2xl sm:rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col lg:flex-row gap-6 sm:gap-8">
       <div class="lg:w-1/3">
         <h3 class="text-lg font-black text-slate-800 dark:text-white uppercase tracking-tight mb-1">Xarajatlar Tahlili</h3>
         <p class="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mb-6">Kategoriyalar bo'yicha taqsimot</p>

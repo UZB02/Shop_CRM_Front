@@ -1,9 +1,9 @@
 <template>
   <div class="space-y-4">
     <!-- Net Profit Breakdown Card -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
       <!-- Gross Revenue -->
-      <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-3">
+      <div class="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 sm:gap-3">
         <div class="flex items-center justify-between">
           <span class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Yalpi Tushum</span>
           <div class="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
@@ -18,7 +18,7 @@
       </div>
 
       <!-- COGS -->
-      <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-3">
+      <div class="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 sm:gap-3">
         <div class="flex items-center justify-between">
           <span class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Tannarx (COGS)</span>
           <div class="w-8 h-8 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
@@ -33,7 +33,7 @@
       </div>
 
       <!-- Expenses -->
-      <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-3">
+      <div class="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 sm:gap-3">
         <div class="flex items-center justify-between">
           <span class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Xarajatlar</span>
           <div class="w-8 h-8 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500">
@@ -48,7 +48,7 @@
       </div>
 
       <!-- Net Profit -->
-      <div class="p-5 rounded-3xl bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 shadow-sm flex flex-col gap-3">
+      <div class="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 shadow-sm flex flex-col gap-2 sm:gap-3">
         <div class="flex items-center justify-between">
           <span class="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.2em]">Sof Foyda</span>
           <div class="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-white">
@@ -65,7 +65,7 @@
     <!-- Net Profit Formula Visual -->
     <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight mb-6">Sof Foyda Hisob-Kitobi</h3>
-      <div class="flex flex-wrap items-center justify-center gap-3 text-center">
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-center">
         <div class="flex flex-col gap-1">
           <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tushum</p>
           <p class="text-base font-black text-slate-800 dark:text-white">{{ formatPrice(sales.total_revenue) }}</p>
@@ -109,12 +109,12 @@
             <div class="w-24 shrink-0">
               <p class="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-tighter">{{ cat.name }}</p>
             </div>
-            <div class="flex-1 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div class="flex-1 h-1.5 sm:h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
               <div class="h-full bg-rose-500 rounded-full transition-all duration-1000" :style="{ width: cat.percent + '%' }"></div>
             </div>
-            <div class="text-right w-28 shrink-0">
-              <p class="text-[10px] font-black text-slate-800 dark:text-white">{{ formatPrice(cat.total) }}</p>
-              <p class="text-[8px] font-bold text-slate-400">{{ cat.percent }}%</p>
+            <div class="text-right w-20 sm:w-28 shrink-0">
+              <p class="text-[9px] sm:text-[10px] font-black text-slate-800 dark:text-white">{{ formatPrice(cat.total) }}</p>
+              <p class="text-[7px] sm:text-[8px] font-bold text-slate-400">{{ cat.percent }}%</p>
             </div>
           </div>
           <div v-if="!expenses.by_category?.length" class="text-center py-8 text-slate-400">
@@ -130,6 +130,9 @@
         <div v-if="expenses.by_category?.length" class="h-[200px] w-full">
           <Chart type="pie" :data="expensePieData" :options="pieOptions" class="h-full w-full" />
         </div>
+        <div v-else class="h-[200px] flex items-center justify-center text-slate-300">
+           <i class="pi pi-chart-pie text-4xl opacity-10"></i>
+        </div>
         <div class="mt-4 space-y-2 w-full">
           <div v-for="(cat, i) in expenses.by_category" :key="cat.category_id" class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full shrink-0" :style="{ backgroundColor: pieColors[i % pieColors.length] }"></div>
@@ -143,8 +146,11 @@
     <!-- 3-month expense trend -->
     <div v-if="expenses.trend_3months?.length" class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight mb-6">3 Oylik Xarajat Trendi</h3>
-      <div class="h-[200px]">
+      <div v-if="expenses.trend_3months?.length" class="h-[200px]">
         <Chart type="bar" :data="trendChartData" :options="trendOptions" class="h-full w-full" />
+      </div>
+      <div v-else class="h-[200px] flex items-center justify-center border border-dashed border-slate-100 dark:border-slate-800 rounded-2xl">
+        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Trend tahlili yuklanmoqda...</p>
       </div>
     </div>
   </div>

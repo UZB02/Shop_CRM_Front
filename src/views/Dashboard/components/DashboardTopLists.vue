@@ -1,7 +1,7 @@
 <template>
-  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
     <!-- Active Shifts (Sales Tab) -->
-    <div v-if="type === 'sales'" class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div v-if="type === 'sales'" class="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Ochiq Smenalar</h3>
         <div class="flex items-center gap-2">
@@ -36,7 +36,7 @@
     </div>
 
     <!-- Top Selling Products (Sales Tab) -->
-    <div v-if="type === 'sales'" class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div v-if="type === 'sales'" class="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Ommabop Mahsulotlar</h3>
         <span class="px-2 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase">Eng ko'p sotilgan</span>
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Top Profitable Products (Sales Tab) -->
-    <div v-if="type === 'sales'" class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div v-if="type === 'sales'" class="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Eng Foydali</h3>
         <span class="px-2 py-0.5 rounded-lg bg-blue-500/10 text-blue-500 text-[9px] font-black uppercase">Foyda bo'yicha</span>
@@ -80,7 +80,7 @@
     </div>
 
     <!-- Worker Ranking (Sales Tab) -->
-    <div v-if="type === 'sales'" class="xl:col-span-3 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div v-if="type === 'sales'" class="md:col-span-2 lg:col-span-3 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Sotuvchilar Reytingi</h3>
         <span v-if="workers.total_active_workers" class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ workers.total_active_workers }} ta faol</span>
@@ -134,7 +134,7 @@
     </div>
 
     <!-- Branch Ranking (Inventory Tab) -->
-    <div v-if="type === 'inventory'" class="xl:col-span-3 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div v-if="type === 'inventory'" class="md:col-span-2 lg:col-span-3 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Filiallar Samaradorligi</h3>
         <i class="pi pi-map-marker text-emerald-500"></i>
@@ -165,7 +165,7 @@
     </div>
 
     <!-- Suppliers (Finance Tab) -->
-    <div v-if="type === 'finance'" class="xl:col-span-3 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div v-if="type === 'finance'" class="md:col-span-2 lg:col-span-3 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Yetkazib Beruvchilar</h3>
         <p class="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em] px-3 py-1 rounded-full bg-rose-500/5 border border-rose-500/10">Jami Qarz: {{ formatPrice(suppliers.total_debt) }}</p>
@@ -187,7 +187,7 @@
     </div>
 
     <!-- VIP Customers (Customers Tab) -->
-    <div v-if="type === 'customers'" class="xl:col-span-3 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div v-if="type === 'customers'" class="md:col-span-2 lg:col-span-3 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">VIP Mijozlar</h3>
         <span class="px-2 py-0.5 rounded-lg bg-blue-500/10 text-blue-500 text-[9px] font-black uppercase">Xaridlar bo'yicha</span>
