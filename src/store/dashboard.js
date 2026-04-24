@@ -32,7 +32,8 @@ export const useDashboardStore = defineStore('dashboard', {
                 limit: 10
             },
             error: null,
-            lastUpdated: null
+            lastUpdated: null,
+            monthlyChart: null
         }
     },
     
@@ -54,13 +55,24 @@ export const useDashboardStore = defineStore('dashboard', {
             this.loading = true
             this.error = null
             try {
-                // Ensure date_from and date_to are strings
-                const params = { ...this.filters }
+                // Filter out null or undefined params to keep URL clean
+                const params = Object.fromEntries(
+                    Object.entries(this.filters).filter(([_, v]) => v !== null && v !== undefined)
+                )
                 if (params.date_from instanceof Date) params.date_from = params.date_from.toISOString().split('T')[0]
                 if (params.date_to instanceof Date) params.date_to = params.date_to.toISOString().split('T')[0]
 
-                const response = await dashboardAPI.getData(params)
-                this.data = response.data
+                // Main dashboard + monthly chart in parallel
+                const [dashRes, chartRes] = await Promise.all([
+                    dashboardAPI.getData(params),
+                    dashboardAPI.getRevenueChart({
+                        year: new Date(params.date_to || new Date()).getFullYear(),
+                        ...(params.branch ? { branch: params.branch } : {})
+                    })
+                ])
+
+                this.data = dashRes.data
+                this.monthlyChart = chartRes.data
                 this.lastUpdated = new Date()
                 return { success: true }
             } catch (err) {
@@ -69,6 +81,21 @@ export const useDashboardStore = defineStore('dashboard', {
                 return { success: false, error: this.error }
             } finally {
                 this.loading = false
+            }
+        },
+
+        // Lightweight polling: only refresh current_smena (Redis cache 5 min)
+        async fetchCurrentSmena() {
+            try {
+                const params = Object.fromEntries(
+                    Object.entries(this.filters).filter(([_, v]) => v !== null && v !== undefined)
+                )
+                const res = await dashboardAPI.getData({ ...params, _smena_only: 1 })
+                if (this.data && res.data?.current_smena) {
+                    this.data.current_smena = res.data.current_smena
+                }
+            } catch (err) {
+                console.warn('Smena polling failed:', err)
             }
         },
 

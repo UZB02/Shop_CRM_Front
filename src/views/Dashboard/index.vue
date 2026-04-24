@@ -5,6 +5,7 @@
       :loading="dashboardStore.loading"
       :filters="dashboardStore.filters"
       :branches="dashboardStore.branches"
+      :period="dashboardStore.period"
       @refresh="refreshData"
       @update:filters="onFilterUpdate"
       @reset="dashboardStore.resetFilters"
@@ -15,6 +16,9 @@
       :tabs="tabs"
       v-model="activeTab"
       :net-profit="dashboardStore.expenses.net_profit || 0"
+      :sales-count="dashboardStore.sales.count || 0"
+      :vs-prev="dashboardStore.sales.vs_prev_period"
+      :smena-count="dashboardStore.currentSmena.open_count || 0"
     />
 
     <!-- Main Content Area -->
@@ -30,66 +34,105 @@
     </div>
 
     <div v-else class="space-y-4">
-      <!-- ── Tab Content: Overview (Boshqaruv) ─────────────────── -->
-      <div v-if="activeTab === 'overview'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <!-- ── Tab: Overview (Boshqaruv) ─────────────────── -->
+      <div v-if="activeTab === 'overview'" class="space-y-4 animate-in">
+        <!-- KPI Cards — API: sales, products, customers, expenses, workers -->
         <DashboardKPICards 
           :sales="dashboardStore.sales"
           :products="dashboardStore.products"
           :customers="dashboardStore.customers"
           :expenses="dashboardStore.expenses"
+          :workers="dashboardStore.workers"
         />
 
+        <!-- Daily Sales Trend — API: chart_data.daily_sales -->
         <DashboardCharts 
-          :daily-sales="dashboardStore.chartData.daily_sales"
-          :breakdown="dashboardStore.chartData.payment_breakdown"
-          :hourly-heatmap="dashboardStore.chartData.hourly_heatmap"
-          :total-revenue="dashboardStore.sales.total_revenue"
+          :daily-sales="dashboardStore.chartData.daily_sales || []"
+          :total-revenue="dashboardStore.sales.total_revenue || 0"
+          :trend-3months="dashboardStore.sales.trend_3months || []"
+          mode="overview"
         />
-        
-        <DashboardAlerts 
-          :low-stock="dashboardStore.products.low_stock"
-          :current-smena="dashboardStore.currentSmena"
+
+        <!-- Monthly Revenue Chart — API: /dashboard/revenue-chart/ -->
+        <DashboardMonthlyChart 
+          v-if="dashboardStore.monthlyChart"
+          :chart-data="dashboardStore.monthlyChart"
         />
       </div>
 
-      <!-- ── Tab Content: Sales (Savdolar) ─────────────────────── -->
-      <div v-else-if="activeTab === 'sales'" class="animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <!-- ── Tab: Sales (Savdolar) ─────────────────────── -->
+      <div v-else-if="activeTab === 'sales'" class="space-y-4 animate-in">
+        <!-- Payment breakdown + hourly heatmap — API: chart_data -->
+        <DashboardCharts 
+          :breakdown="dashboardStore.chartData.payment_breakdown || {}"
+          :hourly-heatmap="dashboardStore.chartData.hourly_heatmap || []"
+          :total-revenue="dashboardStore.sales.total_revenue || 0"
+          mode="sales"
+        />
+
+        <!-- Top products + workers ranking + live smenas — API: products, workers, current_smena -->
         <DashboardTopLists 
           :products="dashboardStore.products"
-          :customers="dashboardStore.customers"
           :workers="dashboardStore.workers"
+          :current-smena="dashboardStore.currentSmena"
           type="sales"
         />
       </div>
 
-      <!-- ── Tab Content: Inventory (Ombor) ────────────────────── -->
-      <div v-else-if="activeTab === 'inventory'" class="animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <!-- ── Tab: Inventory (Ombor) ────────────────────── -->
+      <div v-else-if="activeTab === 'inventory'" class="space-y-4 animate-in">
+        <!-- Low stock alerts — API: products.low_stock -->
         <DashboardAlerts 
-          :low-stock="dashboardStore.products.low_stock"
-          :current-smena="dashboardStore.currentSmena"
+          :low-stock="dashboardStore.products.low_stock || []"
+          :low-stock-count="dashboardStore.products.low_stock_count || 0"
+          :warehouse-value="dashboardStore.products.warehouse_value || 0"
+          :wastage-total="dashboardStore.products.wastage_total || 0"
+        />
+        
+        <!-- Branch rankings — API: branches -->
+        <DashboardTopLists 
+          :branches="dashboardStore.branches"
+          type="inventory"
         />
       </div>
 
-      <!-- ── Tab Content: Customers (Mijozlar) ─────────────────── -->
-      <div v-else-if="activeTab === 'customers'" class="animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <!-- ── Tab: Customers (Mijozlar) ─────────────────── -->
+      <div v-else-if="activeTab === 'customers'" class="animate-in">
+        <!-- Top buyers — API: customers.top_buyers -->
         <DashboardTopLists 
-          :products="dashboardStore.products"
           :customers="dashboardStore.customers"
-          :workers="dashboardStore.workers"
           type="customers"
+        />
+      </div>
+
+      <!-- ── Tab: Finance (Moliya) ─────────────────────── -->
+      <div v-else-if="activeTab === 'finance'" class="space-y-4 animate-in">
+        <!-- Net profit breakdown + expense categories pie — API: expenses -->
+        <DashboardFinance :expenses="dashboardStore.expenses" :sales="dashboardStore.sales" />
+        
+        <!-- Suppliers debt list — API: suppliers (filter-independent) -->
+        <DashboardTopLists 
+          :suppliers="dashboardStore.suppliers"
+          type="finance"
         />
       </div>
     </div>
 
-    <!-- Footer Stats -->
-    <div v-if="dashboardStore.data" class="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 py-4 border-t border-slate-100 dark:border-slate-800">
+    <!-- Footer: last updated time -->
+    <div v-if="dashboardStore.data" class="mt-6 flex flex-col md:flex-row items-center justify-between gap-4 py-4 border-t border-slate-100 dark:border-slate-800">
       <div class="flex items-center gap-2">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
         <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Tizim holati: Barcha modullar ishlamoqda</p>
       </div>
-      <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-        So'nggi yangilanish: {{ formatTime(dashboardStore.lastUpdated) }}
-      </p>
+      <div class="flex items-center gap-4">
+        <div v-if="smenaPolling" class="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 uppercase tracking-widest">
+          <span class="w-1 h-1 rounded-full bg-emerald-500 animate-ping"></span>
+          Smena live
+        </div>
+        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+          So'nggi yangilanish: {{ formatTime(dashboardStore.lastUpdated) }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -99,21 +142,28 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useDashboardStore } from '@/store/dashboard'
 
 // Components
-import DashboardHeader from './components/DashboardHeader.vue'
-import DashboardStatsTabs from './components/DashboardStatsTabs.vue'
-import DashboardKPICards from './components/DashboardKPICards.vue'
-import DashboardCharts   from './components/DashboardCharts.vue'
-import DashboardAlerts   from './components/DashboardAlerts.vue'
-import DashboardTopLists from './components/DashboardTopLists.vue'
+import DashboardHeader       from './components/DashboardHeader.vue'
+import DashboardStatsTabs    from './components/DashboardStatsTabs.vue'
+import DashboardKPICards     from './components/DashboardKPICards.vue'
+import DashboardCharts       from './components/DashboardCharts.vue'
+import DashboardAlerts       from './components/DashboardAlerts.vue'
+import DashboardTopLists     from './components/DashboardTopLists.vue'
+import DashboardMonthlyChart from './components/DashboardMonthlyChart.vue'
+import DashboardFinance      from './components/DashboardFinance.vue'
 
 const dashboardStore = useDashboardStore()
-let pollingInterval = null
+
+// Polling: only current_smena refreshes every 5 min (not entire dashboard)
+// Full dashboard only refreshes on filter change or manual refresh
+let smenaPolling = ref(false)
+let smenaInterval = null
 
 const tabs = [
   { id: 'overview',  label: 'Boshqaruv', icon: 'pi pi-chart-bar' },
   { id: 'sales',     label: 'Savdolar',   icon: 'pi pi-shopping-cart' },
-  { id: 'inventory', label: 'Ombor',     icon: 'pi pi-box' },
-  { id: 'customers', label: 'Mijozlar',   icon: 'pi pi-users' }
+  { id: 'inventory', label: 'Ombor',      icon: 'pi pi-box' },
+  { id: 'customers', label: 'Mijozlar',   icon: 'pi pi-users' },
+  { id: 'finance',   label: 'Moliya',     icon: 'pi pi-dollar' }
 ]
 const activeTab = ref('overview')
 
@@ -128,31 +178,32 @@ const refreshData = () => {
 const formatTime = (date) => {
   if (!date) return '...'
   return new Intl.DateTimeFormat('uz-UZ', { 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit' 
+    hour: '2-digit', minute: '2-digit', second: '2-digit' 
   }).format(date)
 }
 
 onMounted(async () => {
   await dashboardStore.fetchDashboard()
   
-  pollingInterval = setInterval(() => {
-    dashboardStore.fetchDashboard()
+  // Only poll current_smena every 5 minutes (lightweight), not the full dashboard
+  smenaPolling.value = true
+  smenaInterval = setInterval(() => {
+    dashboardStore.fetchCurrentSmena()
   }, 5 * 60 * 1000)
 })
 
 onUnmounted(() => {
-  if (pollingInterval) clearInterval(pollingInterval)
+  smenaPolling.value = false
+  if (smenaInterval) clearInterval(smenaInterval)
 })
 </script>
 
 <style scoped>
 .animate-in {
-  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 </style>

@@ -8,11 +8,16 @@
         </div>
         <div>
           <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight leading-tight">Boshqaruv Markazi</h1>
-          <div class="flex items-center gap-2 mt-1">
-            <div v-if="loading" class="w-3 h-3 rounded-full border-2 border-emerald-500/20 border-t-emerald-500 animate-spin"></div>
-            <div v-else class="flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/5 text-emerald-500 border border-emerald-500/10 dark:bg-emerald-500/10">
-               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-               <span class="text-[9px] font-black uppercase tracking-[0.2em]">Monitoring Faol</span>
+          <div class="flex items-center gap-3 mt-1">
+            <div v-if="loading" class="w-2.5 h-2.5 rounded-full border-2 border-emerald-500/20 border-t-emerald-500 animate-spin"></div>
+            <div v-else class="flex items-center gap-2">
+               <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/5 text-emerald-500 border border-emerald-500/10 dark:bg-emerald-500/10">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+                  <span class="text-[9px] font-black uppercase tracking-[0.2em]">Monitoring Faol</span>
+               </div>
+               <span v-if="periodText" class="text-[9px] font-black text-slate-400 uppercase tracking-widest border-l border-slate-200 dark:border-slate-800 pl-3">
+                 {{ periodText }}
+               </span>
             </div>
           </div>
         </div>
@@ -88,7 +93,8 @@ import Select from 'primevue/select'
 const props = defineProps({
   loading: Boolean,
   filters: { type: Object, required: true },
-  branches: { type: Array, default: () => [] }
+  branches: { type: Array, default: () => [] },
+  period: { type: Object, default: () => ({}) }
 })
 
 const emit = defineEmits(['refresh', 'update:filters', 'reset'])
@@ -98,6 +104,18 @@ const selectedBranch = ref(props.filters.branch)
 
 const hasFilters = computed(() => {
   return props.filters.branch !== null || !!props.filters.category || !!props.filters.worker
+})
+
+const periodText = computed(() => {
+  if (!props.period?.date_from || !props.period?.date_to) return null
+  
+  const formatDate = (dateStr) => {
+    const d = new Date(dateStr)
+    const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr']
+    return `${d.getDate()} ${months[d.getMonth()]}`
+  }
+
+  return `${formatDate(props.period.date_from)} — ${formatDate(props.period.date_to)} (${props.period.days} kun)`
 })
 
 const formatDate = (date) => {
