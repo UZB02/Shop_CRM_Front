@@ -617,7 +617,7 @@
         },
         "wastage": {
             "title": "Chiqitlar",
-            "create_title": "Yangi chiqit yaratish",
+            "create_title": "Yangi chiqit chiqarish",
             "detail_title": "Chiqit tafsilotlari",
             "reason_label": "Chiqit sababi",
             "reason_placeholder": "Sababni tanlang",

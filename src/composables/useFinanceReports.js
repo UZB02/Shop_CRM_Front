@@ -67,8 +67,9 @@ export default function useFinanceReports() {
                 date_from: filters.date_from,
                 date_to: filters.date_to,
                 branch: filters.branch,
+                category: filters.category,
                 search: filters.search,
-                group_by: filters.group_by || 'month'
+                group_by: filters.group_by || 'day'
             })
             reports.expenses = res.data
         } catch (error) {

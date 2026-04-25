@@ -106,9 +106,9 @@
                         <button 
                           @click="openWastageModal(item)"
                           v-tooltip.left="$t('warehouse.wastage.create_title')"
-                          class="w-7 h-7 rounded-lg bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 transition-all flex items-center justify-center active:scale-90 opacity-0 group-hover:opacity-100"
+                          class="w-7 h-7 rounded-lg bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 transition-all flex items-center justify-center active:scale-90"
                         >
-                          <i class="pi pi-trash text-[9px]"></i>
+                          <i class="pi pi-exclamation-circle text-[9px]"></i>
                         </button>
                       </td>
                     </tr>

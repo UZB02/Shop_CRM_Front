@@ -611,7 +611,7 @@
     },
     "wastage": {
       "title": "Чиқитлар",
-      "create_title": "Янги чиқит яратиш",
+      "create_title": "Янги чиқит чиқариш",
       "detail_title": "Чиқит тафсилотлари",
       "reason_label": "Чиқит сабаби",
       "reason_placeholder": "Сабабни танланг",

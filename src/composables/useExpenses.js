@@ -116,7 +116,17 @@ export default function useExpenses() {
             if (filters.value.branch) params.branch = filters.value.branch
             if (filters.value.category) params.category = filters.value.category
             if (filters.value.smena) params.smena = filters.value.smena
-            if (filters.value.date) params.date = filters.value.date
+            
+            if (filters.value.date) {
+                if (Array.isArray(filters.value.date)) {
+                    const [start, end] = filters.value.date
+                    if (start) params.date_from = new Date(start).toLocaleDateString('en-CA')
+                    if (end) params.date_to = new Date(end).toLocaleDateString('en-CA')
+                } else {
+                    params.date = new Date(filters.value.date).toLocaleDateString('en-CA')
+                }
+            }
+            
             if (filters.value.search) params.search = filters.value.search
 
             const res = await expensesAPI.getAll(params)
