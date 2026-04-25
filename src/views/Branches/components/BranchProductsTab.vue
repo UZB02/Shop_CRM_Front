@@ -19,79 +19,83 @@
     </div>
 
     <!-- Results Card -->
-    <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden min-h-[300px]">
-      <div v-if="!filteredProducts?.length" class="flex flex-col items-center justify-center py-20 opacity-40">
-        <i class="pi pi-box text-4xl mb-4 text-slate-300"></i>
-        <p v-if="products?.length" class="text-[10px] font-black uppercase tracking-widest">{{ $t('common.no_results') }}</p>
-        <p v-else class="text-[10px] font-black uppercase tracking-widest">{{ $t('stores.branch_detail.no_products') }}</p>
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm min-h-[300px]">
+      <div v-if="!filteredProducts?.length" class="flex flex-col items-center justify-center py-20 opacity-40 text-center">
+        <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mb-3">
+          <i class="pi pi-inbox text-slate-400 text-lg"></i>
+        </div>
+        <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">
+           {{ products?.length ? $t('common.no_results') : $t('stores.branch_detail.no_products') }}
+        </p>
       </div>
       <div v-else class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
+        <table class="w-full text-left min-w-[700px]">
           <thead>
-            <tr class="bg-slate-50/50 dark:bg-slate-800/50">
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('products.col_product') }}</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('products.form.category') }}</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
-              <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-right">{{ $t('products.col_price') }}</th>
-              <th v-if="settingsStore.isWastageEnabled" class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 w-12 text-center">{{ $t('common.actions') }}</th>
+            <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest w-10">№</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.col_product') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.form.barcode') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.col_price') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
-            <tr v-for="product in filteredProducts" :key="product.id" class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center overflow-hidden shrink-0 shadow-sm border border-slate-100 dark:border-slate-800">
+            <tr v-for="(product, index) in filteredProducts" :key="product.id" class="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-colors group">
+              <td class="px-4 py-2 text-[10px] text-slate-400">{{ index + 1 }}</td>
+              <td class="px-4 py-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                     <img v-if="product.image" :src="product.image" class="w-full h-full object-cover" />
-                    <i v-else class="pi pi-image text-slate-300 text-xs"></i>
+                    <i v-else class="pi pi-image text-slate-300 text-[10px]"></i>
                   </div>
-                  <div class="min-w-0">
-                    <p class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight truncate">{{ product.name }}</p>
-                    <div class="flex items-center gap-2">
-                      <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
-                        {{ product.barcode || $t('warehouse.bulk.no_barcode') }}
-                      </p>
-                      <button 
-                        v-if="product.barcode_image_url"
-                        @click="showBarcode(product)"
-                        class="w-5 h-5 rounded-md bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
-                        v-tooltip.right="'Shtrix-kodni ko\'rish'"
-                      >
-                        <i class="pi pi-barcode text-[10px]"></i>
-                      </button>
-                    </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors truncate max-w-[180px]">
+                      {{ product.name }}
+                    </span>
+                    <span class="text-[9px] text-slate-400 uppercase tracking-widest">{{ product.category_name }}</span>
                   </div>
                 </div>
               </td>
-              <td class="px-6 py-4">
-                <div class="flex flex-col">
-                  <span class="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">
-                    {{ product.category_name }}
-                  </span>
-                  <span v-if="product.subcategory_name" class="text-[9px] font-bold text-slate-400">
-                    {{ product.subcategory_name }}
-                  </span>
+              <td class="px-4 py-2">
+                <div class="flex items-center gap-2">
+                  <code class="text-[10px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-700">
+                    {{ product.barcode || '—' }}
+                  </code>
+                  <button 
+                    v-if="product.barcode"
+                    @click="showBarcode(product)"
+                    class="w-5 h-5 rounded-md bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+                    v-tooltip.right="$t('products.view_barcode') || 'Shtrix-kodni ko\'rish'"
+                  >
+                    <i class="pi pi-barcode text-[10px]"></i>
+                  </button>
                 </div>
               </td>
-              <td class="px-6 py-4 text-center">
-                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border"
-                     :class="product.quantity > 10 ? 'bg-emerald-500/5 border-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/5 border-rose-500/10 text-rose-600 dark:text-rose-400'">
-                  <span class="text-[11px] font-black tracking-tighter">{{ product.quantity }}</span>
-                  <span class="text-[8px] font-bold uppercase tracking-widest opacity-60">{{ $t('common.pcs') || 'dona' }}</span>
-                </div>
-              </td>
-              <td class="px-6 py-4 text-right">
-                <span class="text-xs font-black text-slate-800 dark:text-slate-200 tracking-tight">
-                  {{ Number(product.sale_price).toLocaleString() }} <span class="text-[9px] opacity-40 uppercase">{{ product.currency_code || 'UZS' }}</span>
+              <td class="px-4 py-2 text-center text-[10px]">
+                <span 
+                  class="inline-flex items-center px-1.5 py-0.5 rounded-md font-bold"
+                  :class="product.quantity > 10 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'"
+                >
+                  {{ product.quantity }} <span class="ml-1 opacity-60 font-medium">{{ $t('common.pcs') || 'dona' }}</span>
                 </span>
               </td>
-              <td v-if="settingsStore.isWastageEnabled" class="px-6 py-4 text-center">
-                <button 
-                  @click="$emit('create-wastage', product)"
-                  v-tooltip.left="$t('warehouse.wastage.create_title')"
-                  class="w-8 h-8 rounded-xl bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 hover:shadow-lg hover:shadow-rose-500/10 transition-all flex items-center justify-center active:scale-90"
-                >
-                  <i class="pi pi-trash text-[10px]"></i>
-                </button>
+              <td class="px-4 py-2 text-right">
+                <span class="text-xs font-black text-slate-800 dark:text-slate-200 tracking-tight">
+                  {{ Number(product.sale_price).toLocaleString() }}
+                </span>
+              </td>
+              <td class="px-4 py-2 text-center">
+                <div class="flex items-center justify-center gap-1.5">
+                  <button 
+                    v-if="settingsStore.isWastageEnabled"
+                    @click="$emit('create-wastage', product)"
+                    v-tooltip.left="$t('warehouse.wastage.create_title')"
+                    class="w-7 h-7 rounded-lg bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 transition-all flex items-center justify-center active:scale-90"
+                  >
+                    <i class="pi pi-exclamation-circle text-[9px]"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>

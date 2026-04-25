@@ -76,6 +76,7 @@
         <PosCatalog 
           ref="catalogRef"
           :cart="cart"
+          :active-shift="activeShift"
           @add-to-cart="addToCart"
           @focus-barcode="focusScanning"
           :external-search="searchQueryGlobal"

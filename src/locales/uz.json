@@ -2,6 +2,12 @@
     "branches": {
         "title": "Filiallar"
     },
+    "validation": {
+        "required": "Ushbu maydonni to'ldirish shart",
+        "invalid_email": "Elektron pochta manzili noto'g'ri",
+        "min": "Minimal qiymat: {min}",
+        "max": "Maksimal qiymat: {max}"
+    },
     "common": {
         "all": "Barchasi",
         "loading": "Yuklanmoqda...",
@@ -688,6 +694,7 @@
         "col_inventory": "Qoldiq",
         "col_price": "Sotish bahosi",
         "col_actions": "Boshqaruv",
+        "view_barcode": "Shtrix-kodni ko'rish",
         "not_found": "Ma'lumotlar topilmadi",
         "edit": "Tahrirlash",
         "delete": "O'chirish",

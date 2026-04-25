@@ -116,7 +116,7 @@ import { productsAPI, categoriesAPI, branchesAPI } from '@/services/api'
 import { useAuthStore } from '@/store/auth'
 import { useSettingsStore } from '@/store/settings'
 
-const props = defineProps(['externalSearch', 'cart'])
+const props = defineProps(['externalSearch', 'cart', 'activeShift'])
 const emit = defineEmits(['add-to-cart', 'focus-barcode'])
 
 const authStore = useAuthStore()
@@ -169,8 +169,11 @@ const fetchCategories = async () => {
 }
 
 const fetchProducts = async (search = '', categoryId = 'all', subcategoryId = 'all') => {
-  const branchId = authStore.user?.branch_id
-  if (!branchId) return
+  const branchId = props.activeShift?.branch || authStore.user?.branch_id || authStore.user?.worker?.branch_id
+  if (!branchId) {
+    console.warn('POS Catalog: No branchId found yet.')
+    return
+  }
   
   loading.value = true
   try {
@@ -201,6 +204,19 @@ watch(() => props.externalSearch, (newVal) => {
 watch([selectedCategoryId, selectedSubcategoryId], ([newCatId, newSubId]) => {
   fetchProducts(props.externalSearch, newCatId, newSubId)
 })
+
+// Watch for late arrivers: branch info can sometimes load after mount
+watch(() => props.activeShift, (newShift) => {
+  if (newShift?.branch && products.value.length === 0) {
+    fetchProducts()
+  }
+}, { immediate: true })
+
+watch(() => authStore.user, (newUser) => {
+  if (newUser?.branch_id && products.value.length === 0) {
+    fetchProducts()
+  }
+}, { deep: true })
 
 onMounted(async () => {
   await fetchCategories()

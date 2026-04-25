@@ -72,7 +72,10 @@
                 pt:input:class="!bg-transparent !border-none !shadow-none !text-[15px] !font-black !h-full !pl-12 !pr-4 !w-full !outline-none !text-slate-800 dark:!text-slate-100"
               />
             </div>
-            <small v-if="submitted && !form.quantity" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">{{ $t('validation.required') }}</small>
+            <small v-if="submitted && !form.quantity" class="text-[10px] font-medium text-rose-500 ml-1 mt-1 flex items-center gap-1 animate-fade-in">
+              <i class="pi pi-exclamation-triangle text-[8px]"></i>
+              {{ $t('validation.required') }}
+            </small>
           </div>
 
           <!-- Reason -->
@@ -93,7 +96,10 @@
                 pt:label:class="!pl-12 !pr-4 !text-[13px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
               />
             </div>
-            <small v-if="submitted && !form.reason" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">{{ $t('validation.required') }}</small>
+            <small v-if="submitted && !form.reason" class="text-[10px] font-medium text-rose-500 ml-1 mt-1 flex items-center gap-1 animate-fade-in">
+              <i class="pi pi-exclamation-triangle text-[8px]"></i>
+              {{ $t('validation.required') }}
+            </small>
           </div>
 
           <!-- Date -->
@@ -318,5 +324,13 @@ watch(() => props.visible, (val) => {
 
 :deep(.p-select-dropdown) {
   width: 2.5rem !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
 }
 </style>

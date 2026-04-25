@@ -63,7 +63,7 @@
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.col_price') }}</th>
                       <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.date') }}</th>
-                      <th v-if="settingsStore.isWastageEnabled" class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
+                      <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -79,9 +79,19 @@
                         </span>
                       </td>
                       <td class="px-4 py-2">
-                        <code class="text-[10px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-700">
-                          {{ item.barcode || '—' }}
-                        </code>
+                        <div class="flex items-center gap-2">
+                          <code class="text-[10px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-700">
+                            {{ item.barcode || '—' }}
+                          </code>
+                          <button 
+                            v-if="item.barcode"
+                            @click="showBarcode(item)"
+                            class="w-5 h-5 rounded-md bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+                            v-tooltip.right="$t('products.view_barcode') || 'Shtrix-kodni ko\'rish'"
+                          >
+                            <i class="pi pi-barcode text-[10px]"></i>
+                          </button>
+                        </div>
                       </td>
                       <td class="px-4 py-2 text-right">
                         <span 
@@ -102,14 +112,17 @@
                       <td class="px-4 py-2 text-right text-[10px] text-slate-400">
                         {{ item.added_on?.split('|')[0]?.trim() || '—' }}
                       </td>
-                      <td v-if="settingsStore.isWastageEnabled" class="px-4 py-2 text-center">
-                        <button 
-                          @click="openWastageModal(item)"
-                          v-tooltip.left="$t('warehouse.wastage.create_title')"
-                          class="w-7 h-7 rounded-lg bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 transition-all flex items-center justify-center active:scale-90"
-                        >
-                          <i class="pi pi-exclamation-circle text-[9px]"></i>
-                        </button>
+                      <td class="px-4 py-2 text-center">
+                        <div class="flex items-center justify-center gap-1.5">
+                          <button 
+                            v-if="settingsStore.isWastageEnabled"
+                            @click="openWastageModal(item)"
+                            v-tooltip.left="$t('warehouse.wastage.create_title')"
+                            class="w-7 h-7 rounded-lg bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 transition-all flex items-center justify-center active:scale-90"
+                          >
+                            <i class="pi pi-exclamation-circle text-[9px]"></i>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -256,6 +269,40 @@
       location-type="warehouse"
       @saved="onWastageSaved"
     />
+
+    <!-- Barcode Dialog -->
+    <Dialog 
+      v-model:visible="barcodeVisible" 
+      modal 
+      class="!bg-white dark:!bg-slate-900 !rounded-[2rem] !border-none !shadow-2xl" 
+      header=" "
+      :showHeader="false"
+      pt:mask:class="backdrop-blur-sm bg-black/40"
+    >
+      <div v-if="selectedProduct" class="p-8 flex flex-col items-center gap-6 min-w-[320px]">
+        <div class="w-full flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div class="text-left">
+            <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">{{ selectedProduct.product_name || selectedProduct.name }}</h3>
+            <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em]">{{ selectedProduct.barcode }}</p>
+          </div>
+          <button @click="barcodeVisible = false" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
+            <i class="pi pi-times text-[10px]"></i>
+          </button>
+        </div>
+        
+        <div class="bg-white p-6 rounded-2xl shadow-inner border border-slate-100">
+          <img :src="selectedProduct.barcode_image_url" class="max-w-full h-auto" />
+        </div>
+        
+        <button 
+          @click="downloadBarcode"
+          class="w-full py-3 rounded-xl bg-slate-900 border-none text-white text-[10px] font-black uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+        >
+          <i class="pi pi-download"></i>
+          {{ $t('common.download') || 'Yuklab olish' }} (PNG)
+        </button>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -263,6 +310,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { warehousesAPI } from '@/services/api'
+import Dialog from 'primevue/dialog'
 import { useSettingsStore } from '@/store/settings'
 import TablePagination from '@/components/TablePagination.vue'
 import TransfersTab from '@/components/Transfers/TransfersTab.vue'
@@ -280,6 +328,33 @@ const warehouse = ref(null)
 const loading = ref(true)
 const tabLoading = ref(false)
 const activeTab = ref('products')
+
+const barcodeVisible = ref(false)
+const selectedProduct = ref(null)
+
+const showBarcode = (product) => {
+  selectedProduct.value = product
+  barcodeVisible.value = true
+}
+
+const downloadBarcode = async () => {
+  if (!selectedProduct.value?.barcode_image_url) return
+  
+  try {
+    const response = await fetch(selectedProduct.value.barcode_image_url)
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `barcode_${selectedProduct.value.barcode || selectedProduct.value.id}.png`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+  } catch (error) {
+    console.error('Download error:', error)
+  }
+}
 
 // Refresh only the relevant tab when changed
 watch(activeTab, (tab) => {
