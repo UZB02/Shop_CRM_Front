@@ -5,14 +5,13 @@ const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL ||
     "https://shopcrmsystem-production.up.railway.app/api/v1"
 
-// In-memory token store — primary source of truth for the active session.
-// localStorage is only used as a fallback on page refresh (persisted by auth store).
-// NOTE: HttpOnly cookies (set by the backend) would fully eliminate XSS token exposure,
-// but that requires backend changes. This is the best mitigation achievable on the frontend.
 let _memToken = null
 
 export const setApiToken = (token) => { _memToken = token }
 export const clearApiToken = () => { _memToken = null }
+
+let isRefreshing = false
+let refreshQueue = []
 
 // Create axios instance
 const api = axios.create({
@@ -25,7 +24,7 @@ api.interceptors.request.use(
         // Start global loading bar
         if (!config.silent && typeof window !== 'undefined' && window.startLoader) window.startLoader()
 
-        const token = _memToken || localStorage.getItem('token')
+        const token = _memToken || localStorage.getItem('access')
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
         }
@@ -57,24 +56,58 @@ api.interceptors.response.use(
         console.error(`❌ API ERROR [${error.config?.method?.toUpperCase()}] ${error.config?.url}:`, error.response?.data || error.message)
         
         const status = error.response?.status
+        const original = error.config
 
-        if (status === 401) {
-            // Token expired or invalid — clear session data
-            clearApiToken()
-            const preservedKeys = ['theme', 'lang']
-            Object.keys(localStorage).forEach(key => {
-                if (!preservedKeys.includes(key)) {
-                    localStorage.removeItem(key)
-                }
-            })
-            
-            // Dynamic import to avoid circular dependency
-            const router = (await import('@/router')).default
-            router.push({ name: 'login' })
+        if (status === 401 && !original._retry) {
+            original._retry = true
+
+            if (isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    refreshQueue.push({ resolve, reject })
+                }).then(token => {
+                    original.headers.Authorization = `Bearer ${token}`
+                    return api(original)
+                })
+            }
+
+            isRefreshing = true
+
+            try {
+                const refresh = localStorage.getItem('refresh')
+                if (!refresh) throw new Error('No refresh token')
+
+                const res = await axios.post(`${API_BASE_URL}/auth/token/refresh/`, { refresh })
+                const newAccess = res.data.access
+                const newRefresh = res.data.refresh
+
+                localStorage.setItem('access', newAccess)
+                if (newRefresh) localStorage.setItem('refresh', newRefresh)
+                setApiToken(newAccess)
+
+                refreshQueue.forEach(p => p.resolve(newAccess))
+                refreshQueue = []
+                original.headers.Authorization = `Bearer ${newAccess}`
+                return api(original)
+            } catch (refreshError) {
+                refreshQueue.forEach(p => p.reject(refreshError))
+                refreshQueue = []
+
+                clearApiToken()
+                const preservedKeys = ['theme', 'lang']
+                Object.keys(localStorage).forEach(key => {
+                    if (!preservedKeys.includes(key)) localStorage.removeItem(key)
+                })
+
+                const router = (await import('@/router')).default
+                router.push({ name: 'login' })
+                return Promise.reject(refreshError)
+            } finally {
+                isRefreshing = false
+            }
         } else if (status === 429) {
-            console.log('🔘 Dispatching rate-limit-error event');
-            window.dispatchEvent(new CustomEvent('rate-limit-error', { 
-                detail: error.response?.data?.detail || "So'rovlar soni limitdan oshdi. Biroz kuting va qayta urinib ko'ring." 
+            console.log('🔘 Dispatching rate-limit-error event')
+            window.dispatchEvent(new CustomEvent('rate-limit-error', {
+                detail: error.response?.data?.detail || "So'rovlar soni limitdan oshdi. Biroz kuting va qayta urinib ko'ring."
             }))
         }
         
@@ -85,6 +118,8 @@ api.interceptors.response.use(
 // Auth API
 export const authAPI = {
     login: (credentials) => api.post('/auth/login/', credentials),
+    logout: (data) => api.post('/auth/logout/', data),
+    tokenRefresh: (data) => axios.post(`${API_BASE_URL}/auth/token/refresh/`, data),
     register: (userData) => api.post('/auth/register/', userData),
     getMe: () => api.get('/auth/me'),
     changePassword: (data) => api.post('/auth/change-password/', data)

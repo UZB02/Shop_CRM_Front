@@ -44,7 +44,7 @@ function buildPermissions(userData) {
 
 export const useAuthStore = defineStore('auth', {
     state: () => {
-        const savedToken = localStorage.getItem('token')
+        const savedToken = localStorage.getItem('access')
         if (savedToken) setApiToken(savedToken)
 
         // Bootstrap permissions from localStorage carefully
@@ -68,6 +68,7 @@ export const useAuthStore = defineStore('auth', {
                 const response = await authAPI.login(credentials)
                 const data = response.data
                 const token = data.access || data.token || data.access_token
+                const refreshToken = data.refresh
 
                 if (!token) throw new Error('Token topilmadi')
 
@@ -80,7 +81,8 @@ export const useAuthStore = defineStore('auth', {
                 this.sessionVerified = true
 
                 localStorage.setItem('user', JSON.stringify(this.user))
-                localStorage.setItem('token', token)
+                localStorage.setItem('access', token)
+                if (refreshToken) localStorage.setItem('refresh', refreshToken)
                 localStorage.setItem('permissions', JSON.stringify(perms))
                 localStorage.setItem('isLoggedIn', 'true')
 
@@ -166,7 +168,12 @@ export const useAuthStore = defineStore('auth', {
         },
 
         logout() {
-            // Clear notifications state first
+            // Invalidate refresh token on server (fire-and-forget)
+            const refresh = localStorage.getItem('refresh')
+            if (refresh) {
+                authAPI.logout({ refresh }).catch(() => {})
+            }
+
             try {
                 const notificationStore = useNotificationStore()
                 notificationStore.reset()
