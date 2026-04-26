@@ -20,7 +20,7 @@
       <!-- Worker & Rank -->
       <Column field="worker_name" :header="$t('kpi.table.worker')" sortable class="min-w-[200px]">
         <template #body="{ data, index }">
-          <div class="flex items-center gap-3 py-1 group/worker cursor-pointer" @click="$emit('open-target', data)">
+          <div class="flex items-center gap-3 py-1 group/worker cursor-pointer" @click="navigateToDetail(data)">
             <div class="w-5 flex items-center justify-center shrink-0">
                <i v-if="isTopThree(data)" :class="['pi pi-star-fill text-[11px]', getMedalColor(data)]"></i>
                <span v-else class="text-[10px] font-bold text-slate-300">#{{ index + 1 }}</span>
@@ -152,6 +152,7 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { useSettingsStore } from '@/store/settings'
@@ -163,9 +164,19 @@ const props = defineProps({
   loading: Boolean
 })
 
-defineEmits(['open-target'])
+const emit = defineEmits(['open-target'])
 
+const router = useRouter()
 const settingsStore = useSettingsStore()
+
+const navigateToDetail = (data) => {
+  if (!data?.worker) return
+  router.push({ 
+    name: 'worker-detail', 
+    params: { id: data.worker },
+    query: { tab: 'kpi' }
+  })
+}
 const {
   sortedData,
   isTopThree,

@@ -12,7 +12,7 @@
         </div>
 
         <!-- Header Info -->
-        <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-3 mb-4 cursor-pointer group-active:scale-[0.98] transition-transform" @click="navigateToDetail(item)">
           <div 
             class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-sm"
             :style="getAvatarGradient(item?.worker_name)"
@@ -90,6 +90,7 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
 import { useSettingsStore } from '@/store/settings'
 import { useKpiTable } from '../../composables/useKpiTable'
 
@@ -99,7 +100,17 @@ const props = defineProps({
   loading: Boolean
 })
 
-defineEmits(['open-target'])
+const emit = defineEmits(['open-target'])
+const router = useRouter()
+
+const navigateToDetail = (item) => {
+  if (!item?.worker) return
+  router.push({ 
+    name: 'worker-detail', 
+    params: { id: item.worker },
+    query: { tab: 'kpi' }
+  })
+}
 
 const settingsStore = useSettingsStore()
 const {

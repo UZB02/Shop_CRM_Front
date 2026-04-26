@@ -72,7 +72,7 @@ const toast = useToast()
 const settingsStore = useSettingsStore()
 const worker = ref(null)
 const loading = ref(false)
-const activeTab = ref('details')
+const activeTab = ref(route.query.tab || 'details')
 
 const workerDialog = ref(false)
 const saving = ref(false)
@@ -135,6 +135,9 @@ const loadStores = async () => {
 }
 
 onMounted(() => {
+    if (route.query.tab) {
+        activeTab.value = route.query.tab
+    }
     loadWorker()
     loadStores()
 })
