@@ -283,6 +283,63 @@
             "username_min_length": "Foydalanuvchi nomi kamida 5 ta belgi bo'lishi kerak"
         }
     },
+    "kpi": {
+        "title": "Xodimlar KPI",
+        "subtitle": "Xodimlar faoliyati samaradorligi va bonuslar",
+        "not_enabled": "KPI tizimi yoqilmagan. Sozlamalardan faollashtiring.",
+        "filters": {
+            "month": "Oy",
+            "year": "Yil",
+            "worker": "Xodim"
+        },
+        "table": {
+            "worker": "Xodim",
+            "sales_count": "Sotuvlar",
+            "returns_count": "Qaytarish",
+            "net_sales": "Sof sotuv",
+            "avg_sale": "O'rtacha sotuv",
+            "target": "Maqsad",
+            "completion": "Bajarilish",
+            "bonus": "Bonus",
+            "actions": "Amallar",
+            "plan": "Plan"
+        },
+        "stats": {
+            "total_net": "Jami Sof Sotuv",
+            "avg_kpi": "O'rtacha KPI %",
+            "return_rate": "Qaytarmalar Ulushi",
+            "month_star": "Oy Yulduzi",
+            "plan_label": "Plan"
+        },
+        "analytics": {
+            "sales_performance": "Xodimlar samaradorligi (Summa)",
+            "target_analysis": "Maqsad tahlili"
+        },
+        "labels": {
+            "star": "Yulduz",
+            "expert": "Ekspert",
+            "solid": "Barqaror",
+            "growing": "O'syapti",
+            "lagging": "Orqada"
+        },
+        "buttons": {
+            "show_charts": "Grafik Tahlil",
+            "show_list": "Jadvalga qaytish"
+        },
+        "set_target": {
+            "title": "Maqsad belgilash",
+            "worker": "Xodim",
+            "period": "Davr",
+            "target_amount": "Oylik maqsad (summa)",
+            "bonus_amount": "Bonus summasi",
+            "success": "Maqsad muvaffaqiyatli belgilandi"
+        },
+        "status": {
+            "reached": "Bajarildi",
+            "not_reached": "Bajarilmadi",
+            "no_target": "Maqsad yo'q"
+        }
+    },
     "menu": {
         "dashboard": "Boshqaruv",
         "sales": "Sotuv (POS)",

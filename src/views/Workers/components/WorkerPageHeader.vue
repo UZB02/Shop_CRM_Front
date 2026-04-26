@@ -5,6 +5,15 @@
       <p class="text-xs text-slate-400 mt-0.5">{{ $t('workers.worker_count', { count: totalWorkers }) }}</p>
     </div>
     <div class="flex items-center gap-2 shrink-0">
+      <router-link
+        v-if="settingsStore.isKpiEnabled"
+        :to="{ name: 'workers-kpi' }"
+        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap bg-indigo-500 hover:bg-indigo-600 text-white shadow-sm active:scale-95"
+      >
+        <i class="pi pi-chart-bar text-xs"></i>
+        <span>{{ $t('kpi.title') }}</span>
+      </router-link>
+
       <button
         @click="notificationStore.canAddWorker ? $emit('add') : null"
         v-tooltip.bottom="limitTooltip"
@@ -26,9 +35,11 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotificationStore } from '@/store/notifications'
+import { useSettingsStore } from '@/store/settings'
 
 const { t } = useI18n()
 const notificationStore = useNotificationStore()
+const settingsStore = useSettingsStore()
 
 const limitTooltip = computed(() => {
   const w = notificationStore.usage?.workers

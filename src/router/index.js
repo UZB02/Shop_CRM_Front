@@ -120,6 +120,12 @@ const routes = [
                 meta: { permission: 'workers' }
             },
             {
+                path: 'workers/kpi',
+                name: 'workers-kpi',
+                component: () => import('@/views/Workers/KPIView.vue'),
+                meta: { permission: 'workers' }
+            },
+            {
                 path: 'workers/:id',
                 name: 'worker-detail',
                 component: () => import('@/views/Workers/Detail.vue'),
@@ -268,14 +274,20 @@ router.beforeEach(async (to, from, next) => {
         return
     }
 
-    // Special Check: Shift related routes should be blocked if disabled in settings
+    // Special Check: Related routes should be blocked if disabled in settings
     const settingsStore = (await import('@/store/settings')).useSettingsStore()
     
-    // Ensure settings are loaded before making a decision on shift routes
-    if (to.path.includes('/shifts')) {
+    // Ensure settings are loaded before making a decision on module routes
+    if (to.path.includes('/shifts') || to.path.includes('/workers/kpi')) {
         if (!settingsStore.initialized) await settingsStore.fetchSettings()
-        if (!settingsStore.isShiftEnabled) {
+        
+        if (to.path.includes('/shifts') && !settingsStore.isShiftEnabled) {
             next({ name: 'dashboard' })
+            return
+        }
+        
+        if (to.path.includes('/workers/kpi') && !settingsStore.isKpiEnabled) {
+            next({ name: 'workers' })
             return
         }
     }

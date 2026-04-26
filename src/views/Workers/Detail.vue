@@ -27,6 +27,7 @@
         <Transition name="fade-slide" mode="out-in">
           <WorkerInfoTab v-if="activeTab === 'details'" key="details" :worker="worker" />
           <WorkerPermissionsTab v-else-if="activeTab === 'permissions'" key="permissions" :worker="worker" />
+          <WorkerKpiTab v-else-if="activeTab === 'kpi'" key="kpi" :worker-id="worker?.id || worker?._id" />
           <WorkerHistoryTab v-else-if="activeTab === 'history'" key="history" :worker-id="worker?.id || worker?._id" />
         </Transition>
       </div>
@@ -61,10 +62,14 @@ import WorkerTabsSidebar from './components/WorkerTabsSidebar.vue'
 import WorkerInfoTab from './components/detail/tabs/WorkerInfoTab.vue'
 import WorkerPermissionsTab from './components/detail/tabs/WorkerPermissionsTab.vue'
 import WorkerHistoryTab from './components/detail/tabs/WorkerHistoryTab.vue'
+import WorkerKpiTab from './components/detail/tabs/WorkerKpiTab.vue'
+
+import { useSettingsStore } from '@/store/settings'
 
 const route = useRoute()
 const { t } = useI18n()
 const toast = useToast()
+const settingsStore = useSettingsStore()
 const worker = ref(null)
 const loading = ref(false)
 const activeTab = ref('details')
@@ -89,11 +94,19 @@ const workerToEdit = ref({
 })
 
 // Prepare tabs
-const navTabs = computed(() => [
-  { id: 'details', label: t('workers.details'), icon: 'pi pi-id-card' },
-  { id: 'permissions', label: t('workers.permissions'), icon: 'pi pi-shield' },
-  { id: 'history', label: t('workers.logs') || 'Tizim Jurnali', icon: 'pi pi-history' }
-])
+const navTabs = computed(() => {
+  const tabs = [
+    { id: 'details', label: t('workers.details'), icon: 'pi pi-id-card' },
+    { id: 'permissions', label: t('workers.permissions'), icon: 'pi pi-shield' }
+  ]
+  
+  if (settingsStore.isKpiEnabled) {
+    tabs.push({ id: 'kpi', label: t('kpi.title'), icon: 'pi pi-chart-bar' })
+  }
+  
+  tabs.push({ id: 'history', label: t('workers.logs') || 'Tizim Jurnali', icon: 'pi pi-history' })
+  return tabs
+})
 
 const loadWorker = async () => {
     loading.value = true

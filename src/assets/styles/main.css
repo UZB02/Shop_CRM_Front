@@ -242,3 +242,115 @@ body {
 .dark .p-tooltip-arrow {
   border-bottom-color: rgba(2, 6, 23, 0.95) !important;
 }
+
+/* PrimeVue 4 Month Picker Fix (Aura Theme) */
+.p-monthpicker {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 8px !important;
+  padding: 12px !important;
+  background: white !important;
+  min-width: 260px !important;
+}
+
+.dark .p-monthpicker {
+  background: #1e293b !important;
+}
+
+.p-monthpicker-month {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 4px !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #64748b !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid transparent !important;
+}
+
+.p-monthpicker-month:hover {
+  background: #f1f5f9 !important;
+  color: #10b981 !important;
+}
+
+.dark .p-monthpicker-month {
+  color: #94a3b8 !important;
+}
+
+.dark .p-monthpicker-month:hover {
+  background: #0f172a !important;
+  color: #34d399 !important;
+}
+
+.p-monthpicker-month.p-monthpicker-month-selected {
+  background: #10b981 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+}
+
+.dark .p-monthpicker-month.p-monthpicker-month-selected {
+  background: #10b981 !important;
+  color: #0f172a !important;
+}
+
+/* Calendar Header and Navigation */
+.p-datepicker-header {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  background: white !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+
+.dark .p-datepicker-header {
+  background: #1e293b !important;
+  border-bottom-color: #334155 !important;
+}
+
+.p-datepicker-title {
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  color: #334155 !important;
+  display: flex !important;
+  gap: 12px !important;
+}
+
+.dark .p-datepicker-title {
+  color: #f1f5f9 !important;
+}
+
+.p-datepicker-prev, .p-datepicker-next {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 8px !important;
+  transition: all 0.2s !important;
+  border: 1px solid #f1f5f9 !important;
+}
+
+.dark .p-datepicker-prev, .dark .p-datepicker-next {
+  border-color: #334155 !important;
+}
+
+.p-datepicker-prev:hover, .p-datepicker-next:hover {
+  background: #f1f5f9 !important;
+  color: #10b981 !important;
+}
+
+.dark .p-datepicker-prev:hover, .dark .p-datepicker-next:hover {
+  background: #0f172a !important;
+  color: #34d399 !important;
+}
+
+.p-datepicker {
+    border-radius: 12px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid #f1f5f9 !important;
+}
+
+.dark .p-datepicker {
+    border-color: #334155 !important;
+    background: #1e293b !important;
+}

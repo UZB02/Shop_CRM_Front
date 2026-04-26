@@ -276,6 +276,63 @@
       "username_min_length": "Фойдаланувчи номи камида 5 та белги бўлиши керак"
     }
   },
+  "kpi": {
+    "title": "Ходимлар KPI",
+    "subtitle": "Ходимлар фаолияти самарадорлиги ва бонуслар",
+    "not_enabled": "KPI тизими ёқилмаган. Созламалардан фаоллаштиринг.",
+    "filters": {
+      "month": "Ой",
+      "year": "Йил",
+      "worker": "Ходим"
+    },
+    "table": {
+      "worker": "Ходим",
+      "sales_count": "Сотувлар",
+      "returns_count": "Қайтариш",
+      "net_sales": "Соф сотув",
+      "avg_sale": "Ўртача сотув",
+      "target": "Мақсад",
+      "completion": "Бажарилиш",
+      "bonus": "Бонус",
+      "actions": "Амаллар",
+      "plan": "План"
+    },
+    "stats": {
+      "total_net": "Жами Соф Сотув",
+      "avg_kpi": "Ўртача KPI %",
+      "return_rate": "Қайтармалар Улуши",
+      "month_star": "Ой Юлдузи",
+      "plan_label": "План"
+    },
+    "analytics": {
+      "sales_performance": "Ходимлар самарадорлиги (Сумма)",
+      "target_analysis": "Мақсад таҳлили"
+    },
+    "labels": {
+      "star": "Юлдуз",
+      "expert": "Эксперт",
+      "solid": "Барқарор",
+      "growing": "Ўсяпти",
+      "lagging": "Орқада"
+    },
+    "buttons": {
+      "show_charts": "График Таҳлил",
+      "show_list": "Жадвалга қайтиш"
+    },
+    "set_target": {
+      "title": "Мақсад белгилаш",
+      "worker": "Ходим",
+      "period": "Давр",
+      "target_amount": "Ойлик мақсад (сумма)",
+      "bonus_amount": "Бонус суммаси",
+      "success": "Мақсад муваффақиятли белгиланди"
+    },
+    "status": {
+      "reached": "Бажарилди",
+      "not_reached": "Бажарилмади",
+      "no_target": "Мақсад йўқ"
+    }
+  },
   "menu": {
     "dashboard": "Бошқарув",
     "sales": "Сотув (POS)",

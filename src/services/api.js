@@ -393,4 +393,12 @@ export const saleReturnsAPI = {
     cancel: (id) => api.patch(`/sale-returns/${id}/cancel/`)
 }
 
+// KPI API
+export const kpiAPI = {
+    getAll: (params) => api.get('/kpi/', { params }),
+    getById: (id) => api.get(`/kpi/${id}/`),
+    setTarget: (id, data) => api.patch(`/kpi/${id}/set-target/`, data),
+    getWorkerKpi: (workerId, params) => api.get(`/workers/${workerId}/kpi/`, { params })
+}
+
 export default api
