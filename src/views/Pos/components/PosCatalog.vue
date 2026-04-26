@@ -67,7 +67,7 @@
             </div>
 
             <!-- Promotion Badge -->
-            <div v-if="product.active_promotion" class="absolute top-2 right-2 bg-rose-500 text-white flex flex-col px-2 py-1.5 rounded-[8px] items-end max-w-[80%] text-right shadow-lg z-20 overflow-hidden">
+            <div v-if="product.active_promotion" class="absolute top-2 left-2 bg-rose-500 text-white flex flex-col px-2 py-1.5 rounded-[8px] items-start max-w-[80%] text-left shadow-lg z-20 overflow-hidden">
               <span class="text-[8px] font-black uppercase tracking-tight leading-none truncate w-full">{{ product.active_promotion.name }}</span>
               <span class="text-[7px] font-black text-rose-100 uppercase tracking-widest mt-1 leading-none line-clamp-1 block whitespace-nowrap">{{ product.active_promotion.valid_to }}</span>
             </div>
