@@ -141,7 +141,7 @@ const routes = [
                 path: 'finance',
                 name: 'finance',
                 component: () => import('@/views/Finance/index.vue'),
-                meta: { permission: 'finance' }
+                meta: { permission: 'moliya' }
             },
             {
                 path: 'customers',

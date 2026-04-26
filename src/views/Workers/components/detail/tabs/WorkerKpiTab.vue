@@ -1,23 +1,45 @@
 <template>
   <div class="space-y-3">
-    <!-- Compact Filters -->
-    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-2 px-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm">
-      <div class="flex items-center gap-2">
-        <i class="pi pi-filter text-[10px] text-emerald-500"></i>
-        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ $t('kpi.filters.year') }}:</label>
-        <Dropdown 
-          v-model="selectedYear" 
-          :options="years" 
-          class="h-7 w-24 kpi-dropdown-mini"
-          @change="loadHistory"
+    <!-- Enterprise Grade Filter Bar -->
+    <div class="flex items-center justify-between bg-white dark:bg-slate-900/40 p-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
+      <div class="flex items-center gap-3">
+        <!-- Label Section -->
+        <div class="flex items-center gap-2 pr-3 border-r border-slate-200 dark:border-slate-800">
+          <i class="pi pi-calendar text-[11px] text-emerald-500"></i>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ $t('kpi.filters.year') }}:</span>
+        </div>
+
+        <!-- Perfectly Centered Pixel-Perfect Year Picker -->
+        <DatePicker 
+          v-model="selectedYearDate" 
+          view="year" 
+          dateFormat="yy"
+          @date-select="loadHistory"
+          class="kpi-year-picker-final w-28 h-8"
+          :pt="{
+            root: { class: 'relative h-8 !bg-transparent !border-none !shadow-none' },
+            input: { class: 'h-8 rounded-lg border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 hover:border-emerald-500/50 transition-all duration-300 shadow-sm text-[11px] font-black text-slate-700 dark:text-slate-200 w-full focus:ring-0 uppercase tracking-wider text-center flex items-center justify-center p-0' },
+            panel: { class: 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl mt-1 overflow-hidden min-w-[280px]' },
+            yearPicker: { class: 'grid grid-cols-3 gap-2 p-4 bg-white dark:bg-slate-900' },
+            year: ({ context }) => ({
+              class: [
+                'py-2 px-1 rounded-lg text-[11px] font-bold text-center transition-all cursor-pointer border border-transparent',
+                context.selected 
+                  ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-white/5 hover:text-emerald-500'
+              ]
+            })
+          }"
         />
       </div>
+
+      <!-- Actions -->
       <button 
         @click="loadHistory" 
         :disabled="loading"
-        class="h-7 w-7 rounded flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 transition-all active:rotate-180 disabled:opacity-50"
+        class="h-8 w-8 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:border-emerald-500 transition-all active:scale-95 disabled:opacity-50 group"
       >
-        <i :class="['pi pi-refresh text-[10px]', { 'animate-spin': loading }]"></i>
+        <i :class="['pi pi-refresh text-[10px] group-hover:rotate-180 transition-transform duration-500', { 'animate-spin': loading }]"></i>
       </button>
     </div>
 
@@ -132,7 +154,7 @@ import { kpiAPI } from '@/services/api'
 import { useSettingsStore } from '@/store/settings'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import Dropdown from 'primevue/dropdown'
+import DatePicker from 'primevue/datepicker'
 import SetTargetModal from '../../SetTargetModal.vue'
 
 const props = defineProps({
@@ -142,13 +164,9 @@ const props = defineProps({
 const settingsStore = useSettingsStore()
 const loading = ref(false)
 const history = ref([])
-const selectedYear = ref(new Date().getFullYear())
+const selectedYearDate = ref(new Date())
 const dialogVisible = ref(false)
 const selectedKpi = ref(null)
-
-const years = ref([
-    2024, 2025, 2026, 2027, 2028
-])
 
 const formatMonth = (m) => {
     const months = [
@@ -162,7 +180,8 @@ const loadHistory = async () => {
     if (!props.workerId) return
     loading.value = true
     try {
-        const res = await kpiAPI.getWorkerKpi(props.workerId, { year: selectedYear.value })
+        const year = selectedYearDate.value ? selectedYearDate.value.getFullYear() : new Date().getFullYear()
+        const res = await kpiAPI.getWorkerKpi(props.workerId, { year })
         history.value = res.data?.results || res.data || []
     } catch (e) {
         console.error('KPI history load error:', e)
@@ -188,21 +207,33 @@ onMounted(loadHistory)
 </script>
 
 <style scoped>
-.kpi-dropdown-mini :deep(.p-inputtext) {
-    padding: 0.15rem 0.5rem;
-    font-size: 10px !important;
-    font-weight: 800;
+/* Enterprise DatePicker Styling - Overriding PrimeVue Defaults */
+:deep(.p-datepicker-input) {
+  background-color: rgb(30 41 59 / 0.4) !important; /* dark:bg-slate-800/40 */
+  border-color: rgb(51 65 85 / 0.5) !important; /* dark:border-slate-700/50 */
+  color: #f1f5f9 !important; /* slate-200 */
 }
 
-/* Compact DataTable Overlay */
+html:not(.dark) :deep(.p-datepicker-input) {
+  background-color: rgb(248 250 252 / 0.5) !important; /* bg-slate-50/50 */
+  border-color: rgb(226 232 240 / 0.6) !important; /* border-slate-200/60 */
+  color: #334155 !important; /* text-slate-700 */
+}
+
+.kpi-compact-datatable :deep(.p-datatable-row:hover) {
+  background: rgba(var(--slate-500-rgb), 0.05); /* slightly visible hover */
+}
+
+/* ... existing datatable styles ... */
 .kpi-compact-datatable :deep(.p-datatable-thead > tr > th) {
   background: #f8fafc;
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #f1f5f9;
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
   color: #64748b;
+  letter-spacing: 0.05em;
 }
 
 .dark .kpi-compact-datatable :deep(.p-datatable-thead > tr > th) {
@@ -212,11 +243,19 @@ onMounted(loadHistory)
 }
 
 .kpi-compact-datatable :deep(.p-datatable-tbody > tr > td) {
-  padding: 0.35rem 0.75rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #f8fafc;
 }
 
 .dark .kpi-compact-datatable :deep(.p-datatable-tbody > tr > td) {
   border-bottom-color: #1e293b;
+}
+
+.kpi-compact-datatable :deep(.p-datatable-row:hover) {
+  background: #f1f5f9/30;
+}
+
+.dark .kpi-compact-datatable :deep(.p-datatable-row:hover) {
+  background: rgba(255, 255, 255, 0.02);
 }
 </style>
