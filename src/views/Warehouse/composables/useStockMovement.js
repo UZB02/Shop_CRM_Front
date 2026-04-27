@@ -12,11 +12,19 @@ export function useStockMovement() {
     const products = ref([])
     const loadingProducts = ref(false)
 
-    const loadProducts = async () => {
+    const loadProducts = async (query = '') => {
         loadingProducts.value = true
         try {
-            const res = await productsAPI.getAll({ page_size: 1000 })
-            products.value = res.data.results || (Array.isArray(res.data) ? res.data : [])
+            const res = await productsAPI.getAll({ 
+                search: query,
+                page_size: 100 
+            })
+            const newProducts = res.data.results || (Array.isArray(res.data) ? res.data : [])
+            
+            // For bulk movement, we might want to merge with existing list 
+            // but for search results, replacing is often better 
+            // especially if we keep the "selected" items separately.
+            products.value = newProducts
         } catch (error) {
             console.error('Error loading products for movement:', error)
         } finally {

@@ -76,6 +76,9 @@
                       <td class="px-4 py-2">
                         <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors">
                           {{ item.product_name }}
+                          <span v-if="item.tur_name" class="text-[10px] text-slate-400 font-normal">
+                            ({{ item.tur_name }}{{ item.tur_color ? ' / ' + item.tur_color : '' }})
+                          </span>
                         </span>
                       </td>
                       <td class="px-4 py-2">

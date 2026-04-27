@@ -2,10 +2,12 @@ import { ref } from 'vue'
 import { salesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/store/auth'
 
 export function useCheckout() {
     const toast = useToast()
     const { t } = useI18n()
+    const authStore = useAuthStore()
 
     const posLoading = ref(false)
 
@@ -15,16 +17,21 @@ export function useCheckout() {
      * @param {Array}  cartItems   - Savat mahsulotlari
      * @param {Object|null} customer - Tanlangan mijoz
      * @param {Function} onSuccess  - Muvaffaqiyatli callback
+     * @param {Number|null} branchId - Filial ID (ixtiyoriy, store'dan olinadi agar berilmasa)
      */
-    const performCheckout = async (paymentData, cartItems, customer, onSuccess) => {
+    const performCheckout = async (paymentData, cartItems, customer, onSuccess, branchId = null) => {
         if (!cartItems.length) return null
 
         posLoading.value = true
         try {
+            const finalBranchId = branchId || authStore.user?.branch_id || authStore.user?.worker?.branch_id
+            
             const payload = {
+                branch: finalBranchId,
                 customer: customer?.id || null,
                 items: cartItems.map(item => ({
                     product: item.id,
+                    tur_id: item.tur_id || null, // Variant ID qo'shildi
                     quantity: parseFloat(item.qty) || 1,
                     unit_price: parseFloat(item.sale_price || item.price) || 0,
                     ...(item.item_discount_pct > 0 && {

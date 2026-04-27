@@ -13,7 +13,7 @@ export function useProductDetail() {
   const product = ref(null)
   const loading = ref(true)
 
-  const fetchProductDetails = async () => {
+  const fetchProduct = async () => {
     loading.value = true
     try {
       const response = await productsAPI.getById(route.params.id)
@@ -71,7 +71,7 @@ export function useProductDetail() {
   }
 
   onMounted(() => {
-    fetchProductDetails()
+    fetchProduct()
   })
 
   return {
@@ -81,6 +81,7 @@ export function useProductDetail() {
     formatPrice,
     formatDate,
     calculateMargin,
+    fetchProduct,
     printBarcode,
     confirmDelete
   }

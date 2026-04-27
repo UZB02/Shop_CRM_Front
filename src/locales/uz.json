@@ -82,7 +82,8 @@
         "return": "Qaytarish",
         "returns": "Qaytarishlar",
         "reason": "Sabab",
-        "notifications": "Bildirishnomalar"
+        "notifications": "Bildirishnomalar",
+        "optional": "Ixtiyoriy"
     },
     "notifications": {
         "unread_count": "Sizda {count} ta yangi xabar bor"
@@ -169,7 +170,7 @@
         "no_permissions": "Ruxsatlar mavjud emas",
         "last_login_ip": "Oxirgi kirish IP",
         "unknown": "Noma'lum",
-        "management_title": "Xodimlar Boshqaruvi",
+        "management_title": "Xodimlar boshqaruvi",
         "management_subtitle": "Sizning jamoangiz va ularning ruxsatlari",
         "new_worker": "Yangi xodim",
         "list_title": "Xodimlar Ro'yxati",
@@ -582,7 +583,7 @@
             "active": "Faol",
             "inactive": "Nofaol"
         },
-        "management_title": "Omborxonalar Boshqaruvi",
+        "management_title": "Omborxonalar boshqaruvi",
         "messages": {
             "added": "Yangi ombor muvaffaqiyatli qo'shildi",
             "updated": "Ombor ma'lumotlari yangilandi",
@@ -801,7 +802,8 @@
             "tabs": {
                 "overview": "Asosiy",
                 "inventory": "Zahira",
-                "financial": "Moliya"
+                "financial": "Moliya",
+                "turlar": "Turlar"
             },
             "category": "Turkum",
             "store": "Asosiy do'kon",
@@ -980,7 +982,7 @@
     },
     "customers": {
         "title": "Mijozlar",
-        "management_title": "Mijozlar Boshqaruvi",
+        "management_title": "Mijozlar boshqaruvi",
         "management_subtitle": "Sizning mijozlar bazangiz va qarzdorliklar nazorati",
         "subtitle": "Sodiq mijozlaringiz bilan ishlash va guruhlarni boshqarish",
         "customer_count": "{count} ta mijoz",
@@ -1323,5 +1325,26 @@
         "export_pdf": "PDFga yuklash",
         "wastage_export": "Isroflar Excel",
         "filters": "Hisobot filtrlar"
+    },
+    "turlar": {
+        "title": "Mahsulot turlari",
+        "add": "Yangi tur qo'shish",
+        "name": "Nomi / Razmer",
+        "color": "Rangi",
+        "sale_price_override": "Maxsus narx (Ixtiyoriy)",
+        "effective_price": "Amaldagi narx",
+        "is_active": "Faol",
+        "no_turlar": "Hozircha turlar qo'shilmagan",
+        "enable_tur_system": "Tur tizimini yoqish",
+        "enable_tur_desc": "Ushbu mahsulot uchun turli rang yoki razmerlarni yoqish",
+        "delete_confirm": "Ushbu turni o'chirishni tasdiqlaysizmi?",
+        "messages": {
+            "added": "Yangi tur qo'shildi",
+            "updated": "Tur yangilandi",
+            "deleted": "Tur o'chirildi",
+            "delete_error_stock": "Omborda qoldig'i bor turni o'chirib bo'lmaydi"
+        },
+        "badge": "Turli",
+        "select_tur": "Turni tanlang (Razmer/Rang)"
     }
 }

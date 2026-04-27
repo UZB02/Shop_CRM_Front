@@ -46,7 +46,7 @@
         v-for="product in filteredProducts" 
         :key="product.id" 
         class="product-minimal-card"
-        @click="(product.displayQuantity === undefined || product.displayQuantity > 0) && $emit('add-to-cart', product)"
+        @click="handleProductClick(product)"
       >
         <div class="relative bg-white dark:bg-[#0f172a] rounded-2xl overflow-hidden flex flex-col border transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.03)] dark:shadow-none hover:-translate-y-1 hover:shadow-lg cursor-pointer min-h-[220px]"
              :class="[
@@ -69,41 +69,40 @@
             <!-- Promotion Badge -->
             <div v-if="product.active_promotion" class="absolute top-2 left-2 bg-rose-500 text-white flex flex-col px-2 py-1.5 rounded-[8px] items-start max-w-[80%] text-left shadow-lg z-20 overflow-hidden">
               <span class="text-[8px] font-black uppercase tracking-tight leading-none truncate w-full">{{ product.active_promotion.name }}</span>
-              <span class="text-[7px] font-black text-rose-100 uppercase tracking-widest mt-1 leading-none line-clamp-1 block whitespace-nowrap">{{ product.active_promotion.valid_to }}</span>
             </div>
           </div>
 
           <!-- Content Section -->
-          <div class="p-4 flex flex-col flex-1 bg-white dark:bg-[#111827]">
-            <div class="flex justify-between items-start mb-3">
-              <h3 class="font-black text-[13px] text-slate-800 dark:text-white font-outfit uppercase tracking-tight line-clamp-2">
-                {{ product.name }}
-              </h3>
-            </div>
+            <div class="p-4 flex flex-col flex-1 bg-white dark:bg-[#111827]">
+              <div class="flex justify-between items-start mb-3">
+                <h3 class="font-black text-[13px] text-slate-800 dark:text-white font-outfit uppercase tracking-tight line-clamp-2">
+                  {{ product.name }}
+                </h3>
+              </div>
 
-            <!-- Price & Stock -->
-            <div class="flex items-end justify-between mt-auto">
-              <div class="flex flex-col justify-end leading-none gap-1">
-                <!-- Promo Price Logic -->
-                <div v-if="product.active_promotion" class="flex flex-col gap-0.5">
-                  <span class="text-[10px] font-bold text-slate-400 line-through">{{ settingsStore.formatPrice(product.sale_price, product.currency_code) }}</span>
-                  <span class="text-lg font-black text-rose-500 font-outfit">{{ settingsStore.formatPrice(product.active_promotion.discounted_price, product.currency_code) }}</span>
+              <!-- Price & Stock -->
+              <div class="flex items-end justify-between mt-auto">
+                <div class="flex flex-col justify-end leading-none gap-1">
+                  <!-- Promo Price Logic -->
+                  <div v-if="product.active_promotion" class="flex flex-col gap-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 line-through">{{ settingsStore.formatPrice(product.sale_price, product.currency_code) }}</span>
+                    <span class="text-lg font-black text-rose-500 font-outfit">{{ settingsStore.formatPrice(product.active_promotion.discounted_price, product.currency_code) }}</span>
+                  </div>
+                  <div v-else class="flex flex-col gap-0.5">
+                    <span class="text-[10px] font-bold text-transparent select-none">&nbsp;</span>
+                    <span class="text-lg font-black text-slate-800 dark:text-slate-100 font-outfit">{{ settingsStore.formatPrice(product.sale_price, product.currency_code) }}</span>
+                  </div>
+                  
+                  <!-- Stock Details instead of Unit -->
+                  <span v-if="product.displayQuantity > 0" class="text-[9px] font-black uppercase tracking-widest mt-1 text-slate-500 dark:text-slate-400">
+                    Qoldiq: <span class="text-orange-500">{{ product.displayQuantity }} {{ product.unit_display || product.unit }}</span>
+                  </span>
+                  <span v-else class="text-[9px] font-black uppercase tracking-widest mt-1 text-rose-500">
+                    Omborda tugagan
+                  </span>
                 </div>
-                <div v-else class="flex flex-col gap-0.5">
-                  <span class="text-[10px] font-bold text-transparent select-none">&nbsp;</span>
-                  <span class="text-lg font-black text-slate-800 dark:text-slate-100 font-outfit">{{ settingsStore.formatPrice(product.sale_price, product.currency_code) }}</span>
-                </div>
-                
-                <!-- Stock Details instead of Unit -->
-                <span v-if="product.displayQuantity > 0" class="text-[9px] font-black uppercase tracking-widest mt-1 text-slate-500 dark:text-slate-400">
-                  Qoldiq: <span class="text-orange-500">{{ product.displayQuantity }} {{ product.unit_display || product.unit }}</span>
-                </span>
-                <span v-else class="text-[9px] font-black uppercase tracking-widest mt-1 text-rose-500">
-                  Omborda tugagan
-                </span>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
@@ -115,6 +114,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { productsAPI, categoriesAPI, branchesAPI } from '@/services/api'
 import { useAuthStore } from '@/store/auth'
 import { useSettingsStore } from '@/store/settings'
+import Dialog from 'primevue/dialog'
 
 const props = defineProps(['externalSearch', 'cart', 'activeShift'])
 const emit = defineEmits(['add-to-cart', 'focus-barcode'])
@@ -123,11 +123,24 @@ const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
 const products = ref([])
 
+const handleProductClick = async (product) => {
+  if (product.displayQuantity !== undefined && product.displayQuantity <= 0) return
+  emit('add-to-cart', product)
+}
+
+const addTurToCart = (tur) => {
+  if (tur.quantity !== undefined && tur.quantity <= 0) return
+  emit('add-to-cart', selectedProductForTur.value, tur)
+  turDialog.value = false
+}
+
 // Compute stock relative to cart
 const productsWithStock = computed(() => {
   return products.value.map(p => {
-    const inCart = props.cart?.find(item => item.id === p.id)
-    const cartQty = inCart ? inCart.qty : 0
+    // Only subtract if it's the exact same product and it doesn't have variants
+    // If it has variants, displayQuantity will be handled differently (total stock)
+    const inCart = props.cart?.filter(item => item.id === p.id)
+    const cartQty = inCart ? inCart.reduce((acc, item) => acc + item.qty, 0) : 0
     return {
       ...p,
       displayQuantity: p.quantity !== undefined ? Math.max(0, p.quantity - cartQty) : undefined
@@ -185,8 +198,9 @@ const fetchProducts = async (search = '', categoryId = 'all', subcategoryId = 'a
       params.subcategory = subcategoryId
     }
     const res = await branchesAPI.getProducts(branchId, params)
-    products.value = res.data.results || res.data
-  } catch (error) { console.error('Products Error:', error) } 
+    const rawStocks = res.data.results || res.data
+    products.value = rawStocks
+  } catch (error) { console.error('Fetch Products Error:', error) }
   finally { loading.value = false }
 }
 

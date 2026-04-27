@@ -84,10 +84,21 @@ export function useCart() {
     }
 
     // --- Cart CRUD ---
-    const addToCart = (product) => {
-        const existing = cart.value.find(item => item.id === product.id)
+    const addToCart = (product, selectedTur = null) => {
+        // Support both direct tur selection and scanned products with tur_id
+        const tId = selectedTur?.id || product.tur_id || null
+        const tName = selectedTur?.name || product.tur_name || null
+        const tColor = selectedTur?.color || product.tur_color || null
+
+        const cartItemId = tId ? `${product.id}-${tId}` : `${product.id}`
+        const existing = cart.value.find(item => item.cartItemId === cartItemId)
+        
+        // Stock source: if tur is selected, use its quantity, else use product.quantity
+        // (For scans, product.quantity is usually the tur's quantity)
+        const availableStock = selectedTur ? selectedTur.quantity : product.quantity
+
         if (existing) {
-            if (existing.quantity === undefined || existing.qty < existing.quantity) {
+            if (availableStock === undefined || existing.qty < availableStock) {
                 existing.qty++
             } else {
                 toast.add({
@@ -98,32 +109,39 @@ export function useCart() {
                 })
             }
         } else {
-            const effectivePrice = product.active_promotion?.discounted_price || product.sale_price || product.price || 0
+            const effectivePrice = selectedTur 
+                ? selectedTur.effective_price 
+                : (product.active_promotion?.discounted_price || product.sale_price || product.price || 0)
+            
             cart.value.push({
                 ...product,
+                cartItemId,
+                tur_id: tId,
+                tur_name: tName,
+                tur_color: tColor,
                 sale_price: effectivePrice,
                 original_sale_price: product.sale_price,
                 qty: 1,
-                item_discount_pct: 0
+                item_discount_pct: 0,
+                stock_available: availableStock
             })
         }
     }
-
-    const removeFromCart = (productId) => {
-        const index = cart.value.findIndex(item => item.id === productId)
+    const removeFromCart = (cartItemId) => {
+        const index = cart.value.findIndex(item => item.cartItemId === cartItemId)
         if (index !== -1) cart.value.splice(index, 1)
     }
 
-    const updateQty = (productId, qty) => {
-        const item = cart.value.find(item => item.id === productId)
+    const updateQty = (cartItemId, qty) => {
+        const item = cart.value.find(item => item.cartItemId === cartItemId)
         if (item) {
             let newQty = Math.max(0, qty)
-            if (item.quantity !== undefined && newQty > item.quantity) {
-                newQty = item.quantity
+            if (item.stock_available !== undefined && newQty > item.stock_available) {
+                newQty = item.stock_available
                 toast.add({
                     severity: 'warn',
                     summary: 'Limit',
-                    detail: `Omborda faqat ${item.quantity} dona mavjud`,
+                    detail: `Omborda faqat ${item.stock_available} dona mavjud`,
                     life: 2000
                 })
             }
@@ -131,8 +149,8 @@ export function useCart() {
         }
     }
 
-    const updateItemDiscount = (productId, pct) => {
-        const item = cart.value.find(item => item.id === productId)
+    const updateItemDiscount = (cartItemId, pct) => {
+        const item = cart.value.find(item => item.cartItemId === cartItemId)
         if (item) item.item_discount_pct = Math.min(100, Math.max(0, pct))
     }
 
@@ -151,6 +169,10 @@ export function useCart() {
         try {
             const res = await salesAPI.scanProduct(barcode)
             if (res.data) {
+                // If product requires a tur but none was identified by barcode
+                if (res.data.has_tur && !res.data.tur_id) {
+                    return { needs_tur: true, product: res.data }
+                }
                 addToCart(res.data)
                 return true
             }

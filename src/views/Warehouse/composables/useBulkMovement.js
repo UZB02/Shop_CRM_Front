@@ -11,14 +11,14 @@ export function useBulkMovement() {
   
   const displayName = ref('...')
 
-  const { products, saving, loadProducts, saveMovement } = useStockMovement()
+  const { products, loadingProducts, saving, loadProducts, saveMovement } = useStockMovement()
 
   const bulkItems = ref([{ product: null, quantity: null, unit_cost: null }])
   const movement_type = ref('in')
   const note = ref('')
 
   const validItemsCount = computed(() => {
-    return bulkItems.value.filter(item => item.product && item.quantity > 0).length
+    return bulkItems.value.filter(item => item.product?.id && item.quantity > 0).length
   })
 
   const addBulkItem = () => {
@@ -30,7 +30,7 @@ export function useBulkMovement() {
   }
 
   const handleSave = async () => {
-    const validItems = bulkItems.value.filter(item => item.product && item.quantity > 0)
+    const validItems = bulkItems.value.filter(item => item.product?.id && item.quantity > 0)
     if (validItems.length === 0) return
 
     try {
@@ -39,7 +39,8 @@ export function useBulkMovement() {
         movement_type: movement_type.value,
         note: note.value,
         items: validItems.map(item => ({
-          product: item.product,
+          product: item.product.id,
+          tur: item.product.tur_id || null,
           quantity: item.quantity,
           unit_cost: item.unit_cost || 0
         }))
@@ -71,8 +72,9 @@ export function useBulkMovement() {
   })
 
   return {
-    warehouseName: displayName, // Keep it as warehouseName for compatibility or rename in components
+    warehouseName: displayName,
     products,
+    loadingProducts,
     saving,
     bulkItems,
     movement_type,
@@ -81,6 +83,7 @@ export function useBulkMovement() {
     addBulkItem,
     removeBulkItem,
     handleSave,
+    loadProducts,
     router
   }
 }

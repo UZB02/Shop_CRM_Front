@@ -84,6 +84,9 @@
                   <!-- Product name -->
                   <p class="text-[10px] font-black text-slate-800 dark:text-slate-200 truncate leading-tight">
                     {{ item.product_name || 'Mahsulot' }}
+                    <span v-if="item.tur_name" class="text-slate-400 font-normal">
+                      ({{ item.tur_name }}{{ item.tur_color ? ' / ' + item.tur_color : '' }})
+                    </span>
                   </p>
                   <!-- qty × price = total -->
                   <div class="flex justify-between items-center mt-0.5">

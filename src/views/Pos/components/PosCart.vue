@@ -55,7 +55,7 @@
       <div v-else class="space-y-2.5">
         <div 
           v-for="item in cart" 
-          :key="item.id" 
+          :key="item.cartItemId" 
           class="flex items-center gap-3 bg-white dark:bg-[#0f172a] p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 shadow-sm hover:border-emerald-500/40 transition-all group"
         >
           <!-- Compact Icon -->
@@ -65,7 +65,10 @@
           
           <div class="flex-1 min-w-0">
             <h4 class="text-[12px] font-bold text-slate-800 dark:text-white truncate font-outfit uppercase tracking-tight">{{ item.name }}</h4>
-            <div class="flex items-center gap-2 mt-1">
+            <div class="flex items-center gap-2 mt-0.5">
+              <span v-if="item.tur_id" class="text-[9px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest bg-slate-50 dark:bg-slate-900 px-1.5 py-0.5 rounded">
+                {{ item.tur_name }}{{ item.tur_color ? ' / ' + item.tur_color : '' }}
+              </span>
               <span class="text-[12px] font-black text-emerald-500 font-outfit">
                 {{ settingsStore.formatPrice(item.sale_price || item.price || 0, item.currency_code) }}
               </span>
@@ -74,22 +77,22 @@
 
           <!-- Vertical/Compact Qty Controller -->
           <div class="flex items-center gap-3 bg-slate-50 dark:bg-slate-900 p-1 rounded-lg border border-slate-100/30 dark:border-slate-800/50">
-            <button @click="item.qty > 1 ? $emit('update-qty', item.id, item.qty - 1) : $emit('remove', item.id)" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">-</button>
+            <button @click="item.qty > 1 ? $emit('update-qty', item.cartItemId, item.qty - 1) : $emit('remove', item.cartItemId)" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">-</button>
             <input 
               type="number" 
               :value="item.qty"
               @focus="(e) => e.target.select()"
               @change="(e) => {
                 let val = parseFloat(e.target.value);
-                if (val > 0) $emit('update-qty', item.id, val);
-                else if (val === 0) $emit('remove', item.id);
+                if (val > 0) $emit('update-qty', item.cartItemId, val);
+                else if (val === 0) $emit('remove', item.cartItemId);
                 else e.target.value = item.qty;
               }"
               class="w-10 text-[11px] font-black text-center bg-transparent border-none outline-none dark:text-slate-300 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <button 
-              @click="item.quantity === undefined || item.qty < item.quantity ? $emit('update-qty', item.id, item.qty + 1) : null" 
-              :disabled="item.quantity !== undefined && item.qty >= item.quantity"
+              @click="item.stock_available === undefined || item.qty < item.stock_available ? $emit('update-qty', item.cartItemId, item.qty + 1) : null" 
+              :disabled="item.stock_available !== undefined && item.qty >= item.stock_available"
               class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-emerald-500 disabled:opacity-30 disabled:hover:text-slate-400 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800"
             >+</button>
           </div>

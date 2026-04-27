@@ -26,7 +26,12 @@
                   :class="loc.type === 'warehouse' ? 'text-amber-500/70' : 'text-sky-500/70'">
               {{ loc.type === 'warehouse' ? $t('products.detail.warehouse') : $t('products.detail.branch') }}
             </span>
-            <p class="text-[11px] font-bold text-slate-800 dark:text-slate-200 line-clamp-1 truncate max-w-[140px]">{{ loc.name }}</p>
+            <p class="text-[11px] font-bold text-slate-800 dark:text-slate-200 line-clamp-1 truncate max-w-[140px]">
+              {{ loc.name }}
+              <span v-if="loc.tur_id" class="text-slate-400 font-normal">
+                ({{ loc.tur_name }}{{ loc.tur_color ? ' / ' + loc.tur_color : '' }})
+              </span>
+            </p>
           </div>
         </div>
         <div class="text-right">

@@ -21,15 +21,13 @@
          />
       </div>
     </div>
-
     <!-- Main Content -->
     <div v-if="loading" class="flex flex-col gap-6 py-20 items-center justify-center">
         <i class="pi pi-spin pi-spinner text-3xl text-emerald-500"></i>
         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Ma'lumotlar yuklanmoqda...</p>
     </div>
-
     <div v-else class="space-y-4 animate-in">
-        <Tabs value="overview" class="!bg-transparent border-none">
+        <Tabs v-model:value="activeTab" class="!bg-transparent border-none">
             <TabList class="!bg-slate-100/80 dark:!bg-slate-800/80 !p-1 !rounded-xl !border-none !inline-flex !mb-4">
                 <Tab value="overview" class="!text-[10px] !font-bold !uppercase !tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
                    <i class="pi pi-th-large mr-2 !text-[9px]"></i>
@@ -94,7 +92,6 @@
                         />
                     </div>
                 </TabPanel>
-
                 <!-- Tab: Billing -->
                 <TabPanel value="billing">
                     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
@@ -113,7 +110,6 @@
             </TabPanels>
         </Tabs>
     </div>
-
     <!-- Payment Dialog -->
     <PaymentDialog 
       v-model:visible="paymentDialog"

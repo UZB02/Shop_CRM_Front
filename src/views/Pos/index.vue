@@ -246,9 +246,15 @@ const focusScanning = () => barcodeInput.value?.focus()
 const handleBarcodeScan = async () => {
   const code = barcodeBuffer.value.trim()
   if (!code) return
-  const success = await scanAndAdd(code)
-  if (success) { barcodeBuffer.value = '' } 
-  else { setTimeout(() => { barcodeBuffer.value = '' }, 500) }
+  const result = await scanAndAdd(code)
+  if (result === true) { 
+    barcodeBuffer.value = '' 
+  } else if (result && result.needs_tur) {
+    catalogRef.value?.handleProductClick(result.product)
+    barcodeBuffer.value = ''
+  } else { 
+    setTimeout(() => { barcodeBuffer.value = '' }, 500) 
+  }
 }
 
 const handleSearchEnter = async () => {
@@ -258,8 +264,12 @@ const handleSearchEnter = async () => {
   // Agar matn barkod kabi ko'rinsa (masalan: 13 ta raqam bo'lib, uning bir qismi har xil bo'lishi mumkin deb, faqat raqam tekshiramiz)
   // Barkod skanerlar odatda ENTER ni avtomatik yuboradi.
   if (/^\d{5,18}$/.test(query)) {
-    const success = await scanAndAdd(query)
-    if (success) {
+    const result = await scanAndAdd(query)
+    if (result === true) {
+      searchQueryGlobal.value = ''
+      return
+    } else if (result && result.needs_tur) {
+      catalogRef.value?.handleProductClick(result.product)
       searchQueryGlobal.value = ''
       return
     }
@@ -285,21 +295,7 @@ const onShiftConfirm = async (data) => {
 
 const onCheckoutConfirm = async (paymentData) => {
   try {
-    // Backend talabi bo'yicha payload'ni shakllantiramiz
-    const finalPayload = {
-      ...paymentData,
-      // customer_id -> customer
-      customer: selectedCustomer.value?.id || null,
-      // product_id -> product, price -> unit_price
-      items: cart.value.map(item => ({
-        product: item.id,
-        quantity: item.qty,
-        unit_price: item.price,
-        item_discount_pct: item.discount || 0
-      }))
-    }
-
-    const result = await performCheckout(finalPayload)
+    const result = await performCheckout(paymentData)
     if (result) {
       lastTransaction.value = result
       showCheckout.value = false

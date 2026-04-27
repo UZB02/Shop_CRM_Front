@@ -133,7 +133,11 @@ export const productsAPI = {
     update: (id, data) => api.patch(`/warehouse/products/${id}/`, data),
     delete: (id) => api.delete(`/warehouse/products/${id}/`),
     getLowStock: () => api.get('/warehouse/stocks/low-stock/'),
-    getBarcode: (id) => api.get(`/products/${id}/barcode/`, { responseType: 'blob' })
+    getBarcode: (id) => api.get(`/products/${id}/barcode/`, { responseType: 'blob' }),
+    getTurlar: (productId) => api.get(`/warehouse/products/${productId}/turlar/`),
+    createTur: (productId, data) => api.post(`/warehouse/products/${productId}/turlar/`, data),
+    updateTur: (productId, turId, data) => api.patch(`/warehouse/products/${productId}/turlar/${turId}/`, data),
+    deleteTur: (productId, turId) => api.delete(`/warehouse/products/${productId}/turlar/${turId}/`)
 }
 
 // Categories API

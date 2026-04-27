@@ -25,10 +25,12 @@
       <BulkMovementTable 
         :items="bulkItems"
         :products="products"
+        :loadingProducts="loadingProducts"
         :movementType="movement_type"
         :validCount="validItemsCount"
         @add="addBulkItem"
         @remove="removeBulkItem"
+        @search="loadProducts"
       />
     </div>
 
@@ -52,6 +54,8 @@ import BulkMovementTable from '@/views/Warehouse/components/BulkMovement/BulkMov
 const {
   warehouseName,
   products,
+  loadingProducts,
+  loadProducts,
   saving,
   bulkItems,
   movement_type,

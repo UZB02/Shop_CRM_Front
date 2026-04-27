@@ -77,7 +77,8 @@
     "total_to_pay": "Жами Сумма",
     "paid": "Тўланди",
     "close": "Ёпиш",
-    "notifications": "Билдиришномалар"
+    "notifications": "Билдиришномалар",
+    "optional": "Ихтиёрий"
   },
   "notifications": {
     "unread_count": "Сизда {count} та янги хабар бор"
@@ -163,7 +164,7 @@
     "no_permissions": "Рухсатлар мавжуд эмас",
     "last_login_ip": "Охирги кириш IP",
     "unknown": "Номаълум",
-    "management_title": "Ходимлар Бошқаруви",
+    "management_title": "Ходимлар бошқаруви",
     "management_subtitle": "Сизнинг жамоангиз ва уларнинг рухсатлари",
     "new_worker": "Янги ходим",
     "list_title": "Ходимлар Рўйхати",
@@ -550,7 +551,7 @@
     }
   },
   "warehouse": {
-    "management_title": "Омборлар Бошқаруви",
+    "management_title": "Омборлар бошқаруви",
     "page_title": "Омборлар",
     "page_subtitle": "Объектлар ва захира марказлари бошқаруви",
     "search_placeholder": "Омбор номи ёки манзили бўйича қидириш...",
@@ -769,7 +770,8 @@
       "tabs": {
         "overview": "Асосий",
         "inventory": "Захира",
-        "financial": "Молия"
+        "financial": "Молия",
+        "turlar": "Турлар"
       },
       "category": "Туркум",
       "store": "Асосий дўкон",
@@ -983,7 +985,7 @@
     }
   },
   "customers": {
-    "management_title": "Мижозлар Бошқаруви",
+    "management_title": "Мижозлар бошқаруви",
     "management_subtitle": "Содиқ мижозларингиз билан ишлаш ва гуруҳларни бошқариш",
     "customer_count": "{count} та мижоз",
     "title": "Мижозлар Базаси",
@@ -1278,6 +1280,27 @@
     "export_pdf": "PDFга юклаш",
     "wastage_export": "Исрофлар Excel",
     "filters": "Ҳисобот филтрлар"
+  },
+  "turlar": {
+    "title": "Маҳсулот турлари",
+    "add": "Янги тур қўшиш",
+    "name": "Номи / Размер",
+    "color": "Ранги",
+    "sale_price_override": "Махсус нарх (Ихтиёрий)",
+    "effective_price": "Амалдаги нарх",
+    "is_active": "Фаол",
+    "no_turlar": "Ҳозирча турлар қўшилмаган",
+    "enable_tur_system": "Тур тизимини ёқиш",
+    "enable_tur_desc": "Ушбу маҳсулот учун турли ранг ёки размерларни ёқиш",
+    "delete_confirm": "Ушбу турни ўчиришни тасдиқлайсизми?",
+    "messages": {
+      "added": "Янги тур қўшилди",
+      "updated": "Тур янгиланди",
+      "deleted": "Тур ўчирилди",
+      "delete_error_stock": "Омборда қолдиғи бор турни ўчириб бўлмайди"
+    },
+    "badge": "Турли",
+    "select_tur": "Турни танланг (Размер/Ранг)"
   },
   "trades": {
     "status": {

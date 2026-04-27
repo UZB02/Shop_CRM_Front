@@ -5,36 +5,31 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-slate-50/50 dark:bg-[#0b1120]/50 border-b border-slate-200 dark:border-slate-800/60">
-              <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
-              <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ $t('products.form.barcode') }}</th>
-              <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_price') }}</th>
-              <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_inventory') }}</th>
-              <th class="px-6 py-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap text-right">{{ $t('products.col_actions') }}</th>
+            <tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap text-center">{{ $t('products.form.barcode') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_price') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap text-center">{{ $t('products.col_inventory') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap text-right">{{ $t('products.col_actions') }}</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 dark:divide-slate-800/40">
+          <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
 
             <!-- Loading skeleton -->
             <tr v-if="loading" v-for="i in 8" :key="`sk-${i}`" class="animate-pulse">
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-800 shrink-0"></div>
-                  <div class="space-y-2 w-full max-w-[140px]">
-                    <div class="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded"></div>
-                    <div class="h-3 w-2/3 bg-slate-200 dark:bg-slate-800 rounded"></div>
+              <td class="px-6 py-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 shrink-0"></div>
+                  <div class="space-y-1.5 w-full max-w-[140px]">
+                    <div class="h-3 w-full bg-slate-100 dark:bg-slate-800 rounded"></div>
+                    <div class="h-2 w-2/3 bg-slate-100 dark:bg-slate-800 rounded"></div>
                   </div>
                 </div>
               </td>
-              <td class="px-6 py-4"><div class="h-4 w-28 bg-slate-200 dark:bg-slate-800 rounded"></div></td>
-              <td class="px-6 py-4">
-                <div class="space-y-2">
-                  <div class="h-4 w-24 bg-slate-200 dark:bg-slate-800 rounded"></div>
-                  <div class="h-3 w-16 bg-slate-200 dark:bg-slate-800 rounded"></div>
-                </div>
-              </td>
-              <td class="px-6 py-4"><div class="h-4 w-12 bg-slate-200 dark:bg-slate-800 rounded"></div></td>
-              <td class="px-6 py-4"><div class="h-8 w-32 bg-slate-200 dark:bg-slate-800 rounded ml-auto"></div></td>
+              <td class="px-6 py-3"><div class="h-3 w-20 bg-slate-100 dark:bg-slate-800 rounded mx-auto"></div></td>
+              <td class="px-6 py-3"><div class="h-3 w-16 bg-slate-100 dark:bg-slate-800 rounded"></div></td>
+              <td class="px-6 py-3"><div class="h-3 w-10 bg-slate-100 dark:bg-slate-800 rounded mx-auto"></div></td>
+              <td class="px-6 py-3"><div class="h-8 w-24 bg-slate-100 dark:bg-slate-800 rounded ml-auto"></div></td>
             </tr>
 
             <!-- Rows -->
@@ -42,13 +37,13 @@
               v-else
               v-for="item in products"
               :key="item.id"
-              class="group hover:bg-slate-50/80 dark:hover:bg-[#131c31]/50 transition-colors duration-200"
+              class="group hover:bg-emerald-50/30 dark:hover:bg-emerald-500/5 transition-all duration-200 border-b border-slate-50 dark:border-slate-800 last:border-none"
             >
               <!-- Product -->
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-4">
+              <td class="px-6 py-3.5">
+                <div class="flex items-center gap-3">
                   <!-- Image Component -->
-                  <div class="relative shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700/50 shadow-sm overflow-hidden p-1 transition-transform duration-300 group-hover:scale-105">
+                  <div class="relative shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden p-1 group-hover:scale-105 transition-transform">
                     <img
                       v-if="formatImageUrl(item.image) && !imageErrors[item.id]"
                       :src="formatImageUrl(item.image)"
@@ -56,29 +51,34 @@
                       class="w-full h-full object-contain rounded-lg"
                       alt="Product Image"
                     />
-                    <i v-else class="pi pi-image text-xl text-slate-300 dark:text-slate-500"></i>
+                    <i v-else class="pi pi-image text-lg text-slate-200 dark:text-slate-600"></i>
                   </div>
                   
-                  <!-- Status Indicator floating top right of image relative container (not wrapper) -->
-                  <div
-                    v-if="item.status === 'active'"
-                    class="absolute -translate-y-[8px] -translate-x-[16px] w-[11px] h-[11px] bg-emerald-500 border-2 border-white dark:border-[#0f172a] rounded-full z-10 hidden"
-                  ></div>
-
                   <!-- Text Information -->
                   <div class="min-w-0 flex flex-col justify-center">
-                    <router-link
-                      :to="`/dashboard/products/${item.id}`"
-                      class="text-[15px] font-semibold text-slate-900 dark:text-slate-100 hover:text-emerald-600 dark:hover:text-emerald-400 block truncate transition-colors"
-                    >
-                      {{ item.name }}
-                    </router-link>
+                    <div class="flex items-center flex-wrap gap-2">
+                      <router-link
+                        :to="`/dashboard/products/${item.id}`"
+                        class="text-[13px] font-black text-slate-800 dark:text-slate-200 hover:text-emerald-500 transition-colors tracking-tight leading-tight"
+                      >
+                        {{ item.name }}
+                      </router-link>
+                      
+                      <div v-if="item.has_tur" class="flex items-center gap-1">
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black bg-emerald-500/5 text-emerald-600 border border-emerald-500/10 uppercase tracking-widest">
+                           {{ item.tur_name || $t('turlar.badge') }}
+                        </span>
+                        <span v-if="item.tur_color" class="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black bg-slate-50 dark:bg-slate-800 text-slate-500 border border-slate-100 dark:border-slate-700 uppercase tracking-widest">
+                           {{ item.tur_color }}
+                        </span>
+                      </div>
+                    </div>
                     
-                    <div class="flex items-center gap-2 mt-1">
-                      <span v-if="item.category_name" class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 ring-1 ring-inset ring-emerald-500/20 dark:ring-emerald-500/30">
+                    <div class="flex items-center gap-1.5 mt-0.5 opacity-60">
+                      <span v-if="item.category_name" class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
                         {{ item.category_name }}
                       </span>
-                      <span v-if="item.subcategory_name && settingsStore.isSubcategoryEnabled" class="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate max-w-[120px]">
+                      <span v-if="item.subcategory_name && settingsStore.isSubcategoryEnabled" class="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase tracking-widest before:content-['•'] before:text-[7px] before:opacity-30">
                         {{ item.subcategory_name }}
                       </span>
                     </div>
@@ -87,55 +87,57 @@
               </td>
 
               <!-- Barcode -->
-              <td class="px-6 py-4 align-middle">
-                <div v-if="item.barcode" class="inline-flex items-center font-mono text-[13px] font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md ring-1 ring-inset ring-slate-200 dark:ring-slate-700/50">
-                   {{ item.barcode }}
+              <td class="px-6 py-3.5 align-middle text-center">
+                <div v-if="item.barcode" class="inline-flex items-center gap-2 group/barcode">
+                   <i class="pi pi-barcode text-slate-300 dark:text-slate-700 group-hover/barcode:text-emerald-500 transition-colors text-[10px]"></i>
+                   <code class="text-[11px] font-bold text-slate-500 dark:text-slate-400 tracking-tight font-mono">{{ item.barcode }}</code>
                 </div>
-                <span v-else class="text-sm text-slate-400 dark:text-slate-500">—</span>
+                <span v-else class="text-[9px] font-black text-slate-200 dark:text-slate-800 uppercase tracking-widest">—</span>
               </td>
 
               <!-- Price -->
-              <td class="px-6 py-4 align-middle">
-                <!-- If there is a promotion -->
+              <td class="px-6 py-3.5 align-middle">
                   <template v-if="item.active_promotion">
-                  <div class="flex flex-col">
-                    <div class="flex items-baseline gap-1.5">
-                      <span class="text-[13px] font-semibold text-slate-500 dark:text-slate-500 line-through">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
-                      <span class="text-xs font-semibold text-rose-500 dark:text-rose-400">(-{{ item.active_promotion.discount_pct }}%)</span>
+                    <div class="flex flex-col">
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] font-bold text-slate-400 dark:text-slate-600 line-through">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
+                        <span class="text-[8px] font-black text-rose-500 bg-rose-500/10 px-1 rounded">-{{ item.active_promotion.discount_pct }}%</span>
+                      </div>
+                      <span class="text-[13px] font-black text-slate-800 dark:text-white">{{ settingsStore.formatPrice(item.active_promotion.discounted_price, item.currency_code) }}</span>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-0.5">
-                      <span class="text-base font-bold text-slate-900 dark:text-white">{{ settingsStore.formatPrice(item.active_promotion.discounted_price, item.currency_code) }}</span>
+                  </template>
+
+                  <template v-else>
+                    <div class="flex flex-col">
+                      <span class="text-[13px] font-black text-slate-800 dark:text-white leading-none">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
+                      <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter mt-1 opacity-50">{{ item.unit_display || 'dona' }} uchun</span>
                     </div>
-                  </div>
-                </template>
-
-                <!-- Normal Price -->
-                <template v-else>
-                  <div class="flex items-baseline gap-1.5">
-                    <span class="text-base font-bold text-slate-900 dark:text-white">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
-                  </div>
-                </template>
-
-                <div v-if="item.unit_display" class="text-[11px] text-slate-500 mt-1 flex items-center gap-1 font-medium">
-                  1 {{ item.unit_display }} uchun
-                </div>
+                  </template>
               </td>
 
               <!-- Stock Quantity -->
-              <td class="px-6 py-4 align-middle">
-                <div class="flex flex-col">
-                  <span 
-                    class="text-[15px] font-black tracking-tight"
-                    :class="(settingsStore.isLowStockEnabled && Number(item.quantity) <= (item.low_stock_threshold || settingsStore.lowStockThreshold)) ? 'text-rose-500' : 'text-slate-900 dark:text-white'"
-                  >
-                    {{ settingsStore.formatNumber(item.quantity) || 0 }}
-                  </span>
-                  <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ item.unit_display }}</span>
+              <td class="px-6 py-3.5 align-middle text-center">
+                <div class="flex flex-col items-center">
+                  <div class="flex items-center gap-2">
+                    <span 
+                      class="text-[13px] font-black tracking-tight"
+                      :class="(settingsStore.isLowStockEnabled && Number(item.quantity) <= (item.low_stock_threshold || settingsStore.lowStockThreshold)) ? 'text-rose-500' : 'text-slate-800 dark:text-white'"
+                    >
+                      {{ settingsStore.formatNumber(item.quantity) || 0 }}
+                    </span>
+                    <span v-if="item.status_display" 
+                      class="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border"
+                      :class="item.status === 'active' ? 'bg-emerald-500/5 text-emerald-600 border-emerald-500/20' : 'bg-slate-50 text-slate-400 border-slate-200'"
+                    >
+                      {{ item.status_display }}
+                    </span>
+                  </div>
+                  <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">{{ item.unit_display }} omborda</span>
                 </div>
               </td>
 
               <!-- Actions -->
-              <td class="px-6 py-4 align-middle">
+              <td class="px-6 py-3.5 align-middle">
                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-70 group-hover:opacity-100 transition-opacity">
                   <button
                     @click="router.push(`/dashboard/products/${item.id}`)"
