@@ -162,7 +162,7 @@ export default function useExpenseTabLogic() {
     branches, categories, shifts,
     expenseList, crudFilters, exportFilters,
     reportsFilters,
-    dynamicCategories: computed(() => activeTab.value === 'expenses' ? categories.value : productCategories.value),
+    dynamicCategories: computed(() => ['expenses', 'expenses-list'].includes(activeTab.value) ? categories.value : productCategories.value),
     summaryData: computed(() => reports.expenses?.summary || {}),
     totalFromList: computed(() => parseFloat(reports.expenses?.summary?.expenses_total || 0)),
     netProfit: computed(() => {
