@@ -36,7 +36,8 @@ export default function useExpenseTabLogic() {
 
   const tabs = computed(() => {
     const tList = [
-      { id: 'expenses', label: t('finance.title'), icon: 'pi pi-wallet' }
+      { id: 'expenses', label: t('finance.title'), icon: 'pi pi-chart-bar' },
+      { id: 'expenses-list', label: t('finance.list'), icon: 'pi pi-list' }
     ]
     if (userIsManager.value) {
       tList.push(
@@ -56,7 +57,10 @@ export default function useExpenseTabLogic() {
     
     switch (activeTab.value) {
         case 'expenses':
-            await Promise.all([fetchExpenseList(), fetchExpensesReport()])
+            await fetchExpensesReport()
+            break
+        case 'expenses-list':
+            await fetchExpenseList()
             break
         case 'revenue':
             await fetchRevenue()
@@ -90,7 +94,6 @@ export default function useExpenseTabLogic() {
     fetchCategories()
     categoriesAPI.getAll().then(res => productCategories.value = res.data)
     fetchTabReport()
-    if (activeTab.value === 'expenses') fetchExpenseList()
     
     if (userIsManager.value) {
         fetchShifts()
@@ -130,7 +133,6 @@ export default function useExpenseTabLogic() {
         reportsFilters.date_to = defaults.date_to
       }
 
-      if (activeTab.value === 'expenses') fetchExpenseList()
       fetchTabReport()
   }, { deep: true, flush: 'sync' })
 

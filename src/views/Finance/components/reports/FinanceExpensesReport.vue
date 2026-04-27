@@ -108,19 +108,6 @@
        </div>
     </div>
 
-    <!-- General Expenses Tab -->
-    <div v-if="activeSubTab === 'expenses'" class="animate-in fade-in slide-in-from-bottom-2 duration-400">
-       <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-         <ExpenseTable
-           :expenses="props.data.expenses?.items?.length ? props.data.expenses.items : props.expenses"
-           :loading="props.loading"
-           :is-manager="props.isManager"
-           @view="emit('view', $event)"
-           @edit="emit('edit', $event)"
-           @delete="emit('delete', $event)"
-         />
-       </div>
-    </div>
 
   </div>
 </template>
@@ -147,8 +134,7 @@ const emit = defineEmits(['view', 'edit', 'delete'])
 const activeSubTab = ref('analytics')
 const subTabs = computed(() => [
   { id: 'analytics', label: 'reports.analytics', icon: 'pi pi-chart-bar' },
-  { id: 'purchases', label: 'finance.purchases', icon: 'pi pi-shopping-bag' },
-  { id: 'expenses', label: 'finance.list', icon: 'pi pi-wallet' }
+  { id: 'purchases', label: 'finance.purchases', icon: 'pi pi-shopping-bag' }
 ])
 
 const formatPrice = (val) => settingsStore.formatPrice(val)

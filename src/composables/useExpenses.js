@@ -119,9 +119,8 @@ export default function useExpenses() {
             
             if (filters.value.date) {
                 if (Array.isArray(filters.value.date)) {
-                    const [start, end] = filters.value.date
-                    if (start) params.date_from = new Date(start).toLocaleDateString('en-CA')
-                    if (end) params.date_to = new Date(end).toLocaleDateString('en-CA')
+                    const [start, _] = filters.value.date
+                    if (start) params.date = new Date(start).toLocaleDateString('en-CA')
                 } else {
                     params.date = new Date(filters.value.date).toLocaleDateString('en-CA')
                 }

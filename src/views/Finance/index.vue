@@ -41,6 +41,20 @@
         @delete="confirmDelete"
       />
     </div>
+    
+    <!-- ── Tab Content: Expenses List (New Main Tab) ────────── -->
+    <div v-else-if="activeTab === 'expenses-list'" class="animate-in fade-in slide-in-from-bottom-2 duration-400">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+        <ExpenseTable 
+          :expenses="expenseList" 
+          :loading="loading" 
+          :is-manager="userIsManager"
+          @view="viewExpense"
+          @edit="editExpense"
+          @delete="confirmDelete"
+        />
+      </div>
+    </div>
 
     <!-- ── Tab Content: Revenue ──────────────────────────────── -->
     <div v-else-if="activeTab === 'revenue'" class="animate-in fade-in slide-in-from-bottom-2 duration-400">

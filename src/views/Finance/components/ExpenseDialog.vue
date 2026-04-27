@@ -68,7 +68,7 @@
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('finance.branch') }}
             </label>
-            <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
+            <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300" :class="{ 'opacity-60 grayscale-[0.5] cursor-not-allowed': expense.id }">
               <i class="pi pi-map-marker absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
               <Select
                 v-model="expense.branch"
@@ -76,13 +76,15 @@
                 optionLabel="name"
                 optionValue="id"
                 :placeholder="$t('common.select')"
+                :disabled="!!expense.id"
                 class="flex-1 h-full w-full"
                 showClear
                 pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
                 pt:label:class="!pl-12 !pr-4 !text-[13px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
               />
             </div>
-            <p class="text-[8px] font-bold text-slate-400 uppercase ml-1 mt-1 block">Ko'rsatmasangiz, o'z filialingiz avtomatik tanlanadi</p>
+            <p v-if="!expense.id" class="text-[8px] font-bold text-slate-400 uppercase ml-1 mt-1 block">Ko'rsatmasangiz, o'z filialingiz avtomatik tanlanadi</p>
+            <p v-else class="text-[8px] font-bold text-amber-500 uppercase ml-1 mt-1 block">Xarajat filialini tahrirlab bo'lmaydi</p>
           </div>
 
           <!-- Amount -->
@@ -252,19 +254,20 @@ const clearImage = () => {
 
 const handleSave = () => {
   const data = { ...props.expense }
-
   if (selectedFile.value) {
     const fd = new FormData()
     fd.append('category', data.category)
-    if (data.branch) fd.append('branch', data.branch)
+    if (data.branch && !data.id) fd.append('branch', data.branch)
     fd.append('amount', data.amount)
-    fd.append('date', data.date)
+    fd.append('date', formatDateToString(data.date))
     if (data.description) fd.append('description', data.description)
     fd.append('receipt_image', selectedFile.value)
     if (data.id) fd.append('id', data.id)
     emit('save', fd)
   } else {
-    emit('save', { ...data })
+    const payload = { ...data, date: formatDateToString(data.date) }
+    if (data.id) delete payload.branch // Remove branch for PATCH
+    emit('save', payload)
   }
 }
 

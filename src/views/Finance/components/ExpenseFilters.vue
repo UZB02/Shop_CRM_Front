@@ -18,7 +18,7 @@
       <div class="relative flex-1 min-w-[200px] sm:flex-none sm:w-64 group">
         <DatePicker
           v-model="filters.date"
-          selectionMode="range"
+          :selectionMode="['expenses-list', 'debtors'].includes(activeTab) ? 'single' : 'range'"
           :manualInput="false"
           dateFormat="yy-mm-dd"
           :placeholder="$t('common.date')"
