@@ -124,7 +124,10 @@ export function useCheckout(props, emit) {
   // VIP Mijoz Chegirma Mantiq - Soddalashtirilgan (Backend ma'lumotlariga tayanadi)
   watch(() => props.selectedCustomer, (val) => {
     vipMessage.value = ''
-    if (!val) return
+    if (!val) {
+      discountAmount.value = 0
+      return
+    }
 
     // Backenddan to'g'ridan-to'g'ri kelayotgan group_discount dan foydalanamiz
     const discountPct = val.group_discount || (val.group_info?.discount) || 0
@@ -141,6 +144,39 @@ export function useCheckout(props, emit) {
 
       discountAmount.value = calculatedDiscount
       vipMessage.value = `${groupName || 'VIP'} mijoz! ${pct}% chegirma avtomat hisoblandi.`
+    }
+  })
+
+  // To'lanadigan summa o'zgarganda to'lov maydonlarini sinxronlash (Aralash to'lovda overflow bo'lmasligi uchun)
+  watch(paidAmount, (newVal) => {
+    if (paymentType.value === 'cash') {
+      cashAmount.value = newVal
+      cardAmount.value = 0
+    } else if (paymentType.value === 'card') {
+      cardAmount.value = newVal
+      cashAmount.value = 0
+    } else if (paymentType.value === 'mixed') {
+      // Aralash to'lovda jami kiritilgan summa to'lovdan oshib ketmasligi uchun reset qilamiz
+      // Bu foydalanuvchiga xatolik ko'rsatilishidan ko'ra yaxshiroq tajriba beradi
+      cashAmount.value = newVal
+      cardAmount.value = 0
+    }
+  })
+
+  // To'lov turi o'zgarganda ham summalarni moslashtiramiz
+  watch(paymentType, (val) => {
+    if (val === 'cash') {
+      cashAmount.value = paidAmount.value
+      cardAmount.value = 0
+    } else if (val === 'card') {
+      cardAmount.value = paidAmount.value
+      cashAmount.value = 0
+    } else if (val === 'mixed') {
+      cashAmount.value = paidAmount.value
+      cardAmount.value = 0
+    } else if (val === 'debt') {
+      debtCashAmount.value = 0
+      debtCardAmount.value = 0
     }
   })
 
