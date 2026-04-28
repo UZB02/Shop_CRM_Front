@@ -67,8 +67,9 @@
             </div>
 
             <!-- Promotion Badge -->
-            <div v-if="product.active_promotion" class="absolute top-2 left-2 bg-rose-500 text-white flex flex-col px-2 py-1.5 rounded-[8px] items-start max-w-[80%] text-left shadow-lg z-20 overflow-hidden">
-              <span class="text-[8px] font-black uppercase tracking-tight leading-none truncate w-full">{{ product.active_promotion.name }}</span>
+            <div v-if="product.active_promotion" class="absolute top-2 left-2 bg-rose-500 text-white flex flex-row px-2 py-1.5 rounded-[8px] items-center gap-1.5 max-w-[90%] text-left shadow-lg z-20 overflow-hidden">
+              <span class="text-[11px] font-black leading-none shrink-0">-{{ Math.round(product.active_promotion.discount_pct || (product.sale_price ? ((product.sale_price - product.active_promotion.discounted_price) / product.sale_price * 100) : 0)) }}%</span>
+              <span class="text-[8px] font-black uppercase tracking-tight leading-none truncate opacity-90">{{ product.active_promotion.name }}</span>
             </div>
           </div>
 
