@@ -9,7 +9,14 @@
             <div class="flex justify-between items-start">
                <div class="space-y-0.5">
                   <div class="flex items-center gap-1.5 mb-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    <span 
+                        class="w-1.5 h-1.5 rounded-full" 
+                        :class="{
+                            'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]': getStatusSeverity(subscription.status) === 'success',
+                            'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]': getStatusSeverity(subscription.status) === 'warning',
+                            'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]': getStatusSeverity(subscription.status) === 'danger'
+                        }"
+                    />
                     <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ subscription.store_name }}</span>
                   </div>
                   <h2 class="text-2xl font-black tracking-tighter text-slate-900 dark:text-white">{{ displayPlanName }}</h2>
@@ -19,9 +26,12 @@
             </div>
 
             <div class="mt-4 flex flex-wrap gap-3 pt-4 border-t border-slate-100 dark:border-white/5">
-               <div v-if="remainingDays !== null" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
-                  <i class="pi pi-clock text-amber-500 dark:text-amber-400 text-[10px]" />
-                  <span class="text-[10px] font-black text-amber-700 dark:text-amber-200">{{ $t('subscription.days_left', { days: remainingDays }) }}</span>
+               <div v-if="remainingDays !== null" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-colors" :class="{
+                  'bg-rose-50 dark:bg-rose-500/10 border-rose-100 dark:border-rose-500/20': remainingDays <= 0,
+                  'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5': remainingDays > 0
+               }">
+                  <i class="pi pi-clock text-[10px]" :class="remainingDays <= 0 ? 'text-rose-500 dark:text-rose-400' : 'text-amber-500 dark:text-amber-400'" />
+                  <span class="text-[10px] font-black" :class="remainingDays <= 0 ? 'text-rose-700 dark:text-rose-200' : 'text-amber-700 dark:text-amber-200'">{{ $t('subscription.days_left', { days: remainingDays }) }}</span>
                </div>
                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
                   <i class="pi pi-calendar text-emerald-500 dark:text-emerald-400 text-[10px]" />

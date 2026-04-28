@@ -1,7 +1,7 @@
 <template>
   <Transition name="fade">
     <div 
-      v-if="store.isSubscriptionExpired" 
+      v-if="store.isSubscriptionExpired && route.path !== '/dashboard/subscription'" 
       class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xl transition-all duration-500"
     >
       <div class="max-w-md w-full bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in duration-500">
@@ -59,14 +59,15 @@
 <script setup>
 import { useNotificationStore } from '@/store/notifications'
 import { useAuthStore } from '@/store/auth'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const store = useNotificationStore()
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const goToPayment = () => {
-    router.push('/settings')
+    router.push('/dashboard/subscription')
 }
 
 const logout = () => {

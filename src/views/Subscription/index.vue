@@ -124,7 +124,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import Button from 'primevue/button'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
@@ -138,6 +138,7 @@ import { useSettingsStore } from '@/store/settings'
 import { useSubscription } from './composables/useSubscription'
 
 const settingsStore = useSettingsStore()
+const activeTab = ref('overview')
 
 const {
     subscription,
