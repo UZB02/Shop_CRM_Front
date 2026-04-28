@@ -30,7 +30,7 @@ export function useReturnCart(props, emit, close) {
     returnItems.value = []
     productQuery.value = ''
     searchResults.value = []
-    
+
     if (props.initialSale) {
       selectedCustomerId.value = props.initialSale.customer_id
     } else {
@@ -46,7 +46,7 @@ export function useReturnCart(props, emit, close) {
       searchResults.value = []
       return
     }
-    
+
     searchTimeout = setTimeout(async () => {
       try {
         const response = await productsAPI.getAll({ search: productQuery.value, page_size: 5 })
@@ -103,7 +103,7 @@ export function useReturnCart(props, emit, close) {
   const updateQty = (idx, delta) => {
     const item = returnItems.value[idx]
     const newVal = parseFloat(item.quantity) + delta
-    
+
     // Enforce 0 < newVal <= max_qty (if max_qty exists)
     if (newVal > 0) {
       if (item.max_qty !== undefined && newVal > item.max_qty) {
@@ -115,7 +115,6 @@ export function useReturnCart(props, emit, close) {
 
   const submitReturn = async () => {
     if (!returnItems.value.length) return
-    
     const payload = {
       reason: reason.value || undefined,
       items: returnItems.value.map(it => ({
@@ -125,7 +124,7 @@ export function useReturnCart(props, emit, close) {
         ...(it.tur_id && { tur_id: it.tur_id })
       }))
     }
-    
+
     if (props.initialSale?.id) payload.sale = props.initialSale.id
     if (selectedCustomerId.value) payload.customer = selectedCustomerId.value
 
