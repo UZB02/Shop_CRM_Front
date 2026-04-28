@@ -65,10 +65,15 @@
           
           <div class="flex-1 min-w-0">
             <h4 class="text-[12px] font-bold text-slate-800 dark:text-white truncate font-outfit uppercase tracking-tight">{{ item.name }}</h4>
-            <div class="flex items-center gap-2 mt-0.5">
-              <span v-if="item.tur_id" class="text-[9px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest bg-slate-50 dark:bg-slate-900 px-1.5 py-0.5 rounded">
-                {{ item.tur_name }}{{ item.tur_color ? ' / ' + item.tur_color : '' }}
+            <div v-if="item.tur_id" class="flex items-center gap-1 mt-1">
+              <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
+                {{ item.tur_name }}
               </span>
+              <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
+                {{ item.tur_color }}
+              </span>
+            </div>
+            <div class="mt-1">
               <span class="text-[12px] font-black text-emerald-500 font-outfit">
                 {{ settingsStore.formatPrice(item.sale_price || item.price || 0, item.currency_code) }}
               </span>

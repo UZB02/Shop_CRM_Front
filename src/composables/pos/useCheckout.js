@@ -31,9 +31,9 @@ export function useCheckout() {
                 customer: customer?.id || null,
                 items: cartItems.map(item => ({
                     product: item.id,
-                    tur_id: item.tur_id || null, // Variant ID qo'shildi
                     quantity: parseFloat(item.qty) || 1,
                     unit_price: parseFloat(item.sale_price || item.price) || 0,
+                    ...(item.has_tur && item.tur_id && { tur_id: item.tur_id }),
                     ...(item.item_discount_pct > 0 && {
                         original_price: parseFloat(item.original_sale_price || item.sale_price || item.price) || 0,
                         item_discount_pct: parseFloat(item.item_discount_pct) || 0

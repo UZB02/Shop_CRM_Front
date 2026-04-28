@@ -12,6 +12,43 @@ export function useCheckout(props, emit) {
   const description = ref('')
   const vipMessage = ref('')
 
+  const isMixedUpdating = ref(false)
+  
+  // Mixed Payment Auto-calculate
+  watch(cashAmount, (newVal) => {
+    if (isMixedUpdating.value || paymentType.value !== 'mixed') return
+    isMixedUpdating.value = true
+    const other = paidAmount.value - newVal
+    cardAmount.value = other > 0 ? other : 0
+    setTimeout(() => { isMixedUpdating.value = false }, 50)
+  })
+
+  watch(cardAmount, (newVal) => {
+    if (isMixedUpdating.value || paymentType.value !== 'mixed') return
+    isMixedUpdating.value = true
+    const other = paidAmount.value - newVal
+    cashAmount.value = other > 0 ? other : 0
+    setTimeout(() => { isMixedUpdating.value = false }, 50)
+  })
+
+  // Debt Payment Auto-calculate
+  const isDebtUpdating = ref(false)
+  watch(debtCashAmount, (newVal) => {
+    if (isDebtUpdating.value || paymentType.value !== 'debt') return
+    isDebtUpdating.value = true
+    const other = paidAmount.value - newVal
+    debtCardAmount.value = other > 0 ? other : 0
+    setTimeout(() => { isDebtUpdating.value = false }, 50)
+  })
+
+  watch(debtCardAmount, (newVal) => {
+    if (isDebtUpdating.value || paymentType.value !== 'debt') return
+    isDebtUpdating.value = true
+    const other = paidAmount.value - newVal
+    debtCashAmount.value = other > 0 ? other : 0
+    setTimeout(() => { isDebtUpdating.value = false }, 50)
+  })
+
   const methods = computed(() => {
     const list = []
     if (settingsStore.allowCash) list.push({ id: 'cash', label: 'Naqd', icon: 'pi pi-money-bill' })

@@ -12,8 +12,8 @@
         <!-- Minimalist Backdrop -->
         <div class="absolute inset-0 bg-slate-900/60 dark:bg-[#040814]/80 backdrop-blur-sm transition-opacity" @click="close"></div>
         
-        <!-- Premium Modal Wrapper -->
-        <div class="relative w-full max-w-[900px] bg-white dark:bg-[#0f1524] rounded-[24px] overflow-hidden shadow-2xl border border-slate-200 dark:border-white/5 flex flex-col max-h-[92vh]">
+        <!-- Premium Full-Featured Modal Wrapper -->
+        <div class="relative w-[98%] max-w-[1300px] h-[96vh] bg-white dark:bg-[#0f1524] rounded-[28px] overflow-hidden shadow-2xl border border-slate-200 dark:border-white/5 flex flex-col">
           
           <!-- Header -->
           <div class="px-6 py-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between shrink-0 bg-white/50 dark:bg-white/[0.02]">

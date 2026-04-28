@@ -76,9 +76,19 @@
           <!-- Content Section -->
             <div class="p-4 flex flex-col flex-1 bg-white dark:bg-[#111827]">
               <div class="flex justify-between items-start mb-3">
-                <h3 class="font-black text-[13px] text-slate-800 dark:text-white font-outfit uppercase tracking-tight line-clamp-2">
-                  {{ product.name }}
-                </h3>
+                <div class="flex flex-col gap-1">
+                  <h3 class="font-black text-[13px] text-slate-800 dark:text-white font-outfit uppercase tracking-tight line-clamp-2">
+                    {{ product.name }}
+                  </h3>
+                  <div v-if="product.has_tur || product.tur_name" class="flex items-center gap-1">
+                    <span v-if="product.tur_name" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
+                      {{ product.tur_name }}
+                    </span>
+                    <span v-if="product.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
+                      {{ product.tur_color }}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <!-- Price & Stock -->
@@ -138,9 +148,13 @@ const addTurToCart = (tur) => {
 // Compute stock relative to cart
 const productsWithStock = computed(() => {
   return products.value.map(p => {
-    // Only subtract if it's the exact same product and it doesn't have variants
-    // If it has variants, displayQuantity will be handled differently (total stock)
-    const inCart = props.cart?.filter(item => item.id === p.id)
+    // Subtract only if it's the exact same item in the cart.
+    // Catalog products for variants (tur) already have a unique ID or specific tur_id.
+    // We must match both product ID and tur_id to get accurate stock.
+    const inCart = props.cart?.filter(item => 
+      item.id === p.id && 
+      (p.tur_id ? item.tur_id === p.tur_id : !item.tur_id)
+    )
     const cartQty = inCart ? inCart.reduce((acc, item) => acc + item.qty, 0) : 0
     return {
       ...p,

@@ -74,12 +74,19 @@
                     >
                       <td class="px-4 py-2 text-[10px] text-slate-400">{{ index + 1 }}</td>
                       <td class="px-4 py-2">
-                        <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors">
-                          {{ item.product_name }}
-                          <span v-if="item.tur_name" class="text-[10px] text-slate-400 font-normal">
-                            ({{ item.tur_name }}{{ item.tur_color ? ' / ' + item.tur_color : '' }})
+                        <div class="flex items-center flex-wrap gap-2">
+                          <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors">
+                            {{ item.product_name }}
                           </span>
-                        </span>
+                          <div v-if="item.tur_name" class="flex items-center gap-1">
+                            <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
+                              {{ item.tur_name }}
+                            </span>
+                            <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
+                              {{ item.tur_color }}
+                            </span>
+                          </div>
+                        </div>
                       </td>
                       <td class="px-4 py-2">
                         <div class="flex items-center gap-2">

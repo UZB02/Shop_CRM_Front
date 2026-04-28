@@ -63,6 +63,14 @@
                      <div class="flex-grow min-w-0">
                        <div class="flex items-center gap-2 mb-1">
                          <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate" :class="{'line-through opacity-60': item.isFullyReturned}">{{ item.product_name }}</h4>
+                         <div v-if="item.tur_name" class="flex items-center gap-1">
+                           <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
+                             {{ item.tur_name }}
+                           </span>
+                           <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
+                             {{ item.tur_color }}
+                           </span>
+                         </div>
                          <span v-if="item.isReturned" class="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-500/10 px-1 py-0.5 rounded border border-amber-100 dark:border-amber-500/10 uppercase tracking-widest leading-none">
                            {{ item.isFullyReturned ? 'Qaytarilgan' : `Qaytarildi (${item.returned_qty})` }}
                          </span>

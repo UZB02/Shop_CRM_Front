@@ -6,7 +6,17 @@
            class="p-3 rounded-[14px] border border-slate-100 dark:border-white/5 bg-white dark:bg-transparent flex items-center justify-between hover:bg-slate-50/50 dark:hover:bg-white/[0.02] shadow-sm transition-all group"
            :class="{'opacity-50 grayscale-[50%]': parseFloat(item.net_qty || (parseFloat(item.quantity) - parseFloat(item.returned_qty || 0))) <= 0}">
         <div class="flex flex-col">
-          <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ item.product_name }}</span>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ item.product_name }}</span>
+            <div v-if="item.tur_name" class="flex items-center gap-1">
+              <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
+                {{ item.tur_name }}
+              </span>
+              <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
+                {{ item.tur_color }}
+              </span>
+            </div>
+          </div>
           <div class="flex items-center flex-wrap gap-x-2 gap-y-1 mt-1">
             <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Sotilgan: {{ parseFloat(item.quantity) }}</span>
             <template v-if="parseFloat(item.returned_qty || 0) > 0">
@@ -21,13 +31,13 @@
         </div>
         <button 
           @click="$emit('add', item)"
-          :disabled="isAlreadyAdded(item.product_id || item.product) || parseFloat(item.net_qty || (parseFloat(item.quantity) - parseFloat(item.returned_qty || 0))) <= 0"
+          :disabled="isAlreadyAdded(item.id || item.product_id || item.product, item.tur_id) || parseFloat(item.net_qty || (parseFloat(item.quantity) - parseFloat(item.returned_qty || 0))) <= 0"
           class="h-7 px-3 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all
                  disabled:opacity-50 disabled:grayscale 
                  bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white 
                  border border-emerald-100 dark:border-emerald-500/10"
         >
-          {{ isAlreadyAdded(item.product_id || item.product) ? 'Qo\'shilgan' : (parseFloat(item.net_qty || (parseFloat(item.quantity) - parseFloat(item.returned_qty || 0))) <= 0 ? 'Tugagan' : 'Tanlash') }}
+          {{ isAlreadyAdded(item.id || item.product_id || item.product, item.tur_id) ? 'Qo\'shilgan' : (parseFloat(item.net_qty || (parseFloat(item.quantity) - parseFloat(item.returned_qty || 0))) <= 0 ? 'Tugagan' : 'Tanlash') }}
         </button>
       </div>
     </div>

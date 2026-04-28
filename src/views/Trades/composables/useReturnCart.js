@@ -81,6 +81,9 @@ export function useReturnCart(props, emit, close) {
 
     returnItems.value.push({
       product: saleItem.product_id || saleItem.product,
+      tur_id: saleItem.tur_id,
+      tur_name: saleItem.tur_name,
+      tur_color: saleItem.tur_color,
       product_name: saleItem.product_name,
       quantity: netQty,
       unit_price: parseFloat(saleItem.unit_price),
@@ -89,8 +92,8 @@ export function useReturnCart(props, emit, close) {
     })
   }
 
-  const isAlreadyAdded = (productId) => {
-    return returnItems.value.some(item => item.product === productId)
+  const isAlreadyAdded = (productId, turId = null) => {
+    return returnItems.value.some(item => item.product === productId && item.tur_id === turId)
   }
 
   const removeItem = (idx) => {
@@ -118,7 +121,8 @@ export function useReturnCart(props, emit, close) {
       items: returnItems.value.map(it => ({
         product: it.product,
         quantity: it.quantity.toString(),
-        unit_price: it.unit_price.toString()
+        unit_price: it.unit_price.toString(),
+        ...(it.tur_id && { tur_id: it.tur_id })
       }))
     }
     

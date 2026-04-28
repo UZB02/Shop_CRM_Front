@@ -49,11 +49,21 @@
                     <img v-if="product.image" :src="product.image" class="w-full h-full object-cover" />
                     <i v-else class="pi pi-image text-slate-300 text-[10px]"></i>
                   </div>
-                  <div class="flex flex-col">
-                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors truncate max-w-[180px]">
-                      {{ product.name }}
-                    </span>
-                    <span class="text-[9px] text-slate-400 uppercase tracking-widest">{{ product.category_name }}</span>
+                  <div class="flex flex-col min-w-0">
+                    <div class="flex items-center flex-wrap gap-2">
+                      <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors truncate max-w-[180px]">
+                        {{ product.name }}
+                      </span>
+                      <div v-if="product.tur_name" class="flex items-center gap-1">
+                        <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
+                          {{ product.tur_name }}
+                        </span>
+                        <span v-if="product.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
+                          {{ product.tur_color }}
+                        </span>
+                      </div>
+                    </div>
+                    <span class="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">{{ product.category_name }}</span>
                   </div>
                 </div>
               </td>
