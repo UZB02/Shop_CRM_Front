@@ -86,7 +86,7 @@
                     <button
                       @click="$router.push(`/dashboard/branches/${branch.id}/bulk`)"
                       class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:text-sky-400 dark:hover:bg-sky-400/10 transition-all hover:scale-105"
-                      v-tooltip.top="'Ommaviy yuklash'"
+                      v-tooltip.top="$t('warehouse.bulk.title')"
                     >
                       <i class="pi pi-database text-[15px]"></i>
                     </button>
@@ -131,6 +131,7 @@
               <button
                 @click="$router.push(`/dashboard/branches/${branch.id}/bulk`)"
                 class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 active:scale-95"
+                v-tooltip.top="$t('warehouse.bulk.title')"
               ><i class="pi pi-database text-sm"></i></button>
               <button
                 @click="$emit('edit', branch)"

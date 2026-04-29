@@ -17,7 +17,7 @@
           class="flex items-center gap-2 group px-3 sm:px-5 py-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[10px] font-black tracking-widest text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm active:scale-95"
         >
           <i class="pi pi-database text-[9px] group-hover:scale-110 transition-transform"></i>
-          <span class="hidden sm:inline">Ommaviy yuklash</span>
+          <span class="hidden sm:inline">{{ $t('warehouse.bulk.title') }}</span>
         </button>
 
         <button 
