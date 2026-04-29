@@ -30,52 +30,61 @@ export default function useExpenseTabLogic() {
   // Synced loading state
   const loading = computed(() => crudLoading.value || reportsLoading.value)
 
-  const activeTab = ref('expenses')
+  const activeTab = ref('profit-loss')
   const userIsManager = computed(() => isManager())
   const { t } = i18n.global
 
   const tabs = computed(() => {
-    const tList = [
-      { id: 'expenses', label: t('finance.title'), icon: 'pi pi-chart-bar' },
-      { id: 'expenses-list', label: t('finance.list'), icon: 'pi pi-list' }
-    ]
+    const tList = []
+    
+    // For Managers, Finance (P&L) is the primary tab
+    if (userIsManager.value) {
+      tList.push({ id: 'profit-loss', label: t('finance.title'), icon: 'pi pi-chart-bar' })
+    }
+
+    // Common tabs for expenses
+    tList.push(
+      { id: 'expenses', label: t('finance.expenses'), icon: 'pi pi-chart-pie' }
+    )
+
     if (userIsManager.value) {
       tList.push(
         { id: 'revenue', label: t('finance.revenue_report'), icon: 'pi pi-chart-line' },
         { id: 'payments', label: t('finance.payment_methods'), icon: 'pi pi-credit-card' },
         { id: 'profitability', label: t('finance.profitability'), icon: 'pi pi-percentage' },
-        { id: 'profit-loss', label: t('reports.profit_loss'), icon: 'pi pi-chart-bar' },
         { id: 'debtors', label: t('reports.debtors'), icon: 'pi pi-users' }
       )
     }
+
+    // If for some reason a non-manager ends up here, ensure they have a valid tab
+    if (!userIsManager.value && activeTab.value === 'profit-loss') {
+      activeTab.value = 'expenses'
+    }
+
     return tList
   })
 
   // 1. First, define the fetch function to avoid ReferenceErrors
   const fetchTabReport = async () => {
-    if (!userIsManager.value) return
-    
     switch (activeTab.value) {
+        case 'profit-loss':
+            if (userIsManager.value) await fetchProfitLoss()
+            break
         case 'expenses':
             await fetchExpensesReport()
-            break
-        case 'expenses-list':
             await fetchExpenseList()
             break
         case 'revenue':
-            await fetchRevenue()
+            if (userIsManager.value) await fetchRevenue()
             break
         case 'payments':
-            await fetchPaymentMethods()
+            if (userIsManager.value) await fetchPaymentMethods()
             break
         case 'profitability':
-            await fetchProfitability()
-            break
-        case 'profit-loss':
-            await fetchProfitLoss()
+            if (userIsManager.value) await fetchProfitability()
             break
         case 'debtors':
-            await fetchDebtors()
+            if (userIsManager.value) await fetchDebtors()
             break
     }
   }
@@ -137,7 +146,6 @@ export default function useExpenseTabLogic() {
   }, { deep: true, flush: 'sync' })
 
   watch(activeTab, (newTab) => {
-    crudFilters.value.group_by = 'day'
     fetchTabReport()
   })
 
@@ -162,7 +170,7 @@ export default function useExpenseTabLogic() {
     branches, categories, shifts,
     expenseList, crudFilters, exportFilters,
     reportsFilters,
-    dynamicCategories: computed(() => ['expenses', 'expenses-list'].includes(activeTab.value) ? categories.value : productCategories.value),
+    dynamicCategories: computed(() => activeTab.value === 'expenses' ? categories.value : productCategories.value),
     summaryData: computed(() => reports.expenses?.summary || {}),
     totalFromList: computed(() => parseFloat(reports.expenses?.summary?.expenses_total || 0)),
     netProfit: computed(() => {

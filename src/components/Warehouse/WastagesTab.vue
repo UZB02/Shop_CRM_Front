@@ -58,8 +58,11 @@
               <tr v-for="(item, index) in items" :key="item.id" class="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-colors group">
                 <td class="px-4 py-3 text-[10px] text-slate-400">{{ (page - 1) * rows + index + 1 }}</td>
                 <td class="px-4 py-3">
-                  <div class="flex flex-col">
-                    <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ item.product_name }}</span>
+                  <div class="flex flex-col gap-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ item.product_name }}</span>
+                      <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
+                    </div>
                     <span class="text-[9px] font-medium text-slate-400">{{ item.product_unit }}</span>
                   </div>
                 </td>
@@ -131,7 +134,10 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
             <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $t('products.col_product') }}</p>
-            <p class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ selectedItem.product_name }}</p>
+            <div class="flex items-center gap-2">
+              <p class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ selectedItem.product_name }}</p>
+              <TurBadge :tur-name="selectedItem.tur_name" :tur-color="selectedItem.tur_color" />
+            </div>
           </div>
           <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
             <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $t('products.form.amount') }}</p>
@@ -177,6 +183,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { wastagesAPI } from '@/services/api'
+import TurBadge from '@/components/common/TurBadge.vue'
 import DatePicker from 'primevue/datepicker'
 import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'

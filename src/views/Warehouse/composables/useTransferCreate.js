@@ -58,9 +58,11 @@ export function useTransferCreate() {
   })
 
   const addProduct = (p) => {
-    const existing = transferForm.value.items.find(
-      i => (i.product.product_id || i.product.id) === (p.product_id || p.id)
-    )
+    const existing = transferForm.value.items.find(i => {
+      const pId = i.product.product_id || i.product.id
+      const newPId = p.product_id || p.id
+      return pId === newPId && i.product.tur_id === p.tur_id
+    })
     if (existing) {
       existing.quantity = Number(existing.quantity) + 1
     } else {

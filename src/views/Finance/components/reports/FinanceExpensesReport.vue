@@ -52,6 +52,20 @@
       </div>
     </div>
 
+    <!-- List Tab -->
+    <div v-if="activeSubTab === 'list'" class="animate-in fade-in slide-in-from-bottom-2 duration-400">
+      <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+        <ExpenseTable 
+          :expenses="expenses" 
+          :loading="loading" 
+          :is-manager="isManager"
+          @view="(d) => $emit('view', d)"
+          @edit="(d) => $emit('edit', d)"
+          @delete="(d) => $emit('delete', d)"
+        />
+      </div>
+    </div>
+
      <!-- Purchases Tab -->
     <div v-if="activeSubTab === 'purchases'" class="animate-in fade-in slide-in-from-bottom-2 duration-400">
        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden h-fit flex flex-col">
@@ -134,6 +148,7 @@ const emit = defineEmits(['view', 'edit', 'delete'])
 const activeSubTab = ref('analytics')
 const subTabs = computed(() => [
   { id: 'analytics', label: 'reports.analytics', icon: 'pi pi-chart-bar' },
+  { id: 'list', label: 'finance.list', icon: 'pi pi-list' },
   { id: 'purchases', label: 'finance.purchases', icon: 'pi pi-shopping-bag' }
 ])
 

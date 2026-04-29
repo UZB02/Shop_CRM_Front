@@ -8,14 +8,7 @@
         <div class="flex flex-col">
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ item.product_name }}</span>
-            <div v-if="item.tur_name" class="flex items-center gap-1">
-              <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
-                {{ item.tur_name }}
-              </span>
-              <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
-                {{ item.tur_color }}
-              </span>
-            </div>
+            <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
           </div>
           <div class="flex items-center flex-wrap gap-x-2 gap-y-1 mt-1">
             <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Sotilgan: {{ parseFloat(item.quantity) }}</span>
@@ -45,6 +38,8 @@
 </template>
 
 <script setup>
+import TurBadge from '@/components/common/TurBadge.vue'
+
 defineProps({
   initialSale: Object,
   formatCurrency: Function,

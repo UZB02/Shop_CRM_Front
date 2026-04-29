@@ -61,9 +61,12 @@
           >
             <td class="px-5 py-3.5 text-xs text-slate-400">{{ idx + 1 }}</td>
             <td class="px-5 py-3.5">
-              <span class="font-medium text-slate-700 dark:text-slate-200">
-                {{ item.product.product_name || item.product.name }}
-              </span>
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-slate-700 dark:text-slate-200">
+                  {{ item.product.product_name || item.product.name }}
+                </span>
+                <TurBadge :tur-name="item.product.tur_name" :tur-color="item.product.tur_color" />
+              </div>
             </td>
             <td class="px-5 py-3.5">
               <code class="text-xs text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
@@ -133,6 +136,8 @@
 </template>
 
 <script setup>
+import TurBadge from '@/components/common/TurBadge.vue'
+
 defineProps({
   items: Array
 });

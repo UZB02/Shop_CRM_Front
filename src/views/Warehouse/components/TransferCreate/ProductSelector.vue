@@ -64,8 +64,11 @@
               <i class="pi pi-box text-slate-400 group-hover:text-emerald-500 text-xs transition-colors"></i>
             </div>
             <div class="flex-1 min-w-0">
-              <div class="text-sm font-medium text-slate-700 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 truncate transition-colors">
-                {{ p.product_name || p.name }}
+              <div class="flex items-center gap-2">
+                <div class="text-sm font-medium text-slate-700 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 truncate transition-colors">
+                  {{ p.product_name || p.name }}
+                </div>
+                <TurBadge :tur-name="p.tur_name" :tur-color="p.tur_color" />
               </div>
               <div class="flex items-center gap-2 mt-0.5">
                 <code v-if="p.barcode" class="text-xs text-slate-400">{{ p.barcode }}</code>
@@ -82,6 +85,7 @@
 
 <script setup>
 import Dialog from 'primevue/dialog'
+import TurBadge from '@/components/common/TurBadge.vue'
 
 defineProps({
   visible: Boolean,

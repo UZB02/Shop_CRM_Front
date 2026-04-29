@@ -30,10 +30,13 @@
               class="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-colors"
             >
               <td class="px-4 py-2.5">
-                <div class="flex flex-col">
-                  <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">
-                    {{ item.product_name }}
-                  </span>
+                <div class="flex flex-col gap-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">
+                      {{ item.product_name }}
+                    </span>
+                    <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
+                  </div>
                   <span class="text-[9px] font-medium text-slate-400">
                      {{ item.product_barcode }} | {{ item.product_unit }}
                   </span>
@@ -97,6 +100,7 @@
 
 <script setup>
 import TablePagination from '@/components/TablePagination.vue'
+import TurBadge from '@/components/common/TurBadge.vue'
 
 defineProps({
   history: { type: Array, required: true },

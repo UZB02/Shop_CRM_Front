@@ -19,7 +19,10 @@
           class="p-3 hover:bg-slate-50 dark:hover:bg-white/[0.03] cursor-pointer flex justify-between items-center transition-colors border-b border-slate-100 dark:border-white/5 last:border-0"
         >
           <div class="flex flex-col">
-            <span class="text-xs font-bold text-slate-800 dark:text-white">{{ p.name }}</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-800 dark:text-white">{{ p.name }}</span>
+              <TurBadge :tur-name="p.tur_name" :tur-color="p.tur_color" />
+            </div>
             <span class="text-[9px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Qoldiq: {{ p.quantity }} {{ p.unit }}</span>
           </div>
           <span class="text-[11px] font-black text-slate-900 dark:text-emerald-400">{{ formatCurrency(p.selling_price) }}</span>
@@ -31,6 +34,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import TurBadge from '@/components/common/TurBadge.vue'
 
 const props = defineProps({
   query: String,

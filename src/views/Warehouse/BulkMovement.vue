@@ -194,28 +194,39 @@
 
                 <!-- Product select (PrimeVue for filter capability) -->
                 <td class="px-5 py-2.5">
-                  <Select
-                    v-model="item.product"
-                    :options="products"
-                    optionLabel="name"
-                    optionValue="id"
-                    filter
-                    placeholder="Mahsulot tanlang..."
-                    class="!w-full !h-9 !text-sm !rounded-lg !border-slate-200 dark:!border-slate-700 !bg-slate-50 dark:!bg-slate-800 !shadow-none"
-                    panelClass="!rounded-xl !shadow-2xl"
-                  >
-                    <template #option="slotProps">
-                      <div class="flex items-center gap-2.5 py-0.5">
-                        <div class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center shrink-0">
-                          <i class="pi pi-box text-slate-400 text-[10px]"></i>
+                    <Select
+                      v-model="item.product"
+                      :options="products"
+                      optionLabel="name"
+                      dataKey="id"
+                      filter
+                      placeholder="Mahsulot tanlang..."
+                      class="!w-full !h-10 !text-sm !rounded-lg !border-slate-200 dark:!border-slate-700 !bg-slate-50 dark:!bg-slate-800 !shadow-none"
+                      panelClass="!rounded-xl !shadow-2xl"
+                      pt:label:class="!flex !items-center !py-0 !h-full"
+                    >
+                      <template #value="slotProps">
+                        <div v-if="slotProps.value" class="flex items-center gap-2 h-full">
+                          <span class="text-xs font-bold text-slate-700 dark:text-slate-200 leading-none">{{ slotProps.value.name }}</span>
+                          <TurBadge :tur-name="slotProps.value.tur_name" :tur-color="slotProps.value.tur_color" />
                         </div>
-                        <div class="flex flex-col min-w-0">
-                          <span class="text-xs font-medium text-slate-700 dark:text-slate-200 truncate">{{ slotProps.option.name }}</span>
-                          <span class="text-[10px] text-slate-400">{{ slotProps.option.barcode || 'Shtrix-kodsiz' }}</span>
+                        <span v-else class="text-slate-400">{{ slotProps.placeholder }}</span>
+                      </template>
+                      <template #option="slotProps">
+                        <div class="flex items-center gap-2.5 py-0.5">
+                          <div class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center shrink-0">
+                            <i class="pi pi-box text-slate-400 text-[10px]"></i>
+                          </div>
+                          <div class="flex flex-col min-w-0 flex-1">
+                            <div class="flex items-center justify-between gap-2">
+                              <span class="text-xs font-medium text-slate-700 dark:text-slate-200 truncate">{{ slotProps.option.name }}</span>
+                              <TurBadge :tur-name="slotProps.option.tur_name" :tur-color="slotProps.option.tur_color" />
+                            </div>
+                            <span class="text-[10px] text-slate-400">{{ slotProps.option.barcode || 'Shtrix-kodsiz' }}</span>
+                          </div>
                         </div>
-                      </div>
-                    </template>
-                  </Select>
+                      </template>
+                    </Select>
                 </td>
 
                 <!-- Quantity with +/- -->
@@ -305,6 +316,7 @@
 
 <script setup>
 import Select from 'primevue/select'
+import TurBadge from '@/components/common/TurBadge.vue'
 import { useBulkMovement } from './composables/useBulkMovement'
 
 const {

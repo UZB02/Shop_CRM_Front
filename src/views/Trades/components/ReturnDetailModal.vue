@@ -75,7 +75,10 @@
                       <i class="pi pi-box"></i>
                     </div>
                     <div class="flex-grow">
-                      <h4 class="text-[13px] font-bold text-slate-800 dark:text-white">{{ item.product_name }}</h4>
+                      <div class="flex items-center gap-2">
+                        <h4 class="text-[13px] font-bold text-slate-800 dark:text-white">{{ item.product_name }}</h4>
+                        <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
+                      </div>
                       <p class="text-[11px] text-slate-400">{{ parseFloat(item.quantity) }} {{ item.unit }} × {{ formatCurrency(item.unit_price) }}</p>
                     </div>
                     <div class="text-right">
@@ -106,6 +109,7 @@
 
 <script setup>
 import { useSettingsStore } from '@/store/settings'
+import TurBadge from '@/components/common/TurBadge.vue'
 
 const settingsStore = useSettingsStore()
 

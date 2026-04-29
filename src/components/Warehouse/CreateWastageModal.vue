@@ -48,9 +48,12 @@
               <img v-if="product?.image" :src="product.image" class="w-full h-full object-cover" />
               <i v-else class="pi pi-box text-xl"></i>
             </div>
-            <div class="min-w-0">
+            <div class="min-w-0 flex-1">
               <p class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">{{ $t('products.col_product') }}</p>
-              <p class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase truncate">{{ product?.product_name || product?.name }}</p>
+              <div class="flex items-center gap-2 flex-wrap">
+                <p class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase truncate">{{ product?.product_name || product?.name }}</p>
+                <TurBadge :tur-name="product?.tur_name" :tur-color="product?.tur_color" />
+              </div>
             </div>
           </div>
 
@@ -169,6 +172,7 @@ import { ref, reactive, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { wastagesAPI } from '@/services/api'
+import TurBadge from '@/components/common/TurBadge.vue'
 import Select from 'primevue/select'
 import InputNumber from 'primevue/inputnumber'
 import DatePicker from 'primevue/datepicker'
@@ -228,6 +232,10 @@ const handleSave = async () => {
       reason: form.reason,
       date: form.date instanceof Date ? form.date.toISOString().split('T')[0] : form.date,
       description: form.description
+    }
+
+    if (props.product.tur_id) {
+      payload.tur = Number(props.product.tur_id)
     }
 
     if (props.locationType === 'branch') {

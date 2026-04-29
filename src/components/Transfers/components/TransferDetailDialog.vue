@@ -97,7 +97,10 @@
                   class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
                 >
                   <td class="px-4 py-2.5">
-                    <span class="font-medium text-slate-700 dark:text-slate-200">{{ item.product_name }}</span>
+                    <div class="flex items-center gap-2">
+                      <span class="font-medium text-slate-700 dark:text-slate-200">{{ item.product_name }}</span>
+                      <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
+                    </div>
                     <span v-if="item.product_unit" class="ml-1.5 text-xs text-slate-400">{{ item.product_unit }}</span>
                   </td>
                   <td class="px-4 py-2.5 text-right font-semibold text-emerald-600 dark:text-emerald-400">
@@ -158,6 +161,7 @@
 
 <script setup>
 import Dialog from 'primevue/dialog'
+import TurBadge from '@/components/common/TurBadge.vue'
 
 defineProps({
   visible: Boolean,

@@ -158,9 +158,10 @@
               <div class="flex flex-col gap-1.5">
                 <div v-for="(item, idx) in t.items?.slice(0, 2)" :key="idx" class="flex items-center gap-2 group/item">
                   <div class="w-1 h-3 rounded-full bg-emerald-500/20 group-hover/item:bg-emerald-500 transition-colors"></div>
-                  <span class="text-[10px] font-black text-slate-700 dark:text-slate-200">
+                  <span class="text-[10px] font-black text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
                     <span class="text-emerald-500">{{ parseFloat(item.quantity) }}{{ item.unit }}</span> 
                     {{ item.product_name }}
+                    <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
                   </span>
                 </div>
                 <div v-if="t.items?.length > 2" class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1">
@@ -252,6 +253,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import TradeStatusBadge from './TradeStatusBadge.vue'
+import TurBadge from '@/components/common/TurBadge.vue'
 import { useTradeUtils } from '../composables/useTradeUtils'
 
 const props = defineProps({
