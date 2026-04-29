@@ -1,27 +1,33 @@
 <template>
-  <div class="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-    <div class="flex items-center gap-4 mb-8">
-      <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-        <i class="pi pi-shield text-2xl"></i>
-      </div>
-      <div>
-        <h2 class="text-base font-black text-slate-900 dark:text-white tracking-tight">{{ $t('workers.permissions') }}</h2>
-        <p class="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('workers.user_permissions') }}</p>
+  <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden flex flex-col transition-all duration-300">
+    <!-- Compact Header -->
+    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10 flex flex-col gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+          <i class="pi pi-shield text-[10px]"></i>
+        </div>
+        <div>
+          <h2 class="text-[11px] font-black text-slate-900 dark:text-white tracking-tight uppercase">{{ $t('workers.permissions') }}</h2>
+          <p class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('workers.user_permissions') }}</p>
+        </div>
       </div>
     </div>
 
-    <div class="flex flex-wrap gap-3">
-      <div v-for="perm in worker?.permissions" :key="perm" 
-           class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800/40 hover:bg-emerald-500/5 border border-slate-100 dark:border-slate-700/50 rounded-2xl transition-all duration-300 group">
-        <div class="w-6 h-6 rounded-lg bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-emerald-500">
-          <i class="pi pi-check text-[10px]"></i>
+    <!-- Permissions List (Compact) -->
+    <div class="p-4">
+      <div class="flex flex-wrap gap-2">
+        <div v-for="perm in worker?.permissions" :key="perm" 
+             class="flex items-center gap-2 px-2.5 py-1.5 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-emerald-500/5 border border-slate-100 dark:border-slate-700/50 rounded-lg transition-all duration-300 group">
+          <div class="w-4 h-4 rounded bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-emerald-500 border border-slate-100 dark:border-slate-600">
+            <i class="pi pi-check text-[7px]"></i>
+          </div>
+          <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-tight">{{ perm }}</span>
         </div>
-        <span class="text-[11px] font-black text-slate-700 dark:text-slate-300 capitalize tracking-wide">{{ perm }}</span>
-      </div>
-      
-      <div v-if="!worker?.permissions?.length" class="w-full py-12 text-center opacity-40">
-        <i class="pi pi-lock text-3xl text-slate-300 block mb-3"></i>
-        <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.no_permissions') }}</p>
+        
+        <div v-if="!worker?.permissions?.length" class="w-full py-8 text-center opacity-40">
+          <i class="pi pi-lock text-2xl text-slate-300 block mb-2"></i>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.no_permissions') }}</p>
+        </div>
       </div>
     </div>
   </div>
