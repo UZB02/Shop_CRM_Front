@@ -12,7 +12,7 @@
         "all": "Barchasi",
         "loading": "Yuklanmoqda...",
         "save": "Saqlash",
-        "save_worker": "Xodimni Saqlash",
+        "save_worker": "Xodimni saqlash",
         "cancel": "Bekor qilish",
         "choose": "Tanlang",
         "select": "Tanlang",
@@ -21,7 +21,7 @@
         "view": "Ko'rish",
         "back": "Qaytish",
         "search": "Qidirish",
-        "overview": "Obzor",
+        "overview": "Umumiy tahlil",
         "profile": "Profil",
         "actions": "Amallar",
         "status": "Holati",
@@ -150,9 +150,9 @@
     },
     "workers": {
         "title": "Xodimlar",
-        "details": "Xodim Tafsilotlari",
-        "permissions": "Tizim Kirish Huquqlari",
-        "logs": "Tizim Jurnali",
+        "details": "Xodim tafsilotlari",
+        "permissions": "Tizimga kirish huquqlari",
+        "logs": "Audit jurnali",
         "full_name": "To'liq Ism",
         "role": "Lavozimi",
         "salary": "Maosh",
@@ -173,11 +173,11 @@
         "management_title": "Xodimlar boshqaruvi",
         "management_subtitle": "Sizning jamoangiz va ularning ruxsatlari",
         "new_worker": "Yangi xodim",
-        "list_title": "Xodimlar Ro'yxati",
+        "list_title": "Xodimlar ro'yxati",
         "worker_count": "{count} ta xodim",
         "active_status": "Faol",
         "table_col_worker": "Xodim",
-        "table_col_salary": "Oylik Maosh",
+        "table_col_salary": "Oylik maosh",
         "table_col_branch": "Filial",
         "table_col_phone": "Telefon",
         "table_col_status": "Status",
@@ -232,7 +232,7 @@
                 "desc": "Dashboard va statistikaga kirish"
             },
             "dokonlar": {
-                "label": "Do'konlar",
+                "label": "Do'kon",
                 "desc": "Filial va do'konlar boshqaruvi"
             },
             "mahsulotlar": {
@@ -344,7 +344,7 @@
     "menu": {
         "dashboard": "Boshqaruv",
         "sales": "Sotuv (POS)",
-        "stores": "Do'konlar",
+        "stores": "Do'kon",
         "inventory": "Ombor",
         "products": "Mahsulotlar",
         "workers": "Xodimlar",
@@ -467,7 +467,7 @@
         "strong": "Kuchli"
     },
     "stores": {
-        "page_title": "Do'kon va Filiallar",
+        "page_title": "Do'kon va filiallar",
         "no_store": "Do'kon ma'lumotlari mavjud emas",
         "add_store": "Do'kon qo'shish",
         "edit_store": "Do'konni tahrirlash",
@@ -597,8 +597,8 @@
             "error": "Xatolik"
         },
         "bulk": {
-            "title": "Ommaviy Yuklash",
-            "subtitle": "Zaxira operatsiyasini shakillantirish",
+            "title": "Mahsulot qo'shish",
+            "subtitle": "Zaxira operatsiyasini shakllantirish",
             "type": "Operatsiya turi",
             "in": "Kirim",
             "out": "Chiqim",
@@ -671,8 +671,8 @@
             "col_worker": "Mas'ul xodim",
             "col_description": "Tavsif",
             "search_products": "Mahsulot qidirish...",
-            "new_transfer": "Yangi o'tkazma",
-            "bulk_movement": "Ommaviy harakat",
+            "new_transfer": "Mahsulotni ko'chirish",
+            "bulk_movement": "Mahsulot qo'shish",
             "store_unspecified": "Do'kon ko'rsatilmagan",
             "address_unspecified": "Manzil ko'rsatilmagan",
             "no_warehouse_products": "Omborda mahsulotlar mavjud emas",
@@ -681,7 +681,7 @@
         },
         "wastage": {
             "title": "Chiqitlar",
-            "create_title": "Yangi chiqit chiqarish",
+            "create_title": "Yangi chiqit qaydi",
             "detail_title": "Chiqit tafsilotlari",
             "reason_label": "Chiqit sababi",
             "reason_placeholder": "Sababni tanlang",
@@ -732,8 +732,8 @@
     },
     "products": {
         "page_title": "Mahsulotlar",
-        "title": "Mahsulotlar Boshqaruvi",
-        "title_header": "Mahsulotlar Boshqaruvi",
+        "title": "Mahsulotlar boshqaruvi",
+        "title_header": "Mahsulotlar boshqaruvi",
         "subtitle": "ta mahsulot chiqitga chiqarilgan",
         "new_product": "Yangi mahsulot",
         "new_category": "Kategoriya qo'shish",
@@ -805,7 +805,7 @@
                 "financial": "Moliya",
                 "turlar": "Turlar"
             },
-            "category": "Turkum",
+            "category": "Kategoriya",
             "store": "Asosiy do'kon",
             "unit": "Birlik",
             "created_at": "Kiritilgan sana",
@@ -843,7 +843,7 @@
         "piece": "Dona"
     },
     "settings": {
-        "title": "Tizim Sozlamalari",
+        "title": "Tizim sozlamalari",
         "save": "Saqlash",
         "saving": "Saqlanmoqda...",
         "unsaved_changes": "Saqlanmagan o'zgarishlar mavjud",
@@ -941,7 +941,7 @@
             "header_label": "Sarlavha (Header)",
             "header_desc": "Chek tepasidagi matn (do'kon nomi ostida)",
             "header_placeholder": "Masalan: Do'konimizga xush kelibsiz!",
-            "footer_label": "Oyoq qism (Footer)",
+            "footer_label": "Pastki qism (Footer)",
             "footer_desc": "Chek pastidagi matn (summalardan keyin)",
             "footer_placeholder": "Masalan: Xaridingiz uchun rahmat!",
             "barcode_settings_title": "Shtrix-kod sozlamalari",
@@ -994,11 +994,11 @@
         "groups_btn": "Guruhlar",
         "new_customer": "Yangi mijoz",
         "table": {
-            "name": "Mijoz Ismi",
-            "contact_address": "Telefon / Manzil",
+            "name": "Mijoz ismi",
+            "contact_address": "Telefon / manzil",
             "trades": "Savdolar",
-            "total_spent": "Umumiy Xarid",
-            "debt_label": "Qarz Miqdori",
+            "total_spent": "Umumiy xarid",
+            "debt_label": "Qarz miqdori",
             "debt_status": "To'lanmagan",
             "actions": "Amallar",
             "no_results": "Mijozlar topilmadi.",
@@ -1008,21 +1008,21 @@
             "delete_tooltip": "O'chirish"
         },
         "form": {
-            "edit": "Mijozni Tahrirlash",
-            "add": "Yangi Mijoz Qo'shish",
+            "edit": "Mijozni tahrirlash",
+            "add": "Yangi mijoz qo'shish",
             "full_name": "F.I.SH.",
             "name_placeholder": "Mijozning to'liq ismi",
             "name_required": "F.I.SH. kiritilishi shart.",
             "phone": "Telefon raqami",
             "phone_required": "Telefon raqami kiritilishi shart.",
-            "group": "Mijoz Guruhi",
+            "group": "Mijoz guruhi",
             "group_placeholder": "Guruhni tanlang",
             "address": "Manzil",
             "address_placeholder": "Yashash manzili"
         },
         "groups": {
-            "manage_title": "Mijoz Guruhlari",
-            "add_new": "Yangi Guruh Qo'shish",
+            "manage_title": "Mijoz guruhlari",
+            "add_new": "Yangi guruh qo'shish",
             "add_subtitle": "Yangi guruh qo'shing",
             "name": "Guruh nomi",
             "name_placeholder": "Masalan: VIP",
@@ -1076,8 +1076,8 @@
             "col_paid_debt": "To'lov / Qarz",
             "col_status": "Holat",
             "no_history": "Xaridlar tarixi topilmadi.",
-            "detail_title": "Savdo Ma'lumotlari",
-            "items_title": "Mahsulotlar Savatdagi",
+            "detail_title": "Savdo ma'lumotlari",
+            "items_title": "Savatdagi mahsulotlar",
             "product_placeholder": "Mahsulot",
             "more_products": "+ yana {count} ta",
             "no_products": "Mahsulotlar yo'q",
@@ -1103,7 +1103,7 @@
         "print": "Chop etish",
         "branch": "Filial",
         "store": "Do'kon",
-        "period": "Xisobot Davri",
+        "period": "Hisobot Davri",
         "status": {
             "open": "Ochiq",
             "closed": "Yopiq"

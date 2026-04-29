@@ -9,8 +9,6 @@
         <i class="pi pi-chevron-right text-[8px] text-slate-300"></i>
         <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest truncate">{{ branch?.name || '...' }}</span>
       </div>
-      <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100 truncate">{{ branch?.name || '...' }}</h1>
-      <p class="text-xs text-slate-400 mt-0.5 truncate">{{ branch?.address || '...' }} • {{ branch?.phone || '...' }}</p>
     </div>
     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 -mb-1 w-full sm:w-auto">
       <button
