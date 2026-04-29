@@ -2,15 +2,15 @@
   <div class="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden min-h-[300px]">
     <div v-if="!customers?.length" class="flex flex-col items-center justify-center py-20 opacity-40">
       <i class="pi pi-id-card text-4xl mb-4 text-slate-300"></i>
-      <p class="text-[10px] font-black uppercase tracking-widest">{{ $t('stores.branch_detail.no_customers') }}</p>
+      <p class="text-[10px] font-black tracking-widest">{{ $t('stores.branch_detail.no_customers') }}</p>
     </div>
     <div v-else class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-slate-50/50 dark:bg-slate-800/50">
-            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('customers.table.name') }}</th>
-            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('customers.table.contact_address') }}</th>
-            <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-right">{{ $t('customers.table.total_spent') }}</th>
+            <th class="px-6 py-4 text-[9px] font-black tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('customers.table.name') }}</th>
+            <th class="px-6 py-4 text-[9px] font-black tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50">{{ $t('customers.table.contact_address') }}</th>
+            <th class="px-6 py-4 text-[9px] font-black tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 text-right">{{ $t('customers.table.total_spent') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -21,8 +21,8 @@
                   {{ customer.name?.charAt(0) }}
                 </div>
                 <div class="min-w-0">
-                  <p class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight group-hover/link:text-orange-500 transition-colors truncate">{{ customer.name }}</p>
-                  <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ customer.group_name || $t('customers.regular_customer') }}</p>
+                  <p class="text-xs font-black text-slate-800 dark:text-slate-100 tracking-tight group-hover/link:text-orange-500 transition-colors truncate">{{ customer.name }}</p>
+                  <p class="text-[9px] font-bold text-slate-400 tracking-widest">{{ customer.group_name || $t('customers.regular_customer') }}</p>
                 </div>
               </router-link>
             </td>

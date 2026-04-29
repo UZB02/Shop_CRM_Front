@@ -25,8 +25,8 @@
         <!-- Do'kon Info -->
         <div class="hidden xl:flex items-center gap-4 text-right">
            <div class="flex flex-col">
-              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Do'kon</span>
-              <span class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase truncate max-w-[120px]">
+              <span class="text-[9px] font-black text-slate-400 tracking-widest leading-none mb-1">Do'kon</span>
+              <span class="text-xs font-black text-slate-800 dark:text-slate-200 truncate max-w-[120px]">
                 {{ activeShift?.branch_name || authStore.user?.branch_name || authStore.user?.worker?.branch_name || 'Tanlanmagan' }}
               </span>
            </div>
@@ -34,11 +34,11 @@
 
         <!-- Xodim Info -->
         <div class="hidden sm:flex items-center gap-3">
-           <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold uppercase transition-transform hover:scale-105">
+           <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold transition-transform hover:scale-105">
               {{ (activeShift?.worker_open_name || authStore.user?.full_name || 'U').charAt(0) }}
            </div>
            <div class="flex flex-col">
-              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Xodim</span>
+              <span class="text-[9px] font-black text-slate-400 tracking-widest leading-none mb-1">Xodim</span>
               <span class="text-xs font-black text-slate-800 dark:text-slate-200">
                 {{ activeShift?.worker_open_name || authStore.user?.full_name || 'Foydalanuvchi' }}
               </span>
@@ -52,13 +52,13 @@
         <div class="flex items-center gap-3">
           <div v-if="activeShift && settingsStore.isShiftEnabled" class="px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl flex items-center gap-2 border border-emerald-100 dark:border-emerald-500/20">
              <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-pulse"></span>
-             <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Smena #{{ activeShift.id }}</span>
+             <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">Smena #{{ activeShift.id }}</span>
           </div>
 
           <button 
             v-if="settingsStore.isShiftEnabled"
             @click="handleShiftAction"
-            class="px-6 py-3.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-xl active:scale-95"
+            class="px-6 py-3.5 rounded-xl text-[10px] font-black transition-all shadow-xl active:scale-95"
             :class="activeShift && activeShift.status === 'open' ? 'bg-[#151c2f] text-white hover:bg-[#0f1422]' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20'"
           >
             {{ activeShift && activeShift.status === 'open' ? 'Smena Yopish' : (activeShift?.status === 'closed' ? 'Smena Hisoboti' : 'Smena Ochish') }}
@@ -109,11 +109,11 @@
          <i class="pi pi-lock text-4xl text-slate-200 dark:text-slate-800"></i>
       </div>
       <div class="text-center mt-12 space-y-4 max-w-sm px-6">
-        <h2 class="text-2xl font-black text-slate-800 dark:text-white font-outfit uppercase tracking-tighter">Terminal Yopilgan</h2>
+        <h2 class="text-2xl font-black text-slate-800 dark:text-white font-outfit tracking-tighter">Terminal Yopilgan</h2>
         <p class="text-slate-400 font-medium text-sm">Savdoni boshlash uchun avval yangi smena ochishingiz lozim.</p>
         <button 
           @click="showShiftModal = true"
-          class="inline-block px-10 py-5 bg-emerald-500 text-white rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-2xl shadow-emerald-500/40 hover:bg-emerald-600 transition-all active:scale-95"
+          class="inline-block px-10 py-5 bg-emerald-500 text-white rounded-2xl font-black text-[11px] tracking-widest shadow-2xl shadow-emerald-500/40 hover:bg-emerald-600 transition-all active:scale-95"
         >
           Smena Ochish
         </button>
@@ -329,7 +329,7 @@ const printReceipt = () => {
     .text-emerald-500{color:#10b981;} .text-emerald-600{color:#059669;}
     .text-rose-400{color:#f87171;} .text-rose-500{color:#ef4444;} .text-amber-500{color:#f59e0b;}
     .text-xs{font-size:9px;} .text-sm{font-size:10px;} .text-lg{font-size:14px;}
-    .text-xl{font-size:16px;font-weight:900;} .uppercase{text-transform:uppercase;}
+    .text-xl{font-size:16px;font-weight:900;} .{text-transform:;}
     .tracking-widest{letter-spacing:0.15em;} .tracking-tighter{letter-spacing:-0.02em;}
     .font-outfit{font-family:'Courier New',monospace;}
     .flex{display:flex;} .justify-between{justify-content:space-between;} .items-center{align-items:center;}

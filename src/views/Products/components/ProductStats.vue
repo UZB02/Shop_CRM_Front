@@ -5,7 +5,7 @@
         <i :class="['pi text-base sm:text-lg font-bold', stat.icon, stat.color]"></i>
       </div>
       <div class="min-w-0">
-        <p class="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 truncate mb-0.5">{{ $t('products.' + stat.label) }}</p>
+        <p class="text-[8px] sm:text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 truncate mb-0.5">{{ $t('products.' + stat.label) }}</p>
         <p class="text-base sm:text-xl font-black text-slate-800 dark:text-white leading-none">{{ stat.value }}</p>
       </div>
     </div>

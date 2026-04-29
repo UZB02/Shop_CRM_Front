@@ -15,7 +15,7 @@
         <div class="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 shadow-sm flex items-center justify-center mb-6 border border-slate-100 dark:border-slate-700">
           <i class="pi pi-users text-2xl text-emerald-500/30"></i>
         </div>
-        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">{{ $t('customers.groups.no_groups') }}</p>
+        <p class="text-[10px] font-black tracking-[0.3em] text-slate-400">{{ $t('customers.groups.no_groups') }}</p>
         <button @click="openAddMode" class="mt-6 h-8 px-4 rounded-lg bg-emerald-500/10 text-emerald-500 text-xs font-semibold hover:bg-emerald-500 hover:text-white transition-all">
            {{ $t('customers.groups.add_new') }}
         </button>
@@ -72,8 +72,8 @@
           <!-- Panel Header -->
           <div class="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
             <div class="flex flex-col">
-              <span class="text-sm font-semibold text-emerald-500 uppercase tracking-widest">{{ isEditing ? $t('common.edit') : $t('customers.groups.add_subtitle') }}</span>
-              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">{{ $t('customers.groups.loyalty_system') }}</span>
+              <span class="text-sm font-semibold text-emerald-500 tracking-widest">{{ isEditing ? $t('common.edit') : $t('customers.groups.add_subtitle') }}</span>
+              <span class="text-[9px] font-bold text-slate-400 tracking-[0.2em] mt-1">{{ $t('customers.groups.loyalty_system') }}</span>
             </div>
             <button @click="closePanel" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-white transition-all shadow-sm">
               <i class="pi pi-times text-[10px]"></i>
@@ -85,7 +85,7 @@
             <div class="space-y-4">
               <!-- Name Field -->
               <div class="field">
-                <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('customers.groups.name') }}</label>
+                <label class="text-[10px] font-bold tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('customers.groups.name') }}</label>
                 <div class="relative group/input">
                   <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 transition-colors group-focus-within/input:text-emerald-500"></i>
                   <InputText 
@@ -99,7 +99,7 @@
 
               <!-- Discount Field -->
               <div class="field">
-                <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('customers.groups.discount') }}</label>
+                <label class="text-[10px] font-bold tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('customers.groups.discount') }}</label>
                 <div class="relative group/input">
                   <i class="pi pi-percentage absolute left-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 transition-colors group-focus-within/input:text-emerald-500 z-10"></i>
                   <InputNumber 
@@ -121,14 +121,14 @@
               <Button 
                 :label="$t('common.cancel')"
                 text
-                class="!flex-1 !text-[10px] !font-bold !uppercase !tracking-widest !rounded-xl !text-slate-400 !h-10"
+                class="!flex-1 !text-[10px] !font-bold !!tracking-widest !rounded-xl !text-slate-400 !h-10"
                 @click="closePanel"
               />
               <Button 
                 :label="isEditing ? $t('common.save') : $t('common.add')"
                 :loading="saving" 
                 @click="handleSubmit"
-                class="!flex-[2] !h-10 !rounded-xl !bg-emerald-500 !border-none !shadow-xl !shadow-emerald-500/20 active:scale-95 transition-all text-white !text-[10px] !font-bold !uppercase !tracking-widest"
+                class="!flex-[2] !h-10 !rounded-xl !bg-emerald-500 !border-none !shadow-xl !shadow-emerald-500/20 active:scale-95 transition-all text-white !text-[10px] !font-bold !!tracking-widest"
               />
             </div>
           </div>

@@ -105,7 +105,7 @@ const emit = defineEmits(['update:modelValue'])
 .edit-section-label {
   font-size: 9px;
   font-weight: 800;
-  text-transform: uppercase;
+  text-transform: ;
   letter-spacing: 0.12em;
   color: #10b981;
   display: flex; align-items: center; gap: 5px;
@@ -118,7 +118,7 @@ const emit = defineEmits(['update:modelValue'])
 .edit-field label {
   font-size: 10px;
   font-weight: 700;
-  text-transform: uppercase;
+  text-transform: ;
   letter-spacing: 0.08em;
   color: #94a3b8;
 }

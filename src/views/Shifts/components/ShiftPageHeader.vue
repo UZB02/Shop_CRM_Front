@@ -12,7 +12,7 @@
           <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100 truncate">{{ $t('shifts.report_title') }}</h1>
           <span
             v-if="status"
-            class="px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-md border shrink-0"
+            class="px-2 py-0.5 text-[9px] font-bold tracking-wider rounded-md border shrink-0"
             :class="status === 'closed'
               ? 'bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
               : 'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'"

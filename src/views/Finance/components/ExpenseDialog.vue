@@ -26,10 +26,10 @@
         <!-- Panel Header -->
         <div class="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
           <div>
-            <span class="text-sm font-black uppercase tracking-widest text-rose-500">
+            <span class="text-sm font-black tracking-widest text-rose-500">
               {{ expense.id ? $t('finance.edit') : $t('finance.new') }}
             </span>
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">{{ $t('finance.management') }}</p>
+            <p class="text-[9px] font-bold text-slate-400 tracking-[0.2em] mt-1">{{ $t('finance.management') }}</p>
           </div>
           <button
             @click="$emit('update:visible', false)"
@@ -44,7 +44,7 @@
 
           <!-- Category -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('finance.category') }} <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !expense.category }">
@@ -60,12 +60,12 @@
                 pt:label:class="!pl-12 !pr-4 !text-[13px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
               />
             </div>
-            <small v-if="submitted && !expense.category" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">{{ $t('finance.category_required') }}</small>
+            <small v-if="submitted && !expense.category" class="text-[9px] font-bold text-rose-500 ml-1 mt-1 block">{{ $t('finance.category_required') }}</small>
           </div>
 
           <!-- Branch (Optional) -->
           <div v-if="branches?.length > 0" class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('finance.branch') }}
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300" :class="{ 'opacity-60 grayscale-[0.5] cursor-not-allowed': expense.id }">
@@ -83,13 +83,13 @@
                 pt:label:class="!pl-12 !pr-4 !text-[13px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
               />
             </div>
-            <p v-if="!expense.id" class="text-[8px] font-bold text-slate-400 uppercase ml-1 mt-1 block">Ko'rsatmasangiz, o'z filialingiz avtomatik tanlanadi</p>
-            <p v-else class="text-[8px] font-bold text-amber-500 uppercase ml-1 mt-1 block">Xarajat filialini tahrirlab bo'lmaydi</p>
+            <p v-if="!expense.id" class="text-[8px] font-bold text-slate-400 ml-1 mt-1 block">Ko'rsatmasangiz, o'z filialingiz avtomatik tanlanadi</p>
+            <p v-else class="text-[8px] font-bold text-amber-500 ml-1 mt-1 block">Xarajat filialini tahrirlab bo'lmaydi</p>
           </div>
 
           <!-- Amount -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('finance.amount') }} (UZS) <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !expense.amount }">
@@ -104,12 +104,12 @@
                 pt:input:class="!bg-transparent !border-none !shadow-none !text-[15px] !font-black !h-full !pl-12 !pr-4 !w-full !outline-none !text-slate-800 dark:!text-slate-100"
               />
             </div>
-            <small v-if="submitted && !expense.amount" class="text-[9px] font-bold text-rose-500 uppercase ml-1 mt-1 block">{{ $t('finance.amount_required') }}</small>
+            <small v-if="submitted && !expense.amount" class="text-[9px] font-bold text-rose-500 ml-1 mt-1 block">{{ $t('finance.amount_required') }}</small>
           </div>
 
           <!-- Date -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('finance.date') }} <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
@@ -127,7 +127,7 @@
           </div>
 
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('finance.description') }}</label>
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('finance.description') }}</label>
             <div class="custom-input-wrapper relative group/input flex items-start rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
               <Textarea
                 v-model="expense.description"
@@ -142,7 +142,7 @@
 
           <!-- Receipt Image Upload -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('finance.receipt') }}</label>
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('finance.receipt') }}</label>
 
             <div class="flex items-start gap-4">
               <!-- Preview -->
@@ -169,7 +169,7 @@
                   <i class="pi pi-cloud-upload text-slate-400 group-hover/upload:text-rose-500 transition-colors"></i>
                 </div>
                 <div class="text-center">
-                  <span class="text-[9px] font-black text-slate-400 group-hover/upload:text-rose-500 uppercase tracking-widest transition-colors block">{{ $t('finance.upload_image') }}</span>
+                  <span class="text-[9px] font-black text-slate-400 group-hover/upload:text-rose-500 tracking-widest transition-colors block">{{ $t('finance.upload_image') }}</span>
                   <span class="text-[8px] text-slate-300 dark:text-slate-600 font-bold">JPG, PNG, WEBP</span>
                 </div>
               </div>
@@ -183,14 +183,14 @@
           <div class="flex gap-3">
             <button
               @click="$emit('update:visible', false)"
-              class="flex-1 h-10 rounded-2xl text-xs font-black uppercase tracking-widest text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+              class="flex-1 h-10 rounded-2xl text-xs font-black tracking-widest text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
             >
               {{ $t('common.cancel') }}
             </button>
             <button
               @click="handleSave"
               :disabled="saving"
-              class="flex-[2] h-10 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-rose-500/20 active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              class="flex-[2] h-10 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-black tracking-widest shadow-lg shadow-rose-500/20 active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
               <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
               <i v-else class="pi pi-check text-xs"></i>

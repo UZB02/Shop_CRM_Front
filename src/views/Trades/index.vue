@@ -6,11 +6,11 @@
         <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
           <i :class="activeTab === 'sales' ? 'pi pi-receipt' : 'pi pi-refresh'" class="text-emerald-500"></i>
           {{ activeTab === 'sales' ? ($t('menu.trades') || 'Savdolar') : 'Qaytarishlar' }}
-          <span class="text-[9px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded border border-emerald-500/20">
+          <span class="text-[9px] font-black tracking-widest bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded border border-emerald-500/20">
             {{ activeTab === 'sales' ? totalRecords : returnRecords }} ta
           </span>
         </h1>
-        <p class="text-xs text-slate-400 mt-0.5 uppercase tracking-widest font-bold text-[9px]">
+        <p class="text-xs text-slate-400 mt-0.5 tracking-widest font-bold text-[9px]">
           {{ activeTab === 'sales' ? 'Barcha amalga oshirilgan savdolar' : 'Mijozlardan qaytarilgan tovarlar tarixi' }}
         </p>
       </div>
@@ -21,7 +21,7 @@
           @click="openReturnModal"
           icon="pi pi-plus"
           label="Yangi Qaytarish"
-          class="!text-[10px] !font-bold !uppercase !tracking-widest !rounded-lg !bg-emerald-500 !border-none !px-4 !py-2 !shadow-sm hover:!bg-emerald-600 active:scale-95 transition-all text-white"
+          class="!text-[10px] !font-bold !!tracking-widest !rounded-lg !bg-emerald-500 !border-none !px-4 !py-2 !shadow-sm hover:!bg-emerald-600 active:scale-95 transition-all text-white"
         />
       </div>
     </div>
@@ -31,11 +31,11 @@
       <Tabs v-model:value="activeTab" class="!bg-transparent border-none">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
           <TabList class="!bg-slate-100/80 dark:!bg-slate-800/80 !p-1 !rounded-xl !border-none !inline-flex">
-            <Tab value="sales" class="!text-[10px] !font-bold !uppercase !tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
+            <Tab value="sales" class="!text-[10px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
               <i class="pi pi-receipt mr-2 !text-[9px]"></i>
               Savdolar
             </Tab>
-            <Tab value="returns" class="!text-[10px] !font-bold !uppercase !tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
+            <Tab value="returns" class="!text-[10px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
               <i class="pi pi-refresh mr-2 !text-[9px]"></i>
               Qaytarishlar
             </Tab>

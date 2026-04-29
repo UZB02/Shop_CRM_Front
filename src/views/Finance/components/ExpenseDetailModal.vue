@@ -27,8 +27,8 @@
           <!-- Header -->
           <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between relative bg-slate-50/50 dark:bg-slate-900/50">
             <div>
-              <h3 class="text-[11px] font-black uppercase tracking-widest text-rose-500">{{ $t('finance.details') }}</h3>
-              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">ID: #{{ expense?.id }}</p>
+              <h3 class="text-[11px] font-black tracking-widest text-rose-500">{{ $t('finance.details') }}</h3>
+              <p class="text-[8px] font-bold text-slate-400 tracking-[0.2em] mt-0.5">ID: #{{ expense?.id }}</p>
             </div>
             <button
               @click="$emit('update:visible', false)"
@@ -46,11 +46,11 @@
               <div class="absolute -right-4 -top-4 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
               <div class="relative flex justify-between items-center">
                 <div>
-                  <span class="text-[8px] font-black uppercase tracking-widest text-rose-100/80 mb-0.5 block">{{ $t('finance.amount') }}</span>
+                  <span class="text-[8px] font-black tracking-widest text-rose-100/80 mb-0.5 block">{{ $t('finance.amount') }}</span>
                   <h2 class="text-xl font-black text-white tracking-tight">{{ formatCurrency(expense?.amount) }}</h2>
                 </div>
                 <div class="text-right">
-                  <span class="text-[8px] font-black uppercase tracking-widest text-rose-100/80 mb-0.5 block">{{ $t('finance.date') }}</span>
+                  <span class="text-[8px] font-black tracking-widest text-rose-100/80 mb-0.5 block">{{ $t('finance.date') }}</span>
                   <p class="text-[11px] font-bold text-white">{{ formatDate(expense?.date) }}</p>
                 </div>
               </div>
@@ -60,25 +60,25 @@
             <div class="grid grid-cols-2 gap-3">
               <!-- Category -->
               <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/50">
-                <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">{{ $t('finance.category') }}</span>
+                <span class="text-[8px] font-black tracking-widest text-slate-400 block mb-0.5">{{ $t('finance.category') }}</span>
                 <p class="text-[11px] font-black text-slate-700 dark:text-slate-200">{{ expense?.category_name || '—' }}</p>
               </div>
 
               <!-- Branch -->
               <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/50">
-                <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">{{ $t('finance.branch') }}</span>
+                <span class="text-[8px] font-black tracking-widest text-slate-400 block mb-0.5">{{ $t('finance.branch') }}</span>
                 <p class="text-[11px] font-black text-slate-700 dark:text-slate-200 truncate">{{ expense?.branch_name || '—' }}</p>
               </div>
 
               <!-- Worker -->
               <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/50">
-                <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">{{ $t('finance.worker') }}</span>
+                <span class="text-[8px] font-black tracking-widest text-slate-400 block mb-0.5">{{ $t('finance.worker') }}</span>
                 <p class="text-[11px] font-black text-slate-700 dark:text-slate-200">{{ expense?.worker_name || '—' }}</p>
               </div>
 
               <!-- Shift -->
               <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/50">
-                <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">{{ $t('shifts.title') }} ID</span>
+                <span class="text-[8px] font-black tracking-widest text-slate-400 block mb-0.5">{{ $t('shifts.title') }} ID</span>
                 <p class="text-[11px] font-black text-slate-700 dark:text-slate-200">{{ expense?.smena_id || '—' }}</p>
               </div>
             </div>
@@ -87,7 +87,7 @@
             <div class="flex gap-3">
                <!-- Description -->
                <div class="flex-1 space-y-1.5 overflow-hidden">
-                 <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 ml-1 block">{{ $t('finance.description') }}</span>
+                 <span class="text-[8px] font-black tracking-widest text-slate-400 ml-1 block">{{ $t('finance.description') }}</span>
                  <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/50 min-h-[50px] overflow-hidden">
                    <p class="text-[11px] font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic break-words">
                      {{ expense?.description ? `"${expense.description}"` : '—' }}
@@ -97,7 +97,7 @@
 
                <!-- Receipt Image Thumbnail -->
                <div v-if="expense?.receipt_image" class="w-20 shrink-0 space-y-1.5">
-                 <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 ml-1 block">{{ $t('finance.receipt') }}</span>
+                 <span class="text-[8px] font-black tracking-widest text-slate-400 ml-1 block">{{ $t('finance.receipt') }}</span>
                  <div 
                    @click="zoomImage = true"
                    class="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm cursor-zoom-in group/img"
@@ -113,7 +113,7 @@
             <!-- Timestamps -->
             <div class="pt-2 flex items-center justify-between border-t border-slate-50 dark:border-slate-800/50">
               <div class="flex flex-col">
-                <span class="text-[7px] font-black uppercase tracking-widest text-slate-300">{{ $t('common.created_at') }}</span>
+                <span class="text-[7px] font-black tracking-widest text-slate-300">{{ $t('common.created_at') }}</span>
                 <span class="text-[9px] font-bold text-slate-400">{{ formatFullDate(expense?.created_on) }}</span>
               </div>
             </div>
@@ -124,14 +124,14 @@
           <div class="px-4 py-3 bg-slate-50/50 dark:bg-slate-800/20 border-t border-slate-50 dark:border-slate-800 flex gap-2">
              <button
                @click="$emit('update:visible', false)"
-               class="flex-1 h-9 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95"
+               class="flex-1 h-9 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-black tracking-widest text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95"
              >
                {{ $t('common.close') }}
              </button>
              <button
                v-if="isManager"
                @click="$emit('edit', expense)"
-               class="flex-1 h-9 rounded-xl bg-rose-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-rose-500/20 hover:bg-rose-600 transition-all active:scale-95 flex items-center justify-center gap-1.5"
+               class="flex-1 h-9 rounded-xl bg-rose-500 text-white text-[10px] font-black tracking-widest shadow-lg shadow-rose-500/20 hover:bg-rose-600 transition-all active:scale-95 flex items-center justify-center gap-1.5"
              >
                <i class="pi pi-pencil text-[9px]"></i>
                {{ $t('common.edit') }}

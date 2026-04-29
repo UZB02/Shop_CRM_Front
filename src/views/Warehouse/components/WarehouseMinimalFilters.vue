@@ -14,7 +14,7 @@
 
     <div class="flex items-center gap-2 px-1">
       <!-- Info -->
-      <div v-if="count > 0" class="hidden sm:block text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">
+      <div v-if="count > 0" class="hidden sm:block text-[10px] font-bold text-slate-400 tracking-widest px-2">
         {{ count }} {{ $t('warehouse.count_suffix') }}
       </div>
       

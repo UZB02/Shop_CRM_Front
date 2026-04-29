@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-wrap items-center justify-between gap-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl p-4 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm">
     <div class="flex flex-col">
-      <h1 class="text-lg font-black text-slate-800 dark:text-white uppercase tracking-wider">{{ $t('customers.title') }}</h1>
-      <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">{{ totalRecords }} {{ $t('customers.subtitle') }}</p>
+      <h1 class="text-lg font-black text-slate-800 dark:text-white tracking-wider">{{ $t('customers.title') }}</h1>
+      <p class="text-[10px] text-slate-400 font-bold tracking-widest mt-0.5">{{ totalRecords }} {{ $t('customers.subtitle') }}</p>
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
@@ -25,14 +25,14 @@
         icon="pi pi-users" 
         severity="secondary" 
         text
-        class="!text-[11px] !font-black !uppercase !tracking-widest !rounded-xl !px-3"
+        class="!text-[11px] !font-black !!tracking-widest !rounded-xl !px-3"
         @click="$router.push('/dashboard/customers/groups')" 
       />
       <Button 
         :label="$t('customers.new_customer')" 
         icon="pi pi-plus" 
         severity="success" 
-        class="!text-[11px] !font-black !uppercase !tracking-widest !rounded-xl !px-4 !bg-emerald-500 !border-none !shadow-xl !shadow-emerald-500/10 active:scale-95 transition-all text-white"
+        class="!text-[11px] !font-black !!tracking-widest !rounded-xl !px-4 !bg-emerald-500 !border-none !shadow-xl !shadow-emerald-500/10 active:scale-95 transition-all text-white"
         @click="$emit('add')" 
       />
     </div>

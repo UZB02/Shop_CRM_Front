@@ -50,7 +50,7 @@
       :pt="{
         root: { class: '!bg-[#0f172a] !border-white/5 !rounded-[24px] !shadow-2xl overflow-hidden' },
         header: { class: '!bg-[#0f172a] !border-b !border-white/5 !p-5' },
-        title: { class: '!text-sm !font-black !text-white !uppercase !tracking-[3px]' },
+        title: { class: '!text-sm !font-black !text-white !!tracking-[3px]' },
         content: { class: '!bg-[#0f172a] !p-6' },
         footer: { class: '!bg-[#0f172a] !border-t !border-white/5 !p-4' },
         closeButton: { class: '!bg-white/5 !rounded-full hover:!bg-white/10 !transition-all' }
@@ -64,7 +64,7 @@
             <i class="pi pi-exclamation-triangle text-rose-500 text-xs"></i>
           </div>
           <div class="flex flex-col">
-            <span class="text-[8px] font-black text-rose-500 uppercase tracking-widest leading-none mb-1">{{ $t('warehouse.validation.error_header') }}</span>
+            <span class="text-[8px] font-black text-rose-500 tracking-widest leading-none mb-1">{{ $t('warehouse.validation.error_header') }}</span>
             <p class="text-[11px] font-bold text-slate-300 leading-tight">{{ stockErrors.detail }}</p>
           </div>
         </div>
@@ -76,7 +76,7 @@
               <i class="pi pi-times-circle text-rose-500 text-[10px]"></i>
             </div>
             <div class="flex flex-col justify-center min-w-0">
-              <span class="text-[8px] font-black text-rose-500/70 uppercase tracking-[2px] mb-0.5">{{ $t('warehouse.validation.no_stock') }}</span>
+              <span class="text-[8px] font-black text-rose-500/70 tracking-[2px] mb-0.5">{{ $t('warehouse.validation.no_stock') }}</span>
               <p class="text-[10px] font-bold text-slate-400 truncate tracking-tight">{{ err }}</p>
             </div>
           </div>
@@ -87,7 +87,7 @@
               <i class="pi pi-exclamation-circle text-amber-500 text-[10px]"></i>
             </div>
             <div class="flex flex-col justify-center min-w-0">
-              <span class="text-[8px] font-black text-amber-500/70 uppercase tracking-[2px] mb-0.5">{{ $t('warehouse.validation.low_stock') }}</span>
+              <span class="text-[8px] font-black text-amber-500/70 tracking-[2px] mb-0.5">{{ $t('warehouse.validation.low_stock') }}</span>
               <p class="text-[11px] font-bold text-slate-400 leading-snug">{{ err }}</p>
             </div>
           </div>
@@ -97,7 +97,7 @@
       <template #footer>
         <button 
           @click="stockErrors = null"
-          class="w-full h-10 rounded-xl bg-white hover:bg-slate-50 text-slate-950 text-[10px] font-black uppercase tracking-[3px] shadow-lg active:scale-[0.98] transition-all"
+          class="w-full h-10 rounded-xl bg-white hover:bg-slate-50 text-slate-950 text-[10px] font-black tracking-[3px] shadow-lg active:scale-[0.98] transition-all"
         >
           {{ $t('warehouse.validation.understand') }}
         </button>

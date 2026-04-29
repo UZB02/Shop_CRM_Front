@@ -7,8 +7,8 @@
           <i class="pi pi-shield text-[10px]"></i>
         </div>
         <div>
-          <h2 class="text-[11px] font-black text-slate-900 dark:text-white tracking-tight uppercase">{{ $t('workers.permissions') }}</h2>
-          <p class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('workers.user_permissions') }}</p>
+          <h2 class="text-[11px] font-black text-slate-900 dark:text-white tracking-tight ">{{ $t('workers.permissions') }}</h2>
+          <p class="text-[9px] font-bold text-slate-400 dark:text-slate-500 tracking-widest">{{ $t('workers.user_permissions') }}</p>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
         
         <div v-if="!worker?.permissions?.length" class="w-full py-8 text-center opacity-40">
           <i class="pi pi-lock text-2xl text-slate-300 block mb-2"></i>
-          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('workers.no_permissions') }}</p>
+          <p class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('workers.no_permissions') }}</p>
         </div>
       </div>
     </div>

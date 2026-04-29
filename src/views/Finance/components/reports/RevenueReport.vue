@@ -6,7 +6,7 @@
         <div class="absolute -right-2 -bottom-2 w-16 h-16 bg-emerald-500/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
         <div class="flex items-center gap-1.5 mb-2">
           <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">{{ t(card.label) }}</p>
+          <p class="text-[9px] font-bold tracking-widest text-slate-400">{{ t(card.label) }}</p>
         </div>
         <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight relative z-10">{{ card.value }}</h3>
       </div>
@@ -18,7 +18,7 @@
       <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
         <div class="flex items-center justify-between mb-4">
            <div>
-             <h3 class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">{{ t('finance.revenue') }} Dynamika</h3>
+             <h3 class="text-[9px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('finance.revenue') }} Dynamika</h3>
              <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">Vaqt o'tishi bilan tushumlar</p>
            </div>
         </div>
@@ -29,11 +29,11 @@
 
       <!-- Donut Chart / Top Categories -->
       <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
-        <h3 class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-50 dark:border-slate-800 pb-2">{{ t('finance.share') }} Taqsimoti</h3>
+        <h3 class="text-[9px] font-bold tracking-widest text-slate-400 mb-4 border-b border-slate-50 dark:border-slate-800 pb-2">{{ t('finance.share') }} Taqsimoti</h3>
         <div class="h-[150px] mb-4 relative flex items-center justify-center">
            <Chart type="doughnut" :data="donutData" :options="donutOptions" class="relative z-10" />
            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span class="text-[9px] font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Top 5</span>
+              <span class="text-[9px] font-bold text-slate-800 dark:text-slate-100 tracking-widest">Top 5</span>
            </div>
         </div>
         <div class="space-y-1.5 flex-1 overflow-y-auto max-h-[120px] custom-scrollbar">
@@ -53,13 +53,13 @@
        <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
           <div class="flex items-center gap-2">
             <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
-            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">{{ t('finance.list') }}</span>
+            <span class="text-[10px] font-bold tracking-widest text-slate-500">{{ t('finance.list') }}</span>
           </div>
        </div>
        <div class="overflow-x-auto max-h-[400px] custom-scrollbar overflow-y-auto">
           <table class="w-full text-left border-collapse">
              <thead>
-                <tr class="text-[9px] font-bold uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <tr class="text-[9px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
                    <th class="px-4 py-3">#</th>
                    <th class="px-4 py-3">Mahsulot / Kategoriya</th>
                    <th class="px-4 py-3" v-if="tableData[0]?.quantity">{{ t('common.quantity') }}</th>

@@ -19,7 +19,7 @@
         <div class="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 shadow-sm flex items-center justify-center mb-6 border border-slate-100 dark:border-slate-700">
           <i class="pi pi-folder-open text-2xl text-emerald-500/30"></i>
         </div>
-        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">{{ $t('common.no_results') }}</p>
+        <p class="text-[10px] font-black tracking-[0.3em] text-slate-400">{{ $t('common.no_results') }}</p>
         <button @click="openAddMode" class="mt-6 h-8 px-4 rounded-lg bg-emerald-500/10 text-emerald-500 text-xs font-semibold hover:bg-emerald-500 hover:text-white transition-all">
            {{ $t('common.add') }}
         </button>

@@ -11,7 +11,7 @@
     <div v-if="popular || isCurrent" class="absolute -top-16 -right-16 w-32 h-32 bg-emerald-500/5 rounded-full blur-[60px] pointer-events-none group-hover:bg-emerald-500/10 transition-all duration-700" />
 
     <!-- Popular Badge (More compact) -->
-    <div v-if="popular" class="absolute top-4 right-4 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full z-20 flex items-center gap-1 shadow-lg shadow-emerald-500/20">
+    <div v-if="popular" class="absolute top-4 right-4 bg-emerald-500 text-white text-[8px] font-black tracking-widest px-2.5 py-1 rounded-full z-20 flex items-center gap-1 shadow-lg shadow-emerald-500/20">
       <i class="pi pi-bolt text-[7px]"></i>
       {{ $t('subscription.popular') }}
     </div>
@@ -26,14 +26,14 @@
       </div>
       
       <div class="flex-1 min-w-0">
-        <h3 class="text-[10px] font-black uppercase tracking-widest mb-1 truncate" :class="isCurrent ? 'text-emerald-500' : 'text-slate-500 dark:text-slate-400'">
+        <h3 class="text-[10px] font-black tracking-widest mb-1 truncate" :class="isCurrent ? 'text-emerald-500' : 'text-slate-500 dark:text-slate-400'">
           {{ $t(`subscription.plans.${plan}`) }}
         </h3>
         <div class="flex items-baseline gap-1.5">
           <span class="text-2xl font-black tracking-tighter" :class="isCurrent ? 'text-white' : 'text-slate-900 dark:text-slate-100'">
             {{ priceLabel.split(' ')[0] }}
           </span>
-          <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+          <span class="text-[9px] font-bold text-slate-400 tracking-widest">
             {{ priceLabel.split(' ')[1] }} <span class="opacity-50 font-medium">/ oy</span>
           </span>
         </div>
@@ -43,7 +43,7 @@
     <!-- Current Plan Badge (Inline) -->
     <div v-if="isCurrent" class="mb-4 px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/10 inline-flex items-center gap-1 z-10">
         <span class="w-1 h-1 rounded-full bg-emerald-500"></span>
-        <span class="text-[8px] font-black uppercase tracking-tighter text-emerald-500">{{ $t('subscription.current_plan') }}</span>
+        <span class="text-[8px] font-black tracking-tighter text-emerald-500">{{ $t('subscription.current_plan') }}</span>
     </div>
 
     <!-- Features List (GRID for compactness) -->
@@ -61,7 +61,7 @@
       <button 
         v-if="!isCurrent"
         @click="$emit('select')"
-        class="w-full h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
+        class="w-full h-10 rounded-xl text-[10px] font-black tracking-widest transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
         :class="plan === 'free' 
           ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700' 
           : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-md shadow-emerald-500/20'"
@@ -73,14 +73,14 @@
       <button 
         v-else-if="plan !== 'free'"
         @click="$emit('extend')"
-        class="w-full h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 active:scale-95"
+        class="w-full h-10 rounded-xl text-[10px] font-black tracking-widest transition-all duration-300 flex items-center justify-center gap-2 bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 active:scale-95"
       >
          <i class="pi pi-refresh text-[8px]"></i>
          <span>{{ $t('subscription.uzaytirish') }}</span>
       </button>
       
       <div v-else class="text-center py-2">
-         <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest italic opacity-60">{{ $t('subscription.current_plan') }}</span>
+         <span class="text-[9px] font-bold text-slate-500 tracking-widest italic opacity-60">{{ $t('subscription.current_plan') }}</span>
       </div>
     </div>
   </div>

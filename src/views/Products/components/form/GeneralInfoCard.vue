@@ -5,14 +5,14 @@
         <i class="pi pi-box text-white text-[10px]"></i>
       </div>
       <div>
-        <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-100">{{ $t('products.form.main_info') }}</h2>
+        <h2 class="text-[10px] font-black tracking-widest text-slate-800 dark:text-slate-100">{{ $t('products.form.main_info') }}</h2>
       </div>
     </div>
 
     <div class="p-6 space-y-6 overflow-y-auto">
       <!-- Product Name -->
       <div class="flex flex-col gap-2">
-        <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">
+        <label class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">
           {{ $t('products.form.name') }} <span class="text-rose-500 ml-0.5">*</span>
         </label>
         <div class="relative group">
@@ -32,7 +32,7 @@
       <div class="grid grid-cols-2 gap-4">
         <!-- Category -->
         <div class="flex flex-col gap-2" :class="{ 'col-span-2': !settingsStore.isSubcategoryEnabled }">
-          <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">
+          <label class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">
             {{ $t('products.form.category') }} <span class="text-rose-500 ml-0.5">*</span>
           </label>
           <Select
@@ -52,7 +52,7 @@
 
         <!-- Subcategory -->
         <div v-if="settingsStore.isSubcategoryEnabled" class="flex flex-col gap-2">
-          <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">
+          <label class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">
             {{ $t('subcategories.title') }}
           </label>
           <Select
@@ -73,7 +73,7 @@
       
       <!-- Barcode -->
       <div class="flex flex-col gap-2">
-        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.barcode') }}</label>
+        <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.barcode') }}</label>
         <div class="relative group">
           <i class="pi pi-barcode absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors text-xs"></i>
           <input

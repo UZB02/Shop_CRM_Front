@@ -7,7 +7,7 @@
           <i :class="[stat.icon, stat.color]" class="text-sm"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">{{ stat.label }}</p>
+          <p class="text-[10px] font-bold tracking-widest text-slate-400">{{ stat.label }}</p>
           <p class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">
             <span v-if="loading" class="inline-block w-20 h-4 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></span>
             <span v-else>{{ stat.value }}</span>
@@ -23,18 +23,18 @@
           <i class="pi pi-info-circle"></i>
         </div>
         <div>
-          <h4 class="text-xs font-black uppercase tracking-widest text-rose-500">{{ $t('reports.financial_report') }}</h4>
+          <h4 class="text-xs font-black tracking-widest text-rose-500">{{ $t('reports.financial_report') }}</h4>
           <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400">{{ $t('reports.financial_desc') }}</p>
         </div>
       </div>
       <div class="flex items-center gap-6">
         <div class="text-center sm:text-right">
-          <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">{{ $t('reports.total_ops') }}</span>
+          <span class="text-[9px] font-black tracking-widest text-slate-400 block mb-0.5">{{ $t('reports.total_ops') }}</span>
           <span class="text-sm font-black text-slate-800 dark:text-slate-100">{{ formatCurrency(summaryData.totalExpenses) }}</span>
         </div>
         <button 
           @click="$emit('view-report')"
-          class="h-9 px-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm"
+          class="h-9 px-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[10px] font-black tracking-widest text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm"
         >
           {{ $t('common.view_all') }}
         </button>

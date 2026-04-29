@@ -32,12 +32,12 @@
         <table class="w-full text-sm text-left min-w-[780px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30">
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('transfers.col_id_date') }}</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('transfers.col_direction') }}</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">{{ $t('transfers.col_product') }}</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('transfers.col_worker') }}</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">{{ $t('transfers.col_status') }}</th>
-              <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-right">{{ $t('transfers.col_actions') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('transfers.col_id_date') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('transfers.col_direction') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-center">{{ $t('transfers.col_product') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('transfers.col_worker') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-center">{{ $t('transfers.col_status') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-right">{{ $t('transfers.col_actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/60">
@@ -156,7 +156,7 @@
               </div>
             </div>
             <div class="flex flex-col items-end shrink-0">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ t.item_count ?? t.items?.length ?? 0 }} {{ $t('common.pcs') }}</span>
+              <span class="text-[10px] font-bold text-slate-400 tracking-widest">{{ t.item_count ?? t.items?.length ?? 0 }} {{ $t('common.pcs') }}</span>
               <span class="text-[10px] text-slate-500 dark:text-slate-500 mt-0.5">{{ t.worker_name?.split(' ')[0] }}</span>
             </div>
           </div>
@@ -166,13 +166,13 @@
             <button
               v-if="t.direction === 'in'"
               @click.stop="$emit('confirm', t)"
-              class="flex-1 h-8 rounded-lg bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest"
+              class="flex-1 h-8 rounded-lg bg-emerald-500 text-white text-[10px] font-bold tracking-widest"
             >
               {{ $t('transfers.confirm_btn') }}
             </button>
             <button
               @click.stop="$emit('cancel', t)"
-              class="flex-1 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 text-[10px] font-bold uppercase tracking-widest border border-rose-100 dark:border-rose-500/20"
+              class="flex-1 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 text-[10px] font-bold tracking-widest border border-rose-100 dark:border-rose-500/20"
             >
               {{ $t('transfers.cancel_btn') }}
             </button>

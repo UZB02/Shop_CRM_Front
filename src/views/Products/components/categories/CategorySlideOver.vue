@@ -18,8 +18,8 @@
         <!-- Panel Header -->
         <div class="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
           <div class="flex flex-col">
-            <span class="text-sm font-semibold text-emerald-500 uppercase tracking-widest">{{ isEditing ? $t('common.edit') : $t('categories.management') }}</span>
-            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">{{ $t('products.page_title') }}</span>
+            <span class="text-sm font-semibold text-emerald-500 tracking-widest">{{ isEditing ? $t('common.edit') : $t('categories.management') }}</span>
+            <span class="text-[9px] font-bold text-slate-400 tracking-[0.2em] mt-1">{{ $t('products.page_title') }}</span>
           </div>
           <button @click="$emit('update:visible', false)" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-white transition-all shadow-sm">
             <i class="pi pi-times text-[10px]"></i>
@@ -31,7 +31,7 @@
           <div class="space-y-4">
             <!-- Name Field -->
             <div class="field">
-              <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('categories.name') }}</label>
+              <label class="text-[10px] font-bold tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('categories.name') }}</label>
               <div class="relative group/input">
                 <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 transition-colors group-focus-within/input:text-emerald-500"></i>
                 <InputText 
@@ -45,7 +45,7 @@
 
             <!-- Description Field -->
             <div class="field">
-              <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('categories.description') }}</label>
+              <label class="text-[10px] font-bold tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('categories.description') }}</label>
               <div class="relative group/input">
                 <i class="pi pi-align-left absolute left-3 top-4 text-xs text-slate-300 transition-colors group-focus-within/input:text-emerald-500"></i>
                 <Textarea 
@@ -64,8 +64,8 @@
                   <i :class="['pi', category.status === 'active' ? 'pi-check' : 'pi-power-off', 'text-[10px]']"></i>
                 </div>
                 <div>
-                  <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-0.5">{{ $t('common.status') }}</p>
-                  <p :class="['text-[11px] font-bold uppercase tracking-widest transition-colors', category.status === 'active' ? 'text-emerald-500' : 'text-slate-400']">
+                  <p class="text-[9px] font-bold tracking-[0.2em] text-slate-400 mb-0.5">{{ $t('common.status') }}</p>
+                  <p :class="['text-[11px] font-bold tracking-widest transition-colors', category.status === 'active' ? 'text-emerald-500' : 'text-slate-400']">
                     {{ category.status === 'active' ? $t('common.active') : $t('common.inactive') }}
                   </p>
                 </div>
@@ -84,14 +84,14 @@
             <Button 
               :label="$t('common.cancel')"
               text
-              class="!flex-1 !text-[10px] !font-bold !uppercase !tracking-widest !rounded-xl !text-slate-400 !h-10"
+              class="!flex-1 !text-[10px] !font-bold !!tracking-widest !rounded-xl !text-slate-400 !h-10"
               @click="$emit('update:visible', false)"
             />
             <Button 
               :label="isEditing ? $t('common.save') : $t('common.add')"
               :loading="saving" 
               @click="$emit('submit')"
-              class="!flex-[2] !h-10 !rounded-xl !bg-emerald-500 !border-none !shadow-xl !shadow-emerald-500/20 active:scale-95 transition-all text-white !text-[10px] !font-bold !uppercase !tracking-widest"
+              class="!flex-[2] !h-10 !rounded-xl !bg-emerald-500 !border-none !shadow-xl !shadow-emerald-500/20 active:scale-95 transition-all text-white !text-[10px] !font-bold !!tracking-widest"
             />
           </div>
         </div>

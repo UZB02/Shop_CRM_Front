@@ -25,7 +25,7 @@
         <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-2">
           {{ warehouses.length ? $t('warehouse.no_results') : $t('warehouse.no_warehouses') }}
         </h3>
-        <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6 text-center px-4">
+        <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest mb-6 text-center px-4">
           {{ searchQuery ? $t('warehouse.search_no_data') : $t('warehouse.no_warehouses_desc') }}
         </p>
         <button

@@ -10,14 +10,14 @@
             <i class="pi pi-users text-emerald-500 text-[10px]"></i>
           </div>
           <div>
-            <h3 class="text-[11px] font-black text-slate-900 dark:text-white tracking-tight uppercase">{{ $t('workers.list_title') }}</h3>
-            <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">{{ $t('workers.worker_count', { count: totalRecords || 0 }) }}</p>
+            <h3 class="text-[11px] font-black text-slate-900 dark:text-white tracking-tight ">{{ $t('workers.list_title') }}</h3>
+            <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold tracking-widest">{{ $t('workers.worker_count', { count: totalRecords || 0 }) }}</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
           <div class="flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-md">
             <span class="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></span>
-            <span class="text-[8px] font-black text-emerald-500 uppercase tracking-widest">{{ $t('workers.active_status') }}</span>
+            <span class="text-[8px] font-black text-emerald-500 tracking-widest">{{ $t('workers.active_status') }}</span>
           </div>
         </div>
       </div>
@@ -27,8 +27,8 @@
         <table class="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr class="bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_worker') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">
+              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_worker') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">
                 <div class="flex items-center gap-2">
                   {{ $t('workers.table_col_salary') }}
                   <button @click="showSalaries = !showSalaries" 
@@ -37,10 +37,10 @@
                   </button>
                 </div>
               </th>
-              <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_branch') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_phone') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_status') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800 text-center w-24">{{ $t('workers.table_col_actions') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_branch') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_phone') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_status') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800 text-center w-24">{{ $t('workers.table_col_actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -72,8 +72,8 @@
                     <i class="pi pi-users text-3xl text-slate-300 dark:text-slate-700"></i>
                   </div>
                   <div>
-                    <p class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-tight">{{ $t('workers.not_found') }}</p>
-                    <p class="text-[9px] text-slate-400 dark:text-slate-600 mt-1 font-bold uppercase">{{ $t('workers.no_data_desc') }}</p>
+                    <p class="text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest leading-tight">{{ $t('workers.not_found') }}</p>
+                    <p class="text-[9px] text-slate-400 dark:text-slate-600 mt-1 font-bold ">{{ $t('workers.no_data_desc') }}</p>
                   </div>
                 </div>
               </td>
@@ -104,7 +104,7 @@
                     <p class="font-bold text-xs text-slate-700 dark:text-slate-200 leading-none truncate group-hover/worker:text-emerald-500 transition-colors">
                       {{ getDisplayName(data) }}
                     </p>
-                    <span class="inline-flex items-center mt-1 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border border-slate-100 dark:border-slate-800"
+                    <span class="inline-flex items-center mt-1 px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest border border-slate-100 dark:border-slate-800"
                           :class="getRoleBadgeClass(data.role)">
                       {{ getRoleDisplay(data) }}
                     </span>
@@ -118,7 +118,7 @@
                         :class="{ 'blur-[4px] select-none': !showSalaries }">
                     {{ formatFullCurrency(data.salary) }}
                   </span>
-                  <span class="text-[8px] text-slate-400 dark:text-slate-500 font-bold mt-0.5 uppercase tracking-tighter">{{ $t('workers.salary_unit') }}</span>
+                  <span class="text-[8px] text-slate-400 dark:text-slate-500 font-bold mt-0.5 tracking-tighter">{{ $t('workers.salary_unit') }}</span>
                 </div>
               </td>
 
@@ -142,7 +142,7 @@
               </td>
 
               <td class="px-4 py-2">
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest border"
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[8px] font-black tracking-widest border"
                       :class="getStatusClass(data)">
                   <span class="w-1 h-1 rounded-full" :class="getStatusDotClass(data)"></span>
                   {{ getStatusLabel(data) }}
@@ -173,7 +173,7 @@
       <!-- PAGINATION PART (Compact) -->
       <div v-if="totalRecords > 0" 
            class="px-4 py-3 bg-slate-50/30 dark:bg-slate-800/10 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-        <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+        <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 tracking-widest">
           {{ $t('workers.page_info', { current: currentPage, total: totalPages }) }}
         </div>
         <div class="flex items-center gap-1">

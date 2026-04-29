@@ -16,7 +16,7 @@
            <div class="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
              <i class="pi pi-bolt text-indigo-500 text-[10px]"></i>
            </div>
-           <h3 class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest">
+           <h3 class="text-xs font-black text-slate-800 dark:text-slate-100 tracking-widest">
              {{ isEditing ? 'Aksiyani Tahrirlash' : 'Yangi Aksiya' }}
            </h3>
         </div>
@@ -32,14 +32,14 @@
       <div class="flex-1 overflow-y-auto px-6 py-6 scrollbar-thin">
         <div v-if="fetchingDeps" class="flex flex-col items-center justify-center py-20 opacity-40 gap-3">
           <i class="pi pi-spinner animate-spin text-2xl text-indigo-500"></i>
-          <span class="text-[9px] font-black uppercase tracking-widest">Ma'lumotlar yuklanmoqda...</span>
+          <span class="text-[9px] font-black tracking-widest">Ma'lumotlar yuklanmoqda...</span>
         </div>
         
         <form v-else @submit.prevent="$emit('submit')" class="space-y-6">
           
           <!-- Asosiy -->
           <div class="space-y-4">
-            <h4 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800/60 pb-2 mb-2">Asosiy</h4>
+            <h4 class="text-[9px] font-black tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800/60 pb-2 mb-2">Asosiy</h4>
             
             <div class="flex flex-col gap-1.5">
               <label class="text-[11px] font-bold text-slate-600 dark:text-slate-400">Nomi <span class="text-rose-500">*</span></label>
@@ -57,7 +57,7 @@
 
           <!-- Muddat -->
           <div class="space-y-4 pt-1">
-            <h4 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800/60 pb-2 mb-2">Vaqt Oralig'i</h4>
+            <h4 class="text-[9px] font-black tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800/60 pb-2 mb-2">Vaqt Oralig'i</h4>
             
             <div class="grid grid-cols-2 gap-4">
               <div class="flex flex-col gap-1.5">
@@ -78,7 +78,7 @@
 
           <!-- Bog'lanishlar -->
           <div class="space-y-4 pt-1">
-            <h4 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800/60 pb-2 mb-2">Qamrov</h4>
+            <h4 class="text-[9px] font-black tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-slate-800/60 pb-2 mb-2">Qamrov</h4>
             
             <div class="flex flex-col gap-1.5">
               <label class="text-[11px] font-bold text-slate-600 dark:text-slate-400">Kategoriyalar</label>
@@ -100,7 +100,7 @@
           <div class="pt-4">
             <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-[#0b1120] rounded-2xl border border-slate-100 dark:border-slate-800/60 shadow-sm">
                <div class="flex flex-col">
-                  <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-wider">Aksiyani Faollashtirish</span>
+                  <span class="text-[11px] font-black text-slate-700 dark:text-slate-200 tracking-wider">Aksiyani Faollashtirish</span>
                   <span class="text-[9px] text-slate-400 font-medium">Global statusni o'chirib-yoqish</span>
                </div>
                <ToggleSwitch v-model="form.is_active" />
@@ -114,14 +114,14 @@
       <div class="p-5 bg-slate-50/50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2.5">
         <button 
           @click="$emit('update:visible', false)" 
-          class="h-10 px-6 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 transition-all uppercase tracking-widest"
+          class="h-10 px-6 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 transition-all tracking-widest"
           :disabled="saving"
         >
           Bekor qilish
         </button>
         <button 
           @click="$emit('submit')"
-          class="h-10 px-8 rounded-xl bg-indigo-600 text-white text-[11px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95 disabled:opacity-50 flex items-center gap-2.5"
+          class="h-10 px-8 rounded-xl bg-indigo-600 text-white text-[11px] font-black tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95 disabled:opacity-50 flex items-center gap-2.5"
           :disabled="saving"
         >
           <i v-if="saving" class="pi pi-spinner animate-spin text-[10px]"></i>

@@ -32,12 +32,12 @@
         <table class="w-full text-left min-w-[700px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest w-10">№</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.col_product') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.form.barcode') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.col_price') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest w-10">№</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.form.barcode') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.col_price') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -56,7 +56,7 @@
                       </span>
                         <TurBadge :tur-name="product.tur_name" :tur-color="product.tur_color" />
                     </div>
-                    <span class="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">{{ product.category_name }}</span>
+                    <span class="text-[9px] text-slate-400 tracking-widest mt-0.5">{{ product.category_name }}</span>
                   </div>
                 </div>
               </td>
@@ -118,8 +118,8 @@
       <div v-if="selectedProduct" class="p-8 flex flex-col items-center gap-6 min-w-[320px]">
         <div class="w-full flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
           <div class="text-left">
-            <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">{{ selectedProduct.name }}</h3>
-            <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em]">{{ selectedProduct.barcode }}</p>
+            <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight">{{ selectedProduct.name }}</h3>
+            <p class="text-[10px] font-bold text-emerald-500 tracking-[0.2em]">{{ selectedProduct.barcode }}</p>
           </div>
           <button @click="barcodeVisible = false" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
             <i class="pi pi-times text-[10px]"></i>
@@ -132,7 +132,7 @@
         
         <button 
           @click="downloadBarcode"
-          class="w-full py-3 rounded-xl bg-slate-900 border-none text-white text-[10px] font-black uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+          class="w-full py-3 rounded-xl bg-slate-900 border-none text-white text-[10px] font-black tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
         >
           <i class="pi pi-download"></i>
           Yuklab olish (PNG)

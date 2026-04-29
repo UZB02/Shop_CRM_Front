@@ -41,7 +41,7 @@
           <i class="pi pi-lock text-3xl text-slate-400"></i>
         </div>
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">{{ $t('workers.form.access_denied') }}</p>
+          <p class="text-[10px] font-black tracking-widest text-slate-500">{{ $t('workers.form.access_denied') }}</p>
           <p class="text-[11px] font-medium text-slate-400 mt-2 max-w-[200px] leading-relaxed">
             {{ $t('workers.form.access_enable_desc') }}
           </p>

@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
     <div class="text-left">
-      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
         {{ $t('warehouse.page_title') }}
       </h1>
-      <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mt-1 text-left">
+      <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-[0.3em] mt-1 text-left">
         {{ $t('warehouse.page_subtitle') }}
       </p>
     </div>
@@ -25,7 +25,7 @@
       >
         <i :class="notificationStore.canAddWarehouse ? 'pi pi-plus' : 'pi pi-lock'" class="text-[10px] font-bold"></i>
       </div>
-      <span class="text-[11px] font-black uppercase tracking-widest">{{ $t('warehouse.new_warehouse') }}</span>
+      <span class="text-[11px] font-black tracking-widest">{{ $t('warehouse.new_warehouse') }}</span>
     </button>
   </div>
 </template>

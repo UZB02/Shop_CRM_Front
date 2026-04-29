@@ -4,7 +4,7 @@
       v-for="tab in tabs" 
       :key="tab.id"
       @click="$emit('update:modelValue', tab.id)"
-      class="px-4 h-9 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 flex items-center gap-2 whitespace-nowrap relative group overflow-hidden"
+      class="px-4 h-9 rounded-xl text-[10px] font-black tracking-widest transition-all duration-500 flex items-center gap-2 whitespace-nowrap relative group overflow-hidden"
       :class="modelValue === tab.id 
         ? 'bg-white dark:bg-slate-900 text-emerald-600 shadow-sm' 
         : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'"

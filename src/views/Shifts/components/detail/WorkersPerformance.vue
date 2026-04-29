@@ -8,7 +8,7 @@
      <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
            <thead>
-              <tr class="bg-slate-50/50 dark:bg-slate-800/30 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">
+              <tr class="bg-slate-50/50 dark:bg-slate-800/30 text-[10px] font-bold text-slate-400 tracking-widest border-b border-slate-100 dark:border-slate-800">
                  <th class="px-6 py-3 font-semibold">{{ $t('shifts.workers.col_worker') }}</th>
                  <th class="px-6 py-3 font-semibold text-right">{{ $t('shifts.workers.col_sales') }}</th>
                  <th class="px-6 py-3 font-semibold text-right">{{ $t('shifts.workers.col_amount') }}</th>

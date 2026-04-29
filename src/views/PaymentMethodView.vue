@@ -79,7 +79,7 @@
           icon="pi pi-arrow-right" 
           iconPos="right"
           severity="success" 
-          class="flex-1 h-14 !rounded-2xl !text-sm font-black uppercase tracking-widest shadow-xl shadow-emerald-500/20 active:scale-95"
+          class="flex-1 h-14 !rounded-2xl !text-sm font-black tracking-widest shadow-xl shadow-emerald-500/20 active:scale-95"
           :disabled="!selectedMethod"
           @click="proceedToPayment"
         />

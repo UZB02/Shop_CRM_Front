@@ -12,7 +12,7 @@
             <div class="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800/50">
               <div class="flex flex-col">
                 <h3 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">{{ $t('password_change.title') }}</h3>
-                <p class="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">{{ $t('password_change.subtitle') }}</p>
+                <p class="text-[10px] font-medium text-slate-400 dark:text-slate-500 tracking-widest mt-1">{{ $t('password_change.subtitle') }}</p>
               </div>
               <button 
                 class="flex items-center justify-center text-slate-400 hover:!text-slate-600 dark:hover:!text-white hover:bg-slate-100 dark:hover:bg-slate-800 w-8 h-8 rounded-full transition-all border-none bg-transparent cursor-pointer" 
@@ -25,7 +25,7 @@
             <!-- Body -->
             <div class="p-6 space-y-5">
               <div class="flex flex-col gap-2 group">
-                <label for="current_password" class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">{{ $t('password_change.current_password') }}</label>
+                <label for="current_password" class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest px-1">{{ $t('password_change.current_password') }}</label>
                 <div class="relative">
                   <Password 
                     id="current_password" 
@@ -42,7 +42,7 @@
               </div>
 
               <div class="flex flex-col gap-2 group">
-                <label for="password" class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">{{ $t('password_change.new_password') }}</label>
+                <label for="password" class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest px-1">{{ $t('password_change.new_password') }}</label>
                 <Password 
                   id="password" 
                   v-model="form.password" 
@@ -60,7 +60,7 @@
               </div>
 
               <div class="flex flex-col gap-2 group">
-                <label for="password2" class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">{{ $t('password_change.confirm_password') }}</label>
+                <label for="password2" class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest px-1">{{ $t('password_change.confirm_password') }}</label>
                 <Password 
                   id="password2" 
                   v-model="form.password2" 

@@ -47,7 +47,7 @@
             <!-- Left Side: Product List -->
             <div class="flex-grow p-6 overflow-y-auto custom-scrollbar flex flex-col h-full">
               <div class="flex items-center justify-between mb-4 shrink-0">
-                <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{{ $t('customers.trades.items_title') }}</h3>
+                <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">{{ $t('customers.trades.items_title') }}</h3>
                 <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-100 dark:border-emerald-500/10 leading-none">{{ trade.items?.length }} {{ $t('common.pcs') }}</span>
               </div>
 
@@ -64,10 +64,10 @@
                        <div class="flex items-center gap-2 mb-1">
                          <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate" :class="{'line-through opacity-60': item.isFullyReturned}">{{ item.product_name }}</h4>
                          <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
-                         <span v-if="item.isReturned" class="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-500/10 px-1 py-0.5 rounded border border-amber-100 dark:border-amber-500/10 uppercase tracking-widest leading-none">
+                         <span v-if="item.isReturned" class="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-500/10 px-1 py-0.5 rounded border border-amber-100 dark:border-amber-500/10 tracking-widest leading-none">
                            {{ item.isFullyReturned ? 'Qaytarilgan' : `Qaytarildi (${item.returned_qty})` }}
                          </span>
-                         <span v-if="item.hasDiscount" class="text-[8px] font-black text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-1 py-0.5 rounded border border-rose-100 dark:border-rose-500/10 uppercase tracking-widest leading-none">Chegirma</span>
+                         <span v-if="item.hasDiscount" class="text-[8px] font-black text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-1 py-0.5 rounded border border-rose-100 dark:border-rose-500/10 tracking-widest leading-none">Chegirma</span>
                        </div>
                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium flex items-center flex-wrap gap-y-1">
                          <span class="text-slate-700 dark:text-slate-300">{{ item.quantity }} {{ item.unit }}</span>
@@ -103,7 +103,7 @@
                      <i class="pi pi-comment text-amber-600 dark:text-amber-400 text-[9px]"></i>
                    </div>
                    <div>
-                      <h5 class="text-[9px] font-black uppercase text-amber-600/70 dark:text-amber-500/70 tracking-[0.15em] mb-0.5">Izoh</h5>
+                      <h5 class="text-[9px] font-black text-amber-600/70 dark:text-amber-500/70 tracking-[0.15em] mb-0.5">Izoh</h5>
                       <p class="text-[11px] text-amber-800 dark:text-amber-200/80 leading-relaxed font-medium">{{ trade.description }}</p>
                    </div>
                  </div>
@@ -116,7 +116,7 @@
                 
                 <!-- Summary Section -->
                 <div>
-                  <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 pl-1">{{ $t('common.payment_summary') }}</h3>
+                  <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-3 pl-1">{{ $t('common.payment_summary') }}</h3>
                   
                   <div class="space-y-2.5 px-1">
                     <div class="flex justify-between items-center text-[11px] font-semibold">
@@ -130,7 +130,7 @@
                     
                     <div class="pt-3 mt-1 border-t border-slate-200 dark:border-white/5">
                       <div class="flex justify-between items-baseline">
-                        <span class="text-[9px] font-black text-slate-800 dark:text-slate-300 uppercase tracking-widest">Jami Summa</span>
+                        <span class="text-[9px] font-black text-slate-800 dark:text-slate-300 tracking-widest">Jami Summa</span>
                         <span class="text-[18px] font-black text-slate-900 dark:text-white tracking-tighter">{{ formatCurrency(summary.finalTotal) }}</span>
                       </div>
                     </div>
@@ -141,7 +141,7 @@
                 <div class="grid grid-cols-1 gap-3">
                   <div class="p-4 bg-white dark:bg-[#131d31] rounded-[16px] border border-slate-200 dark:border-transparent shadow-sm relative overflow-hidden flex flex-col justify-between group h-[80px]">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-xl -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-500"></div>
-                    <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.15em] relative z-10 block mb-1.5">{{ $t('common.paid') }}</span>
+                    <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 tracking-[0.15em] relative z-10 block mb-1.5">{{ $t('common.paid') }}</span>
                     <div class="flex items-end justify-between relative z-10 mt-auto">
                       <span class="text-[17px] font-black text-emerald-500 tracking-tight leading-none">{{ formatCurrency(trade.paid_amount) }}</span>
                       <div class="scale-90 origin-bottom-right">
@@ -152,7 +152,7 @@
 
                   <div v-if="summary.hasDebt" class="p-4 bg-rose-50 dark:bg-rose-500/5 rounded-[16px] border border-rose-100 dark:border-transparent shadow-sm relative overflow-hidden flex flex-col justify-between h-[80px]">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 rounded-full blur-xl -mr-12 -mt-12"></div>
-                    <span class="text-[8px] font-black text-rose-500/70 uppercase tracking-[0.15em] relative z-10 block mb-1.5">{{ $t('customers.details.debt') }}</span>
+                    <span class="text-[8px] font-black text-rose-500/70 tracking-[0.15em] relative z-10 block mb-1.5">{{ $t('customers.details.debt') }}</span>
                     <div class="flex items-end justify-between relative z-10 mt-auto">
                       <span class="text-[17px] font-black text-rose-500 tracking-tight leading-none">{{ formatCurrency(trade.debt_amount) }}</span>
                     </div>
@@ -163,10 +163,10 @@
                 <div class="space-y-3 pt-3 border-t border-slate-100 dark:border-white/5">
                   <div class="flex items-center justify-between p-3 bg-white dark:bg-[#131d31] rounded-[14px] border border-slate-200 dark:border-transparent shadow-sm">
                     <div class="flex flex-col gap-0.5">
-                      <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.15em]">{{ $t('shifts.workers.col_worker') }}</span>
+                      <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 tracking-[0.15em]">{{ $t('shifts.workers.col_worker') }}</span>
                       <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200">{{ trade.worker_name }}</span>
                     </div>
-                    <div v-if="trade.smena_id" class="px-2 py-1.5 bg-slate-100 dark:bg-white/5 rounded-md text-[8px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest border border-slate-200 dark:border-white/5 shadow-inner leading-none">
+                    <div v-if="trade.smena_id" class="px-2 py-1.5 bg-slate-100 dark:bg-white/5 rounded-md text-[8px] font-black text-slate-500 dark:text-slate-400 tracking-widest border border-slate-200 dark:border-white/5 shadow-inner leading-none">
                       SMENA #{{ trade.smena_id }}
                     </div>
                   </div>
@@ -174,7 +174,7 @@
                   <div v-if="trade.ofd_status && trade.ofd_status !== 'disabled'" class="flex items-center justify-between px-2">
                     <div class="flex items-center gap-1.5">
                       <i class="pi pi-shield text-[9px] text-slate-400"></i>
-                      <span class="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Fiskal Holat</span>
+                      <span class="text-[9px] font-black text-slate-500 dark:text-slate-400 tracking-widest">Fiskal Holat</span>
                     </div>
                     <span v-if="trade.ofd_status === 'success'" class="text-[9px] font-black text-emerald-500 flex items-center gap-1"><i class="pi pi-check-circle text-[9px]"></i> Yuborildi</span>
                     <span v-else class="text-[9px] font-black text-amber-500 flex items-center gap-1"><i class="pi pi-info-circle text-[9px]"></i> {{ trade.ofd_status }}</span>
@@ -182,7 +182,7 @@
                   <div v-else-if="trade.ofd_status === 'disabled'" class="flex items-center justify-between px-2">
                      <div class="flex items-center gap-1.5">
                       <i class="pi pi-shield text-[9px] text-slate-400"></i>
-                      <span class="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Fiskal Holat</span>
+                      <span class="text-[9px] font-black text-slate-500 dark:text-slate-400 tracking-widest">Fiskal Holat</span>
                     </div>
                     <span class="text-[9px] font-bold text-slate-400 flex items-center gap-1 opacity-60"><i class="pi pi-ban text-[9px]"></i> O'chirilgan</span>
                   </div>
@@ -204,7 +204,7 @@
                     <button 
                       v-if="canFullCancel" 
                       @click="showCancelConfirm = true"
-                      class="w-full h-8 text-slate-400 dark:text-slate-500 hover:text-[#ff3b5c] hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-[10px] text-[9px] font-black uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-1.5"
+                      class="w-full h-8 text-slate-400 dark:text-slate-500 hover:text-[#ff3b5c] hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-[10px] text-[9px] font-black tracking-[0.15em] transition-all flex items-center justify-center gap-1.5"
                     >
                       <i class="pi pi-times-circle text-[10px]"></i>
                       BEKOR QILISH (TOTAL)

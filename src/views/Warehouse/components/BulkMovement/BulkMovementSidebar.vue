@@ -3,11 +3,11 @@
     
     <!-- Type Selection -->
     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">{{ $t('warehouse.bulk.type') }}</h4>
+      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest block">{{ $t('warehouse.bulk.type') }}</h4>
       <div class="flex p-1 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700">
         <button 
           @click="$emit('update:type', 'in')"
-          class="flex-1 py-3 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+          class="flex-1 py-3 rounded-lg text-[10px] font-black tracking-widest transition-all flex items-center justify-center gap-2"
           :class="type === 'in' ? 'bg-white dark:bg-slate-700 text-emerald-600 shadow-sm border border-slate-200 dark:border-slate-600' : 'text-slate-400 hover:text-slate-600'"
         >
           <i class="pi pi-download"></i>
@@ -15,7 +15,7 @@
         </button>
         <button 
           @click="$emit('update:type', 'out')"
-          class="flex-1 py-3 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+          class="flex-1 py-3 rounded-lg text-[10px] font-black tracking-widest transition-all flex items-center justify-center gap-2"
           :class="type === 'out' ? 'bg-white dark:bg-slate-700 text-rose-600 shadow-sm border border-slate-200 dark:border-slate-600' : 'text-slate-400 hover:text-slate-600'"
         >
           <i class="pi pi-upload"></i>
@@ -26,7 +26,7 @@
 
     <!-- Note Section -->
     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">{{ $t('warehouse.bulk.notes') }}</h4>
+      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest block">{{ $t('warehouse.bulk.notes') }}</h4>
       <Textarea 
         :modelValue="note"
         @update:modelValue="$emit('update:note', $event)"
@@ -41,7 +41,7 @@
       <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
         <i class="pi pi-info-circle text-white"></i>
       </div>
-      <p class="text-[11px] font-bold leading-relaxed opacity-80 uppercase tracking-wide">
+      <p class="text-[11px] font-bold leading-relaxed opacity-80 tracking-wide">
         {{ $t('warehouse.bulk.fifo_tip') }}
       </p>
     </div>

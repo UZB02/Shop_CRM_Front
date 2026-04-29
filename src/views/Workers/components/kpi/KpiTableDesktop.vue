@@ -13,7 +13,7 @@
       <template #empty>
         <div class="py-16 text-center">
            <i class="pi pi-inbox text-3xl text-slate-200 mb-3 block"></i>
-           <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('common.no_results') }}</p>
+           <p class="text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('common.no_results') }}</p>
         </div>
       </template>
 
@@ -118,11 +118,11 @@
                  <span class="text-[10px] font-black" :class="getCompletionColor(data?.completion_pct, 'text')">
                    {{ data?.completion_pct ? parseFloat(data?.completion_pct).toFixed(0) + '%' : '0%' }}
                  </span>
-                 <span class="px-1.5 py-0.5 rounded-[4px] text-[8px] font-black uppercase tracking-tighter shadow-sm" :class="getSmartStatusBadge(data?.completion_pct)">
+                 <span class="px-1.5 py-0.5 rounded-[4px] text-[8px] font-black tracking-tighter shadow-sm" :class="getSmartStatusBadge(data?.completion_pct)">
                    {{ getSmartStatusLabel(data?.completion_pct) }}
                  </span>
                </div>
-               <span class="text-[8px] text-slate-400 font-bold uppercase tracking-tighter opacity-50">{{ $t('kpi.stats.plan_label') }}</span>
+               <span class="text-[8px] text-slate-400 font-bold tracking-tighter opacity-50">{{ $t('kpi.stats.plan_label') }}</span>
             </div>
             <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800/20 rounded-full overflow-hidden shadow-inner">
               <div 
@@ -196,7 +196,7 @@ const {
   border-bottom: 1px solid #f1f5f9;
   font-size: 10px;
   font-weight: 800;
-  text-transform: uppercase;
+  text-transform: ;
   letter-spacing: 0.05em;
   color: #64748b;
 }

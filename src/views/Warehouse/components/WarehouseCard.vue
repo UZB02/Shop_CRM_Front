@@ -8,10 +8,10 @@
             <i class="pi pi-box text-base"></i>
           </div>
           <div>
-            <h3 class="text-[11px] font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight group-hover:text-emerald-500 transition-colors">
+            <h3 class="text-[11px] font-black text-slate-800 dark:text-slate-100 tracking-tight group-hover:text-emerald-500 transition-colors">
               {{ warehouse.name }}
             </h3>
-            <p class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mt-0.5">
+            <p class="text-[9px] font-bold text-slate-400 dark:text-slate-500 tracking-widest leading-none mt-0.5">
               {{ $t('warehouse.warehouse_name') }}
             </p>
           </div>
@@ -43,7 +43,7 @@
           <p class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight">
             {{ warehouse.address || '—' }}
           </p>
-          <p class="text-[8px] font-bold text-slate-300 dark:text-slate-600 uppercase tracking-widest mt-0.5">
+          <p class="text-[8px] font-bold text-slate-300 dark:text-slate-600 tracking-widest mt-0.5">
             {{ $t('warehouse.warehouse_address') }}
           </p>
         </div>
@@ -56,21 +56,21 @@
             class="w-1.5 h-1.5 rounded-full"
             :class="warehouse.status === 'inactive' ? 'bg-rose-500' : 'bg-emerald-500 animate-pulse'"
           ></div>
-          <span class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+          <span class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-widest">
             {{ warehouse.status === 'inactive' ? $t('common.inactive') : $t('common.active') }}
           </span>
         </div>
         <div class="flex gap-2">
           <button
             @click="$emit('move', warehouse)"
-            class="h-8 px-3 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all border border-emerald-500/10 flex items-center gap-1.5"
+            class="h-8 px-3 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold tracking-widest hover:bg-emerald-500 hover:text-white transition-all border border-emerald-500/10 flex items-center gap-1.5"
           >
             <i class="pi pi-sync text-[10px]"></i>
             {{ $t('warehouse.bulk.title') }}
           </button>
           <button
             @click="$router.push(`/dashboard/warehouse/${warehouse.id || warehouse._id}`)"
-            class="h-8 px-3 rounded-lg bg-slate-900 dark:bg-slate-800 text-[10px] font-bold text-white uppercase tracking-widest hover:bg-slate-800 dark:hover:bg-slate-700 transition-all shadow-sm flex items-center gap-1.5"
+            class="h-8 px-3 rounded-lg bg-slate-900 dark:bg-slate-800 text-[10px] font-bold text-white tracking-widest hover:bg-slate-800 dark:hover:bg-slate-700 transition-all shadow-sm flex items-center gap-1.5"
           >
             <i class="pi pi-arrow-right text-[10px]"></i>
             {{ $t('common.view') }}

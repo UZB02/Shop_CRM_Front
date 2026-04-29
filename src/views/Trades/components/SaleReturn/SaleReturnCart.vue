@@ -1,7 +1,7 @@
 <template>
   <div class="mt-2 flex-grow flex flex-col min-h-0">
     <div class="flex items-center justify-between mb-3 shrink-0">
-      <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">Qaytariladigan mahsulotlar</h3>
+      <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Qaytariladigan mahsulotlar</h3>
       <span class="text-[9px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 px-2 py-1 rounded-md border border-rose-100 dark:border-rose-500/10 leading-none">{{ items.length }} xil</span>
     </div>
     

@@ -25,7 +25,7 @@
           <p>{{ $t('settings.unsaved_changes') }}</p>
           <div class="flex flex-wrap gap-1 mt-1 opacity-80">
             <template v-for="tab in SETTINGS_TABS" :key="tab.key">
-              <span v-if="dirtyTabs[tab.key]" class="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-400/10 text-[9px] uppercase tracking-wider">
+              <span v-if="dirtyTabs[tab.key]" class="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-400/10 text-[9px] tracking-wider">
                 {{ $t(tab.tKey) }}
               </span>
             </template>
@@ -150,7 +150,7 @@ const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwn
   border-bottom: 1px solid #e2e8f0;
   font-size: 10px;
   font-weight: 800;
-  text-transform: uppercase;
+  text-transform: ;
   letter-spacing: 0.09em;
   color: #94a3b8;
 }

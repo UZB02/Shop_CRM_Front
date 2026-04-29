@@ -11,7 +11,7 @@
                 'bg-red-950/90 text-red-400 border border-red-500/20'
             ]
         }),
-        summary: { class: 'text-[11px] font-black mb-1 opacity-60 tracking-[0.05em] uppercase leading-none' },
+        summary: { class: 'text-[11px] font-black mb-1 opacity-60 tracking-[0.05em] leading-none' },
         detail: { class: 'text-sm font-bold text-slate-100 leading-tight block' },
         icon: { class: 'text-lg mr-4 mt-0.5' },
         closeButton: { class: 'hover:bg-white/10 rounded-full transition-colors w-8 h-8 flex items-center justify-center p-0' },

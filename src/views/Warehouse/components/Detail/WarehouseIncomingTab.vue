@@ -3,7 +3,7 @@
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
       <!-- Table header info -->
       <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10 flex items-center justify-between">
-        <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.detail.incoming_title') }}</h3>
+        <h3 class="text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.incoming_title') }}</h3>
         <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">
           {{ $t('warehouse.detail.total_count', { count: total }) }}
         </span>
@@ -14,13 +14,13 @@
         <table class="w-full text-left min-w-[900px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.col_product') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.amount') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.all') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.detail.col_description') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.date') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.all') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_description') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -32,7 +32,7 @@
               <td class="px-4 py-2.5">
                 <div class="flex flex-col gap-1">
                   <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">
+                    <span class="text-xs font-bold text-slate-700 dark:text-slate-200 tracking-tight">
                       {{ item.product_name }}
                     </span>
                     <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />

@@ -17,10 +17,10 @@
                             'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]': getStatusSeverity(subscription.status) === 'danger'
                         }"
                     />
-                    <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ subscription.store_name }}</span>
+                    <span class="text-[9px] font-bold tracking-widest text-slate-400 dark:text-slate-500">{{ subscription.store_name }}</span>
                   </div>
                   <h2 class="text-2xl font-black tracking-tighter text-slate-900 dark:text-white">{{ displayPlanName }}</h2>
-                  <p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{{ subscription.plan?.plan_type_display }}</p>
+                  <p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 tracking-widest">{{ subscription.plan?.plan_type_display }}</p>
                </div>
                <Tag :value="getStatusLabel(subscription.status)" :severity="getStatusSeverity(subscription.status)" class="!text-[9px] !font-black !px-3 !py-1 !rounded-md" />
             </div>
@@ -47,7 +47,7 @@
         <template #content>
            <div class="grid grid-cols-2 gap-x-6 gap-y-4">
               <div v-for="(item, key) in limits" :key="key" class="space-y-1.5">
-                 <div class="flex justify-between items-center text-[9px] font-bold uppercase tracking-tight">
+                 <div class="flex justify-between items-center text-[9px] font-bold tracking-tight">
                     <span class="text-slate-400 dark:text-slate-500">{{ item.label }}</span>
                     <span class="text-slate-900 dark:text-slate-100 flex items-center gap-1">
                       {{ item.data?.used || 0 }} 
@@ -72,7 +72,7 @@
     <div class="lg:col-span-12 xl:col-span-8">
       <Card class="border-none shadow-sm !bg-white dark:!bg-slate-900 !rounded-2xl h-full">
         <template #title>
-          <div class="px-2 pt-2 flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-slate-800 pb-2 mb-2">
+          <div class="px-2 pt-2 flex items-center gap-2 text-[10px] font-bold text-slate-500 tracking-widest border-b border-slate-50 dark:border-slate-800 pb-2 mb-2">
             <i class="pi pi-star-fill text-amber-500 text-[8px]" />
             {{ $t('subscription.features.title') }}
           </div>
@@ -93,7 +93,7 @@
               >
                 <i :class="[getFeatureIcon(key), 'text-[9px]']" />
               </div>
-              <span class="text-[9px] font-bold leading-tight uppercase tracking-tighter truncate" :class="subscription.plan?.[key] ? 'text-slate-700 dark:text-slate-200' : 'text-slate-300'">
+              <span class="text-[9px] font-bold leading-tight tracking-tighter truncate" :class="subscription.plan?.[key] ? 'text-slate-700 dark:text-slate-200' : 'text-slate-300'">
                 {{ label }}
               </span>
             </div>

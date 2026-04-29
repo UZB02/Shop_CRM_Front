@@ -5,7 +5,7 @@
         <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
           <i class="pi pi-briefcase text-[10px]"></i>
         </div>
-        <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">{{ $t('customers.details.trades_count', { count: '' }).trim() }}</h4>
+        <h4 class="text-[9px] font-black text-slate-400 tracking-widest leading-none">{{ $t('customers.details.trades_count', { count: '' }).trim() }}</h4>
       </div>
       <p class="text-xl font-black text-slate-800 dark:text-white">{{ purchaseCount }}</p>
     </div>
@@ -15,7 +15,7 @@
         <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
           <i class="pi pi-users text-[10px]"></i>
         </div>
-        <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">{{ $t('customers.details.group') }}</h4>
+        <h4 class="text-[9px] font-black text-slate-400 tracking-widest leading-none">{{ $t('customers.details.group') }}</h4>
       </div>
       <p class="text-xl font-black text-slate-800 dark:text-white truncate">{{ groupName || '—' }}</p>
     </div>
@@ -25,9 +25,9 @@
         <div class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-500">
           <i class="pi pi-exclamation-circle text-[10px]"></i>
         </div>
-        <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">{{ $t('customers.details.financial_status') }}</h4>
+        <h4 class="text-[9px] font-black text-slate-400 tracking-widest leading-none">{{ $t('customers.details.financial_status') }}</h4>
       </div>
-      <p :class="['text-[11px] font-black uppercase tracking-tight', debtBalance > 0 ? 'text-rose-500' : 'text-emerald-500']">
+      <p :class="['text-[11px] font-black tracking-tight', debtBalance > 0 ? 'text-rose-500' : 'text-emerald-500']">
         {{ debtBalance > 0 ? $t('customers.details.debt') : $t('customers.details.no_debt') }}
       </p>
     </div>

@@ -11,12 +11,12 @@
       <div class="h-10 w-[1px] bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
       <div>
         <div class="flex items-center gap-2 mb-0.5">
-          <h1 class="text-lg font-black text-slate-900 dark:text-slate-50 uppercase tracking-tight">
+          <h1 class="text-lg font-black text-slate-900 dark:text-slate-50 tracking-tight">
             {{ $t('warehouse.bulk.title') }}
           </h1>
           <Tag :value="warehouseName" severity="info" class="!text-[10px] !font-black !rounded-md !px-2" />
         </div>
-        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] leading-none">
+        <p class="text-[10px] font-bold text-slate-400 tracking-[0.2em] leading-none">
           {{ $t('warehouse.bulk.subtitle') }}
         </p>
       </div>
@@ -24,21 +24,21 @@
     
     <div class="flex items-center gap-3">
       <div class="flex flex-col items-end pr-4 border-r border-slate-100 dark:border-slate-800 hidden sm:flex">
-        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+        <span class="text-[9px] font-black text-slate-400 tracking-widest leading-none mb-1">
           {{ $t('warehouse.bulk.filled') }}
         </span>
         <span class="text-sm font-black text-slate-800 dark:text-slate-200 leading-none">{{ validCount }} / {{ totalCount }}</span>
       </div>
       <button
         @click="$emit('back')"
-        class="h-11 px-6 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 text-[11px] font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95"
+        class="h-11 px-6 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 text-[11px] font-black tracking-widest hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95"
       >
         {{ $t('warehouse.bulk.cancel') }}
       </button>
       <button
         @click="$emit('save')"
         :disabled="saving || validCount === 0"
-        class="h-11 px-8 rounded-xl text-white text-[11px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-95 disabled:opacity-30 flex items-center justify-center gap-2"
+        class="h-11 px-8 rounded-xl text-white text-[11px] font-black tracking-widest transition-all shadow-lg active:scale-95 disabled:opacity-30 flex items-center justify-center gap-2"
         :class="type === 'in' ? 'bg-emerald-600 shadow-emerald-500/20 hover:bg-emerald-700' : 'bg-rose-600 shadow-rose-500/20 hover:bg-rose-700'"
       >
         <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>

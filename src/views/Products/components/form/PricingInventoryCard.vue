@@ -5,14 +5,14 @@
         <i class="pi pi-wallet text-white text-[10px]"></i>
       </div>
       <div>
-        <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-100">{{ $t('products.form.pricing_inventory') }}</h2>
+        <h2 class="text-[10px] font-black tracking-widest text-slate-800 dark:text-slate-100">{{ $t('products.form.pricing_inventory') }}</h2>
       </div>
     </div>
 
     <div class="p-6 space-y-6 overflow-y-auto">
       <!-- Currency Selection -->
       <div class="flex flex-col gap-2 pb-2">
-        <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.currency') }}</label>
+        <label class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.currency') }}</label>
         <div class="grid grid-cols-3 gap-2">
           <button 
             v-for="curr in currencies" 
@@ -33,7 +33,7 @@
       <!-- Pricing Grid -->
       <div class="grid grid-cols-1 gap-5">
         <div class="flex flex-col gap-2">
-          <label class="text-[9px] font-black uppercase tracking_widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.purchase_price') }}</label>
+          <label class="text-[9px] font-black tracking_widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.purchase_price') }}</label>
           <div class="relative group">
             <input
               :value="modelValue.purchase_price"
@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="flex flex-col gap-2">
-          <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.sale_price') }}</label>
+          <label class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.sale_price') }}</label>
           <div class="relative group">
             <input
               :value="modelValue.sale_price"
@@ -57,7 +57,7 @@
               placeholder="0"
               class="w-full h-11 px-4 pr-14 rounded-xl text-[12px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/20 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-mono shadow-sm"
             />
-            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[8px] font-black text-white bg-emerald-500 px-2 py-0.5 rounded shadow-lg shadow-emerald-500/20 uppercase">{{ $t('products.form.sale_label') }}</span>
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[8px] font-black text-white bg-emerald-500 px-2 py-0.5 rounded shadow-lg shadow-emerald-500/20 ">{{ $t('products.form.sale_label') }}</span>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
       <!-- Inventory Grid -->
       <div class="grid grid-cols-1 gap-5">
         <div class="flex flex-col gap-2">
-          <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.unit') }}</label>
+          <label class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.unit') }}</label>
           <div class="relative group">
             <Select
               :modelValue="modelValue.unit"
@@ -77,16 +77,16 @@
               optionValue="value"
               class="w-full"
               pt:root:class="!h-11 !rounded-xl !border-[1.5px] !border-slate-200 dark:!border-slate-700/60 !bg-slate-50 dark:!bg-slate-800/40 !shadow-none focus:!border-emerald-500 focus:!ring-4 focus:!ring-emerald-500/10 !transition-all !duration-300"
-              pt:label:class="!text-[10px] !font-black !uppercase !tracking-widest !text-slate-700 dark:!text-slate-200 !py-0 !flex !items-center !h-full"
+              pt:label:class="!text-[10px] !font-black !!tracking-widest !text-slate-700 dark:!text-slate-200 !py-0 !flex !items-center !h-full"
             >
               <template #value="slotProps">
-                <span v-if="slotProps.value" class="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">
+                <span v-if="slotProps.value" class="text-[10px] font-black tracking-widest text-slate-700 dark:text-slate-200">
                   {{ $t('units.' + slotProps.value) }}
                 </span>
                 <span v-else class="text-[10px] text-slate-400 font-medium italic lowercase tracking-normal">{{ slotProps.placeholder }}</span>
               </template>
               <template #option="slotProps">
-                <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('units.' + slotProps.option.value) }}</span>
+                <span class="text-[10px] font-black tracking-widest">{{ $t('units.' + slotProps.option.value) }}</span>
               </template>
             </Select>
           </div>

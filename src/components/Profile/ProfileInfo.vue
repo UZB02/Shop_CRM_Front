@@ -74,7 +74,7 @@ defineProps({
 .info-label {
   font-size: 9px;
   font-weight: 700;
-  text-transform: uppercase;
+  text-transform: ;
   letter-spacing: 0.1em;
   color: #94a3b8;
 }
@@ -96,7 +96,7 @@ defineProps({
   border-radius: 5px;
   background: #f1f5f9;
   color: #64748b;
-  text-transform: uppercase;
+  text-transform: ;
   letter-spacing: 0.05em;
   flex-shrink: 0;
 }

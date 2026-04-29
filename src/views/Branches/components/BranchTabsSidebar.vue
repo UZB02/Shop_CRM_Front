@@ -21,7 +21,7 @@
   <!-- ── DESKTOP: vertical sidebar ── -->
   <div class="hidden lg:flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex-col sticky top-24 max-h-[calc(100vh-120px)]">
     <!-- Header -->
-    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0 text-xs font-semibold text-slate-400 tracking-widest uppercase">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0 text-xs font-semibold text-slate-400 tracking-widest ">
       {{ $t('common.actions') }}
     </div>
 

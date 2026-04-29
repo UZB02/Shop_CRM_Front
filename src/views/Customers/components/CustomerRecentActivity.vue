@@ -1,13 +1,13 @@
 <template>
   <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
     <div class="px-4 py-2 border-b border-slate-50 dark:border-slate-800/50 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/20">
-      <h3 class="text-[8px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+      <h3 class="text-[8px] font-black text-slate-400 tracking-widest flex items-center gap-1.5">
         <span class="w-1 h-1 rounded-full bg-emerald-500"></span>
         {{ $t('common.recent_activity') }}
       </h3>
       <button 
         @click="$emit('viewAll')"
-        class="text-[8px] font-black text-emerald-500 hover:text-emerald-600 uppercase tracking-widest transition-colors"
+        class="text-[8px] font-black text-emerald-500 hover:text-emerald-600 tracking-widest transition-colors"
       >
         {{ $t('common.view_all') }}
       </button>
@@ -26,8 +26,8 @@
             </div>
             <div>
               <div class="flex items-center gap-2 mb-0.5">
-                <p class="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ trade.items?.[0]?.product_name || 'Savdo' }}</p>
-                <span v-if="trade.items?.length > 1" class="text-[7px] font-black text-slate-400 uppercase tracking-widest">+{{ trade.items.length - 1 }} {{ $t('common.more') }}</span>
+                <p class="text-[10px] font-black text-slate-700 dark:text-slate-200 tracking-tight">{{ trade.items?.[0]?.product_name || 'Savdo' }}</p>
+                <span v-if="trade.items?.length > 1" class="text-[7px] font-black text-slate-400 tracking-widest">+{{ trade.items.length - 1 }} {{ $t('common.more') }}</span>
               </div>
               <p class="text-[8px] font-bold text-slate-400">
                 <template v-if="trade.created_on">
@@ -41,14 +41,14 @@
           </div>
           <div class="text-right">
             <p class="text-[10px] font-black text-slate-800 dark:text-white mb-0.5">{{ formatCurrency(trade.net_price) }}</p>
-            <span :class="['text-[6px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest', trade.payment_type === 'cash' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500']">
+            <span :class="['text-[6px] font-black px-1.5 py-0.5 rounded tracking-widest', trade.payment_type === 'cash' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500']">
               {{ trade.payment_type_display || trade.payment_type }}
             </span>
           </div>
         </div>
       </div>
       <div v-if="!recentTrades?.length" class="p-8 text-center">
-        <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">{{ $t('common.no_results') }}</p>
+        <p class="text-[9px] font-black text-slate-300 tracking-widest">{{ $t('common.no_results') }}</p>
       </div>
     </div>
   </div>

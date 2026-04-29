@@ -21,7 +21,7 @@
           <h1 class="text-lg md:text-xl font-black text-slate-800 dark:text-white tracking-tight truncate">
             {{ worker?.full_name }}
           </h1>
-          <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-[8px] font-black uppercase tracking-wider border border-emerald-500/20 whitespace-nowrap">
+          <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-[8px] font-black tracking-wider border border-emerald-500/20 whitespace-nowrap">
             {{ worker?.role_display || worker?.role }}
           </span>
         </div>
@@ -39,7 +39,7 @@
     <div class="flex items-center gap-4 lg:gap-8 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 md:border-l pt-3 md:pt-0 md:pl-6 lg:pl-8 border-slate-100 dark:border-slate-800">
       <!-- Salary -->
       <div class="text-left md:text-right">
-        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('workers.salary') }}</p>
+        <p class="text-[8px] font-black text-slate-400 tracking-widest mb-0.5">{{ $t('workers.salary') }}</p>
         <div class="flex items-center gap-2">
           <p class="text-xs font-black text-emerald-500 tracking-tight transition-all duration-300"
              :class="{ 'blur-[4px] select-none': !showSalary }">
@@ -55,7 +55,7 @@
 
       <Button icon="pi pi-pencil" 
               :label="$t('common.edit')" 
-              class="!rounded-xl !px-4 !py-2 !bg-emerald-500 hover:!bg-emerald-600 !border-none !text-white !font-black !text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/10 transition-all hover:-translate-y-0.5" 
+              class="!rounded-xl !px-4 !py-2 !bg-emerald-500 hover:!bg-emerald-600 !border-none !text-white !font-black !text-[10px] tracking-widest shadow-lg shadow-emerald-500/10 transition-all hover:-translate-y-0.5" 
               @click="$emit('edit')" />
     </div>
   </div>

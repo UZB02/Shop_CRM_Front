@@ -14,9 +14,9 @@
           <template v-else>
             <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/5 text-emerald-500 border border-emerald-500/10 dark:bg-emerald-500/10">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-wider">Faol</span>
+              <span class="text-[8px] sm:text-[9px] font-black tracking-wider">Faol</span>
             </div>
-            <span v-if="periodText" class="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest hidden md:inline border-l border-slate-200 dark:border-slate-800 pl-2 ml-1">
+            <span v-if="periodText" class="text-[8px] sm:text-[9px] font-black text-slate-400 tracking-widest hidden md:inline border-l border-slate-200 dark:border-slate-800 pl-2 ml-1">
               {{ periodText }}
             </span>
           </template>
@@ -38,7 +38,7 @@
           @update:modelValue="onDateChange"
           class="w-full h-10"
           pt:root:class="!bg-transparent !border-none"
-          pt:input:class="!w-full lg:!w-[200px] !h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/40 !bg-white dark:!bg-slate-800/80 focus:!border-emerald-500/50 !text-[10px] !font-black !pl-4 !shadow-sm !uppercase !text-slate-700 dark:!text-slate-200"
+          pt:input:class="!w-full lg:!w-[200px] !h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/40 !bg-white dark:!bg-slate-800/80 focus:!border-emerald-500/50 !text-[10px] !font-black !pl-4 !shadow-sm !!text-slate-700 dark:!text-slate-200"
         />
       </div>
 
@@ -57,7 +57,7 @@
           @change="onFilterChange"
           class="w-full h-10"
           pt:root:class="!h-10 lg:!w-[180px] !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/40 !bg-white dark:!bg-slate-800/80 focus:!border-emerald-500/50 transition-all shadow-sm"
-          pt:label:class="!text-[10px] !font-black !flex !items-center !py-0 !pl-9 !pr-4 !uppercase !text-slate-700 dark:!text-slate-200 truncate"
+          pt:label:class="!text-[10px] !font-black !flex !items-center !py-0 !pl-9 !pr-4 !!text-slate-700 dark:!text-slate-200 truncate"
         />
       </div>
 
@@ -78,7 +78,7 @@
           class="h-10 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-50 active:scale-95 group"
         >
           <i :class="['pi pi-sync text-[11px] transition-transform duration-700', loading ? 'animate-spin' : 'group-hover:rotate-180']"></i>
-          <span class="text-[10px] font-black uppercase tracking-widest">Yangilash</span>
+          <span class="text-[10px] font-black tracking-widest">Yangilash</span>
         </button>
       </div>
     </div>

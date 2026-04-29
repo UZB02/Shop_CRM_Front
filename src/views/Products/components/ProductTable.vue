@@ -6,11 +6,11 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
-              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
-              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap text-center">{{ $t('products.form.barcode') }}</th>
-              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap">{{ $t('products.col_price') }}</th>
-              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap text-center">{{ $t('products.col_inventory') }}</th>
-              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap text-right">{{ $t('products.col_actions') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('products.form.barcode') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.col_price') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('products.col_inventory') }}</th>
+              <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.col_actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -65,20 +65,20 @@
                       </router-link>
                       
                       <div v-if="item.has_tur" class="flex items-center gap-1">
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black bg-emerald-500/5 text-emerald-600 border border-emerald-500/10 uppercase tracking-widest">
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black bg-emerald-500/5 text-emerald-600 border border-emerald-500/10 tracking-widest">
                            {{ item.tur_name || $t('turlar.badge') }}
                         </span>
-                        <span v-if="item.tur_color" class="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black bg-slate-50 dark:bg-slate-800 text-slate-500 border border-slate-100 dark:border-slate-700 uppercase tracking-widest">
+                        <span v-if="item.tur_color" class="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black bg-slate-50 dark:bg-slate-800 text-slate-500 border border-slate-100 dark:border-slate-700 tracking-widest">
                            {{ item.tur_color }}
                         </span>
                       </div>
                     </div>
                     
                     <div class="flex items-center gap-1.5 mt-0.5 opacity-60">
-                      <span v-if="item.category_name" class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                      <span v-if="item.category_name" class="text-[9px] font-black text-slate-400 tracking-widest">
                         {{ item.category_name }}
                       </span>
-                      <span v-if="item.subcategory_name && settingsStore.isSubcategoryEnabled" class="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase tracking-widest before:content-['•'] before:text-[7px] before:opacity-30">
+                      <span v-if="item.subcategory_name && settingsStore.isSubcategoryEnabled" class="flex items-center gap-1.5 text-[9px] font-black text-slate-400 tracking-widest before:content-['•'] before:text-[7px] before:opacity-30">
                         {{ item.subcategory_name }}
                       </span>
                     </div>
@@ -92,7 +92,7 @@
                    <i class="pi pi-barcode text-slate-300 dark:text-slate-700 group-hover/barcode:text-emerald-500 transition-colors text-[10px]"></i>
                    <code class="text-[11px] font-bold text-slate-500 dark:text-slate-400 tracking-tight font-mono">{{ item.barcode }}</code>
                 </div>
-                <span v-else class="text-[9px] font-black text-slate-200 dark:text-slate-800 uppercase tracking-widest">—</span>
+                <span v-else class="text-[9px] font-black text-slate-200 dark:text-slate-800 tracking-widest">—</span>
               </td>
 
               <!-- Price -->
@@ -110,7 +110,7 @@
                   <template v-else>
                     <div class="flex flex-col">
                       <span class="text-[13px] font-black text-slate-800 dark:text-white leading-none">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
-                      <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter mt-1 opacity-50">{{ item.unit_display || 'dona' }} uchun</span>
+                      <span class="text-[9px] font-bold text-slate-400 tracking-tighter mt-1 opacity-50">{{ item.unit_display || 'dona' }} uchun</span>
                     </div>
                   </template>
               </td>
@@ -126,13 +126,13 @@
                       {{ settingsStore.formatNumber(item.quantity) || 0 }}
                     </span>
                     <span v-if="item.status_display" 
-                      class="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border"
+                      class="px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest border"
                       :class="item.status === 'active' ? 'bg-emerald-500/5 text-emerald-600 border-emerald-500/20' : 'bg-slate-50 text-slate-400 border-slate-200'"
                     >
                       {{ item.status_display }}
                     </span>
                   </div>
-                  <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">{{ item.unit_display }} omborda</span>
+                  <span class="text-[8px] font-black text-slate-400 tracking-widest mt-0.5">{{ item.unit_display }} omborda</span>
                 </div>
               </td>
 

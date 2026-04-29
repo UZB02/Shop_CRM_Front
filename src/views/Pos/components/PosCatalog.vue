@@ -6,7 +6,7 @@
         v-for="cat in categories" 
         :key="cat.id"
         @click="selectCategory(cat)"
-        class="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap shadow-sm border"
+        class="px-6 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all whitespace-nowrap shadow-sm border"
         :class="selectedCategoryId === cat.id 
           ? 'bg-emerald-500 text-white border-emerald-500' 
           : 'bg-white dark:bg-[#0f172a] text-slate-400 dark:text-slate-600 border-slate-100 dark:border-slate-800 hover:border-slate-200'"
@@ -21,7 +21,7 @@
         v-for="sub in activeSubcategories" 
         :key="sub.id"
         @click="selectedSubcategoryId = sub.id"
-        class="px-4 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-tight transition-all whitespace-nowrap border"
+        class="px-4 py-1.5 rounded-lg text-[9px] font-bold tracking-tight transition-all whitespace-nowrap border"
         :class="selectedSubcategoryId === sub.id 
           ? 'bg-slate-800 text-white border-slate-800 dark:bg-slate-200 dark:text-slate-900 border-slate-200' 
           : 'bg-slate-50 dark:bg-slate-900/50 text-slate-400 border-slate-100 dark:border-slate-800'"
@@ -38,7 +38,7 @@
     
     <div v-else-if="filteredProducts.length === 0" class="flex-1 flex flex-col items-center justify-center opacity-20">
        <i class="pi pi-search text-5xl mb-3"></i>
-       <p class="font-black text-[10px] uppercase tracking-widest">Ma'lumot topilmadi</p>
+       <p class="font-black text-[10px] tracking-widest">Ma'lumot topilmadi</p>
     </div>
 
     <div v-else class="flex-1 overflow-y-auto pr-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start content-start custom-scrollbar">
@@ -63,13 +63,13 @@
             <!-- Diagonal Low Stock Label -->
             <div v-if="product.displayQuantity !== undefined && product.displayQuantity > 0 && product.displayQuantity <= 5" 
                  class="absolute -top-1 -right-8 w-24 h-10 bg-orange-500 text-white flex items-center justify-center rotate-45 shadow-lg z-10">
-              <span class="text-[7px] font-black uppercase tracking-widest mt-3">Kam qoldi</span>
+              <span class="text-[7px] font-black tracking-widest mt-3">Kam qoldi</span>
             </div>
 
             <!-- Promotion Badge -->
             <div v-if="product.active_promotion" class="absolute top-2 left-2 bg-rose-500 text-white flex flex-row px-2 py-1.5 rounded-[8px] items-center gap-1.5 max-w-[90%] text-left shadow-lg z-20 overflow-hidden">
               <span class="text-[11px] font-black leading-none shrink-0">-{{ Math.round(product.active_promotion.discount_pct || (product.sale_price ? ((product.sale_price - product.active_promotion.discounted_price) / product.sale_price * 100) : 0)) }}%</span>
-              <span class="text-[8px] font-black uppercase tracking-tight leading-none truncate opacity-90">{{ product.active_promotion.name }}</span>
+              <span class="text-[8px] font-black tracking-tight leading-none truncate opacity-90">{{ product.active_promotion.name }}</span>
             </div>
           </div>
 
@@ -77,14 +77,14 @@
             <div class="p-4 flex flex-col flex-1 bg-white dark:bg-[#111827]">
               <div class="flex justify-between items-start mb-3">
                 <div class="flex flex-col gap-1">
-                  <h3 class="font-black text-[13px] text-slate-800 dark:text-white font-outfit uppercase tracking-tight line-clamp-2">
+                  <h3 class="font-black text-[13px] text-slate-800 dark:text-white font-outfit tracking-tight line-clamp-2">
                     {{ product.name }}
                   </h3>
                   <div v-if="product.has_tur || product.tur_name" class="flex items-center gap-1">
-                    <span v-if="product.tur_name" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
+                    <span v-if="product.tur_name" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 tracking-widest leading-none">
                       {{ product.tur_name }}
                     </span>
-                    <span v-if="product.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
+                    <span v-if="product.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 tracking-widest leading-none">
                       {{ product.tur_color }}
                     </span>
                   </div>
@@ -105,10 +105,10 @@
                   </div>
                   
                   <!-- Stock Details instead of Unit -->
-                  <span v-if="product.displayQuantity > 0" class="text-[9px] font-black uppercase tracking-widest mt-1 text-slate-500 dark:text-slate-400">
+                  <span v-if="product.displayQuantity > 0" class="text-[9px] font-black tracking-widest mt-1 text-slate-500 dark:text-slate-400">
                     Qoldiq: <span class="text-orange-500">{{ product.displayQuantity }} {{ product.unit_display || product.unit }}</span>
                   </span>
-                  <span v-else class="text-[9px] font-black uppercase tracking-widest mt-1 text-rose-500">
+                  <span v-else class="text-[9px] font-black tracking-widest mt-1 text-rose-500">
                     Omborda tugagan
                   </span>
                 </div>

@@ -79,7 +79,7 @@
 
         <!-- Items list -->
         <div>
-          <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
+          <h4 class="text-xs font-semibold text-slate-400 tracking-wide mb-2">
             {{ $t('warehouse.detail.products') }} ({{ transfer.items?.length ?? transfer.item_count ?? 0 }})
           </h4>
           <div class="rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">

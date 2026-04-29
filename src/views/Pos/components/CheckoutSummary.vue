@@ -4,12 +4,12 @@
     <div class="absolute -top-16 -left-16 w-32 h-32 bg-emerald-500/5 blur-[60px] rounded-full animate-pulse"></div>
     <div class="absolute -bottom-16 -right-16 w-32 h-32 bg-emerald-500/5 blur-[60px] rounded-full animate-pulse-slow"></div>
     
-    <span class="text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest block mb-2 opacity-60">Umumiy to'lanishi lozim</span>
+    <span class="text-[9px] font-black text-slate-400 dark:text-slate-600 tracking-widest block mb-2 opacity-60">Umumiy to'lanishi lozim</span>
     <div class="flex flex-col items-center gap-0.5">
-      <h2 class="text-3xl font-black text-slate-900 dark:text-white font-outfit uppercase tracking-tighter leading-none">
+      <h2 class="text-3xl font-black text-slate-900 dark:text-white font-outfit tracking-tighter leading-none">
         {{ settingsStore.formatNumber(total || 0) }}
       </h2>
-      <span class="text-[9px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest leading-none">O'zbek so'mi (UZS)</span>
+      <span class="text-[9px] font-black text-slate-300 dark:text-slate-700 tracking-widest leading-none">O'zbek so'mi (UZS)</span>
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <!-- Breadcrumbs & Actions -->
     <div class="flex items-center justify-between gap-2 px-1">
-      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest min-w-0">
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[11px] font-black text-slate-400 tracking-widest min-w-0">
         <router-link to="/dashboard/stores" class="hover:text-emerald-500 transition-colors flex items-center gap-1.5 shrink-0">
           <i class="pi pi-building"></i>{{ $t('menu.stores') }}
         </router-link>
@@ -14,7 +14,7 @@
         <button 
           v-if="branch?.id"
           @click="router.push({ name: 'branch-bulk', params: { id: branch.id } })"
-          class="flex items-center gap-2 group px-3 sm:px-5 py-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm active:scale-95"
+          class="flex items-center gap-2 group px-3 sm:px-5 py-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[10px] font-black tracking-widest text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm active:scale-95"
         >
           <i class="pi pi-database text-[9px] group-hover:scale-110 transition-transform"></i>
           <span class="hidden sm:inline">Ommaviy yuklash</span>
@@ -22,7 +22,7 @@
 
         <button 
           @click="$emit('edit')"
-          class="flex items-center gap-2 group px-3 sm:px-5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm active:scale-95"
+          class="flex items-center gap-2 group px-3 sm:px-5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black tracking-widest text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm active:scale-95"
         >
           <i class="pi pi-pencil text-[9px] text-emerald-500 group-hover:rotate-12 transition-transform"></i>
           <span class="hidden sm:inline">{{ $t('common.edit') }}</span>
@@ -55,11 +55,11 @@
           </div>
           <div class="min-w-0 flex-1 space-y-2 sm:space-y-3">
             <div class="flex flex-col sm:flex-row items-center gap-2">
-              <h1 class="text-lg sm:text-2xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight leading-loose sm:leading-none truncate max-w-full">
+              <h1 class="text-lg sm:text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight leading-loose sm:leading-none truncate max-w-full">
                 {{ branch?.name }}
               </h1>
               <span 
-                class="px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border shrink-0"
+                class="px-2.5 py-1 rounded-full text-[9px] font-black tracking-widest border shrink-0"
                 :class="branch?.status === 'active' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'"
               >
                 {{ branch?.status_display }}
@@ -85,7 +85,7 @@
         <!-- Stats Compact -->
         <div class="flex items-center gap-1.5 sm:gap-2 w-full lg:w-auto overflow-x-auto no-scrollbar py-2 border-t lg:border-t-0 border-slate-50 dark:border-slate-800/50">
           <div v-for="stat in stats" :key="stat.key" class="flex-1 lg:flex-none p-2 sm:p-4 min-w-[75px] sm:min-w-[90px] rounded-xl sm:rounded-2xl bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center transition-transform hover:-translate-y-1 shrink-0">
-            <p class="text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-wider mb-0.5 sm:mb-1">{{ stat.label }}</p>
+            <p class="text-[7px] sm:text-[8px] font-black text-slate-400 tracking-wider mb-0.5 sm:mb-1">{{ stat.label }}</p>
             <p class="text-sm sm:text-xl font-black text-slate-800 dark:text-white leading-none">{{ stat.value }}</p>
           </div>
         </div>

@@ -45,7 +45,7 @@
             <div class="p-6 space-y-5">
               <!-- Warehouse Name -->
               <div class="space-y-1.5 focus-within:z-10 relative">
-                <label for="name" class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">
+                <label for="name" class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest px-1">
                   {{ $t('warehouse.form.name') }} <span class="text-rose-500">*</span>
                 </label>
                 <div class="relative group">
@@ -59,12 +59,12 @@
                     autofocus
                   />
                 </div>
-                <small v-if="submitted && !warehouse.name" class="text-rose-500 text-[10px] font-bold uppercase tracking-wider px-1 block">{{ $t('warehouse.form.name') }} kiritilishi shart.</small>
+                <small v-if="submitted && !warehouse.name" class="text-rose-500 text-[10px] font-bold tracking-wider px-1 block">{{ $t('warehouse.form.name') }} kiritilishi shart.</small>
               </div>
 
               <!-- Address -->
               <div class="space-y-1.5 focus-within:z-10 relative">
-                <label for="address" class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">
+                <label for="address" class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest px-1">
                   {{ $t('warehouse.form.address') }}
                 </label>
                 <div class="relative group">
@@ -80,14 +80,14 @@
 
               <!-- Status Selection -->
               <div class="space-y-2">
-                <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1 block">
+                <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest px-1 block">
                   {{ $t('warehouse.form.status') }}
                 </label>
                 <div class="grid grid-cols-2 gap-3 p-1 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-700/50">
                   <button
                     type="button"
                     @click="warehouse.status = 'active'"
-                    class="flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all text-[10px] font-bold uppercase tracking-widest"
+                    class="flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all text-[10px] font-bold tracking-widest"
                     :class="warehouse.status === 'active' 
                       ? 'bg-white dark:bg-slate-700 text-emerald-500 shadow-sm border border-slate-100 dark:border-slate-600' 
                       : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'"
@@ -98,7 +98,7 @@
                   <button
                     type="button"
                     @click="warehouse.status = 'inactive'"
-                    class="flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all text-[10px] font-bold uppercase tracking-widest"
+                    class="flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all text-[10px] font-bold tracking-widest"
                     :class="warehouse.status === 'inactive' 
                       ? 'bg-white dark:bg-slate-700 text-rose-500 shadow-sm border border-slate-100 dark:border-slate-600' 
                       : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'"
@@ -114,14 +114,14 @@
             <div class="px-6 py-5 bg-slate-50/50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800/50 flex gap-3">
               <button
                 @click="$emit('update:visible', false)"
-                class="flex-1 h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest hover:bg-white dark:hover:bg-slate-800 transition-all active:scale-[0.98]"
+                class="flex-1 h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-[10px] font-bold tracking-widest hover:bg-white dark:hover:bg-slate-800 transition-all active:scale-[0.98]"
               >
                 {{ $t('common.cancel') }}
               </button>
               <button
                 @click="$emit('save')"
                 :disabled="saving"
-                class="flex-[2] h-11 px-4 rounded-xl bg-slate-900 dark:bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+                class="flex-[2] h-11 px-4 rounded-xl bg-slate-900 dark:bg-emerald-500 text-white text-[10px] font-bold tracking-widest transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
               >
                 <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
                 <i v-else class="pi pi-check text-xs"></i>

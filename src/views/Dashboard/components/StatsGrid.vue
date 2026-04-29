@@ -16,7 +16,7 @@
       </div>
       
       <div>
-        <p class="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">{{ stat.label }}</p>
+        <p class="text-xs font-black text-slate-400 dark:text-slate-500 tracking-widest mb-1">{{ stat.label }}</p>
         <h3 class="text-2xl font-black text-slate-800 dark:text-slate-100 tabular-nums">{{ stat.value }}</h3>
       </div>
     </div>

@@ -5,7 +5,7 @@
       <!-- Stats (Always visible but compact on mobile) -->
       <div class="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-[1.25rem] bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
         <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-        <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+        <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 tracking-widest">
           {{ count }} {{ $t('warehouse.count_suffix') }}
         </span>
       </div>
@@ -28,7 +28,7 @@
       <!-- Mobile Only Stats -->
       <div class="sm:hidden flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
         <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-        <span class="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+        <span class="text-[9px] font-black text-emerald-600 dark:text-emerald-400 tracking-widest">
           {{ count }} {{ $t('warehouse.count_suffix') }}
         </span>
       </div>
@@ -41,7 +41,7 @@
           class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl transition-all duration-300 active:scale-95"
         >
           <i class="pi pi-th-large text-[10px]"></i>
-          <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">{{ $t('warehouse.view_grid') }}</span>
+          <span class="text-[9px] sm:text-[10px] font-black tracking-widest">{{ $t('warehouse.view_grid') }}</span>
         </button>
         <button
           @click="$emit('update:viewMode', 'table')"
@@ -49,7 +49,7 @@
           class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl transition-all duration-300 active:scale-95"
         >
           <i class="pi pi-list text-[10px]"></i>
-          <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">{{ $t('warehouse.view_table') }}</span>
+          <span class="text-[9px] sm:text-[10px] font-black tracking-widest">{{ $t('warehouse.view_table') }}</span>
         </button>
       </div>
     </div>

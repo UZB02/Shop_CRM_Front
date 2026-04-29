@@ -22,7 +22,7 @@
         >
           <div class="flex items-center gap-2">
             <i class="pi pi-calculator text-xs text-slate-500 dark:text-slate-400"></i>
-            <span class="text-[9px] font-black tracking-widest uppercase text-slate-500 dark:text-slate-400">Kalkulyator</span>
+            <span class="text-[9px] font-black tracking-widest text-slate-500 dark:text-slate-400">Kalkulyator</span>
           </div>
           <button @click="closeWidget" @mousedown.stop @touchstart.stop class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-slate-200/50 dark:hover:bg-white/10 transition-colors text-slate-400">
             <i class="pi pi-times text-[10px]"></i>

@@ -15,7 +15,7 @@
     <div v-if="product.has_tur" class="space-y-4">
        <!-- Add Button Header -->
        <div class="flex items-center justify-between px-2">
-         <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest">{{ $t('turlar.title') }}</h3>
+         <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 tracking-widest">{{ $t('turlar.title') }}</h3>
          <button 
            @click="openNewDialog"
            class="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/20"
@@ -51,7 +51,7 @@
                        {{ tur.color }}
                     </span>
                   </div>
-                  <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">{{ $t('turlar.effective_price') }}: {{ formatPrice(tur.effective_price) }}</p>
+                  <p class="text-[10px] font-bold text-emerald-500 tracking-wider">{{ $t('turlar.effective_price') }}: {{ formatPrice(tur.effective_price) }}</p>
                </div>
                <div class="flex items-center gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                   <button @click="editTur(tur)" class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-emerald-500 transition-colors">
@@ -66,7 +66,7 @@
             <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
                <div class="flex items-center gap-2">
                   <div :class="tur.is_active ? 'bg-emerald-500 shadow-sm shadow-emerald-500/50' : 'bg-slate-300 dark:bg-slate-700'" class="w-1.5 h-1.5 rounded-full"></div>
-                  <span class="text-[9px] font-bold uppercase text-slate-400 tracking-wider">{{ tur.is_active ? $t('common.active') : $t('common.inactive') }}</span>
+                  <span class="text-[9px] font-bold text-slate-400 tracking-wider">{{ tur.is_active ? $t('common.active') : $t('common.inactive') }}</span>
                </div>
                <div v-if="tur.sale_price_override" class="text-[9px] font-bold text-slate-400 line-through">
                   {{ formatPrice(product.sale_price) }}
@@ -85,7 +85,7 @@
     }">
       <div class="space-y-5 pt-2">
         <div class="space-y-1.5">
-          <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">{{ $t('turlar.name') }}</label>
+          <label class="text-[10px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.name') }}</label>
           <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
             <i class="pi pi-tag absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
             <InputText 
@@ -97,7 +97,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">{{ $t('turlar.color') }} ({{ $t('common.optional') }})</label>
+          <label class="text-[10px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.color') }} ({{ $t('common.optional') }})</label>
           <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
             <i class="pi pi-palette absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
             <InputText 
@@ -109,9 +109,9 @@
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">{{ $t('turlar.sale_price_override') }}</label>
+          <label class="text-[10px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.sale_price_override') }}</label>
           <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
-            <span class="absolute left-4 text-[10px] font-black text-slate-400 group-focus-within/input:text-emerald-500 transition-colors uppercase tracking-tight">SUM</span>
+            <span class="absolute left-4 text-[10px] font-black text-slate-400 group-focus-within/input:text-emerald-500 transition-colors tracking-tight">SUM</span>
             <InputNumber 
               v-model="turForm.sale_price_override" 
               mode="decimal" 
@@ -138,10 +138,10 @@
 
       <template #footer>
         <div class="flex gap-3 w-full">
-          <button @click="turDialog = false" class="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors uppercase tracking-widest">
+          <button @click="turDialog = false" class="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors tracking-widest">
             {{ $t('common.cancel') }}
           </button>
-          <button @click="saveTur" :disabled="savingTur" class="flex-1 h-11 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-500/20 uppercase tracking-widest">
+          <button @click="saveTur" :disabled="savingTur" class="flex-1 h-11 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-500/20 tracking-widest">
              <i v-if="savingTur" class="pi pi-spin pi-spinner mr-2"></i>
              {{ $t('common.save') }}
           </button>

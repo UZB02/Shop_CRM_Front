@@ -8,7 +8,7 @@
         </div>
         <div>
           <h3 class="text-sm font-bold text-slate-700 dark:text-slate-100">{{ $t('warehouse.wastage.title') }}</h3>
-          <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">{{ totalRecords }} {{ $t('products.subtitle', { count: totalRecords }) }}</p>
+          <p class="text-[10px] text-slate-400 font-medium tracking-wider">{{ totalRecords }} {{ $t('products.subtitle', { count: totalRecords }) }}</p>
         </div>
       </div>
 
@@ -45,13 +45,13 @@
           <table class="w-full text-left min-w-[900px]">
             <thead>
               <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest w-12">№</th>
-                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.col_product') }}</th>
-                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.amount') }}</th>
-                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.wastage.reason_label') }}</th>
-                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
-                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.date') }}</th>
-                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest w-16"></th>
+                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 tracking-widest w-12">№</th>
+                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
+                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.wastage.reason_label') }}</th>
+                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
+                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
+                <th class="px-4 py-3 text-[10px] font-bold text-slate-400 tracking-widest w-16"></th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -60,7 +60,7 @@
                 <td class="px-4 py-3">
                   <div class="flex flex-col gap-1">
                     <div class="flex items-center gap-2">
-                      <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ item.product_name }}</span>
+                      <span class="text-xs font-bold text-slate-700 dark:text-slate-200 tracking-tight">{{ item.product_name }}</span>
                       <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
                     </div>
                     <span class="text-[9px] font-medium text-slate-400">{{ item.product_unit }}</span>
@@ -133,31 +133,31 @@
       <div v-if="selectedItem" class="space-y-4 pt-2">
         <div class="grid grid-cols-2 gap-4">
           <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $t('products.col_product') }}</p>
+            <p class="text-[9px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('products.col_product') }}</p>
             <div class="flex items-center gap-2">
               <p class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ selectedItem.product_name }}</p>
               <TurBadge :tur-name="selectedItem.tur_name" :tur-color="selectedItem.tur_color" />
             </div>
           </div>
           <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $t('products.form.amount') }}</p>
+            <p class="text-[9px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('products.form.amount') }}</p>
             <p class="text-xs font-bold text-rose-500">{{ selectedItem.quantity }} {{ selectedItem.product_unit }}</p>
           </div>
           <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $t('warehouse.wastage.reason_label') }}</p>
+            <p class="text-[9px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('warehouse.wastage.reason_label') }}</p>
             <div class="flex items-center gap-1.5">
               <i :class="[getReasonIcon(selectedItem.reason), getReasonColor(selectedItem.reason)]" class="text-[10px]"></i>
               <p class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ selectedItem.reason_display }}</p>
             </div>
           </div>
           <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $t('common.date') }}</p>
+            <p class="text-[9px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('common.date') }}</p>
             <p class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ selectedItem.date }}</p>
           </div>
         </div>
 
         <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
-          <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $t('warehouse.detail.col_description') }}</p>
+          <p class="text-[9px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('warehouse.detail.col_description') }}</p>
           <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed italic">
             {{ selectedItem.description || '—' }}
           </p>
@@ -169,7 +169,7 @@
               {{ selectedItem.worker_name?.charAt(0) }}
             </div>
             <div>
-              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest line-clamp-1">{{ $t('warehouse.detail.col_worker') }}</p>
+              <p class="text-[9px] font-bold text-slate-400 tracking-widest line-clamp-1">{{ $t('warehouse.detail.col_worker') }}</p>
               <p class="text-[11px] font-bold text-slate-700 dark:text-slate-200 line-clamp-1">{{ selectedItem.worker_name }}</p>
             </div>
           </div>

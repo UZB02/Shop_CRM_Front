@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-3">
-    <label class="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">To'lov usuli</label>
+    <label class="text-[8px] font-black text-slate-400 dark:text-slate-600 tracking-widest ml-1">To'lov usuli</label>
     <div class="flex p-1 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-100 dark:border-slate-800/50 gap-1 overflow-x-auto no-scrollbar">
       <button 
         v-for="method in methods" 
         :key="method.id"
         @click="$emit('update:paymentType', method.id)"
-        class="flex-1 py-2.5 px-2 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 min-w-[80px]"
+        class="flex-1 py-2.5 px-2 rounded-lg text-[9px] font-black tracking-wider transition-all duration-300 flex items-center justify-center gap-2 min-w-[80px]"
         :class="[
           paymentType === method.id 
             ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 

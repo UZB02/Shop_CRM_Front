@@ -29,10 +29,10 @@
       <table class="w-full text-left border-collapse min-w-[450px]">
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.category_form.name') }}</th>
-            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('finance.category_form.expense_count') }}</th>
-            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('finance.category_form.status') }}</th>
-            <th class="px-4 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('common.actions') }}</th>
+            <th class="px-4 py-3.5 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.category_form.name') }}</th>
+            <th class="px-4 py-3.5 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('finance.category_form.expense_count') }}</th>
+            <th class="px-4 py-3.5 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-center">{{ $t('finance.category_form.status') }}</th>
+            <th class="px-4 py-3.5 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('common.actions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -43,7 +43,7 @@
               <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-2">
                 <i class="pi pi-tag text-lg text-slate-400"></i>
               </div>
-              <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('finance.category_form.no_categories') }}</p>
+              <p class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('finance.category_form.no_categories') }}</p>
             </td>
           </tr>
 
@@ -83,7 +83,7 @@
             <!-- Status -->
             <td class="px-4 py-2.5 text-center">
               <span
-                class="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest"
+                class="px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest"
                 :class="cat.status === 'active'
                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'"

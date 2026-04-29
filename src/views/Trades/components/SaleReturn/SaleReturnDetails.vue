@@ -4,7 +4,7 @@
       
       <!-- Customer Section -->
       <div v-if="!initialSale" class="space-y-2">
-        <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">Mijoz (Ixtiyoriy)</label>
+        <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Mijoz (Ixtiyoriy)</label>
         <div class="relative group">
           <i class="pi pi-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
           <select 
@@ -19,7 +19,7 @@
       </div>
       <!-- Customer Display (Static) -->
       <div v-else class="p-3 rounded-[14px] bg-white dark:bg-[#131d31] border border-slate-100 dark:border-white/5 shadow-sm">
-         <h5 class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1.5 ml-1">Mijoz</h5>
+         <h5 class="text-[8px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-1.5 ml-1">Mijoz</h5>
          <div class="flex items-center gap-2.5 px-1 pb-1">
            <div class="w-6 h-6 rounded-md bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center shrink-0">
               <i class="pi pi-user text-[10px] text-rose-500"></i>
@@ -30,7 +30,7 @@
 
       <!-- Reason Section -->
       <div class="space-y-2">
-        <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">Qaytarish Sababi</label>
+        <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Qaytarish Sababi</label>
         <textarea 
           v-model="internalReason"
           placeholder="Masalan: Mahsulot nuqsonli chiqqan..."
@@ -44,7 +44,7 @@
       <!-- Total Amount Summary & Finalize -->
       <div class="space-y-4">
         <div class="space-y-3 px-1">
-           <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Jami summa</h3>
+           <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">Jami summa</h3>
            <div class="flex justify-between items-baseline pt-1">
               <span class="text-[24px] font-black text-slate-900 dark:text-white tracking-tighter leading-none">{{ formatCurrency(totalAmount) }}</span>
            </div>
@@ -53,7 +53,7 @@
         <button 
           @click="$emit('submit')"
           :disabled="loading || disabled"
-          class="w-full h-12 bg-rose-500 hover:bg-rose-600 dark:bg-rose-500/90 dark:hover:bg-rose-500 disabled:opacity-50 disabled:bg-slate-200 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 text-white rounded-[14px] text-xs font-black uppercase tracking-widest transition-all duration-200 hover:shadow-lg hover:shadow-rose-500/20 active:scale-95 flex items-center justify-center gap-2 border border-rose-600/20 leading-none"
+          class="w-full h-12 bg-rose-500 hover:bg-rose-600 dark:bg-rose-500/90 dark:hover:bg-rose-500 disabled:opacity-50 disabled:bg-slate-200 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 text-white rounded-[14px] text-xs font-black tracking-widest transition-all duration-200 hover:shadow-lg hover:shadow-rose-500/20 active:scale-95 flex items-center justify-center gap-2 border border-rose-600/20 leading-none"
         >
           <i v-if="loading" class="pi pi-spinner pi-spin"></i>
           <i v-else class="pi pi-check-circle"></i>

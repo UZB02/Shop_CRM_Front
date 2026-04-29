@@ -5,7 +5,7 @@
       <!-- Ombor Kapitali -->
       <div class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 transition-all hover:shadow-md">
         <div class="flex items-center justify-between">
-          <span class="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Ombor Kapitali</span>
+          <span class="text-[8px] sm:text-[9px] font-black text-slate-400 tracking-[0.2em]">Ombor Kapitali</span>
           <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500">
             <i class="pi pi-box text-[10px]"></i>
           </div>
@@ -16,7 +16,7 @@
       <!-- Isrof -->
       <div class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 transition-all hover:shadow-md">
         <div class="flex items-center justify-between">
-          <span class="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Isrof</span>
+          <span class="text-[8px] sm:text-[9px] font-black text-slate-400 tracking-[0.2em]">Isrof</span>
           <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500">
             <i class="pi pi-trash text-[10px]"></i>
           </div>
@@ -30,7 +30,7 @@
                       ? 'bg-rose-50 dark:bg-rose-500/5 border-rose-200 dark:border-rose-500/20'
                       : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800']">
         <div class="flex items-center justify-between">
-          <span :class="['text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em]', lowStockCount > 0 ? 'text-rose-500' : 'text-slate-400']">Defitsit</span>
+          <span :class="['text-[8px] sm:text-[9px] font-black tracking-[0.2em]', lowStockCount > 0 ? 'text-rose-500' : 'text-slate-400']">Defitsit</span>
           <div :class="['w-8 h-8 rounded-lg flex items-center justify-center', lowStockCount > 0 ? 'bg-rose-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400']">
             <i class="pi pi-exclamation-triangle text-[10px]"></i>
           </div>
@@ -49,8 +49,8 @@
             <i class="pi pi-exclamation-triangle text-sm"></i>
           </div>
           <div>
-            <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Kritik Zaxira Darajasi</h3>
-            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Zudlik bilan to'ldirish kerak bo'lgan mahsulotlar</p>
+            <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">Kritik Zaxira Darajasi</h3>
+            <p class="text-[9px] text-slate-400 font-bold tracking-widest mt-0.5">Zudlik bilan to'ldirish kerak bo'lgan mahsulotlar</p>
           </div>
         </div>
         <span v-if="lowStock.length" class="px-3 py-1 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-black border border-rose-500/20">{{ lowStock.length }} ta</span>
@@ -60,7 +60,7 @@
         <div class="w-16 h-16 rounded-full bg-emerald-500/5 flex items-center justify-center mb-4">
           <i class="pi pi-check text-2xl text-emerald-500"></i>
         </div>
-        <p class="text-[11px] font-black uppercase tracking-widest">Barcha zaxiralar me'yorida</p>
+        <p class="text-[11px] font-black tracking-widest">Barcha zaxiralar me'yorida</p>
       </div>
       
       <div v-else class="space-y-2">
@@ -71,8 +71,8 @@
             <div>
               <p class="text-xs font-black text-slate-800 dark:text-white">{{ item.name }}</p>
               <div class="flex items-center gap-2 mt-0.5">
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">{{ item.location }}</p>
-                <span :class="['text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase',
+                <p class="text-[9px] font-bold text-slate-400 tracking-tighter">{{ item.location }}</p>
+                <span :class="['text-[8px] font-black px-1.5 py-0.5 rounded-md ',
                                item.location_type === 'branch' ? 'bg-blue-500/10 text-blue-500' : 'bg-purple-500/10 text-purple-500']">
                   {{ item.location_type === 'branch' ? 'Filial' : 'Omborxona' }}
                 </span>
@@ -81,7 +81,7 @@
           </div>
           <div class="text-right">
             <p class="text-sm font-black text-rose-500 tabular-nums">{{ item.quantity }} {{ item.unit }}</p>
-            <p class="text-[8px] font-black uppercase text-rose-300 tracking-tighter">Kam qolgan</p>
+            <p class="text-[8px] font-black text-rose-300 tracking-tighter">Kam qolgan</p>
           </div>
         </div>
       </div>

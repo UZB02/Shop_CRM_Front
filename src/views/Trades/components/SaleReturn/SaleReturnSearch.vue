@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-2">
-    <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Mahsulotlarni qidirish</h3>
+    <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">Mahsulotlarni qidirish</h3>
     <div class="relative group">
       <i class="pi pi-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
       <input 

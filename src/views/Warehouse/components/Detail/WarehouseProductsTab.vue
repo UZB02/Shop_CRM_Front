@@ -13,7 +13,7 @@
             class="h-8 pl-8 pr-4 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 w-64 transition-all"
           />
         </div>
-        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+        <div class="text-[10px] font-bold text-slate-400 tracking-widest">
           {{ products.length }} / {{ totalProducts }} {{ $t('products.title') }}
         </div>
       </div>
@@ -23,14 +23,14 @@
         <table class="w-full text-left min-w-[700px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest w-10">№</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.col_product') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('products.form.barcode') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.amount') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('products.col_price') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">{{ $t('common.date') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest w-10">№</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.form.barcode') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.col_price') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
+              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -46,10 +46,10 @@
                     {{ item.product_name }}
                   </span>
                   <div v-if="item.tur_name" class="flex items-center gap-1">
-                    <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase tracking-widest leading-none">
+                    <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 tracking-widest leading-none">
                       {{ item.tur_name }}
                     </span>
-                    <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 uppercase tracking-widest leading-none">
+                    <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 tracking-widest leading-none">
                       {{ item.tur_color }}
                     </span>
                   </div>

@@ -23,7 +23,7 @@
 
       <!-- Target Amount -->
       <div class="space-y-1.5">
-        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider pl-1">{{ $t('kpi.set_target.target_amount') }}</label>
+        <label class="text-xs font-semibold text-slate-500 tracking-wider pl-1">{{ $t('kpi.set_target.target_amount') }}</label>
         <div class="relative">
           <InputNumber
             v-model="form.target_amount"
@@ -39,7 +39,7 @@
 
       <!-- Bonus Amount -->
       <div class="space-y-1.5">
-        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider pl-1">{{ $t('kpi.set_target.bonus_amount') }}</label>
+        <label class="text-xs font-semibold text-slate-500 tracking-wider pl-1">{{ $t('kpi.set_target.bonus_amount') }}</label>
         <div class="relative">
           <InputNumber
             v-model="form.bonus_amount"

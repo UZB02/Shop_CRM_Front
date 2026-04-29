@@ -41,10 +41,10 @@
         <div class="w-12 h-12 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <i class="pi pi-lock text-xl text-amber-500"></i>
         </div>
-        <h2 class="text-sm font-bold text-slate-800 dark:text-white uppercase mb-4">{{ $t('kpi.not_enabled') }}</h2>
+        <h2 class="text-sm font-bold text-slate-800 dark:text-white mb-4">{{ $t('kpi.not_enabled') }}</h2>
         <router-link 
           :to="{ name: 'settings' }" 
-          class="inline-flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-[10px] uppercase tracking-widest transition-all"
+          class="inline-flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-[10px] tracking-widest transition-all"
         >
           <i class="pi pi-cog"></i>
           <span>{{ $t('menu.settings') }}</span>

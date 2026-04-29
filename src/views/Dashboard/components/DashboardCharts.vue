@@ -4,19 +4,19 @@
     <div v-if="mode === 'overview'" class="lg:col-span-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Savdo Dinamikasi</h3>
-          <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mt-0.5">Kunlik tushum va sotuvlar</p>
+          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">Savdo Dinamikasi</h3>
+          <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">Kunlik tushum va sotuvlar</p>
         </div>
         <div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
           <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/30"></div>
-          <span class="text-[9px] font-black uppercase tracking-widest">Tushum</span>
+          <span class="text-[9px] font-black tracking-widest">Tushum</span>
         </div>
       </div>
       <div v-if="dailySales.length" class="flex-1 min-h-[300px] relative">
         <Chart type="line" :data="lineChartData" :options="lineChartOptions" class="h-full w-full" />
       </div>
       <div v-else class="flex-1 min-h-[300px] flex items-center justify-center bg-slate-50/50 dark:bg-white/5 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ma'lumot yuklanmoqda...</p>
+        <p class="text-[10px] font-black text-slate-400 tracking-widest">Ma'lumot yuklanmoqda...</p>
       </div>
     </div>
 
@@ -24,8 +24,8 @@
     <div v-if="mode === 'overview' && trend3months.length" class="lg:col-span-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">3 Oylik Trend</h3>
-          <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mt-0.5">Oxirgi 3 oy: tushum, sotuv, foyda</p>
+          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">3 Oylik Trend</h3>
+          <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">Oxirgi 3 oy: tushum, sotuv, foyda</p>
         </div>
       </div>
       <div class="h-[160px]">
@@ -36,13 +36,13 @@
     <!-- Payment Breakdown (Sales mode) -->
     <div v-if="mode === 'sales'" class="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col">
       <div class="mb-4">
-        <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">To'lov Taqsimoti</h3>
-        <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mt-0.5">Kredit / Naqd / Karta</p>
+        <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">To'lov Taqsimoti</h3>
+        <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">Kredit / Naqd / Karta</p>
       </div>
       <div class="h-[140px] relative flex items-center justify-center mb-4">
         <Chart type="doughnut" :data="pieData" :options="pieOptions" class="h-full w-full" />
         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-          <span class="text-[7px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-0.5">Jami</span>
+          <span class="text-[7px] font-black text-slate-400 dark:text-slate-500 tracking-[0.3em] mb-0.5">Jami</span>
           <span class="text-sm font-black text-slate-800 dark:text-white tabular-nums tracking-tighter">{{ formatPrice(totalRevenue) }}</span>
         </div>
       </div>
@@ -50,11 +50,11 @@
         <div v-for="(item, key) in breakdown" :key="key" class="group flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-default">
           <div class="flex items-center gap-2">
             <div :class="['w-2 h-2 rounded-full', getStatusColor(key)]"></div>
-            <span class="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{{ paymentLabel(key) }}</span>
+            <span class="text-[9px] font-black tracking-widest text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{{ paymentLabel(key) }}</span>
           </div>
           <div class="text-right">
             <p class="text-[10px] font-black text-slate-800 dark:text-white">{{ formatPrice(item.amount) }}</p>
-            <p class="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase">{{ item.percent }}%</p>
+            <p class="text-[8px] font-bold text-slate-400 dark:text-slate-500 ">{{ item.percent }}%</p>
           </div>
         </div>
       </div>
@@ -64,8 +64,8 @@
     <div v-if="mode === 'sales'" class="lg:col-span-2 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Soatlik Faollik</h3>
-          <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mt-0.5">Kunlik gavjumlik tahlili</p>
+          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">Soatlik Faollik</h3>
+          <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">Kunlik gavjumlik tahlili</p>
         </div>
         <i class="pi pi-clock text-[10px] text-slate-300"></i>
       </div>
@@ -73,24 +73,24 @@
         <Chart type="bar" :data="hourlyData" :options="hourlyOptions" class="h-full w-full" />
       </div>
       <div v-else class="flex-1 min-h-[220px] flex items-center justify-center">
-        <p class="text-[9px] font-black text-slate-400 uppercase">Soatlik tahlil yuklanmoqda...</p>
+        <p class="text-[9px] font-black text-slate-400 ">Soatlik tahlil yuklanmoqda...</p>
       </div>
     </div>
 
     <!-- Expense Categories (Finance mode) -->
     <div v-if="mode === 'finance'" class="lg:col-span-3 p-5 sm:p-8 rounded-2xl sm:rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col lg:flex-row gap-6 sm:gap-8">
       <div class="lg:w-1/3">
-        <h3 class="text-lg font-black text-slate-800 dark:text-white uppercase tracking-tight mb-1">Xarajatlar Tahlili</h3>
-        <p class="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mb-6">Kategoriyalar bo'yicha taqsimot</p>
+        <h3 class="text-lg font-black text-slate-800 dark:text-white tracking-tight mb-1">Xarajatlar Tahlili</h3>
+        <p class="text-xs text-slate-400 dark:text-slate-500 font-bold tracking-widest mb-6">Kategoriyalar bo'yicha taqsimot</p>
         
         <div class="p-6 rounded-3xl bg-rose-500/5 border border-rose-500/10 mb-6">
-           <p class="text-[10px] font-black text-rose-400 uppercase tracking-[0.2em] mb-1">Jami Xarajat</p>
+           <p class="text-[10px] font-black text-rose-400 tracking-[0.2em] mb-1">Jami Xarajat</p>
            <h4 class="text-2xl font-black text-rose-500 tracking-tighter">{{ formatPrice(expensesData.total) }}</h4>
         </div>
 
         <div class="space-y-3">
            <div v-for="cat in expensesData.by_category" :key="cat.category_id" class="flex flex-col gap-1.5">
-              <div class="flex justify-between text-[10px] font-black uppercase">
+              <div class="flex justify-between text-[10px] font-black ">
                  <span class="text-slate-500">{{ cat.name }}</span>
                  <span class="text-rose-500">{{ cat.percent }}%</span>
               </div>
@@ -107,7 +107,7 @@
          </div>
          <div v-else class="text-slate-400 text-center">
             <i class="pi pi-inbox text-4xl mb-4 opacity-20"></i>
-            <p class="text-[10px] font-black uppercase tracking-widest">Ma'lumotlar topilmadi</p>
+            <p class="text-[10px] font-black tracking-widest">Ma'lumotlar topilmadi</p>
          </div>
       </div>
     </div>

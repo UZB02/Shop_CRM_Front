@@ -55,7 +55,7 @@
         
         <!-- Row 1 -->
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.status') }}</label>
+          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.status') }}</label>
           <Dropdown 
             :modelValue="filters.status"
             @update:modelValue="$emit('update:filter', { status: $event })"
@@ -68,7 +68,7 @@
         </div>
         
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.payment.all') }}</label>
+          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.payment.all') }}</label>
           <Dropdown 
             :modelValue="filters.payment_type"
             @update:modelValue="$emit('update:filter', { payment_type: $event })"
@@ -81,7 +81,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.branch') }}</label>
+          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.branch') }}</label>
           <Dropdown 
             :modelValue="filters.branch"
             @update:modelValue="$emit('update:filter', { branch: $event })"
@@ -96,7 +96,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.worker') }}</label>
+          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.worker') }}</label>
           <Dropdown 
             :modelValue="filters.worker"
             @update:modelValue="$emit('update:filter', { worker: $event })"
@@ -110,7 +110,7 @@
         </div>
         
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_from') }}</label>
+          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_from') }}</label>
           <input 
             type="date"
             :value="filters.date_from"
@@ -120,7 +120,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_to') }}</label>
+          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_to') }}</label>
           <input 
             type="date"
             :value="filters.date_to"
@@ -130,7 +130,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.min_amount') }}</label>
+          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.min_amount') }}</label>
           <input 
             type="number"
             :value="filters.min_amount"
@@ -141,7 +141,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.max_amount') }}</label>
+          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.max_amount') }}</label>
           <input 
             type="number"
             :value="filters.max_amount"

@@ -68,7 +68,7 @@
               <InputText 
                 v-model="form.cardHolder" 
                 placeholder="FIRSTNAME LASTNAME"
-                class="w-full uppercase"
+                class="w-full "
                 required
               />
             </div>

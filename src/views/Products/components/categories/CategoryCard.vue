@@ -42,7 +42,7 @@
       <div class="flex items-center gap-2 shrink-0">
         <!-- Quick Stats -->
         <div class="hidden xs:flex items-center px-1.5 py-0.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
-           <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ subCount }} subs</span>
+           <span class="text-[9px] font-bold text-slate-400 tracking-widest">{{ subCount }} subs</span>
         </div>
 
         <div class="flex items-center gap-1 ml-1 opacity-0 group-hover:opacity-100 transition-all">

@@ -26,10 +26,10 @@
         <!-- Panel Header -->
         <div class="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
           <div>
-            <span class="text-sm font-black uppercase tracking-widest text-emerald-500">
+            <span class="text-sm font-black tracking-widest text-emerald-500">
               {{ $t('warehouse.wastage.create_title') }}
             </span>
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">{{ $t('warehouse.detail.bulk_movement') }}</p>
+            <p class="text-[9px] font-bold text-slate-400 tracking-[0.2em] mt-1">{{ $t('warehouse.detail.bulk_movement') }}</p>
           </div>
           <button
             @click="onHide"
@@ -49,9 +49,9 @@
               <i v-else class="pi pi-box text-xl"></i>
             </div>
             <div class="min-w-0 flex-1">
-              <p class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">{{ $t('products.col_product') }}</p>
+              <p class="text-[9px] font-bold text-emerald-500 tracking-widest">{{ $t('products.col_product') }}</p>
               <div class="flex items-center gap-2 flex-wrap">
-                <p class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase truncate">{{ product?.product_name || product?.name }}</p>
+                <p class="text-sm font-black text-slate-800 dark:text-slate-100 truncate">{{ product?.product_name || product?.name }}</p>
                 <TurBadge :tur-name="product?.tur_name" :tur-color="product?.tur_color" />
               </div>
             </div>
@@ -59,7 +59,7 @@
 
           <!-- Quantity -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('products.form.amount') }} ({{ product?.product_unit || product?.unit }}) <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !form.quantity }">
@@ -83,7 +83,7 @@
 
           <!-- Reason -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('warehouse.wastage.reason_label') }} <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !form.reason }">
@@ -107,7 +107,7 @@
 
           <!-- Date -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('common.date') }} <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all duration-300">
@@ -126,7 +126,7 @@
 
           <!-- Description -->
           <div class="field">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('warehouse.detail.col_description') }}</label>
+            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('warehouse.detail.col_description') }}</label>
             <div class="custom-input-wrapper relative group/input flex items-start rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all duration-300">
               <Textarea
                 v-model="form.description"
@@ -146,14 +146,14 @@
           <div class="flex gap-3">
             <button
               @click="onHide"
-              class="flex-1 h-10 rounded-2xl text-xs font-black uppercase tracking-widest text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+              class="flex-1 h-10 rounded-2xl text-xs font-black tracking-widest text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
             >
               {{ $t('common.cancel') }}
             </button>
             <button
               @click="handleSave"
               :disabled="loading"
-              class="flex-[2] h-10 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-xs font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              class="flex-[2] h-10 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-xs font-black tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
               <i v-if="loading" class="pi pi-spin pi-spinner text-xs"></i>
               <i v-else class="pi pi-check text-xs"></i>

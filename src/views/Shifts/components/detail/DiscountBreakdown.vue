@@ -26,7 +26,7 @@
 
         <!-- Total Discount -->
         <div class="flex items-center justify-between p-4 rounded-xl bg-indigo-50/50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 mt-2">
-            <span class="text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider">
+            <span class="text-xs font-bold text-indigo-700 dark:text-indigo-400 tracking-wider">
                {{ $t('shifts.discounts.total') }}
             </span>
             <span class="text-base font-black text-indigo-600 dark:text-indigo-500 tracking-tight">

@@ -20,7 +20,7 @@
               <div class="flex items-center justify-between">
                  <div class="flex items-center gap-1.5">
                     <div class="w-2 h-2 rounded-full shadow-sm" :class="dotClasses[method]"></div>
-                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{{ methodLabels[method] }}</span>
+                    <span class="text-[10px] font-bold text-slate-500 tracking-wider">{{ methodLabels[method] }}</span>
                  </div>
               </div>
               <div>

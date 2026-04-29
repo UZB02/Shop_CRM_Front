@@ -7,13 +7,13 @@
         <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">
           <i class="pi pi-user text-xs"></i>
         </div>
-        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Shaxsiy ma'lumotlar</h3>
+        <h3 class="text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400">Shaxsiy ma'lumotlar</h3>
       </div>
       <div class="p-6 space-y-5">
         <div v-for="key in ['full_name', 'username', 'status', 'created_at']" :key="key">
-          <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1.5">{{ getLabel(key) }}</p>
+          <p class="text-[9px] font-black tracking-widest text-slate-400 mb-1.5">{{ getLabel(key) }}</p>
           <div class="flex items-center gap-2">
-            <span v-if="key === 'status'" class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase">
+            <span v-if="key === 'status'" class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[9px] font-black ">
               {{ getValue(key) }}
             </span>
             <p v-else class="text-[12px] font-bold text-slate-800 dark:text-slate-200 tracking-tight">{{ getValue(key) }}</p>
@@ -28,11 +28,11 @@
         <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
           <i class="pi pi-phone text-xs"></i>
         </div>
-        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Aloqa ma'lumotlari</h3>
+        <h3 class="text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400">Aloqa ma'lumotlari</h3>
       </div>
       <div class="p-6 space-y-5">
         <div v-for="key in ['phone1', 'phone2', 'email']" :key="key">
-          <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1.5">{{ getLabel(key) }}</p>
+          <p class="text-[9px] font-black tracking-widest text-slate-400 mb-1.5">{{ getLabel(key) }}</p>
           <p class="text-[12px] font-bold text-slate-800 dark:text-slate-200 tracking-tight flex items-center gap-2">
             <i v-if="key.includes('phone')" class="pi pi-phone text-[10px] opacity-20"></i>
             <i v-if="key === 'email'" class="pi pi-envelope text-[10px] opacity-20"></i>
@@ -48,16 +48,16 @@
         <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
           <i class="pi pi-briefcase text-xs"></i>
         </div>
-        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Ish faoliyati</h3>
+        <h3 class="text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400">Ish faoliyati</h3>
       </div>
       <div class="p-6 space-y-5">
         <div v-for="key in ['role', 'branch']" :key="key">
-          <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1.5">{{ getLabel(key) }}</p>
+          <p class="text-[9px] font-black tracking-widest text-slate-400 mb-1.5">{{ getLabel(key) }}</p>
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-emerald-500 shadow-inner">
               <i :class="key === 'role' ? 'pi pi-id-card' : 'pi pi-map-marker'" class="text-[10px]"></i>
             </div>
-            <p class="text-[12px] font-black text-slate-800 dark:text-slate-100 tracking-tight uppercase">{{ getValue(key) }}</p>
+            <p class="text-[12px] font-black text-slate-800 dark:text-slate-100 tracking-tight ">{{ getValue(key) }}</p>
           </div>
         </div>
       </div>

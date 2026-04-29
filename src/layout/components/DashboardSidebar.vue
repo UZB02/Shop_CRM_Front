@@ -110,7 +110,7 @@
           class="flex-1 min-w-0 transition-all duration-300"
         >
           <p class="text-sm font-bold text-slate-700 dark:text-slate-200 truncate">{{ user?.username }}</p>
-          <p class="text-[10px] uppercase font-bold text-slate-400 truncate tracking-wider">
+          <p class="text-[10px] font-bold text-slate-400 truncate tracking-wider">
             {{ user?.role_display || user?.worker?.role_display || (user?.role === 'owner' ? 'Ega' : 'Xodim') }}
           </p>
         </div>

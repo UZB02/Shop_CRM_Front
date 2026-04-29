@@ -2,12 +2,12 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
     <div class="min-w-0">
       <div class="flex items-center gap-2 mb-1">
-        <router-link to="/dashboard/stores" class="text-[10px] font-bold text-slate-400 hover:text-emerald-500 transition-colors uppercase tracking-widest flex items-center gap-1">
+        <router-link to="/dashboard/stores" class="text-[10px] font-bold text-slate-400 hover:text-emerald-500 transition-colors tracking-widest flex items-center gap-1">
           <i class="pi pi-building text-[9px]"></i>
           {{ $t('menu.stores') }}
         </router-link>
         <i class="pi pi-chevron-right text-[8px] text-slate-300"></i>
-        <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest truncate">{{ branch?.name || '...' }}</span>
+        <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 tracking-widest truncate">{{ branch?.name || '...' }}</span>
       </div>
     </div>
     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 -mb-1 w-full sm:w-auto">

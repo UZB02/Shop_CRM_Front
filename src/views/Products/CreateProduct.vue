@@ -18,7 +18,7 @@
           <div class="absolute inset-0 border-3 border-emerald-500/20 rounded-full"></div>
           <div class="absolute inset-0 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
-        <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Yuklanmoqda...</p>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400">Yuklanmoqda...</p>
       </div>
 
       <!-- Grid: 1 col on mobile, 1 col on md, 3 cols on lg (single screen) -->

@@ -5,7 +5,7 @@
       <button 
         v-for="tab in tabs" :key="tab.id"
         @click="$emit('update:activeTab', tab.id)"
-        class="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 sm:py-2 rounded-[1.2rem] sm:rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all duration-300 relative group/tab whitespace-nowrap min-w-fit"
+        class="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 sm:py-2 rounded-[1.2rem] sm:rounded-xl text-[9px] sm:text-[10px] font-black tracking-widest transition-all duration-300 relative group/tab whitespace-nowrap min-w-fit"
         :class="activeTab === tab.id 
           ? (tab.id === 'no_debt' 
               ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
@@ -26,7 +26,7 @@
            ? 'bg-rose-500/5 dark:bg-rose-500/10' 
            : 'bg-emerald-500/5 dark:bg-emerald-500/10'">
       <div class="flex flex-col items-start sm:items-end">
-        <span class="text-[8px] font-black uppercase tracking-widest leading-none"
+        <span class="text-[8px] font-black tracking-widest leading-none"
               :class="totalDebt > 0 ? 'text-rose-500' : 'text-emerald-500'">
           {{ $t('customers.total_debt_label') || 'Umumiy Qarzdorlik' }}
         </span>

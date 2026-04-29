@@ -3,7 +3,7 @@
 
     <!-- Table header: search -->
     <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50/50 dark:bg-slate-800/30">
-      <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+      <span class="text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400">
         {{ $t('finance.list') }}
       </span>
       <div class="relative w-full sm:w-64 group/search">
@@ -22,12 +22,12 @@
       <table class="w-full text-left border-collapse min-w-[700px]">
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.date') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.category') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden md:table-cell">{{ $t('finance.branch') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden sm:table-cell">{{ $t('finance.worker') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.amount') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('common.actions') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.date') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.category') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 hidden md:table-cell">{{ $t('finance.branch') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 hidden sm:table-cell">{{ $t('finance.worker') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400">{{ $t('finance.amount') }}</th>
+            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-right">{{ $t('common.actions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -51,7 +51,7 @@
                 <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3">
                   <i class="pi pi-wallet text-xl text-slate-400"></i>
                 </div>
-                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{{ $t('finance.no_results') }}</p>
+                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest">{{ $t('finance.no_results') }}</p>
               </td>
             </tr>
           </template>
@@ -67,7 +67,7 @@
             <td class="px-4 py-2.5">
               <div class="flex flex-col">
                 <span class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-tight">{{ formatDate(item.date) }}</span>
-                <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-0.5">{{ formatTime(item.created_on) }}</span>
+                <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 mt-0.5">{{ formatTime(item.created_on) }}</span>
               </div>
             </td>
 
@@ -143,10 +143,10 @@
 
     <!-- Footer info -->
     <div v-if="filteredExpenses.length > 0" class="px-4 py-2.5 bg-slate-50/50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-      <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+      <span class="text-[9px] font-black text-slate-400 tracking-widest">
         {{ $t('finance.results_count', { count: filteredExpenses.length }) }}
       </span>
-      <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+      <span class="text-[9px] font-black text-slate-400 tracking-widest">
         {{ $t('common.total_amount') }}: <span class="text-rose-500">{{ settingsStore.formatPrice(totalAmount) }}</span>
       </span>
     </div>

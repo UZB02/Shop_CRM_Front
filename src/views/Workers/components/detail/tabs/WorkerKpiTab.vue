@@ -6,7 +6,7 @@
         <!-- Label Section -->
         <div class="flex items-center gap-2 pr-3 border-r border-slate-200 dark:border-slate-800">
           <i class="pi pi-calendar text-[11px] text-emerald-500"></i>
-          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ $t('kpi.filters.year') }}:</span>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 tracking-wider">{{ $t('kpi.filters.year') }}:</span>
         </div>
 
         <!-- Perfectly Centered Pixel-Perfect Year Picker -->
@@ -18,7 +18,7 @@
           class="kpi-year-picker-final w-28 h-8"
           :pt="{
             root: { class: 'relative h-8 !bg-transparent !border-none !shadow-none' },
-            input: { class: 'h-8 rounded-lg border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 hover:border-emerald-500/50 transition-all duration-300 shadow-sm text-[11px] font-black text-slate-700 dark:text-slate-200 w-full focus:ring-0 uppercase tracking-wider text-center flex items-center justify-center p-0' },
+            input: { class: 'h-8 rounded-lg border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 hover:border-emerald-500/50 transition-all duration-300 shadow-sm text-[11px] font-black text-slate-700 dark:text-slate-200 w-full focus:ring-0 tracking-wider text-center flex items-center justify-center p-0' },
             panel: { class: 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl mt-1 overflow-hidden min-w-[280px]' },
             yearPicker: { class: 'grid grid-cols-3 gap-2 p-4 bg-white dark:bg-slate-900' },
             year: ({ context }) => ({
@@ -53,7 +53,7 @@
         dataKey="id"
       >
         <template #empty>
-          <div class="py-8 text-center text-[10px] text-slate-400 uppercase font-bold tracking-widest">
+          <div class="py-8 text-center text-[10px] text-slate-400 font-bold tracking-widest">
              {{ $t('common.no_results') }}
           </div>
         </template>
@@ -231,7 +231,7 @@ html:not(.dark) :deep(.p-datepicker-input) {
   border-bottom: 1px solid #f1f5f9;
   font-size: 9px;
   font-weight: 900;
-  text-transform: uppercase;
+  text-transform: ;
   color: #64748b;
   letter-spacing: 0.05em;
 }

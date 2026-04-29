@@ -37,14 +37,14 @@
       <div class="px-6 md:px-8 py-5 bg-slate-50/50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-end gap-3">
         <button
           @click="$emit('update:visible', false)"
-          class="w-full sm:w-auto h-11 px-6 rounded-xl text-[11px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-[0.98]"
+          class="w-full sm:w-auto h-11 px-6 rounded-xl text-[11px] font-black tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-[0.98]"
         >
           {{ $t('common.cancel') }}
         </button>
         <button
           @click="$emit('save')"
           :disabled="saving"
-          class="w-full sm:w-auto h-11 px-8 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black uppercase tracking-widest transition-all shadow-xl shadow-emerald-500/20 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+          class="w-full sm:w-auto h-11 px-8 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black tracking-widest transition-all shadow-xl shadow-emerald-500/20 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
         >
           <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
           <i v-else class="pi pi-check text-xs"></i>

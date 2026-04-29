@@ -3,19 +3,19 @@
     <div class="min-0">
       <!-- Breadcrumbs -->
       <div class="flex items-center gap-2 mb-1">
-        <router-link to="/dashboard/workers" class="text-[10px] font-bold text-slate-400 hover:text-emerald-500 transition-colors uppercase tracking-widest flex items-center gap-1">
+        <router-link to="/dashboard/workers" class="text-[10px] font-bold text-slate-400 hover:text-emerald-500 transition-colors tracking-widest flex items-center gap-1">
           <i class="pi pi-users text-[9px]"></i>
           {{ $t('workers.title') }}
         </router-link>
         <i class="pi pi-chevron-right text-[8px] text-slate-300"></i>
-        <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ $t('kpi.title') }}</span>
+        <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 tracking-widest">{{ $t('kpi.title') }}</span>
       </div>
       
       <div class="flex items-center gap-3">
         <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100 truncate">{{ $t('kpi.title') }}</h1>
         <div class="hidden sm:flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
           <span class="w-1 h-1 bg-emerald-400 rounded-full animate-pulse shadow-sm"></span>
-          <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest">{{ $t('workers.active_status') }}</span>
+          <span class="text-[9px] font-black text-emerald-500 tracking-widest">{{ $t('workers.active_status') }}</span>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
       <button 
         v-if="hasData"
         @click="$emit('toggle-charts')"
-        class="h-8 px-4 rounded-lg flex items-center justify-center gap-2 transition-all border shadow-sm text-[10px] font-black uppercase tracking-wider whitespace-nowrap"
+        class="h-8 px-4 rounded-lg flex items-center justify-center gap-2 transition-all border shadow-sm text-[10px] font-black tracking-wider whitespace-nowrap"
         :class="showCharts 
           ? 'bg-emerald-500 text-white border-emerald-500 shadow-emerald-500/20' 
           : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-emerald-500/30'"
@@ -95,7 +95,7 @@ const calendarPt = {
   monthPicker: { class: 'grid grid-cols-3 gap-4 p-5 bg-white dark:bg-slate-900' },
   month: ({ context }) => ({
     class: [
-      'py-3 px-2 rounded-xl text-[12px] font-black text-center transition-all cursor-pointer border border-transparent uppercase tracking-wider',
+      'py-3 px-2 rounded-xl text-[12px] font-black text-center transition-all cursor-pointer border border-transparent tracking-wider',
       context.selected 
         ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
         : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/5 hover:text-emerald-500'

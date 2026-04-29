@@ -16,8 +16,8 @@
             <i class="pi pi-sync text-white text-xl"></i>
           </div>
           <div>
-            <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">Yangi Transfer</h2>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ sourceName }} dan o'tkazish</p>
+            <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 tracking-tight">Yangi Transfer</h2>
+            <p class="text-[10px] font-bold text-slate-400 tracking-widest">{{ sourceName }} dan o'tkazish</p>
           </div>
         </div>
         <button 
@@ -31,7 +31,7 @@
       <div class="p-8 space-y-8 max-h-[70vh] overflow-y-auto no-scrollbar">
         <!-- Target Selection -->
         <div class="space-y-4">
-          <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Qayerga yuborilmoqda?</label>
+          <label class="text-[10px] font-black text-slate-400 tracking-widest pl-2">Qayerga yuborilmoqda?</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <!-- Location Tabs -->
             <button 
@@ -48,7 +48,7 @@
                   <i class="pi pi-building text-base"></i>
                 </div>
                 <div>
-                  <h4 class="text-xs font-black uppercase tracking-tight" :class="targetType === 'branch' ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'">Filialga</h4>
+                  <h4 class="text-xs font-black tracking-tight" :class="targetType === 'branch' ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'">Filialga</h4>
                   <p class="text-[9px] font-bold" :class="targetType === 'branch' ? 'text-emerald-500' : 'text-slate-300'">Do'konga yuboring</p>
                 </div>
               </div>
@@ -69,7 +69,7 @@
                   <i class="pi pi-box text-base"></i>
                 </div>
                 <div>
-                  <h4 class="text-xs font-black uppercase tracking-tight" :class="targetType === 'warehouse' ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'">Omborga</h4>
+                  <h4 class="text-xs font-black tracking-tight" :class="targetType === 'warehouse' ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'">Omborga</h4>
                   <p class="text-[9px] font-bold" :class="targetType === 'warehouse' ? 'text-emerald-500' : 'text-slate-300'">Markaziy omborga</p>
                 </div>
               </div>
@@ -104,10 +104,10 @@
         <!-- Products Selection -->
         <div class="space-y-4">
           <div class="flex items-center justify-between px-2">
-            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mahsulotlar</label>
+            <label class="text-[10px] font-black text-slate-400 tracking-widest">Mahsulotlar</label>
             <button 
               @click="showProductSelect = true"
-              class="px-4 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-[9px] font-black uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all"
+              class="px-4 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-[9px] font-black tracking-widest hover:opacity-90 active:scale-95 transition-all"
             >
               Qo'shish
             </button>
@@ -117,7 +117,7 @@
             <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
               <i class="pi pi-box text-slate-300"></i>
             </div>
-            <p class="text-[10px] font-black uppercase tracking-widest">Hali mahsulot qo'shilmadi</p>
+            <p class="text-[10px] font-black tracking-widest">Hali mahsulot qo'shilmadi</p>
           </div>
 
           <div v-else class="space-y-3">
@@ -126,12 +126,12 @@
                 <i class="pi pi-image text-slate-300 text-xs"></i>
               </div>
               <div class="flex-grow min-w-0">
-                <h5 class="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight truncate">{{ item.product.product_name || item.product.name }}</h5>
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ item.product.barcode }}</p>
+                <h5 class="text-xs font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">{{ item.product.product_name || item.product.name }}</h5>
+                <p class="text-[9px] font-bold text-slate-400 tracking-widest">{{ item.product.barcode }}</p>
               </div>
               <div class="flex items-center gap-3">
                 <div class="flex flex-col gap-1 items-end">
-                  <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Miqdor</span>
+                  <span class="text-[8px] font-black text-slate-400 tracking-widest">Miqdor</span>
                   <input 
                     v-model="item.quantity"
                     type="number"
@@ -153,7 +153,7 @@
 
         <!-- Note -->
         <div class="space-y-4">
-          <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Izoh (ixtiyoriy)</label>
+          <label class="text-[10px] font-black text-slate-400 tracking-widest pl-2">Izoh (ixtiyoriy)</label>
           <textarea 
             v-model="form.note"
             rows="3"
@@ -167,14 +167,14 @@
       <div class="p-8 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex flex-col sm:flex-row items-center gap-4">
         <button 
           @click="visible = false"
-          class="w-full sm:w-1/3 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
+          class="w-full sm:w-1/3 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-black tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
         >
           Bekor qilish
         </button>
         <button 
           @click="submit"
           :disabled="subLoading"
-          class="w-full sm:w-2/3 py-4 rounded-2xl bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 shadow-xl shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+          class="w-full sm:w-2/3 py-4 rounded-2xl bg-emerald-500 text-white text-[10px] font-black tracking-widest hover:bg-emerald-600 shadow-xl shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
         >
           <i v-if="subLoading" class="pi pi-spin pi-spinner text-xs"></i>
           <span v-else>Yuborish tasdiqlash uchun</span>
@@ -214,9 +214,9 @@
               <i class="pi pi-box text-slate-300 text-[10px]"></i>
             </div>
             <div class="flex-grow min-w-0">
-              <div class="text-[10px] font-black uppercase tracking-tight truncate group-hover:text-emerald-500 transition-colors">{{ p.product_name || p.name }}</div>
+              <div class="text-[10px] font-black tracking-tight truncate group-hover:text-emerald-500 transition-colors">{{ p.product_name || p.name }}</div>
               <div class="flex items-center gap-2">
-                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{{ p.barcode }}</span>
+                <span class="text-[8px] font-bold text-slate-400 tracking-widest">{{ p.barcode }}</span>
                 <span class="text-[8px] font-black text-emerald-500">{{ p.quantity }} mavjud</span>
               </div>
             </div>

@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between gap-3 mb-4">
       <div class="flex items-center gap-2">
         <div class="w-1 h-3 bg-emerald-500/50 rounded-full"></div>
-        <h4 class="text-[10px] font-bold uppercase tracking-widest text-slate-500">{{ $t('subcategories.title') }}</h4>
+        <h4 class="text-[10px] font-bold tracking-widest text-slate-500">{{ $t('subcategories.title') }}</h4>
       </div>
       
       <div class="flex items-center gap-2 flex-1 max-w-[240px]">
@@ -18,7 +18,7 @@
         
         <button 
           @click="$emit('add')"
-          class="h-7 px-2 rounded-lg bg-emerald-500/10 text-emerald-600 text-[10px] font-bold hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap uppercase tracking-widest"
+          class="h-7 px-2 rounded-lg bg-emerald-500/10 text-emerald-600 text-[10px] font-bold hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap tracking-widest"
         >
           <i class="pi pi-plus text-[8px] mr-1"></i>
           {{ $t('common.add') }}
@@ -66,7 +66,7 @@
         class="py-8 flex flex-col items-center justify-center border border-dashed border-slate-200 dark:border-slate-800 rounded-xl opacity-40 bg-white/30"
       >
         <i class="pi pi-box text-xl mb-2 text-slate-300"></i>
-        <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">{{ $t('common.no_results') }}</p>
+        <p class="text-[9px] font-bold tracking-widest text-slate-400">{{ $t('common.no_results') }}</p>
       </div>
     </div>
   </div>

@@ -126,7 +126,7 @@ const FieldGroup = defineComponent({
     const closeTooltip = () => { isVisible.value = false }
     
     return () => h('div', { class: 'flex flex-col gap-1.5' }, [
-      h('label', { class: 'text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-1.5' }, [
+      h('label', { class: 'text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest flex items-center gap-1.5' }, [
         h('i', { class: `pi ${props.icon || 'pi-circle'} text-[9px]` }),
         h('span', null, props.label),
         props.required ? h('span', { class: 'text-rose-400' }, '*') : null,

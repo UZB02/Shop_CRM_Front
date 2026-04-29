@@ -2,15 +2,15 @@
   <Dialog :visible="visible" @update:visible="$emit('update:visible', $event)" :header="header" :style="{width: '450px'}" :modal="true">
       <div class="flex flex-col gap-4">
           <div class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800">
-              <p class="text-xs uppercase font-black text-slate-500 mb-1 tracking-widest">{{ $t('subscription.current_plan') }}:</p>
-              <p class="font-black text-2xl uppercase tracking-tight text-slate-800 dark:text-slate-100">
+              <p class="text-xs font-black text-slate-500 mb-1 tracking-widest">{{ $t('subscription.current_plan') }}:</p>
+              <p class="font-black text-2xl tracking-tight text-slate-800 dark:text-slate-100">
                 {{ $t(`subscription.plans.${plan}`) }}
               </p>
               <p class="text-emerald-500 font-black text-lg mt-2">{{ priceLabel }}</p>
           </div>
 
           <div class="field">
-              <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-3">To'lov Turi</label>
+              <label class="block text-xs font-black tracking-widest text-slate-500 mb-3">To'lov Turi</label>
               <div class="flex gap-4">
                   <div class="flex-1 p-4 border-2 rounded-2xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-all flex flex-col items-center gap-2 group"
                        :class="{'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20': method === 'click', 'border-slate-100 dark:border-slate-800': method !== 'click'}"
@@ -18,7 +18,7 @@
                       <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <i class="pi pi-credit-card text-2xl text-blue-500"></i>
                       </div>
-                      <span class="text-xs font-black uppercase tracking-widest">Click</span>
+                      <span class="text-xs font-black tracking-widest">Click</span>
                   </div>
                    <div class="flex-1 p-4 border-2 rounded-2xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-all flex flex-col items-center gap-2 group"
                        :class="{'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20': method === 'payme', 'border-slate-100 dark:border-slate-800': method !== 'payme'}"
@@ -26,7 +26,7 @@
                       <div class="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <i class="pi pi-wallet text-2xl text-teal-500"></i>
                       </div>
-                      <span class="text-xs font-black uppercase tracking-widest">Payme</span>
+                      <span class="text-xs font-black tracking-widest">Payme</span>
                    </div>
               </div>
           </div>

@@ -24,7 +24,7 @@
                     <i class="pi pi-bell text-emerald-500 text-xs" />
                     Bildirishnomalar
                 </h3>
-                <span v-if="store.unreadCount > 0" class="text-[9px] px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-bold uppercase tracking-wider">
+                <span v-if="store.unreadCount > 0" class="text-[9px] px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-bold tracking-wider">
                     {{ store.unreadCount }}
                 </span>
             </div>
@@ -129,7 +129,7 @@
                                 <i :class="getIcon(selectedNotification.type)" />
                             </div>
                             <div>
-                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 mb-1 block">
+                                <span class="text-[10px] font-black tracking-[0.2em] text-emerald-500 mb-1 block">
                                     {{ selectedNotification.type_display || selectedNotification.source }}
                                 </span>
                                 <div class="text-[10px] font-bold text-slate-400">
@@ -154,7 +154,7 @@
 
                         <!-- Footer / Meta -->
                         <div class="mt-10 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                            <div class="flex items-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                            <div class="flex items-center gap-4 text-xs font-bold text-slate-400 tracking-widest">
                                 <span class="flex items-center gap-2">
                                     <i class="pi pi-calendar opacity-50" />
                                     {{ selectedNotification.date }}

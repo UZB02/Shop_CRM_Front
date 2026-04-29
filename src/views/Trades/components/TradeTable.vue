@@ -4,13 +4,13 @@
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.trades.col_id_date') }}</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.name') }}</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">Filial / Xodim</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right">Summa</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter text-center">To'lov turi</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter text-center">{{ $t('customers.trades.col_status') }}</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right">{{ $t('customers.table.actions') }}</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.trades.col_id_date') }}</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.name') }}</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">Filial / Xodim</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right">Summa</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-center">To'lov turi</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-center">{{ $t('customers.trades.col_status') }}</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right">{{ $t('customers.table.actions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -31,7 +31,7 @@
                   <div class="w-12 h-12 bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center mx-auto">
                     <i class="pi pi-receipt text-slate-300"></i>
                   </div>
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Savdolar topilmadi</p>
+                  <p class="text-[10px] font-bold text-slate-400 tracking-widest italic">Savdolar topilmadi</p>
                 </div>
               </td>
             </tr>
@@ -48,7 +48,7 @@
             <td class="px-6 py-4">
               <div class="flex flex-col">
                 <span class="text-[11px] font-black text-slate-900 dark:text-white leading-none mb-1">#{{ trade.id }}</span>
-                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter italic">
+                <span class="text-[9px] font-bold text-slate-400 tracking-tighter italic">
                   {{ trade.created_on }}
                 </span>
               </div>
@@ -64,7 +64,7 @@
                   <span class="text-[11px] font-black text-slate-800 dark:text-slate-200 truncate max-w-[150px]">
                     {{ trade.customer_name || 'Amaliyotchi Mijoz' }}
                   </span>
-                  <span v-if="!trade.customer_name" class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Tezkor savdo</span>
+                  <span v-if="!trade.customer_name" class="text-[8px] font-black text-slate-400 tracking-widest mt-0.5">Tezkor savdo</span>
                 </div>
               </div>
             </td>
@@ -96,7 +96,7 @@
             <!-- Payment Type -->
             <td class="px-6 py-4 text-center">
               <div class="flex justify-center">
-                <span :class="['px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 border', getPaymentStyle(trade.payment_type)]">
+                <span :class="['px-2 py-0.5 rounded-md text-[8px] font-black tracking-widest flex items-center gap-1.5 border', getPaymentStyle(trade.payment_type)]">
                   <div :class="['w-1 h-1 rounded-full', getPaymentDotColor(trade.payment_type)]"></div>
                   {{ trade.payment_type_display }}
                 </span>
@@ -106,7 +106,7 @@
             <!-- Status -->
             <td class="px-6 py-4 text-center">
               <div class="flex justify-center">
-                <span :class="['px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border', getStatusStyle(trade.status)]">
+                <span :class="['px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest border', getStatusStyle(trade.status)]">
                   {{ trade.status_display }}
                 </span>
               </div>
@@ -126,7 +126,7 @@
     <!-- Pagination -->
     <div v-if="totalRecords > 0" 
          class="px-6 py-4 bg-slate-50/50 dark:bg-slate-950/20 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-      <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
+      <div class="text-[10px] font-black text-slate-400 tracking-widest leading-none">
         SAHIFA {{ page }} / {{ Math.ceil(totalRecords / pageSize) }}
       </div>
       <div class="flex items-center gap-1">

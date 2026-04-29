@@ -45,11 +45,11 @@
       <table class="w-full text-sm text-left">
         <thead class="sticky top-0 z-10">
           <tr class="bg-slate-50/90 dark:bg-slate-800/90 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800">
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide w-8">#</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('warehouse.transfer.col_product') }}</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">{{ $t('warehouse.transfer.col_barcode') }}</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center w-36">{{ $t('warehouse.transfer.col_available') }}</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide text-center w-36">{{ $t('warehouse.transfer.col_quantity') }}</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide w-8">#</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('warehouse.transfer.col_product') }}</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('warehouse.transfer.col_barcode') }}</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-center w-36">{{ $t('warehouse.transfer.col_available') }}</th>
+            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-center w-36">{{ $t('warehouse.transfer.col_quantity') }}</th>
             <th class="px-5 py-3 w-12"></th>
           </tr>
         </thead>

@@ -9,7 +9,7 @@
     :draggable="false"
     class="p-fluid sr-professional-dialog"
     pt:root:class="!rounded-[2rem] !border-none !shadow-2xl overflow-hidden shadow-emerald-500/5"
-    pt:header:class="!px-6 !pt-6 !pb-4 !bg-white dark:!bg-slate-900 !text-slate-900 dark:!text-white !font-black !uppercase !tracking-tighter !text-lg"
+    pt:header:class="!px-6 !pt-6 !pb-4 !bg-white dark:!bg-slate-900 !text-slate-900 dark:!text-white !font-black !!tracking-tighter !text-lg"
     pt:content:class="!px-6 !pb-6 !bg-white dark:!bg-slate-900"
     pt:closeButton:class="!rounded-xl hover:!bg-slate-100 dark:hover:!bg-slate-800 transition-all"
   >
@@ -20,12 +20,12 @@
         <div class="relative p-4 bg-slate-50 dark:bg-slate-800/40 rounded-[1.5rem] border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
           <div class="flex items-center gap-2 mb-3">
             <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">{{ $t('customers.groups.add_subtitle') }}</span>
+            <span class="text-[9px] font-black tracking-[0.2em] text-slate-400">{{ $t('customers.groups.add_subtitle') }}</span>
           </div>
           
           <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
             <div class="flex-1 flex flex-col gap-1.5 min-w-0">
-              <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.name') }}</label>
+              <label class="text-[9px] font-black tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.name') }}</label>
               <div class="relative">
                 <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-300 transition-colors group-focus-within:text-emerald-500"></i>
                 <InputText 
@@ -37,7 +37,7 @@
             </div>
             
             <div class="w-full sm:w-[130px] flex flex-col gap-1.5 flex-shrink-0">
-              <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.discount') }}</label>
+              <label class="text-[9px] font-black tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.discount') }}</label>
               <div class="flex gap-2">
                 <div class="relative flex-1 flex items-center">
                   <InputNumber 
@@ -65,7 +65,7 @@
       <!-- Separator -->
       <div class="flex items-center gap-4 py-1">
         <div class="h-px flex-1 bg-slate-100 dark:bg-slate-800"></div>
-        <span class="text-[8px] font-black uppercase tracking-[0.3em] text-slate-300 dark:text-slate-600">{{ $t('customers.groups.list_separator') }}</span>
+        <span class="text-[8px] font-black tracking-[0.3em] text-slate-300 dark:text-slate-600">{{ $t('customers.groups.list_separator') }}</span>
         <div class="h-px flex-1 bg-slate-100 dark:bg-slate-800"></div>
       </div>
 
@@ -77,7 +77,7 @@
         
         <div v-else-if="groups.length === 0" class="flex flex-col items-center justify-center py-10 opacity-30">
           <i class="pi pi-box text-3xl mb-2"></i>
-          <p class="text-[10px] font-black uppercase tracking-widest">{{ $t('customers.groups.no_groups') }}</p>
+          <p class="text-[10px] font-black tracking-widest">{{ $t('customers.groups.no_groups') }}</p>
         </div>
         
         <div v-else class="space-y-2.5">
@@ -91,11 +91,11 @@
                 <i class="pi pi-users text-xs"></i>
               </div>
               <div class="flex flex-col">
-                <p class="text-[12px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tighter leading-none mb-1">{{ g.name }}</p>
+                <p class="text-[12px] font-black text-slate-700 dark:text-slate-200 tracking-tighter leading-none mb-1">{{ g.name }}</p>
                 <div class="flex items-center gap-1.5 leading-none">
                   <span class="text-[9px] font-bold text-emerald-500 tracking-wider">{{ g.discount }}% OFF</span>
                   <div class="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-700"></div>
-                  <span class="text-[8px] font-medium text-slate-400 uppercase tracking-widest">{{ $t('customers.groups.loyalty_system') }}</span>
+                  <span class="text-[8px] font-medium text-slate-400 tracking-widest">{{ $t('customers.groups.loyalty_system') }}</span>
                 </div>
               </div>
             </div>

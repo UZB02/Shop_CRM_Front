@@ -7,12 +7,12 @@
           
           <div class="flex items-center gap-1.5 mb-2 relative z-10">
             <div :class="['w-1.5 h-1.5 rounded-full', card.glow]"></div>
-            <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">{{ t(card.label) }}</p>
+            <p class="text-[9px] font-bold tracking-widest text-slate-400">{{ t(card.label) }}</p>
           </div>
 
           <div class="flex items-end justify-between relative z-10">
              <h3 :class="['text-lg font-bold tracking-tight truncate', card.color]">{{ card.value }}</h3>
-             <span v-if="card.sub" class="text-[8px] font-black uppercase tracking-widest text-slate-400 bg-slate-50 dark:bg-slate-800 flex items-center px-1.5 py-0.5 rounded-md border border-slate-100 dark:border-slate-800">
+             <span v-if="card.sub" class="text-[8px] font-black tracking-widest text-slate-400 bg-slate-50 dark:bg-slate-800 flex items-center px-1.5 py-0.5 rounded-md border border-slate-100 dark:border-slate-800">
                {{ card.sub }}
              </span>
           </div>
@@ -24,17 +24,17 @@
       <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 shadow-sm flex flex-col h-full">
           <div class="flex items-center justify-between mb-6">
              <div>
-                <h3 class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">{{ t('reports.profit_loss') }} Flux</h3>
+                <h3 class="text-[9px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.profit_loss') }} Flux</h3>
                 <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ props.data.year }} {{ t('common.year') }} {{ t('reports.summary') }}</p>
              </div>
              <div class="flex gap-4">
                 <div class="flex items-center gap-2">
                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm"></div>
-                   <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Net Profit</span>
+                   <span class="text-[9px] font-bold tracking-widest text-slate-400">Net Profit</span>
                 </div>
                 <div class="flex items-center gap-2">
                    <div class="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700"></div>
-                   <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Revenue</span>
+                   <span class="text-[9px] font-bold tracking-widest text-slate-400">Revenue</span>
                 </div>
              </div>
           </div>
@@ -50,11 +50,11 @@
           </div>
           
           <div class="relative z-10">
-            <h4 class="text-[9px] font-black uppercase tracking-widest opacity-80 mb-6 border-b border-white/10 pb-2">{{ t('common.analytics') }}</h4>
+            <h4 class="text-[9px] font-black tracking-widest opacity-80 mb-6 border-b border-white/10 pb-2">{{ t('common.analytics') }}</h4>
             <div class="space-y-6">
                <div v-for="metric in metrics" :key="metric.label" class="flex flex-col gap-1">
                   <div class="flex items-center justify-between">
-                    <span class="text-[9px] font-bold uppercase tracking-widest opacity-70">{{ t(metric.label) }}</span>
+                    <span class="text-[9px] font-bold tracking-widest opacity-70">{{ t(metric.label) }}</span>
                     <div v-if="metric.trend" :class="['flex items-center gap-1 text-[8px] font-black px-1.5 py-0.5 rounded-md bg-white/10', metric.trend > 0 ? 'text-white' : 'text-rose-200']">
                       <i :class="['pi', metric.trend > 0 ? 'pi-arrow-up-right' : 'pi-arrow-down-right']"></i>
                       {{ Math.abs(metric.trend) }}%
@@ -81,9 +81,9 @@
        <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between bg-slate-50/30 dark:bg-slate-800/20">
           <div class="flex items-center gap-2">
             <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
-            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Oylik moliyaviy taqsimot</span>
+            <span class="text-[10px] font-bold tracking-widest text-slate-500">Oylik moliyaviy taqsimot</span>
           </div>
-          <button class="text-[9px] font-bold uppercase tracking-widest text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-2">
+          <button class="text-[9px] font-bold tracking-widest text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-2">
             <i class="pi pi-download"></i>
             {{ t('common.export') }}
           </button>
@@ -91,7 +91,7 @@
        <div class="overflow-x-auto max-h-[500px] custom-scrollbar overflow-y-auto">
           <table class="w-full text-left border-collapse">
              <thead>
-                <tr class="text-[9px] font-bold uppercase tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <tr class="text-[9px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
                    <th class="px-4 py-3">Oy</th>
                    <th class="px-4 py-3 text-right">{{ t('finance.revenue') }}</th>
                    <th class="px-4 py-3 text-right">COGS</th>

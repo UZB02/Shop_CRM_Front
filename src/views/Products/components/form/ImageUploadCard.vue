@@ -5,7 +5,7 @@
         <i class="pi pi-image text-white text-[10px]"></i>
       </div>
       <div>
-        <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-100">{{ $t('products.form.image') }}</h2>
+        <h2 class="text-[10px] font-black tracking-widest text-slate-800 dark:text-slate-100">{{ $t('products.form.image') }}</h2>
       </div>
     </div>
 
@@ -21,15 +21,15 @@
         />
         <div v-else class="flex flex-col items-center gap-3 text-slate-300 dark:text-slate-700 group-hover:text-emerald-500 transition-all">
           <i class="pi pi-cloud-upload text-2xl"></i>
-          <span class="text-[9px] font-black uppercase tracking-widest">{{ $t('products.form.upload_image') }}</span>
+          <span class="text-[9px] font-black tracking-widest">{{ $t('products.form.upload_image') }}</span>
         </div>
 
         <!-- Overlays -->
         <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col items-center justify-center gap-2 backdrop-blur-md">
-          <button type="button" class="px-4 py-2 rounded-lg bg-white text-slate-900 text-[9px] font-black uppercase tracking-widest shadow-xl">
+          <button type="button" class="px-4 py-2 rounded-lg bg-white text-slate-900 text-[9px] font-black tracking-widest shadow-xl">
              {{ $t('products.form.change') }}
           </button>
-          <button v-if="previewUrl || imageUrl" type="button" @click.stop="$emit('remove')" class="px-4 py-2 rounded-lg bg-rose-500 text-white text-[9px] font-black uppercase tracking-widest shadow-xl">
+          <button v-if="previewUrl || imageUrl" type="button" @click.stop="$emit('remove')" class="px-4 py-2 rounded-lg bg-rose-500 text-white text-[9px] font-black tracking-widest shadow-xl">
              {{ $t('common.delete') }}
           </button>
         </div>

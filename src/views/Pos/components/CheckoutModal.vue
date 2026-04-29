@@ -18,7 +18,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800/60 flex-shrink-0">
           <div>
-            <span class="text-[7.5px] font-black uppercase tracking-[0.22em] text-slate-400 dark:text-slate-600 block">To'lov</span>
+            <span class="text-[7.5px] font-black tracking-[0.22em] text-slate-400 dark:text-slate-600 block">To'lov</span>
             <h2 class="text-[1rem] font-black text-slate-900 dark:text-white font-outfit tracking-tight leading-tight m-0">Savdoni yakunlash</h2>
           </div>
           <button
@@ -34,7 +34,7 @@
           <div class="absolute inset-0 dark:block hidden" style="background:radial-gradient(circle at 80% 20%,rgba(16,185,129,.22) 0%,transparent 60%)" />
           <div class="absolute inset-0 block dark:hidden" style="background:radial-gradient(circle at 20% 80%,rgba(255,255,255,0.15) 0%,transparent 55%)" />
           <div class="relative px-5 py-2.5 text-center">
-            <p class="text-[7px] font-black uppercase tracking-[0.2em] text-white/70 mb-0.5 m-0 leading-none">Jami to'lanishi lozim</p>
+            <p class="text-[7px] font-black tracking-[0.2em] text-white/70 mb-0.5 m-0 leading-none">Jami to'lanishi lozim</p>
             <div class="flex items-baseline justify-center gap-1.5">
               <span class="text-3xl font-black text-white font-outfit tracking-tight leading-none">{{ settingsStore.formatNumber(total) }}</span>
               <span class="text-[9px] font-black text-white/60">{{ (currencyCode || settingsStore.currency) === 'UZS' ? "so'm" : (currencyCode || settingsStore.currency) }}</span>
@@ -59,7 +59,7 @@
                   : 'text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400'"
               >
                 <i :class="m.icon" class="text-[13px] leading-none" />
-                <span class="text-[7.5px] font-black uppercase tracking-wide leading-none">{{ m.label }}</span>
+                <span class="text-[7.5px] font-black tracking-wide leading-none">{{ m.label }}</span>
               </button>
             </div>
           </div>
@@ -71,13 +71,13 @@
               <div class="flex items-center gap-2">
                 <!-- Max limit badge -->
                 <span v-if="maxDiscountPct > 0"
-                  class="text-[7.5px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md"
+                  class="text-[7.5px] font-black tracking-widest px-1.5 py-0.5 rounded-md"
                   :class="isDiscountValid ? 'bg-slate-100 dark:bg-slate-800 text-slate-400' : 'bg-rose-100 dark:bg-rose-900/20 text-rose-500'"
                 >
                   Max: {{ maxDiscountPct }}%
                 </span>
                 <button @click="discountAmount = 0"
-                  class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 uppercase tracking-widest transition-colors">
+                  class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 tracking-widest transition-colors">
                   × Tozalash
                 </button>
               </div>
@@ -99,7 +99,7 @@
             <div v-if="!isDiscountValid"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-100 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">
                 Chegirma limitdan oshdi! Maksimal: {{ settingsStore.formatPrice(maxDiscountAmount) }} ({{ maxDiscountPct }}%)
               </span>
             </div>
@@ -107,7 +107,7 @@
             <div v-if="discountAmount > 0 && paymentType !== 'debt'"
               class="flex items-center justify-between px-3.5 py-3 rounded-2xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 animate-fadein">
               <div>
-                <span class="text-[8px] font-black uppercase tracking-widest block opacity-80">To'lanishi kerak</span>
+                <span class="text-[8px] font-black tracking-widest block opacity-80">To'lanishi kerak</span>
                 <span class="text-xl font-black font-outfit leading-none">{{ settingsStore.formatPrice(paidAmount, currencyCode) }}</span>
               </div>
               <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -118,7 +118,7 @@
             <div v-if="discountAmount > total"
               class="mt-1 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-100 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">Chegirma jami summadan oshib ketmoqda!</span>
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Chegirma jami summadan oshib ketmoqda!</span>
             </div>
           </div>
 
@@ -138,7 +138,7 @@
              <!-- Debt Summary -->
              <div class="flex items-center justify-between px-3.5 py-3 rounded-2xl bg-rose-500 text-white shadow-lg shadow-rose-500/20">
                <div>
-                 <span class="text-[8px] font-black uppercase tracking-widest block opacity-80">Mijoz qarzi bo'ladi</span>
+                 <span class="text-[8px] font-black tracking-widest block opacity-80">Mijoz qarzi bo'ladi</span>
                   <span class="text-xl font-black font-outfit leading-none">{{ settingsStore.formatPrice(remainingDebt, currencyCode) }}</span>
                </div>
                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -178,27 +178,27 @@
             <div v-if="isCashOverflow && !isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">Naqd pul jami summadan oshib ketmoqda!</span>
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Naqd pul jami summadan oshib ketmoqda!</span>
             </div>
 
             <!-- Plastik karta alohida oshib ketsa -->
             <div v-if="isCardOverflow && !isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">Plastik karta jami summadan oshib ketmoqda!</span>
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Plastik karta jami summadan oshib ketmoqda!</span>
             </div>
 
             <!-- Yig'indi oshib ketsa -->
             <div v-if="isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 uppercase tracking-widest">Kiritilgan jami summa to'lanadigan miqdordan oshib ketmoqda!</span>
+              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Kiritilgan jami summa to'lanadigan miqdordan oshib ketmoqda!</span>
             </div>
 
             <div class="flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-dashed"
               :class="isMixedValid ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40' : isSumOverflow ? 'bg-rose-50 dark:bg-rose-950/10 border-rose-200 dark:border-rose-800/30' : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800'">
               <div>
-                <span class="text-[7.5px] font-black uppercase tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">Jami kiritildi</span>
+                <span class="text-[7.5px] font-black tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">Jami kiritildi</span>
                 <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">{{ settingsStore.formatPrice(cashAmount + cardAmount, currencyCode) }}</span>
               </div>
               <div class="w-7 h-7 rounded-full flex items-center justify-center"
@@ -212,7 +212,7 @@
           <div v-if="paymentType === 'debt'" class="animate-fadein">
             <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/10 border border-amber-200 dark:border-amber-800/20">
               <i class="pi pi-info-circle text-amber-500 text-sm flex-shrink-0" />
-              <span class="text-[7.5px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest leading-relaxed">Nasiyada qoldirilyapti — mijoz tanlash majburiy</span>
+              <span class="text-[7.5px] font-black text-amber-600 dark:text-amber-400 tracking-widest leading-relaxed">Nasiyada qoldirilyapti — mijoz tanlash majburiy</span>
             </div>
           </div>
 
@@ -228,7 +228,7 @@
                 <span v-else class="text-slate-300 dark:text-slate-700 ml-1">(Ixtiyoriy)</span>
               </label>
               <button v-if="selectedCustomer" @click="$emit('update:selected-customer', null)"
-                class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 uppercase tracking-widest transition-colors">
+                class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 tracking-widest transition-colors">
                 × Olib tashlash
               </button>
             </div>
@@ -251,13 +251,13 @@
             <!-- VIP Message -->
             <div v-if="vipMessage" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-800/30">
               <i class="pi pi-verified text-indigo-500 text-xs" />
-              <span class="text-[7.5px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{{ vipMessage }}</span>
+              <span class="text-[7.5px] font-black text-indigo-600 dark:text-indigo-400 tracking-widest">{{ vipMessage }}</span>
             </div>
 
             <div v-if="paymentType === 'debt' && !selectedCustomer"
               class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-800/30">
               <i class="pi pi-user-minus text-rose-500 text-xs" />
-              <span class="text-[7.5px] font-black text-rose-500 uppercase tracking-widest">Nasiya uchun mijoz tanlash majburiy!</span>
+              <span class="text-[7.5px] font-black text-rose-500 tracking-widest">Nasiya uchun mijoz tanlash majburiy!</span>
             </div>
           </div>
 
@@ -273,12 +273,12 @@
         <div class="px-4 py-3.5 border-t border-slate-100 dark:border-slate-800/60 flex gap-2.5 flex-shrink-0 bg-white dark:bg-[#0b0f1a]">
           <button
             @click="$emit('update:visible', false)"
-            class="flex-shrink-0 px-4 py-3 rounded-xl font-black text-[8.5px] uppercase tracking-widest text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
+            class="flex-shrink-0 px-4 py-3 rounded-xl font-black text-[8.5px] tracking-widest text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
           >Bekor</button>
           <button
             @click="handleConfirm"
             :disabled="!isValid || loading"
-            class="flex-1 py-3 px-5 rounded-xl font-black text-[9px] uppercase tracking-[0.16em] text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+            class="flex-1 py-3 px-5 rounded-xl font-black text-[9px] tracking-[0.16em] text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2"
             :class="isValid && !loading
               ? 'bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/25'
               : 'bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed'"
@@ -339,7 +339,7 @@ const {
 </script>
 
 <style>
-.lbl { font-size: 7.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.18em; color: #94a3b8; display: block; }
+.lbl { font-size: 7.5px; font-weight: 900; text-transform: ; letter-spacing: 0.18em; color: #94a3b8; display: block; }
 .dark .lbl { color: #475569; }
 
 .co-amount-input .p-inputtext {

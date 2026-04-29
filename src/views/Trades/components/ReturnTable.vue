@@ -4,13 +4,13 @@
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">ID / Sana</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">Mijoz</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">Filial / Xodim</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter">Sabab</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right">Summa</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter text-center">Holat</th>
-            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right">Amallar</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">ID / Sana</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">Mijoz</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">Filial / Xodim</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">Sabab</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right">Summa</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-center">Holat</th>
+            <th class="px-6 py-4 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right">Amallar</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -31,7 +31,7 @@
                   <div class="w-12 h-12 bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center mx-auto">
                     <i class="pi pi-refresh text-slate-300"></i>
                   </div>
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Qaytarishlar topilmadi</p>
+                  <p class="text-[10px] font-bold text-slate-400 tracking-widest italic">Qaytarishlar topilmadi</p>
                 </div>
               </td>
             </tr>
@@ -48,7 +48,7 @@
             <td class="px-6 py-4">
               <div class="flex flex-col">
                 <span class="text-[11px] font-black text-slate-900 dark:text-white leading-none mb-1">#{{ item.id }}</span>
-                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter italic">
+                <span class="text-[9px] font-bold text-slate-400 tracking-tighter italic">
                   {{ item.created_on }}
                 </span>
               </div>
@@ -64,7 +64,7 @@
                   <span class="text-[11px] font-black text-slate-800 dark:text-slate-200 truncate max-w-[150px]">
                     {{ item.customer_name || 'Mijoz ko\'rsatilmagan' }}
                   </span>
-                  <span v-if="item.sale_id" class="text-[8px] font-black text-emerald-500 uppercase tracking-widest mt-0.5">Savdo #{{ item.sale_id }}</span>
+                  <span v-if="item.sale_id" class="text-[8px] font-black text-emerald-500 tracking-widest mt-0.5">Savdo #{{ item.sale_id }}</span>
                 </div>
               </div>
             </td>
@@ -98,7 +98,7 @@
             <!-- Status -->
             <td class="px-6 py-4 text-center">
               <div class="flex justify-center">
-                <span :class="['px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border', getStatusStyle(item.status)]">
+                <span :class="['px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest border', getStatusStyle(item.status)]">
                   {{ item.status_display }}
                 </span>
               </div>
@@ -118,7 +118,7 @@
     <!-- Pagination -->
     <div v-if="totalRecords > 0" 
          class="px-6 py-4 bg-slate-50/50 dark:bg-slate-950/20 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-      <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
+      <div class="text-[10px] font-black text-slate-400 tracking-widest leading-none">
         SAHIFA {{ page }} / {{ Math.ceil(totalRecords / pageSize) }}
       </div>
       <div class="flex items-center gap-1">

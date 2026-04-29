@@ -26,10 +26,10 @@
         <!-- Header -->
         <div class="p-8 pb-6 flex items-start justify-between shrink-0">
           <div>
-            <h2 class="text-[13px] font-black text-emerald-500 uppercase tracking-widest mb-1">
+            <h2 class="text-[13px] font-black text-emerald-500 tracking-widest mb-1">
               {{ $t('customers.details.pay_debt_title') }}
             </h2>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mijozlar</p>
+            <p class="text-[10px] font-bold text-slate-400 tracking-widest">Mijozlar</p>
           </div>
           <button 
             @click="$emit('update:visible', false)"
@@ -46,7 +46,7 @@
             <!-- Financial Status Indicator -->
             <div class="p-6 rounded-[1.3rem] bg-rose-50/50 dark:bg-rose-500/5 border border-rose-100/30 dark:border-rose-500/10 flex items-center justify-between group transition-all duration-300 hover:shadow-sm">
                <div class="flex flex-col">
-                 <span class="text-[9px] font-black text-rose-400 uppercase tracking-[0.2em] mb-1.5 opacity-80">
+                 <span class="text-[9px] font-black text-rose-400 tracking-[0.2em] mb-1.5 opacity-80">
                    {{ $t('customers.details.current_debt') }}
                  </span>
                  <span class="text-2xl font-black text-rose-600 dark:text-rose-400 tracking-tighter">{{ formatCurrency(customerDebt) }}</span>
@@ -63,13 +63,13 @@
                     <div class="w-5 h-5 rounded-md bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500">
                       <i class="pi pi-money-bill text-[10px]"></i>
                     </div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                    <label class="text-[10px] font-black text-slate-400 tracking-widest leading-none">
                       {{ $t('customers.details.payment_amount') }}
                     </label>
                  </div>
                  <button 
                   @click="payment.amount = parseFloat(customerDebt)"
-                  class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest hover:underline"
+                  class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 tracking-widest hover:underline"
                  >
                    {{ $t('customers.details.pay_all') }}
                  </button>
@@ -88,7 +88,7 @@
 
             <!-- Payment Method Segment -->
             <div class="space-y-4 pt-2">
-              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 opacity-70">
+              <label class="text-[10px] font-black text-slate-400 tracking-widest ml-1 opacity-70">
                 {{ $t('customers.details.payment_method') }}
               </label>
               <div class="grid grid-cols-2 gap-4">
@@ -106,7 +106,7 @@
                      <i class="pi pi-check-circle text-[10px] text-emerald-500"></i>
                   </div>
                   <i :class="['text-xl pi', method === 'cash' ? 'pi-wallet' : 'pi-credit-card']"></i>
-                  <span class="text-[10px] font-black uppercase tracking-widest text-center">
+                  <span class="text-[10px] font-black tracking-widest text-center">
                     {{ method === 'cash' ? $t('shifts.payment.cash_part') : $t('shifts.payment.card_part') }}
                   </span>
                 </button>
@@ -121,14 +121,14 @@
           <div class="flex gap-3 items-center">
             <button 
               @click="$emit('update:visible', false)"
-              class="flex-1 h-12 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:bg-slate-50 transition-all"
+              class="flex-1 h-12 rounded-xl text-[10px] font-black tracking-[0.2em] text-slate-400 hover:bg-slate-50 transition-all"
             >
               {{ $t('common.cancel') }}
             </button>
             <button 
               @click="submitPayment"
               :disabled="saving || !payment.amount || payment.amount <= 0"
-              class="flex-[2] h-12 rounded-xl bg-emerald-500 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 disabled:opacity-30 transition-all flex items-center justify-center gap-2"
+              class="flex-[2] h-12 rounded-xl bg-emerald-500 text-white text-[10px] font-black tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 disabled:opacity-30 transition-all flex items-center justify-center gap-2"
             >
               <i v-if="saving" class="pi pi-spin pi-spinner text-[10px]"></i>
               {{ saving ? $t('common.saving') : $t('common.pay') }}

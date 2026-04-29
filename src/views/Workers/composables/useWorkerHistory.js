@@ -16,7 +16,7 @@ export function useWorkerHistory(workerId) {
   })
 
   const actionOptions = [
-    { label: 'Yaratish', value: 'create' },
+    { label: 'Kiritish', value: 'create' },
     { label: 'Yangilash', value: 'update' },
     { label: 'O\'chirish', value: 'delete' },
     { label: 'Login', value: 'login' },

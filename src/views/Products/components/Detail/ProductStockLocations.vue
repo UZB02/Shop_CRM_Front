@@ -1,7 +1,7 @@
 <template>
   <div v-if="product?.stock_locations?.length" class="bg-white dark:bg-[#131d31] rounded-[18px] border border-slate-200 dark:border-transparent p-6 sm:p-8 flex flex-col shadow-sm">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-      <h3 class="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] flex items-center gap-3">
+      <h3 class="text-[10px] font-black text-slate-900 dark:text-white tracking-[0.2em] flex items-center gap-3">
         <span class="w-1 h-1 rounded-full bg-indigo-500 shrink-0"></span>
         <span class="leading-tight">{{ $te('products.detail.stock_locations') ? $t('products.detail.stock_locations') : 'ZAHIRA LOKATSIYALARI' }}</span>
       </h3>
@@ -22,7 +22,7 @@
             <i class="pi" :class="loc.type === 'warehouse' ? 'pi-box' : 'pi-building'"></i>
           </div>
           <div>
-            <span class="text-[8px] font-black uppercase tracking-widest block mb-0.5" 
+            <span class="text-[8px] font-black tracking-widest block mb-0.5" 
                   :class="loc.type === 'warehouse' ? 'text-amber-500/70' : 'text-sky-500/70'">
               {{ loc.type === 'warehouse' ? $t('products.detail.warehouse') : $t('products.detail.branch') }}
             </span>
@@ -38,7 +38,7 @@
            <p class="text-xl font-black tracking-tight" :class="loc.quantity > 0 ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-600'">
              {{ loc.quantity }}
            </p>
-           <span class="text-[8px] font-black uppercase tracking-widest text-slate-400">{{ product.unit_display }}</span>
+           <span class="text-[8px] font-black tracking-widest text-slate-400">{{ product.unit_display }}</span>
         </div>
       </div>
     </div>

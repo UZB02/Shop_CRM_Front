@@ -16,7 +16,7 @@
             <div class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-xl mb-3 animate-bounce">
               <i class="pi pi-lock text-4xl text-white" />
             </div>
-            <h2 class="text-xl font-black text-white uppercase tracking-widest text-center px-4">
+            <h2 class="text-xl font-black text-white tracking-widest text-center px-4">
               Obuna muddati tugadi
             </h2>
           </div>
@@ -46,7 +46,7 @@
           </div>
           
           <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
-            <p class="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
+            <p class="text-[10px] text-slate-400 font-medium tracking-widest">
               Texnik yordam: +998 (XX) XXX-XX-XX
             </p>
           </div>

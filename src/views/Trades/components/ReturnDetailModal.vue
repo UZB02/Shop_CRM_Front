@@ -40,26 +40,26 @@
             <!-- Basic Info Grid -->
             <div class="grid grid-cols-2 gap-8 mb-8">
                <div class="space-y-1">
-                 <h5 class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Mijoz</h5>
+                 <h5 class="text-[9px] font-black text-slate-400 tracking-widest">Mijoz</h5>
                  <p class="text-[13px] font-bold text-slate-700 dark:text-slate-200">{{ returnItem.customer_name || 'Mijoz ko\'rsatilmagan' }}</p>
                </div>
                <div class="space-y-1 text-right">
-                 <h5 class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Filial</h5>
+                 <h5 class="text-[9px] font-black text-slate-400 tracking-widest">Filial</h5>
                  <p class="text-[13px] font-bold text-slate-700 dark:text-slate-200">{{ returnItem.branch_name }}</p>
                </div>
                <div class="space-y-1">
-                 <h5 class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Xodim</h5>
+                 <h5 class="text-[9px] font-black text-slate-400 tracking-widest">Xodim</h5>
                  <p class="text-[13px] font-bold text-slate-700 dark:text-slate-200">{{ returnItem.worker_name }}</p>
                </div>
                <div class="space-y-1 text-right">
-                 <h5 class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Smena ID</h5>
+                 <h5 class="text-[9px] font-black text-slate-400 tracking-widest">Smena ID</h5>
                  <p class="text-[13px] font-bold text-slate-700 dark:text-slate-200">#{{ returnItem.smena_id || 'N/A' }}</p>
                </div>
             </div>
 
             <!-- Reason Box -->
             <div class="p-5 rounded-[24px] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800/50 mb-8">
-               <h5 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Qaytarish sababi</h5>
+               <h5 class="text-[9px] font-black text-slate-400 tracking-widest mb-2">Qaytarish sababi</h5>
                <p class="text-xs font-medium text-slate-600 dark:text-slate-300 italic leading-relaxed">
                  "{{ returnItem.reason || 'Sabab ko\'rsatilmagan' }}"
                </p>
@@ -67,7 +67,7 @@
 
             <!-- Items List -->
             <div class="space-y-4">
-               <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Qaytarilgan Mahsulotlar</h5>
+               <h5 class="text-[10px] font-black text-slate-400 tracking-widest px-1">Qaytarilgan Mahsulotlar</h5>
                <div class="space-y-2">
                   <div v-for="item in returnItem.items" :key="item.id" 
                        class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
@@ -92,11 +92,11 @@
           <!-- Footer Summary -->
           <div class="px-8 py-6 bg-slate-50 dark:bg-slate-800/20 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
              <div class="flex flex-col">
-               <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Umumiy Qaytarish Summasi</span>
+               <span class="text-[10px] font-black text-slate-400 tracking-widest">Umumiy Qaytarish Summasi</span>
                <span class="text-2xl font-black text-rose-500 tracking-tighter">{{ formatCurrency(returnItem.total_amount) }}</span>
              </div>
              <div class="flex items-center gap-3">
-               <span :class="['px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border', getStatusStyle(returnItem.status)]">
+               <span :class="['px-3 py-1 rounded-full text-[10px] font-black tracking-widest border', getStatusStyle(returnItem.status)]">
                  {{ returnItem.status_display }}
                </span>
              </div>

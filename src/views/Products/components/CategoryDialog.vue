@@ -10,7 +10,7 @@
       <div class="flex items-center justify-between mb-8">
         <div class="flex items-center gap-3">
           <div class="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
-          <h3 class="text-lg font-black text-slate-800 dark:text-white uppercase tracking-[0.1em]">
+          <h3 class="text-lg font-black text-slate-800 dark:text-white tracking-[0.1em]">
             {{ category._id || category.id ? $t('common.edit') : $t('categories.title') }}
           </h3>
         </div>
@@ -26,7 +26,7 @@
       <div class="space-y-8">
         <!-- Name Field -->
         <div class="space-y-3">
-          <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">{{ $t('categories.name') }}</label>
+          <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">{{ $t('categories.name') }}</label>
           <div class="relative group">
             <input 
               v-model.trim="category.name"
@@ -36,13 +36,13 @@
               :class="{ '!border-rose-500/30 !bg-rose-50/30 !text-rose-600': submitted && !category.name }"
               autofocus
             />
-            <small v-if="submitted && !category.name" class="text-[9px] font-black text-rose-500 uppercase tracking-widest mt-2 ml-1 block">{{ $t('categories.messages.name_required') }}</small>
+            <small v-if="submitted && !category.name" class="text-[9px] font-black text-rose-500 tracking-widest mt-2 ml-1 block">{{ $t('categories.messages.name_required') }}</small>
           </div>
         </div>
 
         <!-- Description Field -->
         <div class="space-y-3">
-          <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">{{ $t('categories.description') }}</label>
+          <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">{{ $t('categories.description') }}</label>
           <div class="relative group">
             <textarea 
               v-model="category.description"
@@ -58,14 +58,14 @@
       <div class="mt-12 flex items-center justify-end gap-6">
         <button 
           @click="$emit('update:visible', false)"
-          class="text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+          class="text-[11px] font-black tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
         >
           {{ $t('common.cancel') }}
         </button>
         <button 
           @click="onSave"
           :disabled="saving"
-          class="h-14 px-10 bg-slate-900 dark:bg-emerald-500 text-white text-xs font-black uppercase tracking-[0.15em] rounded-2xl hover:shadow-2xl hover:shadow-emerald-500/30 active:scale-95 transition-all disabled:opacity-50"
+          class="h-14 px-10 bg-slate-900 dark:bg-emerald-500 text-white text-xs font-black tracking-[0.15em] rounded-2xl hover:shadow-2xl hover:shadow-emerald-500/30 active:scale-95 transition-all disabled:opacity-50"
         >
           <span v-if="saving">...</span>
           <span v-else>{{ category._id || category.id ? $t('common.save') : $t('common.add') }}</span>

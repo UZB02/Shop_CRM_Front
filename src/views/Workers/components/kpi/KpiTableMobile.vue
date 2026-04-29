@@ -28,24 +28,24 @@
         <!-- Grid Stats -->
         <div class="grid grid-cols-2 gap-y-4 gap-x-2 mb-4">
           <div>
-            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">{{ $t('kpi.table.net_sales') }}</span>
+            <span class="text-[9px] font-black text-slate-400 tracking-widest block mb-0.5">{{ $t('kpi.table.net_sales') }}</span>
             <span class="text-xs font-black text-emerald-500">{{ settingsStore.formatPrice(item.net_sales_amount) }}</span>
           </div>
           <div class="text-right">
-            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">{{ $t('kpi.table.returns_count') }}</span>
+            <span class="text-[9px] font-black text-slate-400 tracking-widest block mb-0.5">{{ $t('kpi.table.returns_count') }}</span>
             <span :class="['text-xs font-black', parseFloat(item.returns_amount) > 0 ? 'text-rose-500' : 'text-slate-300']">
                {{ parseFloat(item.returns_amount) > 0 ? settingsStore.formatPrice(item.returns_amount) : '-' }}
             </span>
           </div>
           <div>
-             <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">{{ $t('kpi.table.sales_count') }}</span>
+             <span class="text-[9px] font-black text-slate-400 tracking-widest block mb-0.5">{{ $t('kpi.table.sales_count') }}</span>
              <div class="flex items-center gap-2">
                 <span class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ item.sales_count }}</span>
                 <span class="text-[10px] text-slate-400">/ {{ settingsStore.formatPrice(item.sales_amount) }}</span>
              </div>
           </div>
           <div class="text-right">
-             <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">{{ $t('kpi.table.target') }}</span>
+             <span class="text-[9px] font-black text-slate-400 tracking-widest block mb-0.5">{{ $t('kpi.table.target') }}</span>
              <div class="flex flex-col items-end leading-none">
                 <span v-if="parseFloat(item.target_amount) > 0" class="text-xs font-black text-slate-700 dark:text-slate-200">
                    {{ settingsStore.formatPrice(item.target_amount) }}
@@ -62,7 +62,7 @@
                  <span class="text-[11px] font-black" :class="getCompletionColor(item.completion_pct, 'text')">
                     {{ item.completion_pct ? parseFloat(item.completion_pct).toFixed(0) + '%' : '0%' }}
                  </span>
-                 <span class="px-1.5 py-0.5 rounded-[4px] text-[8px] font-black uppercase tracking-tighter shadow-sm" :class="getSmartStatusBadge(item.completion_pct)">
+                 <span class="px-1.5 py-0.5 rounded-[4px] text-[8px] font-black tracking-tighter shadow-sm" :class="getSmartStatusBadge(item.completion_pct)">
                     {{ getSmartStatusLabel(item.completion_pct) }}
                  </span>
              </div>
@@ -83,7 +83,7 @@
     <template v-else>
       <div class="py-16 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800">
          <i class="pi pi-inbox text-3xl text-slate-200 mb-3 block"></i>
-         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('common.no_results') }}</p>
+         <p class="text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('common.no_results') }}</p>
       </div>
     </template>
   </div>

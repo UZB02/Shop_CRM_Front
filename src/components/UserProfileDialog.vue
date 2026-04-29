@@ -206,7 +206,7 @@ const onEsc = (e) => { if (e.key === 'Escape') closeModal() }
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  text-transform: ;
   color: #10b981;
   background: rgba(16, 185, 129, 0.1);
   padding: 2px 8px;
@@ -253,7 +253,7 @@ const onEsc = (e) => { if (e.key === 'Escape') closeModal() }
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
+  text-transform: ;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: all 0.2s;
@@ -287,7 +287,7 @@ const onEsc = (e) => { if (e.key === 'Escape') closeModal() }
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
+  text-transform: ;
   cursor: pointer;
   transition: all 0.15s;
 }
@@ -305,7 +305,7 @@ const onEsc = (e) => { if (e.key === 'Escape') closeModal() }
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
+  text-transform: ;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 7px;
   transition: all 0.2s;

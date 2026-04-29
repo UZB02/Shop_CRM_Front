@@ -23,7 +23,7 @@
     <!-- Total Debt Amount Badge -->
     <div class="flex items-center justify-between md:justify-end gap-3 px-4 py-2.5 bg-slate-50/50 dark:bg-slate-800/50 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800 transition-all min-w-fit">
       <div class="flex flex-col items-start md:items-end">
-        <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">
+        <span class="text-[9px] font-bold tracking-widest text-slate-400">
           {{ $t('customers.total_debt_label') || 'Umumiy Qarzdorlik' }}
         </span>
         <span class="text-xs font-semibold tracking-tight"

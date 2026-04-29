@@ -7,11 +7,11 @@
           <div class="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
             <i class="pi pi-shopping-bag text-[10px]"></i>
           </div>
-          <h3 class="text-[10px] font-black text-slate-700 dark:text-white uppercase tracking-widest truncate">{{ $t('customers.trades.title') }}</h3>
+          <h3 class="text-[10px] font-black text-slate-700 dark:text-white tracking-widest truncate">{{ $t('customers.trades.title') }}</h3>
         </div>
         <div v-if="activeTab === 'debts' && totalDebt > 0" class="flex items-center gap-2 bg-rose-500/5 px-2 py-1 rounded-lg border border-rose-500/10 self-start sm:self-auto">
-          <span class="text-[8px] font-black text-rose-500/70 uppercase tracking-widest leading-none">{{ $t('customers.details.debt') }}:</span>
-          <span class="text-[9px] font-black text-rose-600 dark:text-rose-400 uppercase leading-none">
+          <span class="text-[8px] font-black text-rose-500/70 tracking-widest leading-none">{{ $t('customers.details.debt') }}:</span>
+          <span class="text-[9px] font-black text-rose-600 dark:text-rose-400 leading-none">
             {{ formatCurrency(totalDebt) }}
           </span>
         </div>
@@ -24,7 +24,7 @@
           <div class="flex gap-0.5 bg-slate-100/50 dark:bg-slate-900/50 p-0.5 rounded-lg w-full lg:w-fit overflow-x-auto no-scrollbar border border-slate-200/50 dark:border-slate-800/50">
             <button 
               v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
-              :class="['px-4 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider transition-all outline-none whitespace-nowrap flex-1 lg:flex-none text-center', activeTab === tab.id ? 'bg-white dark:bg-slate-800 text-emerald-600 shadow-sm border border-slate-100 dark:border-slate-700' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300']"
+              :class="['px-4 py-1.5 rounded-md text-[9px] font-black tracking-wider transition-all outline-none whitespace-nowrap flex-1 lg:flex-none text-center', activeTab === tab.id ? 'bg-white dark:bg-slate-800 text-emerald-600 shadow-sm border border-slate-100 dark:border-slate-700' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300']"
             >
               {{ $t(`customers.trades.tabs.${tab.id}`) }} <span class="ml-1 opacity-50 font-black">({{ tab.count }})</span>
             </button>
@@ -40,7 +40,7 @@
                 @input="debounceApplyFilters"
                 type="text" 
                 :placeholder="$t('common.search')" 
-                class="bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50 rounded-lg pl-7 pr-3 py-1.5 text-[9px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-300 outline-none focus:border-emerald-500/50 w-full sm:w-32"
+                class="bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50 rounded-lg pl-7 pr-3 py-1.5 text-[9px] font-black tracking-wider text-slate-600 dark:text-slate-300 outline-none focus:border-emerald-500/50 w-full sm:w-32"
               />
             </div>
 
@@ -60,10 +60,10 @@
             <div class="flex items-center gap-0.5 bg-slate-100/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-slate-800/50 rounded-lg p-0.5 transition-colors flex-grow lg:flex-grow-0 justify-center">
               <div class="flex items-center px-2 py-1 gap-1.5 bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-100 dark:border-slate-700 flex-1 lg:flex-none">
                 <i class="pi pi-calendar text-[9px] text-slate-400"></i>
-                <input type="date" v-model="filters.date_from" @change="applyFilters" class="bg-transparent border-none text-[9px] font-black text-slate-600 dark:text-slate-300 outline-none w-full sm:w-auto uppercase" />
+                <input type="date" v-model="filters.date_from" @change="applyFilters" class="bg-transparent border-none text-[9px] font-black text-slate-600 dark:text-slate-300 outline-none w-full sm:w-auto " />
               </div>
               <div class="flex items-center px-2 py-1 gap-1.5 bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-100 dark:border-slate-700 flex-1 lg:flex-none">
-                <input type="date" v-model="filters.date_to" @change="applyFilters" class="bg-transparent border-none text-[9px] font-black text-slate-600 dark:text-slate-300 outline-none w-full sm:w-auto uppercase" />
+                <input type="date" v-model="filters.date_to" @change="applyFilters" class="bg-transparent border-none text-[9px] font-black text-slate-600 dark:text-slate-300 outline-none w-full sm:w-auto " />
                 <i class="pi pi-calendar text-[9px] text-slate-400"></i>
               </div>
             </div>
@@ -72,7 +72,7 @@
             <div class="flex items-center gap-2 w-full sm:w-auto">
               <div class="relative group/select flex-grow sm:flex-grow-0">
                 <select v-model="filters.payment_type" @change="applyFilters" 
-                        class="appearance-none bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50 rounded-lg pl-3 pr-7 py-1.5 text-[9px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-300 outline-none focus:border-emerald-500/50 transition-all cursor-pointer w-full sm:w-auto">
+                        class="appearance-none bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50 rounded-lg pl-3 pr-7 py-1.5 text-[9px] font-black tracking-wider text-slate-600 dark:text-slate-300 outline-none focus:border-emerald-500/50 transition-all cursor-pointer w-full sm:w-auto">
                   <option value="">{{ $t('common.all') }}</option>
                   <option value="cash">{{ $t('common.cash_label') }}</option>
                   <option value="card">{{ $t('common.card_label') }}</option>
@@ -83,7 +83,7 @@
               </div>
 
               <button @click="toggleHasDebt" 
-                      :class="['h-8 px-3 rounded-lg border text-[9px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 flex-grow sm:flex-grow-0', filters.has_debt ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-white dark:bg-slate-800 text-slate-500 border-slate-200/50 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-700']">
+                      :class="['h-8 px-3 rounded-lg border text-[9px] font-black tracking-wider transition-all flex items-center justify-center gap-1.5 flex-grow sm:flex-grow-0', filters.has_debt ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-white dark:bg-slate-800 text-slate-500 border-slate-200/50 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-700']">
                 <div :class="['w-1 h-1 rounded-full', filters.has_debt ? 'bg-white' : 'bg-slate-300 dark:bg-slate-600']"></div>
                 <span class="whitespace-nowrap">{{ $t('customers.tab_debtors') }}</span>
               </button>
@@ -100,19 +100,19 @@
       <div v-if="currentSummary" class="px-5 pb-4">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 dark:border-emerald-500/20 rounded-2xl p-3 shadow-inner">
           <div class="flex flex-col">
-            <span class="text-[8px] font-black text-emerald-500/70 uppercase tracking-widest">{{ $t('common.all') }}</span>
+            <span class="text-[8px] font-black text-emerald-500/70 tracking-widest">{{ $t('common.all') }}</span>
             <span class="text-xs font-black text-emerald-600 dark:text-emerald-400">{{ formatCurrency(currentSummary.total_amount) }}</span>
           </div>
           <div class="flex flex-col border-l border-emerald-500/10 pl-3">
-            <span class="text-[8px] font-black text-emerald-500/70 uppercase tracking-widest">{{ $t('common.net_price') }}</span>
+            <span class="text-[8px] font-black text-emerald-500/70 tracking-widest">{{ $t('common.net_price') }}</span>
             <span class="text-xs font-black text-slate-700 dark:text-slate-200">{{ formatCurrency(currentSummary.total_net) }}</span>
           </div>
           <div class="flex flex-col border-l border-emerald-500/10 pl-3">
-            <span class="text-[8px] font-black text-rose-500/70 uppercase tracking-widest">{{ $t('common.debt_label') }}</span>
+            <span class="text-[8px] font-black text-rose-500/70 tracking-widest">{{ $t('common.debt_label') }}</span>
             <span class="text-xs font-black text-rose-500">{{ formatCurrency(currentSummary.total_debt) }}</span>
           </div>
           <div class="flex flex-col border-l border-emerald-500/10 pl-3">
-            <span class="text-[8px] font-black text-emerald-500/70 uppercase tracking-widest">{{ $t('common.success') }}</span>
+            <span class="text-[8px] font-black text-emerald-500/70 tracking-widest">{{ $t('common.success') }}</span>
             <span class="text-xs font-black text-slate-700 dark:text-slate-200">{{ currentSummary.total_count }} {{ $t('customers.trades.count', { count: '' }) }}</span>
           </div>
         </div>
@@ -123,7 +123,7 @@
     <div class="flex-grow overflow-y-auto custom-scrollbar">
       <table class="w-full text-left border-separate border-spacing-y-2 px-4">
         <thead>
-          <tr class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400/80">
+          <tr class="text-[9px] font-black tracking-[0.2em] text-slate-400/80">
             <th class="px-4 py-2">{{ $t('common.date') }}</th>
             <th class="px-4 py-2">{{ $t('customers.trades.col_products') }}</th>
             <th class="px-4 py-2">{{ $t('customers.trades.col_total') }}</th>
@@ -141,7 +141,7 @@
                 <span class="text-[11px] font-black text-slate-900 dark:text-white leading-none whitespace-nowrap">
                   {{ t.created_on.split('|')[0] }}
                 </span>
-                <span class="text-[9px] font-black text-slate-400 mt-1 uppercase tracking-tighter">
+                <span class="text-[9px] font-black text-slate-400 mt-1 tracking-tighter">
                   {{ t.created_on.split('|')[1] }}
                 </span>
                 <div class="flex items-center gap-1.5 mt-2.5">
@@ -164,7 +164,7 @@
                     <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
                   </span>
                 </div>
-                <div v-if="t.items?.length > 2" class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1">
+                <div v-if="t.items?.length > 2" class="text-[8px] font-black text-slate-400 tracking-widest mt-1">
                   +{{ t.items.length - 2 }} {{ $t('common.more') }}
                 </div>
               </div>
@@ -180,7 +180,7 @@
                   <span class="text-[9px] font-black text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded-md">-{{ formatCurrency(t.discount_amount) }}</span>
                 </div>
                 <div v-if="Number(t.debt_amount) > 0" class="mt-1.5">
-                  <span class="text-[9px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-tighter bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                  <span class="text-[9px] font-black text-amber-600 dark:text-amber-400 tracking-tighter bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
                     {{ formatCurrency(t.debt_amount) }} {{ $t('common.debt_label') }}
                   </span>
                 </div>
@@ -191,7 +191,7 @@
             <td class="px-4 py-4 text-right last:rounded-r-2xl">
               <div class="flex flex-col items-end gap-2">
                 <TradeStatusBadge :status="t.payment_type" :display-label="t.status_display || t.payment_type_display" />
-                <span v-if="t.branch_name" class="flex items-center gap-1 text-[8px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">
+                <span v-if="t.branch_name" class="flex items-center gap-1 text-[8px] font-black text-slate-400 tracking-widest whitespace-nowrap">
                   <i class="pi pi-map-marker text-[7px]"></i>
                   {{ t.branch_name }}
                 </span>
@@ -206,7 +206,7 @@
 
     <div v-if="totalRecords > 0" 
          class="px-6 py-4 bg-slate-50/50 dark:bg-slate-950/20 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-      <div class="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest leading-none">
+      <div class="text-[10px] font-black text-slate-400 dark:text-slate-600 tracking-widest leading-none">
         {{ $t('workers.page_info', { current: currentPage, total: totalPages }) }}
       </div>
       <div class="flex items-center gap-1">

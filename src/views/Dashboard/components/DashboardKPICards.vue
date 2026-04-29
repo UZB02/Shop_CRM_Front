@@ -23,7 +23,7 @@
 
       <!-- Main value -->
       <div>
-        <p class="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Sof Tushum</p>
+        <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 mb-1">Sof Tushum</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(sales.total_revenue) }}</h2>
         <!-- Gross + discount -->
         <div class="flex items-center gap-2 mt-1.5">
@@ -68,13 +68,13 @@
       </div>
 
       <div>
-        <p class="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Yalpi Foyda</p>
+        <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 mb-1">Yalpi Foyda</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(sales.total_profit) }}</h2>
       </div>
 
       <!-- Expense ratio progress bar -->
       <div class="space-y-1">
-        <div class="flex justify-between text-[8px] font-black uppercase text-slate-400">
+        <div class="flex justify-between text-[8px] font-black text-slate-400">
           <span>Sof foyda</span>
           <span class="text-rose-400">{{ expenses.expense_ratio || 0 }}% xarajat</span>
         </div>
@@ -105,7 +105,7 @@
       </div>
 
       <div>
-        <p class="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Ombor Kapitali</p>
+        <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 mb-1">Ombor Kapitali</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(products.warehouse_value) }}</h2>
         <p class="text-[8px] font-bold text-slate-400 mt-1">Savat: {{ products.avg_items_per_sale }} ta/sotuv</p>
       </div>
@@ -129,9 +129,9 @@
       </div>
 
       <div>
-        <p class="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Mijozlar Bazasi</p>
+        <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 mb-1">Mijozlar Bazasi</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ customers.total || 0 }} ta</h2>
-        <p v-if="workers.total_active_workers" class="text-[8px] font-black text-emerald-500 mt-1 uppercase tracking-wider">
+        <p v-if="workers.total_active_workers" class="text-[8px] font-black text-emerald-500 mt-1 tracking-wider">
           {{ workers.total_active_workers }} ta faol sotuvchi
         </p>
       </div>

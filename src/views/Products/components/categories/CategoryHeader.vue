@@ -2,12 +2,12 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div class="min-w-0">
       <div class="flex items-center gap-2 mb-1">
-        <router-link to="/dashboard/products" class="text-[10px] font-bold text-slate-400 hover:text-emerald-500 transition-colors uppercase tracking-widest flex items-center gap-1 shrink-0">
+        <router-link to="/dashboard/products" class="text-[10px] font-bold text-slate-400 hover:text-emerald-500 transition-colors tracking-widest flex items-center gap-1 shrink-0">
           <i class="pi pi-chevron-left text-[9px]"></i>
           {{ $t('products.page_title') }}
         </router-link>
         <i class="pi pi-chevron-right text-[8px] text-slate-300 shrink-0"></i>
-        <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest truncate">{{ $t('categories.management') }}</span>
+        <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 tracking-widest truncate">{{ $t('categories.management') }}</span>
       </div>
       <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100">{{ $t('categories.management') }}</h1>
       <p class="text-xs text-slate-400 mt-0.5">{{ totalCategories || 0 }} {{ $t('categories.all') }}</p>
