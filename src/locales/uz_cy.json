@@ -94,7 +94,8 @@
     "month": "Ой",
     "average": "Ўртача",
     "loss": "Зарар",
-    "profit": "Фойда"
+    "profit": "Фойда",
+    "items": "та маҳсулот"
   },
   "notifications": {
     "unread_count": "Сизда {count} та янги хабар бор"
@@ -646,6 +647,9 @@
     "transfer": {
       "title": "Ўтказма шакллантириш",
       "create": "Ўтказма шакллантириш",
+      "items_list": "Маҳсулотлар рўйхати",
+      "new_transfer_title": "Маҳсулотни кўчириш",
+      "total_qty": "Жами миқдор",
       "receiver": "Қабул қилувчи",
       "required": "Мажбурий",
       "branch": "Филиал",

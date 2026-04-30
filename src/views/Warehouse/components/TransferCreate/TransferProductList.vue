@@ -1,151 +1,136 @@
 <template>
-  <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex flex-col min-h-0 overflow-hidden">
-
-    <!-- Panel toolbar -->
-    <div class="flex items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 shrink-0">
-      <div class="flex items-center gap-2">
-        <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ $t('warehouse.transfer.products') }}</h3>
-        <span
-          v-if="items.length"
-          class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-        >{{ items.length }}</span>
+  <div class="flex-1 flex flex-col min-h-0">
+    <!-- Panel Header -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/10 shrink-0">
+          <i class="pi pi-shopping-cart text-emerald-500 text-[10px] sm:text-xs"></i>
+        </div>
+        <div>
+          <h3 class="text-[12px] sm:text-[14px] font-black text-slate-800 dark:text-white font-outfit tracking-tight uppercase leading-none mb-1 opacity-70">{{ $t('warehouse.transfer.items_list') || 'Ro\'yxat' }}</h3>
+          <p class="text-[9px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest opacity-60">{{ items.length }} {{ $t('warehouse.transfer.products') }}</p>
+        </div>
       </div>
-      <button
-        @click="$emit('openSearch')"
-        class="flex items-center gap-1.5 h-8 px-3 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-medium hover:opacity-90 transition-all"
-      >
-        <i class="pi pi-plus text-[11px]"></i>
-        {{ $t('warehouse.transfer.add_product') }}
-      </button>
+      
+      <div v-if="items.length" class="flex items-center gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700/50 shadow-inner">
+        <span class="hidden xs:inline text-[10px] sm:text-[11px] font-black text-slate-500 uppercase tracking-widest opacity-60">{{ $t('warehouse.transfer.total_qty') || 'Jami' }}:</span>
+        <span class="text-[11px] sm:text-[13px] font-black text-slate-900 dark:text-white">{{ totalQuantity }}</span>
+      </div>
     </div>
 
-    <!-- Empty state -->
+    <!-- Empty State -->
     <div
       v-if="!items.length"
-      class="flex-1 flex flex-col items-center justify-center gap-3 text-center p-8"
+      class="flex-1 flex flex-col items-center justify-center gap-6 text-center p-8 sm:p-12 bg-white dark:bg-[#1e293b]/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 rounded-[32px] sm:rounded-[40px] shadow-sm"
     >
-      <div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-        <i class="pi pi-inbox text-2xl text-slate-300 dark:text-slate-600"></i>
+      <div class="relative">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-[24px] sm:rounded-[32px] bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center shadow-xl">
+          <i class="pi pi-inbox text-3xl sm:text-4xl text-slate-200 dark:text-slate-800"></i>
+        </div>
+        <div class="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg border-2 border-white dark:border-[#0f172a]">
+          <i class="pi pi-plus text-[8px] sm:text-[10px]"></i>
+        </div>
       </div>
-      <div>
-        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ $t('warehouse.transfer.no_items') }}</p>
-        <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{{ $t('warehouse.transfer.no_items_desc') }}</p>
+      <div class="max-w-[240px]">
+        <p class="text-[14px] sm:text-[16px] font-black text-slate-800 dark:text-white font-outfit uppercase tracking-tight">{{ $t('warehouse.transfer.no_items') }}</p>
+        <p class="text-[11px] sm:text-[13px] font-bold text-slate-400 dark:text-slate-500 mt-2 leading-relaxed">{{ $t('warehouse.transfer.no_items_desc') }}</p>
       </div>
-      <button
-        @click="$emit('openSearch')"
-        class="flex items-center gap-1.5 h-8 px-4 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-500 dark:text-slate-400 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
-      >
-        <i class="pi pi-plus text-xs"></i>
-        {{ $t('warehouse.transfer.add_product') }}
-      </button>
     </div>
 
-    <!-- Products table -->
-    <div v-else class="flex-1 overflow-y-auto no-scrollbar">
-      <table class="w-full text-sm text-left">
-        <thead class="sticky top-0 z-10">
-          <tr class="bg-slate-50/90 dark:bg-slate-800/90 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800">
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide w-8">#</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('warehouse.transfer.col_product') }}</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('warehouse.transfer.col_barcode') }}</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-center w-36">{{ $t('warehouse.transfer.col_available') }}</th>
-            <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-center w-36">{{ $t('warehouse.transfer.col_quantity') }}</th>
-            <th class="px-5 py-3 w-12"></th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-50 dark:divide-slate-800/60">
-          <tr
+    <!-- Product Cards Scroll Area -->
+    <div v-else class="flex-1 overflow-y-auto no-scrollbar pr-1 sm:pr-2 pb-10">
+      <div class="grid grid-cols-1 gap-2.5 sm:gap-3">
+        <TransitionGroup name="list">
+          <div
             v-for="(item, idx) in items"
-            :key="idx"
-            class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
+            :key="item.product.id || item.product.product_id"
+            class="group relative bg-white dark:bg-[#1e293b]/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-2.5 sm:p-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
           >
-            <td class="px-5 py-3.5 text-xs text-slate-400">{{ idx + 1 }}</td>
-            <td class="px-5 py-3.5">
-              <div class="flex items-center gap-2">
-                <span class="font-medium text-slate-700 dark:text-slate-200">
-                  {{ item.product.product_name || item.product.name }}
-                </span>
-                <TurBadge :tur-name="item.product.tur_name" :tur-color="item.product.tur_color" />
-              </div>
-            </td>
-            <td class="px-5 py-3.5">
-              <code class="text-xs text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
-                {{ item.product.barcode || '—' }}
-              </code>
-            </td>
-            <td class="px-5 py-3.5 text-center">
-              <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
-                {{ item.product.quantity ?? '—' }}
-              </span>
-            </td>
-            <td class="px-5 py-3.5 text-center">
-              <div class="flex items-center justify-center gap-1">
-                <!-- Minus -->
-                <button
-                  @click="item.quantity = Math.max(1, Number(item.quantity) - 1)"
-                  class="w-6 h-6 rounded-md flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
-                >
-                  <i class="pi pi-minus text-[9px]"></i>
-                </button>
-                <input
-                  v-model="item.quantity"
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  class="w-16 h-7 text-center text-sm font-semibold rounded-lg border transition-all outline-none"
-                  :class="item.quantity > 0
-                    ? 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400'
-                    : 'border-rose-300 dark:border-rose-500/50 bg-rose-50 dark:bg-rose-500/10 text-rose-600'"
-                />
-                <!-- Plus -->
-                <button
-                  @click="item.quantity = Number(item.quantity) + 1"
-                  class="w-6 h-6 rounded-md flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
-                >
-                  <i class="pi pi-plus text-[9px]"></i>
-                </button>
-              </div>
-            </td>
-            <td class="px-5 py-3.5 text-right">
-              <button
-                @click="$emit('remove', idx)"
-                class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-300 dark:text-slate-600 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all opacity-0 group-hover:opacity-100"
-              >
-                <i class="pi pi-trash text-xs"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            <!-- Delete Button -->
+            <button
+              @click="$emit('remove', idx)"
+              class="absolute top-2 right-2 sm:-top-1 sm:-right-1 w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-white dark:bg-slate-800 text-rose-500 shadow-xl border border-rose-100 dark:border-rose-900/50 flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all hover:bg-rose-500 hover:text-white active:scale-90 z-20"
+            >
+              <i class="pi pi-trash text-[10px]"></i>
+            </button>
 
-      <!-- Table footer summary -->
-      <div class="sticky bottom-0 px-5 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-800/60 backdrop-blur-sm flex items-center justify-between">
-        <span class="text-xs text-slate-400">
-          {{ $t('warehouse.transfer.total_items', { count: items.length }) }}
-        </span>
-        <button
-          @click="$emit('openSearch')"
-          class="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 hover:underline"
-        >
-          <i class="pi pi-plus text-[10px]"></i>
-          {{ $t('warehouse.transfer.add_more') }}
-        </button>
+            <!-- Product Info -->
+            <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 pr-8 sm:pr-0">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center overflow-hidden shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-500">
+                <img v-if="item.product.image" :src="item.product.image" class="w-full h-full object-contain p-1" />
+                <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-lg sm:text-xl"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-0.5 sm:mb-1">
+                  <h4 class="text-[13px] sm:text-[15px] font-black text-slate-800 dark:text-white font-outfit truncate leading-tight uppercase">{{ item.product.product_name || item.product.name }}</h4>
+                </div>
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <div class="flex items-center gap-1 opacity-70">
+                    <i class="pi pi-barcode text-[9px] text-slate-400"></i>
+                    <code class="text-[10px] font-bold tracking-tight text-slate-400 truncate max-w-[80px] sm:max-w-none">{{ item.product.barcode || '—' }}</code>
+                  </div>
+                  <div class="flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
+                    <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest opacity-70">{{ $t('warehouse.transfer.col_available') }}:</span>
+                    <span class="text-[10px] sm:text-[12px] font-black text-emerald-600 dark:text-emerald-400">{{ item.product.quantity }}</span>
+                  </div>
+                  <TurBadge :tur-name="item.product.tur_name" :tur-color="item.product.tur_color" class="scale-[0.8] sm:scale-100 origin-left shrink-0" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Quantity Controls -->
+            <div class="flex items-center justify-between sm:justify-end gap-4 sm:gap-5 shrink-0 border-t sm:border-t-0 pt-2.5 sm:pt-0 border-slate-100 dark:border-slate-800/40">
+              <div class="flex flex-row sm:flex-col items-center sm:items-end gap-1.5 flex-1 sm:flex-initial">
+                <span class="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-60 hidden xs:block">{{ $t('warehouse.transfer.col_quantity') }}</span>
+                <div class="flex items-center p-0.5 bg-slate-100 dark:bg-slate-900 rounded-lg sm:rounded-xl border border-slate-200/40 dark:border-slate-800 shadow-inner group-focus-within:ring-4 group-focus-within:ring-emerald-500/5 transition-all w-full sm:w-auto justify-between">
+                  <button
+                    @click="item.quantity = Math.max(0.01, Number(item.quantity) - 1)"
+                    class="w-8 h-8 rounded-md sm:rounded-lg bg-white dark:bg-slate-700 text-slate-400 hover:text-emerald-500 shadow-sm flex items-center justify-center transition-all active:scale-90"
+                  >
+                    <i class="pi pi-minus text-[10px]"></i>
+                  </button>
+                  <input
+                    v-model="item.quantity"
+                    type="number"
+                    step="0.01"
+                    class="w-12 sm:w-14 h-8 text-center text-[12px] sm:text-[13px] font-black bg-transparent border-none outline-none focus:ring-0 text-slate-800 dark:text-white p-0"
+                  />
+                  <button
+                    @click="item.quantity = Number(item.quantity) + 1"
+                    class="w-8 h-8 rounded-md sm:rounded-lg bg-white dark:bg-slate-700 text-slate-400 hover:text-emerald-500 shadow-sm flex items-center justify-center transition-all active:scale-90"
+                  >
+                    <i class="pi pi-plus text-[10px]"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </TransitionGroup>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import TurBadge from '@/components/common/TurBadge.vue'
 
-defineProps({
-  items: Array
-});
+const props = defineProps({
+  items: { type: Array, default: () => [] }
+})
 
-defineEmits(['remove', 'openSearch']);
+defineEmits(['remove'])
+
+const totalQuantity = computed(() => {
+  return props.items.reduce((sum, item) => sum + Number(item.quantity || 0), 0)
+})
 </script>
 
 <style scoped>
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.list-enter-active, .list-leave-active { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.list-enter-from { opacity: 0; transform: translateX(-30px); }
+.list-leave-to { opacity: 0; transform: scale(0.95); }
 </style>

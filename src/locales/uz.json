@@ -94,7 +94,8 @@
     "month": "Oy",
     "average": "O'rtacha",
     "loss": "Zarar",
-    "profit": "Foyda"
+    "profit": "Foyda",
+    "items": "ta mahsulot"
   },
   "notifications": {
     "unread_count": "Sizda {count} ta yangi xabar bor"
@@ -646,6 +647,9 @@
     "transfer": {
       "title": "O'tkazma shakllantirish",
       "create": "O'tkazma shakllantirish",
+      "items_list": "Mahsulotlar ro'yxati",
+      "new_transfer_title": "Mahsulotni ko'chirish",
+      "total_qty": "Jami miqdor",
       "receiver": "Qabul qiluvchi",
       "required": "Majburiy",
       "branch": "Filial",

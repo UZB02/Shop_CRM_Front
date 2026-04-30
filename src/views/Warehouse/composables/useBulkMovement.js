@@ -81,18 +81,12 @@ export function useBulkMovement() {
         isBulk: true,
         movement_type: movement_type.value,
         note: note.value,
-        items: validItems.map(item => {
-          const data = {
-            product: item.product.id,
-            tur: item.product.tur_id || null,
-            quantity: item.quantity,
-            unit_cost: item.unit_cost || 0
-          }
-          if (item.product.tur_id) {
-            data.tur_id = item.product.tur_id
-          }
-          return data
-        })
+        items: validItems.map(item => ({
+          product: item.product.id,
+          tur_id: item.product.tur_id || null,
+          quantity: item.quantity,
+          unit_cost: item.unit_cost || 0
+        }))
       }
 
       if (isBranch) payload.branch = entityId

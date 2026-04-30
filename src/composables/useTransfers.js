@@ -121,7 +121,7 @@ export function useTransfers() {
             const payload = {
                 items: transferForm.value.items.map(item => ({
                     product: item.product.id || item.product.product_id,
-                    tur: item.product.tur_id || null,
+                    tur_id: item.product.tur_id || null,
                     quantity: item.quantity,
                     note: item.note || ''
                 })),
