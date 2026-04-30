@@ -45,6 +45,7 @@
     "subscription_expired": "Obuna muddati tugagan! To'lov qiling.",
     "no_results": "Hech nima topilmadi",
     "no_results_desc": "Hozircha hech qanday ma'lumot mavjud emas.",
+    "no_data": "Ma'lumotlar mavjud emas",
     "pay": "To'lov",
     "pay_action": "To'lov qilish",
     "required_field": "Maydonni to'ldirish shart",
