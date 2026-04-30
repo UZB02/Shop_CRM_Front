@@ -119,12 +119,17 @@ export function useTransfers() {
             // Clean up the form data: from_branch and from_warehouse - only one should be sent
             // to_branch and to_warehouse - only one should be sent
             const payload = {
-                items: transferForm.value.items.map(item => ({
-                    product: item.product.id || item.product.product_id,
-                    tur_id: item.product.tur_id || null,
-                    quantity: item.quantity,
-                    note: item.note || ''
-                })),
+                items: transferForm.value.items.map(item => {
+                    const itemData = {
+                        product: item.product.id || item.product.product_id,
+                        quantity: item.quantity,
+                        note: item.note || ''
+                    }
+                    if (item.product.has_tur && item.product.tur_id != null) {
+                        itemData.tur_id = item.product.tur_id
+                    }
+                    return itemData
+                }),
                 note: transferForm.value.note
             }
 

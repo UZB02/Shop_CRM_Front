@@ -43,19 +43,14 @@
         <TransitionGroup name="list">
           <div
             v-for="(item, idx) in items"
-            :key="item.product.id || item.product.product_id"
+            :key="`${item.product.product_id || item.product.id}_${item.product.tur_id ?? 'no-tur'}`"
             class="group relative bg-white dark:bg-[#1e293b]/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-2.5 sm:p-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
           >
             <!-- Delete Button -->
-            <button
-              @click="$emit('remove', idx)"
-              class="absolute top-2 right-2 sm:-top-1 sm:-right-1 w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-white dark:bg-slate-800 text-rose-500 shadow-xl border border-rose-100 dark:border-rose-900/50 flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all hover:bg-rose-500 hover:text-white active:scale-90 z-20"
-            >
-              <i class="pi pi-trash text-[10px]"></i>
-            </button>
+
 
             <!-- Product Info -->
-            <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 pr-8 sm:pr-0">
+            <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
               <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center overflow-hidden shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-500">
                 <img v-if="item.product.image" :src="item.product.image" class="w-full h-full object-contain p-1" />
                 <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-lg sm:text-xl"></i>
@@ -79,29 +74,54 @@
             </div>
 
             <!-- Quantity Controls -->
-            <div class="flex items-center justify-between sm:justify-end gap-4 sm:gap-5 shrink-0 border-t sm:border-t-0 pt-2.5 sm:pt-0 border-slate-100 dark:border-slate-800/40">
+            <div class="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 shrink-0 border-t sm:border-t-0 pt-2.5 sm:pt-0 border-slate-100 dark:border-slate-800/40">
               <div class="flex flex-row sm:flex-col items-center sm:items-end gap-1.5 flex-1 sm:flex-initial">
                 <span class="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-60 hidden xs:block">{{ $t('warehouse.transfer.col_quantity') }}</span>
-                <div class="flex items-center p-0.5 bg-slate-100 dark:bg-slate-900 rounded-lg sm:rounded-xl border border-slate-200/40 dark:border-slate-800 shadow-inner group-focus-within:ring-4 group-focus-within:ring-emerald-500/5 transition-all w-full sm:w-auto justify-between">
+                <div class="flex items-center p-0.5 bg-slate-100 dark:bg-slate-900 rounded-lg sm:rounded-xl border border-slate-200/40 dark:border-slate-800 shadow-inner group-focus-within:ring-4 group-focus-within:ring-emerald-500/5 transition-all w-full sm:w-auto justify-between"
+                  :class="{ 'ring-2 ring-rose-500/30 border-rose-500/30': Number(item.quantity) >= Number(item.product.quantity) }"
+                >
                   <button
-                    @click="item.quantity = Math.max(0.01, Number(item.quantity) - 1)"
-                    class="w-8 h-8 rounded-md sm:rounded-lg bg-white dark:bg-slate-700 text-slate-400 hover:text-emerald-500 shadow-sm flex items-center justify-center transition-all active:scale-90"
+                    @click="item.quantity = Math.max(1, Number(item.quantity) - 1)"
+                    :disabled="Number(item.quantity) <= 1"
+                    class="w-8 h-8 rounded-md sm:rounded-lg bg-white dark:bg-slate-700 text-slate-400 hover:text-emerald-500 shadow-sm flex items-center justify-center transition-all active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     <i class="pi pi-minus text-[10px]"></i>
                   </button>
                   <input
-                    v-model="item.quantity"
+                    v-model.number="item.quantity"
                     type="number"
-                    step="0.01"
-                    class="w-12 sm:w-14 h-8 text-center text-[12px] sm:text-[13px] font-black bg-transparent border-none outline-none focus:ring-0 text-slate-800 dark:text-white p-0"
+                    min="1"
+                    :max="item.product.quantity"
+                    step="1"
+                    @blur="item.quantity = Math.min(Math.max(1, Number(item.quantity)), Number(item.product.quantity))"
+                    @input="item.quantity = Number(item.quantity) > Number(item.product.quantity) ? Number(item.product.quantity) : Number(item.quantity)"
+                    class="w-12 sm:w-14 h-8 text-center text-[12px] sm:text-[13px] font-black bg-transparent border-none outline-none focus:ring-0 p-0 transition-colors"
+                    :class="Number(item.quantity) >= Number(item.product.quantity) ? 'text-rose-500' : 'text-slate-800 dark:text-white'"
                   />
                   <button
-                    @click="item.quantity = Number(item.quantity) + 1"
-                    class="w-8 h-8 rounded-md sm:rounded-lg bg-white dark:bg-slate-700 text-slate-400 hover:text-emerald-500 shadow-sm flex items-center justify-center transition-all active:scale-90"
+                    @click="item.quantity = Math.min(Number(item.product.quantity), Number(item.quantity) + 1)"
+                    :disabled="Number(item.quantity) >= Number(item.product.quantity)"
+                    class="relative w-8 h-8 rounded-md sm:rounded-lg bg-white dark:bg-slate-700 text-slate-400 hover:text-emerald-500 shadow-sm flex items-center justify-center transition-all active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed"
+                    :title="Number(item.quantity) >= Number(item.product.quantity) ? $t('warehouse.transfer.max_qty_reached') || 'Maksimal miqdor' : ''"
                   >
                     <i class="pi pi-plus text-[10px]"></i>
+                    <span
+                      v-if="Number(item.quantity) >= Number(item.product.quantity)"
+                      class="absolute -top-2 -right-2 text-[7px] font-black bg-rose-500 text-white rounded px-1 leading-4 tracking-wider shadow-sm"
+                    >MAX</span>
                   </button>
                 </div>
+              </div>
+
+              <!-- Action: Delete -->
+              <div class="flex items-end self-end sm:self-center">
+                <button
+                  @click="$emit('remove', idx)"
+                  class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-rose-50 dark:bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white border border-rose-100 dark:border-rose-500/20 shadow-sm transition-all flex items-center justify-center active:scale-90"
+                  title="Remove"
+                >
+                  <i class="pi pi-trash text-[14px]"></i>
+                </button>
               </div>
             </div>
           </div>

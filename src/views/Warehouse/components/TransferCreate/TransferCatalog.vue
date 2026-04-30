@@ -31,13 +31,14 @@
       <div v-else class="space-y-2">
         <div 
           v-for="product in filteredProducts" 
-          :key="product.id || product.product_id" 
-          class="group cursor-pointer"
-          @click="$emit('add', product)"
+          :key="`${product.product_id || product.id}_${product.tur_id ?? 'no-tur'}`" 
+          class="group transition-all"
+          :class="remainingQty(product) > 0 ? 'cursor-pointer' : 'opacity-40 grayscale pointer-events-none'"
+          @click="remainingQty(product) > 0 && $emit('add', product)"
         >
           <div class="flex items-center gap-4 p-2.5 rounded-xl border border-transparent hover:border-emerald-500/30 hover:bg-emerald-50/30 dark:hover:bg-emerald-950/10 transition-all duration-200 relative overflow-hidden">
             <!-- Hover Accent -->
-            <div class="absolute inset-y-0 left-0 w-1 bg-emerald-500 transform -translate-x-full group-hover:translate-x-0 transition-transform"></div>
+            <div v-if="remainingQty(product) > 0" class="absolute inset-y-0 left-0 w-1 bg-emerald-500 transform -translate-x-full group-hover:translate-x-0 transition-transform"></div>
 
             <!-- Mini Thumb -->
             <div class="relative shrink-0">
@@ -57,16 +58,28 @@
             <div class="flex-1 min-w-0">
               <h5 class="text-[13px] font-black text-slate-700 dark:text-slate-300 truncate tracking-tight font-outfit">{{ product.product_name || product.name }}</h5>
               <div class="flex items-center gap-2 mt-1">
-                <div class="flex items-center gap-1 opacity-60">
-                  <i class="pi pi-database text-[10px] text-emerald-500"></i>
-                  <span class="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter">{{ product.quantity }}</span>
+                <!-- Remaining stock badge -->
+                <div class="flex items-center gap-1 opacity-70">
+                  <i class="pi pi-database text-[10px]"
+                    :class="remainingQty(product) === 0 ? 'text-rose-400' : remainingQty(product) <= product.quantity * 0.2 ? 'text-amber-500' : 'text-emerald-500'"
+                  ></i>
+                  <span class="text-[11px] font-black uppercase tracking-tighter"
+                    :class="remainingQty(product) === 0 ? 'text-rose-500' : remainingQty(product) <= product.quantity * 0.2 ? 'text-amber-500 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'"
+                  >{{ remainingQty(product) }}</span>
+                  <span v-if="getItemQty(product) > 0" class="text-[9px] text-slate-400 font-bold">({{ $t('common.from') || 'dan' }} {{ product.quantity }})</span>
                 </div>
                 <TurBadge v-if="product.tur_name" :tur-name="product.tur_name" :tur-color="product.tur_color" class="scale-[0.7] origin-left" />
               </div>
             </div>
 
-            <div class="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-slate-300 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm active:scale-90">
+            <div 
+              v-if="remainingQty(product) > 0" 
+              class="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-slate-300 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm active:scale-90"
+            >
               <i class="pi pi-plus text-[10px]"></i>
+            </div>
+            <div v-else class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20 flex items-center justify-center">
+              <i class="pi pi-times text-[10px] text-rose-400"></i>
             </div>
           </div>
         </div>
@@ -90,12 +103,18 @@ const emit = defineEmits(['add'])
 const searchQuery = ref('')
 
 const getItemQty = (product) => {
-  const pId = product.id || product.product_id
+  const pId = product.product_id || product.id
   const item = props.items.find(i => {
-    const iPId = i.product.id || i.product.product_id
+    const iPId = i.product.product_id || i.product.id
     return iPId === pId && i.product.tur_id === product.tur_id
   })
   return item ? item.quantity : 0
+}
+
+// Qolgan mavjud miqdor = bazadagi miqdor − tanlangan miqdor
+const remainingQty = (product) => {
+  const selected = getItemQty(product)
+  return Math.max(0, Number(product.quantity) - Number(selected))
 }
 
 const filteredProducts = computed(() => {

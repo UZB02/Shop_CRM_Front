@@ -58,18 +58,20 @@ export function useTransferCreate() {
   })
 
   const addProduct = (p) => {
+    const newPId = p.product_id || p.id
     const existing = transferForm.value.items.find(i => {
       const pId = i.product.product_id || i.product.id
-      const newPId = p.product_id || p.id
       return pId === newPId && i.product.tur_id === p.tur_id
     })
     if (existing) {
+      // Mavjud miqdordan oshmaslik uchun himoya
+      const maxQty = Number(p.quantity)
+      if (Number(existing.quantity) >= maxQty) return
       existing.quantity = Number(existing.quantity) + 1
     } else {
-      transferForm.value.items.push({ product: p, quantity: 1, note: '' })
+      if (Number(p.quantity) <= 0) return
+      transferForm.value.items.push({ product: { ...p }, quantity: 1, note: '' })
     }
-    showProductSelect.value = false
-    productSearch.value = ''
   }
 
   const removeItem = (idx) => {
@@ -82,7 +84,21 @@ export function useTransferCreate() {
       const res = await api.getById(entityId)
       if (res.data) {
         sourceName.value = res.data.name
-        availableProducts.value = res.data.products || []
+        const rawProducts = res.data.products || []
+        const aggregated = []
+        rawProducts.forEach(p => {
+          const pId = p.product_id || p.id
+          const existing = aggregated.find(a => {
+            const aId = a.product_id || a.id
+            return aId === pId && a.tur_id === p.tur_id
+          })
+          if (existing) {
+            existing.quantity = Number(existing.quantity) + Number(p.quantity)
+          } else {
+            aggregated.push({ ...p })
+          }
+        })
+        availableProducts.value = aggregated
         if (isBranch.value) {
           transferForm.value.from_branch = entityId
           transferForm.value.from_warehouse = null

@@ -90,12 +90,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between px-2 py-0.5">
-          <span class="text-[11px] sm:text-[12px] font-bold text-slate-400">{{ $t('warehouse.transfer.products') }}</span>
-          <div class="px-2 sm:px-2.5 py-1 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[11px] sm:text-[12px] font-black">
-            {{ transferForm.items.length }}
-          </div>
-        </div>
+
       </div>
 
       <!-- Validation Errors -->
