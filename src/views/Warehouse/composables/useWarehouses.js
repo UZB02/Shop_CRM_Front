@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { useToast } from 'primevue/usetoast'
-import { useConfirm } from 'primevue/useconfirm'
+import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { useI18n } from 'vue-i18n'
 import { warehousesAPI } from '@/services/api'
 import { useNotificationStore } from '@/store/notifications'

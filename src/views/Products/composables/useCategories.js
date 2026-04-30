@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
-import { useConfirm } from 'primevue/useconfirm'
+import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { categoriesAPI, warehousesAPI } from '@/services/api'
 
 export function useCategories(loadProductsCallback) {

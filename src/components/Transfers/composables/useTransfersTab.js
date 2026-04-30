@@ -1,5 +1,5 @@
 import { ref, computed, watch } from 'vue'
-import { useConfirm } from 'primevue/useconfirm'
+import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { useTransfers } from '@/composables/useTransfers'
 import i18n from '@/i18n'
 

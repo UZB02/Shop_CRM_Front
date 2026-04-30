@@ -95,7 +95,8 @@
     "average": "Ўртача",
     "loss": "Зарар",
     "profit": "Фойда",
-    "items": "та маҳсулот"
+    "items": "та маҳсулот",
+    "from": "дан"
   },
   "notifications": {
     "unread_count": "Сизда {count} та янги хабар бор"

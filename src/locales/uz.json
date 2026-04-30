@@ -95,7 +95,8 @@
     "average": "O'rtacha",
     "loss": "Zarar",
     "profit": "Foyda",
-    "items": "ta mahsulot"
+    "items": "ta mahsulot",
+    "from": "dan"
   },
   "notifications": {
     "unread_count": "Sizda {count} ta yangi xabar bor"

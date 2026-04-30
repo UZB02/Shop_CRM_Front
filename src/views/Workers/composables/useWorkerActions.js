@@ -2,7 +2,7 @@ import { ref, toRaw } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { workersAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
-import { useConfirm } from 'primevue/useconfirm'
+import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { useNotificationStore } from '@/store/notifications'
 import { ROLE_PERMISSIONS } from './useWorkerForm'
 

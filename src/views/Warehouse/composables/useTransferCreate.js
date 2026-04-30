@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { warehousesAPI, branchesAPI } from '@/services/api'
 import { useTransfers } from '@/composables/useTransfers'
@@ -8,6 +8,9 @@ export function useTransferCreate() {
   const router = useRouter()
   const entityId = route.params.id
   const isBranch = computed(() => route.path.includes('/branches/'))
+
+  // LocalStorage kaliti — har bir filial/ombor uchun alohida
+  const STORAGE_KEY = `transfer_create_${isBranch.value ? 'branch' : 'wh'}_${entityId}`
 
   const targetType = ref('branch')
   const showProductSelect = ref(false)
@@ -23,6 +26,37 @@ export function useTransferCreate() {
     fetchLocations,
     createTransfer
   } = useTransfers()
+
+  // LocalStorage dan tiklash
+  const _restoreFromStorage = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+      if (saved.items?.length) {
+        transferForm.value.items = saved.items
+        transferForm.value.note = saved.note || ''
+        transferForm.value.to_branch = saved.to_branch || null
+        transferForm.value.to_warehouse = saved.to_warehouse || null
+        targetType.value = saved.targetType || 'branch'
+      }
+    } catch (e) { /* ignore */ }
+  }
+  _restoreFromStorage()
+
+  // O'zgarishlarni avtomatik saqlash
+  watch(
+    [() => transferForm.value.items, () => transferForm.value.note,
+     () => transferForm.value.to_branch, () => transferForm.value.to_warehouse, targetType],
+    () => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        items: transferForm.value.items,
+        note: transferForm.value.note,
+        to_branch: transferForm.value.to_branch,
+        to_warehouse: transferForm.value.to_warehouse,
+        targetType: targetType.value
+      }))
+    },
+    { deep: true }
+  )
 
   const isValid = computed(() => {
     const hasTarget = targetType.value === 'branch'
@@ -117,21 +151,24 @@ export function useTransferCreate() {
   const submitTransfer = async () => {
     if (!isValid.value) return
     stockErrors.value = null
-    
+
     const result = await createTransfer()
-    
+
     if (result === true) {
+      localStorage.removeItem(STORAGE_KEY)
       router.back()
     } else if (result && result.validationErrors) {
       stockErrors.value = result.validationErrors
     }
   }
 
+  // Faqat "Bekor qilish" tugmasi bosilganda chaqiriladi
   const resetForm = () => {
     transferForm.value.items = []
     transferForm.value.note = ''
     transferForm.value.to_branch = null
     transferForm.value.to_warehouse = null
+    localStorage.removeItem(STORAGE_KEY)
   }
 
   return {

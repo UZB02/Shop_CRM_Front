@@ -17,7 +17,7 @@
         closeButton: { class: 'hover:bg-white/10 rounded-full transition-colors w-8 h-8 flex items-center justify-center p-0' },
         closeIcon: { class: 'text-sm' }
     }" />
-    <ConfirmDialog pt:root:class="!rounded-2xl !border-none !shadow-2xl !bg-white dark:!bg-slate-900" />
+    <AppConfirm />
     <SubscriptionBarrier />
 
     <!-- MOBILE OVERLAY -->
@@ -82,8 +82,8 @@ import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { RouterView } from 'vue-router'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
-import ConfirmDialog from 'primevue/confirmdialog'
-import { useConfirm } from 'primevue/useconfirm'
+import AppConfirm from '@/components/common/AppConfirm.vue'
+import { useConfirmStore } from '@/store/confirm'
 import { useDashboardLayout } from './composables/useDashboardLayout'
 import { useNotificationStore } from '@/store/notifications'
 
@@ -94,7 +94,7 @@ import UserProfileDialog from '@/components/UserProfileDialog.vue'
 import SubscriptionBarrier from '@/components/SubscriptionBarrier.vue'
 import CalculatorWidget from '@/components/CalculatorWidget.vue'
 
-const confirm = useConfirm()
+const confirmStore = useConfirmStore()
 const toast = useToast()
 const { 
   router, t, locale, setLang,
@@ -213,7 +213,7 @@ const handleLogout = () => {
   isConfirmingLogout.value = true
   showProfileDialog.value = false
   
-  confirm.require({
+  confirmStore.require({
     message: t('common.logout_confirm') || 'Tizimdan chiqishni tasdiqlaysizmi?',
     header: t('common.logout_title') || 'Chiqish',
     icon: 'pi pi-exclamation-triangle',

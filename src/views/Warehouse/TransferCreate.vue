@@ -6,7 +6,7 @@
       :source-name="sourceName"
       :loading="subLoading"
       :is-valid="isValid"
-      @back="router.back()"
+      @back="handleCancel"
       @submit="submitTransfer"
     />
 
@@ -212,8 +212,12 @@ const {
 onMounted(() => {
   fetchLocations()
   loadSourceData()
-  resetForm()
 })
+
+const handleCancel = () => {
+  resetForm()
+  router.back()
+}
 </script>
 
 <style scoped>
