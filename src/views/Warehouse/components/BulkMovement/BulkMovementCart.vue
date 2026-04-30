@@ -89,27 +89,30 @@
         <div 
           v-for="(item, index) in items" 
           :key="index"
-          class="bg-white dark:bg-[#1e293b]/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-3 flex items-center gap-3 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden"
+          class="bg-white dark:bg-[#1e293b]/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden"
         >
-          <!-- Left: Image -->
-          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0 border border-slate-100 dark:border-slate-800 shadow-inner">
-            <img v-if="item.product.image" :src="item.product.image" class="w-full h-full object-cover" />
-            <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-lg"></i>
-          </div>
+          <!-- Left/Top: Image & Info -->
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <!-- Image -->
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0 border border-slate-100 dark:border-slate-800 shadow-inner">
+              <img v-if="item.product.image" :src="item.product.image" class="w-full h-full object-cover" />
+              <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-lg"></i>
+            </div>
 
-          <!-- Center: Product Info (Flexible) -->
-          <div class="flex-1 min-w-0 py-1">
-            <h4 class="text-[13px] font-black text-slate-800 dark:text-white truncate font-outfit mb-0.5 leading-tight">
-              {{ item.product.name }}
-            </h4>
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <TurBadge v-if="item.product.tur_name" :tur-name="item.product.tur_name" :tur-color="item.product.tur_color" class="scale-[0.75] origin-left shrink-0" />
-              <span class="text-[9px] font-bold text-slate-400 tracking-tighter italic opacity-60 truncate">{{ item.product.barcode }}</span>
+            <!-- Info -->
+            <div class="flex-1 min-w-0 py-0.5">
+              <h4 class="text-[13px] font-black text-slate-800 dark:text-white truncate font-outfit mb-0.5 leading-tight">
+                {{ item.product.name }}
+              </h4>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <TurBadge v-if="item.product.tur_name" :tur-name="item.product.tur_name" :tur-color="item.product.tur_color" class="scale-[0.75] origin-left shrink-0" />
+                <span class="text-[9px] font-bold text-slate-400 tracking-tighter italic opacity-60 truncate">{{ item.product.barcode }}</span>
+              </div>
             </div>
           </div>
 
-          <!-- Right: Controls (Compact Group) -->
-          <div class="flex items-center gap-2 shrink-0">
+          <!-- Right/Bottom: Controls (Full width on mobile) -->
+          <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800/40 pt-2 sm:pt-0">
             <!-- Qty -->
             <div class="flex items-center bg-slate-100 dark:bg-slate-900 rounded-lg p-0.5 border border-slate-200/40 dark:border-slate-800 shadow-inner">
               <button @click="$emit('update-qty', index, item.quantity - 1)" class="w-7 h-7 flex items-center justify-center rounded-md bg-white dark:bg-slate-700 text-slate-400 hover:text-emerald-500 transition-colors">
@@ -126,21 +129,22 @@
               </button>
             </div>
 
-            <!-- Price -->
-            <div v-if="type === 'in'" class="relative w-24 sm:w-28">
-              <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[7px] font-black text-slate-400 tracking-widest">UZS</span>
-              <input 
-                type="number" 
-                :value="item.unit_cost" 
-                @input="$emit('update-price', index, parseFloat($event.target.value) || 0)" 
-                class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200/40 dark:border-slate-800 rounded-lg pl-8 pr-2 h-8 text-[12px] font-black text-right text-slate-800 dark:text-white focus:ring-2 focus:ring-emerald-500/20 shadow-inner transition-all" 
-              />
-            </div>
+            <!-- Price & Actions -->
+            <div class="flex items-center gap-2">
+              <div v-if="type === 'in'" class="relative w-24 sm:w-28">
+                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[7px] font-black text-slate-400 tracking-widest uppercase">UZS</span>
+                <input 
+                  type="number" 
+                  :value="item.unit_cost" 
+                  @input="$emit('update-price', index, parseFloat($event.target.value) || 0)" 
+                  class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200/40 dark:border-slate-800 rounded-lg pl-8 pr-2 h-8 text-[12px] font-black text-right text-slate-800 dark:text-white focus:ring-2 focus:ring-emerald-500/20 shadow-inner transition-all" 
+                />
+              </div>
 
-            <!-- Remove -->
-            <button @click="$emit('remove', index)" class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-900/20 text-rose-400 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center">
-              <i class="pi pi-trash text-xs"></i>
-            </button>
+              <button @click="$emit('remove', index)" class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-900/20 text-rose-400 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center">
+                <i class="pi pi-trash text-xs"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
