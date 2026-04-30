@@ -86,7 +86,14 @@
     "total": "Жами",
     "return": "Қайтариш",
     "returns": "Қайтаришлар",
-    "reason": "Сабаб"
+    "reason": "Сабаб",
+    "year": "йил",
+    "analytics": "Таҳлил",
+    "export": "Экспорт",
+    "month": "Ой",
+    "average": "Ўртача",
+    "loss": "Зарар",
+    "profit": "Фойда"
   },
   "notifications": {
     "unread_count": "Сизда {count} та янги хабар бор"
@@ -1296,7 +1303,8 @@
       "load_error": "Маълумотларни юклашда хатолик"
     },
     "payment_method": "Тўлов усули",
-    "expenses": "Харажатлар таҳлили"
+    "expenses": "Харажатлар таҳлили",
+    "months_tip": "1,2,3... шаклида киритинг"
   },
   "reports": {
     "title": "Молия ва ҳисоботлар",
@@ -1318,7 +1326,10 @@
     "export_pdf": "Pdfга юклаш",
     "wastage_export": "Исрофлар Excel",
     "filters": "Ҳисобот филтрлар",
-    "analytics": "Аналитика"
+    "analytics": "Аналитика",
+    "summary": "хулосаси",
+    "profit_loss_desc": "Бизнесингизнинг молиявий соғлиғи ҳисоботи.",
+    "monthly_distribution": "Ойлик молиявий тақсимот"
   },
   "turlar": {
     "title": "Маҳсулот турлари",

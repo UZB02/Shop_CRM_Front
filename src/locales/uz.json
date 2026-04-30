@@ -86,7 +86,14 @@
     "optional": "Ixtiyoriy",
     "payments": "To'lovlar",
     "history": "Tarix",
-    "stats": "Statistika"
+    "stats": "Statistika",
+    "year": "yil",
+    "analytics": "Tahlil",
+    "export": "Eksport",
+    "month": "Oy",
+    "average": "O'rtacha",
+    "loss": "Zarar",
+    "profit": "Foyda"
   },
   "notifications": {
     "unread_count": "Sizda {count} ta yangi xabar bor"
@@ -1319,7 +1326,8 @@
       "updated": "Xarajat yangilandi",
       "deleted": "Xarajat o'chirildi",
       "load_error": "Ma'lumotlarni yuklashda xatolik"
-    }
+    },
+    "months_tip": "1,2,3... shaklida kiriting"
   },
   "reports": {
     "title": "Moliya va hisobotlar",
@@ -1341,7 +1349,10 @@
     "export_excel": "Excelga yuklash",
     "export_pdf": "Pdfga yuklash",
     "wastage_export": "Isroflar Excel",
-    "filters": "Hisobot filtrlar"
+    "filters": "Hisobot filtrlar",
+    "summary": "xulosasi",
+    "profit_loss_desc": "Biznesingizning moliyaviy sog'lig'i hisoboti.",
+    "monthly_distribution": "Oylik moliyaviy taqsimot"
   },
   "turlar": {
     "title": "Mahsulot turlari",

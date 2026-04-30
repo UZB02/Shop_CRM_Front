@@ -7,12 +7,12 @@
           
           <div class="flex items-center gap-1.5 mb-2 relative z-10">
             <div :class="['w-1.5 h-1.5 rounded-full', card.glow]"></div>
-            <p class="text-[9px] font-bold tracking-widest text-slate-400">{{ t(card.label) }}</p>
+            <p class="text-[11px] font-bold tracking-widest text-slate-400">{{ t(card.label) }}</p>
           </div>
 
           <div class="flex items-end justify-between relative z-10">
-             <h3 :class="['text-lg font-bold tracking-tight truncate', card.color]">{{ card.value }}</h3>
-             <span v-if="card.sub" class="text-[8px] font-black tracking-widest text-slate-400 bg-slate-50 dark:bg-slate-800 flex items-center px-1.5 py-0.5 rounded-md border border-slate-100 dark:border-slate-800">
+             <h3 :class="['text-xl font-bold tracking-tight truncate', card.color]">{{ card.value }}</h3>
+             <span v-if="card.sub" class="text-[10px] font-black tracking-widest text-slate-400 bg-slate-50 dark:bg-slate-800 flex items-center px-1.5 py-0.5 rounded-md border border-slate-100 dark:border-slate-800">
                {{ card.sub }}
              </span>
           </div>
@@ -24,17 +24,17 @@
       <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 shadow-sm flex flex-col h-full">
           <div class="flex items-center justify-between mb-6">
              <div>
-                <h3 class="text-[9px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.profit_loss') }} Flux</h3>
-                <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ props.data.year }} {{ t('common.year') }} {{ t('reports.summary') }}</p>
+                <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.profit_loss') }} Flux</h3>
+                <p class="text-base font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ props.data.year }} {{ t('common.year') }} {{ t('reports.summary') }}</p>
              </div>
              <div class="flex gap-4">
                 <div class="flex items-center gap-2">
                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm"></div>
-                   <span class="text-[9px] font-bold tracking-widest text-slate-400">Net Profit</span>
+                   <span class="text-[11px] font-bold tracking-widest text-slate-400">{{ t('finance.net_profit') }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                    <div class="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700"></div>
-                   <span class="text-[9px] font-bold tracking-widest text-slate-400">Revenue</span>
+                   <span class="text-[11px] font-bold tracking-widest text-slate-400">{{ t('finance.revenue') }}</span>
                 </div>
              </div>
           </div>
@@ -50,12 +50,12 @@
           </div>
           
           <div class="relative z-10">
-            <h4 class="text-[9px] font-black tracking-widest opacity-80 mb-6 border-b border-white/10 pb-2">{{ t('common.analytics') }}</h4>
+            <h4 class="text-[11px] font-black tracking-widest opacity-80 mb-6 border-b border-white/10 pb-2">{{ t('common.analytics') }}</h4>
             <div class="space-y-6">
                <div v-for="metric in metrics" :key="metric.label" class="flex flex-col gap-1">
                   <div class="flex items-center justify-between">
-                    <span class="text-[9px] font-bold tracking-widest opacity-70">{{ t(metric.label) }}</span>
-                    <div v-if="metric.trend" :class="['flex items-center gap-1 text-[8px] font-black px-1.5 py-0.5 rounded-md bg-white/10', metric.trend > 0 ? 'text-white' : 'text-rose-200']">
+                    <span class="text-[11px] font-bold tracking-widest opacity-70">{{ t(metric.label) }}</span>
+                    <div v-if="metric.trend" :class="['flex items-center gap-1 text-[10px] font-black px-1.5 py-0.5 rounded-md bg-white/10', metric.trend > 0 ? 'text-white' : 'text-rose-200']">
                       <i :class="['pi', metric.trend > 0 ? 'pi-arrow-up-right' : 'pi-arrow-down-right']"></i>
                       {{ Math.abs(metric.trend) }}%
                     </div>
@@ -69,8 +69,8 @@
           </div>
 
           <div class="mt-6 pt-4 border-t border-white/10 relative z-10">
-            <p class="text-[10px] font-medium opacity-80 leading-relaxed italic">
-              Biznesingizning moliyaviy sog'lig'i hisoboti.
+            <p class="text-xs font-medium opacity-80 leading-relaxed italic">
+              {{ t('reports.profit_loss_desc') }}
             </p>
           </div>
        </div>
@@ -81,9 +81,9 @@
        <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between bg-slate-50/30 dark:bg-slate-800/20">
           <div class="flex items-center gap-2">
             <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
-            <span class="text-[10px] font-bold tracking-widest text-slate-500">Oylik moliyaviy taqsimot</span>
+            <span class="text-xs font-bold tracking-widest text-slate-500">{{ t('reports.monthly_distribution') }}</span>
           </div>
-          <button class="text-[9px] font-bold tracking-widest text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-2">
+          <button class="text-xs font-bold tracking-widest text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-2">
             <i class="pi pi-download"></i>
             {{ t('common.export') }}
           </button>
@@ -91,19 +91,19 @@
        <div class="overflow-x-auto max-h-[500px] custom-scrollbar overflow-y-auto">
           <table class="w-full text-left border-collapse">
              <thead>
-                <tr class="text-[9px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
-                   <th class="px-4 py-3">Oy</th>
+                <tr class="text-[11px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
+                   <th class="px-4 py-3">{{ t('common.month') }}</th>
                    <th class="px-4 py-3 text-right">{{ t('finance.revenue') }}</th>
-                   <th class="px-4 py-3 text-right">COGS</th>
-                   <th class="px-4 py-3 text-right">Yalpi Foyda</th>
-                   <th v-if="settingsStore.isWastageEnabled" class="px-4 py-3 text-right">Zarar (Isrof)</th>
-                   <th class="px-4 py-3 text-right">Xarajatlar</th>
-                   <th class="px-4 py-3 text-right">Sof Foyda</th>
-                   <th class="px-4 py-3 text-center">Margin %</th>
+                   <th class="px-4 py-3 text-right">{{ t('finance.cogs') }}</th>
+                   <th class="px-4 py-3 text-right">{{ t('finance.gross_profit') }}</th>
+                   <th v-if="settingsStore.isWastageEnabled" class="px-4 py-3 text-right">{{ t('finance.wastage_loss') }}</th>
+                   <th class="px-4 py-3 text-right">{{ t('finance.expenses') }}</th>
+                   <th class="px-4 py-3 text-right">{{ t('finance.net_profit') }}</th>
+                   <th class="px-4 py-3 text-center">{{ t('finance.margin') }} %</th>
                 </tr>
              </thead>
              <tbody class="divide-y divide-slate-50 dark:divide-slate-800/30">
-                <tr v-for="row in tableData" :key="row.month" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-all duration-300 group text-xs">
+                <tr v-for="row in tableData" :key="row.month" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-all duration-300 group text-sm">
                    <td class="px-4 py-3">
                       <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">{{ row.month_name }}</span>
                    </td>
@@ -120,7 +120,7 @@
                       </span>
                    </td>
                    <td class="px-4 py-3 text-center">
-                      <div :class="['inline-flex px-2 py-0.5 rounded-lg text-[9px] font-black transition-all', parseFloat(row.margin_pct) >= 0 ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-500']">
+                      <div :class="['inline-flex px-2 py-0.5 rounded-lg text-[11px] font-black transition-all', parseFloat(row.margin_pct) >= 0 ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-500']">
                          {{ row.margin_pct }}%
                       </div>
                    </td>
@@ -152,9 +152,9 @@ const execCards = computed(() => {
   return [
     { label: 'finance.total_revenue', value: formatPrice(sum.total_revenue || 0), color: 'text-slate-800 dark:text-white', iconBg: 'bg-slate-100 dark:bg-slate-800', icon: 'pi pi-chart-line', glow: 'bg-slate-500' },
     { label: 'finance.gross_profit', value: formatPrice(sum.total_gross_profit || 0), color: 'text-emerald-600', iconBg: 'bg-emerald-50 dark:bg-emerald-500/10', icon: 'pi pi-bolt', glow: 'bg-emerald-500' },
-    { label: 'finance.wastage_loss', value: formatPrice(sum.total_wastage_loss || 0), color: 'text-rose-500', iconBg: 'bg-rose-50 dark:bg-rose-500/10', icon: 'pi pi-trash', glow: 'bg-rose-500', sub: 'Zarar' },
+    { label: 'finance.wastage_loss', value: formatPrice(sum.total_wastage_loss || 0), color: 'text-rose-500', iconBg: 'bg-rose-50 dark:bg-rose-500/10', icon: 'pi pi-trash', glow: 'bg-rose-500', sub: t('common.loss') },
     { label: 'finance.net_profit', value: formatPrice(sum.total_net_profit || 0), color: 'text-emerald-500', iconBg: 'bg-emerald-50 dark:bg-emerald-500/10', icon: 'pi pi-wallet', glow: 'bg-emerald-400' },
-    { label: 'finance.margin', value: (sum.avg_margin_pct || 0) + '%', color: 'text-blue-600', iconBg: 'bg-blue-50 dark:bg-blue-500/10', icon: 'pi pi-percentage', glow: 'bg-blue-500', sub: "O'rtacha" }
+    { label: 'finance.margin', value: (sum.avg_margin_pct || 0) + '%', color: 'text-blue-600', iconBg: 'bg-blue-50 dark:bg-blue-500/10', icon: 'pi pi-percentage', glow: 'bg-blue-500', sub: t('common.average') }
   ]
 })
 
@@ -194,7 +194,7 @@ const chartData = computed(() => ({
       fill: true
     },
     {
-      label: 'Revenue',
+      label: t('finance.revenue'),
       data: props.data.data?.map(i => parseFloat(i.revenue)) || [],
       borderColor: 'rgba(203, 213, 225, 0.5)',
       backgroundColor: 'transparent',
@@ -229,7 +229,7 @@ const chartOptions = {
       grid: { color: 'rgba(203, 213, 225, 0.08)', drawBorder: false }, 
       ticks: { 
         color: '#94a3b8',
-        font: { size: 10, weight: '600' },
+        font: { size: 11, weight: '600' },
         callback: (val) => val >= 1000000 ? (val/1000000).toFixed(1) + 'M' : val >= 1000 ? (val/1000).toFixed(0) + 'K' : val
       } 
     },
@@ -237,7 +237,7 @@ const chartOptions = {
       grid: { display: false }, 
       ticks: { 
         color: '#94a3b8',
-        font: { size: 10, weight: '600' } 
+        font: { size: 11, weight: '600' } 
       } 
     }
   }

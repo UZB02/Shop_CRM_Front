@@ -9,8 +9,8 @@
         <input
           v-model="filters.search"
           type="text"
-          :placeholder="activeTab === 'revenue' && filters.category ? 'Mahsulot nomi...' : $t('common.search')"
-          class="w-full h-10 pl-9 pr-4 text-xs font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
+          :placeholder="activeTab === 'revenue' && filters.category ? $t('products.search_placeholder') : $t('common.search')"
+          class="w-full h-10 pl-9 pr-4 text-sm font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
         />
       </div>
 
@@ -26,7 +26,7 @@
           iconDisplay="input"
           class="w-full"
           pt:root:class="!h-10 !rounded-xl !bg-transparent !border-none transition-all"
-          pt:input:class="!w-full !h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 !bg-slate-50/50 dark:!bg-slate-800/40 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !text-xs !font-black !pl-4 !shadow-none select-none !!tracking-wider !text-slate-700 dark:!text-slate-200 placeholder:!text-slate-400"
+          pt:input:class="!w-full !h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 !bg-slate-50/50 dark:!bg-slate-800/40 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !text-sm !font-black !pl-4 !shadow-none select-none !tracking-wider !text-slate-700 dark:!text-slate-200 placeholder:!text-slate-400"
         />
       </div>
 
@@ -47,7 +47,7 @@
           fluid
           class="w-full"
           pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
-          pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !!tracking-wider"
+          pt:label:class="!text-sm !font-black !flex !items-center !py-0 !pl-9 !pr-3 !tracking-wider"
         />
       </div>
 
@@ -67,7 +67,7 @@
           :placeholder="$t('finance.group_by')"
           class="w-full"
           pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
-          pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !!tracking-wider"
+          pt:label:class="!text-sm !font-black !flex !items-center !py-0 !pl-9 !pr-3 !tracking-wider"
         />
       </div>
 
@@ -80,7 +80,7 @@
           v-model.number="filters.year"
           type="number"
           :placeholder="$t('finance.year')"
-          class="w-full h-10 pl-9 pr-4 text-xs font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
+          class="w-full h-10 pl-9 pr-4 text-sm font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
         />
       </div>
 
@@ -93,8 +93,8 @@
           v-model="filters.months"
           type="text"
           :placeholder="$t('finance.months')"
-          class="w-full h-10 pl-9 pr-4 text-xs font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
-          title="1,2,3... shaklida kiriting"
+          class="w-full h-10 pl-9 pr-4 text-sm font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
+          :title="$t('finance.months_tip')"
         />
       </div>
 
@@ -107,7 +107,7 @@
           v-model.number="filters.min_debt"
           type="number"
           :placeholder="$t('finance.min_debt')"
-          class="w-full h-10 pl-9 pr-4 text-xs font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
+          class="w-full h-10 pl-9 pr-4 text-sm font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
         />
       </div>
 
@@ -145,12 +145,12 @@
       <!-- Export Panel Toggle -->
       <button
         @click="showExport = !showExport"
-        class="h-10 px-4 rounded-xl text-[10px] font-black tracking-widest transition-all flex items-center gap-2.5 border"
+        class="h-10 px-4 rounded-xl text-xs font-black tracking-widest transition-all flex items-center gap-2.5 border"
         :class="showExport 
           ? 'text-emerald-600 bg-emerald-50 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20 shadow-lg shadow-emerald-500/5' 
           : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm'"
       >
-        <i class="pi pi-sliders-h text-[11px]"></i>
+        <i class="pi pi-sliders-h text-xs"></i>
         {{ showExport ? $t('common.close') : $t('reports.title') }}
       </button>
     </div>
@@ -167,8 +167,8 @@
       <div v-if="showExport" class="pt-4 border-t border-slate-100 dark:border-slate-800/60 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3 w-full sm:w-auto">
           <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg">
-            <i class="pi pi-filter text-[9px] text-slate-400"></i>
-            <span class="text-[9px] font-black tracking-widest text-slate-500">{{ $t('reports.title') }}</span>
+            <i class="pi pi-filter text-[11px] text-slate-400"></i>
+            <span class="text-[11px] font-black tracking-widest text-slate-500">{{ $t('reports.title') }}</span>
           </div>
           <div class="flex items-center gap-2 flex-1 sm:flex-none">
             <DatePicker
@@ -177,16 +177,16 @@
               :placeholder="$t('common.date_from')"
               class="flex-1 sm:w-36"
               pt:root:class="!h-9 !rounded-xl !border !border-slate-200 dark:!border-slate-700 bg-white dark:bg-slate-900"
-              pt:input:class="!bg-transparent !border-none !shadow-none !text-[10px] !font-black !h-full !!tracking-wider"
+              pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-black !h-full !tracking-wider"
             />
-            <span class="text-slate-300 dark:text-slate-700">to</span>
+            <span class="text-slate-300 dark:text-slate-700">-</span>
             <DatePicker
               v-model="exportFilters.date_to"
               dateFormat="yy-mm-dd"
               :placeholder="$t('common.date_to')"
               class="flex-1 sm:w-36"
               pt:root:class="!h-9 !rounded-xl !border !border-slate-200 dark:!border-slate-700 bg-white dark:bg-slate-900"
-              pt:input:class="!bg-transparent !border-none !shadow-none !text-[10px] !font-black !h-full !!tracking-wider"
+              pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-black !h-full !tracking-wider"
             />
           </div>
         </div>
@@ -194,24 +194,24 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:flex items-center gap-2.5 w-full lg:w-auto">
           <button
             @click="$emit('export', 'excel')"
-            class="h-9 px-5 rounded-xl text-[10px] font-black tracking-widest text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2.5 active:scale-95 shadow-sm"
+            class="h-9 px-5 rounded-xl text-xs font-black tracking-widest text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2.5 active:scale-95 shadow-sm"
           >
-            <i class="pi pi-file-excel text-[11px]"></i>
+            <i class="pi pi-file-excel text-xs"></i>
             Excel
           </button>
           <button
             @click="$emit('export', 'pdf')"
-            class="h-9 px-5 rounded-xl text-[10px] font-black tracking-widest text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center gap-2.5 active:scale-95 shadow-sm"
+            class="h-9 px-5 rounded-xl text-xs font-black tracking-widest text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center gap-2.5 active:scale-95 shadow-sm"
           >
-            <i class="pi pi-file-pdf text-[11px]"></i>
+            <i class="pi pi-file-pdf text-xs"></i>
             PDF
           </button>
           <button
              v-if="isManager"
              @click="$emit('export-wastage')"
-             class="col-span-2 sm:col-span-1 h-9 px-5 rounded-xl text-[10px] font-black tracking-widest text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center gap-2.5 active:scale-95 whitespace-nowrap shadow-sm"
+             class="col-span-2 sm:col-span-1 h-9 px-5 rounded-xl text-xs font-black tracking-widest text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center gap-2.5 active:scale-95 whitespace-nowrap shadow-sm"
           >
-            <i class="pi pi-trash text-[11px]"></i>
+            <i class="pi pi-trash text-xs"></i>
             {{ $t('reports.wastage_export') }}
           </button>
         </div>
@@ -261,9 +261,9 @@ const allowedPaymentMethods = computed(() => [
   border-color: rgb(51 65 85 / 0.5) !important; /* dark:border-slate-700/50 */
   color: #e2e8f0 !important; /* text-slate-200 */
   font-weight: 900 !important;
-  text-transform: !important;
+  text-transform: uppercase !important;
   letter-spacing: 0.05em !important;
-  font-size: 0.75rem !important;
+  font-size: 0.875rem !important;
   box-shadow: none !important;
 }
 
