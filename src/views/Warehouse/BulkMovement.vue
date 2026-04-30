@@ -1,3 +1,32 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useBulkMovement } from './composables/useBulkMovement'
+import BulkMovementHeader from './components/BulkMovement/BulkMovementHeader.vue'
+import BulkMovementCatalog from './components/BulkMovement/BulkMovementCatalog.vue'
+import BulkMovementCart from './components/BulkMovement/BulkMovementCart.vue'
+
+const activeTab = ref('cart') // 'cart' or 'catalog'
+
+const {
+  warehouseName,
+  products,
+  loadingProducts,
+  loadProducts,
+  saving,
+  bulkItems,
+  movement_type,
+  note,
+  validItemsCount,
+  addItem,
+  removeBulkItem,
+  updateQty,
+  updatePrice,
+  handleSave,
+  handleCancel,
+  router
+} = useBulkMovement()
+</script>
+
 <template>
   <div class="h-[calc(100vh-120px)] flex flex-col gap-6 animate-in fade-in duration-500 overflow-hidden px-4 md:px-0">
     
@@ -8,30 +37,101 @@
       :totalCount="bulkItems.length"
       :saving="saving"
       :type="movement_type"
-      @back="router.back()"
+      @back="handleCancel"
       @save="handleSave"
     />
 
-    <!-- Main Content Area: Split View -->
-    <div class="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden min-h-0">
+    <!-- Main Content Area: Responsive POS Layout -->
+    <div class="flex-1 flex overflow-hidden min-h-0 relative">
       
-      <!-- Side Config Component -->
-      <BulkMovementSidebar 
-        v-model:type="movement_type"
-        v-model:note="note"
-      />
+      <!-- Desktop & Large Tablet: Side-by-Side (Visible from LG breakpoint) -->
+      <div class="hidden lg:flex flex-1 overflow-hidden">
+        <!-- Left/Center: Selected Items (Work Area) -->
+        <section class="flex-1 h-full relative overflow-hidden flex flex-col bg-slate-50/50 dark:bg-slate-950/20">
+          <BulkMovementCart 
+            :items="bulkItems"
+            v-model:type="movement_type"
+            v-model:note="note"
+            @remove="removeBulkItem"
+            @update-qty="updateQty"
+            @update-price="updatePrice"
+            @save="handleSave"
+            :saving="saving"
+            :validCount="validItemsCount"
+          />
+        </section>
 
-      <!-- Main Items Table Component -->
-      <BulkMovementTable 
-        :items="bulkItems"
-        :products="products"
-        :loadingProducts="loadingProducts"
-        :movementType="movement_type"
-        :validCount="validItemsCount"
-        @add="addBulkItem"
-        @remove="removeBulkItem"
-        @search="loadProducts"
-      />
+        <!-- Right: Product Selector (Catalog Sidebar) -->
+        <section class="w-[420px] flex-shrink-0 h-full border-l border-slate-200/60 dark:border-slate-800/50 bg-white dark:bg-[#0f1422] flex flex-col overflow-hidden shadow-2xl">
+          <BulkMovementCatalog 
+            :items="bulkItems"
+            @add="addItem"
+            @search="loadProducts"
+          />
+        </section>
+      </div>
+
+      <!-- Mobile & Small Tablet: Tabbed Navigation (Hidden from LG breakpoint) -->
+      <div class="lg:hidden flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 overflow-hidden">
+          <transition 
+            enter-active-class="transition-all duration-300 ease-out"
+            leave-active-class="transition-all duration-200 ease-in"
+            :enter-from-class="activeTab === 'cart' ? '-translate-x-full opacity-0' : 'translate-x-full opacity-0'"
+            :leave-to-class="activeTab === 'cart' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0'"
+            mode="out-in"
+          >
+            <div :key="activeTab" class="h-full">
+              <BulkMovementCart 
+                v-if="activeTab === 'cart'"
+                :items="bulkItems"
+                v-model:type="movement_type"
+                v-model:note="note"
+                @remove="removeBulkItem"
+                @update-qty="updateQty"
+                @update-price="updatePrice"
+                @save="handleSave"
+                :saving="saving"
+                :validCount="validItemsCount"
+              />
+              <BulkMovementCatalog 
+                v-else
+                :items="bulkItems"
+                @add="addItem"
+                @search="loadProducts"
+              />
+            </div>
+          </transition>
+        </div>
+
+        <!-- Mobile Bottom Tabs -->
+        <div class="h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-around px-4 shrink-0 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-[60]">
+          <button 
+            @click="activeTab = 'cart'"
+            class="flex-1 flex flex-col items-center gap-1 transition-all relative"
+            :class="activeTab === 'cart' ? 'text-emerald-500 scale-110' : 'text-slate-400'"
+          >
+            <div class="relative">
+              <i class="pi pi-shopping-cart text-lg"></i>
+              <span v-if="validItemsCount > 0" class="absolute -top-1.5 -right-1.5 min-w-[14px] h-[14px] bg-rose-500 text-white rounded-full flex items-center justify-center text-[8px] font-black border-2 border-white dark:border-slate-900 shadow-sm">
+                {{ validItemsCount }}
+              </span>
+            </div>
+            <span class="text-[8px] font-black uppercase tracking-widest">{{ $t('warehouse.bulk.products_list') }}</span>
+          </button>
+
+          <div class="w-px h-8 bg-slate-100 dark:bg-slate-800"></div>
+
+          <button 
+            @click="activeTab = 'catalog'"
+            class="flex-1 flex flex-col items-center gap-1 transition-all"
+            :class="activeTab === 'catalog' ? 'text-emerald-500 scale-110' : 'text-slate-400'"
+          >
+            <i class="pi pi-th-large text-lg"></i>
+            <span class="text-[8px] font-black uppercase tracking-widest">{{ $t('menu.products') }}</span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Overlay Loading -->
@@ -44,29 +144,6 @@
     
   </div>
 </template>
-
-<script setup>
-import { useBulkMovement } from './composables/useBulkMovement'
-import BulkMovementHeader from './components/BulkMovement/BulkMovementHeader.vue'
-import BulkMovementSidebar from './components/BulkMovement/BulkMovementSidebar.vue'
-import BulkMovementTable from './components/BulkMovement/BulkMovementTable.vue'
-
-const {
-  warehouseName,
-  products,
-  loadingProducts,
-  loadProducts,
-  saving,
-  bulkItems,
-  movement_type,
-  note,
-  validItemsCount,
-  addBulkItem,
-  removeBulkItem,
-  handleSave,
-  router
-} = useBulkMovement()
-</script>
 
 <style scoped>
 .no-scrollbar::-webkit-scrollbar { display: none; }
