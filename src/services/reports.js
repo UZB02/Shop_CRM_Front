@@ -15,3 +15,5 @@ export const reportsAPI = {
     getTaxReport: (params) => api.get('/export/tax-report/', { params }),
     getMonthlyProfitLoss: (params) => api.get('/export/profit-loss/monthly-chart/', { params })
 }
+
+

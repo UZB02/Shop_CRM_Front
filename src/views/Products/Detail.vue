@@ -28,20 +28,20 @@
       <div class="md:col-span-8 lg:col-span-9 animate-in">
         <Tabs v-model:value="activeTab" class="!bg-transparent border-none">
             <TabList class="!bg-slate-100/80 dark:!bg-slate-800/80 !p-1 !rounded-xl !border-none !inline-flex !mb-4 overflow-x-auto hide-scrollbar max-w-full">
-                <Tab value="overview" class="!text-[10px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm whitespace-nowrap">
-                   <i class="pi pi-box mr-2 !text-[9px]"></i>
+                <Tab value="overview" class="!text-[12px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm whitespace-nowrap">
+                   <i class="pi pi-box mr-2 !text-[11px]"></i>
                    {{ $t('products.detail.tabs.overview') }}
                 </Tab>
-                <Tab value="stock" class="!text-[10px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm whitespace-nowrap">
-                   <i class="pi pi-map-marker mr-2 !text-[9px]"></i>
+                <Tab value="stock" class="!text-[12px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm whitespace-nowrap">
+                   <i class="pi pi-map-marker mr-2 !text-[11px]"></i>
                    {{ $t('products.detail.tabs.inventory') }}
                 </Tab>
-                <Tab value="financial" class="!text-[10px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm whitespace-nowrap">
-                   <i class="pi pi-dollar mr-2 !text-[9px]"></i>
+                <Tab value="financial" class="!text-[12px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm whitespace-nowrap">
+                   <i class="pi pi-dollar mr-2 !text-[11px]"></i>
                    {{ $t('products.detail.tabs.financial') }}
                 </Tab>
-                <Tab value="turlar" class="!text-[10px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm whitespace-nowrap">
-                   <i class="pi pi-tags mr-2 !text-[9px]"></i>
+                <Tab value="turlar" class="!text-[12px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm whitespace-nowrap">
+                   <i class="pi pi-tags mr-2 !text-[11px]"></i>
                    {{ $t('products.detail.tabs.turlar') }}
                 </Tab>
             </TabList>
@@ -137,3 +137,5 @@ const {
   scrollbar-width: none;
 }
 </style>
+
+

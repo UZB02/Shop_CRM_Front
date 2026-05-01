@@ -25,7 +25,7 @@
         <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-2">
           {{ warehouses.length ? $t('warehouse.no_results') : $t('warehouse.no_warehouses') }}
         </h3>
-        <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest mb-6 text-center px-4">
+        <p class="text-[12px] font-bold text-slate-400 dark:text-slate-500 tracking-widest mb-6 text-center px-4">
           {{ searchQuery ? $t('warehouse.search_no_data') : $t('warehouse.no_warehouses_desc') }}
         </p>
         <button
@@ -33,7 +33,7 @@
           v-if="searchQuery"
           class="flex items-center gap-2 h-9 px-6 rounded-lg bg-white dark:bg-slate-800 text-emerald-500 border border-slate-200 dark:border-slate-700 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm"
         >
-          <i class="pi pi-times text-[10px]"></i>
+          <i class="pi pi-times text-[12px]"></i>
           {{ $t('warehouse.clear_filter') }}
         </button>
         <button
@@ -47,7 +47,7 @@
               : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50'
           ]"
         >
-          <i :class="notificationStore.canAddWarehouse ? 'pi pi-plus' : 'pi pi-lock'" class="text-[10px]"></i>
+          <i :class="notificationStore.canAddWarehouse ? 'pi pi-plus' : 'pi pi-lock'" class="text-[12px]"></i>
           {{ $t('warehouse.add_first') }}
         </button>
       </div>
@@ -195,3 +195,5 @@ onMounted(() => loadWarehouses())
   background-color: #1e293b !important;
 }
 </style>
+
+

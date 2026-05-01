@@ -186,3 +186,5 @@ export function useWarehouseDetail() {
     openNewTransferHandler
   }
 }
+
+

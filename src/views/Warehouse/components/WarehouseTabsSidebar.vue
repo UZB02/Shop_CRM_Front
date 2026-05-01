@@ -11,7 +11,7 @@
           ? 'bg-emerald-500 text-white border-emerald-500'
           : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'"
       >
-        <i :class="['pi', tab.icon, 'text-[10px]']"></i>
+        <i :class="['pi', tab.icon, 'text-[12px]']"></i>
         {{ tab.label }}
       </button>
     </div>
@@ -40,10 +40,10 @@
           <span class="font-medium text-xs">{{ tab.label }}</span>
         </div>
         <div class="flex items-center gap-1.5">
-          <span v-if="tab.count !== undefined" class="text-[10px] font-bold px-1.5 py-0.5 rounded-md" :class="active === tab.id ? 'bg-white/20 text-white' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'">
+          <span v-if="tab.count !== undefined" class="text-[12px] font-bold px-1.5 py-0.5 rounded-md" :class="active === tab.id ? 'bg-white/20 text-white' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'">
             {{ tab.count }}
           </span>
-          <i v-if="active === tab.id" class="pi pi-chevron-right text-[8px]"></i>
+          <i v-if="active === tab.id" class="pi pi-chevron-right text-[10px]"></i>
         </div>
       </button>
     </div>
@@ -62,3 +62,5 @@ defineEmits(['select'])
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+
+

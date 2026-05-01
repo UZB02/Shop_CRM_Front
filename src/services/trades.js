@@ -32,3 +32,5 @@ export const shiftsAPI = {
     getXReport: (id) => api.get(`/shifts/${id}/x-report/`),
     export: (id) => api.get(`/export/shifts/${id}/`, { responseType: 'blob' })
 }
+
+

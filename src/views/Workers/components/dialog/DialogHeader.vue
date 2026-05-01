@@ -8,7 +8,7 @@
         <h2 class="text-sm font-semibold text-slate-800 dark:text-white leading-none tracking-tight">
           {{ isEdit ? $t('workers.actions.edit') : $t('workers.actions.add') }}
         </h2>
-        <p class="text-[10px] font-medium text-slate-400 dark:text-slate-500 mt-1 tracking-widest">
+        <p class="text-[12px] font-medium text-slate-400 dark:text-slate-500 mt-1 tracking-widest">
           {{ isEdit ? $t('workers.actions.update_desc') : $t('workers.actions.add_desc') }}
         </p>
       </div>
@@ -28,3 +28,5 @@ defineProps({
 })
 defineEmits(['close'])
 </script>
+
+

@@ -59,7 +59,7 @@
                     <i class="pi text-xs" :class="[locationIcon(t.from_location_type), t.from_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
                     <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ t.from_location_name }}</span>
                   </div>
-                  <i class="pi pi-arrow-right text-[10px] text-slate-300 dark:text-slate-600 shrink-0"></i>
+                  <i class="pi pi-arrow-right text-[12px] text-slate-300 dark:text-slate-600 shrink-0"></i>
                   <div class="flex items-center gap-1.5">
                     <i class="pi text-xs" :class="[locationIcon(t.to_location_type), t.to_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
                     <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ t.to_location_name }}</span>
@@ -134,10 +134,10 @@
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
               <span class="text-xs font-bold text-slate-900 dark:text-slate-100">#{{ t.id }}</span>
-              <span class="text-[10px] text-slate-400">{{ t.created_on }}</span>
+              <span class="text-[12px] text-slate-400">{{ t.created_on }}</span>
             </div>
             <span
-              class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-bold"
               :class="statusClass(t.status)"
             >
               {{ $t('transfers.status.' + t.status) }}
@@ -147,17 +147,17 @@
           <div class="flex items-center gap-3 mb-3">
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-1.5 mb-1">
-                <i class="pi text-[10px]" :class="[locationIcon(t.from_location_type), t.from_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
-                <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400 truncate">{{ t.from_location_name }}</span>
+                <i class="pi text-[12px]" :class="[locationIcon(t.from_location_type), t.from_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
+                <span class="text-[13px] font-medium text-slate-600 dark:text-slate-400 truncate">{{ t.from_location_name }}</span>
               </div>
               <div class="flex items-center gap-1.5">
-                <i class="pi text-[10px]" :class="[locationIcon(t.to_location_type), t.to_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
-                <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400 truncate">{{ t.to_location_name }}</span>
+                <i class="pi text-[12px]" :class="[locationIcon(t.to_location_type), t.to_location_type === 'branch' ? 'text-amber-500' : 'text-emerald-500']"></i>
+                <span class="text-[13px] font-medium text-slate-600 dark:text-slate-400 truncate">{{ t.to_location_name }}</span>
               </div>
             </div>
             <div class="flex flex-col items-end shrink-0">
-              <span class="text-[10px] font-bold text-slate-400 tracking-widest">{{ t.item_count ?? t.items?.length ?? 0 }} {{ $t('common.pcs') }}</span>
-              <span class="text-[10px] text-slate-500 dark:text-slate-500 mt-0.5">{{ t.worker_name?.split(' ')[0] }}</span>
+              <span class="text-[12px] font-bold text-slate-400 tracking-widest">{{ t.item_count ?? t.items?.length ?? 0 }} {{ $t('common.pcs') }}</span>
+              <span class="text-[12px] text-slate-500 dark:text-slate-500 mt-0.5">{{ t.worker_name?.split(' ')[0] }}</span>
             </div>
           </div>
 
@@ -166,13 +166,13 @@
             <button
               v-if="t.direction === 'in'"
               @click.stop="$emit('confirm', t)"
-              class="flex-1 h-8 rounded-lg bg-emerald-500 text-white text-[10px] font-bold tracking-widest"
+              class="flex-1 h-8 rounded-lg bg-emerald-500 text-white text-[12px] font-bold tracking-widest"
             >
               {{ $t('transfers.confirm_btn') }}
             </button>
             <button
               @click.stop="$emit('cancel', t)"
-              class="flex-1 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 text-[10px] font-bold tracking-widest border border-rose-100 dark:border-rose-500/20"
+              class="flex-1 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 text-[12px] font-bold tracking-widest border border-rose-100 dark:border-rose-500/20"
             >
               {{ $t('transfers.cancel_btn') }}
             </button>
@@ -212,3 +212,5 @@ const statusClass = (status) => {
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
 </style>
+
+

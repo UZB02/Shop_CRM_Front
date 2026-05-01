@@ -21,7 +21,7 @@
       <!-- Opening Shift Inputs -->
       <div v-if="!isClosing" class="space-y-4">
         <div class="space-y-1.5">
-          <label class="text-[11px] font-bold text-slate-400 ml-1">Boshlang'ich kassa (Naqd)</label>
+          <label class="text-[13px] font-bold text-slate-400 ml-1">Boshlang'ich kassa (Naqd)</label>
           <InputNumber 
             v-model="cashStart" 
             class="w-full sr-input"
@@ -32,7 +32,7 @@
         </div>
         <div class="p-3 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-500/10 flex items-center gap-3">
           <i class="pi pi-info-circle text-emerald-500"></i>
-          <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">
+          <span class="text-[12px] font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">
             Smena joriy filialda ({{ authStore.user?.branch_name || authStore.user?.worker?.branch_name || 'Tanlanmagan' }}) ochiladi
           </span>
         </div>
@@ -42,7 +42,7 @@
       <div v-else class="space-y-5">
         <!-- Shift Meta Info -->
         <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2.5">
-           <div class="flex justify-between items-center text-[10px] font-black tracking-wider">
+           <div class="flex justify-between items-center text-[12px] font-black tracking-wider">
              <span class="text-slate-400">Smena ID / Holati</span>
              <div class="flex items-center gap-2">
                <span class="text-slate-800 dark:text-white">#{{ shift?.id }}</span>
@@ -50,7 +50,7 @@
                <span :class="shift?.status === 'open' ? 'text-emerald-500' : 'text-slate-500'">{{ (shift?.status === 'open' ? 'OCHIQ' : 'YOPILGAN') }}</span>
              </div>
            </div>
-           <div class="flex justify-between items-center text-[10px] font-black tracking-wider">
+           <div class="flex justify-between items-center text-[12px] font-black tracking-wider">
              <span class="text-slate-400">Ochilgan vaqt:</span>
              <span class="text-slate-800 dark:text-white">{{ formatDate(shift?.opened_at || shift?.start_time || shift?.created_at) }}</span>
            </div>
@@ -60,13 +60,13 @@
         <!-- Summary Cards -->
         <div class="grid grid-cols-2 gap-3">
           <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <span class="text-[8px] font-black text-slate-400 tracking-widest block mb-1">Yakuniy Kassa</span>
+            <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">Yakuniy Kassa</span>
             <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
               {{ formatCurrency(displayCash) }}
             </span>
           </div>
           <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <span class="text-[8px] font-black text-slate-400 tracking-widest block mb-1">Naqd Qoldiq</span>
+            <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">Naqd Qoldiq</span>
             <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
               {{ formatCurrency(xReport?.net_income || shift?.net_income) }}
             </span>
@@ -78,19 +78,19 @@
            <!-- Correct Cash -->
            <div v-if="parseFloat(shift.cash_difference || 0) === 0" class="flex items-center gap-3 p-3.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl">
               <i class="pi pi-check-circle text-emerald-500 text-lg"></i>
-              <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">✅ Kassa to'g'ri (Farq yo'q)</span>
+              <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">✅ Kassa to'g'ri (Farq yo'q)</span>
            </div>
            <!-- Shortage (Kamomad) -->
            <div v-else-if="parseFloat(shift.cash_difference || 0) < 0" class="flex items-center gap-3 p-3.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-500/20 rounded-2xl">
               <i class="pi pi-exclamation-triangle text-rose-500 text-lg"></i>
-              <span class="text-[10px] font-black text-rose-600 dark:text-rose-400 tracking-wider leading-tight">
+              <span class="text-[12px] font-black text-rose-600 dark:text-rose-400 tracking-wider leading-tight">
                 ⚠️ Kassir {{ formatCurrency(Math.abs(shift.cash_difference)) }} kam
               </span>
            </div>
            <!-- Extra (Ortiqcha) -->
            <div v-else class="flex items-center gap-3 p-3.5 bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-500/20 rounded-2xl">
               <i class="pi pi-info-circle text-amber-500 text-lg"></i>
-              <span class="text-[10px] font-black text-amber-600 dark:text-amber-400 tracking-wider leading-tight">
+              <span class="text-[12px] font-black text-amber-600 dark:text-amber-400 tracking-wider leading-tight">
                 ℹ️ Kassir {{ formatCurrency(shift.cash_difference) }} ortiqcha
               </span>
            </div>
@@ -99,8 +99,8 @@
         <!-- Money Input (Only if open and trying to close) -->
         <div v-if="shift?.status === 'open'" class="space-y-2 animate-fadein">
           <div class="flex items-center justify-between ml-1 mb-1">
-            <label class="text-[10px] font-black text-slate-400 tracking-widest block">Kassada sanalgan pul</label>
-            <span v-if="settingsStore.requireCashCount" class="text-[8px] font-black text-rose-500 tracking-tighter bg-rose-50 dark:bg-rose-950/20 px-1.5 py-0.5 rounded-md border border-rose-100 dark:border-rose-800/30 animate-pulse">
+            <label class="text-[12px] font-black text-slate-400 tracking-widest block">Kassada sanalgan pul</label>
+            <span v-if="settingsStore.requireCashCount" class="text-[10px] font-black text-rose-500 tracking-tighter bg-rose-50 dark:bg-rose-950/20 px-1.5 py-0.5 rounded-md border border-rose-100 dark:border-rose-800/30 animate-pulse">
               Majburiy
             </span>
           </div>
@@ -249,3 +249,5 @@ watch(() => props.visible, (newVal) => {
   background: #0f172a;
 }
 </style>
+
+

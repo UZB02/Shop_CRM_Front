@@ -14,8 +14,8 @@
           <span v-if="isFieldDirty('max_discount_percent')" class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
         </div>
         <p class="row-desc">{{ $t('settings.payment.max_discount_desc') }}</p>
-        <p v-if="form.max_discount_percent === 0" class="text-[10px] text-emerald-500 font-bold mt-1">
-          <i class="pi pi-infinity text-[9px] mr-1"></i>
+        <p v-if="form.max_discount_percent === 0" class="text-[12px] text-emerald-500 font-bold mt-1">
+          <i class="pi pi-infinity text-[11px] mr-1"></i>
           {{ $t('settings.payment.unlimited_discount') }}
         </p>
       </div>
@@ -56,3 +56,5 @@ watch(() => [props.form.allow_cash, props.form.allow_card], ([newCash, newCard],
   }
 })
 </script>
+
+

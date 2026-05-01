@@ -9,9 +9,9 @@
       </div>
       <button 
         @click="$emit('add')"
-        class="h-9 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition-all flex items-center gap-2 text-[10px] font-black tracking-widest"
+        class="h-9 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition-all flex items-center gap-2 text-[12px] font-black tracking-widest"
       >
-        <i class="pi pi-plus text-[9px]"></i>
+        <i class="pi pi-plus text-[11px]"></i>
         {{ $t('warehouse.bulk.add_row') }}
       </button>
     </div>
@@ -21,9 +21,9 @@
       <table class="w-full text-left border-collapse table-fixed">
         <thead>
           <tr class="sticky top-0 z-10 bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-6 py-4 text-[10px] font-black text-slate-400 tracking-widest w-[45%]">{{ $t('warehouse.bulk.col_product') }}</th>
-            <th class="px-4 py-4 text-[10px] font-black text-slate-400 tracking-widest text-center w-36">{{ $t('warehouse.bulk.col_quantity') }}</th>
-            <th v-if="movementType === 'in'" class="px-4 py-4 text-[10px] font-black text-slate-400 tracking-widest text-right w-48">{{ $t('warehouse.bulk.col_price') }}</th>
+            <th class="px-6 py-4 text-[12px] font-black text-slate-400 tracking-widest w-[45%]">{{ $t('warehouse.bulk.col_product') }}</th>
+            <th class="px-4 py-4 text-[12px] font-black text-slate-400 tracking-widest text-center w-36">{{ $t('warehouse.bulk.col_quantity') }}</th>
+            <th v-if="movementType === 'in'" class="px-4 py-4 text-[12px] font-black text-slate-400 tracking-widest text-right w-48">{{ $t('warehouse.bulk.col_price') }}</th>
             <th class="px-6 py-4 w-16 text-center"></th>
           </tr>
         </thead>
@@ -39,13 +39,13 @@
                 :loading="loadingProducts"
                 @filter="onProductFilter"
                 :placeholder="$t('warehouse.bulk.product_ph')"
-                class="!w-full !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !h-11 !text-[13px] !shadow-none"
+                class="!w-full !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !h-11 !text-[15px] !shadow-none"
                 panelClass="!rounded-xl !shadow-2xl"
                 pt:label:class="!flex !items-center !py-0 !h-full"
               >
                 <template #value="slotProps">
                   <div v-if="slotProps.value" class="flex items-center gap-2">
-                    <span class="text-[13px] font-bold text-slate-700 dark:text-slate-100 truncate max-w-[200px]">
+                    <span class="text-[15px] font-bold text-slate-700 dark:text-slate-100 truncate max-w-[200px]">
                       {{ slotProps.value.name }}
                     </span>
                     <TurBadge :tur-name="slotProps.value.tur_name" :tur-color="slotProps.value.tur_color" />
@@ -61,12 +61,12 @@
                     </div>
                     <div class="flex flex-col min-w-0 flex-1">
                       <div class="flex items-center justify-between gap-2">
-                        <span class="text-[12px] font-black text-slate-700 dark:text-slate-200 truncate leading-tight">{{ slotProps.option.name }}</span>
+                        <span class="text-[14px] font-black text-slate-700 dark:text-slate-200 truncate leading-tight">{{ slotProps.option.name }}</span>
                         <TurBadge :tur-name="slotProps.option.tur_name" :tur-color="slotProps.option.tur_color" />
                       </div>
                       <div class="flex items-center gap-2 mt-1">
-                        <span class="text-[9px] font-bold text-slate-400 tracking-widest italic opacity-60">{{ slotProps.option.barcode || $t('warehouse.bulk.no_barcode') }}</span>
-                        <span v-if="slotProps.option.category_name" class="text-[9px] font-bold text-slate-300 dark:text-slate-600 tracking-widest truncate before:content-['•'] before:mr-1.5">
+                        <span class="text-[11px] font-bold text-slate-400 tracking-widest italic opacity-60">{{ slotProps.option.barcode || $t('warehouse.bulk.no_barcode') }}</span>
+                        <span v-if="slotProps.option.category_name" class="text-[11px] font-bold text-slate-300 dark:text-slate-600 tracking-widest truncate before:content-['•'] before:mr-1.5">
                           {{ slotProps.option.category_name }}
                         </span>
                       </div>
@@ -82,7 +82,7 @@
                 :minFractionDigits="0" 
                 placeholder="0"
                 class="w-full h-11"
-                inputClass="!rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !px-3 font-black !text-[13px] !text-center outline-none focus:!border-emerald-500"
+                inputClass="!rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !px-3 font-black !text-[15px] !text-center outline-none focus:!border-emerald-500"
               />
             </td>
             <td v-if="movementType === 'in'" class="px-4 py-3">
@@ -93,7 +93,7 @@
                 locale="uz-UZ"
                 placeholder="0"
                 class="w-full h-11"
-                inputClass="!rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !px-3 font-black !text-[13px] !text-right outline-none focus:!border-emerald-500"
+                inputClass="!rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-200 dark:!border-slate-700 !px-3 font-black !text-[15px] !text-right outline-none focus:!border-emerald-500"
               />
             </td>
             <td class="px-6 py-3 text-center">
@@ -111,7 +111,7 @@
             <td colspan="4" class="px-6 py-10 text-center">
               <button 
                 @click="$emit('add')"
-                class="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors tracking-[0.2em]"
+                class="text-[12px] font-black text-slate-400 hover:text-blue-500 transition-colors tracking-[0.2em]"
               >
                 <i class="pi pi-plus-circle mr-2"></i>
                 {{ $t('warehouse.bulk.new_product_tip') }}
@@ -122,7 +122,7 @@
       </table>
     </div>
 
-    <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex justify-between items-center text-[10px] font-bold text-slate-400 tracking-widest">
+    <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex justify-between items-center text-[12px] font-bold text-slate-400 tracking-widest">
         <span>{{ $t('warehouse.bulk.enter_to_add') }}</span>
         <span>{{ $t('warehouse.bulk.total_ready', { count: validCount }) }}</span>
     </div>
@@ -153,3 +153,5 @@ const onProductFilter = (event) => {
   }, 400)
 }
 </script>
+
+

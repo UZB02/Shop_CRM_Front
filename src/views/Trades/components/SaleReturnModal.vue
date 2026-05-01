@@ -24,7 +24,7 @@
               <div class="flex flex-col gap-0.5">
                 <div class="flex items-center gap-3">
                   <h2 class="text-sm font-bold text-slate-800 dark:text-white leading-none">TOVARNI QAYTARISH</h2>
-                  <span v-if="initialSale" class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-none">SAVDO #{{ initialSale.id }} ASOSIDA</span>
+                  <span v-if="initialSale" class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 text-[11px] font-bold text-slate-500 dark:text-slate-400 leading-none">SAVDO #{{ initialSale.id }} ASOSIDA</span>
                 </div>
               </div>
             </div>
@@ -33,7 +33,7 @@
               @click="close"
               class="w-8 h-8 rounded-full bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 dark:text-slate-300 flex items-center justify-center transition-all duration-200 active:scale-95 border border-transparent dark:border-white/5"
             >
-              <i class="pi pi-times text-[11px] font-bold"></i>
+              <i class="pi pi-times text-[13px] font-bold"></i>
             </button>
           </div>
 
@@ -150,3 +150,5 @@ watch(() => props.visible, (newVal) => {
 .animate-in { animation: fadeIn 0.3s ease-out; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
+
+

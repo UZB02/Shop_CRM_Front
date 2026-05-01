@@ -24,7 +24,7 @@
 
     <!-- Label -->
     <span
-      class="flex-1 text-[11px] font-bold leading-none transition-colors"
+      class="flex-1 text-[13px] font-bold leading-none transition-colors"
       :class="active ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-600 dark:text-slate-400'"
     >
       {{ $t(`workers.permissions_list.${perm.value}.label`) }}
@@ -39,3 +39,5 @@ defineProps({
 })
 defineEmits(['toggle'])
 </script>
+
+

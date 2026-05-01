@@ -29,13 +29,13 @@
             <span class="text-sm font-black tracking-widest text-emerald-500">
               {{ $t('warehouse.wastage.create_title') }}
             </span>
-            <p class="text-[9px] font-bold text-slate-400 tracking-[0.2em] mt-1">{{ $t('warehouse.detail.bulk_movement') }}</p>
+            <p class="text-[11px] font-bold text-slate-400 tracking-[0.2em] mt-1">{{ $t('warehouse.detail.bulk_movement') }}</p>
           </div>
           <button
             @click="onHide"
             class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all shadow-sm"
           >
-            <i class="pi pi-times text-[10px]"></i>
+            <i class="pi pi-times text-[12px]"></i>
           </button>
         </div>
 
@@ -49,7 +49,7 @@
               <i v-else class="pi pi-box text-xl"></i>
             </div>
             <div class="min-w-0 flex-1">
-              <p class="text-[9px] font-bold text-emerald-500 tracking-widest">{{ $t('products.col_product') }}</p>
+              <p class="text-[11px] font-bold text-emerald-500 tracking-widest">{{ $t('products.col_product') }}</p>
               <div class="flex items-center gap-2 flex-wrap">
                 <p class="text-sm font-black text-slate-800 dark:text-slate-100 truncate">{{ product?.product_name || product?.name }}</p>
                 <TurBadge :tur-name="product?.tur_name" :tur-color="product?.tur_color" />
@@ -59,7 +59,7 @@
 
           <!-- Quantity -->
           <div class="field">
-            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[12px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('products.form.amount') }} ({{ product?.product_unit || product?.unit }}) <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !form.quantity }">
@@ -72,18 +72,18 @@
                 placeholder="0.00"
                 class="flex-1 h-full w-full"
                 pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
-                pt:input:class="!bg-transparent !border-none !shadow-none !text-[15px] !font-black !h-full !pl-12 !pr-4 !w-full !outline-none !text-slate-800 dark:!text-slate-100"
+                pt:input:class="!bg-transparent !border-none !shadow-none !text-[16px] !font-black !h-full !pl-12 !pr-4 !w-full !outline-none !text-slate-800 dark:!text-slate-100"
               />
             </div>
-            <small v-if="submitted && !form.quantity" class="text-[10px] font-medium text-rose-500 ml-1 mt-1 flex items-center gap-1 animate-fade-in">
-              <i class="pi pi-exclamation-triangle text-[8px]"></i>
+            <small v-if="submitted && !form.quantity" class="text-[12px] font-medium text-rose-500 ml-1 mt-1 flex items-center gap-1 animate-fade-in">
+              <i class="pi pi-exclamation-triangle text-[10px]"></i>
               {{ $t('validation.required') }}
             </small>
           </div>
 
           <!-- Reason -->
           <div class="field">
-            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[12px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('warehouse.wastage.reason_label') }} <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all duration-300" :class="{ '!border-rose-500': submitted && !form.reason }">
@@ -96,18 +96,18 @@
                 :placeholder="$t('warehouse.wastage.reason_placeholder')"
                 class="flex-1 h-full w-full"
                 pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
-                pt:label:class="!pl-12 !pr-4 !text-[13px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
+                pt:label:class="!pl-12 !pr-4 !text-[15px] !font-semibold !flex !items-center !h-full !bg-transparent !w-full !text-slate-700 dark:!text-slate-200"
               />
             </div>
-            <small v-if="submitted && !form.reason" class="text-[10px] font-medium text-rose-500 ml-1 mt-1 flex items-center gap-1 animate-fade-in">
-              <i class="pi pi-exclamation-triangle text-[8px]"></i>
+            <small v-if="submitted && !form.reason" class="text-[12px] font-medium text-rose-500 ml-1 mt-1 flex items-center gap-1 animate-fade-in">
+              <i class="pi pi-exclamation-triangle text-[10px]"></i>
               {{ $t('validation.required') }}
             </small>
           </div>
 
           <!-- Date -->
           <div class="field">
-            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            <label class="text-[12px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
               {{ $t('common.date') }} <span class="text-rose-500">*</span>
             </label>
             <div class="custom-input-wrapper relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all duration-300">
@@ -119,14 +119,14 @@
                 iconDisplay="input"
                 class="flex-1 h-full w-full"
                 pt:root:class="!bg-transparent !border-none !shadow-none !h-full !w-full"
-                pt:input:class="!bg-transparent !border-none !shadow-none !text-[13px] !font-semibold !h-full !pl-12 !pr-4 !w-full !text-slate-700 dark:!text-slate-200"
+                pt:input:class="!bg-transparent !border-none !shadow-none !text-[15px] !font-semibold !h-full !pl-12 !pr-4 !w-full !text-slate-700 dark:!text-slate-200"
               />
             </div>
           </div>
 
           <!-- Description -->
           <div class="field">
-            <label class="text-[10px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('warehouse.detail.col_description') }}</label>
+            <label class="text-[12px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('warehouse.detail.col_description') }}</label>
             <div class="custom-input-wrapper relative group/input flex items-start rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all duration-300">
               <Textarea
                 v-model="form.description"
@@ -134,7 +134,7 @@
                 :placeholder="$t('warehouse.wastage.desc_placeholder')"
                 class="w-full h-full"
                 pt:root:class="!bg-transparent !border-none !shadow-none !w-full"
-                pt:textarea:class="!bg-transparent !border-none !shadow-none !text-[13px] !font-semibold !p-4 !px-4 !w-full !text-slate-700 dark:!text-slate-200 !outline-none !resize-none !min-h-[100px]"
+                pt:textarea:class="!bg-transparent !border-none !shadow-none !text-[15px] !font-semibold !p-4 !px-4 !w-full !text-slate-700 dark:!text-slate-200 !outline-none !resize-none !min-h-[100px]"
               />
             </div>
           </div>
@@ -342,3 +342,5 @@ watch(() => props.visible, (val) => {
   animation: fadeIn 0.2s ease-out forwards;
 }
 </style>
+
+

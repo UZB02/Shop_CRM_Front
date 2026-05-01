@@ -24,7 +24,7 @@
     <!-- Main Content Area -->
     <div v-if="dashboardStore.loading && !dashboardStore.data" class="flex flex-col items-center justify-center py-32 text-slate-400">
       <div class="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-      <p class="mt-4 font-black text-[10px] tracking-widest text-emerald-500">Ma'lumotlar tahlil qilinmoqda...</p>
+      <p class="mt-4 font-black text-[12px] tracking-widest text-emerald-500">Ma'lumotlar tahlil qilinmoqda...</p>
     </div>
 
     <div v-else-if="dashboardStore.error" class="p-12 rounded-3xl bg-rose-50 dark:bg-rose-500/5 border border-rose-100 dark:border-rose-500/20 text-center">
@@ -122,14 +122,14 @@
     <div v-if="dashboardStore.data" class="mt-6 flex flex-col md:flex-row items-center justify-between gap-4 py-4 border-t border-slate-100 dark:border-slate-800">
       <div class="flex items-center gap-2">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-        <p class="text-[9px] font-black text-slate-400 tracking-widest">Tizim holati: Barcha modullar ishlamoqda</p>
+        <p class="text-[11px] font-black text-slate-400 tracking-widest">Tizim holati: Barcha modullar ishlamoqda</p>
       </div>
       <div class="flex items-center gap-4">
-        <div v-if="smenaPolling" class="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 tracking-widest">
+        <div v-if="smenaPolling" class="flex items-center gap-1.5 text-[11px] font-black text-emerald-500 tracking-widest">
           <span class="w-1 h-1 rounded-full bg-emerald-500 animate-ping"></span>
           Smena live
         </div>
-        <p class="text-[9px] font-black text-slate-400 tracking-widest">
+        <p class="text-[11px] font-black text-slate-400 tracking-widest">
           So'nggi yangilanish: {{ formatTime(dashboardStore.lastUpdated) }}
         </p>
       </div>
@@ -207,3 +207,5 @@ onUnmounted(() => {
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
+
+

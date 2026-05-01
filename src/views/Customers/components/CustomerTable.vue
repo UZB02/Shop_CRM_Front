@@ -4,13 +4,13 @@
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800">
-            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.name') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter hidden sm:table-cell">{{ $t('customers.table.contact_address') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-center font-inter hidden md:table-cell">{{ $t('customers.table.trades') }}</th>
-            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right sm:text-left">
+            <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter">{{ $t('customers.table.name') }}</th>
+            <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter hidden sm:table-cell">{{ $t('customers.table.contact_address') }}</th>
+            <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-center font-inter hidden md:table-cell">{{ $t('customers.table.trades') }}</th>
+            <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right sm:text-left">
               {{ mode === 'debtors' ? ($t('customers.table.debt_label') || 'Qarz Miqdori') : $t('customers.table.total_spent') }}
             </th>
-            <th class="px-4 py-3 text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-right font-inter">{{ $t('customers.table.actions') }}</th>
+            <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-right font-inter">{{ $t('customers.table.actions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -32,7 +32,7 @@
                 <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3">
                   <i class="pi pi-users text-xl text-slate-400"></i>
                 </div>
-                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest">{{ $t('customers.table.no_results') }}</p>
+                <p class="text-[12px] font-black text-slate-400 dark:text-slate-500 tracking-widest">{{ $t('customers.table.no_results') }}</p>
               </td>
             </tr>
           </template>
@@ -53,12 +53,12 @@
                   <i class="pi pi-user text-sm"></i>
                 </div>
                 <div class="min-w-0">
-                  <p class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-tight group-hover/name:text-emerald-500 transition-colors truncate">{{ data.name }}</p>
+                  <p class="text-[14px] font-black text-slate-800 dark:text-slate-200 tracking-tight group-hover/name:text-emerald-500 transition-colors truncate">{{ data.name }}</p>
                   <div class="flex items-center gap-1.5 mt-0.5">
-                    <span v-if="data.group_name" class="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-[8px] font-black text-amber-600 dark:text-amber-400 tracking-widest border border-amber-500/20 truncate">
+                    <span v-if="data.group_name" class="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-[10px] font-black text-amber-600 dark:text-amber-400 tracking-widest border border-amber-500/20 truncate">
                       {{ data.group_name }}
                     </span>
-                    <span class="sm:hidden text-[10px] text-slate-400 font-medium truncate">{{ data.phone }}</span>
+                    <span class="sm:hidden text-[12px] text-slate-400 font-medium truncate">{{ data.phone }}</span>
                   </div>
                 </div>
               </div>
@@ -68,15 +68,15 @@
             <td class="px-4 py-2.5 hidden sm:table-cell">
               <div class="space-y-1">
                 <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
-                  <i class="pi pi-phone text-[9px] text-slate-400"></i>
-                  <span class="text-[11px] font-semibold tracking-tight">{{ data.phone }}</span>
+                  <i class="pi pi-phone text-[11px] text-slate-400"></i>
+                  <span class="text-[13px] font-semibold tracking-tight">{{ data.phone }}</span>
                 </div>
                 <div class="flex items-center gap-1.5 text-slate-400 dark:text-slate-500">
-                  <i class="pi pi-map-marker text-[9px]"></i>
-                  <span class="text-[10px] font-medium truncate max-w-[180px]">{{ data.address || '—' }}</span>
+                  <i class="pi pi-map-marker text-[11px]"></i>
+                  <span class="text-[12px] font-medium truncate max-w-[180px]">{{ data.address || '—' }}</span>
                 </div>
-                <div v-if="data.created_on" class="flex items-center gap-1.5 text-[9px] font-bold text-slate-400/70 tracking-wider">
-                  <i class="pi pi-calendar text-[8px]"></i>
+                <div v-if="data.created_on" class="flex items-center gap-1.5 text-[11px] font-bold text-slate-400/70 tracking-wider">
+                  <i class="pi pi-calendar text-[10px]"></i>
                   {{ data.created_on }}
                 </div>
               </div>
@@ -85,11 +85,11 @@
             <!-- Status & Trades -->
             <td class="px-4 py-2.5 text-center hidden md:table-cell">
               <div class="flex flex-col items-center gap-1.5">
-                <span class="px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest"
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black tracking-widest"
                       :class="data.status === 'active' ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : 'bg-slate-500/10 text-slate-500 border border-slate-500/20'">
                   {{ data.status_display || data.status }}
                 </span>
-                <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 text-[11px] font-black text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 text-[13px] font-black text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
                   {{ data.total_purchases_count || 0 }}
                 </span>
               </div>
@@ -99,12 +99,12 @@
             <td class="px-4 py-2.5 text-right sm:text-left">
               <div class="flex flex-col">
                 <span 
-                  class="text-[12px] font-black tracking-tighter"
+                  class="text-[14px] font-black tracking-tighter"
                   :class="mode === 'debtors' ? 'text-rose-500' : 'text-emerald-600 dark:text-emerald-400'"
                 >
                   {{ formatCurrency(mode === 'debtors' ? data.debt_balance : data.total_purchases_amount) }}
                 </span>
-                <span class="text-[8px] font-bold text-slate-400 dark:text-slate-500 mt-0.5">
+                <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 mt-0.5">
                   {{ mode === 'debtors' ? ($t('customers.table.debt_status') || 'To\'lanmagan') : $t('customers.table.total_spent_label') }}
                 </span>
               </div>
@@ -117,13 +117,13 @@
                   @click="emit('edit', data)"
                   class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/20"
                 >
-                  <i class="pi pi-pencil text-[10px]"></i>
+                  <i class="pi pi-pencil text-[12px]"></i>
                 </button>
                 <button
                   @click="emit('delete', data)"
                   class="w-8 h-8 rounded-lg flex items-center justify-center text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all border border-transparent hover:border-rose-100 dark:hover:border-rose-500/20"
                 >
-                  <i class="pi pi-trash text-[10px]"></i>
+                  <i class="pi pi-trash text-[12px]"></i>
                 </button>
               </div>
             </td>
@@ -133,20 +133,20 @@
     </div>
     <div v-if="totalRecords > 0" 
          class="px-4 py-2.5 bg-slate-50/50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-      <div class="text-[9px] font-black text-slate-400 tracking-widest">
+      <div class="text-[11px] font-black text-slate-400 tracking-widest">
         Showing {{ (currentPage-1)*pageSize + 1 }} - {{ Math.min(currentPage*pageSize, totalRecords) }} of {{ totalRecords }}
       </div>
       <div class="flex items-center gap-1">
         <button @click="currentPage--" :disabled="currentPage === 1"
                 class="w-8 h-8 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30
                        border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800">
-          <i class="pi pi-angle-left text-[10px]"></i>
+          <i class="pi pi-angle-left text-[12px]"></i>
         </button>
         
         <div class="flex items-center gap-1 mx-1">
           <template v-for="p in displayedPages" :key="p">
             <button @click="currentPage = p"
-                    class="w-8 h-8 rounded-xl text-[11px] font-black transition-all shadow-sm border focus:outline-none"
+                    class="w-8 h-8 rounded-xl text-[13px] font-black transition-all shadow-sm border focus:outline-none"
                     :class="currentPage === p 
                       ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
                       : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'">
@@ -158,7 +158,7 @@
         <button @click="currentPage++" :disabled="currentPage === totalPages"
                 class="w-8 h-8 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30
                        border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800">
-          <i class="pi pi-angle-right text-[10px]"></i>
+          <i class="pi pi-angle-right text-[12px]"></i>
         </button>
       </div>
     </div>
@@ -205,4 +205,6 @@ const formatCurrency = (val) => {
   }).format(val || 0)
 }
 </script>
+
+
 

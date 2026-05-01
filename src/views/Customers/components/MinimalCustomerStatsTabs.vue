@@ -13,9 +13,9 @@
           : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200'"
       >
         <span class="flex items-center justify-center gap-2">
-          <i :class="tab.icon" class="text-[10px]"></i>
+          <i :class="tab.icon" class="text-[12px]"></i>
           {{ tab.label }}
-          <span v-if="tab.count > 0" class="px-1.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 text-[9px] font-bold">{{ tab.count }}</span>
+          <span v-if="tab.count > 0" class="px-1.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 text-[11px] font-bold">{{ tab.count }}</span>
         </span>
       </button>
     </div>
@@ -23,7 +23,7 @@
     <!-- Total Debt Amount Badge -->
     <div class="flex items-center justify-between md:justify-end gap-3 px-4 py-2.5 bg-slate-50/50 dark:bg-slate-800/50 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800 transition-all min-w-fit">
       <div class="flex flex-col items-start md:items-end">
-        <span class="text-[9px] font-bold tracking-widest text-slate-400">
+        <span class="text-[11px] font-bold tracking-widest text-slate-400">
           {{ $t('customers.total_debt_label') || 'Umumiy Qarzdorlik' }}
         </span>
         <span class="text-xs font-semibold tracking-tight"
@@ -35,7 +35,7 @@
            :class="totalDebt > 0 
              ? 'bg-rose-50 text-rose-500 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20' 
              : 'bg-emerald-50 text-emerald-500 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20'">
-        <i :class="totalDebt > 0 ? 'pi pi-exclamation-circle' : 'pi pi-check-circle'" class="text-[10px]"></i>
+        <i :class="totalDebt > 0 ? 'pi pi-exclamation-circle' : 'pi pi-check-circle'" class="text-[12px]"></i>
       </div>
     </div>
   </div>
@@ -57,3 +57,5 @@ const formatCurrency = (val) => {
   }).format(val || 0) + ' UZS'
 }
 </script>
+
+

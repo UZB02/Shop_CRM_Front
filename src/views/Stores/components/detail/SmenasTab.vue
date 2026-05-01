@@ -11,7 +11,7 @@
         showIcon
         iconDisplay="input"
         class="!h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 !w-full"
-        inputClass="!text-[10px] !font-black !!tracking-tighter !h-10 !bg-transparent !border-none !px-4"
+        inputClass="!text-[12px] !font-black !!tracking-tighter !h-10 !bg-transparent !border-none !px-4"
         :placeholder="$t('common.date_from')"
       />
 
@@ -22,7 +22,7 @@
         showIcon
         iconDisplay="input"
         class="!h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 !w-full"
-        inputClass="!text-[10px] !font-black !!tracking-tighter !h-10 !bg-transparent !border-none !px-4"
+        inputClass="!text-[12px] !font-black !!tracking-tighter !h-10 !bg-transparent !border-none !px-4"
         :placeholder="$t('common.date_to')"
       />
 
@@ -33,7 +33,7 @@
         optionLabel="name"
         optionValue="id"
         showClear
-        class="!text-[10px] !font-black !!tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-2"
+        class="!text-[12px] !font-black !!tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-2"
         :placeholder="$t('branches.title')"
       />
 
@@ -44,7 +44,7 @@
         optionLabel="label"
         optionValue="id"
         showClear
-        class="!text-[10px] !font-black !!tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-2"
+        class="!text-[12px] !font-black !!tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-2"
         :placeholder="$t('common.status')"
       />
 
@@ -75,7 +75,7 @@
       <div class="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center mb-5 text-slate-200 dark:text-slate-700 text-2xl">
         <i class="pi pi-calendar"></i>
       </div>
-      <h4 class="text-[10px] font-black text-slate-400 dark:text-slate-600 tracking-[0.3em]">{{ $t('common.no_results') }}</h4>
+      <h4 class="text-[12px] font-black text-slate-400 dark:text-slate-600 tracking-[0.3em]">{{ $t('common.no_results') }}</h4>
     </div>
 
     <!-- ===== SHIFTS GRID ===== -->
@@ -99,8 +99,8 @@
             </div>
             <!-- Branch & Worker -->
             <div class="min-w-0">
-              <h4 class="text-[11px] font-black text-slate-800 dark:text-slate-100 tracking-tight leading-none truncate mb-1.5">{{ smena.branch_name }}</h4>
-              <div class="flex items-center gap-1 text-[9px] font-bold text-slate-400 dark:text-slate-600 tracking-wider">
+              <h4 class="text-[13px] font-black text-slate-800 dark:text-slate-100 tracking-tight leading-none truncate mb-1.5">{{ smena.branch_name }}</h4>
+              <div class="flex items-center gap-1 text-[11px] font-bold text-slate-400 dark:text-slate-600 tracking-wider">
                 <i class="pi pi-user" style="font-size:7px"></i>
                 <span class="truncate">{{ smena.worker_open_name || smena.worker_name || '—' }}</span>
               </div>
@@ -108,7 +108,7 @@
           </div>
           <!-- Status Badge -->
           <span
-            class="flex-shrink-0 px-2 py-1 rounded-lg text-[8px] font-black tracking-wider border"
+            class="flex-shrink-0 px-2 py-1 rounded-lg text-[10px] font-black tracking-wider border"
             :class="smena.status === 'open'
               ? 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
               : 'bg-rose-50 text-rose-500 border-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'"
@@ -126,23 +126,23 @@
             <span class="text-[1.5rem] font-black leading-none tracking-tight text-slate-800 dark:text-slate-100">
               {{ Number(smena.status === 'open' ? (smena.expected_cash || smena.cash_start || 0) : (smena.cash_end || 0)).toLocaleString() }}
             </span>
-            <span class="text-[9px] font-black text-slate-400 dark:text-slate-600 ">uzs</span>
+            <span class="text-[11px] font-black text-slate-400 dark:text-slate-600 ">uzs</span>
           </div>
         </div>
 
         <!-- Footer: Timestamps -->
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <p class="text-[8px] font-black text-slate-300 dark:text-slate-700 tracking-[0.12em] mb-1">
+            <p class="text-[10px] font-black text-slate-300 dark:text-slate-700 tracking-[0.12em] mb-1">
               {{ $t('stores.detail.shift_opened', { date: '' }).replace(':', '') }}
             </p>
-            <p class="text-[10px] font-semibold text-slate-500 dark:text-slate-500">{{ smena.start_time || smena.opened_at || '—' }}</p>
+            <p class="text-[12px] font-semibold text-slate-500 dark:text-slate-500">{{ smena.start_time || smena.opened_at || '—' }}</p>
           </div>
           <div class="text-right">
-            <p class="text-[8px] font-black text-slate-300 dark:text-slate-700 tracking-[0.12em] mb-1 truncate">
+            <p class="text-[10px] font-black text-slate-300 dark:text-slate-700 tracking-[0.12em] mb-1 truncate">
               {{ smena.status === 'open' ? $t('stores.detail.cash_start') : $t('stores.detail.shift_closed', { date: '' }).replace(':', '') }}
             </p>
-            <p class="text-[10px] font-semibold text-slate-500 dark:text-slate-500">
+            <p class="text-[12px] font-semibold text-slate-500 dark:text-slate-500">
               {{ smena.status === 'open'
                 ? Number(smena.cash_start || 0).toLocaleString() + ' UZS'
                 : (smena.end_time || smena.closed_at || '—') }}
@@ -286,3 +286,5 @@ const statusOptions = computed(() => [
   color: #10b981 !important;
 }
 </style>
+
+

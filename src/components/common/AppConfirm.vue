@@ -32,7 +32,7 @@
             <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-tight leading-none">
               {{ store.options.header }}
             </h3>
-            <p class="text-[14px] font-bold text-slate-400 dark:text-slate-500 leading-relaxed px-2">
+            <p class="text-[16px] font-bold text-slate-400 dark:text-slate-500 leading-relaxed px-2">
               {{ store.options.message }}
             </p>
           </div>
@@ -42,14 +42,14 @@
         <div class="px-8 pb-8 flex gap-3">
           <button 
             @click="store.onReject"
-            class="flex-1 h-12 rounded-2xl bg-transparent hover:bg-slate-50 dark:hover:bg-white/5 text-slate-500 dark:text-slate-400 font-black text-[13px] transition-all active:scale-95"
+            class="flex-1 h-12 rounded-2xl bg-transparent hover:bg-slate-50 dark:hover:bg-white/5 text-slate-500 dark:text-slate-400 font-black text-[15px] transition-all active:scale-95"
           >
             {{ store.options.rejectLabel }}
           </button>
           <button 
             @click="store.onAccept"
             :class="[
-              'flex-1 h-12 rounded-2xl font-black text-[13px] text-white transition-all active:scale-95 shadow-lg',
+              'flex-1 h-12 rounded-2xl font-black text-[15px] text-white transition-all active:scale-95 shadow-lg',
               isDanger ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20' : 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20'
             ]"
           >
@@ -89,3 +89,5 @@ const isDanger = computed(() => {
   transform: scale(0.9) translateY(20px);
 }
 </style>
+
+

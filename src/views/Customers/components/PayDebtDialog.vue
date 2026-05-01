@@ -26,16 +26,16 @@
         <!-- Header -->
         <div class="p-8 pb-6 flex items-start justify-between shrink-0">
           <div>
-            <h2 class="text-[13px] font-black text-emerald-500 tracking-widest mb-1">
+            <h2 class="text-[15px] font-black text-emerald-500 tracking-widest mb-1">
               {{ $t('customers.details.pay_debt_title') }}
             </h2>
-            <p class="text-[10px] font-bold text-slate-400 tracking-widest">Mijozlar</p>
+            <p class="text-[12px] font-bold text-slate-400 tracking-widest">Mijozlar</p>
           </div>
           <button 
             @click="$emit('update:visible', false)"
             class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-400 flex items-center justify-center hover:bg-slate-100 transition-all shadow-sm"
           >
-            <i class="pi pi-times text-[10px]"></i>
+            <i class="pi pi-times text-[12px]"></i>
           </button>
         </div>
 
@@ -46,7 +46,7 @@
             <!-- Financial Status Indicator -->
             <div class="p-6 rounded-[1.3rem] bg-rose-50/50 dark:bg-rose-500/5 border border-rose-100/30 dark:border-rose-500/10 flex items-center justify-between group transition-all duration-300 hover:shadow-sm">
                <div class="flex flex-col">
-                 <span class="text-[9px] font-black text-rose-400 tracking-[0.2em] mb-1.5 opacity-80">
+                 <span class="text-[11px] font-black text-rose-400 tracking-[0.2em] mb-1.5 opacity-80">
                    {{ $t('customers.details.current_debt') }}
                  </span>
                  <span class="text-2xl font-black text-rose-600 dark:text-rose-400 tracking-tighter">{{ formatCurrency(customerDebt) }}</span>
@@ -61,15 +61,15 @@
               <div class="flex items-center justify-between px-1">
                  <div class="flex items-center gap-2">
                     <div class="w-5 h-5 rounded-md bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                      <i class="pi pi-money-bill text-[10px]"></i>
+                      <i class="pi pi-money-bill text-[12px]"></i>
                     </div>
-                    <label class="text-[10px] font-black text-slate-400 tracking-widest leading-none">
+                    <label class="text-[12px] font-black text-slate-400 tracking-widest leading-none">
                       {{ $t('customers.details.payment_amount') }}
                     </label>
                  </div>
                  <button 
                   @click="payment.amount = parseFloat(customerDebt)"
-                  class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 tracking-widest hover:underline"
+                  class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 tracking-widest hover:underline"
                  >
                    {{ $t('customers.details.pay_all') }}
                  </button>
@@ -80,7 +80,7 @@
                   :min="0" :max="parseFloat(customerDebt)"
                   mode="decimal"
                   class="w-full"
-                  pt:input:class="!w-full !rounded-[1.3rem] !bg-slate-50/80 dark:!bg-slate-900/50 !border-slate-100 dark:!border-slate-800 !px-6 !py-5 !text-[15px] !font-bold !text-slate-800 dark:!text-white focus:!border-emerald-500 focus:!ring-0 focus:!bg-white dark:focus:!bg-slate-900 transition-all border shadow-none"
+                  pt:input:class="!w-full !rounded-[1.3rem] !bg-slate-50/80 dark:!bg-slate-900/50 !border-slate-100 dark:!border-slate-800 !px-6 !py-5 !text-[16px] !font-bold !text-slate-800 dark:!text-white focus:!border-emerald-500 focus:!ring-0 focus:!bg-white dark:focus:!bg-slate-900 transition-all border shadow-none"
                   placeholder="0.00"
                 />
               </div>
@@ -88,7 +88,7 @@
 
             <!-- Payment Method Segment -->
             <div class="space-y-4 pt-2">
-              <label class="text-[10px] font-black text-slate-400 tracking-widest ml-1 opacity-70">
+              <label class="text-[12px] font-black text-slate-400 tracking-widest ml-1 opacity-70">
                 {{ $t('customers.details.payment_method') }}
               </label>
               <div class="grid grid-cols-2 gap-4">
@@ -103,10 +103,10 @@
                   ]"
                 >
                   <div v-if="payment.payment_method === method" class="absolute top-3 right-3">
-                     <i class="pi pi-check-circle text-[10px] text-emerald-500"></i>
+                     <i class="pi pi-check-circle text-[12px] text-emerald-500"></i>
                   </div>
                   <i :class="['text-xl pi', method === 'cash' ? 'pi-wallet' : 'pi-credit-card']"></i>
-                  <span class="text-[10px] font-black tracking-widest text-center">
+                  <span class="text-[12px] font-black tracking-widest text-center">
                     {{ method === 'cash' ? $t('shifts.payment.cash_part') : $t('shifts.payment.card_part') }}
                   </span>
                 </button>
@@ -121,16 +121,16 @@
           <div class="flex gap-3 items-center">
             <button 
               @click="$emit('update:visible', false)"
-              class="flex-1 h-12 rounded-xl text-[10px] font-black tracking-[0.2em] text-slate-400 hover:bg-slate-50 transition-all"
+              class="flex-1 h-12 rounded-xl text-[12px] font-black tracking-[0.2em] text-slate-400 hover:bg-slate-50 transition-all"
             >
               {{ $t('common.cancel') }}
             </button>
             <button 
               @click="submitPayment"
               :disabled="saving || !payment.amount || payment.amount <= 0"
-              class="flex-[2] h-12 rounded-xl bg-emerald-500 text-white text-[10px] font-black tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 disabled:opacity-30 transition-all flex items-center justify-center gap-2"
+              class="flex-[2] h-12 rounded-xl bg-emerald-500 text-white text-[12px] font-black tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 disabled:opacity-30 transition-all flex items-center justify-center gap-2"
             >
-              <i v-if="saving" class="pi pi-spin pi-spinner text-[10px]"></i>
+              <i v-if="saving" class="pi pi-spin pi-spinner text-[12px]"></i>
               {{ saving ? $t('common.saving') : $t('common.pay') }}
             </button>
           </div>
@@ -194,3 +194,5 @@ const submitPayment = async () => {
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #f1f5f9; border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
 </style>
+
+

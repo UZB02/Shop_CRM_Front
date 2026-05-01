@@ -30,3 +30,4 @@ defineProps({
 
 defineEmits(['open-target'])
 </script>
+

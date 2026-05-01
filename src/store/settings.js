@@ -162,3 +162,5 @@ export const useSettingsStore = defineStore('settings', () => {
     formatNumber,
   }
 })
+
+

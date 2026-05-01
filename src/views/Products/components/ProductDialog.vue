@@ -17,7 +17,7 @@
               <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-[0.1em]">
                 {{ product._id || product.id ? 'Mahsulotni tahrirlash' : 'Yangi mahsulot' }}
               </h3>
-              <p class="text-[10px] font-bold text-slate-400 tracking-[0.2em]">Inventarizatsiya va ombor hisobi</p>
+              <p class="text-[12px] font-bold text-slate-400 tracking-[0.2em]">Inventarizatsiya va ombor hisobi</p>
             </div>
           </div>
           <button 
@@ -33,7 +33,7 @@
           <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
             <!-- Left: Image Management -->
             <div class="md:col-span-4 space-y-4">
-              <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Mahsulot rasmi</label>
+              <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Mahsulot rasmi</label>
               <div 
                 class="relative aspect-square rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border-2 border-dashed border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center overflow-hidden group hover:border-emerald-500/50 transition-all cursor-pointer shadow-inner"
                 @click="fileInput.click()"
@@ -41,7 +41,7 @@
                 <img v-if="previewUrl || product.imageUrl" :src="previewUrl || product.imageUrl" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div v-else class="flex flex-col items-center text-slate-300 group-hover:text-emerald-500 transition-colors">
                   <i class="pi pi-cloud-upload text-3xl mb-3"></i>
-                  <span class="text-[9px] font-black tracking-[0.2em]">Rasm yuklash</span>
+                  <span class="text-[11px] font-black tracking-[0.2em]">Rasm yuklash</span>
                 </div>
                 
                 <!-- Action Overlays -->
@@ -55,14 +55,14 @@
                 </div>
               </div>
               <input type="file" ref="fileInput" class="hidden" accept="image/*" @change="onFileSelect" />
-              <p class="text-[9px] text-slate-400 text-center font-bold tracking-tight opacity-60">JPG, PNG (MAX 5MB)</p>
+              <p class="text-[11px] text-slate-400 text-center font-bold tracking-tight opacity-60">JPG, PNG (MAX 5MB)</p>
             </div>
 
             <!-- Right: Details Form -->
             <div class="md:col-span-8 space-y-6">
               <!-- Row 1: Name -->
               <div class="space-y-2">
-                <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Mahsulot nomi</label>
+                <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Mahsulot nomi</label>
                 <input 
                   v-model.trim="product.name"
                   type="text"
@@ -75,7 +75,7 @@
               <!-- Row 2: Category & Barcode -->
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
-                  <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Kategoriya</label>
+                  <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Kategoriya</label>
                   <Select 
                     v-model="product.category" 
                     :options="categories" 
@@ -86,7 +86,7 @@
                   />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Shtrix-kod</label>
+                  <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Shtrix-kod</label>
                   <input 
                     v-model.trim="product.barcode"
                     type="text"
@@ -99,17 +99,17 @@
               <!-- Row 3: Prices -->
               <div class="grid grid-cols-2 gap-4 p-5 bg-slate-50/50 dark:bg-slate-800/20 rounded-3xl border border-slate-100 dark:border-slate-800">
                 <div class="space-y-2">
-                  <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Kelish narxi</label>
+                  <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Kelish narxi</label>
                   <div class="relative">
                     <InputNumber v-model="product.purchase_price" class="modern-input-number" placeholder="0" />
-                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-300 dark:text-slate-600 tracking-widest">UZS</span>
+                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] font-black text-slate-300 dark:text-slate-600 tracking-widest">UZS</span>
                   </div>
                 </div>
                 <div class="space-y-2">
-                  <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Sotish narxi</label>
+                  <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Sotish narxi</label>
                   <div class="relative">
                     <InputNumber v-model="product.sale_price" class="modern-input-number" placeholder="0" />
-                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-emerald-500 tracking-widest">UZS</span>
+                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] font-black text-emerald-500 tracking-widest">UZS</span>
                   </div>
                 </div>
               </div>
@@ -117,15 +117,15 @@
               <!-- Row 4: Stocks & Units -->
               <div class="grid grid-cols-3 gap-4">
                 <div class="space-y-2">
-                  <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">O'lchov</label>
+                  <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">O'lchov</label>
                   <Select v-model="product.unit" :options="units" placeholder="Birlik" class="modern-select" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Miqdori</label>
+                  <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Miqdori</label>
                   <InputNumber v-model="product.amount" class="modern-input-number" placeholder="0" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Limit</label>
+                  <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Limit</label>
                   <InputNumber v-model="product.lowStockThreshold" class="modern-input-number" placeholder="10" />
                 </div>
               </div>
@@ -137,7 +137,7 @@
         <div class="p-8 pt-0 flex items-center justify-end gap-6">
           <button 
             @click="$emit('update:visible', false)"
-            class="text-[11px] font-black tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            class="text-[13px] font-black tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
           >
             Bekor qilish
           </button>
@@ -269,3 +269,5 @@ watch(() => props.visible, (newVal) => {
   padding: 0.75rem 1rem !important;
 }
 </style>
+
+

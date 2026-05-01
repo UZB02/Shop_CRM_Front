@@ -3,8 +3,8 @@
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
       <!-- Table header info -->
       <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10 flex items-center justify-between">
-        <h3 class="text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.incoming_title') }}</h3>
-        <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+        <h3 class="text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.incoming_title') }}</h3>
+        <span class="text-[12px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">
           {{ $t('warehouse.detail.total_count', { count: total }) }}
         </span>
       </div>
@@ -14,13 +14,13 @@
         <table class="w-full text-left min-w-[900px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.all') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_description') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.all') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_description') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -37,38 +37,38 @@
                     </span>
                     <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
                   </div>
-                  <span class="text-[9px] font-medium text-slate-400">
+                  <span class="text-[11px] font-medium text-slate-400">
                      {{ item.product_barcode }} | {{ item.product_unit }}
                   </span>
                 </div>
               </td>
               <td class="px-4 py-2.5 text-right">
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[12px]">
                   {{ item.quantity }}
                 </span>
               </td>
-              <td class="px-4 py-2.5 text-right text-[10px] text-slate-500 dark:text-slate-400">
+              <td class="px-4 py-2.5 text-right text-[12px] text-slate-500 dark:text-slate-400">
                 {{ Number(item.unit_cost).toLocaleString() }}
               </td>
-              <td class="px-4 py-2.5 text-right font-black text-slate-800 dark:text-slate-100 text-[10px]">
+              <td class="px-4 py-2.5 text-right font-black text-slate-800 dark:text-slate-100 text-[12px]">
                 {{ Number(item.total_cost).toLocaleString() }}
               </td>
               <td class="px-4 py-2.5">
                 <div class="flex items-center gap-1.5">
-                  <div class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px] font-bold text-slate-500">
+                  <div class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500">
                     {{ item.worker_name?.charAt(0) }}
                   </div>
-                  <span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">
+                  <span class="text-[12px] font-medium text-slate-600 dark:text-slate-400">
                     {{ item.worker_name }}
                   </span>
                 </div>
               </td>
               <td class="px-4 py-2.5">
-                <span class="text-[10px] text-slate-400 italic">
+                <span class="text-[12px] text-slate-400 italic">
                   {{ item.description || '—' }}
                 </span>
               </td>
-              <td class="px-4 py-2.5 text-right text-[10px] text-slate-400">
+              <td class="px-4 py-2.5 text-right text-[12px] text-slate-400">
                 {{ item.created_on }}
               </td>
             </tr>
@@ -111,3 +111,5 @@ defineProps({
 
 defineEmits(['page-change'])
 </script>
+
+

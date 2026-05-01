@@ -46,7 +46,7 @@
           </div>
           
           <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
-            <p class="text-[10px] text-slate-400 font-medium tracking-widest">
+            <p class="text-[12px] text-slate-400 font-medium tracking-widest">
               Texnik yordam: +998 (XX) XXX-XX-XX
             </p>
           </div>
@@ -80,3 +80,5 @@ const logout = () => {
 .fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>
+
+

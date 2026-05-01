@@ -27,21 +27,21 @@
         class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-95"
         v-tooltip.bottom="'Ortga'"
       >
-        <i class="pi pi-arrow-left text-[10px]"></i>
+        <i class="pi pi-arrow-left text-[12px]"></i>
       </button>
       <button 
         @click="router.go(1)"
         class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-95"
         v-tooltip.bottom="'Oldinga'"
       >
-        <i class="pi pi-arrow-right text-[10px]"></i>
+        <i class="pi pi-arrow-right text-[12px]"></i>
       </button>
       <button 
         @click="handleReload"
         class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all active:scale-95"
         v-tooltip.bottom="'Yangilash'"
       >
-        <i class="pi pi-refresh text-[10px]" :class="{ 'animate-spin': isReloading }"></i>
+        <i class="pi pi-refresh text-[12px]" :class="{ 'animate-spin': isReloading }"></i>
       </button>
     </div>
 
@@ -71,7 +71,7 @@
           v-for="l in [{c:'uz', n:'LOT'}, {c:'uz_cy', n:'КРИ'}]" 
           :key="l.c"
           @click="$emit('update:locale', l.c)"
-          class="px-2 py-1 rounded-md text-[9px] font-black transition-all duration-300 border-none cursor-pointer"
+          class="px-2 py-1 rounded-md text-[11px] font-black transition-all duration-300 border-none cursor-pointer"
           :class="locale === l.c ? 'bg-white dark:bg-slate-700 text-emerald-500 shadow-sm scale-105' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 bg-transparent'"
         >
           {{ l.n }}
@@ -153,3 +153,5 @@ defineEmits(['update:sidebarOpen', 'update:locale', 'toggleTheme', 'toggleFullsc
 .theme-icon-enter-from   { opacity: 0; transform: rotate(-90deg) scale(0.5); }
 .theme-icon-leave-to     { opacity: 0; transform: rotate(90deg) scale(0.5); }
 </style>
+
+

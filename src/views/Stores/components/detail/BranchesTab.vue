@@ -23,11 +23,11 @@
           <table class="w-full text-left border-collapse">
             <thead>
               <tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
-                <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('stores.col_branch') }}</th>
-                <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('stores.col_address') }}</th>
-                <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('stores.col_phone') }}</th>
-                <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('stores.col_status') }}</th>
-                <th class="px-6 py-3 text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('stores.col_actions') }}</th>
+                <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('stores.col_branch') }}</th>
+                <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('stores.col_address') }}</th>
+                <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('stores.col_phone') }}</th>
+                <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('stores.col_status') }}</th>
+                <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('stores.col_actions') }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -43,24 +43,24 @@
                       <i class="pi pi-sitemap text-lg"></i>
                     </div>
                     <div class="flex flex-col">
-                      <span class="text-[13px] font-black text-slate-800 dark:text-slate-200 tracking-tight leading-tight group-hover/link:text-emerald-500 transition-colors">{{ branch.name }}</span>
-                      <span class="text-[9px] font-black text-slate-400 tracking-widest mt-0.5">{{ $t('stores.branch_label') }}</span>
+                      <span class="text-[15px] font-black text-slate-800 dark:text-slate-200 tracking-tight leading-tight group-hover/link:text-emerald-500 transition-colors">{{ branch.name }}</span>
+                      <span class="text-[11px] font-black text-slate-400 tracking-widest mt-0.5">{{ $t('stores.branch_label') }}</span>
                     </div>
                   </router-link>
                 </td>
 
                 <!-- Address -->
                 <td class="px-6 py-3.5">
-                  <div class="flex items-center gap-2 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                    <i class="pi pi-map-marker text-[10px] text-emerald-500/60"></i>
+                  <div class="flex items-center gap-2 text-[13px] font-bold text-slate-500 dark:text-slate-400">
+                    <i class="pi pi-map-marker text-[12px] text-emerald-500/60"></i>
                     {{ branch.address || '—' }}
                   </div>
                 </td>
 
                 <!-- Phone -->
                 <td class="px-6 py-3.5">
-                  <a :href="'tel:' + branch.phone" class="inline-flex items-center gap-2 text-[11px] font-bold text-slate-500 dark:text-slate-400 hover:text-emerald-500 transition-colors">
-                    <i class="pi pi-phone text-[10px] text-emerald-500/60"></i>
+                  <a :href="'tel:' + branch.phone" class="inline-flex items-center gap-2 text-[13px] font-bold text-slate-500 dark:text-slate-400 hover:text-emerald-500 transition-colors">
+                    <i class="pi pi-phone text-[12px] text-emerald-500/60"></i>
                     {{ branch.phone || '—' }}
                   </a>
                 </td>
@@ -68,7 +68,7 @@
                 <!-- Status -->
                 <td class="px-6 py-3.5 text-center">
                   <span
-                    class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-black tracking-widest border"
+                    class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-black tracking-widest border"
                     :class="branch.status === 'active'
                       ? 'bg-emerald-500/5 text-emerald-600 border-emerald-500/20'
                       : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'"
@@ -88,21 +88,21 @@
                       class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:text-sky-400 dark:hover:bg-sky-400/10 transition-all hover:scale-105"
                       v-tooltip.top="$t('warehouse.bulk.title')"
                     >
-                      <i class="pi pi-database text-[15px]"></i>
+                      <i class="pi pi-database text-[16px]"></i>
                     </button>
                     <button
                       @click="$emit('edit', branch)"
                       class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:text-emerald-400 dark:hover:bg-emerald-400/10 transition-all hover:scale-105"
                       v-tooltip.top="'Tahrirlash'"
                     >
-                      <i class="pi pi-pencil text-[15px]"></i>
+                      <i class="pi pi-pencil text-[16px]"></i>
                     </button>
                     <button
                       @click="$emit('delete', branch)"
                       class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:text-rose-400 dark:hover:bg-rose-400/10 transition-all hover:scale-105"
                       v-tooltip.top="`O'chirish`"
                     >
-                      <i class="pi pi-trash text-[15px]"></i>
+                      <i class="pi pi-trash text-[16px]"></i>
                     </button>
                   </div>
                 </td>
@@ -122,9 +122,9 @@
               <i class="pi pi-sitemap text-lg"></i>
             </div>
             <router-link :to="`/dashboard/branches/${branch.id}`" class="flex-1 min-w-0">
-              <p class="text-[13px] font-black text-slate-800 dark:text-slate-200 tracking-tight truncate hover:text-emerald-500 transition-colors">{{ branch.name }}</p>
-              <p class="text-[9px] font-bold text-slate-400 truncate mt-0.5">
-                <i class="pi pi-map-marker text-[8px] text-emerald-500/60"></i> {{ branch.address || '—' }}
+              <p class="text-[15px] font-black text-slate-800 dark:text-slate-200 tracking-tight truncate hover:text-emerald-500 transition-colors">{{ branch.name }}</p>
+              <p class="text-[11px] font-bold text-slate-400 truncate mt-0.5">
+                <i class="pi pi-map-marker text-[10px] text-emerald-500/60"></i> {{ branch.address || '—' }}
               </p>
             </router-link>
             <div class="flex items-center gap-1 shrink-0">
@@ -191,3 +191,5 @@ const filtered = computed(() => {
 .overflow-x-auto::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
 .dark .overflow-x-auto::-webkit-scrollbar-thumb { background: #334155; }
 </style>
+
+

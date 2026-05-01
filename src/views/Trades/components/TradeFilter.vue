@@ -11,7 +11,7 @@
           optionLabel="name"
           :placeholder="$t('customers.search_placeholder') || 'Mijoz nomi bo\'yicha qidirib tanlang...'"
           class="w-full custom-autocomplete-wrapper"
-          inputClass="w-full h-11 !pl-11 pr-10 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
+          inputClass="w-full h-11 !pl-11 pr-10 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
         />
         <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none z-10 transition-colors" :class="{'text-emerald-500': selectedCustomer}"></i>
         <button 
@@ -19,7 +19,7 @@
           @click="onCustomerClear" 
           class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 z-10 p-1"
         >
-           <i class="pi pi-times text-[10px] font-bold"></i>
+           <i class="pi pi-times text-[12px] font-bold"></i>
         </button>
       </div>
       <button 
@@ -28,7 +28,7 @@
         class="h-11 px-4 rounded-xl border border-rose-100 dark:border-rose-900/30 bg-rose-50/50 dark:bg-rose-500/5 text-rose-500 flex items-center justify-center gap-2 hover:bg-rose-100 dark:hover:bg-rose-500/10 transition-all shrink-0 shadow-sm group"
         title="Filtrlarni tozalash"
       >
-        <i class="pi pi-refresh text-[12px] group-hover:rotate-180 transition-transform duration-500"></i>
+        <i class="pi pi-refresh text-[14px] group-hover:rotate-180 transition-transform duration-500"></i>
       </button>
 
       <button 
@@ -40,9 +40,9 @@
             : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
         ]"
       >
-        <i class="pi pi-filter text-[13px]"></i>
-        <span class="text-[13px] font-bold">Filtr</span>
-        <i :class="['pi text-[10px] ml-1 transition-transform', showFilters ? 'pi-chevron-up opacity-50' : 'pi-chevron-down dark:text-slate-400']"></i>
+        <i class="pi pi-filter text-[15px]"></i>
+        <span class="text-[15px] font-bold">Filtr</span>
+        <i :class="['pi text-[12px] ml-1 transition-transform', showFilters ? 'pi-chevron-up opacity-50' : 'pi-chevron-down dark:text-slate-400']"></i>
       </button>
     </div>
 
@@ -55,7 +55,7 @@
         
         <!-- Row 1 -->
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.status') }}</label>
+          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.status') }}</label>
           <Dropdown 
             :modelValue="filters.status"
             @update:modelValue="$emit('update:filter', { status: $event })"
@@ -63,12 +63,12 @@
             optionLabel="label"
             optionValue="value"
             :placeholder="$t('common.select')"
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[15px]"
           />
         </div>
         
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.payment.all') }}</label>
+          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.payment.all') }}</label>
           <Dropdown 
             :modelValue="filters.payment_type"
             @update:modelValue="$emit('update:filter', { payment_type: $event })"
@@ -76,12 +76,12 @@
             optionLabel="label"
             optionValue="value"
             :placeholder="$t('common.select')"
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[15px]"
           />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.branch') }}</label>
+          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.branch') }}</label>
           <Dropdown 
             :modelValue="filters.branch"
             @update:modelValue="$emit('update:filter', { branch: $event })"
@@ -91,12 +91,12 @@
             :placeholder="$t('common.all')"
             filter
             :disabled="isSeller"
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px] disabled:opacity-50"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[15px] disabled:opacity-50"
           />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.worker') }}</label>
+          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.worker') }}</label>
           <Dropdown 
             :modelValue="filters.worker"
             @update:modelValue="$emit('update:filter', { worker: $event })"
@@ -105,49 +105,49 @@
             optionValue="id"
             :placeholder="$t('common.all')"
             filter
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[13px]"
+            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[15px]"
           />
         </div>
         
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_from') }}</label>
+          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_from') }}</label>
           <input 
             type="date"
             :value="filters.date_from"
             @input="$emit('update:filter', { date_from: $event.target.value })"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all"
+            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all"
           >
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_to') }}</label>
+          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_to') }}</label>
           <input 
             type="date"
             :value="filters.date_to"
             @input="$emit('update:filter', { date_to: $event.target.value })"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all"
+            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all"
           >
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.min_amount') }}</label>
+          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.min_amount') }}</label>
           <input 
             type="number"
             :value="filters.min_amount"
             @input="$emit('update:filter', { min_amount: $event.target.value })"
             placeholder="0"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
+            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
           >
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.max_amount') }}</label>
+          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.max_amount') }}</label>
           <input 
             type="number"
             :value="filters.max_amount"
             @input="$emit('update:filter', { max_amount: $event.target.value })"
             placeholder="0"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[13px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
+            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
           >
         </div>
       </div>
@@ -158,15 +158,15 @@
           @click="onReset" 
           class="h-10 px-5 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300"
         >
-          <i class="pi pi-times text-[10px]"></i>
-          <span class="text-[13px] font-bold">{{ $t('common.reset') }}</span>
+          <i class="pi pi-times text-[12px]"></i>
+          <span class="text-[15px] font-bold">{{ $t('common.reset') }}</span>
         </button>
         <button 
           @click="onApply" 
           class="h-10 px-6 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
         >
-          <i class="pi pi-filter text-[11px]"></i>
-          <span class="text-[13px] font-bold">{{ $t('trades.filters.apply') }}</span>
+          <i class="pi pi-filter text-[13px]"></i>
+          <span class="text-[15px] font-bold">{{ $t('trades.filters.apply') }}</span>
         </button>
       </div>
     </div>
@@ -324,3 +324,5 @@ const onReset = () => {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
 }
 </style>
+
+

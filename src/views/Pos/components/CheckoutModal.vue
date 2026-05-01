@@ -34,10 +34,10 @@
           <div class="absolute inset-0 dark:block hidden" style="background:radial-gradient(circle at 80% 20%,rgba(16,185,129,.22) 0%,transparent 60%)" />
           <div class="absolute inset-0 block dark:hidden" style="background:radial-gradient(circle at 20% 80%,rgba(255,255,255,0.15) 0%,transparent 55%)" />
           <div class="relative px-5 py-2.5 text-center">
-            <p class="text-[7px] font-black tracking-[0.2em] text-white/70 mb-0.5 m-0 leading-none">Jami to'lanishi lozim</p>
+            <p class="text-[9px] font-black tracking-[0.2em] text-white/70 mb-0.5 m-0 leading-none">Jami to'lanishi lozim</p>
             <div class="flex items-baseline justify-center gap-1.5">
               <span class="text-3xl font-black text-white font-outfit tracking-tight leading-none">{{ settingsStore.formatNumber(total) }}</span>
-              <span class="text-[9px] font-black text-white/60">{{ (currencyCode || settingsStore.currency) === 'UZS' ? "so'm" : (currencyCode || settingsStore.currency) }}</span>
+              <span class="text-[11px] font-black text-white/60">{{ (currencyCode || settingsStore.currency) === 'UZS' ? "so'm" : (currencyCode || settingsStore.currency) }}</span>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
                   ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-md shadow-slate-200/80 dark:shadow-black/40'
                   : 'text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400'"
               >
-                <i :class="m.icon" class="text-[13px] leading-none" />
+                <i :class="m.icon" class="text-[15px] leading-none" />
                 <span class="text-[7.5px] font-black tracking-wide leading-none">{{ m.label }}</span>
               </button>
             </div>
@@ -83,7 +83,7 @@
               </div>
             </div>
             <div class="relative group">
-              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors z-10 select-none">{{ currencyCode || settingsStore.currency }}</span>
+              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[12px] font-black text-slate-400 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors z-10 select-none">{{ currencyCode || settingsStore.currency }}</span>
               <InputNumber
                 v-model="discountAmount"
                 inputId="discount_amount"
@@ -107,7 +107,7 @@
             <div v-if="discountAmount > 0 && paymentType !== 'debt'"
               class="flex items-center justify-between px-3.5 py-3 rounded-2xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 animate-fadein">
               <div>
-                <span class="text-[8px] font-black tracking-widest block opacity-80">To'lanishi kerak</span>
+                <span class="text-[10px] font-black tracking-widest block opacity-80">To'lanishi kerak</span>
                 <span class="text-xl font-black font-outfit leading-none">{{ settingsStore.formatPrice(paidAmount, currencyCode) }}</span>
               </div>
               <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -138,7 +138,7 @@
              <!-- Debt Summary -->
              <div class="flex items-center justify-between px-3.5 py-3 rounded-2xl bg-rose-500 text-white shadow-lg shadow-rose-500/20">
                <div>
-                 <span class="text-[8px] font-black tracking-widest block opacity-80">Mijoz qarzi bo'ladi</span>
+                 <span class="text-[10px] font-black tracking-widest block opacity-80">Mijoz qarzi bo'ladi</span>
                   <span class="text-xl font-black font-outfit leading-none">{{ settingsStore.formatPrice(remainingDebt, currencyCode) }}</span>
                </div>
                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -203,7 +203,7 @@
               </div>
               <div class="w-7 h-7 rounded-full flex items-center justify-center"
                 :class="isMixedValid ? 'bg-emerald-500 text-white' : isSumOverflow ? 'bg-rose-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'">
-                <i :class="isMixedValid ? 'pi pi-check' : isSumOverflow ? 'pi pi-times' : 'pi pi-minus'" class="text-[9px]" />
+                <i :class="isMixedValid ? 'pi pi-check' : isSumOverflow ? 'pi pi-times' : 'pi pi-minus'" class="text-[11px]" />
               </div>
             </div>
           </div>
@@ -278,7 +278,7 @@
           <button
             @click="handleConfirm"
             :disabled="!isValid || loading"
-            class="flex-1 py-3 px-5 rounded-xl font-black text-[9px] tracking-[0.16em] text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+            class="flex-1 py-3 px-5 rounded-xl font-black text-[11px] tracking-[0.16em] text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2"
             :class="isValid && !loading
               ? 'bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/25'
               : 'bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed'"
@@ -401,3 +401,5 @@ const {
 .animate-fadein { animation: fadein 0.2s ease-out; }
 @keyframes fadein { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
 </style>
+
+

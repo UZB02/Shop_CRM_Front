@@ -37,3 +37,5 @@ export const promotionsAPI = {
     activate: (id) => api.post(`/warehouse/promotions/${id}/activate/`),
     deactivate: (id) => api.post(`/warehouse/promotions/${id}/deactivate/`)
 }
+
+

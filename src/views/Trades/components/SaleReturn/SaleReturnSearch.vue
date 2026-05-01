@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-2">
-    <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">Mahsulotlarni qidirish</h3>
+    <h3 class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">Mahsulotlarni qidirish</h3>
     <div class="relative group">
       <i class="pi pi-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
       <input 
@@ -23,9 +23,9 @@
               <span class="text-xs font-bold text-slate-800 dark:text-white">{{ p.name }}</span>
               <TurBadge :tur-name="p.tur_name" :tur-color="p.tur_color" />
             </div>
-            <span class="text-[9px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Qoldiq: {{ p.quantity }} {{ p.unit }}</span>
+            <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Qoldiq: {{ p.quantity }} {{ p.unit }}</span>
           </div>
-          <span class="text-[11px] font-black text-slate-900 dark:text-emerald-400">{{ formatCurrency(p.selling_price) }}</span>
+          <span class="text-[13px] font-black text-slate-900 dark:text-emerald-400">{{ formatCurrency(p.selling_price) }}</span>
         </div>
       </div>
     </div>
@@ -64,3 +64,5 @@ const addProduct = (p) => {
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #f1f5f9; border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
 </style>
+
+

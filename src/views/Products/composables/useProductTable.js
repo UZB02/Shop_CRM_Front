@@ -96,3 +96,5 @@ export function useProductTable(products) {
     printBarcode
   }
 }
+
+

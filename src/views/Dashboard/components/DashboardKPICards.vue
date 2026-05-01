@@ -12,23 +12,23 @@
         </div>
         <!-- vs_prev_period badge -->
         <div v-if="sales.vs_prev_period?.revenue_pct !== undefined"
-             :class="['flex items-center gap-1 px-2 py-1 rounded-xl text-[9px] font-black border',
+             :class="['flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border',
                       sales.vs_prev_period.revenue_pct >= 0
                         ? 'text-emerald-500 bg-emerald-500/8 border-emerald-500/20'
                         : 'text-rose-500 bg-rose-500/8 border-rose-500/20']">
-          <i :class="['pi text-[8px]', sales.vs_prev_period.revenue_pct >= 0 ? 'pi-arrow-up' : 'pi-arrow-down']"></i>
+          <i :class="['pi text-[10px]', sales.vs_prev_period.revenue_pct >= 0 ? 'pi-arrow-up' : 'pi-arrow-down']"></i>
           {{ Math.abs(sales.vs_prev_period.revenue_pct).toFixed(1) }}%
         </div>
       </div>
 
       <!-- Main value -->
       <div>
-        <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 mb-1">Sof Tushum</p>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">Sof Tushum</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(sales.total_revenue) }}</h2>
         <!-- Gross + discount -->
         <div class="flex items-center gap-2 mt-1.5">
-          <span class="text-[8px] font-bold text-slate-400">Yalpi: {{ formatPrice(sales.gross_revenue) }}</span>
-          <span v-if="sales.discount_total" class="text-[8px] font-bold text-rose-400">−{{ formatPrice(sales.discount_total) }}</span>
+          <span class="text-[10px] font-bold text-slate-400">Yalpi: {{ formatPrice(sales.gross_revenue) }}</span>
+          <span v-if="sales.discount_total" class="text-[10px] font-bold text-rose-400">−{{ formatPrice(sales.discount_total) }}</span>
         </div>
       </div>
 
@@ -40,13 +40,13 @@
       <!-- Footer: count + avg_check + return_stats -->
       <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between gap-2">
         <div>
-          <span class="text-[9px] font-black text-slate-600 dark:text-slate-300">{{ sales.count || 0 }} xarid</span>
-          <span v-if="sales.vs_prev_period?.count_diff" class="ml-1 text-[8px] font-black text-emerald-500">+{{ sales.vs_prev_period.count_diff }}</span>
+          <span class="text-[11px] font-black text-slate-600 dark:text-slate-300">{{ sales.count || 0 }} xarid</span>
+          <span v-if="sales.vs_prev_period?.count_diff" class="ml-1 text-[10px] font-black text-emerald-500">+{{ sales.vs_prev_period.count_diff }}</span>
         </div>
-        <span class="text-[8px] font-bold text-slate-400">~{{ formatPrice(sales.avg_check) }}</span>
+        <span class="text-[10px] font-bold text-slate-400">~{{ formatPrice(sales.avg_check) }}</span>
       </div>
       <!-- Return stats -->
-      <div v-if="sales.return_stats?.count" class="flex items-center justify-between text-[8px] font-black">
+      <div v-if="sales.return_stats?.count" class="flex items-center justify-between text-[10px] font-black">
         <span class="text-rose-400">{{ sales.return_stats.count }} qaytarish</span>
         <span :class="['px-1.5 py-0.5 rounded-md', sales.return_stats.return_rate > 5 ? 'bg-rose-500/10 text-rose-500' : 'bg-slate-100 dark:bg-slate-800 text-slate-500']">
           {{ sales.return_stats.return_rate }}%
@@ -62,19 +62,19 @@
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
           <i class="pi pi-chart-line text-sm"></i>
         </div>
-        <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[9px] font-black border border-blue-500/20 bg-blue-500/8 text-blue-500">
+        <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-blue-500/20 bg-blue-500/8 text-blue-500">
           {{ parseFloat(sales.margin_percent || 0).toFixed(1) }}% marja
         </div>
       </div>
 
       <div>
-        <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 mb-1">Yalpi Foyda</p>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">Yalpi Foyda</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(sales.total_profit) }}</h2>
       </div>
 
       <!-- Expense ratio progress bar -->
       <div class="space-y-1">
-        <div class="flex justify-between text-[8px] font-black text-slate-400">
+        <div class="flex justify-between text-[10px] font-black text-slate-400">
           <span>Sof foyda</span>
           <span class="text-rose-400">{{ expenses.expense_ratio || 0 }}% xarajat</span>
         </div>
@@ -85,8 +85,8 @@
       </div>
 
       <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
-        <span class="text-[9px] font-black text-slate-600 dark:text-slate-300">Sof: <span class="text-emerald-500">{{ formatPrice(expenses.net_profit) }}</span></span>
-        <span class="text-[8px] font-bold text-slate-400">COGS: {{ formatPrice(expenses.cogs) }}</span>
+        <span class="text-[11px] font-black text-slate-600 dark:text-slate-300">Sof: <span class="text-emerald-500">{{ formatPrice(expenses.net_profit) }}</span></span>
+        <span class="text-[10px] font-bold text-slate-400">COGS: {{ formatPrice(expenses.cogs) }}</span>
       </div>
     </div>
 
@@ -99,19 +99,19 @@
           <i class="pi pi-box text-sm"></i>
         </div>
         <div v-if="products.low_stock_count"
-             class="flex items-center gap-1 px-2 py-1 rounded-xl text-[9px] font-black border border-rose-500/20 bg-rose-500/8 text-rose-500 animate-pulse">
+             class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-rose-500/20 bg-rose-500/8 text-rose-500 animate-pulse">
           ⚠ {{ products.low_stock_count }} Defitsit
         </div>
       </div>
 
       <div>
-        <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 mb-1">Ombor Kapitali</p>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">Ombor Kapitali</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(products.warehouse_value) }}</h2>
-        <p class="text-[8px] font-bold text-slate-400 mt-1">Savat: {{ products.avg_items_per_sale }} ta/sotuv</p>
+        <p class="text-[10px] font-bold text-slate-400 mt-1">Savat: {{ products.avg_items_per_sale }} ta/sotuv</p>
       </div>
 
       <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
-        <span class="text-[9px] font-black text-slate-500">Isrof: <span class="text-orange-500">{{ formatPrice(products.wastage_total) }}</span></span>
+        <span class="text-[11px] font-black text-slate-500">Isrof: <span class="text-orange-500">{{ formatPrice(products.wastage_total) }}</span></span>
       </div>
     </div>
 
@@ -123,21 +123,21 @@
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
           <i class="pi pi-users text-sm"></i>
         </div>
-        <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[9px] font-black border border-amber-500/20 bg-amber-500/8 text-amber-600">
+        <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-amber-500/20 bg-amber-500/8 text-amber-600">
           +{{ customers.new_count || 0 }} yangi
         </div>
       </div>
 
       <div>
-        <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 mb-1">Mijozlar Bazasi</p>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">Mijozlar Bazasi</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ customers.total || 0 }} ta</h2>
-        <p v-if="workers.total_active_workers" class="text-[8px] font-black text-emerald-500 mt-1 tracking-wider">
+        <p v-if="workers.total_active_workers" class="text-[10px] font-black text-emerald-500 mt-1 tracking-wider">
           {{ workers.total_active_workers }} ta faol sotuvchi
         </p>
       </div>
 
       <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
-        <span class="text-[9px] font-black text-slate-500">Nasiya: <span class="text-rose-500">{{ formatPrice(customers.total_debt) }}</span></span>
+        <span class="text-[11px] font-black text-slate-500">Nasiya: <span class="text-rose-500">{{ formatPrice(customers.total_debt) }}</span></span>
       </div>
     </div>
 
@@ -191,3 +191,5 @@ const sparklineOptions = {
   box-shadow: 0 8px 32px -8px rgba(0,0,0,0.08);
 }
 </style>
+
+

@@ -13,15 +13,15 @@
           ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20' 
           : 'bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-600 border-slate-100 dark:border-slate-800 hover:border-slate-200'"
       >
-        <span class="text-[10px] font-black tracking-tight">{{ order.name }}</span>
-        <i v-if="orders.length > 1" @click.stop="$emit('remove-order', idx)" class="pi pi-times text-[8px] hover:text-white transition-colors" />
+        <span class="text-[12px] font-black tracking-tight">{{ order.name }}</span>
+        <i v-if="orders.length > 1" @click.stop="$emit('remove-order', idx)" class="pi pi-times text-[10px] hover:text-white transition-colors" />
       </div>
 
       <button 
         @click="$emit('new-order')"
         class="w-8 h-8 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-400 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all flex-shrink-0"
       >
-        <i class="pi pi-plus text-[10px]"></i>
+        <i class="pi pi-plus text-[12px]"></i>
       </button>
     </div>
 
@@ -29,7 +29,7 @@
     <div class="flex items-center justify-between mb-6">
       <div class="flex flex-col">
         <h2 class="text-xl font-black text-slate-800 dark:text-white font-outfit m-0 tracking-tight leading-none">Joriy Savdo</h2>
-        <span class="text-[9px] font-black text-slate-400 dark:text-slate-600 tracking-widest mt-1.5 opacity-60">
+        <span class="text-[11px] font-black text-slate-400 dark:text-slate-600 tracking-widest mt-1.5 opacity-60">
           {{ cart.length }} ta mahsulot savatchada
         </span>
       </div>
@@ -38,7 +38,7 @@
         @click="$emit('clear')" 
         class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/10 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all duration-300"
       >
-        <i class="pi pi-trash text-[14px]"></i>
+        <i class="pi pi-trash text-[16px]"></i>
       </button>
     </div>
     </div><!-- end fixed top -->
@@ -49,7 +49,7 @@
          <div class="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center mb-5">
             <i class="pi pi-shopping-bag text-2xl text-slate-300 dark:text-slate-700"></i>
          </div>
-         <h3 class="text-[10px] font-black text-slate-800 dark:text-slate-200 tracking-[0.2em] mb-2 font-outfit">Savat bo'sh</h3>
+         <h3 class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-[0.2em] mb-2 font-outfit">Savat bo'sh</h3>
       </div>
 
       <div v-else class="space-y-2.5">
@@ -64,17 +64,17 @@
           </div>
           
           <div class="flex-1 min-w-0">
-            <h4 class="text-[12px] font-bold text-slate-800 dark:text-white truncate font-outfit tracking-tight">{{ item.name }}</h4>
+            <h4 class="text-[14px] font-bold text-slate-800 dark:text-white truncate font-outfit tracking-tight">{{ item.name }}</h4>
             <div v-if="item.tur_id" class="flex items-center gap-1 mt-1">
-              <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 tracking-widest leading-none">
+              <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 tracking-widest leading-none">
                 {{ item.tur_name }}
               </span>
-              <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[8px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 tracking-widest leading-none">
+              <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 tracking-widest leading-none">
                 {{ item.tur_color }}
               </span>
             </div>
             <div class="mt-1">
-              <span class="text-[12px] font-black text-emerald-500 font-outfit">
+              <span class="text-[14px] font-black text-emerald-500 font-outfit">
                 {{ settingsStore.formatPrice(item.sale_price || item.price || 0, item.currency_code) }}
               </span>
             </div>
@@ -93,7 +93,7 @@
                 else if (val === 0) $emit('remove', item.cartItemId);
                 else e.target.value = item.qty;
               }"
-              class="w-10 text-[11px] font-black text-center bg-transparent border-none outline-none dark:text-slate-300 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              class="w-10 text-[13px] font-black text-center bg-transparent border-none outline-none dark:text-slate-300 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <button 
               @click="item.stock_available === undefined || item.qty < item.stock_available ? $emit('update-qty', item.cartItemId, item.qty + 1) : null" 
@@ -108,20 +108,20 @@
     <!-- Sticky Footer: Total + Checkout -->
     <div class="flex-shrink-0 px-6 pb-6 pt-4 border-t border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0b0f1a]">
       <div class="flex items-center justify-between px-1 mb-4">
-        <span class="text-[10px] font-black text-slate-400 dark:text-slate-700 tracking-widest">JAMI:</span>
+        <span class="text-[12px] font-black text-slate-400 dark:text-slate-700 tracking-widest">JAMI:</span>
         <div class="flex items-baseline gap-1.5 text-right">
            <span class="text-2xl font-black text-emerald-500 font-outfit ">{{ settingsStore.formatNumber(totals.finalTotal) }}</span>
-           <span class="text-[8px] font-black text-slate-300 dark:text-slate-700 tracking-widest">{{ (totals.currency || settingsStore.currency) === 'UZS' ? "so'm" : (totals.currency || settingsStore.currency) }}</span>
+           <span class="text-[10px] font-black text-slate-300 dark:text-slate-700 tracking-widest">{{ (totals.currency || settingsStore.currency) === 'UZS' ? "so'm" : (totals.currency || settingsStore.currency) }}</span>
         </div>
       </div>
 
       <button
         @click="$emit('checkout')"
         :disabled="cart.length === 0"
-        class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white font-black text-[10px] tracking-[0.2em] shadow-xl shadow-emerald-500/10 transition-all active:scale-95 flex items-center justify-center gap-2"
+        class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white font-black text-[12px] tracking-[0.2em] shadow-xl shadow-emerald-500/10 transition-all active:scale-95 flex items-center justify-center gap-2"
       >
         <span>TO'LOVGA O'TISH</span>
-        <i class="pi pi-chevron-right text-[8px]"></i>
+        <i class="pi pi-chevron-right text-[10px]"></i>
       </button>
     </div><!-- end footer -->
   </div>
@@ -190,3 +190,5 @@ defineEmits([
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+
+

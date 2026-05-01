@@ -1,7 +1,7 @@
 <template>
   <span 
     :class="[
-      'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[8px] font-black tracking-widest border transition-all duration-200',
+      'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-black tracking-widest border transition-all duration-200',
       getStatusClass(status)
     ]"
   >
@@ -31,3 +31,5 @@ const translatedLabel = computed(() => {
   return props.displayLabel
 })
 </script>
+
+

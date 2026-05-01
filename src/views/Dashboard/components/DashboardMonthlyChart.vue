@@ -3,11 +3,11 @@
     <div class="flex items-center justify-between mb-8">
       <div>
         <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">Oylik Moliyaviy Tahlil</h3>
-        <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">{{ chartData?.year }}-yil tushum va xarajatlar</p>
+        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">{{ chartData?.year }}-yil tushum va xarajatlar</p>
       </div>
       <div v-if="chartData?.summary" class="flex items-center gap-6">
          <div class="text-right">
-           <p class="text-[8px] font-black text-slate-400 tracking-widest">Jami Foyda</p>
+           <p class="text-[10px] font-black text-slate-400 tracking-widest">Jami Foyda</p>
            <p class="text-xs font-black text-emerald-500">{{ formatPrice(chartData.summary.total_profit) }}</p>
          </div>
          <i class="pi pi-chart-bar text-slate-300"></i>
@@ -108,3 +108,5 @@ const chartOptions = {
   }
 }
 </script>
+
+

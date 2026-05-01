@@ -18,11 +18,11 @@
         <div :class="['absolute -right-2 -bottom-2 w-16 h-16 opacity-5 group-hover:scale-150 transition-transform duration-500 rounded-full', card.bg]"></div>
         <div class="flex items-center gap-1.5 mb-2 relative z-10">
            <div :class="['w-1.5 h-1.5 rounded-full', card.bg]"></div>
-           <p class="text-[9px] font-bold tracking-widest text-slate-400">{{ t(card.label) }}</p>
+           <p class="text-[11px] font-bold tracking-widest text-slate-400">{{ t(card.label) }}</p>
         </div>
         <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight mb-1 relative z-10">{{ card.value }}</h3>
-        <div class="flex items-center gap-2 text-[9px] font-bold text-slate-400 tracking-widest relative z-10">
-          <i :class="['pi', card.icon, 'text-[8px]']"></i>
+        <div class="flex items-center gap-2 text-[11px] font-bold text-slate-400 tracking-widest relative z-10">
+          <i :class="['pi', card.icon, 'text-[10px]']"></i>
           <span>{{ card.count }} {{ t('finance.sales_count').toLowerCase() }}</span>
           <span v-if="card.mixed" class="text-emerald-500 ml-auto">+{{ card.mixed }} aralash</span>
         </div>
@@ -34,7 +34,7 @@
        <!-- Cumulative Bar Chart -->
        <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col h-full">
           <div class="mb-4">
-             <h3 class="text-[9px] font-bold tracking-widest text-slate-400 mb-0.5">To'lov Usullari</h3>
+             <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">To'lov Usullari</h3>
              <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">Tushumlar strukturasi</p>
           </div>
           <div class="flex-1 min-h-[220px] sm:min-h-[250px]">
@@ -44,15 +44,15 @@
 
        <!-- Distribution Pie Chart -->
        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col h-full">
-          <h3 class="text-[9px] font-bold tracking-widest text-slate-400 mb-6 border-b border-slate-50 dark:border-slate-800 pb-2">Ulushi Taqsimoti</h3>
+          <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-6 border-b border-slate-50 dark:border-slate-800 pb-2">Ulushi Taqsimoti</h3>
           <div class="h-[180px] relative mb-6 flex items-center justify-center">
              <Chart type="doughnut" :data="donutData" :options="donutOptions" class="relative z-10 w-full h-full" />
              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-                <span class="text-[9px] font-black text-slate-400 tracking-[0.2em] mb-1 leading-none">{{ t('common.total') }}</span>
+                <span class="text-[11px] font-black text-slate-400 tracking-[0.2em] mb-1 leading-none">{{ t('common.total') }}</span>
                 <span class="text-lg font-black text-slate-800 dark:text-white leading-none">
                   {{ Math.floor(props.data.summary?.total_revenue || 0).toLocaleString() }}
                 </span>
-                <span class="text-[8px] font-black text-slate-400 mt-1">SO'M</span>
+                <span class="text-[10px] font-black text-slate-400 mt-1">SO'M</span>
              </div>
           </div>
           <div class="space-y-4 flex-1">
@@ -60,9 +60,9 @@
                 <div class="flex items-center justify-between mb-1.5">
                    <div class="flex items-center gap-2">
                       <div :class="['w-1.5 h-1.5 rounded-full shadow-sm', method.bg]"></div>
-                      <span class="text-[10px] font-bold text-slate-500 tracking-wider group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{{ t(method.label) }}</span>
+                      <span class="text-[12px] font-bold text-slate-500 tracking-wider group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{{ t(method.label) }}</span>
                    </div>
-                   <span class="text-[10px] font-black text-slate-800 dark:text-slate-100">{{ method.pct }}%</span>
+                   <span class="text-[12px] font-black text-slate-800 dark:text-slate-100">{{ method.pct }}%</span>
                 </div>
                 <div class="h-1 w-full bg-slate-50 dark:bg-slate-800/50 rounded-full overflow-hidden">
                    <div :class="['h-full rounded-full transition-all duration-1000 shadow-sm', method.bg]" :style="{ width: method.pct + '%' }"></div>
@@ -77,13 +77,13 @@
        <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
           <div class="flex items-center gap-2">
              <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
-             <span class="text-[10px] font-bold tracking-widest text-slate-500">Filiallar bo'yicha tahlil</span>
+             <span class="text-[12px] font-bold tracking-widest text-slate-500">Filiallar bo'yicha tahlil</span>
           </div>
        </div>
        <div class="overflow-x-auto max-h-[400px] custom-scrollbar overflow-y-auto">
           <table class="w-full text-left border-collapse">
              <thead>
-                <tr class="text-[9px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <tr class="text-[11px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
                    <th class="px-4 py-3">{{ t('finance.branch') }}</th>
                    <th class="px-4 py-3 text-right">{{ t('finance.total_revenue') }}</th>
                    <th class="px-4 py-3 text-center">Sotuvlar</th>
@@ -97,16 +97,16 @@
                 <tr v-for="item in tableData" :key="item.branch_id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-colors group">
                    <td class="px-4 py-3 text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">{{ item.branch_name }}</td>
                    <td class="px-4 py-3 text-right text-xs font-bold text-emerald-600">{{ formatPrice(item.total) }}</td>
-                   <td class="px-4 py-3 text-center text-[11px] text-slate-500">{{ item.sales_count }}</td>
-                   <td class="px-4 py-3 text-right text-[11px] text-slate-500">{{ formatPrice(item.cash) }}</td>
-                   <td class="px-4 py-3 text-right text-[11px] text-slate-500">{{ formatPrice(item.card) }}</td>
-                   <td class="px-4 py-3 text-right text-[11px] text-slate-500">{{ formatPrice(item.debt) }}</td>
+                   <td class="px-4 py-3 text-center text-[13px] text-slate-500">{{ item.sales_count }}</td>
+                   <td class="px-4 py-3 text-right text-[13px] text-slate-500">{{ formatPrice(item.cash) }}</td>
+                   <td class="px-4 py-3 text-right text-[13px] text-slate-500">{{ formatPrice(item.card) }}</td>
+                   <td class="px-4 py-3 text-right text-[13px] text-slate-500">{{ formatPrice(item.debt) }}</td>
                    <td class="px-4 py-3">
                       <div class="flex items-center gap-2">
                          <div class="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                             <div class="h-full bg-slate-400 dark:bg-slate-500 rounded-full" :style="{ width: item.share_pct + '%' }"></div>
                          </div>
-                         <span class="text-[10px] font-medium text-slate-400 w-8">{{ item.share_pct }}%</span>
+                         <span class="text-[12px] font-medium text-slate-400 w-8">{{ item.share_pct }}%</span>
                       </div>
                    </td>
                 </tr>
@@ -261,3 +261,5 @@ const distribution = computed(() => {
 
 const tableData = computed(() => props.data.table || [])
 </script>
+
+

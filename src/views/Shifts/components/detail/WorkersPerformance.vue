@@ -8,7 +8,7 @@
      <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
            <thead>
-              <tr class="bg-slate-50/50 dark:bg-slate-800/30 text-[10px] font-bold text-slate-400 tracking-widest border-b border-slate-100 dark:border-slate-800">
+              <tr class="bg-slate-50/50 dark:bg-slate-800/30 text-[12px] font-bold text-slate-400 tracking-widest border-b border-slate-100 dark:border-slate-800">
                  <th class="px-6 py-3 font-semibold">{{ $t('shifts.workers.col_worker') }}</th>
                  <th class="px-6 py-3 font-semibold text-right">{{ $t('shifts.workers.col_sales') }}</th>
                  <th class="px-6 py-3 font-semibold text-right">{{ $t('shifts.workers.col_amount') }}</th>
@@ -18,7 +18,7 @@
               <tr v-for="worker in workers" :key="worker.worker_id" class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
                  <td class="px-6 py-3.5 font-medium text-slate-900 dark:text-slate-200">
                     <div class="flex items-center gap-3">
-                       <div class="w-7 h-7 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-black text-slate-500 border border-slate-200 dark:border-slate-700">
+                       <div class="w-7 h-7 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[12px] font-black text-slate-500 border border-slate-200 dark:border-slate-700">
                           {{ worker.name.charAt(0) }}
                        </div>
                        {{ worker.name }}
@@ -41,3 +41,5 @@ defineProps({
   formatCurrency: { type: Function, required: true }
 })
 </script>
+
+

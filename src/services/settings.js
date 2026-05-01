@@ -28,3 +28,5 @@ export const subscriptionAPI = {
     extend: (data) => api.post('/subscription/extend/', data),
     changePlan: (data) => api.post('/subscription/plan/', data)
 }
+
+

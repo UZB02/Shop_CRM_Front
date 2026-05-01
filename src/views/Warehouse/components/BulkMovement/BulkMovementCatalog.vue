@@ -3,18 +3,18 @@
     <!-- Compact Header -->
     <div class="p-6 border-b border-slate-100 dark:border-slate-800/50 space-y-4">
       <div class="flex items-center justify-between">
-        <h4 class="text-[12px] font-black text-slate-400 tracking-[0.2em] uppercase">{{ $t('menu.products') }}</h4>
+        <h4 class="text-[14px] font-black text-slate-400 tracking-[0.2em] uppercase">{{ $t('menu.products') }}</h4>
         <div v-if="loading" class="w-4 h-4 border-2 border-slate-200 border-t-emerald-500 rounded-full animate-spin"></div>
       </div>
 
       <!-- Search -->
       <div class="relative group">
-        <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-emerald-500 transition-colors text-[12px]" />
+        <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-emerald-500 transition-colors text-[14px]" />
         <input 
           v-model="searchQuery" 
           type="text" 
           :placeholder="$t('common.search') + '...'" 
-          class="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-[13px] font-bold outline-none focus:ring-2 focus:ring-emerald-500/10 placeholder:text-slate-300 transition-all"
+          class="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-[15px] font-bold outline-none focus:ring-2 focus:ring-emerald-500/10 placeholder:text-slate-300 transition-all"
         />
       </div>
 
@@ -24,7 +24,7 @@
           v-for="cat in categories" 
           :key="cat.id"
           @click="selectCategory(cat)"
-          class="px-4 py-2 rounded-lg text-[11px] font-black tracking-widest transition-all whitespace-nowrap border"
+          class="px-4 py-2 rounded-lg text-[13px] font-black tracking-widest transition-all whitespace-nowrap border"
           :class="selectedCategoryId === cat.id 
             ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white' 
             : 'bg-white dark:bg-slate-900 text-slate-400 border-slate-100 dark:border-slate-800'"
@@ -38,13 +38,13 @@
     <div class="flex-1 overflow-y-auto px-4 py-2 custom-scrollbar">
       <div v-if="filteredProducts.length === 0 && !loading" class="h-full flex flex-col items-center justify-center opacity-20 py-10">
          <i class="pi pi-search text-2xl mb-2"></i>
-         <p class="font-black text-[11px] tracking-widest uppercase">{{ $t('common.no_data') }}</p>
+         <p class="font-black text-[13px] tracking-widest uppercase">{{ $t('common.no_data') }}</p>
       </div>
 
       <div v-else class="space-y-1.5">
         <div 
           v-for="product in filteredProducts" 
-          :key="product.id" 
+          :key="`${product.id}-${product.tur_id || 0}`" 
           class="group cursor-pointer"
           @click="$emit('add', product)"
         >
@@ -56,21 +56,21 @@
                 <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-sm"></i>
               </div>
               
-              <div v-if="getItemQty(product)" class="absolute -top-2 -right-2 min-w-[20px] h-[20px] bg-emerald-500 text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-lg border-2 border-white dark:border-slate-900 z-[20]">
+              <div v-if="getItemQty(product)" class="absolute -top-2 -right-2 min-w-[20px] h-[20px] bg-emerald-500 text-white rounded-full flex items-center justify-center text-[12px] font-black shadow-lg border-2 border-white dark:border-slate-900 z-[20]">
                 {{ getItemQty(product) }}
               </div>
             </div>
             
             <div class="flex-1 min-w-0">
-              <h5 class="text-[12px] font-black text-slate-700 dark:text-slate-300 truncate tracking-tight">{{ product.name }}</h5>
+              <h5 class="text-[14px] font-black text-slate-700 dark:text-slate-300 truncate tracking-tight">{{ product.name }}</h5>
               <div class="flex items-center gap-2 mt-0.5">
                 <TurBadge v-if="product.tur_name" :tur-name="product.tur_name" :tur-color="product.tur_color" class="scale-[0.65] origin-left" />
-                <span class="text-[10px] font-bold text-slate-400 tracking-tighter truncate">{{ product.barcode }}</span>
+                <span class="text-[12px] font-bold text-slate-400 tracking-tighter truncate">{{ product.barcode }}</span>
               </div>
             </div>
 
             <div class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
-              <i class="pi pi-plus text-[10px]"></i>
+              <i class="pi pi-plus text-[12px]"></i>
             </div>
           </div>
         </div>
@@ -150,3 +150,5 @@ onMounted(async () => {
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.2); border-radius: 10px; }
 </style>
+
+

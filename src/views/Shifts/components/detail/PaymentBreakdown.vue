@@ -20,20 +20,20 @@
               <div class="flex items-center justify-between">
                  <div class="flex items-center gap-1.5">
                     <div class="w-2 h-2 rounded-full shadow-sm" :class="dotClasses[method]"></div>
-                    <span class="text-[10px] font-bold text-slate-500 tracking-wider">{{ methodLabels[method] }}</span>
+                    <span class="text-[12px] font-bold text-slate-500 tracking-wider">{{ methodLabels[method] }}</span>
                  </div>
               </div>
               <div>
                  <p class="text-sm font-black text-slate-900 dark:text-white tracking-tight">{{ formatCurrency(xReport.by_payment[method]) }}</p>
-                 <p class="text-[10px] font-semibold text-slate-400 mt-0.5">{{ calculatePercent(xReport.by_payment[method]) }}%</p>
+                 <p class="text-[12px] font-semibold text-slate-400 mt-0.5">{{ calculatePercent(xReport.by_payment[method]) }}%</p>
                  <div v-if="(method === 'mixed' || method === 'debt') && xReport.by_payment[method + '_cash'] !== undefined" class="mt-2.5 pt-2.5 border-t border-slate-200/60 dark:border-slate-700/60 space-y-1.5 flex-none">
                     <div class="flex items-center justify-between">
-                       <span class="text-[9px] font-semibold text-slate-400">{{ $t('shifts.payment.cash_part') }}:</span>
-                       <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(xReport.by_payment[method + '_cash']) }}</span>
+                       <span class="text-[11px] font-semibold text-slate-400">{{ $t('shifts.payment.cash_part') }}:</span>
+                       <span class="text-[12px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(xReport.by_payment[method + '_cash']) }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                       <span class="text-[9px] font-semibold text-slate-400">{{ $t('shifts.payment.card_part') }}:</span>
-                       <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(xReport.by_payment[method + '_card']) }}</span>
+                       <span class="text-[11px] font-semibold text-slate-400">{{ $t('shifts.payment.card_part') }}:</span>
+                       <span class="text-[12px] font-bold text-slate-600 dark:text-slate-300">{{ formatCurrency(xReport.by_payment[method + '_card']) }}</span>
                     </div>
                  </div>
               </div>
@@ -54,3 +54,5 @@ defineProps({
   formatCurrency: { type: Function, required: true }
 })
 </script>
+
+

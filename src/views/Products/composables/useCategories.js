@@ -121,3 +121,5 @@ export function useCategories(loadProductsCallback) {
         confirmDeleteCategory
     }
 }
+
+

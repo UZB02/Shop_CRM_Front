@@ -26,7 +26,7 @@
         </div>
         <div class="min-w-0">
           <h3 
-            class="text-[13px] font-semibold tracking-tight transition-colors duration-300 truncate" 
+            class="text-[15px] font-semibold tracking-tight transition-colors duration-300 truncate" 
             :class="[
               category.status === 'inactive'
                 ? 'text-rose-600 dark:text-rose-400'
@@ -35,14 +35,14 @@
           >
             {{ category.name }}
           </h3>
-          <p v-if="category.description" class="text-[10px] text-slate-400 mt-0.5 line-clamp-1 truncate">{{ category.description }}</p>
+          <p v-if="category.description" class="text-[12px] text-slate-400 mt-0.5 line-clamp-1 truncate">{{ category.description }}</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
         <!-- Quick Stats -->
         <div class="hidden xs:flex items-center px-1.5 py-0.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
-           <span class="text-[9px] font-bold text-slate-400 tracking-widest">{{ subCount }} subs</span>
+           <span class="text-[11px] font-bold text-slate-400 tracking-widest">{{ subCount }} subs</span>
         </div>
 
         <div class="flex items-center gap-1 ml-1 opacity-0 group-hover:opacity-100 transition-all">
@@ -50,13 +50,13 @@
             @click.stop="$emit('edit', category)"
             class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/20"
           >
-            <i class="pi pi-pencil text-[10px]"></i>
+            <i class="pi pi-pencil text-[12px]"></i>
           </button>
           <button 
             @click.stop="$emit('delete', category)"
             class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all border border-transparent hover:border-rose-100 dark:hover:border-rose-500/20"
           >
-            <i class="pi pi-trash text-[10px]"></i>
+            <i class="pi pi-trash text-[12px]"></i>
           </button>
         </div>
         
@@ -64,7 +64,7 @@
           class="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ml-1"
           :class="[isExpanded ? 'rotate-180 text-emerald-500' : 'text-slate-300']"
         >
-          <i class="pi pi-chevron-down text-[10px] font-bold"></i>
+          <i class="pi pi-chevron-down text-[12px] font-bold"></i>
         </div>
       </div>
     </div>
@@ -93,3 +93,5 @@ defineProps({
 
 defineEmits(['expand', 'edit', 'delete'])
 </script>
+
+

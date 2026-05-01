@@ -14,7 +14,7 @@
         @click="modelValue.search = ''"
         class="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded flex items-center justify-center text-slate-400 hover:text-slate-600 transition-all"
       >
-        <i class="pi pi-times text-[9px]"></i>
+        <i class="pi pi-times text-[11px]"></i>
       </button>
     </div>
 
@@ -66,4 +66,6 @@ defineEmits(['update:modelValue'])
 <style scoped>
 /* Remove PrimeVue styles since we're using native elements */
 </style>
+
+
 

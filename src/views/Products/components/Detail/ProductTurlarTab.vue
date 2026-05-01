@@ -47,11 +47,11 @@
                <div class="space-y-0.5 min-w-0">
                   <div class="flex items-center gap-2 flex-wrap">
                     <h4 class="font-bold text-slate-900 dark:text-white truncate">{{ tur.name }}</h4>
-                    <span v-if="tur.color" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                    <span v-if="tur.color" class="text-[12px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                        {{ tur.color }}
                     </span>
                   </div>
-                  <p class="text-[10px] font-bold text-emerald-500 tracking-wider">{{ $t('turlar.effective_price') }}: {{ formatPrice(tur.effective_price) }}</p>
+                  <p class="text-[12px] font-bold text-emerald-500 tracking-wider">{{ $t('turlar.effective_price') }}: {{ formatPrice(tur.effective_price) }}</p>
                </div>
                <div class="flex items-center gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                   <button @click="editTur(tur)" class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-emerald-500 transition-colors">
@@ -66,9 +66,9 @@
             <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
                <div class="flex items-center gap-2">
                   <div :class="tur.is_active ? 'bg-emerald-500 shadow-sm shadow-emerald-500/50' : 'bg-slate-300 dark:bg-slate-700'" class="w-1.5 h-1.5 rounded-full"></div>
-                  <span class="text-[9px] font-bold text-slate-400 tracking-wider">{{ tur.is_active ? $t('common.active') : $t('common.inactive') }}</span>
+                  <span class="text-[11px] font-bold text-slate-400 tracking-wider">{{ tur.is_active ? $t('common.active') : $t('common.inactive') }}</span>
                </div>
-               <div v-if="tur.sale_price_override" class="text-[9px] font-bold text-slate-400 line-through">
+               <div v-if="tur.sale_price_override" class="text-[11px] font-bold text-slate-400 line-through">
                   {{ formatPrice(product.sale_price) }}
                </div>
             </div>
@@ -85,7 +85,7 @@
     }">
       <div class="space-y-5 pt-2">
         <div class="space-y-1.5">
-          <label class="text-[10px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.name') }}</label>
+          <label class="text-[12px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.name') }}</label>
           <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
             <i class="pi pi-tag absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
             <InputText 
@@ -97,7 +97,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-[10px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.color') }} ({{ $t('common.optional') }})</label>
+          <label class="text-[12px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.color') }} ({{ $t('common.optional') }})</label>
           <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
             <i class="pi pi-palette absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
             <InputText 
@@ -109,9 +109,9 @@
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-[10px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.sale_price_override') }}</label>
+          <label class="text-[12px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.sale_price_override') }}</label>
           <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
-            <span class="absolute left-4 text-[10px] font-black text-slate-400 group-focus-within/input:text-emerald-500 transition-colors tracking-tight">SUM</span>
+            <span class="absolute left-4 text-[12px] font-black text-slate-400 group-focus-within/input:text-emerald-500 transition-colors tracking-tight">SUM</span>
             <InputNumber 
               v-model="turForm.sale_price_override" 
               mode="decimal" 
@@ -130,7 +130,7 @@
         <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800">
           <div class="flex flex-col">
             <span class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ $t('common.status') }}</span>
-            <span class="text-[10px] text-slate-500">{{ turForm.is_active ? $t('common.active') : $t('common.inactive') }}</span>
+            <span class="text-[12px] text-slate-500">{{ turForm.is_active ? $t('common.active') : $t('common.inactive') }}</span>
           </div>
           <ToggleSwitch v-model="turForm.is_active" />
         </div>
@@ -301,3 +301,5 @@ watch(() => props.product.has_tur, (newVal) => {
   if (newVal) fetchTurlar()
 })
 </script>
+
+

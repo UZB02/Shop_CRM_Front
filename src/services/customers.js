@@ -18,3 +18,5 @@ export const customerGroupsAPI = {
     update: (id, data) => api.patch(`/customer-groups/${id}/`, data),
     delete: (id) => api.delete(`/customer-groups/${id}/`)
 }
+
+

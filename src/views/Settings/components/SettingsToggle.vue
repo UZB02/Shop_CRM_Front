@@ -18,7 +18,7 @@
     <!-- Label -->
     <div class="flex-1 min-w-0">
       <p class="text-xs font-black text-slate-800 dark:text-slate-200 leading-snug">{{ label }}</p>
-      <p v-if="desc" class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 leading-snug">{{ desc }}</p>
+      <p v-if="desc" class="text-[12px] text-slate-400 dark:text-slate-500 mt-0.5 leading-snug">{{ desc }}</p>
     </div>
 
     <!-- Toggle switch -->
@@ -46,3 +46,5 @@ const emit = defineEmits(['update:modelValue'])
 
 const toggle = () => emit('update:modelValue', !props.modelValue)
 </script>
+
+

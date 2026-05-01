@@ -13,7 +13,7 @@
       <template #empty>
         <div class="py-16 text-center">
            <i class="pi pi-inbox text-3xl text-slate-200 mb-3 block"></i>
-           <p class="text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('common.no_results') }}</p>
+           <p class="text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('common.no_results') }}</p>
         </div>
       </template>
 
@@ -22,11 +22,11 @@
         <template #body="{ data, index }">
           <div class="flex items-center gap-3 py-1 group/worker cursor-pointer" @click="navigateToDetail(data)">
             <div class="w-5 flex items-center justify-center shrink-0">
-               <i v-if="isTopThree(data)" :class="['pi pi-star-fill text-[11px]', getMedalColor(data)]"></i>
-               <span v-else class="text-[10px] font-bold text-slate-300">#{{ index + 1 }}</span>
+               <i v-if="isTopThree(data)" :class="['pi pi-star-fill text-[13px]', getMedalColor(data)]"></i>
+               <span v-else class="text-[12px] font-bold text-slate-300">#{{ index + 1 }}</span>
             </div>
             <div 
-              class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-[10px] shadow-sm transition-transform group-hover/worker:scale-105"
+              class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-[12px] shadow-sm transition-transform group-hover/worker:scale-105"
               :style="getAvatarGradient(data?.worker_name)"
             >
               {{ (data?.worker_name || '??').split(' ').filter(n => n).map(n => n[0]).join('').toUpperCase().substring(0, 2) }}
@@ -35,7 +35,7 @@
               <span class="text-xs font-bold text-slate-700 dark:text-slate-200 truncate group-hover/worker:text-emerald-500 transition-colors">
                 {{ data?.worker_name || '---' }}
               </span>
-              <span class="text-[9px] font-medium text-slate-400 opacity-70 tracking-tight">ID: {{ data?.worker }}</span>
+              <span class="text-[11px] font-medium text-slate-400 opacity-70 tracking-tight">ID: {{ data?.worker }}</span>
             </div>
           </div>
         </template>
@@ -52,7 +52,7 @@
                   <div class="bg-rose-500 h-full" :style="{ width: (100 - getQualityRatio(data)) + '%' }"></div>
                </div>
             </div>
-            <span class="text-[9px] font-medium text-slate-400 leading-none">{{ settingsStore.formatPrice(data?.sales_amount) }}</span>
+            <span class="text-[11px] font-medium text-slate-400 leading-none">{{ settingsStore.formatPrice(data?.sales_amount) }}</span>
           </div>
         </template>
       </Column>
@@ -79,7 +79,7 @@
       <!-- Avg Sale -->
       <Column field="avg_sale" :header="$t('kpi.table.avg_sale')" sortable class="text-right min-w-[100px]">
         <template #body="{ data }">
-          <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+          <span class="text-[12px] font-semibold text-slate-500 dark:text-slate-400">
             {{ settingsStore.formatPrice(data?.avg_sale) }}
           </span>
         </template>
@@ -91,17 +91,17 @@
           <div class="flex flex-col items-end">
             <template v-if="parseFloat(data?.target_amount || 0) > 0">
               <div class="flex items-center gap-1.5">
-                 <span class="text-[11px] font-black text-slate-800 dark:text-slate-200">
+                 <span class="text-[13px] font-black text-slate-800 dark:text-slate-200">
                    {{ settingsStore.formatPrice(data?.target_amount) }}
                  </span>
                  <span v-if="parseFloat(data?.completion_pct || 0) >= 100" class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
               </div>
-              <span class="text-[9px] font-bold text-emerald-500 opacity-80 mt-0.5 tracking-widest">+{{ settingsStore.formatPrice(data?.bonus_amount) }}</span>
+              <span class="text-[11px] font-bold text-emerald-500 opacity-80 mt-0.5 tracking-widest">+{{ settingsStore.formatPrice(data?.bonus_amount) }}</span>
             </template>
             <button 
               v-else
               @click="$emit('open-target', data)"
-              class="text-[9px] font-bold text-slate-400 border border-dashed border-slate-200 dark:border-slate-700 rounded px-2 py-0.5 hover:text-emerald-500 transition-all"
+              class="text-[11px] font-bold text-slate-400 border border-dashed border-slate-200 dark:border-slate-700 rounded px-2 py-0.5 hover:text-emerald-500 transition-all"
             >
               {{ $t('kpi.status.no_target') }}
             </button>
@@ -115,14 +115,14 @@
           <div class="flex flex-col gap-1 py-1">
             <div class="flex justify-between items-center">
                <div class="flex items-center gap-2">
-                 <span class="text-[10px] font-black" :class="getCompletionColor(data?.completion_pct, 'text')">
+                 <span class="text-[12px] font-black" :class="getCompletionColor(data?.completion_pct, 'text')">
                    {{ data?.completion_pct ? parseFloat(data?.completion_pct).toFixed(0) + '%' : '0%' }}
                  </span>
-                 <span class="px-1.5 py-0.5 rounded-[4px] text-[8px] font-black tracking-tighter shadow-sm" :class="getSmartStatusBadge(data?.completion_pct)">
+                 <span class="px-1.5 py-0.5 rounded-[4px] text-[10px] font-black tracking-tighter shadow-sm" :class="getSmartStatusBadge(data?.completion_pct)">
                    {{ getSmartStatusLabel(data?.completion_pct) }}
                  </span>
                </div>
-               <span class="text-[8px] text-slate-400 font-bold tracking-tighter opacity-50">{{ $t('kpi.stats.plan_label') }}</span>
+               <span class="text-[10px] text-slate-400 font-bold tracking-tighter opacity-50">{{ $t('kpi.stats.plan_label') }}</span>
             </div>
             <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800/20 rounded-full overflow-hidden shadow-inner">
               <div 
@@ -143,7 +143,7 @@
             v-tooltip.left="$t('kpi.set_target.title')"
             class="w-7 h-7 rounded-lg text-slate-300 hover:text-emerald-500 hover:bg-emerald-500/5 transition-all flex items-center justify-center active:scale-95"
           >
-            <i class="pi pi-pencil text-[9px]"></i>
+            <i class="pi pi-pencil text-[11px]"></i>
           </button>
         </template>
       </Column>
@@ -227,3 +227,5 @@ const {
   background: #334155;
 }
 </style>
+
+

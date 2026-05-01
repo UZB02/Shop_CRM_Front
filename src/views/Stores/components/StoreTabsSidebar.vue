@@ -11,7 +11,7 @@
           ? 'bg-emerald-500 text-white border-emerald-500'
           : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'"
       >
-        <i :class="[tab.icon, 'text-[10px]']"></i>
+        <i :class="[tab.icon, 'text-[12px]']"></i>
         {{ tab.label }}
       </button>
     </div>
@@ -41,7 +41,7 @@
           <i :class="[tab.icon, 'text-xs']"></i>
           <span class="font-medium text-xs">{{ tab.label }}</span>
         </div>
-        <i v-if="active === tab.id" class="pi pi-chevron-right text-[8px]"></i>
+        <i v-if="active === tab.id" class="pi pi-chevron-right text-[10px]"></i>
       </button>
     </div>
   </div>
@@ -59,3 +59,5 @@ defineEmits(['select'])
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+
+

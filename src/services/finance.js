@@ -38,3 +38,5 @@ export const financeReportsAPI = {
     getProfitLoss: (params) => api.get('/finance/profit-loss/', { params }),
     getDebtorReport: (params) => api.get('/finance/debtor-report/', { params })
 }
+
+

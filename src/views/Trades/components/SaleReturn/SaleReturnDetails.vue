@@ -4,7 +4,7 @@
       
       <!-- Customer Section -->
       <div v-if="!initialSale" class="space-y-2">
-        <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Mijoz (Ixtiyoriy)</label>
+        <label class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Mijoz (Ixtiyoriy)</label>
         <div class="relative group">
           <i class="pi pi-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
           <select 
@@ -14,23 +14,23 @@
             <option :value="null">Noma'lum mijoz</option>
             <option v-for="c in customers" :key="c.id" :value="c.id">{{ c.full_name }}</option>
           </select>
-          <i class="pi pi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-500 text-[9px] pointer-events-none"></i>
+          <i class="pi pi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-500 text-[11px] pointer-events-none"></i>
         </div>
       </div>
       <!-- Customer Display (Static) -->
       <div v-else class="p-3 rounded-[14px] bg-white dark:bg-[#131d31] border border-slate-100 dark:border-white/5 shadow-sm">
-         <h5 class="text-[8px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-1.5 ml-1">Mijoz</h5>
+         <h5 class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-1.5 ml-1">Mijoz</h5>
          <div class="flex items-center gap-2.5 px-1 pb-1">
            <div class="w-6 h-6 rounded-md bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center shrink-0">
-              <i class="pi pi-user text-[10px] text-rose-500"></i>
+              <i class="pi pi-user text-[12px] text-rose-500"></i>
            </div>
-           <span class="text-[12px] font-bold text-slate-800 dark:text-slate-200">{{ initialSale.customer_name || 'Noma\'lum mijoz' }}</span>
+           <span class="text-[14px] font-bold text-slate-800 dark:text-slate-200">{{ initialSale.customer_name || 'Noma\'lum mijoz' }}</span>
          </div>
       </div>
 
       <!-- Reason Section -->
       <div class="space-y-2">
-        <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Qaytarish Sababi</label>
+        <label class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Qaytarish Sababi</label>
         <textarea 
           v-model="internalReason"
           placeholder="Masalan: Mahsulot nuqsonli chiqqan..."
@@ -44,7 +44,7 @@
       <!-- Total Amount Summary & Finalize -->
       <div class="space-y-4">
         <div class="space-y-3 px-1">
-           <h3 class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">Jami summa</h3>
+           <h3 class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">Jami summa</h3>
            <div class="flex justify-between items-baseline pt-1">
               <span class="text-[24px] font-black text-slate-900 dark:text-white tracking-tighter leading-none">{{ formatCurrency(totalAmount) }}</span>
            </div>
@@ -59,7 +59,7 @@
           <i v-else class="pi pi-check-circle"></i>
           Tasdiqlash va Qaytarish
         </button>
-        <p class="text-[9px] font-medium text-slate-400 dark:text-slate-500 text-center leading-relaxed">"Tasdiqlash" tugmasini bossangiz, mahsulotlar stokga qaytadi va tranzaksiya saqlanadi.</p>
+        <p class="text-[11px] font-medium text-slate-400 dark:text-slate-500 text-center leading-relaxed">"Tasdiqlash" tugmasini bossangiz, mahsulotlar stokga qaytadi va tranzaksiya saqlanadi.</p>
       </div>
 
     </div>
@@ -99,3 +99,5 @@ const internalReason = computed({
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #f1f5f9; border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
 </style>
+
+

@@ -17,7 +17,7 @@
           </div>
           <div>
             <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 tracking-tight">Yangi Transfer</h2>
-            <p class="text-[10px] font-bold text-slate-400 tracking-widest">{{ sourceName }} dan o'tkazish</p>
+            <p class="text-[12px] font-bold text-slate-400 tracking-widest">{{ sourceName }} dan o'tkazish</p>
           </div>
         </div>
         <button 
@@ -31,7 +31,7 @@
       <div class="p-8 space-y-8 max-h-[70vh] overflow-y-auto no-scrollbar">
         <!-- Target Selection -->
         <div class="space-y-4">
-          <label class="text-[10px] font-black text-slate-400 tracking-widest pl-2">Qayerga yuborilmoqda?</label>
+          <label class="text-[12px] font-black text-slate-400 tracking-widest pl-2">Qayerga yuborilmoqda?</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <!-- Location Tabs -->
             <button 
@@ -49,7 +49,7 @@
                 </div>
                 <div>
                   <h4 class="text-xs font-black tracking-tight" :class="targetType === 'branch' ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'">Filialga</h4>
-                  <p class="text-[9px] font-bold" :class="targetType === 'branch' ? 'text-emerald-500' : 'text-slate-300'">Do'konga yuboring</p>
+                  <p class="text-[11px] font-bold" :class="targetType === 'branch' ? 'text-emerald-500' : 'text-slate-300'">Do'konga yuboring</p>
                 </div>
               </div>
               <div v-if="targetType === 'branch'" class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl"></div>
@@ -70,7 +70,7 @@
                 </div>
                 <div>
                   <h4 class="text-xs font-black tracking-tight" :class="targetType === 'warehouse' ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'">Omborga</h4>
-                  <p class="text-[9px] font-bold" :class="targetType === 'warehouse' ? 'text-emerald-500' : 'text-slate-300'">Markaziy omborga</p>
+                  <p class="text-[11px] font-bold" :class="targetType === 'warehouse' ? 'text-emerald-500' : 'text-slate-300'">Markaziy omborga</p>
                 </div>
               </div>
               <div v-if="targetType === 'warehouse'" class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl"></div>
@@ -96,7 +96,7 @@
               <option v-for="w in filteredWarehouses" :key="w.id" :value="w.id || w._id">{{ w.name }}</option>
             </select>
             <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none">
-              <i class="pi pi-chevron-down text-[10px] text-slate-400"></i>
+              <i class="pi pi-chevron-down text-[12px] text-slate-400"></i>
             </div>
           </div>
         </div>
@@ -104,10 +104,10 @@
         <!-- Products Selection -->
         <div class="space-y-4">
           <div class="flex items-center justify-between px-2">
-            <label class="text-[10px] font-black text-slate-400 tracking-widest">Mahsulotlar</label>
+            <label class="text-[12px] font-black text-slate-400 tracking-widest">Mahsulotlar</label>
             <button 
               @click="showProductSelect = true"
-              class="px-4 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-[9px] font-black tracking-widest hover:opacity-90 active:scale-95 transition-all"
+              class="px-4 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-[11px] font-black tracking-widest hover:opacity-90 active:scale-95 transition-all"
             >
               Qo'shish
             </button>
@@ -117,7 +117,7 @@
             <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
               <i class="pi pi-box text-slate-300"></i>
             </div>
-            <p class="text-[10px] font-black tracking-widest">Hali mahsulot qo'shilmadi</p>
+            <p class="text-[12px] font-black tracking-widest">Hali mahsulot qo'shilmadi</p>
           </div>
 
           <div v-else class="space-y-3">
@@ -127,24 +127,24 @@
               </div>
               <div class="flex-grow min-w-0">
                 <h5 class="text-xs font-black text-slate-800 dark:text-slate-100 tracking-tight truncate">{{ item.product.product_name || item.product.name }}</h5>
-                <p class="text-[9px] font-bold text-slate-400 tracking-widest">{{ item.product.barcode }}</p>
+                <p class="text-[11px] font-bold text-slate-400 tracking-widest">{{ item.product.barcode }}</p>
               </div>
               <div class="flex items-center gap-3">
                 <div class="flex flex-col gap-1 items-end">
-                  <span class="text-[8px] font-black text-slate-400 tracking-widest">Miqdor</span>
+                  <span class="text-[10px] font-black text-slate-400 tracking-widest">Miqdor</span>
                   <input 
                     v-model="item.quantity"
                     type="number"
                     step="0.01"
                     min="0.01"
-                    class="w-20 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-xl py-1.5 px-3 text-[11px] font-black text-slate-700 dark:text-slate-200 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-center"
+                    class="w-20 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-xl py-1.5 px-3 text-[13px] font-black text-slate-700 dark:text-slate-200 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-center"
                   />
                 </div>
                 <button 
                   @click="removeItem(idx)"
                   class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center"
                 >
-                  <i class="pi pi-trash text-[10px]"></i>
+                  <i class="pi pi-trash text-[12px]"></i>
                 </button>
               </div>
             </div>
@@ -153,7 +153,7 @@
 
         <!-- Note -->
         <div class="space-y-4">
-          <label class="text-[10px] font-black text-slate-400 tracking-widest pl-2">Izoh (ixtiyoriy)</label>
+          <label class="text-[12px] font-black text-slate-400 tracking-widest pl-2">Izoh (ixtiyoriy)</label>
           <textarea 
             v-model="form.note"
             rows="3"
@@ -167,14 +167,14 @@
       <div class="p-8 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex flex-col sm:flex-row items-center gap-4">
         <button 
           @click="visible = false"
-          class="w-full sm:w-1/3 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-black tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
+          class="w-full sm:w-1/3 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-500 text-[12px] font-black tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
         >
           Bekor qilish
         </button>
         <button 
           @click="submit"
           :disabled="subLoading"
-          class="w-full sm:w-2/3 py-4 rounded-2xl bg-emerald-500 text-white text-[10px] font-black tracking-widest hover:bg-emerald-600 shadow-xl shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+          class="w-full sm:w-2/3 py-4 rounded-2xl bg-emerald-500 text-white text-[12px] font-black tracking-widest hover:bg-emerald-600 shadow-xl shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
         >
           <i v-if="subLoading" class="pi pi-spin pi-spinner text-xs"></i>
           <span v-else>Yuborish tasdiqlash uchun</span>
@@ -194,13 +194,13 @@
       <div class="space-y-4">
         <div class="relative group">
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <i class="pi pi-search text-[10px] text-slate-400"></i>
+            <i class="pi pi-search text-[12px] text-slate-400"></i>
           </div>
           <input 
             v-model="productSearch"
             type="text" 
             placeholder="Qidiruv..."
-            class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl py-3 pl-11 pr-4 text-[11px] font-bold outline-none"
+            class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl py-3 pl-11 pr-4 text-[13px] font-bold outline-none"
           />
         </div>
         
@@ -211,16 +211,16 @@
             class="w-full text-left p-3 rounded-xl hover:bg-emerald-500/5 border border-transparent hover:border-emerald-500/20 flex items-center gap-3 group transition-all"
           >
             <div class="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center shrink-0">
-              <i class="pi pi-box text-slate-300 text-[10px]"></i>
+              <i class="pi pi-box text-slate-300 text-[12px]"></i>
             </div>
             <div class="flex-grow min-w-0">
-              <div class="text-[10px] font-black tracking-tight truncate group-hover:text-emerald-500 transition-colors">{{ p.product_name || p.name }}</div>
+              <div class="text-[12px] font-black tracking-tight truncate group-hover:text-emerald-500 transition-colors">{{ p.product_name || p.name }}</div>
               <div class="flex items-center gap-2">
-                <span class="text-[8px] font-bold text-slate-400 tracking-widest">{{ p.barcode }}</span>
-                <span class="text-[8px] font-black text-emerald-500">{{ p.quantity }} mavjud</span>
+                <span class="text-[10px] font-bold text-slate-400 tracking-widest">{{ p.barcode }}</span>
+                <span class="text-[10px] font-black text-emerald-500">{{ p.quantity }} mavjud</span>
               </div>
             </div>
-            <i class="pi pi-plus text-slate-300 group-hover:text-emerald-500 text-[10px]"></i>
+            <i class="pi pi-plus text-slate-300 group-hover:text-emerald-500 text-[12px]"></i>
           </button>
         </div>
       </div>
@@ -314,3 +314,5 @@ const submit = () => {
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
 </style>
+
+

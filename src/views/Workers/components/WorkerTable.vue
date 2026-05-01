@@ -7,17 +7,17 @@
       <div class="flex items-center justify-between px-4 py-3 bg-slate-50/30 dark:bg-slate-800/10 border-b border-slate-100 dark:border-slate-800">
         <div class="flex items-center gap-2.5">
           <div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-            <i class="pi pi-users text-emerald-500 text-[10px]"></i>
+            <i class="pi pi-users text-emerald-500 text-[12px]"></i>
           </div>
           <div>
-            <h3 class="text-[11px] font-black text-slate-900 dark:text-white tracking-tight ">{{ $t('workers.list_title') }}</h3>
-            <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold tracking-widest">{{ $t('workers.worker_count', { count: totalRecords || 0 }) }}</p>
+            <h3 class="text-[13px] font-black text-slate-900 dark:text-white tracking-tight ">{{ $t('workers.list_title') }}</h3>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest">{{ $t('workers.worker_count', { count: totalRecords || 0 }) }}</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
           <div class="flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-md">
             <span class="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></span>
-            <span class="text-[8px] font-black text-emerald-500 tracking-widest">{{ $t('workers.active_status') }}</span>
+            <span class="text-[10px] font-black text-emerald-500 tracking-widest">{{ $t('workers.active_status') }}</span>
           </div>
         </div>
       </div>
@@ -27,20 +27,20 @@
         <table class="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr class="bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_worker') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">
+              <th class="px-4 py-2.5 text-[12px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_worker') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">
                 <div class="flex items-center gap-2">
                   {{ $t('workers.table_col_salary') }}
                   <button @click="showSalaries = !showSalaries" 
                           class="w-5 h-5 flex items-center justify-center rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
-                    <i :class="['pi', showSalaries ? 'pi-eye-slash' : 'pi-eye', 'text-[10px]']"></i>
+                    <i :class="['pi', showSalaries ? 'pi-eye-slash' : 'pi-eye', 'text-[12px]']"></i>
                   </button>
                 </div>
               </th>
-              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_branch') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_phone') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_status') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800 text-center w-24">{{ $t('workers.table_col_actions') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_branch') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_phone') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">{{ $t('workers.table_col_status') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold tracking-widest text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800 text-center w-24">{{ $t('workers.table_col_actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -72,8 +72,8 @@
                     <i class="pi pi-users text-3xl text-slate-300 dark:text-slate-700"></i>
                   </div>
                   <div>
-                    <p class="text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest leading-tight">{{ $t('workers.not_found') }}</p>
-                    <p class="text-[9px] text-slate-400 dark:text-slate-600 mt-1 font-bold ">{{ $t('workers.no_data_desc') }}</p>
+                    <p class="text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest leading-tight">{{ $t('workers.not_found') }}</p>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-600 mt-1 font-bold ">{{ $t('workers.no_data_desc') }}</p>
                   </div>
                 </div>
               </td>
@@ -93,7 +93,7 @@
                       <img :src="data.avatar_url" class="w-full h-full object-cover" />
                     </div>
                     <div v-else
-                         class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black text-[10px] shadow-sm border border-slate-100 dark:border-slate-800 group-hover/worker:border-emerald-500 transition-all"
+                         class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black text-[12px] shadow-sm border border-slate-100 dark:border-slate-800 group-hover/worker:border-emerald-500 transition-all"
                          :style="getAvatarGradient(data.full_name || data.first_name)">
                       {{ getInitials(data) }}
                     </div>
@@ -104,7 +104,7 @@
                     <p class="font-bold text-xs text-slate-700 dark:text-slate-200 leading-none truncate group-hover/worker:text-emerald-500 transition-colors">
                       {{ getDisplayName(data) }}
                     </p>
-                    <span class="inline-flex items-center mt-1 px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest border border-slate-100 dark:border-slate-800"
+                    <span class="inline-flex items-center mt-1 px-1.5 py-0.5 rounded text-[10px] font-black tracking-widest border border-slate-100 dark:border-slate-800"
                           :class="getRoleBadgeClass(data.role)">
                       {{ getRoleDisplay(data) }}
                     </span>
@@ -118,14 +118,14 @@
                         :class="{ 'blur-[4px] select-none': !showSalaries }">
                     {{ formatFullCurrency(data.salary) }}
                   </span>
-                  <span class="text-[8px] text-slate-400 dark:text-slate-500 font-bold mt-0.5 tracking-tighter">{{ $t('workers.salary_unit') }}</span>
+                  <span class="text-[10px] text-slate-400 dark:text-slate-500 font-bold mt-0.5 tracking-tighter">{{ $t('workers.salary_unit') }}</span>
                 </div>
               </td>
 
               <td class="px-4 py-2">
                 <div class="flex items-center gap-1.5">
-                  <i class="pi pi-map-marker text-[9px] text-slate-400"></i>
-                  <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400 truncate max-w-[120px]">
+                  <i class="pi pi-map-marker text-[11px] text-slate-400"></i>
+                  <span class="text-[13px] font-medium text-slate-600 dark:text-slate-400 truncate max-w-[120px]">
                     {{ getBranchName(data) }}
                   </span>
                 </div>
@@ -134,15 +134,15 @@
               <td class="px-4 py-2">
                 <a :href="'tel:' + getPhone(data)" 
                    class="flex items-center gap-1.5 group/phone hover:opacity-80 transition-opacity">
-                  <i class="pi pi-phone text-[9px] text-slate-400 group-hover/phone:text-blue-500"></i>
-                  <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight group-hover/phone:text-slate-700 dark:group-hover/phone:text-slate-200">
+                  <i class="pi pi-phone text-[11px] text-slate-400 group-hover/phone:text-blue-500"></i>
+                  <span class="text-[13px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight group-hover/phone:text-slate-700 dark:group-hover/phone:text-slate-200">
                     {{ getPhone(data) || '—' }}
                   </span>
                 </a>
               </td>
 
               <td class="px-4 py-2">
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[8px] font-black tracking-widest border"
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black tracking-widest border"
                       :class="getStatusClass(data)">
                   <span class="w-1 h-1 rounded-full" :class="getStatusDotClass(data)"></span>
                   {{ getStatusLabel(data) }}
@@ -155,13 +155,13 @@
                     class="w-7 h-7 rounded-lg bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-all active:scale-90"
                     v-tooltip.top="$t('common.edit')"
                     @click="$emit('edit', data)">
-                    <i class="pi pi-pencil text-[9px]"></i>
+                    <i class="pi pi-pencil text-[11px]"></i>
                   </button>
                   <button
                     class="w-7 h-7 rounded-lg bg-rose-500/5 hover:bg-rose-500/10 border border-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center transition-all active:scale-90"
                     v-tooltip.top="$t('common.delete')"
                     @click="$emit('delete', data)">
-                    <i class="pi pi-trash text-[9px]"></i>
+                    <i class="pi pi-trash text-[11px]"></i>
                   </button>
                 </div>
               </td>
@@ -173,25 +173,25 @@
       <!-- PAGINATION PART (Compact) -->
       <div v-if="totalRecords > 0" 
            class="px-4 py-3 bg-slate-50/30 dark:bg-slate-800/10 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-        <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 tracking-widest">
+        <div class="text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-widest">
           {{ $t('workers.page_info', { current: currentPage, total: totalPages }) }}
         </div>
         <div class="flex items-center gap-1">
           <button @click="currentPage = 1" :disabled="currentPage === 1"
                   class="w-7 h-7 rounded-lg flex items-center justify-center border transition-all disabled:opacity-30
                          border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50">
-            <i class="pi pi-angle-double-left text-[9px]"></i>
+            <i class="pi pi-angle-double-left text-[11px]"></i>
           </button>
           <button @click="currentPage--" :disabled="currentPage === 1"
                   class="w-7 h-7 rounded-lg flex items-center justify-center border transition-all disabled:opacity-30
                          border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50">
-            <i class="pi pi-angle-left text-[9px]"></i>
+            <i class="pi pi-angle-left text-[11px]"></i>
           </button>
           
           <div class="flex items-center gap-1 mx-0.5">
             <template v-for="page in displayedPages" :key="page">
               <button @click="currentPage = page"
-                      class="w-7 h-7 rounded-lg text-[10px] font-bold transition-all
+                      class="w-7 h-7 rounded-lg text-[12px] font-bold transition-all
                              border focus:outline-none"
                        :class="currentPage === page 
                         ? 'bg-emerald-500 border-emerald-500 text-white' 
@@ -204,12 +204,12 @@
           <button @click="currentPage++" :disabled="currentPage === totalPages"
                   class="w-7 h-7 rounded-lg flex items-center justify-center border transition-all disabled:opacity-30
                          border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50">
-            <i class="pi pi-angle-right text-[9px]"></i>
+            <i class="pi pi-angle-right text-[11px]"></i>
           </button>
           <button @click="currentPage = totalPages" :disabled="currentPage === totalPages"
                   class="w-7 h-7 rounded-lg flex items-center justify-center border transition-all disabled:opacity-30
                          border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50">
-            <i class="pi pi-angle-double-right text-[9px]"></i>
+            <i class="pi pi-angle-double-right text-[11px]"></i>
           </button>
         </div>
       </div>
@@ -362,3 +362,5 @@ th, td {
   white-space: nowrap;
 }
 </style>
+
+

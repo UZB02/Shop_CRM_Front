@@ -31,3 +31,5 @@ export const ROLE_PERMISSIONS = {
     manager: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'moliya', 'mijozlar'],
     seller: ['sotuv', 'savdolar', 'mijozlar', 'ombor', 'mahsulotlar']
 }
+
+

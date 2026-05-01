@@ -49,14 +49,14 @@
             </div>
             <div>
               <div class="text-xs font-semibold text-slate-700 dark:text-slate-200">{{ transfer.from_location_name }}</div>
-              <div class="text-[10px] text-slate-400 capitalize">{{ transfer.from_location_type }}</div>
+              <div class="text-[12px] text-slate-400 capitalize">{{ transfer.from_location_type }}</div>
             </div>
           </div>
 
           <div class="flex flex-col items-center gap-1 shrink-0">
             <div class="flex items-center gap-1">
               <div class="w-8 h-px bg-slate-300 dark:bg-slate-600"></div>
-              <i class="pi pi-arrow-right text-[10px] text-slate-400"></i>
+              <i class="pi pi-arrow-right text-[12px] text-slate-400"></i>
               <div class="w-8 h-px bg-slate-300 dark:bg-slate-600"></div>
             </div>
           </div>
@@ -72,7 +72,7 @@
             </div>
             <div>
               <div class="text-xs font-semibold text-slate-700 dark:text-slate-200">{{ transfer.to_location_name }}</div>
-              <div class="text-[10px] text-slate-400 capitalize">{{ transfer.to_location_type }}</div>
+              <div class="text-[12px] text-slate-400 capitalize">{{ transfer.to_location_type }}</div>
             </div>
           </div>
         </div>
@@ -188,3 +188,5 @@ const statusClass = (status) => {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+
+

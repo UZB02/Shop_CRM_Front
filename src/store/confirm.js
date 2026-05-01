@@ -51,3 +51,5 @@ export const useConfirmStore = defineStore('confirm', () => {
     onReject
   }
 })
+
+

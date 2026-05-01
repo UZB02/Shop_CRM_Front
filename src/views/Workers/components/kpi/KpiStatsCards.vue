@@ -3,9 +3,9 @@
     <!-- Jami Sof Sotuv -->
     <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm group hover:border-emerald-500/30 transition-all">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('kpi.stats.total_net') }}</span>
+        <span class="text-[12px] font-black text-slate-400 tracking-widest">{{ $t('kpi.stats.total_net') }}</span>
         <div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
-          <i class="pi pi-wallet text-[10px]"></i>
+          <i class="pi pi-wallet text-[12px]"></i>
         </div>
       </div>
       <div class="flex items-baseline gap-1">
@@ -19,9 +19,9 @@
     <!-- O'rtacha Samaradorlik -->
     <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm group hover:border-amber-500/30 transition-all">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('kpi.stats.avg_kpi') }}</span>
+        <span class="text-[12px] font-black text-slate-400 tracking-widest">{{ $t('kpi.stats.avg_kpi') }}</span>
         <div class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 transition-colors group-hover:bg-amber-500 group-hover:text-white">
-          <i class="pi pi-bolt text-[10px]"></i>
+          <i class="pi pi-bolt text-[12px]"></i>
         </div>
       </div>
       <span class="text-sm font-black text-slate-800 dark:text-white">{{ stats.avgCompletion }}%</span>
@@ -33,9 +33,9 @@
     <!-- Qaytarish Ko'rsatkichi -->
     <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm group hover:border-rose-500/30 transition-all">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('kpi.stats.return_rate') }}</span>
+        <span class="text-[12px] font-black text-slate-400 tracking-widest">{{ $t('kpi.stats.return_rate') }}</span>
         <div class="w-7 h-7 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-500 transition-colors group-hover:bg-rose-500 group-hover:text-white">
-          <i class="pi pi-history text-[10px]"></i>
+          <i class="pi pi-history text-[12px]"></i>
         </div>
       </div>
       <span class="text-sm font-black text-rose-500">{{ stats.returnRate }}%</span>
@@ -50,11 +50,11 @@
         <i class="pi pi-trophy text-5xl text-white"></i>
       </div>
       <div class="flex items-center justify-between mb-2">
-        <span class="text-[10px] font-black text-white/70 tracking-widest">{{ $t('kpi.stats.month_star') }}</span>
-        <i class="pi pi-star-fill text-[10px] text-white"></i>
+        <span class="text-[12px] font-black text-white/70 tracking-widest">{{ $t('kpi.stats.month_star') }}</span>
+        <i class="pi pi-star-fill text-[12px] text-white"></i>
       </div>
       <span class="text-sm font-black text-white truncate block">{{ stats.topPerformer?.worker_name || '---' }}</span>
-      <span class="text-[9px] font-bold text-white/60 tracking-tight mt-1 inline-block">{{ $t('kpi.table.plan') }}: {{ stats.topPerformer?.completion_pct || 0 }}%</span>
+      <span class="text-[11px] font-bold text-white/60 tracking-tight mt-1 inline-block">{{ $t('kpi.table.plan') }}: {{ stats.topPerformer?.completion_pct || 0 }}%</span>
     </div>
   </div>
 </template>
@@ -68,3 +68,5 @@ defineProps({
 
 const { formatPrice } = useSettingsStore()
 </script>
+
+

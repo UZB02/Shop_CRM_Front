@@ -3,24 +3,24 @@
     <div class="flex items-center justify-between gap-3 mb-4">
       <div class="flex items-center gap-2">
         <div class="w-1 h-3 bg-emerald-500/50 rounded-full"></div>
-        <h4 class="text-[10px] font-bold tracking-widest text-slate-500">{{ $t('subcategories.title') }}</h4>
+        <h4 class="text-[12px] font-bold tracking-widest text-slate-500">{{ $t('subcategories.title') }}</h4>
       </div>
       
       <div class="flex items-center gap-2 flex-1 max-w-[240px]">
         <div class="relative group/subsearch flex-1">
-          <i class="pi pi-search absolute left-2.5 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 group-focus-within/subsearch:text-emerald-500 transition-colors"></i>
+          <i class="pi pi-search absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 group-focus-within/subsearch:text-emerald-500 transition-colors"></i>
           <InputText 
             v-model="searchModel" 
             :placeholder="$t('common.search')" 
-            class="!h-7 !pl-8 !text-[10px] !font-medium !rounded-lg !bg-white/80 dark:!bg-slate-900/80 !border-slate-200 dark:!border-slate-700/50 focus:!ring-4 focus:!ring-emerald-500/5 transition-all w-full shadow-sm" 
+            class="!h-7 !pl-8 !text-[12px] !font-medium !rounded-lg !bg-white/80 dark:!bg-slate-900/80 !border-slate-200 dark:!border-slate-700/50 focus:!ring-4 focus:!ring-emerald-500/5 transition-all w-full shadow-sm" 
           />
         </div>
         
         <button 
           @click="$emit('add')"
-          class="h-7 px-2 rounded-lg bg-emerald-500/10 text-emerald-600 text-[10px] font-bold hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap tracking-widest"
+          class="h-7 px-2 rounded-lg bg-emerald-500/10 text-emerald-600 text-[12px] font-bold hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap tracking-widest"
         >
-          <i class="pi pi-plus text-[8px] mr-1"></i>
+          <i class="pi pi-plus text-[10px] mr-1"></i>
           {{ $t('common.add') }}
         </button>
       </div>
@@ -45,16 +45,16 @@
               :class="sub.status === 'inactive' ? 'bg-rose-500' : 'bg-emerald-500'"
             ></div>
             <div class="min-w-0">
-              <h5 class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 truncate">{{ sub.name }}</h5>
-              <p v-if="sub.description" class="text-[9px] text-slate-400 mt-0.5 truncate">{{ sub.description }}</p>
+              <h5 class="text-[13px] font-semibold text-slate-700 dark:text-slate-200 truncate">{{ sub.name }}</h5>
+              <p v-if="sub.description" class="text-[11px] text-slate-400 mt-0.5 truncate">{{ sub.description }}</p>
             </div>
           </div>
           <div class="flex items-center gap-1 opacity-0 group-hover/sub:opacity-100 transition-all">
             <button @click="$emit('edit', sub)" class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all">
-              <i class="pi pi-pencil text-[9px]"></i>
+              <i class="pi pi-pencil text-[11px]"></i>
             </button>
             <button @click="$emit('delete', sub)" class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all">
-              <i class="pi pi-trash text-[9px]"></i>
+              <i class="pi pi-trash text-[11px]"></i>
             </button>
           </div>
         </div>
@@ -66,7 +66,7 @@
         class="py-8 flex flex-col items-center justify-center border border-dashed border-slate-200 dark:border-slate-800 rounded-xl opacity-40 bg-white/30"
       >
         <i class="pi pi-box text-xl mb-2 text-slate-300"></i>
-        <p class="text-[9px] font-bold tracking-widest text-slate-400">{{ $t('common.no_results') }}</p>
+        <p class="text-[11px] font-bold tracking-widest text-slate-400">{{ $t('common.no_results') }}</p>
       </div>
     </div>
   </div>
@@ -104,3 +104,5 @@ const searchModel = computed({
   background: var(--color-slate-800);
 }
 </style>
+
+

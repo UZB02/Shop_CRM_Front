@@ -95,10 +95,10 @@
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
                 <h3 class="text-sm font-black tracking-widest text-rose-500">{{ $t('finance.categories') }}</h3>
-                <p class="text-[9px] font-bold text-slate-400 tracking-[0.2em] mt-0.5">{{ $t('finance.management') }}</p>
+                <p class="text-[11px] font-bold text-slate-400 tracking-[0.2em] mt-0.5">{{ $t('finance.management') }}</p>
               </div>
               <button @click="showCategories = false" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
-                <i class="pi pi-times text-[10px]"></i>
+                <i class="pi pi-times text-[12px]"></i>
               </button>
             </div>
             <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
@@ -260,3 +260,5 @@ onMounted(refreshData)
   background: #334155;
 }
 </style>
+
+

@@ -7,7 +7,7 @@
           <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
             <i class="pi pi-check-circle text-sm"></i>
           </div>
-          <span class="text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('shifts.debt_info.paid_now') }}</span>
+          <span class="text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('shifts.debt_info.paid_now') }}</span>
         </div>
         <h3 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">
           {{ formatCurrency(debtInfo.paid_now) }} <span class="text-xs font-medium text-slate-400">UZS</span>
@@ -19,7 +19,7 @@
           <div class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-500 flex items-center justify-center">
             <i class="pi pi-history text-sm"></i>
           </div>
-          <span class="text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('shifts.debt_info.outstanding') }}</span>
+          <span class="text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('shifts.debt_info.outstanding') }}</span>
         </div>
         <h3 class="text-xl font-black text-rose-500 tracking-tight">
           {{ formatCurrency(debtInfo.outstanding) }} <span class="text-xs font-medium text-slate-400">UZS</span>
@@ -33,14 +33,14 @@
         <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <i class="pi pi-users text-slate-400"></i> {{ $t('shifts.debt_info.title') }}
         </h3>
-        <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-500 ">
+        <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[12px] font-bold text-slate-500 ">
           {{ $t('shifts.debt_info.count', { count: debtInfo.count }) }}
         </span>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-slate-50/50 dark:bg-slate-800/30 text-[10px] font-bold text-slate-400 tracking-widest border-b border-slate-100 dark:border-slate-800">
+            <tr class="bg-slate-50/50 dark:bg-slate-800/30 text-[12px] font-bold text-slate-400 tracking-widest border-b border-slate-100 dark:border-slate-800">
               <th class="px-6 py-3 font-semibold">{{ $t('shifts.debt_info.col_customer') }}</th>
               <th class="px-6 py-3 font-semibold text-right">{{ $t('shifts.debt_info.col_paid') }}</th>
               <th class="px-6 py-3 font-semibold text-right">{{ $t('shifts.debt_info.col_debt') }}</th>
@@ -71,3 +71,5 @@ defineProps({
   formatCurrency: { type: Function, required: true }
 })
 </script>
+
+

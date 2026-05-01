@@ -13,3 +13,5 @@ export const authAPI = {
     getMe: () => api.get('/auth/me'),
     changePassword: (data) => api.post('/auth/change-password/', data)
 }
+
+

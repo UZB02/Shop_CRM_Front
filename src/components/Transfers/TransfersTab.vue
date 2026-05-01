@@ -75,3 +75,5 @@ onMounted(() => {
 <style scoped>
 /* Essential layout styles if needed */
 </style>
+
+

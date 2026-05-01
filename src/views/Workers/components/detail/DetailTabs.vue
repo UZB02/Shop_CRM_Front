@@ -5,7 +5,7 @@
       <button 
         v-for="tab in tabs" :key="tab.id"
         @click="activeTab = tab.id"
-        class="flex-1 sm:flex-none px-6 py-3 rounded-xl text-[10px] font-black tracking-widest transition-all duration-300 whitespace-nowrap flex items-center gap-2"
+        class="flex-1 sm:flex-none px-6 py-3 rounded-xl text-[12px] font-black tracking-widest transition-all duration-300 whitespace-nowrap flex items-center gap-2"
         :class="activeTab === tab.id 
           ? (tab.id === 'permissions' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : (tab.id === 'history' ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'))
           : 'text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800'"
@@ -57,3 +57,5 @@ const tabs = computed(() => [
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+
+

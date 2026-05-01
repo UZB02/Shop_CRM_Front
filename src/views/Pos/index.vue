@@ -25,7 +25,7 @@
         <!-- Do'kon Info -->
         <div class="hidden xl:flex items-center gap-4 text-right">
            <div class="flex flex-col">
-              <span class="text-[9px] font-black text-slate-400 tracking-widest leading-none mb-1">Do'kon</span>
+              <span class="text-[11px] font-black text-slate-400 tracking-widest leading-none mb-1">Do'kon</span>
               <span class="text-xs font-black text-slate-800 dark:text-slate-200 truncate max-w-[120px]">
                 {{ activeShift?.branch_name || authStore.user?.branch_name || authStore.user?.worker?.branch_name || 'Tanlanmagan' }}
               </span>
@@ -38,7 +38,7 @@
               {{ (activeShift?.worker_open_name || authStore.user?.full_name || 'U').charAt(0) }}
            </div>
            <div class="flex flex-col">
-              <span class="text-[9px] font-black text-slate-400 tracking-widest leading-none mb-1">Xodim</span>
+              <span class="text-[11px] font-black text-slate-400 tracking-widest leading-none mb-1">Xodim</span>
               <span class="text-xs font-black text-slate-800 dark:text-slate-200">
                 {{ activeShift?.worker_open_name || authStore.user?.full_name || 'Foydalanuvchi' }}
               </span>
@@ -52,13 +52,13 @@
         <div class="flex items-center gap-3">
           <div v-if="activeShift && settingsStore.isShiftEnabled" class="px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl flex items-center gap-2 border border-emerald-100 dark:border-emerald-500/20">
              <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-pulse"></span>
-             <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">Smena #{{ activeShift.id }}</span>
+             <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">Smena #{{ activeShift.id }}</span>
           </div>
 
           <button 
             v-if="settingsStore.isShiftEnabled"
             @click="handleShiftAction"
-            class="px-6 py-3.5 rounded-xl text-[10px] font-black transition-all shadow-xl active:scale-95"
+            class="px-6 py-3.5 rounded-xl text-[12px] font-black transition-all shadow-xl active:scale-95"
             :class="activeShift && activeShift.status === 'open' ? 'bg-[#151c2f] text-white hover:bg-[#0f1422]' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20'"
           >
             {{ activeShift && activeShift.status === 'open' ? 'Smena Yopish' : (activeShift?.status === 'closed' ? 'Smena Hisoboti' : 'Smena Ochish') }}
@@ -113,7 +113,7 @@
         <p class="text-slate-400 font-medium text-sm">Savdoni boshlash uchun avval yangi smena ochishingiz lozim.</p>
         <button 
           @click="showShiftModal = true"
-          class="inline-block px-10 py-5 bg-emerald-500 text-white rounded-2xl font-black text-[11px] tracking-widest shadow-2xl shadow-emerald-500/40 hover:bg-emerald-600 transition-all active:scale-95"
+          class="inline-block px-10 py-5 bg-emerald-500 text-white rounded-2xl font-black text-[13px] tracking-widest shadow-2xl shadow-emerald-500/40 hover:bg-emerald-600 transition-all active:scale-95"
         >
           Smena Ochish
         </button>
@@ -364,3 +364,5 @@ const printReceipt = () => {
   100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 </style>
+
+

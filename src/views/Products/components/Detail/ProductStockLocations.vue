@@ -1,11 +1,11 @@
 <template>
   <div v-if="product?.stock_locations?.length" class="bg-white dark:bg-[#131d31] rounded-[18px] border border-slate-200 dark:border-transparent p-6 sm:p-8 flex flex-col shadow-sm">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-      <h3 class="text-[10px] font-black text-slate-900 dark:text-white tracking-[0.2em] flex items-center gap-3">
+      <h3 class="text-[12px] font-black text-slate-900 dark:text-white tracking-[0.2em] flex items-center gap-3">
         <span class="w-1 h-1 rounded-full bg-indigo-500 shrink-0"></span>
         <span class="leading-tight">{{ $te('products.detail.stock_locations') ? $t('products.detail.stock_locations') : 'ZAHIRA LOKATSIYALARI' }}</span>
       </h3>
-      <span class="text-[10px] font-bold px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 rounded-lg shrink-0 w-fit self-start sm:self-auto flex items-center leading-none">
+      <span class="text-[12px] font-bold px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 rounded-lg shrink-0 w-fit self-start sm:self-auto flex items-center leading-none">
         {{ $t('products.detail.total') }}: {{ product.stock_total }} {{ product.unit_display }}
       </span>
     </div>
@@ -22,11 +22,11 @@
             <i class="pi" :class="loc.type === 'warehouse' ? 'pi-box' : 'pi-building'"></i>
           </div>
           <div>
-            <span class="text-[8px] font-black tracking-widest block mb-0.5" 
+            <span class="text-[10px] font-black tracking-widest block mb-0.5" 
                   :class="loc.type === 'warehouse' ? 'text-amber-500/70' : 'text-sky-500/70'">
               {{ loc.type === 'warehouse' ? $t('products.detail.warehouse') : $t('products.detail.branch') }}
             </span>
-            <p class="text-[11px] font-bold text-slate-800 dark:text-slate-200 line-clamp-1 truncate max-w-[140px]">
+            <p class="text-[13px] font-bold text-slate-800 dark:text-slate-200 line-clamp-1 truncate max-w-[140px]">
               {{ loc.name }}
               <span v-if="loc.tur_id" class="text-slate-400 font-normal">
                 ({{ loc.tur_name }}{{ loc.tur_color ? ' / ' + loc.tur_color : '' }})
@@ -38,7 +38,7 @@
            <p class="text-xl font-black tracking-tight" :class="loc.quantity > 0 ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-600'">
              {{ loc.quantity }}
            </p>
-           <span class="text-[8px] font-black tracking-widest text-slate-400">{{ product.unit_display }}</span>
+           <span class="text-[10px] font-black tracking-widest text-slate-400">{{ product.unit_display }}</span>
         </div>
       </div>
     </div>
@@ -57,3 +57,5 @@ const sortedLocations = computed(() => {
   return [...props.product.stock_locations].sort((a, b) => b.quantity - a.quantity)
 })
 </script>
+
+

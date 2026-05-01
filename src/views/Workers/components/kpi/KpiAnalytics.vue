@@ -25,7 +25,7 @@
        <div class="mt-4 grid grid-cols-2 gap-2">
           <div v-for="label in chartLabels" :key="label.text" class="flex items-center gap-2 px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg">
              <div class="w-2 h-2 rounded-full" :style="{ backgroundColor: label.color }"></div>
-             <span class="text-[9px] font-bold text-slate-500 tracking-tighter">{{ label.text }}</span>
+             <span class="text-[11px] font-bold text-slate-500 tracking-tighter">{{ label.text }}</span>
           </div>
        </div>
     </div>
@@ -53,3 +53,5 @@ const chartLabels = [
     { text: '<50%', color: '#f43f5e' }
 ]
 </script>
+
+

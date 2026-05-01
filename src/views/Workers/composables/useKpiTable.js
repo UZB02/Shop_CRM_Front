@@ -94,3 +94,5 @@ export function useKpiTable(props) {
     getAvatarGradient
   }
 }
+
+

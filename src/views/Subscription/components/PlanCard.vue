@@ -11,8 +11,8 @@
     <div v-if="popular || isCurrent" class="absolute -top-16 -right-16 w-32 h-32 bg-emerald-500/5 rounded-full blur-[60px] pointer-events-none group-hover:bg-emerald-500/10 transition-all duration-700" />
 
     <!-- Popular Badge (More compact) -->
-    <div v-if="popular" class="absolute top-4 right-4 bg-emerald-500 text-white text-[8px] font-black tracking-widest px-2.5 py-1 rounded-full z-20 flex items-center gap-1 shadow-lg shadow-emerald-500/20">
-      <i class="pi pi-bolt text-[7px]"></i>
+    <div v-if="popular" class="absolute top-4 right-4 bg-emerald-500 text-white text-[10px] font-black tracking-widest px-2.5 py-1 rounded-full z-20 flex items-center gap-1 shadow-lg shadow-emerald-500/20">
+      <i class="pi pi-bolt text-[9px]"></i>
       {{ $t('subscription.popular') }}
     </div>
 
@@ -26,14 +26,14 @@
       </div>
       
       <div class="flex-1 min-w-0">
-        <h3 class="text-[10px] font-black tracking-widest mb-1 truncate" :class="isCurrent ? 'text-emerald-500' : 'text-slate-500 dark:text-slate-400'">
+        <h3 class="text-[12px] font-black tracking-widest mb-1 truncate" :class="isCurrent ? 'text-emerald-500' : 'text-slate-500 dark:text-slate-400'">
           {{ $t(`subscription.plans.${plan}`) }}
         </h3>
         <div class="flex items-baseline gap-1.5">
           <span class="text-2xl font-black tracking-tighter" :class="isCurrent ? 'text-white' : 'text-slate-900 dark:text-slate-100'">
             {{ priceLabel.split(' ')[0] }}
           </span>
-          <span class="text-[9px] font-bold text-slate-400 tracking-widest">
+          <span class="text-[11px] font-bold text-slate-400 tracking-widest">
             {{ priceLabel.split(' ')[1] }} <span class="opacity-50 font-medium">/ oy</span>
           </span>
         </div>
@@ -43,14 +43,14 @@
     <!-- Current Plan Badge (Inline) -->
     <div v-if="isCurrent" class="mb-4 px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/10 inline-flex items-center gap-1 z-10">
         <span class="w-1 h-1 rounded-full bg-emerald-500"></span>
-        <span class="text-[8px] font-black tracking-tighter text-emerald-500">{{ $t('subscription.current_plan') }}</span>
+        <span class="text-[10px] font-black tracking-tighter text-emerald-500">{{ $t('subscription.current_plan') }}</span>
     </div>
 
     <!-- Features List (GRID for compactness) -->
     <div class="relative z-10 grid grid-cols-1 gap-x-3 gap-y-2 mb-8 flex-1">
       <div v-for="(feature, index) in features" :key="index" class="flex items-center gap-2 group/item">
-        <i class="pi pi-check text-[7px] font-bold text-emerald-500 flex-shrink-0"></i>
-        <span class="text-[10px] font-medium leading-none truncate transition-colors" :class="isCurrent ? 'text-slate-400 group-hover/item:text-slate-200' : 'text-slate-500 dark:text-slate-400 group-hover/item:text-slate-800 dark:group-hover/item:text-slate-200'">
+        <i class="pi pi-check text-[9px] font-bold text-emerald-500 flex-shrink-0"></i>
+        <span class="text-[12px] font-medium leading-none truncate transition-colors" :class="isCurrent ? 'text-slate-400 group-hover/item:text-slate-200' : 'text-slate-500 dark:text-slate-400 group-hover/item:text-slate-800 dark:group-hover/item:text-slate-200'">
           {{ feature }}
         </span>
       </div>
@@ -61,26 +61,26 @@
       <button 
         v-if="!isCurrent"
         @click="$emit('select')"
-        class="w-full h-10 rounded-xl text-[10px] font-black tracking-widest transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
+        class="w-full h-10 rounded-xl text-[12px] font-black tracking-widest transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
         :class="plan === 'free' 
           ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700' 
           : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-md shadow-emerald-500/20'"
       >
         <span>{{ plan === 'free' ? $t('subscription.otish') : $t('subscription.sotib_olish') }}</span>
-        <i class="pi pi-arrow-right text-[8px]"></i>
+        <i class="pi pi-arrow-right text-[10px]"></i>
       </button>
       
       <button 
         v-else-if="plan !== 'free'"
         @click="$emit('extend')"
-        class="w-full h-10 rounded-xl text-[10px] font-black tracking-widest transition-all duration-300 flex items-center justify-center gap-2 bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 active:scale-95"
+        class="w-full h-10 rounded-xl text-[12px] font-black tracking-widest transition-all duration-300 flex items-center justify-center gap-2 bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 active:scale-95"
       >
-         <i class="pi pi-refresh text-[8px]"></i>
+         <i class="pi pi-refresh text-[10px]"></i>
          <span>{{ $t('subscription.uzaytirish') }}</span>
       </button>
       
       <div v-else class="text-center py-2">
-         <span class="text-[9px] font-bold text-slate-500 tracking-widest italic opacity-60">{{ $t('subscription.current_plan') }}</span>
+         <span class="text-[11px] font-bold text-slate-500 tracking-widest italic opacity-60">{{ $t('subscription.current_plan') }}</span>
       </div>
     </div>
   </div>
@@ -129,3 +129,5 @@ const getIconBgClass = computed(() => {
   transform: translateY(-4px);
 }
 </style>
+
+

@@ -4,7 +4,7 @@
       <!-- Search Filter -->
       <div v-if="activeTab !== 'payments'" class="relative flex-1 min-w-[200px] sm:w-64 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-search text-[10px]"></i>
+          <i class="pi pi-search text-[12px]"></i>
         </div>
         <input
           v-model="filters.search"
@@ -33,7 +33,7 @@
       <!-- Category Filter -->
       <div v-if="!['profit-loss', 'debtors'].includes(activeTab)" class="relative flex-1 min-w-[180px] sm:flex-none sm:w-60 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-tag text-[10px]"></i>
+          <i class="pi pi-tag text-[12px]"></i>
         </div>
         <Select
           v-model="filters.category"
@@ -54,7 +54,7 @@
       <!-- Group By Filter (Only for Reports) -->
       <div v-if="activeTab && ['revenue', 'payments', 'expenses'].includes(activeTab)" class="relative flex-1 min-w-[140px] sm:flex-none sm:w-40 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-th-large text-[10px]"></i>
+          <i class="pi pi-th-large text-[12px]"></i>
         </div>
         <Select
           v-model="filters.group_by"
@@ -74,7 +74,7 @@
       <!-- Year Filter (P&L only) -->
       <div v-if="activeTab === 'profit-loss'" class="relative flex-1 min-w-[100px] sm:flex-none sm:w-32 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-calendar-plus text-[10px]"></i>
+          <i class="pi pi-calendar-plus text-[12px]"></i>
         </div>
         <input
           v-model.number="filters.year"
@@ -87,7 +87,7 @@
       <!-- Months Filter (P&L only) - Simple Comma Separated for now -->
       <div v-if="activeTab === 'profit-loss'" class="relative flex-1 min-w-[150px] sm:w-48 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-list text-[10px]"></i>
+          <i class="pi pi-list text-[12px]"></i>
         </div>
         <input
           v-model="filters.months"
@@ -101,7 +101,7 @@
       <!-- Min Debt Filter (Debtors only) -->
       <div v-if="activeTab === 'debtors'" class="relative flex-1 min-w-[150px] sm:w-48 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-money-bill text-[10px]"></i>
+          <i class="pi pi-money-bill text-[12px]"></i>
         </div>
         <input
           v-model.number="filters.min_debt"
@@ -115,7 +115,7 @@
       <!-- Payment Method Filter (Payments tab only) -->
       <div v-if="activeTab === 'payments'" class="relative flex-1 min-w-[150px] sm:flex-none sm:w-48 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-credit-card text-[10px]"></i>
+          <i class="pi pi-credit-card text-[12px]"></i>
         </div>
         <Select
           v-model="filters.payment_method"
@@ -137,7 +137,7 @@
         class="h-10 w-10 rounded-xl flex items-center justify-center text-slate-500 hover:text-rose-500 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all active:scale-95 hover:shadow-lg hover:shadow-rose-500/10"
         title="Filtrni tozalash"
       >
-        <i class="pi pi-refresh text-[11px]"></i>
+        <i class="pi pi-refresh text-[13px]"></i>
       </button>
 
       <div class="flex-1"></div>
@@ -167,8 +167,8 @@
       <div v-if="showExport" class="pt-4 border-t border-slate-100 dark:border-slate-800/60 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3 w-full sm:w-auto">
           <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg">
-            <i class="pi pi-filter text-[11px] text-slate-400"></i>
-            <span class="text-[11px] font-black tracking-widest text-slate-500">{{ $t('reports.title') }}</span>
+            <i class="pi pi-filter text-[13px] text-slate-400"></i>
+            <span class="text-[13px] font-black tracking-widest text-slate-500">{{ $t('reports.title') }}</span>
           </div>
           <div class="flex items-center gap-2 flex-1 sm:flex-none">
             <DatePicker
@@ -277,3 +277,5 @@ html:not(.dark) :deep(.p-datepicker-input) {
   color: #334155 !important; /* text-slate-700 */
 }
 </style>
+
+

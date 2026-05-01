@@ -26,7 +26,7 @@
       <div class="space-y-8">
         <!-- Name Field -->
         <div class="space-y-3">
-          <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">{{ $t('categories.name') }}</label>
+          <label class="text-[12px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">{{ $t('categories.name') }}</label>
           <div class="relative group">
             <input 
               v-model.trim="category.name"
@@ -36,13 +36,13 @@
               :class="{ '!border-rose-500/30 !bg-rose-50/30 !text-rose-600': submitted && !category.name }"
               autofocus
             />
-            <small v-if="submitted && !category.name" class="text-[9px] font-black text-rose-500 tracking-widest mt-2 ml-1 block">{{ $t('categories.messages.name_required') }}</small>
+            <small v-if="submitted && !category.name" class="text-[11px] font-black text-rose-500 tracking-widest mt-2 ml-1 block">{{ $t('categories.messages.name_required') }}</small>
           </div>
         </div>
 
         <!-- Description Field -->
         <div class="space-y-3">
-          <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">{{ $t('categories.description') }}</label>
+          <label class="text-[12px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">{{ $t('categories.description') }}</label>
           <div class="relative group">
             <textarea 
               v-model="category.description"
@@ -58,7 +58,7 @@
       <div class="mt-12 flex items-center justify-end gap-6">
         <button 
           @click="$emit('update:visible', false)"
-          class="text-[11px] font-black tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+          class="text-[13px] font-black tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
         >
           {{ $t('common.cancel') }}
         </button>
@@ -121,3 +121,5 @@ watch(() => props.visible, (newVal) => {
   animation: zoom-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 </style>
+
+

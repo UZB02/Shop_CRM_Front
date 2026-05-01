@@ -44,7 +44,7 @@
         <h2 class="text-sm font-bold text-slate-800 dark:text-white mb-4">{{ $t('kpi.not_enabled') }}</h2>
         <router-link 
           :to="{ name: 'settings' }" 
-          class="inline-flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-[10px] tracking-widest transition-all"
+          class="inline-flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-[12px] tracking-widest transition-all"
         >
           <i class="pi pi-cog"></i>
           <span>{{ $t('menu.settings') }}</span>
@@ -108,3 +108,5 @@ const {
   transform: translateY(10px);
 }
 </style>
+
+

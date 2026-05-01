@@ -6,11 +6,11 @@
         <h1 class="text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
           <i :class="activeTab === 'sales' ? 'pi pi-receipt' : 'pi pi-refresh'" class="text-emerald-500"></i>
           {{ activeTab === 'sales' ? ($t('menu.trades') || 'Savdolar') : 'Qaytarishlar' }}
-          <span class="text-[9px] font-black tracking-widest bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded border border-emerald-500/20">
+          <span class="text-[11px] font-black tracking-widest bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded border border-emerald-500/20">
             {{ activeTab === 'sales' ? totalRecords : returnRecords }} ta
           </span>
         </h1>
-        <p class="text-xs text-slate-400 mt-0.5 tracking-widest font-bold text-[9px]">
+        <p class="text-xs text-slate-400 mt-0.5 tracking-widest font-bold text-[11px]">
           {{ activeTab === 'sales' ? 'Barcha amalga oshirilgan savdolar' : 'Mijozlardan qaytarilgan tovarlar tarixi' }}
         </p>
       </div>
@@ -21,7 +21,7 @@
           @click="openReturnModal"
           icon="pi pi-plus"
           label="Yangi Qaytarish"
-          class="!text-[10px] !font-bold !!tracking-widest !rounded-lg !bg-emerald-500 !border-none !px-4 !py-2 !shadow-sm hover:!bg-emerald-600 active:scale-95 transition-all text-white"
+          class="!text-[12px] !font-bold !!tracking-widest !rounded-lg !bg-emerald-500 !border-none !px-4 !py-2 !shadow-sm hover:!bg-emerald-600 active:scale-95 transition-all text-white"
         />
       </div>
     </div>
@@ -31,12 +31,12 @@
       <Tabs v-model:value="activeTab" class="!bg-transparent border-none">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
           <TabList class="!bg-slate-100/80 dark:!bg-slate-800/80 !p-1 !rounded-xl !border-none !inline-flex">
-            <Tab value="sales" class="!text-[10px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
-              <i class="pi pi-receipt mr-2 !text-[9px]"></i>
+            <Tab value="sales" class="!text-[12px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
+              <i class="pi pi-receipt mr-2 !text-[11px]"></i>
               Savdolar
             </Tab>
-            <Tab value="returns" class="!text-[10px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
-              <i class="pi pi-refresh mr-2 !text-[9px]"></i>
+            <Tab value="returns" class="!text-[12px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
+              <i class="pi pi-refresh mr-2 !text-[11px]"></i>
               Qaytarishlar
             </Tab>
           </TabList>
@@ -52,12 +52,12 @@
               @reset="resetFilters"
             />
             <div v-else class="relative group">
-              <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] group-focus-within:text-emerald-500 transition-colors"></i>
+              <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[12px] group-focus-within:text-emerald-500 transition-colors"></i>
               <input 
                 v-model="returnSearch"
                 type="text"
                 placeholder="Qaytarishlardan qidirish..."
-                class="w-full h-10 pl-10 pr-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl text-[11px] font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all placeholder:text-slate-400 shadow-sm"
+                class="w-full h-10 pl-10 pr-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl text-[13px] font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all placeholder:text-slate-400 shadow-sm"
               />
             </div>
           </div>
@@ -223,3 +223,5 @@ watch(activeTab, (newTab) => {
   }
 }
 </style>
+
+

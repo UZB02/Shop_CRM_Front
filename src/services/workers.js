@@ -18,3 +18,5 @@ export const kpiAPI = {
     setTarget: (id, data) => api.patch(`/kpi/${id}/set-target/`, data),
     getWorkerKpi: (workerId, params) => api.get(`/workers/${workerId}/kpi/`, { params })
 }
+
+

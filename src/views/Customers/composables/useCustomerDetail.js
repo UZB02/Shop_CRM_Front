@@ -159,3 +159,5 @@ export function useCustomerDetail() {
     handleFilters, editCustomer, saveUpdate, showTradeDetail
   }
 }
+
+

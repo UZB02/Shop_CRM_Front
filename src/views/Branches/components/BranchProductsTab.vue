@@ -3,7 +3,7 @@
     <!-- Search Bar -->
     <div class="relative group">
       <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-        <i class="pi pi-search text-[10px] text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
+        <i class="pi pi-search text-[12px] text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
       </div>
       <input 
         v-model="searchQuery"
@@ -13,7 +13,7 @@
       />
       <div v-if="searchQuery" class="absolute inset-y-0 right-0 pr-4 flex items-center">
         <button @click="searchQuery = ''" class="w-6 h-6 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-400">
-          <i class="pi pi-times text-[8px]"></i>
+          <i class="pi pi-times text-[10px]"></i>
         </button>
       </div>
     </div>
@@ -32,22 +32,22 @@
         <table class="w-full text-left min-w-[700px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest w-10">№</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.form.barcode') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.col_price') }}</th>
-              <th class="px-4 py-2.5 text-[10px] font-bold text-slate-400 tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest w-10">№</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.form.barcode') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.col_price') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
             <tr v-for="(product, index) in filteredProducts" :key="product.id" class="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-colors group">
-              <td class="px-4 py-2 text-[10px] text-slate-400">{{ index + 1 }}</td>
+              <td class="px-4 py-2 text-[12px] text-slate-400">{{ index + 1 }}</td>
               <td class="px-4 py-2">
                 <div class="flex items-center gap-2.5">
                   <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                     <img v-if="product.image" :src="product.image" class="w-full h-full object-cover" />
-                    <i v-else class="pi pi-image text-slate-300 text-[10px]"></i>
+                    <i v-else class="pi pi-image text-slate-300 text-[12px]"></i>
                   </div>
                   <div class="flex flex-col min-w-0">
                     <div class="flex items-center flex-wrap gap-2">
@@ -56,13 +56,13 @@
                       </span>
                         <TurBadge :tur-name="product.tur_name" :tur-color="product.tur_color" />
                     </div>
-                    <span class="text-[9px] text-slate-400 tracking-widest mt-0.5">{{ product.category_name }}</span>
+                    <span class="text-[11px] text-slate-400 tracking-widest mt-0.5">{{ product.category_name }}</span>
                   </div>
                 </div>
               </td>
               <td class="px-4 py-2">
                 <div class="flex items-center gap-2">
-                  <code class="text-[10px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-700">
+                  <code class="text-[12px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-700">
                     {{ product.barcode || '—' }}
                   </code>
                   <button 
@@ -71,11 +71,11 @@
                     class="w-5 h-5 rounded-md bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
                     v-tooltip.right="$t('products.view_barcode') || 'Shtrix-kodni ko\'rish'"
                   >
-                    <i class="pi pi-barcode text-[10px]"></i>
+                    <i class="pi pi-barcode text-[12px]"></i>
                   </button>
                 </div>
               </td>
-              <td class="px-4 py-2 text-center text-[10px]">
+              <td class="px-4 py-2 text-center text-[12px]">
                 <span 
                   class="inline-flex items-center px-1.5 py-0.5 rounded-md font-bold"
                   :class="product.quantity > 10 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'"
@@ -96,7 +96,7 @@
                     v-tooltip.left="$t('warehouse.wastage.create_title')"
                     class="w-7 h-7 rounded-lg bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 transition-all flex items-center justify-center active:scale-90"
                   >
-                    <i class="pi pi-exclamation-circle text-[9px]"></i>
+                    <i class="pi pi-exclamation-circle text-[11px]"></i>
                   </button>
                 </div>
               </td>
@@ -119,10 +119,10 @@
         <div class="w-full flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
           <div class="text-left">
             <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight">{{ selectedProduct.name }}</h3>
-            <p class="text-[10px] font-bold text-emerald-500 tracking-[0.2em]">{{ selectedProduct.barcode }}</p>
+            <p class="text-[12px] font-bold text-emerald-500 tracking-[0.2em]">{{ selectedProduct.barcode }}</p>
           </div>
           <button @click="barcodeVisible = false" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
-            <i class="pi pi-times text-[10px]"></i>
+            <i class="pi pi-times text-[12px]"></i>
           </button>
         </div>
         
@@ -132,7 +132,7 @@
         
         <button 
           @click="downloadBarcode"
-          class="w-full py-3 rounded-xl bg-slate-900 border-none text-white text-[10px] font-black tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+          class="w-full py-3 rounded-xl bg-slate-900 border-none text-white text-[12px] font-black tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
         >
           <i class="pi pi-download"></i>
           Yuklab olish (PNG)
@@ -194,3 +194,5 @@ const downloadBarcode = async () => {
   }
 }
 </script>
+
+

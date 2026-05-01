@@ -7,7 +7,7 @@
         :key="tab.id"
         @click="activeSubTab = tab.id"
         :class="[
-          'px-4 py-1.5 rounded-lg text-[10px] font-bold tracking-widest transition-all duration-300',
+          'px-4 py-1.5 rounded-lg text-[12px] font-bold tracking-widest transition-all duration-300',
           activeSubTab === tab.id 
             ? 'bg-white dark:bg-slate-900 text-emerald-600 shadow-sm' 
             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
@@ -24,11 +24,11 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
          <div v-for="card in visibleCards" :key="card.label" class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-3.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden">
             <div :class="['absolute right-0 top-0 w-16 h-16 blur-2xl opacity-5 rounded-full -translate-y-1/2 translate-x-1/2', card.bgGlow]"></div>
-            <p class="text-[9px] font-bold tracking-widest text-slate-400 mb-2">{{ t(card.label) }}</p>
+            <p class="text-[11px] font-bold tracking-widest text-slate-400 mb-2">{{ t(card.label) }}</p>
             <div class="flex items-center justify-between relative z-10">
                <h3 :class="['text-sm font-bold tracking-tight', card.color]">{{ card.value }}</h3>
                <div :class="['w-7 h-7 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110', card.iconBg, card.iconColor]">
-                  <i :class="['pi text-[10px]', card.icon]"></i>
+                  <i :class="['pi text-[12px]', card.icon]"></i>
                </div>
             </div>
          </div>
@@ -38,12 +38,12 @@
       <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 shadow-sm">
          <div class="flex items-center justify-between mb-4">
             <div>
-              <h3 class="text-[9px] font-bold tracking-widest text-slate-400 mb-0.5">Xarajatlar oqimi</h3>
+              <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">Xarajatlar oqimi</h3>
               <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">Vaqt kesimida tahlil</p>
             </div>
             <div class="flex items-center gap-1.5">
                <div class="w-2 h-1 rounded-full bg-emerald-500"></div>
-               <span class="text-[10px] font-medium text-slate-400">{{ t('finance.expenses') }}</span>
+               <span class="text-[12px] font-medium text-slate-400">{{ t('finance.expenses') }}</span>
             </div>
          </div>
          <div class="h-[180px]">
@@ -72,16 +72,16 @@
           <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 bg-emerald-500/5 flex justify-between items-center">
              <div class="flex items-center gap-2">
                 <div class="w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-sm">
-                   <i class="pi pi-shopping-bag text-[10px]"></i>
+                   <i class="pi pi-shopping-bag text-[12px]"></i>
                 </div>
-                <span class="text-[10px] font-bold tracking-widest text-emerald-600">{{ t('finance.purchases') }}</span>
+                <span class="text-[12px] font-bold tracking-widest text-emerald-600">{{ t('finance.purchases') }}</span>
              </div>
-             <span class="text-[9px] font-bold text-emerald-500 tracking-widest bg-white dark:bg-slate-800 px-2 py-1 rounded-md border border-emerald-100 dark:border-emerald-500/10">{{ props.data.purchases?.count || 0 }} ta</span>
+             <span class="text-[11px] font-bold text-emerald-500 tracking-widest bg-white dark:bg-slate-800 px-2 py-1 rounded-md border border-emerald-100 dark:border-emerald-500/10">{{ props.data.purchases?.count || 0 }} ta</span>
           </div>
           <div class="overflow-x-auto max-h-[450px] custom-scrollbar overflow-y-auto">
              <table class="w-full text-left border-collapse">
                 <thead>
-                   <tr class="text-[9px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md z-20">
+                   <tr class="text-[11px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md z-20">
                       <th class="px-4 py-3">{{ t('finance.date') }}</th>
                       <th class="px-4 py-3">Mahsulot / Kategoriya</th>
                       <th class="px-4 py-3">Yetkazib beruvchi / Filial</th>
@@ -91,23 +91,23 @@
                 </thead>
                 <tbody class="divide-y divide-slate-50 dark:divide-slate-800/40">
                    <tr v-for="(p, i) in props.data.purchases?.items" :key="i" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-colors group">
-                      <td class="px-4 py-3 text-[10px] font-medium text-slate-400">{{ p.date }}</td>
+                      <td class="px-4 py-3 text-[12px] font-medium text-slate-400">{{ p.date }}</td>
                       <td class="px-4 py-3">
                          <div class="flex flex-col">
                             <span class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">{{ p.product }}</span>
-                            <span class="text-[9px] font-medium text-slate-400 mt-0.5">{{ p.category }}</span>
+                            <span class="text-[11px] font-medium text-slate-400 mt-0.5">{{ p.category }}</span>
                          </div>
                       </td>
                       <td class="px-4 py-3">
                          <div class="flex flex-col">
-                            <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">{{ p.supplier }}</span>
-                            <span class="text-[9px] font-medium text-slate-400 mt-0.5">{{ p.location }}</span>
+                            <span class="text-[12px] font-bold text-slate-600 dark:text-slate-300">{{ p.supplier }}</span>
+                            <span class="text-[11px] font-medium text-slate-400 mt-0.5">{{ p.location }}</span>
                          </div>
                       </td>
                       <td class="px-4 py-3 text-center">
                          <div class="flex flex-col items-center">
-                            <span class="text-[10px] font-black text-slate-700 dark:text-slate-200">{{ p.quantity }}</span>
-                            <span class="text-[9px] font-medium text-slate-400 mt-0.5">{{ formatPrice(p.unit_cost) }}</span>
+                            <span class="text-[12px] font-black text-slate-700 dark:text-slate-200">{{ p.quantity }}</span>
+                            <span class="text-[11px] font-medium text-slate-400 mt-0.5">{{ formatPrice(p.unit_cost) }}</span>
                          </div>
                       </td>
                       <td class="px-4 py-3 text-xs font-bold text-emerald-600 text-right">{{ formatPrice(p.total_cost) }}</td>
@@ -116,7 +116,7 @@
              </table>
           </div>
           <div class="px-4 py-2.5 border-t border-slate-50 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10 flex justify-between items-center">
-             <span class="text-[9px] font-bold tracking-widest text-slate-400">Jami xaridlar:</span>
+             <span class="text-[11px] font-bold tracking-widest text-slate-400">Jami xaridlar:</span>
              <span class="text-xs font-bold text-slate-800 dark:text-slate-100">{{ formatPrice(props.data.purchases?.total || 0) }}</span>
           </div>
        </div>
@@ -262,3 +262,5 @@ const chartOptions = computed(() => {
   }
 })
 </script>
+
+

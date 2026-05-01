@@ -9,8 +9,8 @@
           <span v-if="isFieldDirty('tax_percent')" class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
         </div>
         <p class="row-desc">{{ $t('settings.tax.tax_percent_desc') }}</p>
-        <p v-if="form.tax_percent === null || form.tax_percent === ''" class="text-[10px] text-amber-500 font-bold mt-1">
-          <i class="pi pi-info-circle text-[9px] mr-1"></i>
+        <p v-if="form.tax_percent === null || form.tax_percent === ''" class="text-[12px] text-amber-500 font-bold mt-1">
+          <i class="pi pi-info-circle text-[11px] mr-1"></i>
           {{ $t('settings.tax.using_global_tax') }}
         </p>
       </div>
@@ -94,3 +94,5 @@ import SectionHeader from './SectionHeader.vue'
 const { t } = useI18n()
 defineProps({ form: Object, active: String, readonly: Boolean, isFieldDirty: Function })
 </script>
+
+

@@ -50,3 +50,5 @@ const limitTooltip = computed(() => {
 defineProps({ totalWorkers: Number })
 defineEmits(['add'])
 </script>
+
+

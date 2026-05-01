@@ -113,3 +113,5 @@ const settingsStore = useSettingsStore()
 .modal-fade-enter-from .relative { transform: scale(0.96) translateY(8px); }
 .modal-fade-leave-to .relative { transform: scale(0.96) translateY(8px); }
 </style>
+
+

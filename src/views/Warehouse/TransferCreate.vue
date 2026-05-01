@@ -94,11 +94,11 @@
           >
             <div class="relative">
               <i class="pi pi-shopping-cart text-lg"></i>
-              <span v-if="transferForm.items.length > 0" class="absolute -top-1.5 -right-1.5 min-w-[14px] h-[14px] bg-rose-500 text-white rounded-full flex items-center justify-center text-[8px] font-black border-2 border-white dark:border-slate-900 shadow-sm">
+              <span v-if="transferForm.items.length > 0" class="absolute -top-1.5 -right-1.5 min-w-[14px] h-[14px] bg-rose-500 text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white dark:border-slate-900 shadow-sm">
                 {{ transferForm.items.length }}
               </span>
             </div>
-            <span class="text-[8px] font-black uppercase tracking-widest">{{ $t('warehouse.transfer.items_list') || 'Ro\'yxat' }}</span>
+            <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('warehouse.transfer.items_list') || 'Ro\'yxat' }}</span>
           </button>
 
           <div class="w-px h-8 bg-slate-100 dark:bg-slate-800"></div>
@@ -109,7 +109,7 @@
             :class="activeTab === 'catalog' ? 'text-emerald-500 scale-105' : 'text-slate-400'"
           >
             <i class="pi pi-th-large text-lg"></i>
-            <span class="text-[8px] font-black uppercase tracking-widest">{{ $t('menu.products') }}</span>
+            <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('menu.products') }}</span>
           </button>
         </div>
       </div>
@@ -137,39 +137,39 @@
           </div>
           <div>
             <h3 class="text-base font-black text-slate-800 dark:text-white uppercase tracking-tight">{{ $t('warehouse.validation.title') }}</h3>
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.validation.error_header') }}</p>
+            <p class="text-[13px] font-bold text-slate-400 uppercase tracking-widest">{{ $t('warehouse.validation.error_header') }}</p>
           </div>
         </div>
 
         <div v-if="stockErrors?.detail" class="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-500/5 border border-rose-100 dark:border-rose-500/10">
-          <p class="text-[13px] font-bold text-slate-600 dark:text-slate-300 leading-relaxed">{{ stockErrors.detail }}</p>
+          <p class="text-[15px] font-bold text-slate-600 dark:text-slate-300 leading-relaxed">{{ stockErrors.detail }}</p>
         </div>
 
         <div class="space-y-3 max-h-[300px] overflow-y-auto no-scrollbar pr-1">
           <div v-for="(err, i) in stockErrors?.zero_stock" :key="'z-'+i" class="flex gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 transition-all hover:border-rose-500/30">
             <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/10 flex items-center justify-center shrink-0">
-              <i class="pi pi-times-circle text-rose-500 text-[12px]"></i>
+              <i class="pi pi-times-circle text-rose-500 text-[14px]"></i>
             </div>
             <div class="flex flex-col justify-center min-w-0">
-              <span class="text-[9px] font-black text-rose-500 tracking-widest uppercase mb-1">{{ $t('warehouse.validation.no_stock') }}</span>
-              <p class="text-[12px] font-bold text-slate-500 dark:text-slate-400 leading-snug">{{ err }}</p>
+              <span class="text-[11px] font-black text-rose-500 tracking-widest uppercase mb-1">{{ $t('warehouse.validation.no_stock') }}</span>
+              <p class="text-[14px] font-bold text-slate-500 dark:text-slate-400 leading-snug">{{ err }}</p>
             </div>
           </div>
 
           <div v-for="(err, i) in stockErrors?.insufficient_stock" :key="'in-'+i" class="flex gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 transition-all hover:border-amber-500/30">
             <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/10 flex items-center justify-center shrink-0">
-              <i class="pi pi-exclamation-circle text-amber-500 text-[12px]"></i>
+              <i class="pi pi-exclamation-circle text-amber-500 text-[14px]"></i>
             </div>
             <div class="flex flex-col justify-center min-w-0">
-              <span class="text-[9px] font-black text-amber-500 tracking-widest uppercase mb-1">{{ $t('warehouse.validation.low_stock') }}</span>
-              <p class="text-[12px] font-bold text-slate-500 dark:text-slate-400 leading-snug">{{ err }}</p>
+              <span class="text-[11px] font-black text-amber-500 tracking-widest uppercase mb-1">{{ $t('warehouse.validation.low_stock') }}</span>
+              <p class="text-[14px] font-bold text-slate-500 dark:text-slate-400 leading-snug">{{ err }}</p>
             </div>
           </div>
         </div>
 
         <button 
           @click="stockErrors = null"
-          class="w-full h-12 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[12px] font-black tracking-widest uppercase shadow-xl hover:opacity-90 active:scale-95 transition-all"
+          class="w-full h-12 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[14px] font-black tracking-widest uppercase shadow-xl hover:opacity-90 active:scale-95 transition-all"
         >
           {{ $t('warehouse.validation.understand') }}
         </button>
@@ -229,3 +229,5 @@ const handleCancel = () => {
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
+
+

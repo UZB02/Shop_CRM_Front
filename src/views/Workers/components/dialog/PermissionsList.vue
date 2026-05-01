@@ -3,13 +3,13 @@
     <!-- Header: title + count + select-all -->
     <div class="flex items-center justify-between mb-4 px-1">
       <div class="flex items-center gap-2">
-        <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest">{{ $t('workers.form.permissions') }}</span>
-        <span class="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[10px] font-black">
+        <span class="text-[12px] font-black text-slate-400 dark:text-slate-500 tracking-widest">{{ $t('workers.form.permissions') }}</span>
+        <span class="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[12px] font-black">
           {{ selectedCount }}/{{ total }}
         </span>
       </div>
       <button
-        class="text-[10px] font-black tracking-widest transition-all hover:opacity-80 active:scale-95"
+        class="text-[12px] font-black tracking-widest transition-all hover:opacity-80 active:scale-95"
         :class="allSelected ? 'text-rose-400' : 'text-emerald-500'"
         @click="$emit('toggle-all')"
       >
@@ -51,3 +51,5 @@ defineEmits(['toggle', 'toggle-all'])
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
 </style>
+
+

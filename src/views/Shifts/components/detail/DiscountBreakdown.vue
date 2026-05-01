@@ -43,3 +43,5 @@ defineProps({
   formatCurrency: { type: Function, required: true }
 })
 </script>
+
+

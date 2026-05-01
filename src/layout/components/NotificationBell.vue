@@ -10,7 +10,7 @@
       <i class="pi pi-bell text-sm" />
       <span 
         v-if="store.unreadCount > 0" 
-        class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-white dark:ring-slate-900 animate-pulse"
+        class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[12px] font-bold text-white shadow-sm ring-2 ring-white dark:ring-slate-900 animate-pulse"
       >
         {{ store.unreadCount > 9 ? '9+' : store.unreadCount }}
       </span>
@@ -24,7 +24,7 @@
                     <i class="pi pi-bell text-emerald-500 text-xs" />
                     Bildirishnomalar
                 </h3>
-                <span v-if="store.unreadCount > 0" class="text-[9px] px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-bold tracking-wider">
+                <span v-if="store.unreadCount > 0" class="text-[11px] px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-bold tracking-wider">
                     {{ store.unreadCount }}
                 </span>
             </div>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-start justify-between gap-2">
-                                <h4 class="text-[13px] font-bold text-slate-700 dark:text-slate-200 mb-0.5 truncate group-hover:text-emerald-500 transition-colors">
+                                <h4 class="text-[15px] font-bold text-slate-700 dark:text-slate-200 mb-0.5 truncate group-hover:text-emerald-500 transition-colors">
                                     {{ item.title }}
                                 </h4>
                                 <div class="flex items-center gap-2 flex-shrink-0 mt-1">
@@ -66,21 +66,21 @@
                                         class="w-6 h-6 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all duration-300"
                                         v-tooltip.left="'O\'qilgan deb belgilash'"
                                     >
-                                        <i class="pi pi-check text-[10px]" />
+                                        <i class="pi pi-check text-[12px]" />
                                     </button>
                                     <span v-if="!item.read" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                                 </div>
                             </div>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight mb-1 line-clamp-2">
+                            <p class="text-[13px] text-slate-500 dark:text-slate-400 leading-tight mb-1 line-clamp-2">
                                 {{ item.body }}
                             </p>
                             <div class="flex items-center gap-3">
-                                <span class="text-[9px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1">
-                                    <i class="pi pi-clock text-[8px]" />
+                                <span class="text-[11px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1">
+                                    <i class="pi pi-clock text-[10px]" />
                                     {{ formatTime(item.date) }}
                                 </span>
-                                <span v-if="item.link" class="text-[9px] font-bold text-emerald-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Ko'rish <i class="pi pi-arrow-right text-[7px]" />
+                                <span v-if="item.link" class="text-[11px] font-bold text-emerald-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Ko'rish <i class="pi pi-arrow-right text-[9px]" />
                                 </span>
                             </div>
                         </div>
@@ -129,10 +129,10 @@
                                 <i :class="getIcon(selectedNotification.type)" />
                             </div>
                             <div>
-                                <span class="text-[10px] font-black tracking-[0.2em] text-emerald-500 mb-1 block">
+                                <span class="text-[12px] font-black tracking-[0.2em] text-emerald-500 mb-1 block">
                                     {{ selectedNotification.type_display || selectedNotification.source }}
                                 </span>
-                                <div class="text-[10px] font-bold text-slate-400">
+                                <div class="text-[12px] font-bold text-slate-400">
                                     XABAR #{{ selectedNotification.id }}
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                             
                             <div class="relative">
                                 <div class="absolute -left-4 top-0 bottom-0 w-1 bg-emerald-500/20 rounded-full" />
-                                <div class="text-[15px] font-medium text-slate-600 dark:text-slate-300 leading-relaxed break-words whitespace-pre-wrap max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+                                <div class="text-[16px] font-medium text-slate-600 dark:text-slate-300 leading-relaxed break-words whitespace-pre-wrap max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                                     {{ selectedNotification.message || selectedNotification.body }}
                                 </div>
                             </div>
@@ -324,3 +324,5 @@ const handleItemClick = async (item) => {
     backdrop-filter: blur(12px);
 }
 </style>
+
+

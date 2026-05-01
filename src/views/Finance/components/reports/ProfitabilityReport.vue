@@ -6,7 +6,7 @@
            <div :class="['absolute -right-2 -bottom-2 w-16 h-16 opacity-5 group-hover:scale-150 transition-transform duration-500 rounded-full', stat.bg]"></div>
            <div class="flex items-center gap-1.5 mb-2 relative z-10">
               <div :class="['w-1.5 h-1.5 rounded-full', stat.bg]"></div>
-              <p class="text-[9px] font-bold tracking-widest text-slate-400">{{ t(stat.label) }}</p>
+              <p class="text-[11px] font-bold tracking-widest text-slate-400">{{ t(stat.label) }}</p>
            </div>
            <h3 :class="['text-lg font-bold tracking-tight mb-2 relative z-10', stat.color]">{{ stat.value }}</h3>
            <div class="w-full h-1 bg-slate-50 dark:bg-slate-800/50 rounded-full overflow-hidden relative z-10">
@@ -19,7 +19,7 @@
            <div class="absolute -right-2 -top-2 opacity-10 group-hover:rotate-12 transition-transform duration-500">
              <i class="pi pi-percentage text-5xl"></i>
            </div>
-           <h5 class="text-[9px] font-black tracking-widest mb-1 relative z-10 opacity-80">Profit Analysis</h5>
+           <h5 class="text-[11px] font-black tracking-widest mb-1 relative z-10 opacity-80">Profit Analysis</h5>
            <p class="text-xs font-bold relative z-10 leading-tight">Margin biznes barqarorligidir</p>
         </div>
     </div>
@@ -28,10 +28,10 @@
     <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 rounded-xl shadow-sm flex flex-col">
         <div class="flex items-center justify-between mb-6">
            <div>
-              <h3 class="text-[9px] font-bold tracking-widest text-slate-400 mb-0.5">Rentabellik Matritsasi</h3>
+              <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">Rentabellik Matritsasi</h3>
               <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2">
                  Kategoriyalar bo'yicha tahlil
-                 <span v-if="props.data.subcategory_enabled" class="px-1.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 text-[8px] font-black tracking-widest border border-emerald-100 dark:border-emerald-500/20">
+                 <span v-if="props.data.subcategory_enabled" class="px-1.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 text-[10px] font-black tracking-widest border border-emerald-100 dark:border-emerald-500/20">
                    {{ t('finance.subcategory') }}
                  </span>
               </p>
@@ -47,13 +47,13 @@
        <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
           <div class="flex items-center gap-2">
             <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
-            <span class="text-[10px] font-bold tracking-widest text-slate-500">Rentabellik Jadvali</span>
+            <span class="text-[12px] font-bold tracking-widest text-slate-500">Rentabellik Jadvali</span>
           </div>
        </div>
        <div class="overflow-x-auto max-h-[500px] custom-scrollbar overflow-y-auto">
           <table class="w-full text-left border-collapse">
               <thead>
-                <tr class="text-[9px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <tr class="text-[11px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
                    <th class="px-4 py-3 w-10">#</th>
                    <th class="px-4 py-3">{{ t('finance.category') }}</th>
                    <th class="px-4 py-3 text-right">{{ t('finance.revenue') }}</th>
@@ -71,7 +71,7 @@
                    <td class="px-4 py-3">
                       <div class="flex flex-col">
                          <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">{{ item.name }}</span>
-                         <span v-if="item.parent" class="text-[8px] font-black text-slate-400 tracking-widest">{{ item.parent }}</span>
+                         <span v-if="item.parent" class="text-[10px] font-black text-slate-400 tracking-widest">{{ item.parent }}</span>
                       </div>
                    </td>
                    <td class="px-4 py-3 text-right font-medium text-slate-600 dark:text-slate-400">{{ formatPrice(item.revenue) }}</td>
@@ -82,7 +82,7 @@
                    <td class="px-4 py-3 text-center text-slate-500">{{ item.sales_count || 0 }}</td>
                    <td class="px-4 py-3 text-center text-slate-500">{{ item.qty_sold || 0 }}</td>
                    <td class="px-4 py-3 text-center">
-                      <span :class="['px-2 py-0.5 rounded-lg font-black text-[9px]', parseFloat(item.margin_pct) >= 0 ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-500']">
+                      <span :class="['px-2 py-0.5 rounded-lg font-black text-[11px]', parseFloat(item.margin_pct) >= 0 ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-500']">
                          {{ item.margin_pct }}%
                       </span>
                    </td>
@@ -91,7 +91,7 @@
                         <div class="flex-1 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                           <div class="h-full bg-slate-300 dark:bg-slate-600 rounded-full" :style="{ width: item.share_pct + '%' }"></div>
                         </div>
-                        <span class="text-[9px] font-bold text-slate-400">{{ item.share_pct }}%</span>
+                        <span class="text-[11px] font-bold text-slate-400">{{ item.share_pct }}%</span>
                       </div>
                    </td>
                 </tr>
@@ -180,3 +180,5 @@ const chartOptions = {
 
 const tableData = computed(() => props.data.table || [])
 </script>
+
+

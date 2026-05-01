@@ -113,11 +113,11 @@ const {
           >
             <div class="relative">
               <i class="pi pi-shopping-cart text-lg"></i>
-              <span v-if="validItemsCount > 0" class="absolute -top-1.5 -right-1.5 min-w-[14px] h-[14px] bg-rose-500 text-white rounded-full flex items-center justify-center text-[8px] font-black border-2 border-white dark:border-slate-900 shadow-sm">
+              <span v-if="validItemsCount > 0" class="absolute -top-1.5 -right-1.5 min-w-[14px] h-[14px] bg-rose-500 text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white dark:border-slate-900 shadow-sm">
                 {{ validItemsCount }}
               </span>
             </div>
-            <span class="text-[8px] font-black uppercase tracking-widest">{{ $t('warehouse.bulk.products_list') }}</span>
+            <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('warehouse.bulk.products_list') }}</span>
           </button>
 
           <div class="w-px h-8 bg-slate-100 dark:bg-slate-800"></div>
@@ -128,7 +128,7 @@ const {
             :class="activeTab === 'catalog' ? 'text-emerald-500 scale-110' : 'text-slate-400'"
           >
             <i class="pi pi-th-large text-lg"></i>
-            <span class="text-[8px] font-black uppercase tracking-widest">{{ $t('menu.products') }}</span>
+            <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('menu.products') }}</span>
           </button>
         </div>
       </div>
@@ -139,7 +139,7 @@ const {
       <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 shadow-2xl flex items-center justify-center border border-slate-200 dark:border-slate-700">
         <i class="pi pi-spin pi-spinner text-blue-500 text-2xl"></i>
       </div>
-      <p class="text-[10px] font-black text-slate-900 dark:text-slate-100 tracking-widest">{{ $t('warehouse.bulk.saving') }}</p>
+      <p class="text-[12px] font-black text-slate-900 dark:text-slate-100 tracking-widest">{{ $t('warehouse.bulk.saving') }}</p>
     </div>
     
   </div>
@@ -167,3 +167,5 @@ const {
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
+
+

@@ -14,20 +14,20 @@
             @click="activeTab = tab.id"
             :class="['flex items-center gap-2 px-4 py-1.5 rounded-md transition-all duration-300 whitespace-nowrap', activeTab === tab.id ? 'bg-white dark:bg-slate-800 text-emerald-500 shadow-sm scale-[1.02]' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300']"
           >
-            <i :class="['pi text-[10px]', tab.icon]"></i>
-            <span class="text-[10px] font-black tracking-widest">{{ tab.label }}</span>
+            <i :class="['pi text-[12px]', tab.icon]"></i>
+            <span class="text-[12px] font-black tracking-widest">{{ tab.label }}</span>
           </button>
         </div>
         
         <div class="flex items-center gap-6 px-4">
           <div class="hidden sm:flex flex-col items-end">
-            <span class="text-[7px] font-black text-slate-400 tracking-widest leading-none mb-1">{{ $t('customers.details.total_spent') }}</span>
-            <span class="text-[10px] font-black text-emerald-500 tracking-tight">{{ formatCurrency(customer?.total_purchases_amount) }}</span>
+            <span class="text-[9px] font-black text-slate-400 tracking-widest leading-none mb-1">{{ $t('customers.details.total_spent') }}</span>
+            <span class="text-[12px] font-black text-emerald-500 tracking-tight">{{ formatCurrency(customer?.total_purchases_amount) }}</span>
           </div>
           <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
           <div class="flex flex-col items-end">
-            <span class="text-[7px] font-black text-slate-400 tracking-widest leading-none mb-1">{{ $t('customers.details.debt') }}</span>
-            <span :class="['text-[10px] font-black tracking-tight', Number(customer?.debt_balance) > 0 ? 'text-rose-500' : 'text-slate-400']">{{ formatCurrency(customer?.debt_balance) }}</span>
+            <span class="text-[9px] font-black text-slate-400 tracking-widest leading-none mb-1">{{ $t('customers.details.debt') }}</span>
+            <span :class="['text-[12px] font-black tracking-tight', Number(customer?.debt_balance) > 0 ? 'text-rose-500' : 'text-slate-400']">{{ formatCurrency(customer?.debt_balance) }}</span>
           </div>
         </div>
       </div>
@@ -189,3 +189,5 @@ onMounted(() => {
   opacity: 0;
 }
 </style>
+
+

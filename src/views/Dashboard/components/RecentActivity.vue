@@ -43,3 +43,5 @@ const formatTime = (date) => {
   return activityDate.toLocaleDateString('uz-UZ')
 }
 </script>
+
+

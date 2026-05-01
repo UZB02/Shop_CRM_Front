@@ -126,8 +126,8 @@ const FieldGroup = defineComponent({
     const closeTooltip = () => { isVisible.value = false }
     
     return () => h('div', { class: 'flex flex-col gap-1.5' }, [
-      h('label', { class: 'text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest flex items-center gap-1.5' }, [
-        h('i', { class: `pi ${props.icon || 'pi-circle'} text-[9px]` }),
+      h('label', { class: 'text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest flex items-center gap-1.5' }, [
+        h('i', { class: `pi ${props.icon || 'pi-circle'} text-[11px]` }),
         h('span', null, props.label),
         props.required ? h('span', { class: 'text-rose-400' }, '*') : null,
         
@@ -138,7 +138,7 @@ const FieldGroup = defineComponent({
         }, [
           // The Icon
           h('span', { 
-            class: `w-4 h-4 rounded-full flex items-center justify-center cursor-help transition-all border text-[9px] font-black ${
+            class: `w-4 h-4 rounded-full flex items-center justify-center cursor-help transition-all border text-[11px] font-black ${
               isVisible.value 
                 ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.2)]' 
                 : 'bg-slate-800 text-slate-500 border-slate-700 group-hover/tooltip:bg-emerald-500/10 group-hover/tooltip:text-emerald-400 group-hover/tooltip:border-emerald-500/30'
@@ -149,14 +149,14 @@ const FieldGroup = defineComponent({
           // The Tooltip Window
           h('div', { 
             class: [
-              'absolute bottom-full right-0 mb-2 w-56 p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl text-[10px] text-slate-600 dark:text-slate-300 font-medium normal-case tracking-normal leading-relaxed transition-all duration-200 z-50 pointer-events-none',
+              'absolute bottom-full right-0 mb-2 w-56 p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl text-[12px] text-slate-600 dark:text-slate-300 font-medium normal-case tracking-normal leading-relaxed transition-all duration-200 z-50 pointer-events-none',
               isVisible.value 
                 ? 'opacity-100 visible translate-y-0' 
                 : 'opacity-0 invisible translate-y-1 md:group-hover/tooltip:opacity-100 md:group-hover/tooltip:visible md:group-hover/tooltip:translate-y-0'
             ]
           }, [
             h('div', { class: 'relative' }, [
-              h('i', { class: 'pi pi-info-circle text-emerald-500 dark:text-emerald-400 mr-1.5 text-[10px]' }),
+              h('i', { class: 'pi pi-info-circle text-emerald-500 dark:text-emerald-400 mr-1.5 text-[12px]' }),
               props.helpText,
               // Arrow
               h('div', { class: 'absolute -bottom-4 right-1 border-[6px] border-transparent border-t-slate-200 dark:border-t-slate-700' }),
@@ -259,3 +259,5 @@ const handleRegister = async () => {
   to   { opacity: 1; transform: translateY(0); }
 }
 </style>
+
+

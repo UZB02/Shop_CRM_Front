@@ -72,3 +72,5 @@ import SectionHeader from './SectionHeader.vue'
 const { t } = useI18n()
 defineProps({ form: Object, active: String, readonly: Boolean, isFieldDirty: Function })
 </script>
+
+

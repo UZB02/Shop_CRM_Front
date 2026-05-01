@@ -54,3 +54,5 @@ export const transfersAPI = {
     confirm: (id) => api.post(`/warehouse/transfers/${id}/confirm/`, {}),
     cancel: (id) => api.post(`/warehouse/transfers/${id}/cancel/`, {})
 }
+
+

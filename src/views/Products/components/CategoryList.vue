@@ -9,10 +9,10 @@
           ? 'bg-emerald-500 text-white border-emerald-500'
           : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'"
       >
-        <i class="pi pi-th-large text-[10px]"></i>
+        <i class="pi pi-th-large text-[12px]"></i>
         {{ $t('categories.all') }}
         <span
-          class="px-1.5 py-0.5 rounded-full text-[10px] font-semibold"
+          class="px-1.5 py-0.5 rounded-full text-[12px] font-semibold"
           :class="!selectedId ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500'"
         >{{ totalProducts }}</span>
       </button>
@@ -29,7 +29,7 @@
         {{ cat.name }}
         <span
           v-if="cat.product_count !== undefined"
-          class="px-1.5 py-0.5 rounded-full text-[10px] font-semibold"
+          class="px-1.5 py-0.5 rounded-full text-[12px] font-semibold"
           :class="isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500'"
         >{{ cat.product_count }}</span>
       </button>
@@ -61,7 +61,7 @@
     <!-- Search -->
     <div class="px-3 py-2.5 shrink-0 border-b border-slate-50 dark:border-slate-800/60">
       <div class="relative">
-        <i class="pi pi-search absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400"></i>
+        <i class="pi pi-search absolute left-2.5 top-1/2 -translate-y-1/2 text-[12px] text-slate-400"></i>
         <input
           v-model="catSearch"
           type="text"
@@ -103,7 +103,7 @@
       >
         <div class="flex items-center gap-2.5 min-w-0 flex-1">
           <div
-            class="w-6 h-6 rounded-md flex items-center justify-center text-[9px] font-bold shrink-0 transition-all"
+            class="w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold shrink-0 transition-all"
             :class="isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 group-hover:text-emerald-600'"
           >{{ cat.name?.substring(0, 2).toUpperCase() }}</div>
           <span class="text-xs font-medium truncate">{{ cat.name }}</span>
@@ -121,14 +121,14 @@
 
           <div v-if="!readonly" class="hidden group-hover:flex gap-0.5">
             <button class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-white/20 dark:hover:bg-slate-700 transition-all" @click.stop="$emit('edit', cat)">
-              <i class="pi pi-pencil text-[9px]"></i>
+              <i class="pi pi-pencil text-[11px]"></i>
             </button>
             <button
               class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-rose-500/20 hover:text-rose-500 transition-all"
               :class="isSelected(cat) ? 'text-white/70' : 'text-slate-400'"
               @click.stop="$emit('delete', cat)"
             >
-              <i class="pi pi-trash text-[9px]"></i>
+              <i class="pi pi-trash text-[11px]"></i>
             </button>
           </div>
         </div>
@@ -174,3 +174,5 @@ const selectCategory = (cat) => emit('select', cat ?? null)
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+
+

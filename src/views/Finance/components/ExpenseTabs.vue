@@ -4,13 +4,13 @@
       v-for="tab in tabs" 
       :key="tab.id"
       @click="$emit('update:modelValue', tab.id)"
-      class="px-4 h-9 rounded-xl text-[10px] font-black tracking-widest transition-all duration-500 flex items-center gap-2 whitespace-nowrap relative group overflow-hidden"
+      class="px-4 h-9 rounded-xl text-[12px] font-black tracking-widest transition-all duration-500 flex items-center gap-2 whitespace-nowrap relative group overflow-hidden"
       :class="modelValue === tab.id 
         ? 'bg-white dark:bg-slate-900 text-emerald-600 shadow-sm' 
         : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'"
     >
       <div v-if="modelValue === tab.id" class="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 to-transparent pointer-events-none"></div>
-      <i :class="[tab.icon, modelValue === tab.id ? 'scale-110' : '']" class="text-[11px] transition-transform duration-500"></i>
+      <i :class="[tab.icon, modelValue === tab.id ? 'scale-110' : '']" class="text-[13px] transition-transform duration-500"></i>
       <span class="relative z-10">{{ tab.label }}</span>
       
       <!-- Bottom highlight for active tab -->
@@ -39,3 +39,5 @@ defineEmits(['update:modelValue'])
   scrollbar-width: none;
 }
 </style>
+
+

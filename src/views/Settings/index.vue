@@ -25,7 +25,7 @@
           <p>{{ $t('settings.unsaved_changes') }}</p>
           <div class="flex flex-wrap gap-1 mt-1 opacity-80">
             <template v-for="tab in SETTINGS_TABS" :key="tab.key">
-              <span v-if="dirtyTabs[tab.key]" class="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-400/10 text-[9px] tracking-wider">
+              <span v-if="dirtyTabs[tab.key]" class="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-400/10 text-[11px] tracking-wider">
                 {{ $t(tab.tKey) }}
               </span>
             </template>
@@ -44,7 +44,7 @@
           ? 'bg-emerald-500 border-emerald-500 text-white'
           : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'"
       >
-        <i :class="['pi', tab.icon, 'mr-1 text-[10px]']"></i>
+        <i :class="['pi', tab.icon, 'mr-1 text-[12px]']"></i>
         {{ $t(tab.tKey) }}
         <span v-if="dirtyTabs[tab.key]" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-500 border-2 border-white dark:border-slate-900 rounded-full animate-pulse"></span>
       </button>
@@ -281,3 +281,5 @@ const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwn
 .slide-down-enter-active, .slide-down-leave-active { transition: all 0.2s; }
 .slide-down-enter-from, .slide-down-leave-to { opacity: 0; transform: translateY(-6px); }
 </style>
+
+

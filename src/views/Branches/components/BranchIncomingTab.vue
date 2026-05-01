@@ -14,7 +14,7 @@
           </div>
           <div>
             <h3 class="text-xs font-bold text-slate-800 dark:text-slate-200 tracking-widest leading-none">{{ $t('warehouse.detail.incoming_title') }}</h3>
-            <p class="text-[10px] text-slate-400 mt-1 font-medium">{{ $t('warehouse.detail.total_count', { count: incomingTotal }) }}</p>
+            <p class="text-[12px] text-slate-400 mt-1 font-medium">{{ $t('warehouse.detail.total_count', { count: incomingTotal }) }}</p>
           </div>
         </div>
       </div>
@@ -24,13 +24,13 @@
         <table class="w-full text-left min-w-[900px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-5 py-3 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
-              <th class="px-5 py-3 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
-              <th class="px-5 py-3 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
-              <th class="px-5 py-3 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.all') }}</th>
-              <th class="px-5 py-3 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
-              <th class="px-5 py-3 text-[10px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_description') }}</th>
-              <th class="px-5 py-3 text-[10px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
+              <th class="px-5 py-3 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
+              <th class="px-5 py-3 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+              <th class="px-5 py-3 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
+              <th class="px-5 py-3 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.all') }}</th>
+              <th class="px-5 py-3 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
+              <th class="px-5 py-3 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_description') }}</th>
+              <th class="px-5 py-3 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -43,35 +43,35 @@
                     </span>
                     <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
                   </div>
-                  <span class="text-[9px] font-medium text-slate-400">{{ item.product_barcode }} | {{ item.product_unit }}</span>
+                  <span class="text-[11px] font-medium text-slate-400">{{ item.product_barcode }} | {{ item.product_unit }}</span>
                 </div>
               </td>
               <td class="px-5 py-3.5 text-right">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[12px]">
                   {{ item.quantity }}
                 </span>
               </td>
-              <td class="px-5 py-3.5 text-right text-[10px] font-medium text-slate-500 dark:text-slate-400">
+              <td class="px-5 py-3.5 text-right text-[12px] font-medium text-slate-500 dark:text-slate-400">
                 {{ Number(item.unit_cost || 0).toLocaleString() }}
               </td>
-              <td class="px-5 py-3.5 text-right font-black text-slate-800 dark:text-slate-100 text-[10px]">
+              <td class="px-5 py-3.5 text-right font-black text-slate-800 dark:text-slate-100 text-[12px]">
                 {{ Number(item.total_cost || 0).toLocaleString() }}
               </td>
               <td class="px-5 py-3.5">
                 <div class="flex items-center gap-2">
-                  <div class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px] font-bold text-slate-500 border border-white dark:border-slate-700 shadow-sm">
+                  <div class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500 border border-white dark:border-slate-700 shadow-sm">
                     {{ item.worker_name?.charAt(0) }}
                   </div>
-                  <span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">{{ item.worker_name }}</span>
+                  <span class="text-[12px] font-medium text-slate-600 dark:text-slate-400">{{ item.worker_name }}</span>
                 </div>
               </td>
               <td class="px-5 py-3.5">
-                <span class="text-[10px] text-slate-400 italic font-medium max-w-[150px] truncate block" :title="item.description">
+                <span class="text-[12px] text-slate-400 italic font-medium max-w-[150px] truncate block" :title="item.description">
                   {{ item.description || '—' }}
                 </span>
               </td>
               <td class="px-5 py-3.5 text-right">
-                <span class="text-[10px] font-bold text-slate-400">{{ item.created_on }}</span>
+                <span class="text-[12px] font-bold text-slate-400">{{ item.created_on }}</span>
               </td>
             </tr>
           </tbody>
@@ -84,7 +84,7 @@
           <i class="pi pi-history text-slate-300 text-2xl"></i>
         </div>
         <h4 class="text-xs font-bold text-slate-600 dark:text-slate-400 tracking-widest">{{ $t('warehouse.detail.no_incoming') }}</h4>
-        <p class="text-[10px] text-slate-400 mt-2 max-w-[200px] leading-relaxed">{{ $t('common.no_results_desc') }}</p>
+        <p class="text-[12px] text-slate-400 mt-2 max-w-[200px] leading-relaxed">{{ $t('common.no_results_desc') }}</p>
       </div>
     </div>
 
@@ -129,3 +129,5 @@ const {
   animation: loading 1.5s infinite ease-in-out;
 }
 </style>
+
+

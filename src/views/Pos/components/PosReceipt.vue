@@ -16,7 +16,7 @@
               <i class="pi pi-check text-white text-sm font-black" />
             </div>
             <div>
-              <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-600 leading-none mb-0.5">Savdo yakunlandi</p>
+              <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-600 leading-none mb-0.5">Savdo yakunlandi</p>
               <p class="text-sm font-black text-slate-800 dark:text-white font-outfit leading-none">Savdo cheki #{{ t.id }}</p>
             </div>
           </div>
@@ -32,17 +32,17 @@
 
             <!-- Store Header -->
             <div class="text-center py-4 border-b-2 border-dashed border-slate-300 dark:border-slate-600 mb-3">
-              <p class="text-[10px] font-black tracking-[0.3em] text-slate-400 dark:text-slate-500 mb-1">★ ★ ★</p>
+              <p class="text-[12px] font-black tracking-[0.3em] text-slate-400 dark:text-slate-500 mb-1">★ ★ ★</p>
               
-              <p v-if="settingsStore.receiptConfig.header" class="text-[9px] font-bold text-slate-500 mb-1 whitespace-pre-line">{{ settingsStore.receiptConfig.header }}</p>
+              <p v-if="settingsStore.receiptConfig.header" class="text-[11px] font-bold text-slate-500 mb-1 whitespace-pre-line">{{ settingsStore.receiptConfig.header }}</p>
               
               <h2 class="text-lg font-black tracking-tighter text-slate-900 dark:text-white font-outfit ">
                 {{ settingsStore.storeName }}
               </h2>
               
-              <p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 tracking-widest mt-0.5">{{ t.branch_name || 'Do\'kon' }}</p>
+              <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 tracking-widest mt-0.5">{{ t.branch_name || 'Do\'kon' }}</p>
               
-              <div v-if="settingsStore.receiptConfig.address || settingsStore.receiptConfig.phone" class="mt-2 text-[8px] text-slate-400 font-bold leading-tight">
+              <div v-if="settingsStore.receiptConfig.address || settingsStore.receiptConfig.phone" class="mt-2 text-[10px] text-slate-400 font-bold leading-tight">
                 <p v-if="settingsStore.receiptConfig.address">{{ settingsStore.receiptConfig.address }}</p>
                 <p v-if="settingsStore.receiptConfig.phone">Tel: {{ settingsStore.receiptConfig.phone }}</p>
               </div>
@@ -78,11 +78,11 @@
 
             <!-- Items -->
             <div class="border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3">
-              <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center">— MAHSULOTLAR —</p>
+              <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center">— MAHSULOTLAR —</p>
               <div class="space-y-2.5">
                 <div v-for="(item, idx) in t.items" :key="item.id || idx">
                   <!-- Product name -->
-                  <p class="text-[10px] font-black text-slate-800 dark:text-slate-200 truncate leading-tight">
+                  <p class="text-[12px] font-black text-slate-800 dark:text-slate-200 truncate leading-tight">
                     {{ item.product_name || 'Mahsulot' }}
                     <span v-if="item.tur_name" class="text-slate-400 font-normal">
                       ({{ item.tur_name }}{{ item.tur_color ? ' / ' + item.tur_color : '' }})
@@ -90,10 +90,10 @@
                   </p>
                   <!-- qty × price = total -->
                   <div class="flex justify-between items-center mt-0.5">
-                    <span class="text-[9px] text-slate-400 dark:text-slate-500 font-bold">
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 font-bold">
                       {{ num(item.quantity) }} {{ item.unit || 'dona' }} × {{ fmt(item.unit_price) }}
                     </span>
-                    <span class="text-[10px] font-black text-slate-700 dark:text-slate-300">
+                    <span class="text-[12px] font-black text-slate-700 dark:text-slate-300">
                       {{ fmt(num(item.quantity) * num(item.unit_price)) }}
                     </span>
                   </div>
@@ -133,7 +133,7 @@
 
             <!-- Payment Breakdown -->
             <div class="border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3">
-              <p class="text-[8px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center">— TO'LOV USULI —</p>
+              <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center">— TO'LOV USULI —</p>
               <div class="space-y-1">
                 <div class="flex justify-between items-center text-[9.5px]">
                   <span class="text-slate-400 dark:text-slate-500 font-bold ">Tur:</span>
@@ -154,12 +154,12 @@
 
             <!-- Footer -->
             <div class="text-center border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 pb-2">
-               <p v-if="settingsStore.receiptConfig.promo" class="text-[9px] font-black text-emerald-600 dark:text-emerald-400 mb-2 italic">
+               <p v-if="settingsStore.receiptConfig.promo" class="text-[11px] font-black text-emerald-600 dark:text-emerald-400 mb-2 italic">
                 {{ settingsStore.receiptConfig.promo }}
               </p>
-              <p class="text-[9px] font-bold text-slate-400 dark:text-slate-500 tracking-widest leading-relaxed">
+              <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-widest leading-relaxed">
                 {{ settingsStore.receiptConfig.footer || 'Xarid uchun rahmat!' }}<br/>
-                <span class="text-[8px]">★ ★ ★</span>
+                <span class="text-[10px]">★ ★ ★</span>
               </p>
             </div>
 
@@ -170,18 +170,18 @@
         <div class="flex-shrink-0 px-4 py-4 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
           <div class="grid grid-cols-2 gap-2">
             <button @click="$emit('download')"
-              class="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[9px] font-black tracking-widest text-slate-600 dark:text-slate-300 transition-all active:scale-95">
+              class="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[11px] font-black tracking-widest text-slate-600 dark:text-slate-300 transition-all active:scale-95">
               <i class="pi pi-download text-sm" />
               Yuklab olish
             </button>
             <button @click="$emit('print')"
-              class="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[9px] font-black tracking-widest text-slate-600 dark:text-slate-300 transition-all active:scale-95">
+              class="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[11px] font-black tracking-widest text-slate-600 dark:text-slate-300 transition-all active:scale-95">
               <i class="pi pi-print text-sm" />
               Chop etish
             </button>
           </div>
           <button @click="$emit('update:visible', false)"
-            class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[9px] font-black tracking-[0.18em] shadow-lg shadow-emerald-500/25 transition-all active:scale-[0.98]">
+            class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black tracking-[0.18em] shadow-lg shadow-emerald-500/25 transition-all active:scale-[0.98]">
             <i class="pi pi-plus mr-2" />
             Yangi savdo boshlash
           </button>
@@ -250,3 +250,5 @@ const t = computed(() => props.transaction || {})
   }
 }
 </style>
+
+

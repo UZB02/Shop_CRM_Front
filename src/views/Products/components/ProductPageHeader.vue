@@ -57,3 +57,5 @@ const limitTooltip = computed(() => {
 defineProps({ totalProducts: Number })
 defineEmits(['add-category', 'add-product'])
 </script>
+
+
