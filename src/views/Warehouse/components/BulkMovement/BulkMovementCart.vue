@@ -145,7 +145,7 @@
               <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">{{ $t('products.form.amount') }}</span>
               <div class="flex items-center bg-slate-100 dark:bg-slate-700/60 rounded-lg overflow-hidden border border-slate-200/60 dark:border-slate-600/40">
                 <button
-                  @click="$emit('update-qty', index, item.quantity - 1)"
+                  @click="item.quantity > 1 ? $emit('update-qty', index, item.quantity - 1) : $emit('remove', index)"
                   class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all shrink-0"
                 >
                   <i class="pi pi-minus text-[9px]"></i>

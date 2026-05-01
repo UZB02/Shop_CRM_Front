@@ -56,11 +56,7 @@ export function useBulkMovement() {
   }
 
   const updateQty = (index, qty) => {
-    if (qty <= 0) {
-      removeBulkItem(index)
-    } else {
-      bulkItems.value[index].quantity = qty
-    }
+    bulkItems.value[index].quantity = qty
   }
 
   const updatePrice = (index, price) => {
