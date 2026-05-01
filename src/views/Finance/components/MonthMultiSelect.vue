@@ -89,24 +89,26 @@ const emit = defineEmits(['update:modelValue'])
 const isOpen = ref(false)
 
 const monthNames = computed(() => {
-  let currentLocale = (locale.value || 'uz').replace('_', '-')
+  const currentLocale = (locale.value || 'uz').replace('_', '-')
   
-  // Handle specific non-standard tags like uz-cy
-  if (currentLocale === 'uz-cy') currentLocale = 'uz-Cyrl'
+  // High-quality hardcoded names for primary project languages to avoid "M01" issues
+  const uzNames = ['YAN', 'FEV', 'MAR', 'APR', 'MAY', 'IYU', 'IYL', 'AVG', 'SEN', 'OKT', 'NOY', 'DEK']
+  const ruNames = ['ЯНВ', 'ФЕВ', 'МАР', 'АПР', 'МАЙ', 'ИЮН', 'ИЮЛ', 'АВГ', 'СЕН', 'ОКТ', 'НОЯ', 'ДЕК']
+  
+  if (currentLocale.startsWith('uz')) return uzNames
+  if (currentLocale.startsWith('ru')) return ruNames
   
   try {
     const formatter = new Intl.DateTimeFormat(currentLocale, { month: 'short' })
-    return Array.from({ length: 12 }, (_, i) => {
+    const names = Array.from({ length: 12 }, (_, i) => {
       const name = formatter.format(new Date(2024, i, 1))
       return name.replace(/\./g, '').toUpperCase()
     })
+    // If Intl still returns something like M01, fallback to UZ
+    if (names[0].startsWith('M')) return uzNames
+    return names
   } catch (e) {
-    // Fallback to standard 'uz' if the locale is still invalid
-    const fallbackFormatter = new Intl.DateTimeFormat('uz', { month: 'short' })
-    return Array.from({ length: 12 }, (_, i) => {
-      const name = fallbackFormatter.format(new Date(2024, i, 1))
-      return name.replace(/\./g, '').toUpperCase()
-    })
+    return uzNames
   }
 })
 
@@ -117,7 +119,12 @@ const selectedArray = computed(() => {
 
 const label = computed(() => {
   if (selectedArray.value.length === 0) return t('finance.months')
-  if (selectedArray.value.length === 12) return t('common.all')
+  if (selectedArray.value.length === 12) {
+    const allText = t('common.all').toLowerCase()
+    const monthsText = t('finance.months').toLowerCase()
+    // Uzbek: Barcha oylar, Russian: Все месяцы
+    return locale.value.startsWith('uz') ? `Barcha oylar` : `Все месяцы`
+  }
   if (selectedArray.value.length > 3) return `${selectedArray.value.length} ${t('common.month').toLowerCase()}`
   
   return selectedArray.value
