@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col gap-3 sm:gap-4">
+  <div class="relative z-[50] bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col gap-3 sm:gap-4">
     <div class="flex flex-wrap items-center gap-2 sm:gap-3">
       <!-- Search Filter -->
       <div v-if="activeTab !== 'payments'" class="relative flex-1 min-w-[200px] sm:w-64 group">
@@ -15,7 +15,7 @@
       </div>
 
       <!-- Date Range Filter -->
-      <div class="relative flex-1 min-w-[200px] sm:flex-none sm:w-64 group">
+      <div v-if="activeTab !== 'profit-loss'" class="relative flex-1 min-w-[200px] sm:flex-none sm:w-64 group">
         <DatePicker
           v-model="filters.date"
           :selectionMode="['expenses-list', 'debtors'].includes(activeTab) ? 'single' : 'range'"
@@ -84,19 +84,11 @@
         />
       </div>
 
-      <!-- Months Filter (P&L only) - Simple Comma Separated for now -->
-      <div v-if="activeTab === 'profit-loss'" class="relative flex-1 min-w-[150px] sm:w-48 group">
-        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-          <i class="pi pi-list text-[12px]"></i>
-        </div>
-        <input
-          v-model="filters.months"
-          type="text"
-          :placeholder="$t('finance.months')"
-          class="w-full h-10 pl-9 pr-4 text-sm font-black rounded-xl border border-slate-200/60 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/40 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all tracking-wider placeholder:text-slate-400"
-          :title="$t('finance.months_tip')"
-        />
-      </div>
+      <!-- Months Filter (P&L only) -->
+      <MonthMultiSelect 
+        v-if="activeTab === 'profit-loss'"
+        v-model="filters.months"
+      />
 
       <!-- Min Debt Filter (Debtors only) -->
       <div v-if="activeTab === 'debtors'" class="relative flex-1 min-w-[150px] sm:w-48 group">
@@ -225,6 +217,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DatePicker from 'primevue/datepicker'
 import Select from 'primevue/select'
+import MonthMultiSelect from './MonthMultiSelect.vue'
 import { useSettingsStore } from '@/store/settings'
 
 const { t } = useI18n()
