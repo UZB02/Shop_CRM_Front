@@ -103,9 +103,12 @@
             />
             <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-3xl"></i>
 
-            <!-- Index badge (top-left) -->
-            <div class="absolute top-1.5 left-1.5 w-5 h-5 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-[9px] font-black border border-white/60 dark:border-slate-700 shadow">
-              {{ index + 1 }}
+            <!-- Quantity badge (top-left) -->
+            <div 
+              class="absolute top-1.5 left-1.5 min-w-[20px] h-5 px-1 rounded-lg flex items-center justify-center text-[10px] font-black border border-white/60 dark:border-slate-700 shadow transition-colors"
+              :class="item.quantity > 0 ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'"
+            >
+              {{ item.quantity }}
             </div>
 
             <!-- Delete (top-right) -->
