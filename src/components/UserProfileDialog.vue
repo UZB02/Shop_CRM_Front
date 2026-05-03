@@ -19,6 +19,14 @@
                   <h2 class="profile-name">
                     {{ (currentWorker?.first_name || user.first_name) }}
                     {{ (currentWorker?.last_name  || user.last_name)  }}
+                    <router-link 
+                      :to="{ name: 'profile' }" 
+                      @click="closeModal"
+                      class="profile-link-icon"
+                      title="To'liq profilga o'tish"
+                    >
+                      <i class="pi pi-external-link"></i>
+                    </router-link>
                   </h2>
                   <div class="profile-meta">
                     <span class="profile-role">
@@ -198,8 +206,27 @@ const onEsc = (e) => { if (e.key === 'Escape') closeModal() }
   margin: 0 0 5px;
   letter-spacing: -0.3px;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .dark .profile-name { color: #f8fafc; }
+
+.profile-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 10px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.dark .profile-link-icon { background: #1e293b; color: #94a3b8; }
+.profile-link-icon:hover { background: #10b981; color: #fff; transform: translateY(-1px); }
 
 .profile-meta { display: flex; align-items: center; gap: 6px; }
 .profile-role {

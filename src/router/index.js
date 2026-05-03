@@ -202,6 +202,12 @@ const routes = [
                 name: 'subscription',
                 component: () => import('@/views/Subscription/index.vue'),
                 meta: { permission: 'subscription' }
+            },
+            {
+                path: 'profile',
+                name: 'profile',
+                component: () => import('@/views/Profile/index.vue'),
+                meta: { permission: null }
             }
         ]
     }
