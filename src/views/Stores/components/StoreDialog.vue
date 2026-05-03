@@ -231,7 +231,6 @@ const statuses = computed(() => [
   align-items: center !important;
   font-size: 11px !important;
   font-weight: 900 !important;
-  text-transform: !important;
   letter-spacing: 0.05em !important;
   padding: 0 1rem !important;
 }

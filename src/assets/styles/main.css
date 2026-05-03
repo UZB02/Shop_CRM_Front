@@ -320,7 +320,7 @@ body {
 
 .p-datepicker-title {
   font-weight: 800 !important;
-  font-size: 17px !important;
+  font-size: 1rem !important;
   color: #334155 !important;
   display: flex !important;
   gap: 12px !important;

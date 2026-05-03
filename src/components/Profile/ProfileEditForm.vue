@@ -47,7 +47,7 @@
     <!-- Password Section -->
     <div class="edit-section">
       <p class="edit-section-label">
-        <i class="pi pi-lock" style="font-size: 10px;"></i>
+        <i class="pi pi-lock text-[10px]"></i>
         {{ $t('password_change.title') }}
       </p>
       <div class="edit-field">
@@ -103,9 +103,8 @@ const emit = defineEmits(['update:modelValue'])
 .profile-edit-body { display: flex; flex-direction: column; gap: 0; padding: 16px 20px; }
 .edit-section { display: flex; flex-direction: column; gap: 10px; }
 .edit-section-label {
-  font-size: 9px;
+  font-size: 0.75rem;
   font-weight: 800;
-  text-transform: ;
   letter-spacing: 0.12em;
   color: #10b981;
   display: flex; align-items: center; gap: 5px;
@@ -116,9 +115,8 @@ const emit = defineEmits(['update:modelValue'])
 
 .edit-field { display: flex; flex-direction: column; gap: 5px; flex: 1; }
 .edit-field label {
-  font-size: 10px;
+  font-size: 0.75rem;
   font-weight: 700;
-  text-transform: ;
   letter-spacing: 0.08em;
   color: #94a3b8;
 }

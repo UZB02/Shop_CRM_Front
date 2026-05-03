@@ -101,7 +101,7 @@
             <div class="min-w-0">
               <h4 class="text-[13px] font-black text-slate-800 dark:text-slate-100 tracking-tight leading-none truncate mb-1.5">{{ smena.branch_name }}</h4>
               <div class="flex items-center gap-1 text-[11px] font-bold text-slate-400 dark:text-slate-600 tracking-wider">
-                <i class="pi pi-user" style="font-size:7px"></i>
+                <i class="pi pi-user text-[10px]"></i>
                 <span class="truncate">{{ smena.worker_open_name || smena.worker_name || '—' }}</span>
               </div>
             </div>
@@ -185,7 +185,6 @@ const statusOptions = computed(() => [
   padding: 0 0.875rem !important;
   font-size: 11px !important;
   font-weight: 800 !important;
-  text-transform: !important;
   letter-spacing: 0.05em !important;
   color: #f1f5f9 !important;
   box-shadow: none !important;

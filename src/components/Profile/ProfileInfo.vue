@@ -72,9 +72,8 @@ defineProps({
 }
 .info-content { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .info-label {
-  font-size: 9px;
+  font-size: 0.75rem;
   font-weight: 700;
-  text-transform: ;
   letter-spacing: 0.1em;
   color: #94a3b8;
 }
@@ -96,7 +95,6 @@ defineProps({
   border-radius: 5px;
   background: #f1f5f9;
   color: #64748b;
-  text-transform: ;
   letter-spacing: 0.05em;
   flex-shrink: 0;
 }

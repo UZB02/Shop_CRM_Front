@@ -229,9 +229,8 @@ html:not(.dark) :deep(.p-datepicker-input) {
   background: #f8fafc;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #f1f5f9;
-  font-size: 9px;
+  font-size: 0.75rem;
   font-weight: 900;
-  text-transform: ;
   color: #64748b;
   letter-spacing: 0.05em;
 }

@@ -148,9 +148,8 @@ const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwn
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
-  font-size: 10px;
+  font-size: 0.75rem;
   font-weight: 800;
-  text-transform: ;
   letter-spacing: 0.09em;
   color: #94a3b8;
 }
@@ -187,7 +186,7 @@ const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwn
 .dark .row-label { color: #e2e8f0; }
 
 .row-desc {
-  font-size: 11.5px;
+  font-size: 0.75rem;
   color: #94a3b8;
   line-height: 1.4;
   margin-top: 1px;

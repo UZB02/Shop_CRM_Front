@@ -11,7 +11,7 @@
       class="flex-shrink-0 w-4.5 h-4.5 rounded md border-2 flex items-center justify-center transition-all"
       :class="active ? 'bg-emerald-500 border-emerald-500 shadow-md shadow-emerald-500/20' : 'border-slate-200 dark:border-slate-700'"
     >
-      <i v-if="active" class="pi pi-check text-white" style="font-size:9px"></i>
+      <i v-if="active" class="pi pi-check text-white text-[10px]"></i>
     </div>
 
     <!-- Module icon -->
@@ -19,7 +19,7 @@
       class="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-colors shadow-sm"
       :class="active ? 'bg-white dark:bg-slate-800 text-emerald-500' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'"
     >
-      <i :class="['pi', perm.icon]" style="font-size:11px"></i>
+      <i :class="['pi', perm.icon]" class="text-xs"></i>
     </div>
 
     <!-- Label -->

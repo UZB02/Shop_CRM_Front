@@ -196,7 +196,6 @@ const {
   border-bottom: 1px solid #f1f5f9;
   font-size: 10px;
   font-weight: 800;
-  text-transform: ;
   letter-spacing: 0.05em;
   color: #64748b;
 }

@@ -18,7 +18,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800/60 flex-shrink-0">
           <div>
-            <span class="text-[7.5px] font-black tracking-[0.22em] text-slate-400 dark:text-slate-600 block">To'lov</span>
+            <span class="text-[11px] font-black tracking-[0.22em] text-slate-400 dark:text-slate-600 block">To'lov</span>
             <h2 class="text-[1rem] font-black text-slate-900 dark:text-white font-outfit tracking-tight leading-tight m-0">Savdoni yakunlash</h2>
           </div>
           <button
@@ -59,7 +59,7 @@
                   : 'text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400'"
               >
                 <i :class="m.icon" class="text-[15px] leading-none" />
-                <span class="text-[7.5px] font-black tracking-wide leading-none">{{ m.label }}</span>
+                <span class="text-[11px] font-black tracking-wide leading-none">{{ m.label }}</span>
               </button>
             </div>
           </div>
@@ -71,13 +71,13 @@
               <div class="flex items-center gap-2">
                 <!-- Max limit badge -->
                 <span v-if="maxDiscountPct > 0"
-                  class="text-[7.5px] font-black tracking-widest px-1.5 py-0.5 rounded-md"
+                  class="text-[11px] font-black tracking-widest px-1.5 py-0.5 rounded-md"
                   :class="isDiscountValid ? 'bg-slate-100 dark:bg-slate-800 text-slate-400' : 'bg-rose-100 dark:bg-rose-900/20 text-rose-500'"
                 >
                   Max: {{ maxDiscountPct }}%
                 </span>
                 <button @click="discountAmount = 0"
-                  class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 tracking-widest transition-colors">
+                  class="text-[11px] font-black text-slate-400 hover:text-slate-500 tracking-widest transition-colors">
                   × Tozalash
                 </button>
               </div>
@@ -99,7 +99,7 @@
             <div v-if="!isDiscountValid"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-100 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">
                 Chegirma limitdan oshdi! Maksimal: {{ settingsStore.formatPrice(maxDiscountAmount) }} ({{ maxDiscountPct }}%)
               </span>
             </div>
@@ -118,7 +118,7 @@
             <div v-if="discountAmount > total"
               class="mt-1 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-100 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Chegirma jami summadan oshib ketmoqda!</span>
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Chegirma jami summadan oshib ketmoqda!</span>
             </div>
           </div>
 
@@ -178,27 +178,27 @@
             <div v-if="isCashOverflow && !isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Naqd pul jami summadan oshib ketmoqda!</span>
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Naqd pul jami summadan oshib ketmoqda!</span>
             </div>
 
             <!-- Plastik karta alohida oshib ketsa -->
             <div v-if="isCardOverflow && !isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Plastik karta jami summadan oshib ketmoqda!</span>
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Plastik karta jami summadan oshib ketmoqda!</span>
             </div>
 
             <!-- Yig'indi oshib ketsa -->
             <div v-if="isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[7.5px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Kiritilgan jami summa to'lanadigan miqdordan oshib ketmoqda!</span>
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Kiritilgan jami summa to'lanadigan miqdordan oshib ketmoqda!</span>
             </div>
 
             <div class="flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-dashed"
               :class="isMixedValid ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40' : isSumOverflow ? 'bg-rose-50 dark:bg-rose-950/10 border-rose-200 dark:border-rose-800/30' : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800'">
               <div>
-                <span class="text-[7.5px] font-black tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">Jami kiritildi</span>
+                <span class="text-[11px] font-black tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">Jami kiritildi</span>
                 <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">{{ settingsStore.formatPrice(cashAmount + cardAmount, currencyCode) }}</span>
               </div>
               <div class="w-7 h-7 rounded-full flex items-center justify-center"
@@ -212,7 +212,7 @@
           <div v-if="paymentType === 'debt'" class="animate-fadein">
             <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/10 border border-amber-200 dark:border-amber-800/20">
               <i class="pi pi-info-circle text-amber-500 text-sm flex-shrink-0" />
-              <span class="text-[7.5px] font-black text-amber-600 dark:text-amber-400 tracking-widest leading-relaxed">Nasiyada qoldirilyapti — mijoz tanlash majburiy</span>
+              <span class="text-[11px] font-black text-amber-600 dark:text-amber-400 tracking-widest leading-relaxed">Nasiyada qoldirilyapti — mijoz tanlash majburiy</span>
             </div>
           </div>
 
@@ -228,7 +228,7 @@
                 <span v-else class="text-slate-300 dark:text-slate-700 ml-1">(Ixtiyoriy)</span>
               </label>
               <button v-if="selectedCustomer" @click="$emit('update:selected-customer', null)"
-                class="text-[7.5px] font-black text-slate-400 hover:text-slate-500 tracking-widest transition-colors">
+                class="text-[11px] font-black text-slate-400 hover:text-slate-500 tracking-widest transition-colors">
                 × Olib tashlash
               </button>
             </div>
@@ -251,13 +251,13 @@
             <!-- VIP Message -->
             <div v-if="vipMessage" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-800/30">
               <i class="pi pi-verified text-indigo-500 text-xs" />
-              <span class="text-[7.5px] font-black text-indigo-600 dark:text-indigo-400 tracking-widest">{{ vipMessage }}</span>
+              <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400 tracking-widest">{{ vipMessage }}</span>
             </div>
 
             <div v-if="paymentType === 'debt' && !selectedCustomer"
               class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-800/30">
               <i class="pi pi-user-minus text-rose-500 text-xs" />
-              <span class="text-[7.5px] font-black text-rose-500 tracking-widest">Nasiya uchun mijoz tanlash majburiy!</span>
+              <span class="text-[11px] font-black text-rose-500 tracking-widest">Nasiya uchun mijoz tanlash majburiy!</span>
             </div>
           </div>
 
@@ -339,14 +339,14 @@ const {
 </script>
 
 <style>
-.lbl { font-size: 7.5px; font-weight: 900; text-transform: ; letter-spacing: 0.18em; color: #94a3b8; display: block; }
+.lbl { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.18em; color: #94a3b8; display: block; }
 .dark .lbl { color: #475569; }
 
 .co-amount-input .p-inputtext {
   background: #f8fafc !important; border: 1.5px solid #e2e8f0 !important;
   padding: 0.7rem 1rem 0.7rem 3rem !important; border-radius: 12px !important;
   font-family: 'Outfit', sans-serif !important; font-weight: 900 !important;
-  font-size: 1.2rem !important; color: #0f172a !important;
+  font-size: 1rem !important; color: #0f172a !important;
   transition: all 0.2s !important; box-shadow: none !important;
 }
 .dark .co-amount-input .p-inputtext { background: #0f172a !important; border-color: #1e293b !important; color: #f1f5f9 !important; }
@@ -373,7 +373,7 @@ const {
 .co-amount-input-sm .p-inputtext:focus { border-color: #10b981 !important; box-shadow: 0 0 0 3px rgba(16,185,129,.1) !important; }
 
 .co-customer-select { background: #f8fafc !important; border: 1.5px solid #e2e8f0 !important; border-radius: 12px !important; transition: all 0.2s !important; }
-.co-customer-select .p-select-label { padding: 0.62rem 1rem 0.62rem 2.3rem !important; font-family: 'Inter', sans-serif !important; font-weight: 600 !important; font-size: 0.78rem !important; color: #334155 !important; }
+.co-customer-select .p-select-label { padding: 0.62rem 1rem 0.62rem 2.3rem !important; font-family: 'Inter', sans-serif !important; font-weight: 600 !important; font-size: 0.875rem !important; color: #334155 !important; }
 .dark .co-customer-select { background: #0f172a !important; border-color: #1e293b !important; }
 .dark .co-customer-select .p-select-label { color: #94a3b8 !important; }
 .co-customer-select:hover { border-color: #10b981 !important; }
@@ -382,7 +382,7 @@ const {
 .co-textarea {
   width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0;
   padding: 0.6rem 0.85rem; border-radius: 12px; font-family: 'Inter', sans-serif;
-  font-size: 11.5px; font-weight: 500; color: #334155; outline: none;
+  font-size: 0.75rem; font-weight: 500; color: #334155; outline: none;
   resize: none; transition: all 0.2s; line-height: 1.5;
 }
 .dark .co-textarea { background: #0f172a; border-color: #1e293b; color: #94a3b8; }
