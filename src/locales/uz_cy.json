@@ -815,6 +815,7 @@
       "expected_margin": "Соф фойда (тахминий)",
       "barcode": "Штрих-код",
       "promo_duration": "Акция муддати",
+      "promo_until": "Акция тугаш вақти",
       "stock_status": "Ҳолати",
       "sufficient": "Етарли",
       "out_of_stock": "Тугаган",

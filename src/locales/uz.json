@@ -841,6 +841,7 @@
       "expected_margin": "Sof foyda (taxminiy)",
       "barcode": "Shtrix-kod",
       "promo_duration": "Aksiya muddati",
+      "promo_until": "Aksiya tugash vaqti",
       "stock_status": "Holati",
       "sufficient": "Yetarli",
       "out_of_stock": "Tugagan",

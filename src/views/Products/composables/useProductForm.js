@@ -2,6 +2,7 @@ import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { productsAPI, categoriesAPI, subcategoriesAPI } from '@/services/api'
+import { getErrorMessage } from '@/services/axios'
 import { useSettingsStore } from '@/store/settings'
 import { useNotificationStore } from '@/store/notifications'
 
@@ -180,7 +181,7 @@ export function useProductForm() {
             router.push('/dashboard/products')
         } catch (err) {
             console.error('Save error:', err)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Saqlashda xatolik yuz berdi', life: 5000 })
+            toast.add({ severity: 'error', summary: 'Xatolik', detail: getErrorMessage(err), life: 5000 })
         } finally {
             saving.value = false
         }

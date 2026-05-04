@@ -114,6 +114,31 @@ api.interceptors.response.use(
     }
 )
 
+export const getErrorMessage = (error) => {
+    const data = error.response?.data
+    if (!data) return error.message || "Xatolik yuz berdi"
+
+    if (typeof data === 'string') return data
+    if (data.detail) return data.detail
+    
+    // Handle DRF validation errors: { "field_name": ["error message"] }
+    if (typeof data === 'object') {
+        const firstKey = Object.keys(data)[0]
+        if (firstKey) {
+            const err = data[firstKey]
+            const message = Array.isArray(err) ? err[0] : err
+            // If message is still an object, try to get its first value
+            if (typeof message === 'object') {
+                const subKey = Object.keys(message)[0]
+                return message[subKey]
+            }
+            return message
+        }
+    }
+    
+    return "Xatolik yuz berdi"
+}
+
 export default api
 
 

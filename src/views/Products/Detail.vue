@@ -61,6 +61,7 @@
                           <ProductInfoGrid 
                              :product="product" 
                              :formatPrice="formatPrice" 
+                             :formatDate="formatDate" 
                              :calculateMargin="calculateMargin" 
                           />
                       </div>

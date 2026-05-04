@@ -21,7 +21,7 @@
         />
 
         <!-- Mini performance widget: Standardized rounding -->
-        <div v-if="currentWorker?.current_kpi" class="mt-4 p-5 bg-indigo-600 rounded-xl text-white shadow-xl shadow-indigo-600/10">
+        <div v-if="settingsStore.isKpiEnabled && currentWorker?.current_kpi" class="mt-4 p-5 bg-indigo-600 rounded-xl text-white shadow-xl shadow-indigo-600/10">
           <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Oylik KPI</p>
           <div class="flex items-end justify-between mb-4">
             <h4 class="text-xl font-black font-outfit">{{ parseFloat(currentWorker.current_kpi.completion_pct || 0).toFixed(2) }}%</h4>
@@ -80,6 +80,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useConfirmStore } from '@/store/confirm'
 import { useNotificationStore } from '@/store/notifications'
+import { useSettingsStore } from '@/store/settings'
 
 // Local Components
 import ProfileHeader from './components/ProfileHeader.vue'
@@ -93,6 +94,7 @@ const authStore = useAuthStore()
 const confirmStore = useConfirmStore()
 const notificationStore = useNotificationStore()
 const router = useRouter()
+const settingsStore = useSettingsStore()
 const { t } = useI18n()
 const activeTab = ref('details')
 const loading = ref(false)
@@ -106,12 +108,20 @@ const {
   saveChanges
 } = useUserProfile(ref(authStore.user))
 
-const navTabs = computed(() => [
-  { id: 'details',    label: 'Ma\'lumotlar',  icon: 'pi-id-card', desc: 'Profil ma\'lumotlari' },
-  { id: 'kpi',        label: 'KPI Natijalar', icon: 'pi-chart-bar', desc: 'Ish ko\'rsatkichlari' },
-  { id: 'permissions', label: 'Ruxsatlar',     icon: 'pi-shield',    desc: 'Vakolatlar' },
-  { id: 'security',    label: 'Xavfsizlik',    icon: 'pi-lock',      desc: 'Parol va himoya' }
-])
+const navTabs = computed(() => {
+  const tabs = [
+    { id: 'details',    label: 'Ma\'lumotlar',  icon: 'pi-id-card', desc: 'Profil ma\'lumotlari' },
+    { id: 'kpi',        label: 'KPI Natijalar', icon: 'pi-chart-bar', desc: 'Ish ko\'rsatkichlari' },
+    { id: 'permissions', label: 'Ruxsatlar',     icon: 'pi-shield',    desc: 'Vakolatlar' },
+    { id: 'security',    label: 'Xavfsizlik',    icon: 'pi-lock',      desc: 'Parol va himoya' }
+  ]
+  
+  if (!settingsStore.isKpiEnabled) {
+    return tabs.filter(t => t.id !== 'kpi')
+  }
+  
+  return tabs
+})
 
 const handleSave = async () => {
   await saveChanges()

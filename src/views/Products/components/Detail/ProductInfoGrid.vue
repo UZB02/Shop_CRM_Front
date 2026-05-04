@@ -95,7 +95,7 @@
     </div>
 
     <!-- IKPU Card -->
-    <div v-if="product?.ikpu_code" class="bg-white dark:bg-[#131d31] p-3.5 rounded-[16px] border border-slate-200 dark:border-transparent shadow-sm col-span-1 sm:col-span-2 flex flex-col justify-center">
+    <div v-if="product?.ikpu_code" class="bg-white dark:bg-[#131d31] p-3.5 rounded-[16px] border border-slate-200 dark:border-transparent shadow-sm flex flex-col justify-center">
       <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest block mb-2">{{ $t('products.detail.ikpu') }}</span>
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/5 text-rose-500 flex items-center justify-center border border-rose-100 dark:border-rose-500/10 shrink-0">
@@ -106,6 +106,22 @@
         </div>
       </div>
     </div>
+
+    <!-- Promotion Card -->
+    <div v-if="product?.active_promotion" class="bg-white dark:bg-[#131d31] p-3.5 rounded-[16px] border border-slate-200 dark:border-transparent shadow-sm flex flex-col justify-center">
+      <span class="text-[10px] font-black text-rose-500 dark:text-rose-400 tracking-widest block mb-2 uppercase">{{ $t('products.detail.promo_duration') }}</span>
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/5 text-rose-500 flex items-center justify-center border border-rose-100 dark:border-rose-500/10 shrink-0">
+          <i class="pi pi-clock text-xs"></i>
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="text-[13px] font-black text-slate-800 dark:text-white leading-tight truncate">
+            {{ formatDate(product.active_promotion.valid_to) }}
+          </p>
+          <p class="text-[10px] font-bold text-slate-400 leading-none mt-0.5 truncate">{{ $t('products.detail.promo_until') }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -113,6 +129,10 @@
 defineProps({
   product: Object,
   formatPrice: {
+    type: Function,
+    default: (val) => val
+  },
+  formatDate: {
     type: Function,
     default: (val) => val
   },

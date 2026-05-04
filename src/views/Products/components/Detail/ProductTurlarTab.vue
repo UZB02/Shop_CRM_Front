@@ -160,6 +160,7 @@ import Dialog from 'primevue/dialog'
 import { useConfirm } from "primevue/useconfirm"
 import { useToast } from "primevue/usetoast"
 import { productsAPI } from '@/services/api'
+import { getErrorMessage } from '@/services/axios'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
@@ -218,7 +219,7 @@ const toggleTurSystem = async () => {
     }
   } catch (err) {
     hasTur.value = !hasTur.value
-    toast.add({ severity: 'error', summary: t('common.error'), detail: err.response?.data?.detail || t('common.error_message'), life: 3000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: getErrorMessage(err), life: 5000 })
   } finally {
     saving.value = false
   }
@@ -267,7 +268,7 @@ const saveTur = async () => {
     fetchTurlar()
     emit('refresh')
   } catch (err) {
-    toast.add({ severity: 'error', summary: t('common.error'), detail: err.response?.data?.detail || t('common.error_message'), life: 5000 })
+    toast.add({ severity: 'error', summary: t('common.error'), detail: getErrorMessage(err), life: 5000 })
   } finally {
     savingTur.value = false
   }
@@ -286,7 +287,7 @@ const confirmDelete = (tur) => {
         fetchTurlar()
         emit('refresh')
       } catch (err) {
-        toast.add({ severity: 'error', summary: t('common.error'), detail: err.response?.data?.detail || t('turlar.messages.delete_error_stock'), life: 5000 })
+        toast.add({ severity: 'error', summary: t('common.error'), detail: getErrorMessage(err), life: 5000 })
       }
     }
   })
