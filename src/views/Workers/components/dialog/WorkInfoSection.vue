@@ -3,12 +3,13 @@
     <SectionTitle :label="$t('workers.form.work_info')" color="slate" />
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
-      <FormField :label="$t('workers.form.branch')">
+      <FormField :label="$t('workers.form.branch')" required>
         <Select v-model="worker.branch"
                   :options="branches"
                   optionLabel="name"
                   optionValue="id"
                   class="sr-select"
+                  :class="{ '!border-rose-500': submitted && !worker.branch }"
                   :placeholder="$t('workers.form.placeholder_branch')" />
       </FormField>
       <FormField :label="$t('workers.form.role')">
@@ -54,8 +55,9 @@ import { WORKER_STATUSES as statuses, WORKER_ROLES as roles, ROLE_PERMISSIONS } 
 const { t } = useI18n()
 
 const props = defineProps({
-  worker:   { type: Object, required: true },
-  branches: { type: Array,  default: () => [] },
+  worker:    { type: Object, required: true },
+  branches:  { type: Array,  default: () => [] },
+  submitted: { type: Boolean, default: false },
 })
 
 const localizedRoles = computed(() => roles.map(r => ({

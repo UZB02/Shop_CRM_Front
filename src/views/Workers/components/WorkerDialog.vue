@@ -20,7 +20,7 @@
         <div class="md:col-span-7 space-y-8">
           <div class="space-y-6">
             <PersonalInfoSection :worker="worker" :submitted="submitted" />
-            <WorkInfoSection :worker="worker" :branches="branches" />
+            <WorkInfoSection :worker="worker" :branches="branches" :submitted="submitted" />
           </div>
         </div>
 

@@ -50,8 +50,16 @@
                     <span v-if="tur.color" class="text-[12px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                        {{ tur.color }}
                     </span>
-                    <span v-if="tur.barcode" class="text-[11px] px-2 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 font-mono">
+                    <span v-if="tur.barcode" class="text-[11px] px-2 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 font-mono flex items-center gap-1.5">
                        {{ tur.barcode }}
+                       <button 
+                         v-if="tur.barcode_image_url" 
+                         @click.stop="showBarcode(tur)"
+                         class="hover:text-emerald-500 transition-colors cursor-pointer"
+                         v-tooltip.top="'Shtrix-kodni ko\'rish'"
+                       >
+                         <i class="pi pi-image text-[10px]"></i>
+                       </button>
                     </span>
                   </div>
                   <p class="text-[12px] font-bold text-emerald-500 tracking-wider">{{ $t('turlar.effective_price') }}: {{ formatPrice(tur.effective_price) }}</p>
@@ -176,6 +184,16 @@
         </button>
       </div>
     </Drawer>
+    
+    <!-- Barcode Modal -->
+    <ProductBarcodeModal
+      :visible="barcodeVisible"
+      :product="selectedTurForBarcode"
+      :barcodeUrl="selectedTurForBarcode?.barcode_image_url"
+      @close="barcodeVisible = false"
+      @download="downloadBarcode"
+      @print="printBarcode"
+    />
   </div>
 </template>
 
@@ -190,6 +208,7 @@ import { useToast } from "primevue/usetoast"
 import { productsAPI } from '@/services/api'
 import { getErrorMessage } from '@/services/axios'
 import { useI18n } from 'vue-i18n'
+import ProductBarcodeModal from '../ProductBarcodeModal.vue'
 
 const props = defineProps({
   product: { type: Object, required: true }
@@ -218,6 +237,36 @@ const turForm = ref({
   sale_price_override: null,
   is_active: true
 })
+
+const barcodeVisible = ref(false)
+const selectedTurForBarcode = ref(null)
+
+const showBarcode = (tur) => {
+  selectedTurForBarcode.value = {
+    ...tur,
+    name: `${props.product.name} (${tur.name})`,
+    category_name: props.product.category_name,
+    unit_display: props.product.unit_display,
+    sale_price: tur.effective_price
+  }
+  barcodeVisible.value = true
+}
+
+const downloadBarcode = () => {
+  if (!selectedTurForBarcode.value?.barcode_image_url) return
+  const link = document.createElement('a')
+  link.href = selectedTurForBarcode.value.barcode_image_url
+  link.download = `barcode-${selectedTurForBarcode.value.barcode}.png`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+const printBarcode = () => {
+  if (selectedTurForBarcode.value?.barcode_image_url) {
+    window.open(selectedTurForBarcode.value.barcode_image_url, '_blank')
+  }
+}
 
 const formatPrice = (price) => {
   if (price === null || price === undefined) return '0'
