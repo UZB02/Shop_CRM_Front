@@ -135,9 +135,9 @@
                   :tur-color="item.product.tur_color"
                   class="scale-[0.82] origin-left -ml-1 shrink-0"
                 />
-                <code v-else class="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide truncate">
-                  {{ item.product.barcode || '—' }}
-                </code>
+                <span v-if="item.product.barcode" class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-tight font-mono truncate">
+                  {{ item.product.barcode }}
+                </span>
               </div>
             </div>
 

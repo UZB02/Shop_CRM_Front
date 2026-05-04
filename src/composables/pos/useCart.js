@@ -1,5 +1,6 @@
 import { ref, computed, watch } from 'vue'
 import { salesAPI, customersAPI, customerGroupsAPI } from '@/services/api'
+import { getErrorMessage } from '@/services/axios'
 import { useToast } from 'primevue/usetoast'
 
 export function useCart() {
@@ -169,19 +170,27 @@ export function useCart() {
         try {
             const res = await salesAPI.scanProduct(barcode)
             if (res.data) {
-                // If product requires a tur but none was identified by barcode
-                if (res.data.has_tur && !res.data.tur_id) {
-                    return { needs_tur: true, product: res.data }
+                const { type, tur_required, matched_tur, product } = res.data
+                
+                // Case: Product requires variant selection but none was matched by barcode
+                if (tur_required) {
+                    return { needs_tur: true, product }
                 }
-                addToCart(res.data)
+                
+                // Case: Found via variant barcode OR direct product scan that doesn't need variant selection
+                if (type === 'tur' && matched_tur) {
+                    addToCart(product, matched_tur)
+                } else {
+                    addToCart(product)
+                }
                 return true
             }
-        } catch {
+        } catch (err) {
             toast.add({
                 severity: 'warn',
                 summary: 'Topilmadi',
-                detail: "Mahsulot topilmadi yoki omborda yo'q",
-                life: 2000
+                detail: getErrorMessage(err) || "Mahsulot topilmadi yoki omborda yo'q",
+                life: 3000
             })
         } finally {
             posLoading.value = false

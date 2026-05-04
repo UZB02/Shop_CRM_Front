@@ -68,7 +68,7 @@ import { useProducts } from './composables/useProducts'
 import { useCategories } from './composables/useCategories'
 
 const {
-  loading, products, totalProducts, currentPage,
+  loading, products, totalProducts, currentPage, rowsPerPage,
   searchQuery, selectedCategory, selectedSubcategory, selectedStatus, selectedPromotion,
   subcategories, fetchSubcategories, loadProducts, handleSearch,
   handlePageChange, confirmDeleteProduct

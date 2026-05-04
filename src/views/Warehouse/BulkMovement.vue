@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import Dialog from 'primevue/dialog'
 import { useBulkMovement } from './composables/useBulkMovement'
 import BulkMovementHeader from './components/BulkMovement/BulkMovementHeader.vue'
 import BulkMovementCatalog from './components/BulkMovement/BulkMovementCatalog.vue'
@@ -23,8 +24,57 @@ const {
   updatePrice,
   handleSave,
   handleCancel,
+  scanAndAdd,
   router
 } = useBulkMovement()
+
+const turDialog = ref(false)
+const selectedProductForTur = ref(null)
+const turlar = ref([])
+const loadingTurlar = ref(false)
+
+const handleScan = async (code) => {
+  try {
+    const result = await scanAndAdd(code)
+    if (result === true) {
+      // Success, added to cart
+    } else if (result && result.needs_tur) {
+      openTurDialog(result.product)
+    }
+  } catch (err) {
+    const { useToast } = await import('primevue/usetoast')
+    const { getErrorMessage } = await import('@/services/axios')
+    const toast = useToast()
+    toast.add({ severity: 'error', summary: 'Xatolik', detail: getErrorMessage(err), life: 3000 })
+  }
+}
+
+const openTurDialog = async (product) => {
+  selectedProductForTur.value = product
+  turDialog.value = true
+  loadingTurlar.value = true
+  try {
+    const { productsAPI } = await import('@/services/api')
+    const res = await productsAPI.getTurlar(product.id)
+    turlar.value = res.data
+  } catch (err) {
+    console.error('Fetch turlar error:', err)
+  } finally {
+    loadingTurlar.value = false
+  }
+}
+
+const selectTur = (tur) => {
+  const productWithTur = {
+    ...selectedProductForTur.value,
+    tur_id: tur.id,
+    tur_name: tur.name,
+    tur_color: tur.color,
+    barcode: tur.barcode || selectedProductForTur.value.barcode
+  }
+  addItem(productWithTur)
+  turDialog.value = false
+}
 </script>
 
 <template>
@@ -67,6 +117,7 @@ const {
             :items="bulkItems"
             @add="addItem"
             @search="loadProducts"
+            @scan="handleScan"
           />
         </section>
       </div>
@@ -99,6 +150,7 @@ const {
                 :items="bulkItems"
                 @add="addItem"
                 @search="loadProducts"
+                @scan="handleScan"
               />
             </div>
           </transition>
@@ -142,6 +194,37 @@ const {
       <p class="text-[12px] font-black text-slate-900 dark:text-slate-100 tracking-widest">{{ $t('warehouse.bulk.saving') }}</p>
     </div>
     
+    <!-- Tur Selection Modal -->
+    <Dialog 
+      v-model:visible="turDialog" 
+      :header="selectedProductForTur?.name" 
+      modal 
+      class="w-full max-w-lg"
+      :pt="{ 
+        root: { class: 'dark:bg-slate-900 border-none rounded-3xl shadow-2xl overflow-hidden' },
+        header: { class: 'px-8 pt-8 pb-4 dark:bg-slate-900 border-none font-black tracking-tighter text-xl' },
+        content: { class: 'px-8 pb-8 pt-2 dark:bg-slate-900' }
+      }"
+    >
+      <div v-if="loadingTurlar" class="flex flex-col gap-3 py-4">
+        <div v-for="i in 3" :key="i" class="h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
+      </div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3 py-4">
+        <button 
+          v-for="tur in turlar" 
+          :key="tur.id"
+          @click="selectTur(tur)"
+          class="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-emerald-500 hover:bg-emerald-50/30 dark:hover:bg-emerald-500/10 transition-all group relative overflow-hidden"
+        >
+          <span class="text-sm font-black text-slate-800 dark:text-slate-200 mb-1 tracking-tight">{{ tur.name }}</span>
+          <span v-if="tur.color" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ tur.color }}</span>
+          
+          <div class="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            <i class="pi pi-plus-circle text-emerald-500"></i>
+          </div>
+        </button>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -167,5 +250,3 @@ const {
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
-
-

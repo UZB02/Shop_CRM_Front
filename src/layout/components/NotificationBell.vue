@@ -77,7 +77,7 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-[11px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1">
                                     <i class="pi pi-clock text-[10px]" />
-                                    {{ formatTime(item.date) }}
+                                    {{ item.time }}
                                 </span>
                                 <span v-if="item.link" class="text-[11px] font-bold text-emerald-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     Ko'rish <i class="pi pi-arrow-right text-[9px]" />
@@ -155,10 +155,6 @@
                         <!-- Footer / Meta -->
                         <div class="mt-10 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                             <div class="flex items-center gap-4 text-xs font-bold text-slate-400 tracking-widest">
-                                <span class="flex items-center gap-2">
-                                    <i class="pi pi-calendar opacity-50" />
-                                    {{ selectedNotification.date }}
-                                </span>
                                 <span v-if="selectedNotification.time" class="flex items-center gap-2">
                                     <i class="pi pi-clock opacity-50" />
                                     {{ selectedNotification.time }}
@@ -254,29 +250,6 @@ const getIcon = (type) => {
         
         default:                     return 'pi pi-bell'
     }
-}
-
-const formatTime = (dateStr) => {
-    if (!dateStr) return 'Yaqunda'
-    
-    // Backend "2026-04-21 11:26" (UTC) formatda yuboradi
-    // Uni brauzer tushunishi uchun ISO formatga keltiramiz (Z qo'shamiz)
-    const normalizedDate = dateStr.includes('T') ? dateStr : dateStr.replace(' ', 'T') + 'Z'
-    const date = new Date(normalizedDate)
-    const now = new Date()
-    const diff = now - date
-    
-    // Agar xabar juda yangi bo'lsa (1 daqiqadan kam)
-    if (diff < 60000) return 'Hozirgina'
-    
-    // Agar bugun bo'lsa — aniq vaqtini ko'rsatamiz (masalan: 11:26)
-    const isToday = date.toDateString() === now.toDateString()
-    if (isToday) {
-        return date.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit', hour12: false })
-    }
-    
-    // Kecha yoki undan oldin bo'lsa — sanasini ko'rsatamiz
-    return date.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short' })
 }
 
 const handleItemClick = async (item) => {

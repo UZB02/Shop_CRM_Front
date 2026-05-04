@@ -1,7 +1,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStockMovement } from './useStockMovement'
-import { warehousesAPI, branchesAPI } from '@/services/api'
+import { warehousesAPI, branchesAPI, salesAPI } from '@/services/api'
 
 export function useBulkMovement() {
   const route = useRoute()
@@ -104,6 +104,38 @@ export function useBulkMovement() {
     }
   }
 
+  const scanAndAdd = async (barcode) => {
+    if (!barcode) return
+    saving.value = true
+    try {
+      const res = await salesAPI.scanProduct(barcode)
+      if (res.data) {
+        const { type, tur_required, matched_tur, product } = res.data
+        
+        if (tur_required) {
+          return { needs_tur: true, product }
+        }
+        
+        // If matched_tur exists, we pass it to addItem as variant info
+        const productToAdd = { ...product }
+        if (type === 'tur' && matched_tur) {
+          productToAdd.tur_id = matched_tur.id
+          productToAdd.tur_name = matched_tur.name
+          productToAdd.tur_color = matched_tur.color
+          productToAdd.barcode = matched_tur.barcode || product.barcode
+        }
+        
+        addItem(productToAdd)
+        return true
+      }
+    } catch (err) {
+      // getErrorMessage handles the 404 or other errors
+      throw err
+    } finally {
+      saving.value = false
+    }
+  }
+
   onMounted(async () => {
     loadProducts()
     try {
@@ -135,6 +167,7 @@ export function useBulkMovement() {
     handleSave,
     handleCancel,
     loadProducts,
+    scanAndAdd,
     router
   }
 }

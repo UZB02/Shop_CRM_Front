@@ -50,6 +50,9 @@
                     <span v-if="tur.color" class="text-[12px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                        {{ tur.color }}
                     </span>
+                    <span v-if="tur.barcode" class="text-[11px] px-2 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 font-mono">
+                       {{ tur.barcode }}
+                    </span>
                   </div>
                   <p class="text-[12px] font-bold text-emerald-500 tracking-wider">{{ $t('turlar.effective_price') }}: {{ formatPrice(tur.effective_price) }}</p>
                </div>
@@ -76,78 +79,103 @@
        </div>
     </div>
 
-    <!-- Tur Dialog -->
-    <Dialog v-model:visible="turDialog" :header="editMode ? $t('common.edit') : $t('turlar.add')" modal class="w-full max-w-md" :pt="{ 
-      root: { class: 'dark:bg-slate-900 border-none rounded-2xl shadow-2xl overflow-hidden' },
-      header: { class: 'px-6 pt-6 pb-2 dark:bg-slate-900 border-none' },
-      content: { class: 'px-6 dark:bg-slate-900' },
-      footer: { class: 'px-6 pb-6 pt-2 dark:bg-slate-900 border-none' }
-    }">
-      <div class="space-y-5 pt-2">
-        <div class="space-y-1.5">
-          <label class="text-[12px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.name') }}</label>
-          <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
-            <i class="pi pi-tag absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
-            <InputText 
-              v-model="turForm.name" 
-              class="flex-1 !bg-transparent !border-none !shadow-none !pl-11 !pr-4 !py-0 !h-full !text-sm font-bold text-slate-700 dark:text-slate-200 !outline-none" 
-              :placeholder="$t('turlar.name')" 
-            />
+    <!-- Tur Drawer (Right side) -->
+    <Drawer 
+      v-model:visible="turDialog" 
+      :header="editMode ? $t('common.edit') : $t('turlar.add')" 
+      position="right" 
+      class="!w-full !max-w-[440px]" 
+      :pt="{ 
+        root: { class: 'dark:bg-[#0f172a] border-l border-slate-200 dark:border-slate-800 shadow-2xl' },
+        header: { class: 'px-6 pt-6 pb-4 dark:bg-[#0f172a] border-b border-slate-100 dark:border-slate-800/60' },
+        content: { class: 'p-0 dark:bg-[#0f172a] flex flex-col h-full' },
+      }"
+    >
+      <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 custom-scrollbar">
+        <!-- Tur Info Group -->
+        <div class="space-y-4">
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase ml-1">{{ $t('turlar.name') }}</label>
+            <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300">
+              <i class="pi pi-tag absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
+              <InputText 
+                v-model="turForm.name" 
+                class="flex-1 !bg-transparent !border-none !shadow-none !pl-11 !pr-4 !py-0 !h-full !text-sm font-bold text-slate-700 dark:text-slate-200 !outline-none" 
+                :placeholder="$t('turlar.name')" 
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase ml-1">{{ $t('turlar.color') }} ({{ $t('common.optional') }})</label>
+            <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300">
+              <i class="pi pi-palette absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
+              <InputText 
+                v-model="turForm.color" 
+                class="flex-1 !bg-transparent !border-none !shadow-none !pl-11 !pr-4 !py-0 !h-full !text-sm font-bold text-slate-700 dark:text-slate-200 !outline-none" 
+                :placeholder="$t('turlar.color')" 
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase ml-1">{{ $t('products.form.barcode') }} ({{ $t('common.optional') }})</label>
+            <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300">
+              <i class="pi pi-barcode absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
+              <InputText 
+                v-model="turForm.barcode" 
+                class="flex-1 !bg-transparent !border-none !shadow-none !pl-11 !pr-4 !py-0 !h-full !text-sm font-bold text-slate-700 dark:text-slate-200 !outline-none" 
+                :placeholder="$t('products.form.barcode')" 
+              />
+            </div>
           </div>
         </div>
 
-        <div class="space-y-1.5">
-          <label class="text-[12px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.color') }} ({{ $t('common.optional') }})</label>
-          <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
-            <i class="pi pi-palette absolute left-4 text-xs text-slate-400 group-focus-within/input:text-emerald-500 transition-colors"></i>
-            <InputText 
-              v-model="turForm.color" 
-              class="flex-1 !bg-transparent !border-none !shadow-none !pl-11 !pr-4 !py-0 !h-full !text-sm font-bold text-slate-700 dark:text-slate-200 !outline-none" 
-              :placeholder="$t('turlar.color')" 
-            />
-          </div>
-        </div>
+        <div class="h-px bg-slate-100 dark:bg-slate-800/60"></div>
 
-        <div class="space-y-1.5">
-          <label class="text-[12px] font-bold text-slate-400 tracking-widest ml-1">{{ $t('turlar.sale_price_override') }}</label>
-          <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300 shadow-sm">
-            <span class="absolute left-4 text-[12px] font-black text-slate-400 group-focus-within/input:text-emerald-500 transition-colors tracking-tight">SUM</span>
-            <InputNumber 
-              v-model="turForm.sale_price_override" 
-              mode="decimal" 
-              :use-grouping="true"
-              class="flex-1 h-full" 
-              :placeholder="Number(product.sale_price).toString()" 
-              :pt="{ 
-                pcInputText: { 
-                  root: { class: '!bg-transparent !border-none !shadow-none !pl-12 !pr-4 !py-0 !h-full !w-full !text-sm font-bold text-slate-700 dark:text-slate-200 !outline-none' } 
-                } 
-              }" 
-            />
+        <!-- Pricing Group -->
+        <div class="space-y-4">
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase ml-1">{{ $t('turlar.sale_price_override') }}</label>
+            <div class="relative group/input flex items-center h-12 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-300">
+              <span class="absolute left-4 text-[10px] font-black text-slate-400 group-focus-within/input:text-emerald-500 transition-colors tracking-tight">SUM</span>
+              <InputNumber 
+                v-model="turForm.sale_price_override" 
+                mode="decimal" 
+                :use-grouping="true"
+                class="flex-1 h-full" 
+                :placeholder="Number(product.sale_price).toString()" 
+                :pt="{ 
+                  pcInputText: { 
+                    root: { class: '!bg-transparent !border-none !shadow-none !pl-12 !pr-4 !py-0 !h-full !w-full !text-sm font-bold text-slate-700 dark:text-slate-200 !outline-none text-right' } 
+                  } 
+                }" 
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800">
-          <div class="flex flex-col">
-            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ $t('common.status') }}</span>
-            <span class="text-[12px] text-slate-500">{{ turForm.is_active ? $t('common.active') : $t('common.inactive') }}</span>
+          <div class="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-all">
+            <div class="flex flex-col gap-0.5">
+              <span class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest uppercase">{{ $t('common.status') }}</span>
+              <span class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ turForm.is_active ? $t('common.active') : $t('common.inactive') }}</span>
+            </div>
+            <ToggleSwitch v-model="turForm.is_active" />
           </div>
-          <ToggleSwitch v-model="turForm.is_active" />
         </div>
       </div>
 
-      <template #footer>
-        <div class="flex gap-3 w-full">
-          <button @click="turDialog = false" class="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors tracking-widest">
-            {{ $t('common.cancel') }}
-          </button>
-          <button @click="saveTur" :disabled="savingTur" class="flex-1 h-11 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-500/20 tracking-widest">
-             <i v-if="savingTur" class="pi pi-spin pi-spinner mr-2"></i>
-             {{ $t('common.save') }}
-          </button>
-        </div>
-      </template>
-    </Dialog>
+      <!-- Drawer Footer -->
+      <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800/60 bg-white dark:bg-[#0f172a] flex gap-3">
+        <button @click="turDialog = false" class="flex-1 h-12 rounded-2xl border border-slate-200 dark:border-slate-700 text-[11px] font-black uppercase text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all tracking-widest active:scale-[0.98]">
+          {{ $t('common.cancel') }}
+        </button>
+        <button @click="saveTur" :disabled="savingTur" class="flex-[1.5] h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black uppercase transition-all shadow-xl shadow-emerald-500/20 tracking-widest flex items-center justify-center gap-2 active:scale-[0.98]">
+           <i v-if="savingTur" class="pi pi-spin pi-spinner"></i>
+           <i v-else class="pi pi-check-circle"></i>
+           {{ $t('common.save') }}
+        </button>
+      </div>
+    </Drawer>
   </div>
 </template>
 
@@ -156,7 +184,7 @@ import { ref, onMounted, watch } from 'vue'
 import ToggleSwitch from 'primevue/toggleswitch'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
-import Dialog from 'primevue/dialog'
+import Drawer from 'primevue/drawer'
 import { useConfirm } from "primevue/useconfirm"
 import { useToast } from "primevue/usetoast"
 import { productsAPI } from '@/services/api'
@@ -186,6 +214,7 @@ const currentTurId = ref(null)
 const turForm = ref({
   name: '',
   color: '',
+  barcode: '',
   sale_price_override: null,
   is_active: true
 })
@@ -231,6 +260,7 @@ const openNewDialog = () => {
   turForm.value = {
     name: '',
     color: '',
+    barcode: '',
     sale_price_override: null,
     is_active: true
   }
@@ -243,6 +273,7 @@ const editTur = (tur) => {
   turForm.value = {
     name: tur.name,
     color: tur.color,
+    barcode: tur.barcode || '',
     sale_price_override: tur.sale_price_override ? parseFloat(tur.sale_price_override) : null,
     is_active: tur.is_active
   }

@@ -96,7 +96,9 @@
     "loss": "Зарар",
     "profit": "Фойда",
     "items": "та маҳсулот",
-    "from": "дан"
+    "from": "дан",
+    "print": "Чоп этиш",
+    "general": "Умумий"
   },
   "notifications": {
     "unread_count": "Сизда {count} та янги хабар бор"

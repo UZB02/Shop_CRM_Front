@@ -96,7 +96,9 @@
     "loss": "Zarar",
     "profit": "Foyda",
     "items": "ta mahsulot",
-    "from": "dan"
+    "from": "dan",
+    "print": "Chop etish",
+    "general": "Umumiy"
   },
   "notifications": {
     "unread_count": "Sizda {count} ta yangi xabar bor"
