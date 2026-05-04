@@ -36,6 +36,7 @@
           v-model:pageSize="pageSize"
           @edit="editWorker"
           @delete="confirmDeleteWorker"
+          @open-target="openTargetModal"
           @page-change="loadWorkers"
         />
       </div>
@@ -52,6 +53,13 @@
       @save="saveWorker"
       @hide="hideDialog"
     />
+
+    <!-- KPI Target Modal -->
+    <SetTargetModal 
+      v-model="targetModalVisible" 
+      :kpi="selectedKpi"
+      @saved="loadWorkers"
+    />
   </div>
 </template>
 
@@ -65,6 +73,7 @@ import WorkerDialog from './components/WorkerDialog.vue'
 import WorkerFilters from './components/WorkerFilters.vue'
 import WorkerPageHeader from './components/WorkerPageHeader.vue'
 import BranchSidebar from './components/BranchSidebar.vue'
+import SetTargetModal from './components/SetTargetModal.vue'
 
 // Composables
 import { useWorkers } from './composables/useWorkers'
@@ -99,7 +108,10 @@ const {
     editWorker,
     saveWorker,
     confirmDeleteWorker,
-    hideDialog
+    hideDialog,
+    targetModalVisible,
+    selectedKpi,
+    openTargetModal
 } = useWorkerActions(loadWorkers)
 
 const onBranchSelect = (branchId) => {

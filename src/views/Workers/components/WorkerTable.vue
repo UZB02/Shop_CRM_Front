@@ -152,6 +152,12 @@
               <td class="px-4 py-2 text-center">
                 <div class="flex gap-1 justify-center items-center">
                   <button
+                    class="w-7 h-7 rounded-lg bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center transition-all active:scale-90"
+                    v-tooltip.top="$t('kpi.set_target.title') || 'Maqsad belgilash'"
+                    @click="$emit('open-target', data)">
+                    <i class="pi pi-bullseye text-[11px]"></i>
+                  </button>
+                  <button
                     class="w-7 h-7 rounded-lg bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-all active:scale-90"
                     v-tooltip.top="$t('common.edit')"
                     @click="$emit('edit', data)">
@@ -235,7 +241,7 @@ const props = defineProps({
   pageSize: Number
 })
 
-const emit = defineEmits(['edit', 'delete', 'update:page', 'update:pageSize', 'page-change'])
+const emit = defineEmits(['edit', 'delete', 'update:page', 'update:pageSize', 'page-change', 'open-target'])
 
 const currentPage = computed({
   get: () => props.page,

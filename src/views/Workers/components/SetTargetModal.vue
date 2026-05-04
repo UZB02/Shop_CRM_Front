@@ -115,7 +115,15 @@ watch(() => props.kpi, (newKpi) => {
 }, { immediate: true })
 
 const onSave = async () => {
-  if (!props.kpi?.id) return
+  if (!props.kpi?.id) {
+    toast.add({
+      severity: 'error',
+      summary: t('common.error'),
+      detail: 'KPI ID topilmadi. Ushbu xodim uchun joriy oyda KPI ochilmagan.',
+      life: 3000
+    })
+    return
+  }
 
   loading.value = true
   try {

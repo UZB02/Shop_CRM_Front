@@ -4,6 +4,7 @@
     <ProfileHeader 
       :profile="currentWorker" 
       @edit="isEditingMode = !isEditingMode"
+      @logout="handleLogoutConfirm"
     />
 
     <div v-if="loading" class="flex flex-col lg:flex-row gap-4">
@@ -23,7 +24,7 @@
         <div v-if="currentWorker?.current_kpi" class="mt-4 p-5 bg-indigo-600 rounded-xl text-white shadow-xl shadow-indigo-600/10">
           <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Oylik KPI</p>
           <div class="flex items-end justify-between mb-4">
-            <h4 class="text-xl font-black font-outfit">{{ currentWorker.current_kpi.completion_pct }}%</h4>
+            <h4 class="text-xl font-black font-outfit">{{ parseFloat(currentWorker.current_kpi.completion_pct || 0).toFixed(2) }}%</h4>
             <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-md">{{ currentWorker.current_kpi.sales_count }} sotuv</span>
           </div>
           <div class="h-1 w-full bg-white/20 rounded-full overflow-hidden">
@@ -76,6 +77,9 @@ import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '@/store/auth'
 import { useUserProfile } from '@/composables/useUserProfile'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useConfirmStore } from '@/store/confirm'
+import { useNotificationStore } from '@/store/notifications'
 
 // Local Components
 import ProfileHeader from './components/ProfileHeader.vue'
@@ -86,6 +90,9 @@ import ProfilePermissionsTab from './components/ProfilePermissionsTab.vue'
 import ProfileSecurityTab from './components/ProfileSecurityTab.vue'
 
 const authStore = useAuthStore()
+const confirmStore = useConfirmStore()
+const notificationStore = useNotificationStore()
+const router = useRouter()
 const { t } = useI18n()
 const activeTab = ref('details')
 const loading = ref(false)
@@ -110,6 +117,24 @@ const handleSave = async () => {
   await saveChanges()
   isEditingMode.value = false
   await fetchMe()
+}
+
+const handleLogoutConfirm = () => {
+  confirmStore.require({
+    message: t('common.logout_confirm') || 'Tizimdan chiqishni tasdiqlaysizmi?',
+    header: t('common.logout_title') || 'Chiqish',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: t('common.logout_yes') || 'Ha, chiqish',
+    rejectLabel: t('common.cancel') || 'Bekor qilish',
+    acceptClass: 'p-button-danger',
+    accept: () => {
+      // Cleanup for notifications
+      sessionStorage.removeItem('session_notified_any')
+      notificationStore.reset()
+      authStore.logout()
+      router.push('/')
+    }
+  })
 }
 
 onMounted(async () => {

@@ -31,7 +31,7 @@
       v-model:desktopCollapsed="desktopCollapsed" 
       :filtered-menu="filteredMenu"
       :user="user"
-      @showProfile="showProfileDialog = true"
+      @showProfile="router.push('/dashboard/profile')"
       @logout="handleLogout"
     />
 
@@ -72,7 +72,6 @@
     </div>
 
     <!-- GLOBAL DIALOGS -->
-    <UserProfileDialog v-model:visible="showProfileDialog" :user="user" @logout="handleLogout" />
     <CalculatorWidget v-model:visible="isCalculatorOpen" />
   </div>
 </template>
@@ -90,7 +89,6 @@ import { useNotificationStore } from '@/store/notifications'
 // Layout Components
 import DashboardSidebar from './components/DashboardSidebar.vue'
 import DashboardHeader from './components/DashboardHeader.vue'
-import UserProfileDialog from '@/components/UserProfileDialog.vue'  
 import SubscriptionBarrier from '@/components/SubscriptionBarrier.vue'
 import CalculatorWidget from '@/components/CalculatorWidget.vue'
 
@@ -211,7 +209,6 @@ const isCalculatorOpen = ref(false)
 const handleLogout = () => {
   if (isConfirmingLogout.value) return
   isConfirmingLogout.value = true
-  showProfileDialog.value = false
   
   confirmStore.require({
     message: t('common.logout_confirm') || 'Tizimdan chiqishni tasdiqlaysizmi?',

@@ -4,10 +4,10 @@
     <div class="hidden lg:flex px-6 py-4 border-b border-slate-200/60 dark:border-slate-800/50 bg-white dark:bg-[#0f172a] items-center justify-between flex-shrink-0 gap-6">
       <div class="flex items-center gap-6 flex-1 min-w-0">
         <div class="flex flex-col shrink-0">
-          <h2 class="text-lg font-black text-slate-800 dark:text-white font-outfit tracking-tight">
+          <h2 class="text-[14px] sm:text-[15px] font-black text-slate-800 dark:text-white font-outfit tracking-tight uppercase">
             {{ $t('warehouse.bulk.products_list') }}
           </h2>
-          <span class="text-[12px] font-bold text-slate-400 tracking-[0.2em] uppercase mt-1">
+          <span class="text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase mt-1">
             {{ validCount }} {{ $t('warehouse.bulk.total_ready_label') }}
           </span>
         </div>

@@ -3,7 +3,7 @@
     <!-- Compact Header -->
     <div class="p-4 border-b border-slate-100 dark:border-slate-800/50 space-y-3">
       <div class="flex items-center justify-between">
-        <h4 class="text-[12px] font-black text-slate-400 tracking-[0.2em] uppercase">{{ $t('menu.products') }}</h4>
+        <h4 class="text-[11px] font-black text-slate-400 tracking-[0.2em] uppercase">{{ $t('menu.products') }}</h4>
         <div v-if="loading" class="w-4 h-4 border-2 border-slate-200 border-t-emerald-500 rounded-full animate-spin"></div>
       </div>
 
@@ -14,7 +14,7 @@
           v-model="searchQuery" 
           type="text" 
           :placeholder="$t('common.search') + '...'" 
-          class="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-lg pl-10 pr-4 py-2 text-[14px] font-bold outline-none focus:ring-2 focus:ring-emerald-500/10 placeholder:text-slate-300 transition-all"
+          class="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-lg pl-10 pr-4 py-1.5 text-[13px] font-bold outline-none focus:ring-2 focus:ring-emerald-500/10 placeholder:text-slate-300 transition-all"
         />
       </div>
 
@@ -24,7 +24,7 @@
           v-for="cat in categories" 
           :key="cat.id"
           @click="selectCategory(cat)"
-          class="px-4 py-2 rounded-lg text-[12px] font-black tracking-widest transition-all whitespace-nowrap border"
+          class="px-4 py-1.5 rounded-lg text-[11px] font-black tracking-widest transition-all whitespace-nowrap border"
           :class="selectedCategoryId === cat.id 
             ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white' 
             : 'bg-white dark:bg-slate-900 text-slate-400 border-slate-100 dark:border-slate-800'"

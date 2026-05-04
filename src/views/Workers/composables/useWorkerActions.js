@@ -1,6 +1,6 @@
 import { ref, toRaw } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { workersAPI } from '@/services/api'
+import { workersAPI, kpiAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { useNotificationStore } from '@/store/notifications'
@@ -31,6 +31,8 @@ export function useWorkerActions(loadWorkersCallback) {
     const submitted = ref(false)
     const createLogin = ref(true)
     const originalWorker = ref(null)
+    const targetModalVisible = ref(false)
+    const selectedKpi = ref(null)
 
     const openNew = () => {
         worker.value = {
@@ -232,6 +234,47 @@ export function useWorkerActions(loadWorkersCallback) {
         submitted.value = false
     }
 
+    const openTargetModal = async (workerData) => {
+        const workerId = workerData.id || workerData._id
+        if (!workerId) return
+
+        try {
+            const now = new Date()
+            const currentMonth = now.getMonth() + 1
+            const currentYear = now.getFullYear()
+            
+            const params = {
+                month: currentMonth,
+                year: currentYear
+            }
+            const res = await kpiAPI.getWorkerKpi(workerId, params)
+            
+            // Handle both single object and array/paginated responses
+            let rawData = res.data
+            if (rawData?.results && Array.isArray(rawData.results)) {
+                rawData = rawData.results[0]
+            } else if (Array.isArray(rawData)) {
+                rawData = rawData[0]
+            }
+
+            const kpiData = rawData || {}
+            kpiData.worker_name = workerData.full_name || `${workerData.first_name || ''} ${workerData.last_name || ''}`.trim()
+            kpiData.month = kpiData.month || currentMonth
+            kpiData.year = kpiData.year || currentYear
+            
+            selectedKpi.value = kpiData
+            targetModalVisible.value = true
+        } catch (error) {
+            console.error('Error fetching worker KPI:', error)
+            toast.add({
+                severity: 'error',
+                summary: t('common.error'),
+                detail: error.response?.data?.detail || 'KPI ma\'lumotlarini yuklashda xatolik',
+                life: 3000
+            })
+        }
+    }
+
     return {
         worker,
         workerDialog,
@@ -242,7 +285,10 @@ export function useWorkerActions(loadWorkersCallback) {
         editWorker,
         saveWorker,
         confirmDeleteWorker,
-        hideDialog
+        hideDialog,
+        targetModalVisible,
+        selectedKpi,
+        openTargetModal
     }
 }
 

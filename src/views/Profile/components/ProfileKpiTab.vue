@@ -71,7 +71,7 @@ const props = defineProps({
   kpi: Object
 })
 
-const completionPct = computed(() => parseFloat(props.kpi?.completion_pct || 0).toFixed(1))
+const completionPct = computed(() => parseFloat(props.kpi?.completion_pct || 0).toFixed(2))
 
 const mainStats = computed(() => [
   { label: 'Sotuvlar soni', value: props.kpi?.sales_count || 0, icon: 'pi-shopping-cart', sub: 'Muvaffaqiyatli', color: 'text-indigo-500' },

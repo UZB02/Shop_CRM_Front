@@ -29,6 +29,14 @@
         <i class="pi pi-pencil text-xs text-emerald-500"></i>
         <span>Tahrirlash</span>
       </button>
+
+      <button 
+        @click="$emit('logout')"
+        class="logout-btn"
+        v-tooltip.bottom="'Tizimdan chiqish'"
+      >
+        <i class="pi pi-sign-out text-xs"></i>
+      </button>
     </div>
   </div>
 </template>
@@ -37,7 +45,7 @@
 defineProps({
   profile: Object
 })
-defineEmits(['edit'])
+defineEmits(['edit', 'logout'])
 </script>
 
 <style scoped>
@@ -91,5 +99,29 @@ defineEmits(['edit'])
 }
 .dark .edit-btn:hover {
   background-color: #334155;
+}
+
+.logout-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #fee2e2;
+  background-color: #fef2f2;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.dark .logout-btn {
+  border-color: rgba(239, 68, 68, 0.1);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+.logout-btn:hover {
+  background-color: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 </style>
