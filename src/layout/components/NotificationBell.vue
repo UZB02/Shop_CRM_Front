@@ -7,12 +7,12 @@
              hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95"
       v-tooltip.bottom="'Bildirishnomalar'"
     >
-      <i class="pi pi-bell text-sm" />
+      <i class="pi pi-bell text-base" />
       <span 
         v-if="store.unreadCount > 0" 
-        class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[12px] font-bold text-white shadow-sm ring-2 ring-white dark:ring-slate-900 animate-pulse"
+        class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] px-1.5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-sm ring-2 ring-white dark:ring-slate-900 animate-pulse select-none transition-all duration-300"
       >
-        {{ store.unreadCount > 9 ? '9+' : store.unreadCount }}
+        {{ store.unreadCount > 99 ? '99+' : store.unreadCount }}
       </span>
     </button>
 
