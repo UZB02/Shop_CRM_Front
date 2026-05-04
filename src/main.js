@@ -5,6 +5,7 @@ import ToastService from 'primevue/toastservice'
 import ConfirmationService from 'primevue/confirmationservice'
 import Aura from '@primevue/themes/aura'
 import Tooltip from 'primevue/tooltip'
+import Dialog from 'primevue/dialog'
 import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
@@ -39,6 +40,7 @@ app.use(PrimeVue, {
 })
 app.use(ToastService)
 app.use(ConfirmationService)
+app.component('Dialog', Dialog)
 app.directive('tooltip', Tooltip)
 
 app.mount('#app')

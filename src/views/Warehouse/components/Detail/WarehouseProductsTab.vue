@@ -26,7 +26,7 @@
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest w-10">№</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.form.barcode') }}</th>
-              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-center">{{ $t('products.form.amount') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.col_price') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
@@ -41,17 +41,19 @@
             >
               <td class="px-4 py-2 text-[12px] text-slate-400">{{ index + 1 }}</td>
               <td class="px-4 py-2">
-                <div class="flex items-center flex-wrap gap-2">
-                  <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors">
-                    {{ item.product_name }}
-                  </span>
-                  <div v-if="item.tur_name" class="flex items-center gap-1">
-                    <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 tracking-widest leading-none">
-                      {{ item.tur_name }}
-                    </span>
-                    <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 tracking-widest leading-none">
-                      {{ item.tur_color }}
-                    </span>
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+                    <img v-if="item.image_url" :src="item.image_url" class="w-full h-full object-cover" />
+                    <i v-else class="pi pi-image text-slate-300 text-[12px]"></i>
+                  </div>
+                  <div class="flex flex-col min-w-0">
+                    <div class="flex items-center flex-wrap gap-2">
+                      <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors truncate max-w-[180px]">
+                        {{ item.product_name }}
+                      </span>
+                      <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
+                    </div>
+                    <span v-if="item.category_name" class="text-[11px] text-slate-400 tracking-widest mt-0.5">{{ item.category_name }}</span>
                   </div>
                 </div>
               </td>
@@ -70,21 +72,25 @@
                   </button>
                 </div>
               </td>
-              <td class="px-4 py-2 text-right">
+              <td class="px-4 py-2 text-center text-[12px]">
                 <span 
-                  class="inline-flex items-center px-1.5 py-0.5 rounded-md font-bold text-[12px]"
+                  class="inline-flex items-center px-1.5 py-0.5 rounded-md font-bold"
                   :class="settingsStore.isLowStockEnabled && item.quantity <= settingsStore.lowStockThreshold 
                     ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' 
                     : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'"
                  >
-                  {{ item.quantity }}
+                  {{ item.quantity }} <span class="ml-1 opacity-60 font-medium">{{ $t('common.pcs') || 'dona' }}</span>
                 </span>
               </td>
-              <td class="px-4 py-2 text-right text-[12px] text-slate-500 dark:text-slate-400">
-                {{ Number(item.purchase_price || 0).toLocaleString() }}
+              <td class="px-4 py-2 text-right">
+                <span class="text-[12px] font-bold text-slate-500 dark:text-slate-400 tracking-tight">
+                  {{ Number(item.purchase_price || 0).toLocaleString() }}
+                </span>
               </td>
-              <td class="px-4 py-2 text-right font-medium text-slate-700 dark:text-slate-200 text-xs">
-                {{ Number(item.sale_price || 0).toLocaleString() }}
+              <td class="px-4 py-2 text-right">
+                <span class="text-xs font-black text-slate-800 dark:text-slate-200 tracking-tight">
+                  {{ Number(item.sale_price || 0).toLocaleString() }}
+                </span>
               </td>
               <td class="px-4 py-2 text-right text-[12px] text-slate-400">
                 {{ item.added_on?.split('|')[0]?.trim() || '—' }}
@@ -120,6 +126,7 @@
 
 <script setup>
 import { useSettingsStore } from '@/store/settings'
+import TurBadge from '@/components/common/TurBadge.vue'
 
 defineProps({
   products: { type: Array, required: true },

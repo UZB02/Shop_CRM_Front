@@ -22,8 +22,11 @@ export const useNotificationStore = defineStore('notifications', {
 
     getters: {
         unreadCount: (state) => {
-            // Backend dan kelgan unread_count ustivor, aks holda local filter
-            return state.unreadCountFromBackend || (Array.isArray(state.items) ? state.items.filter(i => !i.is_read).length : 0)
+            // Backend dan kelgan unread_count ustivor. Agar u mavjud bo'lmasa, localni ishlatamiz.
+            if (state.unreadCountFromBackend !== undefined && state.unreadCountFromBackend !== null) {
+                return state.unreadCountFromBackend
+            }
+            return Array.isArray(state.items) ? state.items.filter(i => !i.is_read).length : 0
         },
         isSubscriptionExpired: (state) => state.subscription?.status === 'expired',
         daysLeft: (state) => state.subscription?.days_left ?? 0,
@@ -88,48 +91,64 @@ export const useNotificationStore = defineStore('notifications', {
         },
 
         async markAsRead() {
-            try {
-                // Backend: POST /notifications/mark-read/ marks only source: "system"
-                const res = await notificationsAPI.markRead()
-                console.log('✅ Marked as read (system):', res.data)
-                
-                // Front-end state'ni yangilaymiz — faqat system xabarlarini
-                this.items.forEach(item => {
-                    if (item.source !== 'announcement') {
-                        item.is_read = true
-                    }
-                })
-                
-                // Announcement'lar uchun alohida endpoint bo'lsa ham chaqirib qo'yamiz
-                await announcementsAPI.markReadAll()
-                this.items.forEach(item => {
-                    if (item.source === 'announcement') {
-                        item.is_read = true
-                    }
-                })
+            // 1. Optimistik yangilash: Barcha local xabarlarni o'qilgan deb belgilaymiz
+            this.items.forEach(item => {
+                item.is_read = true
+            })
+            this.unreadCountFromBackend = 0
 
-                this.unreadCountFromBackend = 0
+            // 2. Orqa fonga API so'rovlarni yuboramiz. Biri xato qilsa ham, ikkinchisi ishlayveradi.
+            try {
+                await notificationsAPI.markRead()
             } catch (err) {
-                console.error('❌ Mark all as read error:', err)
+                console.error('❌ Tizim xabarlarini o\'qilgan deb belgilashda xatolik:', err)
+            }
+            
+            try {
+                const hasAnnouncements = this.items.some(i => i.source === 'announcement')
+                if (hasAnnouncements) {
+                    await announcementsAPI.markReadAll()
+                }
+            } catch (err) {
+                console.error('❌ Yangiliklarni o\'qilgan deb belgilashda xatolik:', err)
             }
         },
 
         async markItemAsRead(item) {
             if (!item || item.is_read) return
+            
+            // Original ob'ektni topamiz
+            const realItem = this.items.find(i => i.id === item.id)
+            if (realItem) {
+                realItem.is_read = true
+            } else {
+                item.is_read = true // fallback
+            }
+
             try {
                 if (item.source === 'announcement' && item.id) {
                     await announcementsAPI.markRead(item.id)
-                    item.is_read = true
+                    if (this.unreadCountFromBackend > 0) this.unreadCountFromBackend--
                 } else {
                     // Tizim xabarlari uchun hozircha faqat global bor
                     await notificationsAPI.markRead()
+                    
+                    let systemUnreadCount = 0
                     this.items.forEach(i => { 
-                        if (i.source !== 'announcement') i.is_read = true 
+                        if (i.source !== 'announcement' && !i.is_read) {
+                            systemUnreadCount++
+                            i.is_read = true 
+                        }
                     })
+                    // Agar faqat bitta xabarni o'qigan bo'lsa ham API barcha tizim xabarlarini o'qiydi
+                    // Shuning uchun qolgan tizim xabarlarini ham o'qilgan deb belgilaymiz
+                    this.unreadCountFromBackend = Math.max(0, this.unreadCountFromBackend - (systemUnreadCount > 0 ? systemUnreadCount : 1))
                 }
-                if (this.unreadCountFromBackend > 0) this.unreadCountFromBackend--
+                
+                // Holatni to'liq moslashtirish uchun API dan yangilab yuboramiz
+                this.fetchNotifications(true)
             } catch (err) {
-                console.error('❌ Mark item as read error:', err)
+                console.error('❌ Xabarni o\'qilgan deb belgilashda xatolik:', err)
             }
         },
 

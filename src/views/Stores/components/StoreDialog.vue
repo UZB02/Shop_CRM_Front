@@ -43,7 +43,7 @@
                   {{ $t('stores.form.store_name') }} <span class="text-red-500">*</span>
                 </label>
                 <div class="flex items-stretch group">
-                  <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
+                  <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-lg">
                     <i class="pi pi-pencil text-slate-400 group-focus-within:text-emerald-500 text-xs"></i>
                   </div>
                   <InputText
@@ -52,7 +52,7 @@
                     autofocus
                     :placeholder="$t('stores.form.store_name_ph')"
                     :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.name?.trim() }"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
+                    class="flex-1 min-w-0 rounded-r-lg !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
                 </div>
                 <Transition name="fade-slide">
@@ -77,8 +77,11 @@
                     optionValue="id"
                     :placeholder="$t('stores.form.region_ph')"
                     filter
-                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                    class="w-full rounded-lg !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
                     :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.region_id }"
+                    :pt="{
+                      label: { class: '!flex !items-center !justify-center !text-center !pr-10 !text-[13px] !font-bold' }
+                    }"
                   />
                   <Transition name="fade-slide">
                     <p v-if="submitted && !store.region_id" class="text-[10px] font-bold text-red-500 tracking-widest animate-pulse px-1 mt-0.5">
@@ -100,8 +103,11 @@
                     :placeholder="$t('stores.form.district_ph')"
                     :disabled="!store.region_id"
                     filter
-                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                    class="w-full rounded-lg !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
                     :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.district_id }"
+                    :pt="{
+                      label: { class: '!flex !items-center !justify-center !text-center !pr-10 !text-[13px] !font-bold' }
+                    }"
                   />
                   <Transition name="fade-slide">
                     <p v-if="submitted && !store.district_id" class="text-[10px] font-bold text-red-500 tracking-widest animate-pulse px-1 mt-0.5">
@@ -117,7 +123,7 @@
                   {{ $t('stores.form.city') }} <span class="text-red-500">*</span>
                 </label>
                 <div class="flex items-stretch group">
-                  <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
+                  <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-lg">
                     <i class="pi pi-map-marker text-slate-400 group-focus-within:text-emerald-500 text-xs"></i>
                   </div>
                   <InputText
@@ -125,7 +131,7 @@
                     v-model.trim="store.address"
                     :placeholder="$t('stores.form.city_ph')"
                     :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.address?.trim() }"
-                    class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
+                    class="flex-1 min-w-0 rounded-r-lg !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-4 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                   />
                 </div>
                 <Transition name="fade-slide">
@@ -143,7 +149,7 @@
                     {{ $t('stores.form.phone') }} <span class="text-red-500">*</span>
                   </label>
                   <div class="flex items-stretch group">
-                    <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-xl">
+                    <div class="w-10 flex-shrink-0 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 border border-r-0 border-slate-200 dark:border-slate-700 group-focus-within:border-emerald-500 transition-all rounded-l-lg">
                       <i class="pi pi-phone text-slate-400 text-xs group-focus-within:text-emerald-500"></i>
                     </div>
                     <InputText
@@ -151,7 +157,7 @@
                       v-model="store.phone"
                       :placeholder="$t('stores.form.phone_ph')"
                       :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.phone?.trim() }"
-                      class="flex-1 min-w-0 rounded-r-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-3 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
+                      class="flex-1 min-w-0 rounded-r-lg !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 !px-3 !py-2 !font-semibold !text-sm dark:!text-white focus:!bg-white dark:focus:!bg-slate-900 focus:!border-emerald-500 transition-all shadow-none outline-none"
                     />
                   </div>
                   <Transition name="fade-slide">
@@ -170,7 +176,10 @@
                     optionLabel="label"
                     optionValue="value"
                     :placeholder="$t('common.choose')"
-                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                    class="w-full rounded-lg !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                    :pt="{
+                      label: { class: '!flex !items-center !justify-center !text-center !pr-10 !text-[13px] !font-bold' }
+                    }"
                   />
                 </div>
               </div>
@@ -289,13 +298,14 @@ watch(() => props.store.region_id, (newVal, oldVal) => {
 :deep(.custom-premium-dropdown) {
   height: 42px;
 }
+:deep(.custom-premium-dropdown .p-select-label),
 :deep(.custom-premium-dropdown .p-dropdown-label) {
-  display: flex !important;
-  align-items: center !important;
-  font-size: 11px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.05em !important;
-  padding: 0 1rem !important;
+  padding-left: 2.5rem !important; /* Counter-balance the trigger width to achieve geometric center */
+  padding-right: 0 !important; /* We handle right spacing in the pt prop via pr-10 */
+}
+:deep(.custom-premium-dropdown .p-select-dropdown),
+:deep(.custom-premium-dropdown .p-dropdown-trigger) {
+  width: 2.5rem !important;
 }
 .dark :deep(.custom-premium-dropdown .p-dropdown-label) {
   color: #ffffff !important;
