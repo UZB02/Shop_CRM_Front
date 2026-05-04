@@ -117,9 +117,11 @@ watch(() => props.kpi, (newKpi) => {
 const onSave = async () => {
   loading.value = true
   try {
-    await kpiAPI.setTarget(props.kpi.id, {
+    await kpiAPI.setTarget(props.kpi.worker || props.kpi.id, {
       target_amount: Number(form.value.target_amount || 0),
-      bonus_amount: Number(form.value.bonus_amount || 0)
+      bonus_amount: Number(form.value.bonus_amount || 0),
+      month: props.kpi.month,
+      year: props.kpi.year
     })
     
     toast.add({

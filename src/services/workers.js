@@ -15,7 +15,7 @@ export const workersAPI = {
 export const kpiAPI = {
     getAll: (params) => api.get('/kpi/', { params }),
     getById: (id) => api.get(`/kpi/${id}/`),
-    setTarget: (id, data) => api.patch(`/kpi/${id}/set-target/`, data),
+    setTarget: (workerId, data) => api.post(`/workers/${workerId}/set-target/`, data),
     getWorkerKpi: (workerId, params) => api.get(`/workers/${workerId}/kpi/`, { params })
 }
 
