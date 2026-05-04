@@ -153,10 +153,13 @@
                 <div class="flex gap-1 justify-center items-center">
                   <button
                     v-if="settingsStore.isKpiEnabled"
-                    class="w-7 h-7 rounded-lg bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center transition-all active:scale-90"
-                    v-tooltip.top="$t('kpi.set_target.title') || 'Maqsad belgilash'"
+                    class="w-7 h-7 rounded-lg border transition-all active:scale-90 flex items-center justify-center"
+                    :class="data.kpi_summary 
+                      ? 'bg-emerald-500/5 hover:bg-emerald-500/10 border-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
+                      : 'bg-slate-500/5 hover:bg-slate-500/10 border-slate-500/10 text-slate-400 dark:text-slate-500'"
+                    v-tooltip.top="data.kpi_summary ? `${$t('kpi.table.target')}: ${formatFullCurrency(data.kpi_summary.target_amount)}` : $t('kpi.status.no_target')"
                     @click="$emit('open-target', data)">
-                    <i class="pi pi-bullseye text-[11px]"></i>
+                    <i :class="['pi', data.kpi_summary ? 'pi-bullseye' : 'pi-plus-circle', 'text-[11px]']"></i>
                   </button>
                   <button
                     class="w-7 h-7 rounded-lg bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-all active:scale-90"
