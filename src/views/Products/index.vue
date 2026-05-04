@@ -48,6 +48,7 @@
           :loading="loading"
           :totalRecords="totalProducts"
           :currentPage="currentPage"
+          :rowsPerPage="rowsPerPage"
           @delete="confirmDeleteProduct"
           @page-change="handlePageChange"
         />

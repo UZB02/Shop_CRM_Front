@@ -4,6 +4,7 @@ import { workersAPI, kpiAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { useNotificationStore } from '@/store/notifications'
+import { useSettingsStore } from '@/store/settings'
 import { ROLE_PERMISSIONS } from './useWorkerForm'
 
 export function useWorkerActions(loadWorkersCallback) {
@@ -11,6 +12,7 @@ export function useWorkerActions(loadWorkersCallback) {
     const toast = useToast()
     const confirm = useConfirm()
     const notificationStore = useNotificationStore()
+    const settingsStore = useSettingsStore()
 
     const worker = ref({
         first_name: '',
@@ -235,41 +237,66 @@ export function useWorkerActions(loadWorkersCallback) {
     }
 
     const openTargetModal = async (workerData) => {
+        if (!settingsStore.isKpiEnabled) {
+            toast.add({
+                severity: 'warn',
+                summary: t('common.warning'),
+                detail: 'KPI moduli o\'chirilgan. Iltimos, sozlamalardan yoqing.',
+                life: 3000
+            })
+            return
+        }
+
         const workerId = workerData.id || workerData._id
         if (!workerId) return
 
         try {
-            const now = new Date()
-            const currentMonth = now.getMonth() + 1
-            const currentYear = now.getFullYear()
-            
-            const params = {
-                month: currentMonth,
-                year: currentYear
-            }
-            const res = await kpiAPI.getWorkerKpi(workerId, params)
-            
-            // Handle both single object and array/paginated responses
-            let rawData = res.data
-            if (rawData?.results && Array.isArray(rawData.results)) {
-                rawData = rawData.results[0]
-            } else if (Array.isArray(rawData)) {
-                rawData = rawData[0]
+            // Backend documentation states that GET /workers/{id}/ returns full joriy oy KPI in 'current_kpi' field.
+            // This is the most reliable way to get the KPI object with an ID.
+            const res = await workersAPI.getById(workerId)
+            let kpiData = res.data.current_kpi
+
+            if (!kpiData || !kpiData.id) {
+                // Fallback: Try the dedicated worker KPI endpoint with current period filters
+                const now = new Date()
+                const currentMonth = now.getMonth() + 1
+                const currentYear = now.getFullYear()
+                
+                const kpiRes = await kpiAPI.getWorkerKpi(workerId, {
+                    month: currentMonth,
+                    year: currentYear
+                })
+                
+                let rawData = kpiRes.data
+                if (rawData?.results && Array.isArray(rawData.results)) {
+                    rawData = rawData.results[0]
+                } else if (Array.isArray(rawData)) {
+                    rawData = rawData[0]
+                }
+                kpiData = rawData
             }
 
-            const kpiData = rawData || {}
-            kpiData.worker_name = workerData.full_name || `${workerData.first_name || ''} ${workerData.last_name || ''}`.trim()
-            kpiData.month = kpiData.month || currentMonth
-            kpiData.year = kpiData.year || currentYear
-            
-            selectedKpi.value = kpiData
+            // If kpiData is missing or has no ID, we still open the modal.
+            // Documentation suggests that setting a target is how a KPI is "opened" (created).
+            // In this case, we use the workerId as the primary identifier.
+            const finalKpi = (kpiData && kpiData.id) ? kpiData : {
+                id: workerId, 
+                worker: workerId,
+                worker_name: workerData.full_name || `${workerData.first_name || ''} ${workerData.last_name || ''}`.trim(),
+                month: new Date().getMonth() + 1,
+                year: new Date().getFullYear(),
+                target_amount: 0,
+                bonus_amount: 0
+            }
+
+            selectedKpi.value = finalKpi
             targetModalVisible.value = true
         } catch (error) {
-            console.error('Error fetching worker KPI:', error)
+            console.error('❌ Error fetching KPI data:', error)
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.detail || 'KPI ma\'lumotlarini yuklashda xatolik',
+                detail: 'Xodim KPI ma\'lumotlarini olishda xatolik yuz berdi.',
                 life: 3000
             })
         }

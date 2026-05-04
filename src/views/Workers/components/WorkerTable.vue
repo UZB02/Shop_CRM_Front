@@ -152,6 +152,7 @@
               <td class="px-4 py-2 text-center">
                 <div class="flex gap-1 justify-center items-center">
                   <button
+                    v-if="settingsStore.isKpiEnabled"
                     class="w-7 h-7 rounded-lg bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center transition-all active:scale-90"
                     v-tooltip.top="$t('kpi.set_target.title') || 'Maqsad belgilash'"
                     @click="$emit('open-target', data)">
@@ -227,9 +228,11 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useSettingsStore } from '@/store/settings'
 
 const { t } = useI18n()
 const router = useRouter()
+const settingsStore = useSettingsStore()
 
 const showSalaries = ref(false)
 

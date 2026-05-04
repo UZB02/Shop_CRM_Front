@@ -115,21 +115,11 @@ watch(() => props.kpi, (newKpi) => {
 }, { immediate: true })
 
 const onSave = async () => {
-  if (!props.kpi?.id) {
-    toast.add({
-      severity: 'error',
-      summary: t('common.error'),
-      detail: 'KPI ID topilmadi. Ushbu xodim uchun joriy oyda KPI ochilmagan.',
-      life: 3000
-    })
-    return
-  }
-
   loading.value = true
   try {
     await kpiAPI.setTarget(props.kpi.id, {
-      target_amount: form.value.target_amount.toString(),
-      bonus_amount: form.value.bonus_amount.toString()
+      target_amount: Number(form.value.target_amount || 0),
+      bonus_amount: Number(form.value.bonus_amount || 0)
     })
     
     toast.add({

@@ -204,6 +204,7 @@
       <TablePagination
         :currentPage="currentPage"
         :totalRecords="totalRecords"
+        :rowsPerPage="rowsPerPage"
         @page-change="$emit('page-change', $event)"
         class="w-full"
       />
@@ -223,7 +224,8 @@ const props = defineProps({
   products: Array,
   loading: Boolean,
   totalRecords: { type: Number, default: 0 },
-  currentPage: { type: Number, default: 1 }
+  currentPage: { type: Number, default: 1 },
+  rowsPerPage: { type: Number, default: 20 }
 })
 
 const { products } = toRefs(props)

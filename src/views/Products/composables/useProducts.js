@@ -13,7 +13,7 @@ export function useProducts() {
     const products = ref([])
     const totalProducts = ref(0)
     const currentPage = ref(1)
-    const rowsPerPage = ref(10)
+    const rowsPerPage = ref(20)
     const searchQuery = ref('')
     const selectedCategory = ref(null)
     const selectedSubcategory = ref(null)
