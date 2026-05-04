@@ -1,12 +1,12 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { useConfirm } from 'primevue/useconfirm'
+import { useConfirmStore } from '@/store/confirm'
 import { categoriesAPI, subcategoriesAPI } from '@/services/api'
 
 export function useCategoryManager() {
   const toast = useToast()
-  const confirm = useConfirm()
+  const confirm = useConfirmStore()
   const { t } = useI18n()
 
   // Reactive State
@@ -129,10 +129,12 @@ export function useCategoryManager() {
 
   const confirmDeleteCategory = (cat) => {
     confirm.require({
-      message: t('categories.messages.delete_confirm', { name: cat.name }),
+      message: t('categories.messages.delete_confirm', { Name: cat.name }),
       header: t('common.confirm_title'),
       icon: 'pi pi-exclamation-triangle',
-      acceptClass: 'p-button-danger p-button-sm !rounded-xl',
+      acceptLabel: t('common.yes_delete'),
+      rejectLabel: t('common.cancel'),
+      acceptClass: 'p-button-danger',
       accept: async () => {
         try {
           await categoriesAPI.delete(cat.id || cat._id)
@@ -195,10 +197,12 @@ export function useCategoryManager() {
 
   const confirmDeleteSub = (sub) => {
     confirm.require({
-      message: t('subcategories.messages.delete_confirm', { name: sub.name }),
+      message: t('subcategories.messages.delete_confirm', { Name: sub.name }),
       header: t('common.confirm_title'),
       icon: 'pi pi-exclamation-triangle',
-      acceptClass: 'p-button-danger p-button-sm !rounded-xl',
+      acceptLabel: t('common.yes_delete'),
+      rejectLabel: t('common.cancel'),
+      acceptClass: 'p-button-danger',
       accept: async () => {
         try {
           await subcategoriesAPI.delete(sub.id || sub._id)
