@@ -70,6 +70,7 @@
     <StoreDialog
       v-model:visible="storeDialog"
       :store="storeForm"
+      :regions="regions"
       :submitted="submitted"
       :saving="saving"
       @save="saveStore"
@@ -79,6 +80,7 @@
     <BranchDialog
       v-model:visible="branchDialog"
       :branch="branch"
+      :regions="regions"
       :submitted="branchSubmitted"
       :saving="saving"
       @save="saveBranch"
@@ -115,6 +117,7 @@ const limitTooltip = computed(() => {
 
 const {
   store, storeForm, storeDialog, submitted, loading, saving,
+  regions,
   openNewStoreDialog, openEditStoreDialog, saveStore,
   branches: allStoreBranches,
   branch, branchDialog, branchSubmitted,

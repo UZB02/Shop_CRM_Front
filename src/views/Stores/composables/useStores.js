@@ -2,7 +2,7 @@ import { ref, watch, onMounted } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { useI18n } from 'vue-i18n'
-import { storesAPI, branchesAPI } from '@/services/api'
+import { storesAPI, branchesAPI, regionsAPI } from '@/services/api'
 import { useNotificationStore } from '@/store/notifications'
 
 export function useStores() {
@@ -18,6 +18,7 @@ export function useStores() {
     const submitted = ref(false)
     const loading = ref(false)
     const saving = ref(false)
+    const regions = ref([])
 
     // Branch State
     const branches = ref([])
@@ -108,12 +109,19 @@ export function useStores() {
     const loadData = async () => {
         loading.value = true
         try {
-            const storesRes = await storesAPI.getAll()
+            const [storesRes, regionsRes] = await Promise.all([
+                storesAPI.getAll(),
+                regionsAPI.getAll()
+            ])
+            
             const list = storesRes.data?.results ?? (Array.isArray(storesRes.data) ? storesRes.data : [])
             store.value = list.length > 0 ? list[0] : {}
+            
+            regions.value = regionsRes.data?.results ?? (Array.isArray(regionsRes.data) ? regionsRes.data : [])
 
             await loadBranches()
-        } catch {
+        } catch (error) {
+            console.error('Error loading data:', error)
             toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.load_error'), life: 5000 })
         } finally {
             loading.value = false
@@ -122,7 +130,7 @@ export function useStores() {
 
     // ─── Store Actions ────────────────────────────────────────
     const openNewStoreDialog = () => {
-        storeForm.value = { name: '', address: '', phone: '', status: 'active' }
+        storeForm.value = { name: '', address: '', phone: '', status: 'active', region_id: null, district_id: null }
         submitted.value = false
         storeDialog.value = true
     }
@@ -147,7 +155,7 @@ export function useStores() {
 
     const saveStore = async () => {
         submitted.value = true
-        if (!storeForm.value.name?.trim() || !storeForm.value.address?.trim() || !storeForm.value.phone?.trim()) return
+        if (!storeForm.value.name?.trim() || !storeForm.value.address?.trim() || !storeForm.value.phone?.trim() || !storeForm.value.region_id || !storeForm.value.district_id) return
         saving.value = true
         try {
             const id = storeForm.value.id || storeForm.value._id
@@ -155,13 +163,15 @@ export function useStores() {
                 name: storeForm.value.name,
                 address: storeForm.value.address,
                 phone: storeForm.value.phone,
-                status: storeForm.value.status
+                status: storeForm.value.status,
+                region_id: storeForm.value.region_id,
+                district_id: storeForm.value.district_id
             }
             if (id) {
                 await storesAPI.update(id, payload)
                 toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.store_updated'), life: 5000 })
             } else {
-                await storesAPI.create(storeForm.value)
+                await storesAPI.create(payload)
                 toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.store_added'), life: 5000 })
             }
             storeDialog.value = false
@@ -175,7 +185,7 @@ export function useStores() {
 
     // ─── Branch Actions ───────────────────────────────────────
     const openNewBranchDialog = () => {
-        branch.value = { name: '', address: '', phone: '', status: 'active' }
+        branch.value = { name: '', address: '', phone: '', status: 'active', region_id: null, district_id: null }
         branchSubmitted.value = false
         branchDialog.value = true
     }
@@ -187,7 +197,7 @@ export function useStores() {
 
     const saveBranch = async () => {
         branchSubmitted.value = true
-        if (!branch.value.name?.trim() || !branch.value.phone?.trim() || !branch.value.address?.trim()) return
+        if (!branch.value.name?.trim() || !branch.value.phone?.trim() || !branch.value.address?.trim() || !branch.value.region_id || !branch.value.district_id) return
         saving.value = true
         try {
             const id = branch.value.id || branch.value._id
@@ -195,7 +205,9 @@ export function useStores() {
                 name: branch.value.name,
                 address: branch.value.address,
                 phone: branch.value.phone,
-                status: branch.value.status
+                status: branch.value.status,
+                region_id: branch.value.region_id,
+                district_id: branch.value.district_id
             }
             if (id) {
                 await branchesAPI.update(id, payload)
@@ -245,6 +257,7 @@ export function useStores() {
     return {
         // Store
         store, storeForm, storeDialog, submitted, loading, saving,
+        regions,
         openNewStoreDialog, openEditStoreDialog, saveStore,
 
         // Branch

@@ -62,7 +62,56 @@
                 </Transition>
               </div>
 
-              <!-- Location -->
+              <!-- Region & District: side-by-side -->
+              <div class="flex flex-col sm:flex-row gap-3">
+                <!-- Region -->
+                <div class="space-y-1 flex-1 relative">
+                  <label for="region" class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest block px-1">
+                    {{ $t('stores.form.region') }} <span class="text-red-500">*</span>
+                  </label>
+                  <Dropdown
+                    id="region"
+                    v-model="store.region_id"
+                    :options="regions"
+                    optionLabel="name"
+                    optionValue="id"
+                    :placeholder="$t('stores.form.region_ph')"
+                    filter
+                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.region_id }"
+                  />
+                  <Transition name="fade-slide">
+                    <p v-if="submitted && !store.region_id" class="text-[10px] font-bold text-red-500 tracking-widest animate-pulse px-1 mt-0.5">
+                      {{ $t('common.required_field') }}
+                    </p>
+                  </Transition>
+                </div>
+                <!-- District -->
+                <div class="space-y-1 flex-1 relative">
+                  <label for="district" class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest block px-1">
+                    {{ $t('stores.form.district') }} <span class="text-red-500">*</span>
+                  </label>
+                  <Dropdown
+                    id="district"
+                    v-model="store.district_id"
+                    :options="districts"
+                    optionLabel="name"
+                    optionValue="id"
+                    :placeholder="$t('stores.form.district_ph')"
+                    :disabled="!store.region_id"
+                    filter
+                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !store.district_id }"
+                  />
+                  <Transition name="fade-slide">
+                    <p v-if="submitted && !store.district_id" class="text-[10px] font-bold text-red-500 tracking-widest animate-pulse px-1 mt-0.5">
+                      {{ $t('common.required_field') }}
+                    </p>
+                  </Transition>
+                </div>
+              </div>
+
+              <!-- Location (Address) -->
               <div class="space-y-1 relative">
                 <label for="location" class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest block px-1">
                   {{ $t('stores.form.city') }} <span class="text-red-500">*</span>
@@ -86,7 +135,7 @@
                 </Transition>
               </div>
 
-              <!-- Phone & Status: stacked on mobile, side-by-side on desktop -->
+              <!-- Phone & Status -->
               <div class="flex flex-col sm:flex-row gap-3">
                 <!-- Phone -->
                 <div class="space-y-1 sm:flex-[3] min-w-0 relative">
@@ -159,7 +208,7 @@
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
 import Dropdown from 'primevue/dropdown'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -167,6 +216,7 @@ const { t } = useI18n()
 const props = defineProps({
   visible: Boolean,
   store: Object,
+  regions: { type: Array, default: () => [] },
   submitted: Boolean,
   saving: Boolean
 })
@@ -177,6 +227,19 @@ const statuses = computed(() => [
   { label: t('stores.status_active'), value: 'active' },
   { label: t('stores.status_inactive'), value: 'inactive' }
 ])
+
+const districts = computed(() => {
+  if (!props.store.region_id) return []
+  const region = props.regions.find(r => r.id === props.store.region_id)
+  return region ? region.districts : []
+})
+
+watch(() => props.store.region_id, (newVal, oldVal) => {
+  // Only reset if it's a real user change and not initial data load (where oldVal would be null/undefined)
+  if (oldVal && newVal !== oldVal) {
+    props.store.district_id = null
+  }
+})
 </script>
 
 <style scoped>

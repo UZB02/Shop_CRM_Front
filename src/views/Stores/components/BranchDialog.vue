@@ -101,6 +101,55 @@
                 </div>
               </div>
 
+              <!-- Region & District: side-by-side -->
+              <div class="flex flex-col sm:flex-row gap-3">
+                <!-- Region -->
+                <div class="space-y-1 flex-1 relative">
+                  <label for="b_region" class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest block px-1">
+                    {{ $t('stores.form.region') }} <span class="text-red-500">*</span>
+                  </label>
+                  <Select
+                    id="b_region"
+                    v-model="branch.region_id"
+                    :options="regions"
+                    optionLabel="name"
+                    optionValue="id"
+                    :placeholder="$t('stores.form.region_ph')"
+                    filter
+                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !branch.region_id }"
+                  />
+                  <Transition name="fade-slide">
+                    <p v-if="submitted && !branch.region_id" class="text-[10px] font-bold text-red-500 tracking-widest animate-pulse px-1 mt-0.5">
+                      {{ $t('common.required_field') }}
+                    </p>
+                  </Transition>
+                </div>
+                <!-- District -->
+                <div class="space-y-1 flex-1 relative">
+                  <label for="b_district" class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest block px-1">
+                    {{ $t('stores.form.district') }} <span class="text-red-500">*</span>
+                  </label>
+                  <Select
+                    id="b_district"
+                    v-model="branch.district_id"
+                    :options="districts"
+                    optionLabel="name"
+                    optionValue="id"
+                    :placeholder="$t('stores.form.district_ph')"
+                    :disabled="!branch.region_id"
+                    filter
+                    class="w-full rounded-xl !bg-slate-50 dark:!bg-slate-800/50 !border-slate-200 dark:!border-slate-700 custom-premium-dropdown"
+                    :class="{ '!border-red-500/50 !bg-red-50/50 dark:!bg-red-500/5': submitted && !branch.district_id }"
+                  />
+                  <Transition name="fade-slide">
+                    <p v-if="submitted && !branch.district_id" class="text-[10px] font-bold text-red-500 tracking-widest animate-pulse px-1 mt-0.5">
+                      {{ $t('common.required_field') }}
+                    </p>
+                  </Transition>
+                </div>
+              </div>
+
               <!-- Address -->
               <div class="space-y-1 relative">
                 <label for="b_address" class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest block px-1">
@@ -157,14 +206,15 @@
 <script setup>
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-defineProps({
+const props = defineProps({
   visible: Boolean,
   branch: Object,
+  regions: { type: Array, default: () => [] },
   submitted: Boolean,
   saving: Boolean
 })
@@ -173,6 +223,18 @@ const statuses = computed(() => [
   { label: t('stores.status_active'), value: 'active' },
   { label: t('stores.status_inactive'), value: 'inactive' }
 ])
+
+const districts = computed(() => {
+  if (!props.branch.region_id) return []
+  const region = props.regions.find(r => r.id === props.branch.region_id)
+  return region ? region.districts : []
+})
+
+watch(() => props.branch.region_id, (newVal, oldVal) => {
+  if (oldVal && newVal !== oldVal) {
+    props.branch.district_id = null
+  }
+})
 
 defineEmits(['update:visible', 'save', 'hide'])
 </script>

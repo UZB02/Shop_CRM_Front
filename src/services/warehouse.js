@@ -55,4 +55,9 @@ export const transfersAPI = {
     cancel: (id) => api.post(`/warehouse/transfers/${id}/cancel/`, {})
 }
 
+export const regionsAPI = {
+    getAll: (params) => api.get('/regions/', { params }),
+    getById: (id) => api.get(`/regions/${id}/`)
+}
+
 
