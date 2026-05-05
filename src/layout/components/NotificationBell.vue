@@ -24,9 +24,18 @@
                     <i class="pi pi-bell text-emerald-500 text-xs" />
                     Bildirishnomalar
                 </h3>
-                <span v-if="store.unreadCount > 0" class="text-[11px] px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-bold tracking-wider">
-                    {{ store.unreadCount }}
-                </span>
+                <div class="flex items-center gap-2">
+                    <span v-if="store.unreadCount > 0" class="text-[11px] px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-bold tracking-wider">
+                        {{ store.unreadCount }}
+                    </span>
+                    <button 
+                        @click="op.hide()" 
+                        class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors"
+                        v-tooltip.bottom="'Yopish'"
+                    >
+                        <i class="pi pi-times text-sm" />
+                    </button>
+                </div>
             </div>
 
             <!-- List -->
