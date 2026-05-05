@@ -5,6 +5,7 @@ export const useNotificationStore = defineStore('notifications', {
     state: () => ({
         items: [], 
         unreadCountFromBackend: 0,
+        locallyReadIds: JSON.parse(localStorage.getItem('locallyReadNotificationIds') || '[]'),
         subscription: null, 
         usage: {
             branches: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true },
@@ -45,9 +46,9 @@ export const useNotificationStore = defineStore('notifications', {
                 return {
                     ...item,
                     source: item.source || 'system',
-                    read: item.is_read,                    // UI mask: item.read ishlatadi
-                    date: item.time,                       // UI mask: item.date ishlatadi
-                    body: item.message || item.body       // Backend 'message' yuboradi, UI 'body' kutadi
+                    read: item.is_read || state.locallyReadIds.includes(item.id),
+                    date: item.time,                       
+                    body: item.message || item.body       
                 }
             }).sort((a, b) => {
                 const timeA = a.time ? new Date(a.time).getTime() : 0
@@ -62,10 +63,20 @@ export const useNotificationStore = defineStore('notifications', {
             if (!silent) this.loading.notifications = true
             try {
                 const res = await notificationsAPI.getAll(null, silent ? { silent: true } : {})
-                // Backend guide: { unread_count: 3, results: [...] }
                 if (res.data) {
-                    this.items = res.data.results || (Array.isArray(res.data) ? res.data : [])
-                    this.unreadCountFromBackend = res.data.unread_count || 0
+                    let results = res.data.results || (Array.isArray(res.data) ? res.data : [])
+                    let unreadCount = res.data.unread_count || 0
+                    
+                    // Local o'qilganlarni hisobga olish
+                    results.forEach(item => {
+                        if (!item.is_read && this.locallyReadIds.includes(item.id)) {
+                            item.is_read = true
+                            unreadCount = Math.max(0, unreadCount - 1)
+                        }
+                    })
+                    
+                    this.items = results
+                    this.unreadCountFromBackend = unreadCount
                 }
                 console.log('📦 Notifications loaded:', this.items.length, 'Unread:', this.unreadCountFromBackend)
             } catch (err) {
@@ -96,6 +107,10 @@ export const useNotificationStore = defineStore('notifications', {
                 item.is_read = true
             })
             this.unreadCountFromBackend = 0
+            
+            // Local id larni tozalaymiz, chunki endi hammmasi o'qildi
+            this.locallyReadIds = []
+            localStorage.removeItem('locallyReadNotificationIds')
 
             // 2. Orqa fonga API so'rovlarni yuboramiz. Biri xato qilsa ham, ikkinchisi ishlayveradi.
             try {
@@ -115,8 +130,14 @@ export const useNotificationStore = defineStore('notifications', {
         },
 
         async markItemAsRead(item) {
-            if (!item || item.is_read) return
+            if (!item || item.is_read || this.locallyReadIds.includes(item.id)) return
             
+            // Local saqlash
+            if (item.id) {
+                this.locallyReadIds.push(item.id)
+                localStorage.setItem('locallyReadNotificationIds', JSON.stringify(this.locallyReadIds))
+            }
+
             // Original ob'ektni topamiz
             const realItem = this.items.find(i => i.id === item.id)
             if (realItem) {
@@ -125,17 +146,20 @@ export const useNotificationStore = defineStore('notifications', {
                 item.is_read = true // fallback
             }
 
+            if (this.unreadCountFromBackend > 0) {
+                this.unreadCountFromBackend--
+            }
+
             try {
                 if (item.source === 'announcement' && item.id) {
                     await announcementsAPI.markRead(item.id)
-                    if (this.unreadCountFromBackend > 0) this.unreadCountFromBackend--
                 } else if (item.id) {
                     // Faqat bitta xabarni o'qilgan deb belgilash
                     await notificationsAPI.markRead(item.id)
-                    if (this.unreadCountFromBackend > 0) this.unreadCountFromBackend--
                 }
                 
                 // Holatni to'liq moslashtirish uchun API dan yangilab yuboramiz
+                // Agar API 404 qaytarsa, bu joy ishlamaydi, ammo local optimistik update ishlagan bo'ladi
                 this.fetchNotifications(true)
             } catch (err) {
                 console.error('❌ Xabarni o\'qilgan deb belgilashda xatolik:', err)
