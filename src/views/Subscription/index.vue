@@ -24,7 +24,7 @@
     <!-- Main Content -->
     <div v-if="loading" class="flex flex-col gap-6 py-20 items-center justify-center">
         <i class="pi pi-spin pi-spinner text-3xl text-emerald-500"></i>
-        <p class="text-xs font-bold text-slate-400 tracking-widest">Ma'lumotlar yuklanmoqda...</p>
+        <p class="text-xs font-bold text-slate-400 tracking-widest">{{ $t('common.loading') }}</p>
     </div>
     <div v-else class="space-y-4 animate-in">
         <Tabs v-model:value="activeTab" class="!bg-transparent border-none">
@@ -54,7 +54,7 @@
                                 <h3 class="text-xs font-bold text-slate-500 tracking-widest border-b border-slate-50 dark:border-slate-800 pb-3">{{ $t('subscription.faq') }}</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     <div v-for="i in 4" :key="i" class="p-3 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border border-transparent hover:border-slate-100 dark:hover:border-slate-800 transition-all cursor-pointer flex justify-between items-center group">
-                                        <span class="text-[13px] font-medium text-slate-600 dark:text-slate-300">Tarifni qanday o'zgartirish mumkin?</span>
+                                        <span class="text-[13px] font-medium text-slate-600 dark:text-slate-300">{{ $t('subscription.faq_question_1') }}</span>
                                         <i class="pi pi-chevron-right text-[10px] text-slate-400 group-hover:translate-x-1 transition-transform"></i>
                                     </div>
                                 </div>
@@ -63,10 +63,10 @@
                             <div class="bg-indigo-600 rounded-2xl p-6 text-white relative overflow-hidden flex flex-col justify-between shadow-lg shadow-indigo-500/10">
                                 <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
                                 <div>
-                                    <h3 class="text-sm font-bold tracking-tight mb-2">Enterprise</h3>
-                                    <p class="text-[12px] text-indigo-100 font-medium leading-relaxed opacity-90">Maxsus yechimlar va yirik korporatsiyalar uchun.</p>
+                                    <h3 class="text-sm font-bold tracking-tight mb-2">{{ $t('subscription.enterprise_title') }}</h3>
+                                    <p class="text-[12px] text-indigo-100 font-medium leading-relaxed opacity-90">{{ $t('subscription.enterprise_desc') }}</p>
                                 </div>
-                                <Button label="Bog'lanish" severity="contrast" class="!rounded-lg !py-2 !text-[12px] !font-bold !!tracking-widest mt-6 !w-full" />
+                                <Button :label="$t('subscription.contact_us')" severity="contrast" class="!rounded-lg !py-2 !text-[12px] !font-bold !!tracking-widest mt-6 !w-full" />
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                 <TabPanel value="plans">
                     <div class="mb-6">
                         <h2 class="text-sm font-black tracking-[0.2em] text-slate-800 dark:text-slate-200">{{ $t('subscription.tabs.plans') }}</h2>
-                        <p class="text-[12px] text-slate-400 font-medium tracking-widest mt-1">Biznesingiz uchun eng mos variantni tanlang</p>
+                        <p class="text-[12px] text-slate-400 font-medium tracking-widest mt-1">{{ $t('subscription.plans_subtitle') }}</p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
                         <PlanCard 
@@ -96,14 +96,14 @@
                 <TabPanel value="billing">
                     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
                         <div class="px-5 py-4 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
-                            <h3 class="text-xs font-bold text-slate-500 tracking-widest">To'lovlar tarixi</h3>
+                            <h3 class="text-xs font-bold text-slate-500 tracking-widest">{{ $t('subscription.history') }}</h3>
                             <Button icon="pi pi-download" :label="$t('subscription.export_history')" text class="!text-[12px] !font-bold !!tracking-widest !rounded-lg !py-1" />
                         </div>
                         <div class="p-16 text-center space-y-4">
                             <div class="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto">
                                 <i class="pi pi-file-o text-slate-300"></i>
                             </div>
-                            <p class="text-[12px] font-bold text-slate-400 tracking-widest italic">Hozircha ma'lumot yo'q</p>
+                            <p class="text-[12px] font-bold text-slate-400 tracking-widest italic">{{ $t('subscription.no_history') }}</p>
                         </div>
                     </div>
                 </TabPanel>

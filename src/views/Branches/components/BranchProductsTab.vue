@@ -1,25 +1,22 @@
 <template>
-  <div class="space-y-4">
-    <!-- Search Bar -->
-    <div class="relative group">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-        <i class="pi pi-search text-[12px] text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
-      </div>
-      <input 
-        v-model="searchQuery"
-        type="text" 
-        :placeholder="$t('customers.search_placeholder')"
-        class="w-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl py-3.5 pl-11 pr-4 text-xs font-bold text-slate-700 dark:text-slate-200 focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 outline-none transition-all shadow-sm group-hover:shadow-md"
-      />
-      <div v-if="searchQuery" class="absolute inset-y-0 right-0 pr-4 flex items-center">
-        <button @click="searchQuery = ''" class="w-6 h-6 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-400">
-          <i class="pi pi-times text-[10px]"></i>
-        </button>
-      </div>
-    </div>
-
+  <div class="space-y-3">
     <!-- Results Card -->
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm min-h-[300px]">
+      <!-- Table toolbar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10">
+        <div class="relative">
+          <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input
+            v-model="searchQuery"
+            type="text"
+            :placeholder="$t('warehouse.detail.search_products')"
+            class="h-8 pl-8 pr-4 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 w-64 transition-all"
+          />
+        </div>
+        <div class="text-[12px] font-bold text-slate-400 tracking-widest">
+          {{ filteredProducts?.length || 0 }} / {{ products?.length || 0 }} {{ $t('products.title') }}
+        </div>
+      </div>
       <div v-if="!filteredProducts?.length" class="flex flex-col items-center justify-center py-20 opacity-40 text-center">
         <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mb-3">
           <i class="pi pi-inbox text-slate-400 text-lg"></i>
@@ -32,12 +29,13 @@
         <table class="w-full text-left min-w-[700px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest w-10">№</th>
-              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
-              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.form.barcode') }}</th>
-              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-center">{{ $t('products.col_inventory') || 'Qoldiq' }}</th>
-              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.col_price') }}</th>
-              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-center w-12">{{ $t('common.actions') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap w-10">№</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.form.barcode') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('products.form.amount') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.form.purchase_price') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.col_price') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-center w-12">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -81,6 +79,11 @@
                   :class="product.quantity > 10 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'"
                 >
                   {{ product.quantity }} <span class="ml-1 opacity-60 font-medium">{{ $t('common.pcs') || 'dona' }}</span>
+                </span>
+              </td>
+              <td class="px-4 py-2 text-right">
+                <span class="text-xs font-bold text-slate-400 dark:text-slate-500 tracking-tight">
+                  {{ Number(product.purchase_price).toLocaleString() }}
                 </span>
               </td>
               <td class="px-4 py-2 text-right">

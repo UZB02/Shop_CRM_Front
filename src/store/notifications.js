@@ -114,7 +114,7 @@ export const useNotificationStore = defineStore('notifications', {
 
             // 2. Orqa fonga API so'rovlarni yuboramiz. Biri xato qilsa ham, ikkinchisi ishlayveradi.
             try {
-                await notificationsAPI.markRead()
+                await notificationsAPI.markReadAll()
             } catch (err) {
                 console.error('❌ Tizim xabarlarini o\'qilgan deb belgilashda xatolik:', err)
             }
@@ -127,6 +127,9 @@ export const useNotificationStore = defineStore('notifications', {
             } catch (err) {
                 console.error('❌ Yangiliklarni o\'qilgan deb belgilashda xatolik:', err)
             }
+            
+            // UI to'liq yangilanishi uchun yana fetch qilamiz
+            this.fetchNotifications(true)
         },
 
         async markItemAsRead(item) {

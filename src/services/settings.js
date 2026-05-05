@@ -14,12 +14,8 @@ export const settingsAPI = {
 
 export const notificationsAPI = {
     getAll: (params, config = {}) => api.get('/notifications/', { params, ...config }),
-    markRead: (id) => {
-        if (id) {
-            return api.post(`/notifications/${id}/mark-read/`, {})
-        }
-        return api.post('/notifications/mark-read/', {})
-    }
+    markRead: (id) => api.post(`/notifications/${id}/mark-read/`, {}),
+    markReadAll: () => api.post('/notifications/mark-read/', {})
 }
 
 export const announcementsAPI = {

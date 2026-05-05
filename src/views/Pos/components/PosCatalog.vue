@@ -234,22 +234,16 @@ watch([selectedCategoryId, selectedSubcategoryId], ([newCatId, newSubId]) => {
   fetchProducts(props.externalSearch, newCatId, newSubId)
 })
 
-// Watch for late arrivers: branch info can sometimes load after mount
-watch(() => props.activeShift, (newShift) => {
-  if (newShift?.branch && products.value.length === 0) {
+const currentBranchId = computed(() => props.activeShift?.branch || authStore.user?.branch_id || authStore.user?.worker?.branch_id)
+
+watch(currentBranchId, (newId, oldId) => {
+  if (newId && newId !== oldId) {
     fetchProducts()
   }
 }, { immediate: true })
 
-watch(() => authStore.user, (newUser) => {
-  if (newUser?.branch_id && products.value.length === 0) {
-    fetchProducts()
-  }
-}, { deep: true })
-
 onMounted(async () => {
   await fetchCategories()
-  await fetchProducts()
 })
 
 // Expose fetchProducts for manual triggers (e.g. after checkout)
