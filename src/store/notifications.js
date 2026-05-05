@@ -129,20 +129,10 @@ export const useNotificationStore = defineStore('notifications', {
                 if (item.source === 'announcement' && item.id) {
                     await announcementsAPI.markRead(item.id)
                     if (this.unreadCountFromBackend > 0) this.unreadCountFromBackend--
-                } else {
-                    // Tizim xabarlari uchun hozircha faqat global bor
-                    await notificationsAPI.markRead()
-                    
-                    let systemUnreadCount = 0
-                    this.items.forEach(i => { 
-                        if (i.source !== 'announcement' && !i.is_read) {
-                            systemUnreadCount++
-                            i.is_read = true 
-                        }
-                    })
-                    // Agar faqat bitta xabarni o'qigan bo'lsa ham API barcha tizim xabarlarini o'qiydi
-                    // Shuning uchun qolgan tizim xabarlarini ham o'qilgan deb belgilaymiz
-                    this.unreadCountFromBackend = Math.max(0, this.unreadCountFromBackend - (systemUnreadCount > 0 ? systemUnreadCount : 1))
+                } else if (item.id) {
+                    // Faqat bitta xabarni o'qilgan deb belgilash
+                    await notificationsAPI.markRead(item.id)
+                    if (this.unreadCountFromBackend > 0) this.unreadCountFromBackend--
                 }
                 
                 // Holatni to'liq moslashtirish uchun API dan yangilab yuboramiz
