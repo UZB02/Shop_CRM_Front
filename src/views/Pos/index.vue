@@ -13,7 +13,7 @@
             ref="searchRef"
             v-model="searchQueryGlobal" 
             type="text" 
-            placeholder="Skanerlang yoki mahsulot nomi..." 
+            :placeholder="$t('pos.search_placeholder')" 
             @keyup.enter="handleSearchEnter"
             class="w-full bg-[#f4f7fa] dark:bg-slate-950/40 border-none rounded-2xl pl-12 pr-4 py-3.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 dark:focus:ring-emerald-500/10 placeholder:text-slate-300 dark:placeholder:text-slate-800 dark:text-slate-200"
           />
@@ -25,9 +25,9 @@
         <!-- Do'kon Info -->
         <div class="hidden xl:flex items-center gap-4 text-right">
            <div class="flex flex-col">
-              <span class="text-[11px] font-black text-slate-400 tracking-widest leading-none mb-1">Do'kon</span>
+              <span class="text-[11px] font-black text-slate-400 tracking-widest leading-none mb-1">{{ $t('pos.store') }}</span>
               <span class="text-xs font-black text-slate-800 dark:text-slate-200 truncate max-w-[120px]">
-                {{ activeShift?.branch_name || authStore.user?.branch_name || authStore.user?.worker?.branch_name || 'Tanlanmagan' }}
+                {{ activeShift?.branch_name || authStore.user?.branch_name || authStore.user?.worker?.branch_name || $t('pos.unselected') }}
               </span>
            </div>
         </div>
@@ -38,9 +38,9 @@
               {{ (activeShift?.worker_open_name || authStore.user?.full_name || 'U').charAt(0) }}
            </div>
            <div class="flex flex-col">
-              <span class="text-[11px] font-black text-slate-400 tracking-widest leading-none mb-1">Xodim</span>
+              <span class="text-[11px] font-black text-slate-400 tracking-widest leading-none mb-1">{{ $t('pos.employee') }}</span>
               <span class="text-xs font-black text-slate-800 dark:text-slate-200">
-                {{ activeShift?.worker_open_name || authStore.user?.full_name || 'Foydalanuvchi' }}
+                {{ activeShift?.worker_open_name || authStore.user?.full_name || $t('pos.user') }}
               </span>
            </div>
         </div>
@@ -52,7 +52,7 @@
         <div class="flex items-center gap-3">
           <div v-if="activeShift && settingsStore.isShiftEnabled" class="px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl flex items-center gap-2 border border-emerald-100 dark:border-emerald-500/20">
              <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-pulse"></span>
-             <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">Smena #{{ activeShift.id }}</span>
+             <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">{{ $t('pos.shift_number') }}{{ activeShift.id }}</span>
           </div>
 
           <button 
@@ -61,7 +61,7 @@
             class="px-6 py-3.5 rounded-xl text-[12px] font-black transition-all shadow-xl active:scale-95"
             :class="activeShift && activeShift.status === 'open' ? 'bg-[#151c2f] text-white hover:bg-[#0f1422]' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20'"
           >
-            {{ activeShift && activeShift.status === 'open' ? 'Smena Yopish' : (activeShift?.status === 'closed' ? 'Smena Hisoboti' : 'Smena Ochish') }}
+            {{ activeShift && activeShift.status === 'open' ? $t('pos.close_shift') : (activeShift?.status === 'closed' ? $t('pos.shift_report') : $t('pos.open_shift')) }}
           </button>
         </div>
       </div>
@@ -109,13 +109,13 @@
          <i class="pi pi-lock text-4xl text-slate-200 dark:text-slate-800"></i>
       </div>
       <div class="text-center mt-12 space-y-4 max-w-sm px-6">
-        <h2 class="text-2xl font-black text-slate-800 dark:text-white font-outfit tracking-tighter">Terminal Yopilgan</h2>
-        <p class="text-slate-400 font-medium text-sm">Savdoni boshlash uchun avval yangi smena ochishingiz lozim.</p>
+        <h2 class="text-2xl font-black text-slate-800 dark:text-white font-outfit tracking-tighter">{{ $t('pos.terminal_closed') }}</h2>
+        <p class="text-slate-400 font-medium text-sm">{{ $t('pos.need_to_open_shift') }}</p>
         <button 
           @click="showShiftModal = true"
           class="inline-block px-10 py-5 bg-emerald-500 text-white rounded-2xl font-black text-[13px] tracking-widest shadow-2xl shadow-emerald-500/40 hover:bg-emerald-600 transition-all active:scale-95"
         >
-          Smena Ochish
+          {{ $t('pos.open_shift') }}
         </button>
       </div>
     </div>
@@ -179,6 +179,7 @@
   
   <script setup>
   import { ref, onMounted, onBeforeUnmount } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { usePOS } from '@/composables/usePOS'
   import { useAuthStore } from '@/store/auth'
   import { useSettingsStore } from '@/store/settings'
@@ -193,6 +194,7 @@
   const authStore = useAuthStore()
   const settingsStore = useSettingsStore()
   const toast = useToast()
+  const { t } = useI18n()
   
   const {
     activeShift,
@@ -240,7 +242,7 @@
       link.remove()
       window.URL.revokeObjectURL(url)
     } catch (error) {
-      toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Hisobotni yuklab bo\'lmadi', life: 3000 })
+      toast.add({ severity: 'error', summary: t('common.error'), detail: t('pos.report_download_error'), life: 3000 })
     }
   }
 

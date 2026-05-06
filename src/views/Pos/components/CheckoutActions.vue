@@ -4,7 +4,7 @@
       @click="$emit('cancel')"
       class="flex-1 py-4 px-4 rounded-2xl font-black text-[11px] tracking-widest text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 transition-all active:scale-95"
     >
-      Bekor qilish
+      {{ $t('common.cancel') }}
     </button>
     <button 
       @click="$emit('confirm')"
@@ -16,7 +16,7 @@
     >
       <div class="flex items-center justify-center gap-2 relative z-10">
         <i v-if="loading" class="pi pi-spin pi-spinner text-xs"></i>
-        <span>{{ loading ? '...' : 'SOTISH' }}</span>
+        <span>{{ loading ? '...' : $t('pos.sell') }}</span>
         <i v-if="!loading" class="pi pi-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
       </div>
       <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer"></div>

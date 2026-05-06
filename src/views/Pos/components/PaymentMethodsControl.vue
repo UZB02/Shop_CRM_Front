@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-3">
-    <label class="text-[10px] font-black text-slate-400 dark:text-slate-600 tracking-widest ml-1">To'lov usuli</label>
+    <label class="text-[10px] font-black text-slate-400 dark:text-slate-600 tracking-widest ml-1">{{ $t('pos.payment_method') }}</label>
     <div class="flex p-1 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-100 dark:border-slate-800/50 gap-1 overflow-x-auto no-scrollbar">
       <button 
         v-for="method in methods" 
@@ -14,7 +14,7 @@
         ]"
       >
         <i :class="method.icon" class="text-[12px]"></i>
-        {{ method.label }}
+        {{ $t('common.' + method.id) }}
       </button>
     </div>
   </div>

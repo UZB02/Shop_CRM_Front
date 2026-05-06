@@ -28,9 +28,9 @@
     <!-- Compact Header -->
     <div class="flex items-center justify-between mb-6">
       <div class="flex flex-col">
-        <h2 class="text-xl font-black text-slate-800 dark:text-white font-outfit m-0 tracking-tight leading-none">Joriy Savdo</h2>
+        <h2 class="text-xl font-black text-slate-800 dark:text-white font-outfit m-0 tracking-tight leading-none">{{ $t('pos.current_sale') }}</h2>
         <span class="text-[11px] font-black text-slate-400 dark:text-slate-600 tracking-widest mt-1.5 opacity-60">
-          {{ cart.length }} ta mahsulot savatchada
+          {{ cart.length }} {{ $t('pos.items_in_cart') }}
         </span>
       </div>
       <button 
@@ -49,7 +49,7 @@
          <div class="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center mb-5">
             <i class="pi pi-shopping-bag text-2xl text-slate-300 dark:text-slate-700"></i>
          </div>
-         <h3 class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-[0.2em] mb-2 font-outfit">Savat bo'sh</h3>
+         <h3 class="text-[12px] font-black text-slate-800 dark:text-slate-200 tracking-[0.2em] mb-2 font-outfit">{{ $t('pos.cart_empty') }}</h3>
       </div>
 
       <div v-else class="space-y-2.5">
@@ -108,10 +108,10 @@
     <!-- Sticky Footer: Total + Checkout -->
     <div class="flex-shrink-0 px-6 pb-6 pt-4 border-t border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0b0f1a]">
       <div class="flex items-center justify-between px-1 mb-4">
-        <span class="text-[12px] font-black text-slate-400 dark:text-slate-700 tracking-widest">JAMI:</span>
+        <span class="text-[12px] font-black text-slate-400 dark:text-slate-700 tracking-widest">{{ $t('pos.total_caps') }}</span>
         <div class="flex items-baseline gap-1.5 text-right">
            <span class="text-2xl font-black text-emerald-500 font-outfit ">{{ settingsStore.formatNumber(totals.finalTotal) }}</span>
-           <span class="text-[10px] font-black text-slate-300 dark:text-slate-700 tracking-widest">{{ (totals.currency || settingsStore.currency) === 'UZS' ? "so'm" : (totals.currency || settingsStore.currency) }}</span>
+           <span class="text-[10px] font-black text-slate-300 dark:text-slate-700 tracking-widest">{{ (totals.currency || settingsStore.currency) === 'UZS' ? $t('pos.currency_uzs') : (totals.currency || settingsStore.currency) }}</span>
         </div>
       </div>
 
@@ -120,7 +120,7 @@
         :disabled="cart.length === 0"
         class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white font-black text-[12px] tracking-[0.2em] shadow-xl shadow-emerald-500/10 transition-all active:scale-95 flex items-center justify-center gap-2"
       >
-        <span>TO'LOVGA O'TISH</span>
+        <span>{{ $t('pos.proceed_to_checkout') }}</span>
         <i class="pi pi-chevron-right text-[10px]"></i>
       </button>
     </div><!-- end footer -->

@@ -3,7 +3,7 @@
     :visible="visible" 
     @update:visible="$emit('update:visible', $event)"
     modal 
-    :header="isClosing ? 'Smenani yopish' : 'Yangi smena ochish'" 
+    :header="isClosing ? $t('pos.close_shift') : $t('pos.open_new_shift')" 
     :style="{ width: '400px' }"
     class="shift-dialog"
   >
@@ -14,14 +14,14 @@
           <i class="pi pi-briefcase text-2xl" :class="isClosing ? 'text-rose-500' : 'text-emerald-500'"></i>
         </div>
         <p class="text-xs text-slate-500 font-bold tracking-widest text-center">
-           {{ isClosing ? "Kassa hisob-kitobi" : "Kassani tayyorlash" }}
+           {{ isClosing ? $t('pos.cash_calculation') : $t('pos.prepare_cash_register') }}
         </p>
       </div>
 
       <!-- Opening Shift Inputs -->
       <div v-if="!isClosing" class="space-y-4">
         <div class="space-y-1.5">
-          <label class="text-[13px] font-bold text-slate-400 ml-1">Boshlang'ich kassa (Naqd)</label>
+          <label class="text-[13px] font-bold text-slate-400 ml-1">{{ $t('pos.starting_cash') }}</label>
           <InputNumber 
             v-model="cashStart" 
             class="w-full sr-input"
@@ -33,7 +33,7 @@
         <div class="p-3 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-500/10 flex items-center gap-3">
           <i class="pi pi-info-circle text-emerald-500"></i>
           <span class="text-[12px] font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">
-            Smena joriy filialda ({{ authStore.user?.branch_name || authStore.user?.worker?.branch_name || 'Tanlanmagan' }}) ochiladi
+            {{ $t('pos.shift_opened_in_branch', { branch: authStore.user?.branch_name || authStore.user?.worker?.branch_name || $t('pos.unselected') }) }}
           </span>
         </div>
       </div>
@@ -43,15 +43,15 @@
         <!-- Shift Meta Info -->
         <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2.5">
            <div class="flex justify-between items-center text-[12px] font-black tracking-wider">
-             <span class="text-slate-400">Smena ID / Holati</span>
+             <span class="text-slate-400">{{ $t('pos.shift_id_status') }}</span>
              <div class="flex items-center gap-2">
                <span class="text-slate-800 dark:text-white">#{{ shift?.id }}</span>
                <span :class="shift?.status === 'open' ? 'bg-emerald-500' : 'bg-slate-500'" class="w-1.5 h-1.5 rounded-full shadow-pulse"></span>
-               <span :class="shift?.status === 'open' ? 'text-emerald-500' : 'text-slate-500'">{{ (shift?.status === 'open' ? 'OCHIQ' : 'YOPILGAN') }}</span>
+               <span :class="shift?.status === 'open' ? 'text-emerald-500' : 'text-slate-500'">{{ (shift?.status === 'open' ? $t('pos.open_caps') : $t('pos.closed_caps')) }}</span>
              </div>
            </div>
            <div class="flex justify-between items-center text-[12px] font-black tracking-wider">
-             <span class="text-slate-400">Ochilgan vaqt:</span>
+             <span class="text-slate-400">{{ $t('pos.opened_time') }}</span>
              <span class="text-slate-800 dark:text-white">{{ formatDate(shift?.opened_at || shift?.start_time || shift?.created_at) }}</span>
            </div>
         </div>
@@ -60,13 +60,13 @@
         <!-- Summary Cards -->
         <div class="grid grid-cols-2 gap-3">
           <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">Yakuniy Kassa</span>
+            <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">{{ $t('pos.final_cash') }}</span>
             <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
               {{ formatCurrency(displayCash) }}
             </span>
           </div>
           <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">Naqd Qoldiq</span>
+            <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">{{ $t('pos.cash_balance') }}</span>
             <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
               {{ formatCurrency(xReport?.net_income || shift?.net_income) }}
             </span>
@@ -78,20 +78,20 @@
            <!-- Correct Cash -->
            <div v-if="parseFloat(shift.cash_difference || 0) === 0" class="flex items-center gap-3 p-3.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl">
               <i class="pi pi-check-circle text-emerald-500 text-lg"></i>
-              <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">✅ Kassa to'g'ri (Farq yo'q)</span>
+              <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">✅ {{ $t('pos.cash_correct_no_diff') }}</span>
            </div>
            <!-- Shortage (Kamomad) -->
            <div v-else-if="parseFloat(shift.cash_difference || 0) < 0" class="flex items-center gap-3 p-3.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-500/20 rounded-2xl">
               <i class="pi pi-exclamation-triangle text-rose-500 text-lg"></i>
               <span class="text-[12px] font-black text-rose-600 dark:text-rose-400 tracking-wider leading-tight">
-                ⚠️ Kassir {{ formatCurrency(Math.abs(shift.cash_difference)) }} kam
+                ⚠️ {{ $t('pos.cashier_shortage', { amount: formatCurrency(Math.abs(shift.cash_difference)) }) }}
               </span>
            </div>
            <!-- Extra (Ortiqcha) -->
            <div v-else class="flex items-center gap-3 p-3.5 bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-500/20 rounded-2xl">
               <i class="pi pi-info-circle text-amber-500 text-lg"></i>
               <span class="text-[12px] font-black text-amber-600 dark:text-amber-400 tracking-wider leading-tight">
-                ℹ️ Kassir {{ formatCurrency(shift.cash_difference) }} ortiqcha
+                ℹ️ {{ $t('pos.cashier_surplus', { amount: formatCurrency(shift.cash_difference) }) }}
               </span>
            </div>
         </div>
@@ -99,9 +99,9 @@
         <!-- Money Input (Only if open and trying to close) -->
         <div v-if="shift?.status === 'open'" class="space-y-2 animate-fadein">
           <div class="flex items-center justify-between ml-1 mb-1">
-            <label class="text-[12px] font-black text-slate-400 tracking-widest block">Kassada sanalgan pul</label>
+            <label class="text-[12px] font-black text-slate-400 tracking-widest block">{{ $t('pos.counted_cash_in_register') }}</label>
             <span v-if="settingsStore.requireCashCount" class="text-[10px] font-black text-rose-500 tracking-tighter bg-rose-50 dark:bg-rose-950/20 px-1.5 py-0.5 rounded-md border border-rose-100 dark:border-rose-800/30 animate-pulse">
-              Majburiy
+              {{ $t('common.required') }}
             </span>
           </div>
           <InputNumber 
@@ -120,7 +120,7 @@
           @click="$emit('update:visible', false)"
           class="flex-1 py-4 px-4 rounded-2xl font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 transition-all hover:bg-slate-200"
         >
-          {{ shift?.status === 'closed' ? 'Yopish' : 'Bekor qilish' }}
+          {{ shift?.status === 'closed' ? $t('common.close') : $t('common.cancel') }}
         </button>
         
         <!-- Case: Success / Download for closed shift -->
@@ -130,7 +130,7 @@
           class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl bg-[#151c2f] hover:bg-[#0f1422] shadow-slate-400/20"
         >
            <i class="pi pi-download mr-2"></i>
-           Yuklab olish
+           {{ $t('common.download') }}
         </button>
 
         <!-- Case: Action for opening/closing -->
@@ -144,7 +144,7 @@
           ]"
         >
            <i v-if="loading" class="pi pi-spin pi-spinner mr-2"></i>
-           {{ isClosing ? 'Smenani yopish' : 'Smenani ochish' }}
+           {{ isClosing ? $t('pos.close_shift') : $t('pos.open_shift') }}
         </button>
       </div>
     </div>

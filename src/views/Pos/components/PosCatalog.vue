@@ -63,7 +63,7 @@
             <!-- Diagonal Low Stock Label -->
             <div v-if="product.displayQuantity !== undefined && product.displayQuantity > 0 && product.displayQuantity <= 5" 
                  class="absolute -top-1 -right-8 w-24 h-10 bg-orange-500 text-white flex items-center justify-center rotate-45 shadow-lg z-10">
-              <span class="text-[9px] font-black tracking-widest mt-3">Kam qoldi</span>
+              <span class="text-[9px] font-black tracking-widest mt-3">{{ $t('pos.low_stock') }}</span>
             </div>
 
             <!-- Promotion Badge -->
@@ -106,10 +106,10 @@
                   
                   <!-- Stock Details instead of Unit -->
                   <span v-if="product.displayQuantity > 0" class="text-[11px] font-black tracking-widest mt-1 text-slate-500 dark:text-slate-400">
-                    Qoldiq: <span class="text-orange-500">{{ product.displayQuantity }} {{ product.unit_display || product.unit }}</span>
+                    {{ $t('pos.remaining_stock') }} <span class="text-orange-500">{{ product.displayQuantity }} {{ product.unit_display || product.unit }}</span>
                   </span>
                   <span v-else class="text-[11px] font-black tracking-widest mt-1 text-rose-500">
-                    Omborda tugagan
+                    {{ $t('pos.out_of_stock') }}
                   </span>
                 </div>
               </div>
@@ -122,6 +122,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { productsAPI, categoriesAPI, branchesAPI } from '@/services/api'
 import { useAuthStore } from '@/store/auth'
 import { useSettingsStore } from '@/store/settings'
@@ -132,6 +133,7 @@ const emit = defineEmits(['add-to-cart', 'focus-barcode'])
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 const products = ref([])
 
 const handleProductClick = async (product) => {
@@ -192,7 +194,7 @@ const fetchCategories = async () => {
   try {
     const res = await categoriesAPI.getAll()
     const rawCats = res.data.results || res.data
-    categories.value = [{ id: 'all', name: 'All' }, ...rawCats]
+    categories.value = [{ id: 'all', name: t('common.all') }, ...rawCats]
   } catch (error) { console.error('Categories Error:', error) }
 }
 

@@ -18,8 +18,8 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800/60 flex-shrink-0">
           <div>
-            <span class="text-[11px] font-black tracking-[0.22em] text-slate-400 dark:text-slate-600 block">To'lov</span>
-            <h2 class="text-[1rem] font-black text-slate-900 dark:text-white font-outfit tracking-tight leading-tight m-0">Savdoni yakunlash</h2>
+            <span class="text-[11px] font-black tracking-[0.22em] text-slate-400 dark:text-slate-600 block">{{ $t('pos.payment') }}</span>
+            <h2 class="text-[1rem] font-black text-slate-900 dark:text-white font-outfit tracking-tight leading-tight m-0">{{ $t('pos.complete_sale') }}</h2>
           </div>
           <button
             @click="$emit('update:visible', false)"
@@ -34,10 +34,10 @@
           <div class="absolute inset-0 dark:block hidden" style="background:radial-gradient(circle at 80% 20%,rgba(16,185,129,.22) 0%,transparent 60%)" />
           <div class="absolute inset-0 block dark:hidden" style="background:radial-gradient(circle at 20% 80%,rgba(255,255,255,0.15) 0%,transparent 55%)" />
           <div class="relative px-5 py-2.5 text-center">
-            <p class="text-[9px] font-black tracking-[0.2em] text-white/70 mb-0.5 m-0 leading-none">Jami to'lanishi lozim</p>
+            <p class="text-[9px] font-black tracking-[0.2em] text-white/70 mb-0.5 m-0 leading-none">{{ $t('pos.total_to_pay') }}</p>
             <div class="flex items-baseline justify-center gap-1.5">
               <span class="text-3xl font-black text-white font-outfit tracking-tight leading-none">{{ settingsStore.formatNumber(total) }}</span>
-              <span class="text-[11px] font-black text-white/60">{{ (currencyCode || settingsStore.currency) === 'UZS' ? "so'm" : (currencyCode || settingsStore.currency) }}</span>
+              <span class="text-[11px] font-black text-white/60">{{ (currencyCode || settingsStore.currency) === 'UZS' ? $t('pos.currency_uzs') : (currencyCode || settingsStore.currency) }}</span>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
 
           <!-- Payment Methods -->
           <div class="flex flex-col gap-1.5">
-            <label class="lbl">To'lov usuli</label>
+            <label class="lbl">{{ $t('pos.payment_method') }}</label>
             <div class="grid grid-cols-4 gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
               <button
                 v-for="m in methods"
@@ -59,7 +59,7 @@
                   : 'text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400'"
               >
                 <i :class="m.icon" class="text-[15px] leading-none" />
-                <span class="text-[11px] font-black tracking-wide leading-none">{{ m.label }}</span>
+                <span class="text-[11px] font-black tracking-wide leading-none">{{ $t('common.' + m.id) }}</span>
               </button>
             </div>
           </div>
@@ -67,18 +67,18 @@
           <!-- Chegirma miqdori (Barcha to'lov turlari uchun) -->
           <div v-if="allowDiscount" class="flex flex-col gap-1.5 animate-fadein">
             <div class="flex items-center justify-between">
-              <label class="lbl">Chegirma miqdori</label>
+              <label class="lbl">{{ $t('pos.discount_amount') }}</label>
               <div class="flex items-center gap-2">
                 <!-- Max limit badge -->
                 <span v-if="maxDiscountPct > 0"
                   class="text-[11px] font-black tracking-widest px-1.5 py-0.5 rounded-md"
                   :class="isDiscountValid ? 'bg-slate-100 dark:bg-slate-800 text-slate-400' : 'bg-rose-100 dark:bg-rose-900/20 text-rose-500'"
                 >
-                  Max: {{ maxDiscountPct }}%
+                  {{ $t('pos.max_discount') }} {{ maxDiscountPct }}%
                 </span>
                 <button @click="discountAmount = 0"
                   class="text-[11px] font-black text-slate-400 hover:text-slate-500 tracking-widest transition-colors">
-                  × Tozalash
+                  {{ $t('common.clear') }}
                 </button>
               </div>
             </div>
@@ -100,14 +100,14 @@
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-100 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
               <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">
-                Chegirma limitdan oshdi! Maksimal: {{ settingsStore.formatPrice(maxDiscountAmount) }} ({{ maxDiscountPct }}%)
+                {{ $t('pos.discount_limit_exceeded') }} {{ settingsStore.formatPrice(maxDiscountAmount) }} ({{ maxDiscountPct }}%)
               </span>
             </div>
             <!-- Yakuniy to'lanadigan summa (Chegirma berilsa chiqadi, Nasiyadan tashqari) -->
             <div v-if="discountAmount > 0 && paymentType !== 'debt'"
               class="flex items-center justify-between px-3.5 py-3 rounded-2xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 animate-fadein">
               <div>
-                <span class="text-[10px] font-black tracking-widest block opacity-80">To'lanishi kerak</span>
+                <span class="text-[10px] font-black tracking-widest block opacity-80">{{ $t('pos.amount_to_pay') }}</span>
                 <span class="text-xl font-black font-outfit leading-none">{{ settingsStore.formatPrice(paidAmount, currencyCode) }}</span>
               </div>
               <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -118,7 +118,7 @@
             <div v-if="discountAmount > total"
               class="mt-1 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-100 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Chegirma jami summadan oshib ketmoqda!</span>
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">{{ $t('pos.discount_exceeds_total') }}</span>
             </div>
           </div>
 
@@ -126,11 +126,11 @@
           <div v-if="paymentType === 'debt'" class="flex flex-col gap-3 mt-1 animate-fadein">
              <div class="grid grid-cols-2 gap-2">
                <div class="flex flex-col gap-1">
-                 <label class="lbl">Naqd pul</label>
+                 <label class="lbl">{{ $t('pos.cash') }}</label>
                  <InputNumber v-model="debtCashAmount" class="w-full co-amount-input-sm" :min="0" :use-grouping="true" />
                </div>
                <div class="flex flex-col gap-1">
-                 <label class="lbl">Plastik karta</label>
+                 <label class="lbl">{{ $t('pos.card') }}</label>
                  <InputNumber v-model="debtCardAmount" class="w-full co-amount-input-sm" :min="0" :use-grouping="true" />
                </div>
              </div>
@@ -138,7 +138,7 @@
              <!-- Debt Summary -->
              <div class="flex items-center justify-between px-3.5 py-3 rounded-2xl bg-rose-500 text-white shadow-lg shadow-rose-500/20">
                <div>
-                 <span class="text-[10px] font-black tracking-widest block opacity-80">Mijoz qarzi bo'ladi</span>
+                 <span class="text-[10px] font-black tracking-widest block opacity-80">{{ $t('pos.customer_debt_will_be') }}</span>
                   <span class="text-xl font-black font-outfit leading-none">{{ settingsStore.formatPrice(remainingDebt, currencyCode) }}</span>
                </div>
                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -151,7 +151,7 @@
           <div v-if="paymentType === 'mixed'" class="flex flex-col gap-2 animate-fadein">
             <div class="grid grid-cols-2 gap-2">
               <div class="flex flex-col gap-1">
-                <label class="lbl">Naqd pul</label>
+                <label class="lbl">{{ $t('pos.cash') }}</label>
                 <div :class="isCashOverflow ? 'co-input-error' : ''">
                   <InputNumber
                     v-model="cashAmount"
@@ -162,7 +162,7 @@
                 </div>
               </div>
               <div class="flex flex-col gap-1">
-                <label class="lbl">Plastik karta</label>
+                <label class="lbl">{{ $t('pos.card') }}</label>
                 <div :class="isCardOverflow ? 'co-input-error' : ''">
                   <InputNumber
                     v-model="cardAmount"
@@ -178,27 +178,27 @@
             <div v-if="isCashOverflow && !isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Naqd pul jami summadan oshib ketmoqda!</span>
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">{{ $t('pos.cash_exceeds_total') }}</span>
             </div>
 
             <!-- Plastik karta alohida oshib ketsa -->
             <div v-if="isCardOverflow && !isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Plastik karta jami summadan oshib ketmoqda!</span>
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">{{ $t('pos.card_exceeds_total') }}</span>
             </div>
 
             <!-- Yig'indi oshib ketsa -->
             <div v-if="isSumOverflow"
               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
-              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">Kiritilgan jami summa to'lanadigan miqdordan oshib ketmoqda!</span>
+              <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">{{ $t('pos.total_entered_exceeds') }}</span>
             </div>
 
             <div class="flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-dashed"
               :class="isMixedValid ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40' : isSumOverflow ? 'bg-rose-50 dark:bg-rose-950/10 border-rose-200 dark:border-rose-800/30' : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800'">
               <div>
-                <span class="text-[11px] font-black tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">Jami kiritildi</span>
+                <span class="text-[11px] font-black tracking-widest block" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">{{ $t('pos.total_entered') }}</span>
                 <span class="text-base font-black font-outfit" :class="isMixedValid ? 'text-emerald-600 dark:text-emerald-400' : isSumOverflow ? 'text-rose-500 dark:text-rose-400' : 'text-slate-400'">{{ settingsStore.formatPrice(cashAmount + cardAmount, currencyCode) }}</span>
               </div>
               <div class="w-7 h-7 rounded-full flex items-center justify-center"
@@ -212,7 +212,7 @@
           <div v-if="paymentType === 'debt'" class="animate-fadein">
             <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/10 border border-amber-200 dark:border-amber-800/20">
               <i class="pi pi-info-circle text-amber-500 text-sm flex-shrink-0" />
-              <span class="text-[11px] font-black text-amber-600 dark:text-amber-400 tracking-widest leading-relaxed">Nasiyada qoldirilyapti — mijoz tanlash majburiy</span>
+              <span class="text-[11px] font-black text-amber-600 dark:text-amber-400 tracking-widest leading-relaxed">{{ $t('pos.debt_customer_required_info') }}</span>
             </div>
           </div>
 
@@ -223,13 +223,13 @@
           <div class="flex flex-col gap-1.5">
             <div class="flex items-center justify-between">
               <label class="lbl" :class="paymentType === 'debt' ? '!text-rose-500' : ''">
-                Mijoz
-                <span v-if="paymentType === 'debt'" class="text-rose-400 ml-1">(Majburiy)</span>
-                <span v-else class="text-slate-300 dark:text-slate-700 ml-1">(Ixtiyoriy)</span>
+                {{ $t('pos.customer') }}
+                <span v-if="paymentType === 'debt'" class="text-rose-400 ml-1">({{ $t('common.required') }})</span>
+                <span v-else class="text-slate-300 dark:text-slate-700 ml-1">({{ $t('common.optional') }})</span>
               </label>
               <button v-if="selectedCustomer" @click="$emit('update:selected-customer', null)"
                 class="text-[11px] font-black text-slate-400 hover:text-slate-500 tracking-widest transition-colors">
-                × Olib tashlash
+                {{ $t('common.remove') }}
               </button>
             </div>
             <div class="relative">
@@ -239,7 +239,7 @@
                 @update:model-value="$emit('update:selected-customer', $event)"
                 :options="customers"
                 option-label="name"
-                placeholder="Mijozni tanlang..."
+                :placeholder="$t('pos.select_customer')"
                 filter
                 showClear
                 @filter="$emit('search-customers', $event.value)"
@@ -257,14 +257,14 @@
             <div v-if="paymentType === 'debt' && !selectedCustomer"
               class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-800/30">
               <i class="pi pi-user-minus text-rose-500 text-xs" />
-              <span class="text-[11px] font-black text-rose-500 tracking-widest">Nasiya uchun mijoz tanlash majburiy!</span>
+              <span class="text-[11px] font-black text-rose-500 tracking-widest">{{ $t('pos.debt_customer_required') }}</span>
             </div>
           </div>
 
           <!-- Note -->
           <div class="flex flex-col gap-1.5">
-            <label class="lbl">Izoh <span class="normal-case font-medium tracking-normal text-slate-300 dark:text-slate-700">(ixtiyoriy)</span></label>
-            <textarea v-model="description" class="co-textarea" placeholder="Savdo haqida qo'shimcha ma'lumot..." rows="2" />
+            <label class="lbl">{{ $t('common.note') }} <span class="normal-case font-medium tracking-normal text-slate-300 dark:text-slate-700">({{ $t('common.optional') }})</span></label>
+            <textarea v-model="description" class="co-textarea" :placeholder="$t('pos.sale_additional_info')" rows="2" />
           </div>
 
         </div>
@@ -274,7 +274,7 @@
           <button
             @click="$emit('update:visible', false)"
             class="flex-shrink-0 px-4 py-3 rounded-xl font-black text-[8.5px] tracking-widest text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
-          >Bekor</button>
+          >{{ $t('common.cancel') }}</button>
           <button
             @click="handleConfirm"
             :disabled="!isValid || loading"
@@ -283,8 +283,8 @@
               ? 'bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/25'
               : 'bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed'"
           >
-            <template v-if="loading"><i class="pi pi-spin pi-spinner text-sm" /><span>Jarayonda...</span></template>
-            <template v-else><i class="pi pi-check-circle text-sm" /><span>Sotishni tasdiqlash</span></template>
+            <template v-if="loading"><i class="pi pi-spin pi-spinner text-sm" /><span>{{ $t('common.processing') }}</span></template>
+            <template v-else><i class="pi pi-check-circle text-sm" /><span>{{ $t('pos.confirm_sale') }}</span></template>
           </button>
         </div>
       </div>
