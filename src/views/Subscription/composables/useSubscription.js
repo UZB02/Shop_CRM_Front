@@ -26,6 +26,12 @@ export const useSubscription = () => {
     const selectedPlanId = ref(null)
     const paymentMethod = ref('click')
     const isExtending = ref(false)
+    
+    // Billing specific states
+    const loadingBilling = ref(false)
+    const invoices = ref([])
+    const currentBalance = ref(0)
+    const balanceTransactions = ref([])
 
     const availablePlans = computed(() => subscription.value.plans || [])
 
@@ -61,6 +67,47 @@ export const useSubscription = () => {
             })
         } finally {
             loading.value = false
+        }
+    }
+
+    const loadBalanceData = async () => {
+        try {
+            const balanceRes = await subscriptionAPI.getBalance().catch(e => {
+                console.error('Balance load error:', e);
+                return { data: {} };
+            });
+            const balData = balanceRes?.data || {}
+            currentBalance.value = balData.balance || balData.current_balance || 0
+            balanceTransactions.value = balData.transactions || balData.results || []
+        } catch (error) {
+            console.error('Error loading balance:', error)
+        }
+    }
+
+    const loadBillingData = async () => {
+        loadingBilling.value = true
+        try {
+            const [invoicesRes] = await Promise.all([
+                subscriptionAPI.getInvoices().catch(e => {
+                    console.error('Invoices load error:', e);
+                    return { data: { results: [] } };
+                })
+            ])
+            
+            invoices.value = invoicesRes?.data?.results || invoicesRes?.data || []
+            
+            // We load balance globally, but if needed, we can also refresh it here
+            await loadBalanceData();
+        } catch (error) {
+            console.error('Error loading billing data:', error)
+            toast.add({ 
+                severity: 'error', 
+                summary: t('common.error'), 
+                detail: t('common.error_message'), 
+                life: 5000 
+            })
+        } finally {
+            loadingBilling.value = false
         }
     }
 
@@ -158,7 +205,13 @@ export const useSubscription = () => {
         confirmChangePlan,
         openExtendDialog,
         processPayment,
-        getPlanFeatures
+        getPlanFeatures,
+        loadingBilling,
+        invoices,
+        currentBalance,
+        balanceTransactions,
+        loadBillingData,
+        loadBalanceData
     }
 }
 

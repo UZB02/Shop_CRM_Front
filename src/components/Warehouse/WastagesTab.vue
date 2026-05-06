@@ -48,6 +48,8 @@
                 <th class="px-4 py-3 text-[12px] font-bold text-slate-400 tracking-widest w-12">№</th>
                 <th class="px-4 py-3 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.col_product') }}</th>
                 <th class="px-4 py-3 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
+                <th class="px-4 py-3 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.col_price') }}</th>
+                <th class="px-4 py-3 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.all') }}</th>
                 <th class="px-4 py-3 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.wastage.reason_label') }}</th>
                 <th class="px-4 py-3 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
                 <th class="px-4 py-3 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
@@ -70,6 +72,12 @@
                   <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold text-[12px]">
                     {{ item.quantity }}
                   </span>
+                </td>
+                <td class="px-4 py-3 text-right text-[12px] text-slate-500 dark:text-slate-400">
+                  {{ Number(item.unit_cost || 0).toLocaleString() }}
+                </td>
+                <td class="px-4 py-3 text-right font-black text-slate-800 dark:text-slate-100 text-[12px]">
+                  {{ Number(item.total_cost || 0).toLocaleString() }}
                 </td>
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-1.5">
@@ -142,6 +150,14 @@
           <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
             <p class="text-[11px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('products.form.amount') }}</p>
             <p class="text-xs font-bold text-rose-500">{{ selectedItem.quantity }} {{ selectedItem.product_unit }}</p>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+            <p class="text-[11px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('products.col_price') }}</p>
+            <p class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ Number(selectedItem.unit_cost || 0).toLocaleString() }}</p>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+            <p class="text-[11px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('common.all') }}</p>
+            <p class="text-xs font-black text-slate-800 dark:text-slate-100">{{ Number(selectedItem.total_cost || 0).toLocaleString() }}</p>
           </div>
           <div class="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
             <p class="text-[11px] font-bold text-slate-400 tracking-widest mb-1">{{ $t('warehouse.wastage.reason_label') }}</p>

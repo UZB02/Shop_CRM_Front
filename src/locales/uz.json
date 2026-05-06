@@ -172,7 +172,13 @@
       "billing": "To'lovlar"
     },
     "faq": "Ko'p so'raladigan savollar",
-    "export_history": "Excelga yuklash"
+    "export_history": "Excelga yuklash",
+    "current_balance": "Joriy balans",
+    "topup": "To'ldirish",
+    "transactions": "O'tkazmalar tarixi",
+    "no_transactions": "O'tkazmalar mavjud emas",
+    "invoices": "Cheklar",
+    "no_invoices": "Cheklar mavjud emas"
   },
   "workers": {
     "title": "Xodimlar",
