@@ -46,7 +46,7 @@
         <span class="text-[10px] font-bold text-slate-400">~{{ formatPrice(sales.avg_check) }}</span>
       </div>
       <!-- Return stats -->
-      <div v-if="sales.return_stats?.count" class="flex items-center justify-between text-[10px] font-black">
+      <div v-if="settingsStore.isSaleReturnEnabled && sales.return_stats?.count" class="flex items-center justify-between text-[10px] font-black">
         <span class="text-rose-400">{{ sales.return_stats.count }} qaytarish</span>
         <span :class="['px-1.5 py-0.5 rounded-md', sales.return_stats.return_rate > 5 ? 'bg-rose-500/10 text-rose-500' : 'bg-slate-100 dark:bg-slate-800 text-slate-500']">
           {{ sales.return_stats.return_rate }}%
@@ -110,7 +110,7 @@
         <p class="text-[10px] font-bold text-slate-400 mt-1">Savat: {{ products.avg_items_per_sale }} ta/sotuv</p>
       </div>
 
-      <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
+      <div v-if="settingsStore.isWastageEnabled" class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
         <span class="text-[11px] font-black text-slate-500">Isrof: <span class="text-orange-500">{{ formatPrice(products.wastage_total) }}</span></span>
       </div>
     </div>

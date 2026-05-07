@@ -35,7 +35,7 @@
               <i class="pi pi-receipt mr-2 !text-[11px]"></i>
               Savdolar
             </Tab>
-            <Tab value="returns" class="!text-[12px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
+            <Tab v-if="settingsStore.isSaleReturnEnabled" value="returns" class="!text-[12px] !font-bold !!tracking-widest !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
               <i class="pi pi-refresh mr-2 !text-[11px]"></i>
               Qaytarishlar
             </Tab>
@@ -78,7 +78,7 @@
           </TabPanel>
 
           <!-- Tab: Returns -->
-          <TabPanel value="returns">
+          <TabPanel v-if="settingsStore.isSaleReturnEnabled" value="returns">
             <ReturnTable 
               :returns="returns"
               :loading="returnLoading"

@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <!-- Ombor summary KPIs -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4" :class="{'lg:grid-cols-3': settingsStore.isWastageEnabled}">
       <!-- Ombor Kapitali -->
       <div class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 transition-all hover:shadow-md">
         <div class="flex items-center justify-between">
@@ -14,7 +14,7 @@
       </div>
 
       <!-- Isrof -->
-      <div class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 transition-all hover:shadow-md">
+      <div v-if="settingsStore.isWastageEnabled" class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 transition-all hover:shadow-md">
         <div class="flex items-center justify-between">
           <span class="text-[10px] sm:text-[11px] font-black text-slate-400 tracking-[0.2em]">Isrof</span>
           <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500">
@@ -25,7 +25,8 @@
       </div>
 
       <!-- Defitsit -->
-      <div :class="['p-3 sm:p-4 rounded-xl sm:rounded-2xl border shadow-sm flex flex-col gap-2 transition-all hover:shadow-md sm:col-span-2 lg:col-span-1',
+      <div :class="['p-3 sm:p-4 rounded-xl sm:rounded-2xl border shadow-sm flex flex-col gap-2 transition-all hover:shadow-md',
+                    settingsStore.isWastageEnabled ? 'sm:col-span-2 lg:col-span-1' : '',
                     lowStockCount > 0
                       ? 'bg-rose-50 dark:bg-rose-500/5 border-rose-200 dark:border-rose-500/20'
                       : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800']">

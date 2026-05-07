@@ -125,7 +125,7 @@
         <p class="text-[11px] font-black text-slate-400 tracking-widest">Tizim holati: Barcha modullar ishlamoqda</p>
       </div>
       <div class="flex items-center gap-4">
-        <div v-if="smenaPolling" class="flex items-center gap-1.5 text-[11px] font-black text-emerald-500 tracking-widest">
+        <div v-if="settingsStore.isShiftEnabled && smenaPolling" class="flex items-center gap-1.5 text-[11px] font-black text-emerald-500 tracking-widest">
           <span class="w-1 h-1 rounded-full bg-emerald-500 animate-ping"></span>
           Smena live
         </div>
@@ -140,6 +140,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useDashboardStore } from '@/store/dashboard'
+import { useSettingsStore } from '@/store/settings'
 
 // Components
 import DashboardHeader       from './components/DashboardHeader.vue'
@@ -152,6 +153,7 @@ import DashboardMonthlyChart from './components/DashboardMonthlyChart.vue'
 import DashboardFinance      from './components/DashboardFinance.vue'
 
 const dashboardStore = useDashboardStore()
+const settingsStore = useSettingsStore()
 
 // Polling: only current_smena refreshes every 5 min (not entire dashboard)
 // Full dashboard only refreshes on filter change or manual refresh
@@ -185,11 +187,13 @@ const formatTime = (date) => {
 onMounted(async () => {
   await dashboardStore.fetchDashboard()
   
-  // Only poll current_smena every 5 minutes (lightweight), not the full dashboard
-  smenaPolling.value = true
-  smenaInterval = setInterval(() => {
-    dashboardStore.fetchCurrentSmena()
-  }, 5 * 60 * 1000)
+  // Only poll current_smena every 5 minutes (lightweight) if shifts are enabled
+  if (settingsStore.isShiftEnabled) {
+    smenaPolling.value = true
+    smenaInterval = setInterval(() => {
+      dashboardStore.fetchCurrentSmena()
+    }, 5 * 60 * 1000)
+  }
 })
 
 onUnmounted(() => {

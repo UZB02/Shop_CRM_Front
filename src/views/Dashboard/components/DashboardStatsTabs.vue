@@ -44,7 +44,7 @@
         </div>
 
         <!-- Smena count badge -->
-        <div v-if="smenaCount" class="hidden md:flex flex-col items-end border-l border-slate-200 dark:border-slate-700 pl-3">
+        <div v-if="settingsStore.isShiftEnabled && smenaCount" class="hidden md:flex flex-col items-end border-l border-slate-200 dark:border-slate-700 pl-3">
           <span class="text-[10px] font-black tracking-[0.2em] text-emerald-500">Smena</span>
           <span class="text-sm font-black tracking-tighter tabular-nums text-emerald-500">{{ smenaCount }} ochiq</span>
         </div>
