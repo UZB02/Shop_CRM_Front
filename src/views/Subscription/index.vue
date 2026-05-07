@@ -133,7 +133,7 @@
                                                 </div>
                                                 <div>
                                                     <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ tx.description || (tx.type === 'deduction' ? "Yechib olindi" : "To'ldirildi") }}</p>
-                                                    <p class="text-[11px] text-slate-400 font-medium">{{ formatDate(tx.created_at) }}</p>
+                                                    <p class="text-[11px] text-slate-400 font-medium">{{ tx.created_at }}</p>
                                                 </div>
                                             </div>
                                             <div class="text-right">
@@ -193,7 +193,7 @@
                                                         {{ formatCurrency(inv.amount) }}
                                                     </p>
                                                     <p class="text-[10px] text-slate-400 font-medium mt-0.5">
-                                                        {{ inv.paid_at || formatDate(inv.created_at) }}
+                                                        {{ inv.paid_at || inv.created_at }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -280,17 +280,6 @@ const {
 
 const formatCurrency = (value) => settingsStore.formatPrice(value)
 
-const formatDate = (dateString) => {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat('uz-UZ', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    }).format(date)
-}
 
 watch(activeTab, (newTab) => {
     if (newTab === 'billing' && !invoices.value.length && !balanceTransactions.value.length) {

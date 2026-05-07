@@ -51,9 +51,15 @@
 
                 <!-- Address -->
                 <td class="px-6 py-3.5">
-                  <div class="flex items-center gap-2 text-[13px] font-bold text-slate-500 dark:text-slate-400">
-                    <i class="pi pi-map-marker text-[12px] text-emerald-500/60"></i>
-                    {{ branch.address || '—' }}
+                  <div class="flex flex-col gap-0.5 max-w-[280px]">
+                    <span v-if="branch.region_name || branch.district_name" class="inline-flex items-center gap-1 text-[10px] font-black tracking-wider uppercase text-emerald-600 dark:text-emerald-400">
+                      <i class="pi pi-map text-[9px] opacity-80"></i>
+                      {{ [branch.region_name, branch.district_name].filter(Boolean).join(', ') }}
+                    </span>
+                    <div class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 dark:text-slate-300 leading-tight">
+                      <i v-if="!branch.region_name && !branch.district_name" class="pi pi-map-marker text-[12px] text-slate-400/60"></i>
+                      <span class="truncate" v-tooltip.top="branch.address">{{ branch.address || '—' }}</span>
+                    </div>
                   </div>
                 </td>
 
@@ -123,9 +129,16 @@
             </div>
             <router-link :to="`/dashboard/branches/${branch.id}`" class="flex-1 min-w-0">
               <p class="text-[15px] font-black text-slate-800 dark:text-slate-200 tracking-tight truncate hover:text-emerald-500 transition-colors">{{ branch.name }}</p>
-              <p class="text-[11px] font-bold text-slate-400 truncate mt-0.5">
-                <i class="pi pi-map-marker text-[10px] text-emerald-500/60"></i> {{ branch.address || '—' }}
-              </p>
+              <div class="flex flex-col gap-0.5 mt-1">
+                <p v-if="branch.region_name || branch.district_name" class="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                  <i class="pi pi-map text-[9px]"></i>
+                  {{ [branch.region_name, branch.district_name].filter(Boolean).join(', ') }}
+                </p>
+                <p class="text-[11px] font-bold text-slate-400 truncate flex items-center gap-1">
+                  <i v-if="!branch.region_name && !branch.district_name" class="pi pi-map-marker text-[10px] text-emerald-500/60"></i> 
+                  {{ branch.address || '—' }}
+                </p>
+              </div>
             </router-link>
             <div class="flex items-center gap-1 shrink-0">
               <button

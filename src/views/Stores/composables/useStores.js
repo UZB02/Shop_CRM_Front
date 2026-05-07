@@ -191,13 +191,27 @@ export function useStores() {
     }
 
     const editBranch = (data) => {
+        console.log(
+            "%c[Branches Edit Open]%c Tahrirlash uchun ochilgan filial ma'lumotlari:", 
+            "background: #eab308; color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold;", 
+            "color: #eab308; font-weight: bold;", 
+            JSON.parse(JSON.stringify(data))
+        )
         branch.value = { ...data }
         branchDialog.value = true
     }
 
     const saveBranch = async () => {
         branchSubmitted.value = true
-        if (!branch.value.name?.trim() || !branch.value.phone?.trim() || !branch.value.address?.trim() || !branch.value.region_id || !branch.value.district_id) return
+        if (!branch.value.name?.trim() || !branch.value.phone?.trim() || !branch.value.address?.trim() || !branch.value.region_id || !branch.value.district_id) {
+            console.warn(
+                "%c[Branches Validation Failed]%c To'ldirilgan ma'lumotlar to'liq emas yoki noto'g'ri:", 
+                "background: #f43f5e; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;", 
+                "color: #f43f5e; font-weight: bold;", 
+                JSON.parse(JSON.stringify(branch.value))
+            )
+            return
+        }
         saving.value = true
         try {
             const id = branch.value.id || branch.value._id
@@ -209,18 +223,44 @@ export function useStores() {
                 region_id: branch.value.region_id,
                 district_id: branch.value.district_id
             }
+            
+            console.log(
+                "%c[Branches Save Payload]%c Backendga yuborilayotgan ma'lumotlar (Payload):", 
+                "background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;", 
+                "color: #10b981; font-weight: bold;", 
+                JSON.parse(JSON.stringify(payload))
+            )
+            
             if (id) {
-                await branchesAPI.update(id, payload)
+                const res = await branchesAPI.update(id, payload)
+                console.log(
+                    "%c[Branches API Success]%c API dan qaytgan javob (Update - PATCH):", 
+                    "background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;", 
+                    "color: #3b82f6; font-weight: bold;", 
+                    res.data
+                )
                 toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_updated'), life: 5000 })
             } else {
-                await branchesAPI.create(payload)
+                const res = await branchesAPI.create(payload)
+                console.log(
+                    "%c[Branches API Success]%c API dan qaytgan javob (Create - POST):", 
+                    "background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;", 
+                    "color: #10b981; font-weight: bold;", 
+                    res.data
+                )
                 toast.add({ severity: 'success', summary: t('stores.success'), detail: t('stores.branch_added'), life: 5000 })
                 // Real-time sync of subscription limits
                 notificationStore.fetchSubscription()
             }
             branchDialog.value = false
             loadData()
-        } catch {
+        } catch (error) {
+            console.error(
+                "%c[Branches API Error]%c Filialni saqlashda xatolik yuz berdi:", 
+                "background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;", 
+                "color: #ef4444; font-weight: bold;", 
+                error
+            )
             toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.save_error'), life: 5000 })
         } finally {
             saving.value = false

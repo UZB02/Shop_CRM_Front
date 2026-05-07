@@ -16,8 +16,6 @@ export const useSettingsStore = defineStore('settings', () => {
   const isWastageEnabled       = computed(() => !!settings.value?.wastage_enabled)
   const isStockAuditEnabled    = computed(() => !!settings.value?.stock_audit_enabled)
   const isKpiEnabled           = computed(() => !!settings.value?.kpi_enabled)
-  const isPriceListEnabled     = computed(() => !!settings.value?.price_list_enabled)
-  const isSupplierCreditEnabled= computed(() => !!settings.value?.supplier_credit_enabled)
   const isShiftEnabled         = computed(() => !!settings.value?.shift_enabled)
   const isTelegramEnabled      = computed(() => !!settings.value?.telegram_enabled)
   const isTaxEnabled           = computed(() => !!settings.value?.tax_enabled)
@@ -131,8 +129,6 @@ export const useSettingsStore = defineStore('settings', () => {
     isWastageEnabled,
     isStockAuditEnabled,
     isKpiEnabled,
-    isPriceListEnabled,
-    isSupplierCreditEnabled,
     isShiftEnabled,
     isTelegramEnabled,
     isTaxEnabled,

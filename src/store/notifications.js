@@ -14,6 +14,7 @@ export const useNotificationStore = defineStore('notifications', {
             products: { used: 0, limit: 0, remaining: 0, unlimited: false, can_add: true }
         },
         pollingTimer: null,
+        timeoutTimer: null, // Har kuni soat 09:00 dagi rejalashtiruvchi uchun timer
         loading: {
             notifications: false,
             subscription: false
@@ -170,11 +171,12 @@ export const useNotificationStore = defineStore('notifications', {
         },
 
         async startPolling() {
-            this.stopPolling() // Har ehtimolga qarshi oldingisini to'xtatamiz
+            this.stopPolling() // Oldingi timerni to'xtatamiz
             
             this.initialFetchDone = false
             
-            // Dastlabki yuklash
+            // 1. Tizimga kirgandagi boshlang'ich yuklash (Initial Load on login/startup)
+            console.log('⏱️ [Schedule] Login qilinganda boshlang\'ich yuklash bajarilmoqda...')
             await Promise.allSettled([
                 this.fetchNotifications(),
                 this.fetchSubscription()
@@ -182,19 +184,46 @@ export const useNotificationStore = defineStore('notifications', {
             
             this.initialFetchDone = true
 
-            // Polling boshlash (User xohishiga ko'ra 60 soniya)
-            console.log('⏱️ Starting notification polling (60s)...')
-            this.pollingTimer = setInterval(async () => {
-                await Promise.allSettled([
-                    this.fetchNotifications(true),
-                    this.fetchSubscription(true)
-                ])
-            }, 60000)
+            // 2. Har kuni aniq soat 09:00 da avtomatik ishga tushadigan rejalashtiruvchi (Daily Scheduler at 09:00 AM)
+            const scheduleDailyFetch = () => {
+                const now = new Date()
+                const target = new Date()
+                target.setHours(9, 0, 0, 0) // Bugungi soat 09:00:00
+
+                // Agar bugungi soat 09:00 dan o'tib ketgan bo'lsa, ertangi kungi 09:00 ga rejalashtiramiz
+                if (now.getTime() >= target.getTime()) {
+                    target.setDate(target.getDate() + 1)
+                }
+
+                const msUntilTarget = target.getTime() - now.getTime()
+                const minutesUntilTarget = Math.round(msUntilTarget / 1000 / 60)
+                
+                console.log(`⏱️ [Schedule] Navbatdagi so'rovga qolgan vaqt: ${minutesUntilTarget} daqiqa (Mo'ljal: ${target.toLocaleString('uz-UZ')})`)
+
+                this.timeoutTimer = setTimeout(async () => {
+                    console.log('⏱️ [Schedule] Soat 09:00 bo\'ldi! Kundalik so\'rovlar muvaffaqiyatli yuborilmoqda...')
+                    
+                    await Promise.allSettled([
+                        this.fetchNotifications(true),
+                        this.fetchSubscription(true)
+                    ])
+
+                    // Keyingi kun uchun qayta rejalashtirish
+                    scheduleDailyFetch()
+                }, msUntilTarget)
+            }
+
+            scheduleDailyFetch()
         },
 
         stopPolling() {
+            if (this.timeoutTimer) {
+                console.log('🛑 [Schedule] Kundalik rejalashtiruvchi (Timeout) to\'xtatildi.')
+                clearTimeout(this.timeoutTimer)
+                this.timeoutTimer = null
+            }
             if (this.pollingTimer) {
-                console.log('🛑 Stopping notification polling.')
+                console.log('🛑 [Schedule] Interval polling to\'xtatildi.')
                 clearInterval(this.pollingTimer)
                 this.pollingTimer = null
             }

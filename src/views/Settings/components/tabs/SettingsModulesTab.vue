@@ -6,8 +6,6 @@
     <SettingRow v-model="form.wastage_enabled"        :label="$t('settings.modules.wastage_label')"        :desc="$t('settings.modules.wastage_desc')" :disabled="readonly" :is-dirty="isFieldDirty('wastage_enabled')" />
     <SettingRow v-model="form.stock_audit_enabled"    :label="$t('settings.modules.stock_audit_label')"    :desc="$t('settings.modules.stock_audit_desc')" :disabled="readonly" :is-dirty="isFieldDirty('stock_audit_enabled')" />
     <SettingRow v-model="form.kpi_enabled"            :label="$t('settings.modules.kpi_label')"            :desc="$t('settings.modules.kpi_desc')" :disabled="readonly" :is-dirty="isFieldDirty('kpi_enabled')" />
-    <SettingRow v-model="form.price_list_enabled"     :label="$t('settings.modules.price_list_label')"     :desc="$t('settings.modules.price_list_desc')" :disabled="readonly" :is-dirty="isFieldDirty('price_list_enabled')" />
-    <SettingRow v-model="form.supplier_credit_enabled" :label="$t('settings.modules.supplier_credit_label')" :desc="$t('settings.modules.supplier_credit_desc')" :disabled="readonly" :is-dirty="isFieldDirty('supplier_credit_enabled')" />
 
     <SectionHeader icon="pi-clock" color="text-indigo-500">{{ $t('settings.modules.shift_title') }}</SectionHeader>
     <SettingRow v-model="form.shift_enabled" :label="$t('settings.modules.shift_label')" :desc="$t('settings.modules.shift_desc')" :disabled="readonly" :is-dirty="isFieldDirty('shift_enabled')" />
