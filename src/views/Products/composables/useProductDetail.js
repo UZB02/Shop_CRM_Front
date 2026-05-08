@@ -45,9 +45,41 @@ export function useProductDetail() {
   }
 
   const printBarcode = () => {
-    if (product.value?.barcode_image_url) {
-      window.open(product.value.barcode_image_url, '_blank')
-    }
+    if (!product.value?.barcode_image_url) return
+    const win = window.open('', '_blank')
+    win.document.write(`
+      <html>
+        <head>
+          <title>Shtrix-kod</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              min-height: 100vh;
+              background-color: #fff;
+            }
+            img {
+              max-width: 100%;
+              max-height: 100vh;
+              object-fit: contain;
+            }
+          </style>
+        </head>
+        <body>
+          <img src="${product.value.barcode_image_url}" />
+          <script>
+            window.onload = function() {
+              window.print();
+              setTimeout(function() { window.close(); }, 500);
+            }
+          <\/script>
+        </body>
+      </html>
+    `)
+    win.document.close()
   }
 
   const confirmDelete = () => {

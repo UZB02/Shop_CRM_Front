@@ -18,13 +18,13 @@
       <!-- Barcode Container -->
       <div 
         v-if="product?.barcode_image_url" 
-        class="w-full p-6 bg-white dark:bg-white/95 rounded-[2rem] shadow-sm border border-slate-100/50 flex items-center justify-center min-h-[100px] transition-transform hover:scale-[1.02] duration-500 cursor-zoom-in"
+        class="w-full bg-white dark:bg-white/95 rounded-[2rem] shadow-sm border border-slate-100/50 flex items-center justify-center min-h-[140px] p-6 transition-transform hover:scale-[1.01] duration-500 cursor-zoom-in"
         @click="showPreview = true"
       >
         <img 
           :src="product.barcode_image_url" 
-          class="h-16 sm:h-20 w-auto object-contain mix-blend-multiply transition-all group-hover:contrast-125" 
-          alt="Barcode"
+          class="max-w-full h-24 object-contain mix-blend-multiply" 
+          alt="Barcode" 
         />
       </div>
       
@@ -49,30 +49,29 @@
       v-model:visible="showPreview" 
       modal 
       :header="$t('products.detail.barcode')" 
-      class="w-full max-w-lg"
+      class="w-full max-w-md"
       :pt="{ 
-        root: { class: 'dark:bg-slate-900 border-none rounded-3xl shadow-2xl overflow-hidden' },
+        root: { class: 'dark:bg-slate-900 border-none rounded-[2rem] shadow-2xl overflow-hidden' },
         header: { class: 'px-8 pt-8 pb-2 dark:bg-slate-900 border-none font-black tracking-widest uppercase text-xs text-slate-400' },
         content: { class: 'px-8 pb-8 pt-4 dark:bg-slate-900' }
       }"
     >
-      <div class="bg-white p-8 sm:p-12 rounded-[2.5rem] shadow-inner border border-slate-50 flex flex-col items-center gap-8">
-        <img 
-          :src="product?.barcode_image_url" 
-          class="w-full h-auto object-contain mix-blend-multiply" 
-          alt="Full Barcode"
-        />
-        <p class="font-mono text-xl sm:text-2xl font-black tracking-[0.4em] text-slate-800 select-all">
-          {{ product?.barcode }}
-        </p>
+      <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex flex-col items-center">
+        <div class="bg-white p-4 rounded-2xl border border-slate-100/80 flex items-center justify-center w-full min-h-[260px] overflow-hidden">
+          <img 
+            :src="product?.barcode_image_url" 
+            class="w-full max-w-[420px] h-auto max-h-[230px] object-contain mix-blend-multiply scale-[1.08]" 
+            alt="Barcode" 
+          />
+        </div>
       </div>
       <div class="mt-6 flex justify-center">
         <button 
           @click="$emit('print')"
-          class="flex items-center gap-2 px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl text-[12px] font-black tracking-widest transition-all shadow-xl shadow-emerald-500/20 active:scale-95"
+          class="flex items-center gap-2 px-8 py-3 bg-slate-900 hover:opacity-90 text-white rounded-2xl text-[12px] font-black tracking-widest transition-all shadow-xl active:scale-95 w-full justify-center"
         >
           <i class="pi pi-print"></i>
-          {{ $t('common.print') }}
+          {{ $t('common.print') || 'Chop etish' }}
         </button>
       </div>
     </Dialog>

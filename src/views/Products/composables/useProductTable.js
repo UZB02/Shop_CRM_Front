@@ -66,17 +66,36 @@ export function useProductTable(products) {
     if (!barcodeUrl.value) return
     const win = window.open('', '_blank')
     win.document.write(`
-      <html><head><title>Shtrix-kod — ${selectedBarcodeItem.value?.name}</title>
-      <style>
-        body { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: monospace; gap: 12px; }
-        img { max-width: 300px; }
-        p { font-size: 14px; letter-spacing: 4px; margin: 0; }
-      </style></head>
-      <body>
-        <img src="${barcodeUrl.value}" />
-        <p>${selectedBarcodeItem.value?.barcode || ''}</p>
-        <script>window.onload = () => { window.print(); window.close() }<\/script>
-      </body></html>
+      <html>
+        <head>
+          <title>Shtrix-kod</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              min-height: 100vh;
+              background-color: #fff;
+            }
+            img {
+              max-width: 100%;
+              max-height: 100vh;
+              object-fit: contain;
+            }
+          </style>
+        </head>
+        <body>
+          <img src="${barcodeUrl.value}" />
+          <script>
+            window.onload = function() {
+              window.print();
+              setTimeout(function() { window.close(); }, 500);
+            }
+          <\/script>
+        </body>
+      </html>
     `)
     win.document.close()
   }

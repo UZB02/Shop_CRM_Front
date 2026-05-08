@@ -126,30 +126,54 @@
       :showHeader="false"
       pt:mask:class="backdrop-blur-sm bg-black/40"
     >
-      <div v-if="selectedProduct" class="p-8 flex flex-col items-center gap-6 min-w-[320px]">
+      <div v-if="selectedProduct" class="p-8 flex flex-col items-center gap-6 w-full max-w-md min-w-[400px] sm:min-w-[460px]">
+        <!-- Header -->
         <div class="w-full flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
-          <div class="text-left">
-            <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight">{{ selectedProduct.name }}</h3>
-            <p class="text-[12px] font-bold text-emerald-500 tracking-[0.2em]">{{ selectedProduct.barcode }}</p>
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+              <i class="pi pi-barcode text-sm"></i>
+            </div>
+            <div class="text-left">
+              <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight">Shtrix-kod</h3>
+              <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Skanerlash kodi</p>
+            </div>
           </div>
-          <button @click="barcodeVisible = false" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
+          <button @click="barcodeVisible = false" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
             <i class="pi pi-times text-[12px]"></i>
           </button>
         </div>
         
-        <div class="bg-white p-6 rounded-2xl shadow-inner border border-slate-100">
-          <img :src="selectedProduct.barcode_image_url" class="max-w-full h-auto" />
+        <!-- Crisp Barcode Image Container -->
+        <div class="w-full bg-slate-50/50 dark:bg-slate-950/40 p-4 rounded-3xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center justify-center">
+          <div class="bg-white p-4 rounded-2xl border border-slate-100/80 flex items-center justify-center w-full min-h-[260px] overflow-hidden">
+            <img 
+              :src="selectedProduct.barcode_image_url" 
+              class="w-full max-w-[420px] h-auto max-h-[230px] object-contain mix-blend-multiply scale-[1.08]" 
+              alt="Barcode" 
+            />
+          </div>
         </div>
         
-        <button 
-          @click="downloadBarcode"
-          class="w-full py-3 rounded-xl bg-slate-900 border-none text-white text-[12px] font-black tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
-        >
-          <i class="pi pi-download"></i>
-          Yuklab olish (PNG)
-        </button>
+        <!-- Actions -->
+        <div class="flex gap-3 w-full">
+          <button 
+            @click="downloadBarcode"
+            class="flex-1 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-black tracking-widest hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <i class="pi pi-download text-xs"></i>
+            Yuklab olish
+          </button>
+          <button 
+            @click="printBarcode(selectedProduct)"
+            class="flex-1 py-3 rounded-xl bg-slate-900 dark:bg-slate-950 border-none text-white text-[11px] font-black tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10 dark:shadow-none"
+          >
+            <i class="pi pi-print text-xs"></i>
+            Chop etish
+          </button>
+        </div>
       </div>
     </Dialog>
+
   </div>
 </template>
 
@@ -209,6 +233,44 @@ const downloadBarcode = async () => {
     console.error('Download error:', error)
   }
 }
+
+const printBarcode = (product) => {
+  if (!product) return
+  const printWindow = window.open('', '_blank')
+  const barcodeImgUrl = product.barcode_image_url
+
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Shtrix-kod</title>
+        <style>
+          body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #fff;
+          }
+          img {
+            max-width: 100%;
+            max-height: 100vh;
+            object-fit: contain;
+          }
+        </style>
+      </head>
+      <body>
+        <img src="\${barcodeImgUrl}" />
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(function() { window.close(); }, 500);
+          }
+        <\/script>
+      </body>
+    </html>
+  `)
+  printWindow.document.close()
+}
 </script>
-
-
