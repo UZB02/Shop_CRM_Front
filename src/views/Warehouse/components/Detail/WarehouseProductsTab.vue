@@ -2,8 +2,8 @@
   <div class="space-y-3">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
       <!-- Table toolbar -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10">
-        <div class="relative">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10">
+        <div class="relative flex-shrink-0">
           <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
           <input
             :value="search"
@@ -13,8 +13,16 @@
             class="h-8 pl-8 pr-4 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 w-64 transition-all"
           />
         </div>
-        <div class="text-[12px] font-bold text-slate-400 tracking-widest">
-          {{ products.length }} / {{ totalProducts }} {{ $t('products.title') }}
+        <div class="flex flex-wrap items-center gap-3 sm:gap-4 justify-start md:justify-end flex-1">
+          <!-- Jami zaxira tannarxi -->
+          <div class="flex items-center gap-2 px-3 py-1 bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 dark:border-emerald-500/20 rounded-xl">
+            <span class="text-[9px] font-black text-emerald-600/70 dark:text-emerald-400/60 uppercase tracking-[0.12em]">Zaxira tannarxi</span>
+            <span class="text-xs font-black text-emerald-600 dark:text-emerald-400 font-outfit">{{ settingsStore.formatPrice(totalStockValue) }}</span>
+          </div>
+
+          <div class="text-[12px] font-bold text-slate-400 tracking-widest pl-1">
+            {{ products.length }} / {{ totalProducts }} {{ $t('products.title') }}
+          </div>
         </div>
       </div>
 
@@ -125,10 +133,11 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useSettingsStore } from '@/store/settings'
 import TurBadge from '@/components/common/TurBadge.vue'
 
-defineProps({
+const props = defineProps({
   products: { type: Array, required: true },
   totalProducts: { type: Number, default: 0 },
   search: { type: String, default: '' }
@@ -137,6 +146,11 @@ defineProps({
 defineEmits(['update:search', 'show-barcode', 'open-wastage'])
 
 const settingsStore = useSettingsStore()
+
+const totalStockValue = computed(() => {
+  if (!props.products) return 0
+  return props.products.reduce((acc, p) => acc + ((parseFloat(p.purchase_price) || 0) * (parseFloat(p.quantity) || 0)), 0)
+})
 </script>
 
 
