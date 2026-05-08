@@ -11,7 +11,7 @@ export const useSubscription = () => {
     const authStore = useAuthStore()
     const notificationStore = useNotificationStore()
 
-    const subscription = ref({
+    const subscription = ref(notificationStore.subscription || {
         plan: null,
         plans: [],
         status: 'active',
@@ -30,7 +30,7 @@ export const useSubscription = () => {
     // Billing specific states
     const loadingBilling = ref(false)
     const invoices = ref([])
-    const currentBalance = ref(0)
+    const currentBalance = ref(notificationStore.subscription?.balance || 0)
     const balanceTransactions = ref([])
 
     const availablePlans = computed(() => subscription.value.plans || [])
@@ -48,14 +48,40 @@ export const useSubscription = () => {
     })
 
     const loadSubscription = async () => {
+        // 1. If global store already has subscription data, use it immediately (0 requests)
+        if (notificationStore.subscription) {
+            subscription.value = notificationStore.subscription
+            if (notificationStore.subscription.balance !== undefined) {
+                currentBalance.value = notificationStore.subscription.balance
+            }
+            return
+        }
+        
+        // 2. If global store is already loading, wait for it to complete to prevent parallel requests
+        if (notificationStore.loading.subscription) {
+            loading.value = true
+            while (notificationStore.loading.subscription) {
+                await new Promise(resolve => setTimeout(resolve, 50))
+            }
+            if (notificationStore.subscription) {
+                subscription.value = notificationStore.subscription
+                if (notificationStore.subscription.balance !== undefined) {
+                    currentBalance.value = notificationStore.subscription.balance
+                }
+            }
+            loading.value = false
+            return
+        }
+
         loading.value = true
         try {
-            const response = await subscriptionAPI.getStatus()
-            subscription.value = response.data
-            
-            // Sync with global notification store usage
-            if (response.data?.usage) {
-                notificationStore.usage = response.data.usage
+            // 3. Otherwise, fetch via global store to keep everyone in sync
+            await notificationStore.fetchSubscription()
+            if (notificationStore.subscription) {
+                subscription.value = notificationStore.subscription
+                if (notificationStore.subscription.balance !== undefined) {
+                    currentBalance.value = notificationStore.subscription.balance
+                }
             }
         } catch (error) {
             console.error('Error loading subscription:', error)
