@@ -127,12 +127,23 @@
              <div class="grid grid-cols-2 gap-2">
                <div class="flex flex-col gap-1">
                  <label class="lbl">{{ $t('pos.cash') }}</label>
-                 <InputNumber v-model="debtCashAmount" class="w-full co-amount-input-sm" :min="0" :use-grouping="true" />
+                 <div :class="isDebtOverflow ? 'co-input-error' : ''">
+                   <InputNumber v-model="debtCashAmount" class="w-full co-amount-input-sm" :min="0" :use-grouping="true" />
+                 </div>
                </div>
                <div class="flex flex-col gap-1">
                  <label class="lbl">{{ $t('pos.card') }}</label>
-                 <InputNumber v-model="debtCardAmount" class="w-full co-amount-input-sm" :min="0" :use-grouping="true" />
+                 <div :class="isDebtOverflow ? 'co-input-error' : ''">
+                   <InputNumber v-model="debtCardAmount" class="w-full co-amount-input-sm" :min="0" :use-grouping="true" />
+                 </div>
                </div>
+             </div>
+
+             <!-- Yig'indi oshib ketsa -->
+             <div v-if="isDebtOverflow"
+               class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-800/30 animate-fadein">
+               <i class="pi pi-exclamation-triangle text-rose-500 text-sm" />
+               <span class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest">{{ $t('pos.total_entered_exceeds') }}</span>
              </div>
 
              <!-- Debt Summary -->
@@ -331,6 +342,7 @@ const {
   isCashOverflow, 
   isCardOverflow, 
   isSumOverflow, 
+  isDebtOverflow,
   isValid, 
   vipMessage,
   handleConfirm 

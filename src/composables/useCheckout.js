@@ -31,23 +31,6 @@ export function useCheckout(props, emit) {
     setTimeout(() => { isMixedUpdating.value = false }, 50)
   })
 
-  // Debt Payment Auto-calculate
-  const isDebtUpdating = ref(false)
-  watch(debtCashAmount, (newVal) => {
-    if (isDebtUpdating.value || paymentType.value !== 'debt') return
-    isDebtUpdating.value = true
-    const other = paidAmount.value - newVal
-    debtCardAmount.value = other > 0 ? other : 0
-    setTimeout(() => { isDebtUpdating.value = false }, 50)
-  })
-
-  watch(debtCardAmount, (newVal) => {
-    if (isDebtUpdating.value || paymentType.value !== 'debt') return
-    isDebtUpdating.value = true
-    const other = paidAmount.value - newVal
-    debtCashAmount.value = other > 0 ? other : 0
-    setTimeout(() => { isDebtUpdating.value = false }, 50)
-  })
 
   const methods = computed(() => {
     const list = []
@@ -108,6 +91,7 @@ export function useCheckout(props, emit) {
   const isCashOverflow  = computed(() => (cashAmount.value  || 0) > (paidAmount.value || 0))
   const isCardOverflow  = computed(() => (cardAmount.value  || 0) > (paidAmount.value || 0))
   const isSumOverflow   = computed(() => (cashAmount.value + cardAmount.value) > (paidAmount.value || 0))
+  const isDebtOverflow  = computed(() => (debtCashAmount.value + debtCardAmount.value) > (paidAmount.value || 0))
 
   // Aralash to'lov validatsiyasi
   const isMixedValid = computed(() => {
@@ -262,6 +246,7 @@ export function useCheckout(props, emit) {
     isCashOverflow,
     isCardOverflow,
     isSumOverflow,
+    isDebtOverflow,
     isValid,
     vipMessage,
     handleConfirm,
