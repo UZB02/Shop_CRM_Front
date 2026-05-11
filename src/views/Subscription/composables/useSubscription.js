@@ -47,9 +47,9 @@ export const useSubscription = () => {
         return `${new Intl.NumberFormat('uz-UZ').format(price)} so'm`
     })
 
-    const loadSubscription = async () => {
+    const loadSubscription = async (force = false) => {
         // 1. If global store already has subscription data, use it immediately (0 requests)
-        if (notificationStore.subscription) {
+        if (notificationStore.subscription && !force) {
             subscription.value = notificationStore.subscription
             if (notificationStore.subscription.balance !== undefined) {
                 currentBalance.value = notificationStore.subscription.balance
