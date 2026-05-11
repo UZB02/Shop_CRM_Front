@@ -2,6 +2,7 @@ import { ref, watch, onMounted } from 'vue'
 import { salesAPI, tradesAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
+import api from '@/services/axios'
 
 export function useTrades() {
   const toast = useToast()
@@ -24,7 +25,8 @@ export function useTrades() {
     worker: '',
     customer: '',
     min_amount: '',
-    max_amount: ''
+    max_amount: '',
+    smena: ''
   })
 
   const selectedTrade = ref(null)
@@ -47,7 +49,8 @@ export function useTrades() {
         worker: filters.value.worker || undefined,
         customer: filters.value.customer || undefined,
         min_amount: filters.value.min_amount || undefined,
-        max_amount: filters.value.max_amount || undefined
+        max_amount: filters.value.max_amount || undefined,
+        smena: filters.value.smena || undefined
       }
       const response = await salesAPI.getAll(params)
       trades.value = response.data.results || []
@@ -90,7 +93,8 @@ export function useTrades() {
       worker: '',
       customer: '',
       min_amount: '',
-      max_amount: ''
+      max_amount: '',
+      smena: ''
     }
     searchQuery.value = ''
     page.value = 1
@@ -117,6 +121,85 @@ export function useTrades() {
     loadTrades()
   }
 
+  const exportLoadingType = ref(null) // 'excel', 'pdf', or null
+
+  const exportSales = async (format = 'excel') => {
+    exportLoadingType.value = format
+    try {
+      const params = {
+        format,
+        date_from: filters.value.date_from || undefined,
+        date_to: filters.value.date_to || undefined,
+        branch: filters.value.branch || undefined,
+        status: filters.value.status || undefined,
+        smena: filters.value.smena || undefined
+      }
+
+      let response
+      try {
+        response = await salesAPI.export(params)
+      } catch (err) {
+        // Fallback for trailing-slash 404 Django mismatch
+        if (err.response && err.response.status === 404) {
+          response = await api.get('/export/sales', { params, responseType: 'blob' })
+        } else {
+          throw err
+        }
+      }
+
+      // Determine MIME type
+      const mimeType = format === 'excel'
+        ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        : 'application/pdf'
+
+      const blob = new Blob([response.data], { type: mimeType })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+
+      const ext = format === 'excel' ? 'xlsx' : 'pdf'
+      const timestamp = new Date().toISOString().slice(0, 10)
+      link.setAttribute('download', `savdolar_hisoboti_${timestamp}.${ext}`)
+
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+
+      toast.add({
+        severity: 'success',
+        summary: t('common.success') || 'Muvaffaqiyatli',
+        detail: format === 'excel' ? "Excel hisoboti muvaffaqiyatli yuklab olindi" : "PDF hisoboti muvaffaqiyatli yuklab olindi",
+        life: 3000
+      })
+    } catch (error) {
+      console.error('Error exporting sales:', error)
+      let customMsg = "Faylni yuklab olishda xatolik yuz berdi"
+      
+      if (error.response && error.response.data instanceof Blob) {
+        try {
+          const text = await error.response.data.text()
+          const errData = JSON.parse(text)
+          if (errData.detail) customMsg = errData.detail
+          else if (errData.message) customMsg = errData.message
+        } catch (e) {
+          // ignore parsing error
+        }
+      } else if (error.response?.data?.detail) {
+        customMsg = error.response.data.detail
+      }
+
+      toast.add({
+        severity: 'error',
+        summary: t('common.error') || 'Xatolik',
+        detail: customMsg,
+        life: 5000
+      })
+    } finally {
+      exportLoadingType.value = null
+    }
+  }
+
   onMounted(() => {
     loadTrades()
   })
@@ -137,7 +220,9 @@ export function useTrades() {
     applyFilters,
     resetFilters,
     viewTrade,
-    onPageChange
+    onPageChange,
+    exportLoadingType,
+    exportSales
   }
 }
 

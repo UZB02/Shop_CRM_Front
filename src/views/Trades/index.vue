@@ -16,6 +16,30 @@
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
+        <!-- Sales export buttons (only visible when in sales tab) -->
+        <template v-if="activeTab === 'sales'">
+          <Button 
+            @click="exportSales('excel')"
+            :loading="exportLoadingType === 'excel'"
+            :disabled="!!exportLoadingType"
+            icon="pi pi-file-excel"
+            label="Excel"
+            class="!text-[12px] !font-bold !rounded-lg !border-slate-200 dark:!border-slate-800 hover:!bg-slate-100 dark:hover:!bg-slate-800 !px-3 !py-2 text-slate-700 dark:text-slate-200"
+            severity="secondary"
+            outlined
+          />
+          <Button 
+            @click="exportSales('pdf')"
+            :loading="exportLoadingType === 'pdf'"
+            :disabled="!!exportLoadingType"
+            icon="pi pi-file-pdf"
+            label="PDF"
+            class="!text-[12px] !font-bold !rounded-lg !border-slate-200 dark:!border-slate-800 hover:!bg-slate-100 dark:hover:!bg-slate-800 !px-3 !py-2 text-slate-700 dark:text-slate-200"
+            severity="secondary"
+            outlined
+          />
+        </template>
+
         <Button 
           v-if="settingsStore.isSaleReturnEnabled"
           @click="openReturnModal"
@@ -160,7 +184,9 @@ const {
   resetFilters,
   viewTrade,
   onPageChange,
-  loadTrades
+  loadTrades,
+  exportLoadingType,
+  exportSales
 } = useTrades()
 
 const {

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full relative">
+  <div class="flex flex-col w-full">
     <!-- Top Row: Customer AutoComplete and Toggle -->
     <div class="flex items-center gap-3 w-full">
       <div class="relative flex-1">
@@ -11,7 +11,7 @@
           optionLabel="name"
           :placeholder="$t('customers.search_placeholder') || 'Mijoz nomi bo\'yicha qidirib tanlang...'"
           class="w-full custom-autocomplete-wrapper"
-          inputClass="w-full h-11 !pl-11 pr-10 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
+          inputClass="w-full h-11 !pl-11 pr-10 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-400"
         />
         <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none z-10 transition-colors" :class="{'text-emerald-500': selectedCustomer}"></i>
         <button 
@@ -22,6 +22,7 @@
            <i class="pi pi-times text-[12px] font-bold"></i>
         </button>
       </div>
+      
       <button 
         v-if="hasActiveFilters"
         @click="onReset"
@@ -32,152 +33,256 @@
       </button>
 
       <button 
-        @click="showFilters = !showFilters"
+        @click="showFilters = true"
         :class="[
-          'h-11 px-5 rounded-xl border flex items-center justify-center gap-2 transition-all shrink-0 shadow-sm',
-          showFilters 
-            ? 'bg-slate-900 border-slate-900 text-white dark:bg-white dark:border-white dark:text-slate-900' 
+          'h-11 px-5 rounded-xl border flex items-center justify-center gap-2 transition-all shrink-0 shadow-sm font-bold text-[14px]',
+          hasActiveFilters
+            ? 'bg-emerald-500 border-emerald-500 text-white dark:bg-emerald-500 dark:border-emerald-500 dark:text-white' 
             : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
         ]"
       >
-        <i class="pi pi-filter text-[15px]"></i>
-        <span class="text-[15px] font-bold">Filtr</span>
-        <i :class="['pi text-[12px] ml-1 transition-transform', showFilters ? 'pi-chevron-up opacity-50' : 'pi-chevron-down dark:text-slate-400']"></i>
+        <i class="pi pi-filter text-[14px]"></i>
+        <span>Filtr</span>
+        <span v-if="hasActiveFilters" class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+        </span>
       </button>
     </div>
 
-    <!-- Filter Panel (Absolute Positioned Menu) -->
-    <div 
-      v-show="showFilters" 
-      class="absolute right-0 top-full mt-2 p-6 rounded-[24px] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-in slide-in-from-top-2 duration-200 z-[100] w-[320px] md:w-[600px]"
-    >
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
-        <!-- Row 1 -->
-        <div class="flex flex-col gap-2">
-          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.status') }}</label>
-          <Dropdown 
-            :modelValue="filters.status"
-            @update:modelValue="$emit('update:filter', { status: $event })"
-            :options="statusOptions"
-            optionLabel="label"
-            optionValue="value"
-            :placeholder="$t('common.select')"
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[15px]"
-          />
-        </div>
-        
-        <div class="flex flex-col gap-2">
-          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.payment.all') }}</label>
-          <Dropdown 
-            :modelValue="filters.payment_type"
-            @update:modelValue="$emit('update:filter', { payment_type: $event })"
-            :options="paymentOptions"
-            optionLabel="label"
-            optionValue="value"
-            :placeholder="$t('common.select')"
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[15px]"
-          />
-        </div>
+    <!-- Sliding Sidebar Drawer (Teleported to Body for perfect layout) -->
+    <Teleport to="body">
+      <!-- Backdrop -->
+      <div 
+        v-if="showFilters" 
+        @click="showFilters = false"
+        class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-[9999] transition-opacity duration-300"
+      ></div>
 
-        <div class="flex flex-col gap-2">
-          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.branch') }}</label>
-          <Dropdown 
-            :modelValue="filters.branch"
-            @update:modelValue="$emit('update:filter', { branch: $event })"
-            :options="branchOptions"
-            optionLabel="name"
-            optionValue="id"
-            :placeholder="$t('common.all')"
-            filter
-            :disabled="isSeller"
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[15px] disabled:opacity-50"
-          />
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.worker') }}</label>
-          <Dropdown 
-            :modelValue="filters.worker"
-            @update:modelValue="$emit('update:filter', { worker: $event })"
-            :options="workerOptions"
-            optionLabel="full_name"
-            optionValue="id"
-            :placeholder="$t('common.all')"
-            filter
-            class="w-full !rounded-xl !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-950 !h-10 text-[15px]"
-          />
-        </div>
-        
-        <div class="flex flex-col gap-2">
-          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_from') }}</label>
-          <input 
-            type="date"
-            :value="filters.date_from"
-            @input="$emit('update:filter', { date_from: $event.target.value })"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all"
+      <!-- Drawer Panel -->
+      <div 
+        :class="[
+          'fixed right-0 top-0 bottom-0 h-full w-full max-w-md bg-white dark:bg-slate-900 border-l border-slate-100 dark:border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.15)] dark:shadow-[0_0_60px_rgba(0,0,0,0.7)] z-[10000] flex flex-col transition-all duration-300 ease-out transform',
+          showFilters ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'
+        ]"
+      >
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800/60 bg-slate-50/40 dark:bg-slate-950/20 backdrop-blur">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+              <i class="pi pi-sliders-h text-[16px]"></i>
+            </div>
+            <div>
+              <h4 class="text-[15px] font-black text-slate-800 dark:text-slate-100">Batafsil saralash</h4>
+              <p class="text-[11px] text-slate-400 font-bold">Savdolarni batafsil saralash paneli</p>
+            </div>
+          </div>
+          <button 
+            @click="showFilters = false" 
+            class="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-white transition-colors"
           >
+            <i class="pi pi-times text-[12px] font-bold"></i>
+          </button>
         </div>
 
-        <div class="flex flex-col gap-2">
-          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('common.date_to') }}</label>
-          <input 
-            type="date"
-            :value="filters.date_to"
-            @input="$emit('update:filter', { date_to: $event.target.value })"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all"
-          >
+        <!-- Scrollable Form Container -->
+        <div class="flex-1 overflow-y-auto px-6 py-6 space-y-5 custom-scrollbar">
+          <!-- Status & Payment Type Row -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Status (Holat) -->
+            <div class="flex flex-col">
+              <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+                <i class="pi pi-info-circle text-[11px] text-emerald-500/80"></i>
+                {{ $t('common.status') }}
+              </label>
+              <Select 
+                :modelValue="filters.status"
+                @update:modelValue="$emit('update:filter', { status: $event })"
+                :options="statusOptions"
+                optionLabel="label"
+                optionValue="value"
+                class="sr-select !h-11 flex items-center"
+                :placeholder="$t('common.status')" 
+              />
+            </div>
+            
+            <!-- To'lov turi -->
+            <div class="flex flex-col">
+              <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+                <i class="pi pi-credit-card text-[11px] text-emerald-500/80"></i>
+                {{ $t('subscription.payment_type') || 'To\'lov turi' }}
+              </label>
+              <Select 
+                :modelValue="filters.payment_type"
+                @update:modelValue="$emit('update:filter', { payment_type: $event })"
+                :options="paymentOptions"
+                optionLabel="label"
+                optionValue="value"
+                class="sr-select !h-11 flex items-center"
+                :placeholder="$t('subscription.payment_type') || 'To\'lov turi'" 
+              />
+            </div>
+          </div>
+
+          <!-- Filial & Worker Row -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Filial -->
+            <div class="flex flex-col">
+              <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+                <i class="pi pi-map-marker text-[11px] text-emerald-500/80"></i>
+                {{ $t('trades.filters.branch') }}
+              </label>
+              <Select 
+                :modelValue="filters.branch"
+                @update:modelValue="$emit('update:filter', { branch: $event })"
+                :options="branchOptions"
+                optionLabel="name"
+                optionValue="id"
+                :disabled="isSeller"
+                class="sr-select !h-11 flex items-center"
+                :placeholder="$t('trades.filters.branch')" 
+              />
+            </div>
+
+            <!-- Xodim -->
+            <div class="flex flex-col">
+              <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+                <i class="pi pi-user text-[11px] text-emerald-500/80"></i>
+                {{ $t('trades.filters.worker') }}
+              </label>
+              <Select 
+                :modelValue="filters.worker"
+                @update:modelValue="$emit('update:filter', { worker: $event })"
+                :options="workerOptions"
+                optionLabel="full_name"
+                optionValue="id"
+                class="sr-select !h-11 flex items-center"
+                :placeholder="$t('trades.filters.worker')" 
+              />
+            </div>
+          </div>
+
+          <!-- Smena -->
+          <div class="flex flex-col">
+            <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+              <i class="pi pi-clock text-[11px] text-emerald-500/80"></i>
+              Smena
+            </label>
+            <Select 
+              :modelValue="filters.smena"
+              @update:modelValue="$emit('update:filter', { smena: $event })"
+              :options="shiftOptions"
+              optionLabel="name"
+              optionValue="id"
+              class="sr-select !h-11 flex items-center"
+              placeholder="Smena" 
+            />
+          </div>
+
+          <!-- Sanalar Grid -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Sana dan -->
+            <div class="flex flex-col">
+              <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+                <i class="pi pi-calendar-plus text-[10px] text-emerald-500/80"></i>
+                {{ $t('common.date_from') }}
+              </label>
+              <DatePicker 
+                :modelValue="filters.date_from ? new Date(filters.date_from) : null"
+                @update:modelValue="onDateFromChange"
+                dateFormat="yy-mm-dd"
+                showIcon
+                iconDisplay="input"
+                class="sr-datepicker-custom !w-full"
+                inputClass="!w-full !h-11 px-4 !bg-slate-50/50 dark:!bg-slate-950/40 !border !border-slate-200/80 dark:!border-slate-800/80 !rounded-xl text-[13px] !font-bold text-slate-700 dark:text-slate-200 transition-all shadow-sm"
+                placeholder="Dan"
+              />
+            </div>
+
+            <!-- Sana gacha -->
+            <div class="flex flex-col">
+              <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+                <i class="pi pi-calendar-minus text-[10px] text-emerald-500/80"></i>
+                {{ $t('common.date_to') }}
+              </label>
+              <DatePicker 
+                :modelValue="filters.date_to ? new Date(filters.date_to) : null"
+                @update:modelValue="onDateToChange"
+                dateFormat="yy-mm-dd"
+                showIcon
+                iconDisplay="input"
+                class="sr-datepicker-custom !w-full"
+                inputClass="!w-full !h-11 px-4 !bg-slate-50/50 dark:!bg-slate-950/40 !border !border-slate-200/80 dark:!border-slate-800/80 !rounded-xl text-[13px] !font-bold text-slate-700 dark:text-slate-200 transition-all shadow-sm"
+                placeholder="Gacha"
+              />
+            </div>
+          </div>
+
+          <!-- Summalar Grid -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Min Summa -->
+            <div class="flex flex-col">
+              <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+                <i class="pi pi-wallet text-[10px] text-emerald-500/80"></i>
+                {{ $t('trades.filters.min_amount') }}
+              </label>
+              <InputNumber 
+                :modelValue="filters.min_amount !== '' && filters.min_amount !== null ? Number(filters.min_amount) : null"
+                @update:modelValue="$emit('update:filter', { min_amount: $event !== null ? String($event) : '' })"
+                placeholder="0"
+                mode="decimal"
+                class="sr-number !h-11"
+                inputClass="!w-full !h-11 !px-4 !bg-slate-50/50 dark:!bg-slate-950/40 !border !border-slate-200/80 dark:!border-slate-800/80 !rounded-xl focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/5 outline-none text-[13px] !font-bold text-slate-700 dark:text-slate-200 transition-all placeholder:text-slate-500 shadow-sm"
+              />
+            </div>
+
+            <!-- Max Summa -->
+            <div class="flex flex-col">
+              <label class="text-[11px] font-extrabold tracking-wider text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1.5 mb-2">
+                <i class="pi pi-wallet text-[10px] text-emerald-500/80"></i>
+                {{ $t('trades.filters.max_amount') }}
+              </label>
+              <InputNumber 
+                :modelValue="filters.max_amount !== '' && filters.max_amount !== null ? Number(filters.max_amount) : null"
+                @update:modelValue="$emit('update:filter', { max_amount: $event !== null ? String($event) : '' })"
+                placeholder="0"
+                mode="decimal"
+                class="sr-number !h-11"
+                inputClass="!w-full !h-11 !px-4 !bg-slate-50/50 dark:!bg-slate-950/40 !border !border-slate-200/80 dark:!border-slate-800/80 !rounded-xl focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/5 outline-none text-[13px] !font-bold text-slate-700 dark:text-slate-200 transition-all placeholder:text-slate-500 shadow-sm"
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="flex flex-col gap-2">
-          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.min_amount') }}</label>
-          <input 
-            type="number"
-            :value="filters.min_amount"
-            @input="$emit('update:filter', { min_amount: $event.target.value })"
-            placeholder="0"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
+        <!-- Sticky Footer inside Drawer -->
+        <div class="sticky bottom-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800/60 p-5 flex items-center justify-between gap-3 bg-slate-50/20">
+          <button 
+            @click="onReset" 
+            class="h-11 px-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-bold text-[13px]"
           >
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <label class="text-[13px] font-black tracking-wider text-slate-400 dark:text-slate-500">{{ $t('trades.filters.max_amount') }}</label>
-          <input 
-            type="number"
-            :value="filters.max_amount"
-            @input="$emit('update:filter', { max_amount: $event.target.value })"
-            placeholder="0"
-            class="w-full h-10 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 focus:border-emerald-500/50 outline-none text-[15px] font-medium text-slate-800 dark:text-white transition-all placeholder:text-slate-500"
+            <i class="pi pi-times text-[11px]"></i>
+            <span>Tozalash</span>
+          </button>
+          <button 
+            @click="onApply" 
+            class="h-11 flex-1 px-6 rounded-xl bg-emerald-500 text-white flex items-center justify-center gap-2 hover:bg-emerald-600 transition-colors font-bold text-[13px] shadow-lg shadow-emerald-500/10 active:scale-95"
           >
+            <i class="pi pi-filter text-[11px]"></i>
+            <span>Filtrni qo'llash</span>
+          </button>
         </div>
       </div>
-
-      <!-- Actions -->
-      <div class="flex items-center justify-end gap-3 mt-6 pt-5 border-t border-slate-200 dark:border-slate-800/50">
-        <button 
-          @click="onReset" 
-          class="h-10 px-5 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300"
-        >
-          <i class="pi pi-times text-[12px]"></i>
-          <span class="text-[15px] font-bold">{{ $t('common.reset') }}</span>
-        </button>
-        <button 
-          @click="onApply" 
-          class="h-10 px-6 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-        >
-          <i class="pi pi-filter text-[13px]"></i>
-          <span class="text-[15px] font-bold">{{ $t('trades.filters.apply') }}</span>
-        </button>
-      </div>
-    </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue'
-import Dropdown from 'primevue/dropdown'
 import AutoComplete from 'primevue/autocomplete'
-import { customersAPI, branchesAPI, workersAPI } from '@/services/api'
+import Select from 'primevue/select'
+import DatePicker from 'primevue/datepicker'
+import InputNumber from 'primevue/inputnumber'
+import { customersAPI, branchesAPI, workersAPI, shiftsAPI } from '@/services/api'
 import { useAuthStore } from '@/store/auth'
 import { useI18n } from 'vue-i18n'
 
@@ -198,6 +303,7 @@ const customerSuggestions = ref([])
 
 const branchOptions = ref([{ id: '', name: t('common.all') }])
 const workerOptions = ref([{ id: '', full_name: t('common.all') }])
+const shiftOptions = ref([{ id: '', name: t('common.all') || 'Barchasi' }])
 
 const isSeller = computed(() => {
   const role = (authStore.user?.role || authStore.user?.worker?.role || '').toLowerCase()
@@ -214,6 +320,30 @@ const hasActiveFilters = computed(() => {
 const onApply = () => {
   emit('search')
   showFilters.value = false
+}
+
+const onDateFromChange = (val) => {
+  if (!val) {
+    emit('update:filter', { date_from: '' })
+    return
+  }
+  const dateObj = new Date(val)
+  const yyyy = dateObj.getFullYear()
+  const mm = String(dateObj.getMonth() + 1).padStart(2, '0')
+  const dd = String(dateObj.getDate()).padStart(2, '0')
+  emit('update:filter', { date_from: `${yyyy}-${mm}-${dd}` })
+}
+
+const onDateToChange = (val) => {
+  if (!val) {
+    emit('update:filter', { date_to: '' })
+    return
+  }
+  const dateObj = new Date(val)
+  const yyyy = dateObj.getFullYear()
+  const mm = String(dateObj.getMonth() + 1).padStart(2, '0')
+  const dd = String(dateObj.getDate()).padStart(2, '0')
+  emit('update:filter', { date_to: `${yyyy}-${mm}-${dd}` })
 }
 
 const statusOptions = computed(() => [
@@ -234,12 +364,14 @@ const paymentOptions = computed(() => [
 
 onMounted(async () => {
   try {
-    const [bRes, wRes] = await Promise.all([
+    const [bRes, wRes, sRes] = await Promise.all([
       branchesAPI.getAll(),
-      workersAPI.getAll()
+      workersAPI.getAll(),
+      shiftsAPI.getAll({ page_size: 100 })
     ])
     const loadedBranches = bRes.data.results || bRes.data || []
     const loadedWorkers = wRes.data.results || wRes.data || []
+    const loadedShifts = sRes.data.results || sRes.data || []
     
     branchOptions.value = [
       { id: '', name: t('common.all') },
@@ -251,6 +383,14 @@ onMounted(async () => {
       ...loadedWorkers.map(w => ({
         id: w.id,
         full_name: w.full_name || `${w.first_name || ''} ${w.last_name || ''}`.trim() || w.name || t('workers.unknown')
+      }))
+    ]
+
+    shiftOptions.value = [
+      { id: '', name: t('common.all') || 'Barchasi' },
+      ...loadedShifts.map(s => ({
+        id: s.id,
+        name: `#${s.id} - ${s.worker?.full_name || s.worker?.first_name || 'Smena'} (${new Date(s.opened_at).toLocaleDateString('uz-UZ', {day:'2-digit', month:'2-digit'})})`
       }))
     ]
   } catch (error) {
@@ -322,6 +462,24 @@ const onReset = () => {
   background: #0f172a;
   border-color: #1e293b;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+:deep(.sr-datepicker-custom) {
+  width: 100% !important;
+}
+:deep(.sr-datepicker-custom .p-datepicker-input) {
+  width: 100% !important;
+}
+</style>
+
+<style>
+/* Global override to ensure PrimeVue v4 teleported panels are always on top of the fixed sidebar drawer */
+.p-select-overlay,
+.p-select-panel,
+.p-datepicker-panel,
+.p-datepicker,
+.p-autocomplete-panel {
+  z-index: 100010 !important;
 }
 </style>
 
