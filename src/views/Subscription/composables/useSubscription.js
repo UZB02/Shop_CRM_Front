@@ -33,6 +33,13 @@ export const useSubscription = () => {
     const currentBalance = ref(notificationStore.subscription?.balance || 0)
     const balanceTransactions = ref([])
 
+    // Coupons specific states
+    const coupons = ref([])
+    const loadingCoupons = ref(false)
+    const couponsCount = ref(0)
+    const couponsPage = ref(1)
+    const couponsPageSize = ref(10)
+
     const availablePlans = computed(() => subscription.value.plans || [])
 
     const selectedPlanObject = computed(() => {
@@ -139,6 +146,29 @@ export const useSubscription = () => {
         }
     }
 
+    const loadCouponsData = async () => {
+        loadingCoupons.value = true
+        try {
+            const params = {
+                page: couponsPage.value,
+                page_size: couponsPageSize.value
+            }
+            const res = await subscriptionAPI.getMyCoupons(params)
+            coupons.value = res?.data?.results || []
+            couponsCount.value = res?.data?.count || 0
+        } catch (error) {
+            console.error('Error loading coupons data:', error)
+            toast.add({ 
+                severity: 'error', 
+                summary: t('common.error'), 
+                detail: t('common.error_message'), 
+                life: 5000 
+            })
+        } finally {
+            loadingCoupons.value = false
+        }
+    }
+
     const confirmChangePlan = (planId) => {
         selectedPlanId.value = planId
         isExtending.value = false
@@ -239,7 +269,13 @@ export const useSubscription = () => {
         currentBalance,
         balanceTransactions,
         loadBillingData,
-        loadBalanceData
+        loadBalanceData,
+        coupons,
+        loadingCoupons,
+        couponsCount,
+        couponsPage,
+        couponsPageSize,
+        loadCouponsData
     }
 }
 

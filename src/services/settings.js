@@ -30,7 +30,8 @@ export const subscriptionAPI = {
     changePlan: (data) => api.post('/subscription/plan/', data),
     getInvoices: (config = {}) => api.get('/subscription/invoices/', config),
     getBalance: (config = {}) => api.get('/subscription/balance/', config),
-    applyCoupon: (data) => api.post('/subscription/apply-coupon/', data)
+    applyCoupon: (data) => api.post('/subscription/apply-coupon/', data),
+    getMyCoupons: (params) => api.get('/subscription/my-coupons/', { params })
 }
 
 

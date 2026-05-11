@@ -3,7 +3,6 @@
     <!-- Left Column: Primary Status & Coupon -->
     <div class="lg:col-span-12 xl:col-span-4 flex flex-col gap-4">
       <PrimaryStatusCard :subscription="subscription" />
-      <CouponCard @coupon-applied="$emit('coupon-applied')" />
     </div>
 
     <!-- Middle Column: Limits & Billing -->
@@ -21,7 +20,6 @@
 
 <script setup>
 import PrimaryStatusCard from './PrimaryStatusCard.vue'
-import CouponCard from './CouponCard.vue'
 import UsageLimitsCard from './UsageLimitsCard.vue'
 import BalanceSummaryCard from './BalanceSummaryCard.vue'
 import FeaturesGridCard from './FeaturesGridCard.vue'

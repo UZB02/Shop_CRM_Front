@@ -178,7 +178,8 @@
     "tabs": {
       "overview": "Menejment",
       "plans": "Tariflar",
-      "billing": "To'lovlar"
+      "billing": "To'lovlar",
+      "coupons": "Kuponlar"
     },
     "faq": "Ko'p so'raladigan savollar",
     "export_history": "Excelga yuklash",
@@ -196,7 +197,11 @@
     "coupon_empty_warning": "Iltimos, kupon kodini kiriting",
     "coupon_success_free_days": "Obunangiz +{days} kun uzaytirildi",
     "coupon_success_discount": "{amount} UZS chegirma bilan obuna yangilandi",
-    "balance_after": "Qoldiq"
+    "balance_after": "Qoldiq",
+    "coupons_title": "Kuponlarim",
+    "coupons_desc": "Siz tomoningizdan qo'llanilgan barcha faol kuponlar ro'yxati va yangi kuponlar kiritish",
+    "no_coupons": "Qo'llanilgan kuponlar tarixi bo'sh",
+    "showing_coupons": "{start}-{end} dan joriy {total} ta kupon ko'rsatilyapti"
   },
   "workers": {
     "title": "Xodimlar",

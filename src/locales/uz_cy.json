@@ -177,7 +177,8 @@
     "tabs": {
       "overview": "Менежмент",
       "plans": "Тарифлар",
-      "billing": "Тўловlar"
+      "billing": "Тўловlar",
+      "coupons": "Купонлар"
     },
     "faq": "Кўп сўраладиган саволлар",
     "export_history": "Excel'га юклаш",
@@ -196,7 +197,11 @@
     "coupon_empty_warning": "Илтимос, купон кодини киритинг",
     "coupon_success_free_days": "Обунангиз +{days} кун узайтирилди",
     "coupon_success_discount": "{amount} UZS чегирма билан обуна янгиланди",
-    "balance_after": "Қолдиқ"
+    "balance_after": "Қолдиқ",
+    "coupons_title": "Купонларим",
+    "coupons_desc": "Сиз томонингиздан қўлланилган барча фаол купонлар рўйхати ва янги купонлар киритиш",
+    "no_coupons": "Қўлланилган купонлар тарихи бўш",
+    "showing_coupons": "{start}-{end} дан жорий {total} та купон кўрсатиляпти"
   },
   "workers": {
     "title": "Ходимлар",
