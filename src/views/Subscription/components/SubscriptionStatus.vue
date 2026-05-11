@@ -255,7 +255,7 @@ const getFeatureIcon = (key) => {
 
 const getStatusLabel = (status) => {
     const s = String(status || '').toLowerCase()
-    const days = props.subscription.days_left
+    const days = remainingDays.value
     
     // Logic: Even if status is unknown, if we have days left, it's NOT expired
     if (s === 'active' || s === 'trial' || s === 'trialing' || (days > 0)) {
@@ -271,7 +271,7 @@ const getStatusLabel = (status) => {
 
 const getStatusSeverity = (sub) => {
     const s = String(sub.status || '').toLowerCase()
-    const days = sub.days_left
+    const days = remainingDays.value
     
     if (sub.expires_soon || (days > 0 && days <= 3)) {
         return 'warning'

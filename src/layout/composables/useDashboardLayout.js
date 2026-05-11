@@ -18,10 +18,10 @@ export function useDashboardLayout() {
   const showProfileDialog = ref(false)
 
   const subscriptionWarning = computed(() => {
-    const sub = notificationStore.subscription
-    if (!sub) return ''
-    if (sub.status === 'expired') return t('common.subscription_expired') || 'Obuna muddati tugagan!'
-    if (sub.days_left <= 10) return t('common.subscription_warning_days', { days: sub.days_left }) || `Obuna tugashiga ${sub.days_left} kun qoldi.`
+    if (!notificationStore.subscription) return ''
+    if (notificationStore.isSubscriptionExpired) return t('common.subscription_expired') || 'Obuna muddati tugagan!'
+    const daysLeft = notificationStore.daysLeft
+    if (daysLeft <= 10) return t('common.subscription_warning_days', { days: daysLeft }) || `Obuna tugashiga ${daysLeft} kun qoldi.`
     return ''
   })
 

@@ -30,8 +30,38 @@ export const useNotificationStore = defineStore('notifications', {
             }
             return Array.isArray(state.items) ? state.items.filter(i => !i.is_read).length : 0
         },
-        isSubscriptionExpired: (state) => state.subscription?.status === 'expired',
-        daysLeft: (state) => state.subscription?.days_left ?? 0,
+        isSubscriptionExpired: (state) => {
+            if (!state.subscription) return false
+            if (state.subscription.status === 'expired') return true
+            
+            // Check end_date dynamically to see if it has expired
+            if (state.subscription.end_date) {
+                const now = new Date()
+                now.setHours(0, 0, 0, 0)
+                
+                const endDate = new Date(state.subscription.end_date)
+                endDate.setHours(0, 0, 0, 0)
+                
+                if (endDate.getTime() < now.getTime()) {
+                    return true
+                }
+            }
+            return false
+        },
+        daysLeft: (state) => {
+            if (!state.subscription) return 0
+            if (!state.subscription.end_date) return state.subscription.days_left ?? 0
+            
+            const now = new Date()
+            now.setHours(0, 0, 0, 0)
+            
+            const endDate = new Date(state.subscription.end_date)
+            endDate.setHours(0, 0, 0, 0)
+            
+            const diffTime = endDate.getTime() - now.getTime()
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+            return diffDays
+        },
         hasLowStock: (state) => Array.isArray(state.items) && state.items.some(i => i.type === 'low_stock' && !i.is_read),
 
         canAddBranch: (state) => state.usage?.branches?.can_add ?? true,
@@ -90,6 +120,16 @@ export const useNotificationStore = defineStore('notifications', {
         async fetchSubscription(silent = false) {
             if (!silent) this.loading.subscription = true
             try {
+                // Obuna tugashiga 10, 3 va 1 kun qolgandagina background/silent so'rov yuborilsin
+                if (silent && this.subscription && this.subscription.end_date) {
+                    const days = this.daysLeft
+                    const allowedDays = [10, 3, 1]
+                    if (!allowedDays.includes(days)) {
+                        console.log(`ℹ️ [Subscription] Silent API call skipped. Days left: ${days}. We only call API when 10, 3, or 1 days are left.`)
+                        return
+                    }
+                }
+
                 const res = await subscriptionAPI.getStatus(silent ? { silent: true } : {})
                 this.subscription = res.data || null
                 if (res.data?.usage) {
