@@ -125,25 +125,34 @@
                                         <p class="text-[12px] font-bold text-slate-400 tracking-widest italic">{{ $t('subscription.no_transactions') || "O'tkazmalar mavjud emas" }}</p>
                                     </div>
                                     <div v-else class="space-y-3">
-                                        <div v-for="(tx, idx) in balanceTransactions" :key="idx" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-700">
+                                        <div v-for="(tx, idx) in balanceTransactions" :key="idx" class="flex items-center justify-between p-3.5 rounded-xl hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-800">
                                             <div class="flex items-center gap-3">
-                                                <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                                                     :class="tx.type === 'deduction' ? 'bg-rose-50 text-rose-500 dark:bg-rose-500/10' : 'bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10'">
-                                                    <i class="pi" :class="tx.type === 'deduction' ? 'pi-arrow-down-right' : 'pi-arrow-up-right'"></i>
+                                                <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border"
+                                                     :class="tx.type === 'deduction' 
+                                                       ? 'bg-rose-50 text-rose-500 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20' 
+                                                       : 'bg-emerald-50 text-emerald-500 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20'">
+                                                    <i class="pi text-xs" :class="tx.type === 'deduction' ? 'pi-arrow-down-right' : 'pi-arrow-up-right'"></i>
                                                 </div>
                                                 <div>
-                                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ tx.description || (tx.type === 'deduction' ? "Yechib olindi" : "To'ldirildi") }}</p>
-                                                    <p class="text-[11px] text-slate-400 font-medium">{{ tx.created_at }}</p>
+                                                    <p class="text-xs font-black text-slate-700 dark:text-slate-200">
+                                                       {{ tx.type_display || tx.description || (tx.type === 'deduction' ? "Yechib olindi" : "To'ldirildi") }}
+                                                    </p>
+                                                    <p v-if="tx.type_display && tx.description && tx.type_display !== tx.description" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
+                                                       {{ tx.description }}
+                                                    </p>
+                                                    <p class="text-[10px] text-slate-400 font-bold mt-1 tracking-wider flex items-center gap-1 uppercase">
+                                                       <i class="pi pi-clock text-[9px]"></i>
+                                                       {{ tx.created_on || tx.created_at }}
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div class="text-right">
-                                                <p class="text-sm font-bold tracking-tight" :class="tx.type === 'deduction' ? 'text-slate-700 dark:text-slate-200' : 'text-emerald-600'">
-                                                    {{ tx.type === 'deduction' ? '-' : '+' }}{{ formatCurrency(tx.amount) }}
+                                            <div class="text-right flex flex-col items-end">
+                                                <p class="text-xs font-black tracking-tight" :class="tx.type === 'deduction' ? 'text-slate-800 dark:text-slate-200' : 'text-emerald-600'">
+                                                    {{ formatCurrency(tx.amount) }}
                                                 </p>
-                                                <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-widest uppercase mt-1 inline-block"
-                                                      :class="tx.status === 'success' || !tx.status ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20' : 'bg-amber-100 text-amber-600 dark:bg-amber-500/20'">
-                                                    {{ tx.status || 'success' }}
-                                                </span>
+                                                <p v-if="tx.balance_after !== undefined" class="text-[10px] font-bold text-slate-400 mt-1">
+                                                    {{ $t('subscription.balance_after') }}: <span class="text-slate-600 dark:text-slate-300">{{ formatCurrency(tx.balance_after) }}</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

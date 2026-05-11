@@ -95,7 +95,6 @@ export const useSubscription = () => {
             loading.value = false
         }
     }
-
     const loadBalanceData = async () => {
         try {
             const balanceRes = await subscriptionAPI.getBalance().catch(e => {
@@ -104,6 +103,9 @@ export const useSubscription = () => {
             });
             const balData = balanceRes?.data || {}
             currentBalance.value = balData.balance || balData.current_balance || 0
+            if (subscription.value) {
+                subscription.value.balance = currentBalance.value
+            }
             balanceTransactions.value = balData.transactions || balData.results || []
         } catch (error) {
             console.error('Error loading balance:', error)

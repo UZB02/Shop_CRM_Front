@@ -34,8 +34,8 @@
        <!-- Cumulative Bar Chart -->
        <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col h-full">
           <div class="mb-4">
-             <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">To'lov Usullari</h3>
-             <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">Tushumlar strukturasi</p>
+             <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.payment_methods') }}</h3>
+             <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ t('reports.revenue_structure') }}</p>
           </div>
           <div class="flex-1 min-h-[220px] sm:min-h-[250px]">
              <Chart type="bar" :data="chartData" :options="chartOptions" class="h-full" />
@@ -44,7 +44,7 @@
 
        <!-- Distribution Pie Chart -->
        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col h-full">
-          <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-6 border-b border-slate-50 dark:border-slate-800 pb-2">Ulushi Taqsimoti</h3>
+          <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-6 border-b border-slate-50 dark:border-slate-800 pb-2">{{ t('reports.share_distribution') }}</h3>
           <div class="h-[180px] relative mb-6 flex items-center justify-center">
              <Chart type="doughnut" :data="donutData" :options="donutOptions" class="relative z-10 w-full h-full" />
              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
@@ -77,7 +77,7 @@
        <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
           <div class="flex items-center gap-2">
              <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
-             <span class="text-[12px] font-bold tracking-widest text-slate-500">Filiallar bo'yicha tahlil</span>
+             <span class="text-[12px] font-bold tracking-widest text-slate-500">{{ t('reports.branch_analysis') }}</span>
           </div>
        </div>
        <div class="overflow-x-auto max-h-[400px] custom-scrollbar overflow-y-auto">
@@ -86,10 +86,10 @@
                 <tr class="text-[11px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
                    <th class="px-4 py-3">{{ t('finance.branch') }}</th>
                    <th class="px-4 py-3 text-right">{{ t('finance.total_revenue') }}</th>
-                   <th class="px-4 py-3 text-center">Sotuvlar</th>
-                   <th class="px-4 py-3 text-right">Naqd</th>
-                   <th class="px-4 py-3 text-right">Karta</th>
-                   <th class="px-4 py-3 text-right">Nasiya</th>
+                   <th class="px-4 py-3 text-center">{{ t('reports.sales') }}</th>
+                   <th class="px-4 py-3 text-right">{{ t('common.cash') }}</th>
+                   <th class="px-4 py-3 text-right">{{ t('common.card') }}</th>
+                   <th class="px-4 py-3 text-right">{{ t('common.debt') }}</th>
                    <th class="px-4 py-3 text-center">{{ t('finance.share') }}</th>
                 </tr>
              </thead>
@@ -156,16 +156,16 @@ const paymentCards = computed(() => {
 })
 
 // All method definitions
-const ALL_METHODS = [
-  { key: 'cash',  label: 'Naqd',   color: '#10b981' },
-  { key: 'card',  label: 'Karta',  color: '#3b82f6' },
-  { key: 'debt',  label: 'Nasiya', color: '#f59e0b' },
-]
+const ALL_METHODS = computed(() => [
+  { key: 'cash',  label: t('common.cash'),   color: '#10b981' },
+  { key: 'card',  label: t('common.card'),  color: '#3b82f6' },
+  { key: 'debt',  label: t('common.debt'), color: '#f59e0b' },
+])
 
 const chartData = computed(() => {
   const methods = props.activeMethod
-    ? ALL_METHODS.filter(m => m.key === props.activeMethod)
-    : ALL_METHODS
+    ? ALL_METHODS.value.filter(m => m.key === props.activeMethod)
+    : ALL_METHODS.value
 
   return {
     labels: props.data.chart?.map(i => i.label) || [],
@@ -213,8 +213,8 @@ const chartOptions = {
 const donutData = computed(() => {
   const sum = props.data.summary || {}
   const methods = props.activeMethod
-    ? ALL_METHODS.filter(m => m.key === props.activeMethod)
-    : ALL_METHODS
+    ? ALL_METHODS.value.filter(m => m.key === props.activeMethod)
+    : ALL_METHODS.value
 
   return {
     labels: methods.map(m => m.label),
@@ -249,8 +249,8 @@ const donutOptions = computed(() => ({
 const distribution = computed(() => {
   const sum = props.data.summary || {}
   const methods = props.activeMethod
-    ? ALL_METHODS.filter(m => m.key === props.activeMethod)
-    : ALL_METHODS
+    ? ALL_METHODS.value.filter(m => m.key === props.activeMethod)
+    : ALL_METHODS.value
   const bgMap = { cash: 'bg-emerald-500', card: 'bg-blue-500', debt: 'bg-amber-500' }
   return methods.map(m => ({
     label: 'common.' + m.key,

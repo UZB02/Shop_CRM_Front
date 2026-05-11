@@ -18,8 +18,8 @@
       <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
         <div class="flex items-center justify-between mb-4">
            <div>
-             <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('finance.revenue') }} Dynamika</h3>
-             <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">Vaqt o'tishi bilan tushumlar</p>
+             <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.revenue_dynamics') }}</h3>
+             <p class="text-sm font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ t('reports.revenue_over_time') }}</p>
            </div>
         </div>
         <div class="h-[180px] sm:h-[220px]">
@@ -29,7 +29,7 @@
 
       <!-- Donut Chart / Top Categories -->
       <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
-        <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-4 border-b border-slate-50 dark:border-slate-800 pb-2">{{ t('finance.share') }} Taqsimoti</h3>
+        <h3 class="text-[11px] font-bold tracking-widest text-slate-400 mb-4 border-b border-slate-50 dark:border-slate-800 pb-2">{{ t('reports.share_distribution') }}</h3>
         <div class="h-[150px] mb-4 relative flex items-center justify-center">
            <Chart type="doughnut" :data="donutData" :options="donutOptions" class="relative z-10" />
            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
@@ -61,7 +61,7 @@
              <thead>
                 <tr class="text-[11px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
                    <th class="px-4 py-3">#</th>
-                   <th class="px-4 py-3">Mahsulot / Kategoriya</th>
+                   <th class="px-4 py-3">{{ t('reports.product_category') }}</th>
                    <th class="px-4 py-3" v-if="tableData[0]?.quantity">{{ t('common.quantity') }}</th>
                    <th class="px-4 py-3">{{ t('finance.revenue') }}</th>
                    <th class="px-4 py-3">{{ t('finance.sales_count') }}</th>

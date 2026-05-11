@@ -10,7 +10,7 @@
           </div>
 
           <div class="field">
-              <label class="block text-xs font-black tracking-widest text-slate-500 mb-3">To'lov Turi</label>
+              <label class="block text-xs font-black tracking-widest text-slate-500 mb-3">{{ $t('subscription.payment_type') }}</label>
               <div class="flex gap-4">
                   <div class="flex-1 p-4 border-2 rounded-2xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-all flex flex-col items-center gap-2 group"
                        :class="{'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20': method === 'click', 'border-slate-100 dark:border-slate-800': method !== 'click'}"
@@ -33,14 +33,14 @@
           
           <div class="bg-blue-50/50 dark:bg-blue-900/10 text-blue-700 dark:text-blue-300 p-4 rounded-2xl text-xs font-medium border border-blue-100 dark:border-blue-900/30 flex gap-3 items-start">
               <i class="pi pi-info-circle mt-0.5"></i>
-              <span>Bu test rejimi. "To'lash" tugmasini bosish orqali to'lov muvaffaqiyatli amalga oshirilgan deb hisoblanadi.</span>
+              <span>{{ $t('subscription.sandbox_mode_desc') }}</span>
           </div>
       </div>
 
       <template #footer>
           <div class="flex gap-3 w-full pt-2">
             <Button :label="$t('common.cancel')" text class="flex-1 !rounded-xl" @click="$emit('update:visible', false)" />
-            <Button :label="$t('subscription.pay_action' || 'To\'lash')" icon="pi pi-check" severity="success" class="flex-1 !rounded-xl shadow-lg shadow-emerald-500/20" :loading="loading" @click="$emit('process')" />
+            <Button :label="$t('common.pay_action')" icon="pi pi-check" severity="success" class="flex-1 !rounded-xl shadow-lg shadow-emerald-500/20" :loading="loading" @click="$emit('process')" />
           </div>
       </template>
   </Dialog>

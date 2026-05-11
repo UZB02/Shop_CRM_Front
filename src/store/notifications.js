@@ -218,7 +218,6 @@ export const useNotificationStore = defineStore('notifications', {
             // 1. Tizimga kirgandagi boshlang'ich yuklash (Initial Load on login/startup)
             console.log('⏱️ [Schedule] Login qilinganda boshlang\'ich yuklash bajarilmoqda...')
             await Promise.allSettled([
-                this.fetchNotifications(),
                 this.fetchSubscription()
             ])
             

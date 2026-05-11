@@ -9,7 +9,7 @@
                  <i class="pi pi-users text-sm"></i>
               </div>
               <div>
-                 <p class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">Qarzdor mijozlar</p>
+                 <p class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.debtor_customers') }}</p>
                  <p class="text-sm font-bold text-slate-800 dark:text-slate-100">{{ data?.debtors_count || 0 }} ta</p>
               </div>
            </div>
@@ -22,7 +22,7 @@
                  <i class="pi pi-money-bill text-sm"></i>
               </div>
               <div>
-                 <p class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">Umumiy qarz summasi</p>
+                 <p class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.total_debt_amount') }}</p>
                  <p class="text-sm font-bold text-rose-500">{{ formatCurrency(data?.total_debt || 0) }}</p>
               </div>
            </div>
@@ -34,7 +34,7 @@
        <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800/50 flex items-center justify-between bg-slate-50/30 dark:bg-slate-800/20">
           <div class="flex items-center gap-2">
             <div class="w-1.5 h-4 bg-emerald-500 rounded-full shadow-sm"></div>
-            <span class="text-[12px] font-bold tracking-widest text-slate-500">Qarzdorlar ro'yxati</span>
+            <span class="text-[12px] font-bold tracking-widest text-slate-500">{{ t('reports.debtors_list') }}</span>
           </div>
        </div>
        
@@ -42,10 +42,10 @@
           <table class="w-full text-left border-collapse">
              <thead>
                 <tr class="text-[11px] font-bold tracking-widest text-slate-400 border-b border-slate-50 dark:border-slate-800/50 sticky top-0 bg-white dark:bg-slate-900 z-10">
-                   <th class="px-4 py-3">Mijoz / Telefon</th>
-                   <th class="px-4 py-3">Oxirgi savdo</th>
-                   <th class="px-4 py-3">Savdolar soni</th>
-                   <th class="px-4 py-3 text-right">Qarz summasi</th>
+                   <th class="px-4 py-3">{{ t('reports.customer_phone') }}</th>
+                   <th class="px-4 py-3">{{ t('reports.last_sale') }}</th>
+                   <th class="px-4 py-3">{{ t('reports.sales_count') }}</th>
+                   <th class="px-4 py-3 text-right">{{ t('reports.debt_amount') }}</th>
                 </tr>
              </thead>
              <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -70,7 +70,7 @@
                 </tr>
                 <tr v-if="!(data?.items?.length)">
                    <td colspan="4" class="px-4 py-12 text-center">
-                      <p class="text-[12px] font-bold text-slate-400 tracking-widest">Qarzdorlar topilmadi</p>
+                      <p class="text-[12px] font-bold text-slate-400 tracking-widest">{{ t('reports.no_debtors_found') }}</p>
                    </td>
                 </tr>
              </tbody>
@@ -81,8 +81,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { useSettingsStore } from '@/store/settings'
 
+const { t } = useI18n()
 const settingsStore = useSettingsStore()
 
 const props = defineProps({
