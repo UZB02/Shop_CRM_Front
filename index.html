@@ -58,7 +58,7 @@
 
   <!-- Initial Page Loader (Logo Pulse) -->
   <div id="global-initial-overlay"
-    style="position: fixed; inset: 0; background: #020617; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; font-family: 'Outfit', sans-serif;">
+    style="position: fixed; inset: 0; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; font-family: 'Outfit', sans-serif;">
     <div style="position: relative;">
       <!-- Pulsing Rings -->
       <div class="loader-ring"
@@ -79,14 +79,36 @@
     </div>
 
     <div style="margin-top: 40px; text-align: center;">
-      <h2 style="color: white; font-weight: 900; letter-spacing: 2px; margin: 0; font-size: 24px;">SIRIUS <span
+      <h2 id="loader-brand-text" style="font-weight: 900; letter-spacing: 2px; margin: 0; font-size: 24px;">SIRIUS <span
           style="color: #10b981;">POS</span></h2>
-      <p
-        style="color: #64748b; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; margin-top: 10px; animation: text-fade 1.5s infinite;">
+      <p id="loader-sub-text"
+        style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; margin-top: 10px; animation: text-fade 1.5s infinite;">
         Yuklanmoqda...</p>
     </div>
 
     <style>
+      /* Default Light Mode Styles */
+      #global-initial-overlay {
+        background: #f8fafc !important; /* slate-50 */
+      }
+      #loader-brand-text {
+        color: #0f172a !important; /* slate-900 */
+      }
+      #loader-sub-text {
+        color: #64748b !important; /* slate-500 */
+      }
+
+      /* Dark Mode overrides */
+      html.dark #global-initial-overlay {
+        background: #020617 !important; /* slate-950 */
+      }
+      html.dark #loader-brand-text {
+        color: #ffffff !important;
+      }
+      html.dark #loader-sub-text {
+        color: #94a3b8 !important; /* slate-400 */
+      }
+
       @keyframes pulse-ring {
         0% {
           transform: scale(0.8);
