@@ -28,7 +28,10 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Parol</label>
+          <div class="flex justify-between items-center">
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Parol</label>
+            <router-link to="/forgot-password" class="text-xs text-emerald-500 hover:underline font-medium">Parolni unutdingizmi?</router-link>
+          </div>
           <Password v-model="form.password" :feedback="false" toggleMask placeholder="••••••••" class="w-full" inputClass="sr-input" @keyup.enter="handleLogin" />
         </div>
 

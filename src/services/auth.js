@@ -11,7 +11,9 @@ export const authAPI = {
     tokenRefresh: (data) => axios.post(`${API_BASE_URL}/auth/token/refresh/`, data),
     register: (userData) => api.post('/auth/register/', userData),
     getMe: () => api.get('/auth/me'),
-    changePassword: (data) => api.post('/auth/change-password/', data)
+    changePassword: (data) => api.post('/auth/change-password/', data),
+    sendResetEmail: (data) => api.post('/auth/send-reset-email/', data),
+    resetPassword: (uid, token, data) => api.post(`/auth/reset-password/${uid}/${token}/`, data)
 }
 
 
