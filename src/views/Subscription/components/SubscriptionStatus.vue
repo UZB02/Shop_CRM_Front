@@ -8,7 +8,7 @@
     <!-- Middle Column: Limits & Billing -->
     <div class="lg:col-span-6 xl:col-span-4 flex flex-col gap-4">
       <UsageLimitsCard />
-      <BalanceSummaryCard :subscription="subscription" />
+      <BalanceSummaryCard :subscription="subscription" :coupons="coupons" />
     </div>
 
     <!-- Right Column: Features Grid -->
@@ -29,6 +29,10 @@ defineProps({
     type: Object,
     required: true,
     default: () => ({})
+  },
+  coupons: {
+    type: Array,
+    default: () => []
   }
 })
 

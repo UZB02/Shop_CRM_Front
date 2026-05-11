@@ -2,38 +2,57 @@
   <Dialog :visible="visible" @update:visible="$emit('update:visible', $event)" :header="header" :style="{width: '450px'}" :modal="true">
       <div class="flex flex-col gap-4">
           <div class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800">
-              <p class="text-xs font-black text-slate-500 mb-1 tracking-widest">{{ $t('subscription.current_plan') }}:</p>
-              <p class="font-black text-2xl tracking-tight text-slate-800 dark:text-slate-100">
-                {{ $t(`subscription.plans.${plan}`) }}
-              </p>
-              <p class="text-emerald-500 font-black text-lg mt-2">{{ priceLabel }}</p>
+               <p class="text-xs font-black text-slate-500 mb-1 tracking-widest">{{ $t('subscription.current_plan') }}:</p>
+               <p class="font-black text-2xl tracking-tight text-slate-800 dark:text-slate-100">
+                 {{ $t(`subscription.plans.${plan}`) || plan }}
+               </p>
+               
+               <div class="mt-4 space-y-2 pt-3 border-t border-slate-200 dark:border-slate-700" v-if="discountLabel">
+                  <div class="flex justify-between items-center text-xs font-semibold text-slate-500">
+                     <span>{{ $t('common.price') }}:</span>
+                     <span>{{ priceLabel }}</span>
+                  </div>
+                  <div class="flex justify-between items-center text-xs font-black text-emerald-600 dark:text-emerald-400">
+                     <span class="flex items-center gap-1">
+                        <i class="pi pi-ticket text-[11px]"></i>
+                        {{ $t('common.discount') }} ({{ activeCoupon?.code }}):
+                     </span>
+                     <span>{{ discountLabel }}</span>
+                  </div>
+                  <div class="h-px bg-slate-200 dark:bg-slate-700 my-1"></div>
+                  <div class="flex justify-between items-center">
+                     <span class="text-xs font-black text-slate-700 dark:text-slate-300">{{ $t('common.total_to_pay') }}:</span>
+                     <span class="text-lg font-black text-emerald-500">{{ finalPriceLabel }}</span>
+                  </div>
+               </div>
+               <p v-else class="text-emerald-500 font-black text-lg mt-2">{{ priceLabel }}</p>
           </div>
 
           <div class="field">
-              <label class="block text-xs font-black tracking-widest text-slate-500 mb-3">{{ $t('subscription.payment_type') }}</label>
-              <div class="flex gap-4">
-                  <div class="flex-1 p-4 border-2 rounded-2xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-all flex flex-col items-center gap-2 group"
-                       :class="{'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20': method === 'click', 'border-slate-100 dark:border-slate-800': method !== 'click'}"
-                       @click="$emit('update:method', 'click')">
-                      <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i class="pi pi-credit-card text-2xl text-blue-500"></i>
-                      </div>
-                      <span class="text-xs font-black tracking-widest">Click</span>
-                  </div>
+               <label class="block text-xs font-black tracking-widest text-slate-500 mb-3">{{ $t('subscription.payment_type') }}</label>
+               <div class="flex gap-4">
                    <div class="flex-1 p-4 border-2 rounded-2xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-all flex flex-col items-center gap-2 group"
-                       :class="{'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20': method === 'payme', 'border-slate-100 dark:border-slate-800': method !== 'payme'}"
-                       @click="$emit('update:method', 'payme')">
-                      <div class="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i class="pi pi-wallet text-2xl text-teal-500"></i>
-                      </div>
-                      <span class="text-xs font-black tracking-widest">Payme</span>
+                        :class="{'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20': method === 'click', 'border-slate-100 dark:border-slate-800': method !== 'click'}"
+                        @click="$emit('update:method', 'click')">
+                       <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                         <i class="pi pi-credit-card text-2xl text-blue-500"></i>
+                       </div>
+                       <span class="text-xs font-black tracking-widest">Click</span>
                    </div>
-              </div>
+                    <div class="flex-1 p-4 border-2 rounded-2xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-all flex flex-col items-center gap-2 group"
+                        :class="{'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20': method === 'payme', 'border-slate-100 dark:border-slate-800': method !== 'payme'}"
+                        @click="$emit('update:method', 'payme')">
+                       <div class="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                         <i class="pi pi-wallet text-2xl text-teal-500"></i>
+                       </div>
+                       <span class="text-xs font-black tracking-widest">Payme</span>
+                    </div>
+               </div>
           </div>
           
           <div class="bg-blue-50/50 dark:bg-blue-900/10 text-blue-700 dark:text-blue-300 p-4 rounded-2xl text-xs font-medium border border-blue-100 dark:border-blue-900/30 flex gap-3 items-start">
-              <i class="pi pi-info-circle mt-0.5"></i>
-              <span>{{ $t('subscription.sandbox_mode_desc') }}</span>
+               <i class="pi pi-info-circle mt-0.5"></i>
+               <span>{{ $t('subscription.sandbox_mode_desc') }}</span>
           </div>
       </div>
 
@@ -53,13 +72,14 @@ import Button from 'primevue/button'
 const props = defineProps({
   visible: Boolean,
   header: String,
-  plan: String,
+  plan: [String, Number],
   priceLabel: String,
   method: String,
-  loading: Boolean
+  loading: Boolean,
+  discountLabel: String,
+  finalPriceLabel: String,
+  activeCoupon: Object
 })
 
 defineEmits(['update:visible', 'update:method', 'process'])
 </script>
-
-

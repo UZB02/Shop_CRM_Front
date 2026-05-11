@@ -46,12 +46,61 @@ export const useSubscription = () => {
         return availablePlans.value.find(p => p.id === selectedPlanId.value) || null
     })
 
+    const selectedPlanType = computed(() => {
+        if (selectedPlanObject.value) {
+            return selectedPlanObject.value.plan_type
+        }
+        if (subscription.value.plan && subscription.value.plan.id === selectedPlanId.value) {
+            return subscription.value.plan.plan_type
+        }
+        return selectedPlanId.value
+    })
+
     const dialogHeader = computed(() => isExtending.value ? t('subscription.uzaytirish') : t('subscription.sotib_olish'))
 
     const getSelectedPriceLabel = computed(() => {
         if (!selectedPlanObject.value) return ''
         const price = selectedPlanObject.value.price_monthly
         return `${new Intl.NumberFormat('uz-UZ').format(price)} so'm`
+    })
+
+    const activeCoupon = computed(() => coupons.value[0] || null)
+
+    const discountAmount = computed(() => {
+        if (!activeCoupon.value || !selectedPlanObject.value) return 0
+        const rawPrice = selectedPlanObject.value.price_monthly || 0
+        const val = parseFloat(activeCoupon.value.discount_value || 0)
+        
+        const typeStr = String(activeCoupon.value.type || '').toLowerCase()
+        const typeDisplayStr = String(activeCoupon.value.type_display || '').toLowerCase()
+        
+        if (
+            typeStr.includes('percent') || 
+            typeStr.includes('percentage') || 
+            typeStr.includes('foiz') || 
+            typeDisplayStr.includes('foiz') || 
+            typeDisplayStr.includes('percent') ||
+            typeDisplayStr.includes('percentage')
+        ) {
+            return (rawPrice * val) / 100
+        }
+        return val // fixed discount
+    })
+
+    const finalPrice = computed(() => {
+        if (!selectedPlanObject.value) return 0
+        const rawPrice = selectedPlanObject.value.price_monthly || 0
+        return Math.max(rawPrice - discountAmount.value, 0)
+    })
+
+    const getDiscountLabel = computed(() => {
+        if (discountAmount.value <= 0) return ''
+        return `-${new Intl.NumberFormat('uz-UZ').format(discountAmount.value)} so'm`
+    })
+
+    const getFinalPriceLabel = computed(() => {
+        if (!selectedPlanObject.value) return ''
+        return `${new Intl.NumberFormat('uz-UZ').format(finalPrice.value)} so'm`
     })
 
     const loadSubscription = async (force = false) => {
@@ -275,7 +324,13 @@ export const useSubscription = () => {
         couponsCount,
         couponsPage,
         couponsPageSize,
-        loadCouponsData
+        loadCouponsData,
+        activeCoupon,
+        discountAmount,
+        finalPrice,
+        getDiscountLabel,
+        getFinalPriceLabel,
+        selectedPlanType
     }
 }
 

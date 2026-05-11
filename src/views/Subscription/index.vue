@@ -63,7 +63,7 @@
                 <!-- Tab: Overview -->
                 <TabPanel value="overview">
                     <div class="space-y-4">
-                        <SubscriptionStatus :subscription="subscription" @coupon-applied="onCouponApplied" />
+                        <SubscriptionStatus :subscription="subscription" :coupons="coupons" @coupon-applied="onCouponApplied" />
                         <FaqAndPromo />
                     </div>
                 </TabPanel>
@@ -116,10 +116,13 @@
     <PaymentDialog 
       v-model:visible="paymentDialog"
       :header="dialogHeader"
-      :plan="selectedPlanId"
+      :plan="selectedPlanType"
       :priceLabel="getSelectedPriceLabel"
       v-model:method="paymentMethod"
       :loading="processing"
+      :discountLabel="getDiscountLabel"
+      :finalPriceLabel="getFinalPriceLabel"
+      :activeCoupon="activeCoupon"
       @process="processPayment"
     />
   </div>
@@ -178,7 +181,11 @@ const {
     couponsCount,
     couponsPage,
     couponsPageSize,
-    loadCouponsData
+    loadCouponsData,
+    activeCoupon,
+    getDiscountLabel,
+    getFinalPriceLabel,
+    selectedPlanType
 } = useSubscription()
 
 const formatCurrency = (value) => settingsStore.formatPrice(value)
@@ -207,6 +214,9 @@ watch(couponsPage, () => {
 
 onMounted(() => {
     loadSubscription()
+    if (isOwner.value) {
+        loadCouponsData()
+    }
 })
 </script>
 
