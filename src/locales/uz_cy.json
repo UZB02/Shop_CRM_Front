@@ -1409,7 +1409,13 @@
     "last_sale": "Охирги савдо",
     "debt_amount": "Қарз суммаси",
     "no_debtors_found": "Қарздорлар топилмади",
-    "profit_loss_flow": "Фойда ва зарар оқими"
+    "profit_loss_flow": "Фойда ва зарар оқими",
+    "export_started": "Экспорт жараёни бошланди",
+    "export_success": "Файл муваффақиятли тайёрланди",
+    "errors": {
+      "subscription_required": "Экспорт учун обуна талаб қилинади",
+      "export_failed": "Файлни тайёрлашда хатолик юз берди"
+    }
   },
   "turlar": {
     "title": "Маҳсулот турлари",

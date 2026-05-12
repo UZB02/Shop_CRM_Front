@@ -2,9 +2,13 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { shiftsAPI } from '@/services/api'
 import { useSettingsStore } from '@/store/settings'
+import { useToast } from 'primevue/usetoast'
+import { useI18n } from 'vue-i18n'
 
 export function useShiftDetail() {
   const route = useRoute()
+  const { t } = useI18n()
+  const toast = useToast()
   const settingsStore = useSettingsStore()
   const loading = ref(true)
   const data = ref(null)
@@ -67,20 +71,29 @@ export function useShiftDetail() {
   const handleDownload = async () => {
     try {
       const id = route.params.id
+      toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
+      
       const response = await shiftsAPI.export(id)
       
       const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       const link = document.createElement('a')
       const url = window.URL.createObjectURL(blob)
       link.href = url
-      link.download = `Smena_Hisoboti_${id}.xlsx` // Excel format
+      
+      // Better filename with branch and date
+      const branchName = data.value?.smena?.branch_name?.replace(/\s+/g, '_') || 'Smena'
+      const date = data.value?.smena?.start_time?.split(' ')[0] || id
+      
+      link.download = `Smena_Hisoboti_${branchName}_${date}.xlsx`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
       
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
     } catch (error) {
       console.error('Export error:', error)
+      toast.add({ severity: 'error', summary: t('common.error'), detail: t('reports.errors.export_failed'), life: 4000 })
     }
   }
 

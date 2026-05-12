@@ -1,7 +1,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { branchesAPI } from '@/services/api'
+import { branchesAPI, reportsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
 export function useBranchDetail() {
@@ -106,6 +106,28 @@ export function useBranchDetail() {
         }
     }
 
+    const exportStocks = async () => {
+        if (!branch.value) return
+        try {
+            const branchId = branch.value.id || branch.value._id
+            const res = await reportsAPI.exportStocks({ branch: branchId })
+            
+            const url = window.URL.createObjectURL(new Blob([res.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', `qoldiqlar_${branch.value.name}_${new Date().toISOString().split('T')[0]}.xlsx`)
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            window.URL.revokeObjectURL(url)
+            
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
+        } catch (error) {
+            console.error('Export stocks error:', error)
+            toast.add({ severity: 'error', summary: t('common.error'), detail: t('reports.errors.export_failed'), life: 4000 })
+        }
+    }
+
     onMounted(() => {
         fetchDetail()
     })
@@ -122,7 +144,8 @@ export function useBranchDetail() {
         saving,
         fetchDetail,
         openEditModal,
-        handleSave
+        handleSave,
+        exportStocks
     }
 }
 

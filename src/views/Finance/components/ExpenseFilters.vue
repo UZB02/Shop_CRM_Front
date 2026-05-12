@@ -122,6 +122,51 @@
         />
       </div>
 
+      <!-- Shift Filter -->
+      <div v-if="['expenses-list', 'expenses'].includes(activeTab) && shifts?.length" class="relative flex-1 min-w-[150px] sm:flex-none sm:w-48 group">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+          <i class="pi pi-clock text-[12px]"></i>
+        </div>
+        <Select
+          v-model="filters.smena"
+          :options="shifts"
+          optionLabel="id"
+          optionValue="id"
+          :placeholder="$t('finance.smena')"
+          showClear
+          filter
+          class="w-full"
+          pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
+          pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !tracking-wider"
+        >
+          <template #option="slotProps">
+            <div class="flex items-center gap-2">
+              <span class="font-bold">#{{ slotProps.option.id }}</span>
+              <span class="text-[10px] text-slate-400">({{ slotProps.option.opened_at?.split('T')[1]?.substring(0,5) }})</span>
+            </div>
+          </template>
+        </Select>
+      </div>
+
+      <!-- Branch Filter -->
+      <div v-if="isManager && branches?.length" class="relative flex-1 min-w-[150px] sm:flex-none sm:w-48 group">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+          <i class="pi pi-building text-[12px]"></i>
+        </div>
+        <Select
+          v-model="filters.branch"
+          :options="branches"
+          optionLabel="name"
+          optionValue="id"
+          :placeholder="$t('branches.title')"
+          showClear
+          filter
+          class="w-full"
+          pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
+          pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !tracking-wider"
+        />
+      </div>
+
       <!-- Clear Filters -->
       <button
         v-if="hasActiveFilters"
@@ -181,6 +226,19 @@
               pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-black !h-full !tracking-wider"
             />
           </div>
+          <div v-if="isManager" class="relative flex-1 sm:flex-none sm:w-48 group">
+            <Select
+              v-model="filters.reason"
+              :options="wastageReasons"
+              optionLabel="label"
+              optionValue="value"
+              :placeholder="$t('warehouse.wastage.reason_placeholder')"
+              showClear
+              class="w-full"
+              pt:root:class="!h-9 !rounded-xl !border !border-slate-200 dark:!border-slate-700 bg-white dark:bg-slate-900"
+              pt:label:class="!bg-transparent !border-none !shadow-none !text-xs !font-black !h-full !tracking-wider !flex !items-center !py-0 !px-3"
+            />
+          </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:flex items-center gap-2.5 w-full lg:w-auto">
@@ -238,13 +296,20 @@ const showExport = ref(false)
 
 const hasActiveFilters = computed(() => {
   return props.filters.date || props.filters.category || props.filters.search ||
-    props.filters.group_by !== 'day' || props.filters.payment_method
+    props.filters.group_by !== 'day' || props.filters.payment_method || props.filters.smena || props.filters.branch || props.filters.reason
 })
 
 const allowedPaymentMethods = computed(() => [
   ...(settingsStore.allowCash ? [{ label: t('common.cash'), value: 'cash' }] : []),
   ...(settingsStore.allowCard ? [{ label: t('common.card'), value: 'card' }] : []),
   ...(settingsStore.allowDebt ? [{ label: t('common.debt'), value: 'debt' }] : []),
+])
+
+const wastageReasons = computed(() => [
+  { label: t('warehouse.wastage.reasons.damaged'), value: 'damaged' },
+  { label: t('warehouse.wastage.reasons.expired'), value: 'expired' },
+  { label: t('warehouse.wastage.reasons.stolen'), value: 'theft' },
+  { label: t('warehouse.wastage.reasons.other'), value: 'other' }
 ])
 </script>
 

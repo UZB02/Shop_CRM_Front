@@ -5,6 +5,7 @@
       :branch="branch"
       @edit="openEditModal"
       @transfer="openNewTransferHandler"
+      @export="exportStocks"
     />
 
     <!-- Main layout -->
@@ -119,7 +120,7 @@ const settingsStore = useSettingsStore()
 const {
   branch, loading, tabLoading, activeTab,
   editModalVisible, branchForm, submitted, saving,
-  openEditModal, handleSave, fetchDetail: fetchBranch
+  openEditModal, handleSave, fetchDetail: fetchBranch, exportStocks
 } = useBranchDetail()
 
 const openNewTransferHandler = () => {
@@ -184,6 +185,3 @@ const onWastageSaved = () => {
   animation: loading 1.5s infinite ease-in-out;
 }
 </style>
-
-
-

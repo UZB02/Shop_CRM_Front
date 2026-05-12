@@ -1432,7 +1432,13 @@
     "last_sale": "Oxirgi savdo",
     "debt_amount": "Qarz summasi",
     "no_debtors_found": "Qarzdorlar topilmadi",
-    "profit_loss_flow": "Foyda va zarar oqimi"
+    "profit_loss_flow": "Foyda va zarar oqimi",
+    "export_started": "Eksport jarayoni boshlandi",
+    "export_success": "Fayl muvaffaqiyatli tayyorlandi",
+    "errors": {
+      "subscription_required": "Eksport uchun obuna talab qilinadi",
+      "export_failed": "Faylni tayyorlashda xatolik yuz berdi"
+    }
   },
   "turlar": {
     "title": "Mahsulot turlari",

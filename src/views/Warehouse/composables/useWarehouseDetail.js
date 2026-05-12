@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { warehousesAPI } from '@/services/api'
+import { warehousesAPI, reportsAPI } from '@/services/api'
 import { useSettingsStore } from '@/store/settings'
 import i18n from '@/i18n'
 
@@ -155,6 +155,25 @@ export function useWarehouseDetail() {
     fetchWarehouseDetails(tab)
   })
 
+  const exportStocks = async () => {
+    if (!warehouse.value) return
+    try {
+      const warehouseId = warehouse.value.id || warehouse.value._id
+      const res = await reportsAPI.exportStocks({ warehouse: warehouseId })
+      
+      const url = window.URL.createObjectURL(new Blob([res.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `qoldiqlar_${warehouse.value.name}_${new Date().toISOString().split('T')[0]}.xlsx`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Export stocks error:', error)
+    }
+  }
+
   onMounted(() => {
     fetchWarehouseDetails()
   })
@@ -183,7 +202,8 @@ export function useWarehouseDetail() {
     onWastageSaved,
     onIncomingPageChange,
     openMovementDialog,
-    openNewTransferHandler
+    openNewTransferHandler,
+    exportStocks
   }
 }
 

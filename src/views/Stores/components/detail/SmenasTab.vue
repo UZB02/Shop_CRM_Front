@@ -48,6 +48,15 @@
         :placeholder="$t('common.status')"
       />
 
+      <!-- Export -->
+      <button
+        @click="exportShifts"
+        v-tooltip.top="$t('common.export')"
+        class="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all duration-300 flex items-center justify-center shadow-sm"
+      >
+        <i class="pi pi-file-excel text-xs"></i>
+      </button>
+
       <!-- Reset -->
       <button
         @click="resetFilters"
@@ -162,7 +171,7 @@ import DatePicker from 'primevue/datepicker'
 import Select from 'primevue/select'
 
 const { t } = useI18n()
-const { shifts, loading, branches, filters, resetFilters } = useSmenasTab()
+const { shifts, loading, branches, filters, resetFilters, exportShifts } = useSmenasTab()
 
 const statusOptions = computed(() => [
   { id: 'open',   label: t('shifts.status.open') },
@@ -285,5 +294,3 @@ const statusOptions = computed(() => [
   color: #10b981 !important;
 }
 </style>
-
-

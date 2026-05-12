@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
-import { productsAPI } from '@/services/api'
+import { productsAPI, reportsAPI } from '@/services/api'
 import { useNotificationStore } from '@/store/notifications'
 
 export function useProducts() {
@@ -120,6 +120,27 @@ export function useProducts() {
         })
     }
 
+    const exportStocks = async (params = {}) => {
+        try {
+            toast.add({ severity: 'info', summary: 'Jarayonda', detail: 'Sklad qoldiqlari eksporti tayyorlanmoqda...', life: 2000 })
+            
+            const res = await reportsAPI.exportStocks(params)
+            const url = window.URL.createObjectURL(new Blob([res.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', `qoldiqlar_${new Date().toISOString().split('T')[0]}.xlsx`)
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            window.URL.revokeObjectURL(url)
+            
+            toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Fayl yuklab olindi', life: 3000 })
+        } catch (error) {
+            console.error('Stock Export error:', error)
+            toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Eksportda xatolik yuz berdi', life: 4000 })
+        }
+    }
+
     return {
         loading,
         products,
@@ -136,7 +157,8 @@ export function useProducts() {
         loadProducts,
         handleSearch,
         handlePageChange,
-        confirmDeleteProduct
+        confirmDeleteProduct,
+        exportStocks
     }
 }
 

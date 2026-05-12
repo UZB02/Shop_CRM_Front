@@ -5,6 +5,7 @@
       :warehouse="warehouse"
       @movement="openMovementDialog"
       @transfer="openNewTransferHandler"
+      @export="exportStocks"
     />
 
     <!-- Main layout -->
@@ -137,7 +138,8 @@ const {
   onWastageSaved,
   onIncomingPageChange,
   openMovementDialog,
-  openNewTransferHandler
+  openNewTransferHandler,
+  exportStocks
 } = useWarehouseDetail()
 </script>
 

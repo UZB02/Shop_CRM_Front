@@ -24,7 +24,8 @@ const filters = ref({
     year: new Date().getFullYear(),
     months: '1,2,3,4,5,6,7,8,9,10,11,12',
     min_debt: 0,
-    payment_method: null
+    payment_method: null,
+    reason: null
 })
 
 // Export uses separate date range params (only for export endpoints)
@@ -60,7 +61,7 @@ export default function useExpenses() {
             if (statusArg && typeof statusArg === 'string') {
                 params.status = statusArg
             }
-            
+
             const res = await expenseCategoriesAPI.getAll(params)
             categories.value = Array.isArray(res.data) ? res.data : (res.data.results || res.data.data || [])
         } catch {
@@ -116,7 +117,7 @@ export default function useExpenses() {
             if (filters.value.branch) params.branch = filters.value.branch
             if (filters.value.category) params.category = filters.value.category
             if (filters.value.smena) params.smena = filters.value.smena
-            
+
             if (filters.value.date) {
                 if (Array.isArray(filters.value.date)) {
                     const [start, _] = filters.value.date
@@ -125,7 +126,7 @@ export default function useExpenses() {
                     params.date = new Date(filters.value.date).toLocaleDateString('en-CA')
                 }
             }
-            
+
             if (filters.value.search) params.search = filters.value.search
 
             const res = await expensesAPI.getAll(params)
@@ -241,49 +242,103 @@ export default function useExpenses() {
     const exportExpenses = async (format = 'excel') => {
         try {
             const params = { format }
-            if (exportFilters.value.date_from) params.date_from = exportFilters.value.date_from
-            if (exportFilters.value.date_to) params.date_to = exportFilters.value.date_to
+
+            // Format dates correctly to YYYY-MM-DD
+            const formatDate = (date) => {
+                if (!date) return null
+                if (typeof date === 'string') return date.split('T')[0]
+                return new Date(date).toLocaleDateString('en-CA')
+            }
+
+            if (exportFilters.value.date_from) params.date_from = formatDate(exportFilters.value.date_from)
+            if (exportFilters.value.date_to) params.date_to = formatDate(exportFilters.value.date_to)
+
+            // If export dates are missing, fallback to main filters if possible
+            if (!params.date_from && filters.value.date) {
+                if (Array.isArray(filters.value.date)) {
+                    params.date_from = formatDate(filters.value.date[0])
+                    params.date_to = formatDate(filters.value.date[1]) || params.date_from
+                } else {
+                    params.date_from = formatDate(filters.value.date)
+                    params.date_to = formatDate(filters.value.date)
+                }
+            }
+
             if (filters.value.branch) params.branch = filters.value.branch
             if (filters.value.category) params.category = filters.value.category
             if (filters.value.smena) params.smena = filters.value.smena
+
+            toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
 
             const res = await reportsAPI.exportExpenses(params)
             const url = window.URL.createObjectURL(new Blob([res.data]))
             const link = document.createElement('a')
             link.href = url
-            link.setAttribute('download', `moliya_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`)
+            link.setAttribute('download', `xarajatlar_${params.date_from || 'hisobot'}.${format === 'excel' ? 'xlsx' : 'pdf'}`)
             document.body.appendChild(link)
             link.click()
             link.remove()
             window.URL.revokeObjectURL(url)
+
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
         } catch (error) {
+            console.error('Export error:', error)
             const status = error.response?.status
             const detail = status === 403
-                ? 'Export uchun obuna talab qilinadi'
-                : 'Faylni tayyorlashda xatolik yuz berdi'
-            toast.add({ severity: 'error', summary: 'Eksport xatoligi', detail, life: 4000 })
+                ? t('reports.errors.subscription_required')
+                : t('reports.errors.export_failed')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
         }
     }
 
     const exportWastages = async () => {
         try {
             const params = {}
-            if (exportFilters.value.date_from) params.date_from = exportFilters.value.date_from
-            if (exportFilters.value.date_to) params.date_to = exportFilters.value.date_to
+
+            const formatDate = (date) => {
+                if (!date) return null
+                if (typeof date === 'string') return date.split('T')[0]
+                return new Date(date).toLocaleDateString('en-CA')
+            }
+
+            if (exportFilters.value.date_from) params.date_from = formatDate(exportFilters.value.date_from)
+            if (exportFilters.value.date_to) params.date_to = formatDate(exportFilters.value.date_to)
+
+            // Fallback to main filters
+            if (!params.date_from && filters.value.date) {
+                if (Array.isArray(filters.value.date)) {
+                    params.date_from = formatDate(filters.value.date[0])
+                    params.date_to = formatDate(filters.value.date[1]) || params.date_from
+                } else {
+                    params.date_from = formatDate(filters.value.date)
+                    params.date_to = formatDate(filters.value.date)
+                }
+            }
+
             if (filters.value.branch) params.branch = filters.value.branch
             if (filters.value.smena) params.smena = filters.value.smena
+            if (filters.value.reason) params.reason = filters.value.reason
+
+            toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
 
             const res = await reportsAPI.exportWastages(params)
             const url = window.URL.createObjectURL(new Blob([res.data]))
             const link = document.createElement('a')
             link.href = url
-            link.setAttribute('download', `isroflar_${new Date().toISOString().split('T')[0]}.xlsx`)
+            link.setAttribute('download', `isroflar_${params.date_from || 'hisobot'}.xlsx`)
             document.body.appendChild(link)
             link.click()
             link.remove()
             window.URL.revokeObjectURL(url)
+
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
         } catch (error) {
-            toast.add({ severity: 'error', summary: 'Eksport xatoligi', detail: 'Isroflar hisobotini tayyorlashda xatolik', life: 4000 })
+            console.error('Wastage Export error:', error)
+            const status = error.response?.status
+            const detail = status === 403
+                ? t('reports.errors.subscription_required')
+                : t('reports.errors.export_failed')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
         }
     }
 
@@ -313,5 +368,3 @@ export default function useExpenses() {
         fetchShifts
     }
 }
-
-

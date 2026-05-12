@@ -21,6 +21,7 @@
       :filters="crudFilters"
       :export-filters="exportFilters"
       :categories="dynamicCategories"
+      :branches="branches"
       :shifts="shifts"
       :is-manager="userIsManager"
       :active-tab="activeTab"

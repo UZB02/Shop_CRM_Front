@@ -4,7 +4,9 @@ export const reportsAPI = {
     // Excel/PDF Exports (Binary)
     exportExpenses: (params) => api.get('/export/expenses', { params, responseType: 'blob' }),
     exportWastages: (params) => api.get('/export/wastages', { params, responseType: 'blob' }),
-    
+    exportStocks: (params) => api.get('/export/stocks/', { params, responseType: 'blob' }),
+    exportShifts: (params) => api.get('/export/shifts/', { params, responseType: 'blob' }),
+
     // JSON Reports
     getFinancialReport: (params) => api.get('/export/financial-report/', { params }),
     getProfitLoss: (params) => api.get('/export/profit-loss/', { params }),
@@ -15,5 +17,3 @@ export const reportsAPI = {
     getTaxReport: (params) => api.get('/export/tax-report/', { params }),
     getMonthlyProfitLoss: (params) => api.get('/export/profit-loss/monthly-chart/', { params })
 }
-
-

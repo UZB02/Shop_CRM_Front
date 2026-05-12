@@ -5,6 +5,7 @@
     <ProductPageHeader
       :totalProducts="totalProducts"
       @add-category="openCategoryDialog"
+      @export-stocks="exportDialog = true"
     />
 
     <!-- Category Management Dialog -->
@@ -13,6 +14,12 @@
       :category="category"
       :saving="cSaving"
       @save="saveCategory"
+    />
+
+    <!-- Stock Export Dialog -->
+    <ExportStocksDialog
+      v-model="exportDialog"
+      @export="exportStocks"
     />
 
     <!-- Main layout -->
@@ -58,12 +65,13 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import ProductTable from './components/ProductTable.vue'
 import CategoryDialog from './components/CategoryDialog.vue'
 import CategoryList from './components/CategoryList.vue'
 import ProductPageHeader from './components/ProductPageHeader.vue'
 import ProductFilters from './components/ProductFilters.vue'
+import ExportStocksDialog from './components/ExportStocksDialog.vue'
 import { useProducts } from './composables/useProducts'
 import { useCategories } from './composables/useCategories'
 
@@ -71,13 +79,15 @@ const {
   loading, products, totalProducts, currentPage, rowsPerPage,
   searchQuery, selectedCategory, selectedSubcategory, selectedStatus, selectedPromotion,
   subcategories, fetchSubcategories, loadProducts, handleSearch,
-  handlePageChange, confirmDeleteProduct
+  handlePageChange, confirmDeleteProduct, exportStocks
 } = useProducts()
 
 const {
   categories, cSaving, categoryDialog, category,
   loadData, openCategoryDialog, saveCategory
 } = useCategories()
+
+const exportDialog = ref(false)
 
 const onCategorySelect = (cat) => {
   selectedCategory.value = cat ? (cat.id ?? null) : null
