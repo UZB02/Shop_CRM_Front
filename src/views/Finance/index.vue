@@ -26,7 +26,7 @@
       :is-manager="userIsManager"
       :active-tab="activeTab"
       @clear="refreshData"
-      @export="exportExpenses"
+      @export="handleExport"
       @export-wastage="exportWastages"
     />
 
@@ -170,7 +170,7 @@ const {
   branches, categories, shifts,
   expenseList, crudFilters, exportFilters,
   reportsFilters, dynamicCategories,
-  netProfit
+  netProfit, exportDebtors
 } = useExpenseTabLogic()
 
 // Local state for CRUD operations
@@ -178,6 +178,14 @@ const { getExpenseById, saveExpense, deleteExpense, exportExpenses, exportWastag
 
 const expenseDialog = ref(false)
 const detailVisible = ref(false)
+
+const handleExport = (format) => {
+  if (activeTab.value === 'debtors') {
+    exportDebtors(format)
+  } else {
+    exportExpenses(format)
+  }
+}
 const showCategories = ref(false)
 const saving = ref(false)
 const submitted = ref(false)

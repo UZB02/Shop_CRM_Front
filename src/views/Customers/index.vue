@@ -12,7 +12,9 @@
     <MinimalCustomerStatsTabs 
       :tabs="customerTabs"
       v-model:activeTab="activeTab"
-       :totalDebt="groupedData.debtors.total_debt_balance"
+      v-model:minDebt="minDebt"
+      :totalDebt="groupedData.debtors.total_debt_balance"
+      @export="exportDebtors"
     />
 
     <!-- Table Section -->
@@ -73,8 +75,7 @@ const {
   viewHistory,
   saveCustomer,
   confirmDelete,
-  hideDialog
+  hideDialog,
+  exportDebtors
 } = useCustomers()
 </script>
-
-

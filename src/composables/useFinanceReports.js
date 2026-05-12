@@ -148,7 +148,7 @@ export default function useFinanceReports() {
     const fetchDebtors = async () => {
         loading.value = true
         try {
-            const res = await financeReportsAPI.getDebtorReport({
+            const res = await reportsAPI.getDebtorReport({
                 branch: filters.branch,
                 min_debt: filters.min_debt
             })
@@ -180,6 +180,34 @@ export default function useFinanceReports() {
         }
     }
 
+    const exportDebtors = async (format = 'excel') => {
+        try {
+            const params = { format }
+            if (filters.branch) params.branch = filters.branch
+            if (filters.min_debt) params.min_debt = filters.min_debt
+
+            toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
+
+            const res = await reportsAPI.exportDebtorReport(params)
+            const url = window.URL.createObjectURL(new Blob([res.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', `qarzdorlar_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`)
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            window.URL.revokeObjectURL(url)
+
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
+        } catch (error) {
+            console.error('Debtor Export error:', error)
+            const detail = error.response?.status === 403
+                ? t('reports.errors.subscription_required')
+                : t('reports.errors.export_failed')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
+        }
+    }
+
     const clearFilters = () => {
         Object.assign(filters, getInitialFilters())
     }
@@ -195,6 +223,7 @@ export default function useFinanceReports() {
         fetchProfitLoss,
         fetchDebtors,
         fetchFinancialSummary,
+        exportDebtors,
         clearFilters
     }
 }

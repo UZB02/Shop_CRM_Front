@@ -19,6 +19,7 @@ export default function useExpenseTabLogic() {
       fetchProfitLoss,
       fetchDebtors,
       fetchFinancialSummary,
+      exportDebtors,
       clearFilters: clearReportsFilters
   } = useFinanceReports()
 
@@ -171,6 +172,7 @@ export default function useExpenseTabLogic() {
     branches, categories, shifts,
     expenseList, crudFilters, exportFilters,
     reportsFilters,
+    exportDebtors,
     dynamicCategories: computed(() => activeTab.value === 'expenses' ? categories.value : productCategories.value),
     summaryData: computed(() => reports.expenses?.summary || {}),
     totalFromList: computed(() => parseFloat(reports.expenses?.summary?.expenses_total || 0)),

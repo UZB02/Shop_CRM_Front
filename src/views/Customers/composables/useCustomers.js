@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
-import { customersAPI, customerGroupsAPI } from '@/services/api'
+import { customersAPI, customerGroupsAPI, reportsAPI } from '@/services/api'
 
 export function useCustomers() {
   const router = useRouter()
@@ -26,6 +26,7 @@ export function useCustomers() {
   const page = ref(1)
   const pageSize = ref(10)
   const searchQuery = ref('')
+  const minDebt = ref(0)
   let searchTimeout = null
 
   const customer = ref({
@@ -51,13 +52,20 @@ export function useCustomers() {
     loadCustomers()
   })
 
+  watch(minDebt, () => {
+    if (activeTab.value === 'debtors') {
+      handleSearch() // reuse search timeout for minDebt too
+    }
+  })
+
   const loadCustomers = async () => {
     loading.value = true
     try {
       const params = { 
         page: page.value, 
         limit: pageSize.value,
-        search: searchQuery.value || undefined 
+        search: searchQuery.value || undefined,
+        min_debt: activeTab.value === 'debtors' ? minDebt.value : undefined
       }
       const response = await customersAPI.getGrouped(params)
       groupedData.value = response.data
@@ -168,6 +176,34 @@ export function useCustomers() {
     }).format(val || 0)
   }
 
+  const exportDebtors = async (format = 'excel') => {
+    try {
+      const params = { format }
+      if (searchQuery.value) params.search = searchQuery.value
+      if (minDebt.value) params.min_debt = minDebt.value
+      
+      toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
+
+      const res = await reportsAPI.exportDebtorReport(params)
+      const url = window.URL.createObjectURL(new Blob([res.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `qarzdorlar_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
+    } catch (error) {
+      console.error('Debtor Export error:', error)
+      const detail = error.response?.status === 403
+        ? t('reports.errors.subscription_required')
+        : t('reports.errors.export_failed')
+      toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
+    }
+  }
+
   onMounted(() => {
     loadCustomers()
     loadGroups()
@@ -185,6 +221,7 @@ export function useCustomers() {
     page,
     pageSize,
     searchQuery,
+    minDebt,
     customer,
     customerTabs,
     activeCustomers,
@@ -197,7 +234,8 @@ export function useCustomers() {
     saveCustomer,
     confirmDelete,
     hideDialog,
-    formatCurrency
+    formatCurrency,
+    exportDebtors
   }
 }
 

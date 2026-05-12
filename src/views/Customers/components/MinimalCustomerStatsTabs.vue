@@ -20,6 +20,37 @@
       </button>
     </div>
 
+    <!-- Debtors Filters & Actions -->
+    <div v-if="activeTab === 'debtors'" class="flex items-center gap-2 px-2 py-1 md:py-0 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800">
+      <div class="relative group/min-debt min-w-[120px]">
+        <i class="pi pi-money-bill absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-300 text-[10px] transition-colors group-focus-within/min-debt:text-emerald-500"></i>
+        <input 
+          :value="minDebt" 
+          @input="$emit('update:minDebt', $event.target.value)"
+          type="number" 
+          :placeholder="$t('finance.min_debt')" 
+          class="w-full h-8 pl-7 pr-2 text-[11px] font-semibold rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/20 transition-all outline-none"
+        />
+      </div>
+
+      <div class="flex items-center gap-1">
+        <button 
+          @click="$emit('export', 'excel')"
+          class="h-8 w-8 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/10 hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
+          title="Excel"
+        >
+          <i class="pi pi-file-excel text-[12px]"></i>
+        </button>
+        <button 
+          @click="$emit('export', 'pdf')"
+          class="h-8 w-8 rounded-lg flex items-center justify-center text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/10 hover:bg-rose-500 hover:text-white transition-all shadow-sm"
+          title="PDF"
+        >
+          <i class="pi pi-file-pdf text-[12px]"></i>
+        </button>
+      </div>
+    </div>
+
     <!-- Total Debt Amount Badge -->
     <div class="flex items-center justify-between md:justify-end gap-3 px-4 py-2.5 bg-slate-50/50 dark:bg-slate-800/50 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800 transition-all min-w-fit">
       <div class="flex flex-col items-start md:items-end">
@@ -45,10 +76,11 @@
 defineProps({
   tabs: Array,
   activeTab: String,
-  totalDebt: Number
+  totalDebt: Number,
+  minDebt: [Number, String]
 })
 
-defineEmits(['update:activeTab'])
+defineEmits(['update:activeTab', 'update:minDebt', 'export'])
 
 const formatCurrency = (val) => {
   return new Intl.NumberFormat('uz-UZ', { 

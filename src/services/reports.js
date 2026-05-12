@@ -6,6 +6,7 @@ export const reportsAPI = {
     exportWastages: (params) => api.get('/export/wastages', { params, responseType: 'blob' }),
     exportStocks: (params) => api.get('/export/stocks/', { params, responseType: 'blob' }),
     exportShifts: (params) => api.get('/export/shifts/', { params, responseType: 'blob' }),
+    exportDebtorReport: (params) => api.get('/export/debtor-report/', { params, responseType: 'blob' }),
 
     // JSON Reports
     getFinancialReport: (params) => api.get('/export/financial-report/', { params }),
