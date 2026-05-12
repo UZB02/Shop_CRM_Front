@@ -285,6 +285,7 @@ const props = defineProps({
   filters: Object,
   exportFilters: Object,
   categories: Array,
+  branches: Array,
   shifts: Array,
   isManager: Boolean,
   activeTab: String

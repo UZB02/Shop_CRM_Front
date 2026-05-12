@@ -22,8 +22,10 @@
     "back": "Qaytish",
     "search": "Qidirish",
     "overview": "Umumiy tahlil",
+    "summary": "Umumiy",
     "profile": "Profil",
     "actions": "Amallar",
+    "count": "ta",
     "status": "Holati",
     "active": "Faol",
     "vacation": "Ta'tilda",
@@ -312,7 +314,8 @@
       },
       "moliya": {
         "label": "Moliya",
-        "desc": "Moliya va xarajatlar"
+        "profit_desc": "Sof foyda barcha xarajatlardan keyin",
+        "total_outflow_desc": "Barcha chiqimlar (Xarid + Isrof + Xarajat)"
       },
       "obuna": {
         "label": "Obuna",
@@ -618,6 +621,9 @@
     "date": "Sana"
   },
   "warehouse": {
+    "title": "Ombor",
+    "purchases": "Xaridlar",
+    "stocks": "Qoldiqlar",
     "page_title": "Omborlar",
     "page_subtitle": "Ob'ektlar va zahira markazlari boshqaruvi",
     "search_placeholder": "Ombor nomi yoki manzili bo'yicha qidirish...",
@@ -755,9 +761,9 @@
       "desc_placeholder": "Tashish paytida singan, o'ramiga shikast yetgan va h.k.",
       "created_success": "Chiqit muvaffaqiyatli qayd etildi",
       "reasons": {
+        "damaged": "Buzilgan / Shikastlangan",
         "expired": "Muddati o'tgan",
-        "damaged": "Shikastlangan",
-        "stolen": "O'g'irlangan",
+        "stolen": "Yo'qolgan / O'g'irlangan",
         "other": "Boshqa"
       },
       "no_data": "Hozircha chiqitlar tarixi mavjud emas",
@@ -1336,6 +1342,8 @@
     "revenue": "Tushum",
     "purchases": "Xaridlar",
     "expenses": "Xarajatlar tahlili",
+    "expenses_desc": "Operatsion va boshqa xarajatlar",
+    "total_outflow_desc": "Barcha chiqimlar (Xarid + Isrof + Xarajat)",
     "cogs": "Sotilgan mahsulot tannarxi",
     "margin": "Rentabellik (margin)",
     "share": "Ulushi",
@@ -1406,6 +1414,7 @@
     "export_pdf": "Pdfga yuklash",
     "wastage_export": "Isroflar Excel",
     "filters": "Hisobot filtrlar",
+    "period": "Hisobot davri",
     "summary": "xulosasi",
     "profit_loss_desc": "Biznesingizning moliyaviy sog'lig'i hisoboti.",
     "monthly_distribution": "Oylik moliyaviy taqsimot",

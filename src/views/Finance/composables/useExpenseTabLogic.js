@@ -16,12 +16,9 @@ export default function useExpenseTabLogic() {
       loading: reportsLoading,
       filters: reportsFilters,
       reports,
-      fetchRevenue,
-      fetchExpensesReport,
-      fetchPaymentMethods,
-      fetchProfitability,
       fetchProfitLoss,
       fetchDebtors,
+      fetchFinancialSummary,
       clearFilters: clearReportsFilters
   } = useFinanceReports()
 
@@ -39,6 +36,7 @@ export default function useExpenseTabLogic() {
     
     // For Managers, Finance (P&L) is the primary tab
     if (userIsManager.value) {
+      tList.push({ id: 'summary', label: t('common.summary'), icon: 'pi pi-info-circle' })
       tList.push({ id: 'profit-loss', label: t('finance.title'), icon: 'pi pi-chart-bar' })
     }
 
@@ -67,6 +65,9 @@ export default function useExpenseTabLogic() {
   // 1. First, define the fetch function to avoid ReferenceErrors
   const fetchTabReport = async () => {
     switch (activeTab.value) {
+        case 'summary':
+            if (userIsManager.value) await fetchFinancialSummary()
+            break
         case 'profit-loss':
             if (userIsManager.value) await fetchProfitLoss()
             break

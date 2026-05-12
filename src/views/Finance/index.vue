@@ -30,8 +30,13 @@
       @export-wastage="exportWastages"
     />
 
+    <!-- ── Tab Content: Summary ─────────────────────────────── -->
+    <div v-if="activeTab === 'summary'" class="animate-in fade-in slide-in-from-bottom-2 duration-400">
+       <FinancialSummaryReport :data="reports.financialSummary" />
+    </div>
+
     <!-- ── Tab Content: Expenses (Original + Analytics) ─────── -->
-    <div v-if="activeTab === 'expenses'" class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-400">
+    <div v-else-if="activeTab === 'expenses'" class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-400">
       <FinanceExpensesReport 
         :data="reports.expenses" 
         :expenses="expenseList"
@@ -155,6 +160,7 @@ import ProfitabilityReport from './components/reports/ProfitabilityReport.vue'
 import ProfitLossReport from './components/reports/ProfitLossReport.vue'
 import FinanceExpensesReport from './components/reports/FinanceExpensesReport.vue'
 import DebtorReport from './components/reports/DebtorReport.vue'
+import FinancialSummaryReport from './components/reports/FinancialSummaryReport.vue'
 
 const confirm = useConfirm()
 

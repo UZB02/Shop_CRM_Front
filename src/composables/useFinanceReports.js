@@ -1,5 +1,5 @@
 import { ref, reactive } from 'vue'
-import { financeReportsAPI } from '@/services/api'
+import { financeReportsAPI, reportsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import i18n from '@/i18n'
 
@@ -36,7 +36,8 @@ export default function useFinanceReports() {
         payments: { summary: {}, chart: [], table: [] },
         profitability: { summary: {}, chart: [], table: [], subcategory_enabled: false },
         profitLoss: { summary: {}, data: [], year: null, months: [] },
-        debtors: { total_debt: 0, debtors_count: 0, items: [] }
+        debtors: { total_debt: 0, debtors_count: 0, items: [] },
+        financialSummary: null
     })
 
     const fetchRevenue = async () => {
@@ -161,6 +162,24 @@ export default function useFinanceReports() {
         }
     }
 
+    const fetchFinancialSummary = async () => {
+        loading.value = true
+        try {
+            const res = await reportsAPI.getFinancialReport({
+                date_from: filters.date_from,
+                date_to: filters.date_to,
+                branch: filters.branch
+            })
+            reports.financialSummary = res.data
+        } catch (error) {
+            if (error.response?.status === 429) return
+            const detail = error.response?.data?.detail || error.response?.data?.message || t('finance.messages.load_error')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 3000 })
+        } finally {
+            loading.value = false
+        }
+    }
+
     const clearFilters = () => {
         Object.assign(filters, getInitialFilters())
     }
@@ -175,6 +194,7 @@ export default function useFinanceReports() {
         fetchProfitability,
         fetchProfitLoss,
         fetchDebtors,
+        fetchFinancialSummary,
         clearFilters
     }
 }
