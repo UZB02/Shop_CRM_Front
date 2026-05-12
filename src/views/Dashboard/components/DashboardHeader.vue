@@ -102,9 +102,25 @@ const emit = defineEmits(['refresh', 'update:filters', 'reset'])
 const dates = ref([new Date(props.filters.date_from), new Date(props.filters.date_to)])
 const selectedBranch = ref(props.filters.branch)
 
-const hasFilters = computed(() =>
-  props.filters.branch !== null || !!props.filters.category || !!props.filters.worker
-)
+const hasFilters = computed(() => {
+  const f = props.filters
+  
+  // 1. Check if branch, worker, category or warehouse is selected
+  if (f.branch !== null || !!f.category || !!f.worker || !!f.warehouse) return true
+
+  // 2. Check if dates are different from default (First day of month to Today)
+  const now = new Date()
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
+  
+  const formatDateStr = (d) => {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  }
+
+  const defaultFrom = formatDateStr(firstDay)
+  const defaultTo = formatDateStr(now)
+
+  return f.date_from !== defaultFrom || f.date_to !== defaultTo
+})
 
 const periodText = computed(() => {
   if (!props.period?.date_from || !props.period?.date_to) return null

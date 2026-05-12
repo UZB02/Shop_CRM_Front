@@ -45,10 +45,6 @@
           <span class="text-slate-500">Akkauntingiz yo'qmi? </span>
           <router-link to="/register" class="text-emerald-500 font-medium hover:underline">Ro'yxatdan o'tish</router-link>
         </div>
-
-        <div class="text-center mt-6 text-sm text-slate-500">
-          <p>Test login: <code class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">admin / admin123</code></p>
-        </div>
       </div>
     </div>
   </div>
