@@ -1424,7 +1424,27 @@
     "errors": {
       "subscription_required": "Экспорт учун обуна талаб қилинади",
       "export_failed": "Файлни тайёрлашда хатолик юз берди"
-    }
+    },
+    "download_template": "Шаблон юклаш",
+    "template_downloading": "Юкланмоқда...",
+    "template_downloaded": "{file} муваффақиятли юкланди",
+    "template_error": "Шаблонни юклаб бўлмади",
+    "import_btn": "Импорт",
+    "import_title": "Маҳсулотларни импорт қилиш",
+    "import_result_title": "Импорт натижаси",
+    "import_created": "Қўшилди",
+    "import_updated": "Янгиланди",
+    "import_skipped": "Ўтказиб юборилди",
+    "import_errors": "Хатоликлар",
+    "import_row": "Қатор",
+    "import_reason": "Сабаб",
+    "import_no_errors": "Хатоликлар йўқ — барча қаторлар муваффақиятли",
+    "import_select_file": "Excel файлни танланг (.xlsx)",
+    "import_success": "Импорт муваффақиятли якунланди",
+    "import_processing": "Файл юкланмоқда, бироз кутинг...",
+    "import_permission_denied": "Импорт учун manager ёки owner ҳуқуқи талаб қилинади",
+    "import_invalid_file": "Нотўғри файл формати. Фақат .xlsx қабул қилинади",
+    "import_reload": "Маҳсулотларни янгилаш"
   },
   "turlar": {
     "title": "Маҳсулот турлари",

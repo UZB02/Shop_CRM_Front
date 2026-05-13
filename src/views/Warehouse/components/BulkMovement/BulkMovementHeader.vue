@@ -33,6 +33,14 @@
 
       <div class="flex items-center gap-2">
         <button
+          @click="$emit('download-template')"
+          :disabled="templateLoading"
+          class="h-8 sm:h-9 px-4 sm:px-5 rounded-lg border border-blue-100 dark:border-blue-900/50 bg-blue-50/30 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 text-[11px] sm:text-[12px] font-black tracking-widest hover:bg-blue-50 transition-all active:scale-95 flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <i :class="templateLoading ? 'pi pi-spin pi-spinner' : 'pi pi-download'" class="text-[11px]"></i>
+          {{ $t('reports.download_template') }}
+        </button>
+        <button
           @click="$emit('back')"
           class="h-8 sm:h-9 px-4 sm:px-5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 text-[11px] sm:text-[12px] font-black tracking-widest hover:bg-slate-50 transition-all active:scale-95"
         >
@@ -61,10 +69,11 @@ defineProps({
   validCount: Number,
   totalCount: Number,
   saving: Boolean,
-  type: String
+  type: String,
+  templateLoading: { type: Boolean, default: false }
 })
 
-defineEmits(['back', 'save'])
+defineEmits(['back', 'save', 'download-template'])
 </script>
 
 

@@ -3,9 +3,14 @@
     <!-- Header Component -->
     <CustomerPageHeader 
       :totalRecords="totalRecords"
+      :templateLoading="templateLoading.customers"
       v-model:searchQuery="searchQuery"
+      :importing="importing"
+      :canImport="isManagerOrAbove()"
       @add="openNew"
       @update:searchQuery="handleSearch"
+      @download-template="downloadTemplate('customers')"
+      @import="importData('customers', $event, loadCustomers)"
     />
 
     <!-- Stats & Tabs Component -->
@@ -43,6 +48,13 @@
       @save="saveCustomer"
       @hide="hideDialog"
     />
+
+    <!-- Import Result Dialog -->
+    <ImportResultDialog
+      v-model:visible="showResultDialog"
+      :result="importResult"
+      @reload="loadCustomers"
+    />
   </div>
 </template>
 
@@ -51,7 +63,10 @@ import CustomerTable from './components/CustomerTable.vue'
 import CustomerDialog from './components/CustomerDialog.vue'
 import CustomerPageHeader from './components/CustomerPageHeader.vue'
 import MinimalCustomerStatsTabs from './components/MinimalCustomerStatsTabs.vue'
+import ImportResultDialog from '@/components/ImportResultDialog.vue'
 import { useCustomers } from './composables/useCustomers'
+import { useTemplateDownload } from '@/composables/useTemplateDownload'
+import { useImport } from '@/composables/useImport'
 
 const {
   loading,
@@ -64,6 +79,7 @@ const {
   page,
   pageSize,
   searchQuery,
+  minDebt,
   customer,
   customerTabs,
   activeCustomers,
@@ -78,4 +94,7 @@ const {
   hideDialog,
   exportDebtors
 } = useCustomers()
+
+const { templateLoading, downloadTemplate } = useTemplateDownload()
+const { importing, importResult, showResultDialog, isManagerOrAbove, importData } = useImport()
 </script>

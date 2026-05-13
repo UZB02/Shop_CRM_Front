@@ -4,8 +4,13 @@
     <!-- Header -->
     <ProductPageHeader
       :totalProducts="totalProducts"
+      :templateLoading="templateLoading.products"
+      :importing="importing"
+      :canImport="isManagerOrAbove()"
       @add-category="openCategoryDialog"
       @export-stocks="exportDialog = true"
+      @download-template="downloadTemplate('products')"
+      @import="importData('products', $event, loadProducts)"
     />
 
     <!-- Category Management Dialog -->
@@ -20,6 +25,13 @@
     <ExportStocksDialog
       v-model="exportDialog"
       @export="exportStocks"
+    />
+
+    <!-- Import Result Dialog -->
+    <ImportResultDialog
+      v-model:visible="showResultDialog"
+      :result="importResult"
+      @reload="loadProducts"
     />
 
     <!-- Main layout -->
@@ -72,8 +84,11 @@ import CategoryList from './components/CategoryList.vue'
 import ProductPageHeader from './components/ProductPageHeader.vue'
 import ProductFilters from './components/ProductFilters.vue'
 import ExportStocksDialog from './components/ExportStocksDialog.vue'
+import ImportResultDialog from '@/components/ImportResultDialog.vue'
 import { useProducts } from './composables/useProducts'
 import { useCategories } from './composables/useCategories'
+import { useTemplateDownload } from '@/composables/useTemplateDownload'
+import { useImport } from '@/composables/useImport'
 
 const {
   loading, products, totalProducts, currentPage, rowsPerPage,
@@ -86,6 +101,9 @@ const {
   categories, cSaving, categoryDialog, category,
   loadData, openCategoryDialog, saveCategory
 } = useCategories()
+
+const { templateLoading, downloadTemplate } = useTemplateDownload()
+const { importing, importResult, showResultDialog, isManagerOrAbove, importData } = useImport()
 
 const exportDialog = ref(false)
 

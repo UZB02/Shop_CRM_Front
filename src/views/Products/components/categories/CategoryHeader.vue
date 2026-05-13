@@ -24,6 +24,15 @@
       </div>
       
       <button 
+        @click="$emit('download-template')"
+        :disabled="templateLoading"
+        class="h-9 px-3.5 rounded-lg text-xs font-medium text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50 bg-blue-50/30 dark:bg-blue-900/10 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center gap-1.5 whitespace-nowrap shadow-sm shrink-0 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <i :class="templateLoading ? 'pi pi-spin pi-spinner' : 'pi pi-download'" class="text-[12px]"></i>
+        <span>{{ $t('reports.download_template') }}</span>
+      </button>
+      
+      <button 
         @click="$emit('add')"
         class="h-9 px-3.5 rounded-lg text-xs font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center gap-1.5 whitespace-nowrap shadow-sm shadow-emerald-500/20 shrink-0 active:scale-95"
       >
@@ -41,10 +50,11 @@ import InputText from 'primevue/inputtext'
 
 const props = defineProps({
   totalCategories: Number,
-  searchQuery: String
+  searchQuery: String,
+  templateLoading: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['update:searchQuery', 'add'])
+const emit = defineEmits(['update:searchQuery', 'add', 'download-template'])
 const router = useRouter()
 
 const searchModel = computed({

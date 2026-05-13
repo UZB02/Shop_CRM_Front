@@ -1448,7 +1448,27 @@
     "errors": {
       "subscription_required": "Eksport uchun obuna talab qilinadi",
       "export_failed": "Faylni tayyorlashda xatolik yuz berdi"
-    }
+    },
+    "download_template": "Shablon yuklash",
+    "template_downloading": "Yuklanmoqda...",
+    "template_downloaded": "{file} muvaffaqiyatli yuklandi",
+    "template_error": "Shablon yuklab bo'lmadi",
+    "import_btn": "Import",
+    "import_title": "Mahsulotlarni import qilish",
+    "import_result_title": "Import natijasi",
+    "import_created": "Qo'shildi",
+    "import_updated": "Yangilandi",
+    "import_skipped": "O'tkazib yuborildi",
+    "import_errors": "Xatoliklar",
+    "import_row": "Qator",
+    "import_reason": "Sabab",
+    "import_no_errors": "Xatoliklar yo'q — barcha qatorlar muvaffaqiyatli",
+    "import_select_file": "Excel faylni tanlang (.xlsx)",
+    "import_success": "Import muvaffaqiyatli yakunlandi",
+    "import_processing": "Fayl yuklanmoqda, biroz kuting...",
+    "import_permission_denied": "Import uchun manager yoki owner huquqi talab qilinadi",
+    "import_invalid_file": "Noto'g'ri fayl formati. Faqat .xlsx qabul qilinadi",
+    "import_reload": "Mahsulotlarni yangilash"
   },
   "turlar": {
     "title": "Mahsulot turlari",

@@ -5,6 +5,7 @@ import { useBulkMovement } from './composables/useBulkMovement'
 import BulkMovementHeader from './components/BulkMovement/BulkMovementHeader.vue'
 import BulkMovementCatalog from './components/BulkMovement/BulkMovementCatalog.vue'
 import BulkMovementCart from './components/BulkMovement/BulkMovementCart.vue'
+import { useTemplateDownload } from '@/composables/useTemplateDownload'
 
 const activeTab = ref('cart') // 'cart' or 'catalog'
 
@@ -27,6 +28,8 @@ const {
   scanAndAdd,
   router
 } = useBulkMovement()
+
+const { templateLoading, downloadTemplate } = useTemplateDownload()
 
 const turDialog = ref(false)
 const selectedProductForTur = ref(null)
@@ -87,8 +90,10 @@ const selectTur = (tur) => {
       :totalCount="bulkItems.length"
       :saving="saving"
       :type="movement_type"
+      :templateLoading="templateLoading.movements"
       @back="handleCancel"
       @save="handleSave"
+      @download-template="downloadTemplate('movements')"
     />
 
     <!-- Main Content Area: Responsive POS Layout -->

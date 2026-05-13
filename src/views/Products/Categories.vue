@@ -3,8 +3,10 @@
     <!-- Management Header -->
     <CategoryHeader 
       :total-categories="categories.length"
+      :templateLoading="templateLoading.subcategories"
       v-model:search-query="searchQuery"
       @add="openAddMode"
+      @download-template="downloadTemplate('subcategories')"
     />
 
     <!-- Main Content Area -->
@@ -76,6 +78,7 @@
 import { onMounted } from 'vue'
 import { useCategoryManager } from './composables/useCategoryManager'
 import { useSettingsStore } from '@/store/settings'
+import { useTemplateDownload } from '@/composables/useTemplateDownload'
 
 const settingsStore = useSettingsStore()
 
@@ -95,6 +98,8 @@ const {
   loadData, openAddMode, startEdit, handleCategorySubmit, confirmDeleteCategory,
   openAddSubMode, startEditSub, handleSubSubmit, confirmDeleteSub
 } = useCategoryManager()
+
+const { templateLoading, downloadTemplate } = useTemplateDownload()
 
 onMounted(loadData)
 </script>

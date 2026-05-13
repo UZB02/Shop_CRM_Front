@@ -26,6 +26,33 @@
       </div>
       <div class="flex items-center gap-2">
         <button 
+          @click="$emit('download-template')"
+          :disabled="templateLoading"
+          class="flex-1 h-9 sm:h-8 px-3 rounded-lg text-xs font-medium text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50 bg-blue-50/30 dark:bg-blue-900/10 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <i :class="templateLoading ? 'pi pi-spin pi-spinner' : 'pi pi-download'" class="text-[12px]"></i>
+          <span>{{ $t('reports.download_template') }}</span>
+        </button>
+
+        <!-- Import Button -->
+        <div v-if="canImport" class="relative">
+          <input 
+            type="file" 
+            accept=".xlsx" 
+            hidden 
+            ref="fileInput" 
+            @change="handleFileChange" 
+          />
+          <button
+            @click="triggerFileInput"
+            :disabled="importing"
+            class="flex-1 h-9 sm:h-8 px-3 rounded-lg text-xs font-medium text-violet-600 dark:text-violet-400 border border-violet-100 dark:border-violet-900/50 bg-violet-50/30 dark:bg-violet-900/10 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <i :class="importing ? 'pi pi-spin pi-spinner' : 'pi pi-upload'" class="text-[12px]"></i>
+            <span>{{ $t('reports.import_btn') }}</span>
+          </button>
+        </div>
+        <button 
           @click="$router.push('/dashboard/customers/groups')"
           class="flex-1 h-9 sm:h-8 px-3 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
         >
@@ -45,11 +72,32 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
 defineProps({
   totalRecords: { type: Number, default: 0 },
-  searchQuery: { type: String, default: '' }
+  searchQuery: { type: String, default: '' },
+  templateLoading: { type: Boolean, default: false },
+  importing: { type: Boolean, default: false },
+  canImport: { type: Boolean, default: false }
 })
-defineEmits(['update:searchQuery', 'add'])
+const emit = defineEmits(['update:searchQuery', 'add', 'download-template', 'import'])
+
+const fileInput = ref(null)
+
+const triggerFileInput = () => {
+  if (fileInput.value) {
+    fileInput.value.value = '' 
+    fileInput.value.click()
+  }
+}
+
+const handleFileChange = (e) => {
+  const file = e.target.files?.[0]
+  if (file) {
+    emit('import', file)
+  }
+}
 </script>
 
 
