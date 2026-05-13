@@ -1,9 +1,11 @@
 import { ref, computed } from 'vue'
 import { promotionsAPI, categoriesAPI, subcategoriesAPI, productsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
+import { useI18n } from 'vue-i18n'
 
 export function usePromotionManager() {
     const toast = useToast()
+    const { t } = useI18n()
     const loading = ref(false)
     const formsaving = ref(false)
     const promotions = ref([])
@@ -34,7 +36,7 @@ export function usePromotionManager() {
             const res = await promotionsAPI.getAll()
             promotions.value = res.data.results || res.data
         } catch (e) {
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: "Aksiyalarni yuklashda xatolik", life: 3000 })
+            toast.add({ severity: 'error', summary: t('common.error'), detail: t('products.promotions.messages.load_error'), life: 3000 })
         } finally {
             loading.value = false
         }
@@ -107,20 +109,20 @@ export function usePromotionManager() {
             await loadDependencies()
         } catch (e) {
             console.error('Failed to load promotion details:', e)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: "Aksiya ma'lumotlarini yuklab bo'lmadi" })
+            toast.add({ severity: 'error', summary: t('common.error'), detail: t('products.promotions.messages.details_load_error') })
         } finally {
             isFetchingDeps.value = false
         }
     }
 
     const confirmDelete = async (id) => {
-        if (!confirm('Ushbu aksiyani o`chirmokchimisiz?')) return
+        if (!confirm(t('products.promotions.messages.delete_confirm'))) return
         try {
             await promotionsAPI.delete(id)
-            toast.add({ severity: 'success', summary: 'Muaffaqiyatli', detail: "Aksiya o'chirildi", life: 2000 })
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('products.promotions.messages.deleted'), life: 2000 })
             loadData()
         } catch (e) {
-            toast.add({ severity: 'error', summary: 'Xato', detail: "O'chirishda xato yuz berdi" })
+            toast.add({ severity: 'error', summary: t('common.error'), detail: t('products.promotions.messages.delete_error') })
         }
     }
 
@@ -133,23 +135,23 @@ export function usePromotionManager() {
             }
             loadData()
         } catch (e) {
-            toast.add({ severity: 'error', summary: 'Xato', detail: "Statusni o'zgartirib bo'lmadi" })
+            toast.add({ severity: 'error', summary: t('common.error'), detail: t('products.promotions.messages.status_error') })
         }
     }
 
     const submitForm = async () => {
         // Validation
-        const t = activeItem.value
-        if (!t.name || !t.discount_pct || !t.valid_from || !t.valid_to) {
-            toast.add({ severity: 'warn', summary: 'Majburiy:', detail: "Barcha asosiy maydonlarni to'ldiring", life: 3000 })
+        const item = activeItem.value
+        if (!item.name || !item.discount_pct || !item.valid_from || !item.valid_to) {
+            toast.add({ severity: 'warn', summary: t('common.required'), detail: t('products.promotions.messages.fill_required'), life: 3000 })
             return
         }
-        if (new Date(t.valid_from) >= new Date(t.valid_to)) {
-            toast.add({ severity: 'warn', summary: 'Xato:', detail: "Tugash vaqti boshlanish vaqtidan katta bo'lishi shart", life: 3000 })
+        if (new Date(item.valid_from) >= new Date(item.valid_to)) {
+            toast.add({ severity: 'warn', summary: t('common.error'), detail: t('products.promotions.messages.date_error'), life: 3000 })
             return
         }
-        if (t.categories.length === 0 && t.subcategories.length === 0 && t.products.length === 0) {
-            toast.add({ severity: 'warn', summary: 'Xato:', detail: "Aksiya uchun kamida 1 ta mahsulot yoki kategoriya tanlash shart", life: 4000 })
+        if (item.categories.length === 0 && item.subcategories.length === 0 && item.products.length === 0) {
+            toast.add({ severity: 'warn', summary: t('common.error'), detail: t('products.promotions.messages.selection_required'), life: 4000 })
             return
         }
 
@@ -157,28 +159,28 @@ export function usePromotionManager() {
         try {
             // Transform payload
             const payload = {
-                name: t.name,
-                discount_pct: t.discount_pct,
-                valid_from: new Date(t.valid_from).toISOString(),
-                valid_to: new Date(t.valid_to).toISOString(),
-                is_active: t.is_active,
-                categories: t.categories,
-                subcategories: t.subcategories,
-                products: t.products
+                name: item.name,
+                discount_pct: item.discount_pct,
+                valid_from: new Date(item.valid_from).toISOString(),
+                valid_to: new Date(item.valid_to).toISOString(),
+                is_active: item.is_active,
+                categories: item.categories,
+                subcategories: item.subcategories,
+                products: item.products
             }
 
             if (isEditing.value) {
-                await promotionsAPI.update(t.id, payload)
-                toast.add({ severity: 'success', summary: 'Saqlandi', detail: "Aksiya yangilandi" })
+                await promotionsAPI.update(item.id, payload)
+                toast.add({ severity: 'success', summary: t('common.success'), detail: t('products.promotions.messages.updated') })
             } else {
                 await promotionsAPI.create(payload)
-                toast.add({ severity: 'success', summary: 'Yaratildi', detail: "Yangi aksiya yaratildi" })
+                toast.add({ severity: 'success', summary: t('common.success'), detail: t('products.promotions.messages.created') })
             }
             
             isSlideOverOpen.value = false
             loadData()
         } catch (e) {
-            toast.add({ severity: 'error', summary: 'Xato', detail: "Saqlashda xato yuz berdi" })
+            toast.add({ severity: 'error', summary: t('common.error'), detail: t('products.promotions.messages.save_error') })
         } finally {
             formsaving.value = false
         }

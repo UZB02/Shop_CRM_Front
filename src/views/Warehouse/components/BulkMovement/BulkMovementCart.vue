@@ -12,25 +12,7 @@
           </span>
         </div>
 
-        <!-- Movement Type (Integrated) -->
-        <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200/50 dark:border-slate-800 w-[260px] shrink-0">
-          <button 
-            @click="$emit('update:type', 'in')"
-            class="flex-1 py-1.5 rounded-lg text-[13px] font-black tracking-widest transition-all flex items-center justify-center gap-2"
-            :class="type === 'in' ? 'bg-white dark:bg-slate-700 text-emerald-600 shadow-lg shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-600'"
-          >
-            <i class="pi pi-download text-[11px]"></i>
-            {{ $t('warehouse.bulk.type_in') }}
-          </button>
-          <button 
-            @click="$emit('update:type', 'out')"
-            class="flex-1 py-1.5 rounded-lg text-[13px] font-black tracking-widest transition-all flex items-center justify-center gap-2"
-            :class="type === 'out' ? 'bg-white dark:bg-slate-700 text-rose-600 shadow-lg shadow-rose-500/10' : 'text-slate-400 hover:text-slate-600'"
-          >
-            <i class="pi pi-upload text-[11px]"></i>
-            {{ $t('warehouse.bulk.type_out') }}
-          </button>
-        </div>
+
 
         <!-- Notes (Integrated in Header) -->
         <div class="relative group flex-1 max-w-xl">
@@ -49,24 +31,8 @@
 
     </div>
 
-    <!-- Mobile-only Control Strip (Type and Note) -->
+    <!-- Mobile-only Control Strip (Note only) -->
     <div class="lg:hidden px-6 py-4 flex flex-col gap-3 bg-white dark:bg-[#0f172a] border-b border-slate-100 dark:border-slate-800">
-       <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl">
-          <button 
-            @click="$emit('update:type', 'in')"
-            class="flex-1 py-1.5 rounded-lg text-[13px] font-black tracking-widest transition-all"
-            :class="type === 'in' ? 'bg-white dark:bg-slate-700 text-emerald-600 shadow-sm' : 'text-slate-400'"
-          >
-            {{ $t('warehouse.bulk.type_in') }}
-          </button>
-          <button 
-            @click="$emit('update:type', 'out')"
-            class="flex-1 py-1.5 rounded-lg text-[13px] font-black tracking-widest transition-all"
-            :class="type === 'out' ? 'bg-white dark:bg-slate-700 text-rose-600 shadow-sm' : 'text-slate-400'"
-          >
-            {{ $t('warehouse.bulk.type_out') }}
-          </button>
-       </div>
        <input 
           :value="note"
           @input="$emit('update:note', $event.target.value)"

@@ -16,8 +16,8 @@
       <!-- Desktop & Large Tablet Layout (LG+) -->
       <div class="hidden lg:flex flex-1 overflow-hidden">
         <!-- Left: Selected Items (Work Area) -->
-        <section class="flex-1 h-full relative overflow-hidden flex flex-col p-6 gap-6">
-          <div class="flex flex-col lg:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
+        <section class="flex-1 h-full relative overflow-hidden flex flex-col p-4 gap-4">
+          <div class="flex flex-col lg:flex-row gap-4 flex-1 min-h-0 overflow-hidden">
             <!-- Configuration Sidebar (Target Selection) -->
             <TransferSidebar
               v-model:target-type="targetType"
@@ -38,7 +38,7 @@
         </section>
 
         <!-- Right: Available Products (Catalog Sidebar) -->
-        <section class="w-[420px] flex-shrink-0 h-full border-l border-slate-200/60 dark:border-slate-800/50 bg-white dark:bg-[#0f1422] flex flex-col overflow-hidden shadow-2xl z-40">
+        <section class="w-[340px] flex-shrink-0 h-full border-l border-slate-200/60 dark:border-slate-800/50 bg-white dark:bg-[#0f1422] flex flex-col overflow-hidden shadow-2xl z-40">
           <TransferCatalog 
             :products="availableProducts"
             :items="transferForm.items"

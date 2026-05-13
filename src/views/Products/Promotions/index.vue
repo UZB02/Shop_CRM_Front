@@ -9,11 +9,11 @@
           </div>
           <div>
             <h2 class="text-base font-black text-slate-800 dark:text-white tracking-tight leading-none">
-              {{ $t('products.promotions.title') || 'Aksiyalar Boshqaruvi' }}
+              {{ $t('products.promotions.title') }}
             </h2>
             <div class="flex items-center gap-2 mt-1.5 grayscale opacity-70">
-               <span class="text-[12px] font-black text-slate-400 tracking-widest border-r border-slate-200 dark:border-slate-800 pr-2">Marketing</span>
-               <span class="text-[12px] font-bold text-slate-400 tracking-widest">Markazlashgan tizim</span>
+               <span class="text-[12px] font-black text-slate-400 tracking-widest border-r border-slate-200 dark:border-slate-800 pr-2">{{ $t('products.promotions.marketing') }}</span>
+               <span class="text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('products.promotions.centralized_system') }}</span>
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
            @click="openCreate" 
            class="h-10 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[13px] font-black tracking-widest transition-all shadow-lg shadow-indigo-600/20 active:scale-95 flex items-center gap-2.5"
          >
-           <i class="pi pi-plus" /> Yangi Aksiya
+           <i class="pi pi-plus" /> {{ $t('products.promotions.new_promotion') }}
          </button>
       </div>
     </div>
@@ -50,28 +50,28 @@
     <!-- Quick Insights -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
        <div class="bg-white dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-sm">
-          <p class="text-[12px] font-black text-slate-400 tracking-[0.15em] mb-1.5">Jami Aksiyalar</p>
+          <p class="text-[12px] font-black text-slate-400 tracking-[0.15em] mb-1.5">{{ $t('products.promotions.total_promotions') }}</p>
           <div class="flex items-end gap-2">
             <span class="text-xl font-black text-slate-800 dark:text-white leading-none">{{ promotions.length }}</span>
-            <span class="text-[12px] font-bold text-slate-400 pb-0.5 ">ta</span>
+            <span class="text-[12px] font-bold text-slate-400 pb-0.5 ">{{ $t('common.count') }}</span>
           </div>
        </div>
        <div class="bg-white dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-sm">
-          <p class="text-[12px] font-black text-slate-400 tracking-[0.15em] mb-1.5">Ayni paytda faol</p>
+          <p class="text-[12px] font-black text-slate-400 tracking-[0.15em] mb-1.5">{{ $t('products.promotions.active_now') }}</p>
           <div class="flex items-end gap-2">
             <span class="text-xl font-black text-emerald-500 leading-none">{{ promotions.filter(p => p.is_currently_active).length }}</span>
             <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mb-1"></div>
           </div>
        </div>
        <div class="bg-white dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-sm">
-          <p class="text-[12px] font-black text-slate-400 tracking-[0.15em] mb-1.5">Qamrab olingan tovarlar</p>
+          <p class="text-[12px] font-black text-slate-400 tracking-[0.15em] mb-1.5">{{ $t('products.promotions.covered_products') }}</p>
           <div class="flex items-end gap-2">
             <span class="text-xl font-black text-indigo-500 leading-none">{{ promotions.reduce((acc, p) => acc + (p.product_count || 0), 0) }}</span>
-            <span class="text-[12px] font-bold text-slate-400 pb-0.5 ">dona</span>
+            <span class="text-[12px] font-bold text-slate-400 pb-0.5 ">{{ $t('common.pcs').toLowerCase() }}</span>
           </div>
        </div>
        <div class="bg-white dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-sm">
-          <p class="text-[12px] font-black text-slate-400 tracking-[0.15em] mb-1.5">O'rtacha chegirma</p>
+          <p class="text-[12px] font-black text-slate-400 tracking-[0.15em] mb-1.5">{{ $t('products.promotions.average_discount') }}</p>
           <div class="flex items-end gap-2">
             <span class="text-xl font-black text-rose-500 leading-none">{{ promotions.length ? (promotions.reduce((acc, p) => acc + parseFloat(p.discount_pct), 0) / promotions.length).toFixed(0) : 0 }}%</span>
             <i class="pi pi-chart-line text-rose-500/50 mb-1"></i>
@@ -90,11 +90,11 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50/50 dark:bg-[#0b1120]/50 border-b border-slate-200 dark:border-slate-800/60">
-              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] whitespace-nowrap">Aksiya Ma'lumotlari</th>
-              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] whitespace-nowrap">Qiymat</th>
-              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] text-center whitespace-nowrap">Holati</th>
-              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] whitespace-nowrap">Amal Qilish Vaqti</th>
-              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] text-right whitespace-nowrap">Amallar</th>
+              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] whitespace-nowrap">{{ $t('products.promotions.info') }}</th>
+              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] whitespace-nowrap">{{ $t('products.promotions.value') }}</th>
+              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] text-center whitespace-nowrap">{{ $t('products.promotions.status') }}</th>
+              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] whitespace-nowrap">{{ $t('products.promotions.validity_period') }}</th>
+              <th class="px-6 py-4 text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-[0.2em] text-right whitespace-nowrap">{{ $t('products.promotions.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 dark:divide-slate-800/40">
@@ -105,7 +105,7 @@
                   <div class="flex items-center gap-2 mt-1">
                     <span class="text-[11px] font-black bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 px-2 py-0.5 rounded-md flex items-center gap-1.5 border border-indigo-100 dark:border-indigo-500/20">
                       <i class="pi pi-box text-[10px] opacity-70"></i> 
-                      {{ item.product_count || 0 }} Tovar biriktirilgan
+                      {{ item.product_count || 0 }} {{ $t('products.promotions.products_attached') }}
                     </span>
 
                   </div>
@@ -114,19 +114,19 @@
               <td class="px-6 py-4">
                 <div class="inline-flex flex-col">
                   <span class="text-[16px] font-black text-rose-600 dark:text-rose-400 leading-none">-{{ parseFloat(item.discount_pct) }}%</span>
-                  <span class="text-[11px] font-bold text-slate-400 tracking-widest mt-1">Sotuvda</span>
+                  <span class="text-[11px] font-bold text-slate-400 tracking-widest mt-1">{{ $t('products.promotions.on_sale') }}</span>
                 </div>
               </td>
               <td class="px-6 py-4 text-center">
                  <div class="flex items-center justify-center">
                     <span v-if="item.is_currently_active" class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-black bg-emerald-500 text-white shadow-lg shadow-emerald-500/20">
-                      FAOL
+                      {{ $t('products.promotions.active') }}
                     </span>
                     <span v-else-if="item.is_active" class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-black bg-amber-400 text-amber-900">
-                      KUTILMOQDA
+                      {{ $t('products.promotions.pending') }}
                     </span>
                     <span v-else class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-black bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700">
-                      O'PLANGAN
+                      {{ $t('products.promotions.finished') }}
                     </span>
                  </div>
               </td>
@@ -135,14 +135,14 @@
                   <div class="flex items-center justify-between text-[13px] leading-none group/date">
                     <div class="flex items-center gap-2">
                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40"></div>
-                       <span class="text-slate-400 font-black tracking-widest text-[11px]">Boshlanish</span>
+                       <span class="text-slate-400 font-black tracking-widest text-[11px]">{{ $t('products.promotions.start') }}</span>
                     </div>
                     <span class="text-slate-700 dark:text-slate-200 font-bold tabular-nums">{{ formatDate(item.valid_from) }}</span>
                   </div>
                   <div class="flex items-center justify-between text-[13px] leading-none group/date">
                     <div class="flex items-center gap-2">
                        <div class="w-1.5 h-1.5 rounded-full bg-rose-500/20 border border-rose-500/40"></div>
-                       <span class="text-slate-400 font-black tracking-widest text-[11px]">Tugash</span>
+                       <span class="text-slate-400 font-black tracking-widest text-[11px]">{{ $t('products.promotions.end') }}</span>
                     </div>
                     <span class="text-rose-500 dark:text-rose-400 font-black tabular-nums">{{ formatDate(item.valid_to) }}</span>
                   </div>
@@ -150,9 +150,9 @@
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-1.5 opacity-100 lg:opacity-30 group-hover:opacity-100 transition-all">
-                  <button @click="openEdit(item)" class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500 hover:text-white transition-all duration-300" v-tooltip.top="'Tahrirlash'"><i class="pi pi-pencil text-[13px]"></i></button>
+                  <button @click="openEdit(item)" class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500 hover:text-white transition-all duration-300" v-tooltip.top="$t('common.edit')"><i class="pi pi-pencil text-[13px]"></i></button>
                   <button @click="toggleStatus(item)" class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-white transition-all duration-300"><i class="pi text-[13px]" :class="item.is_active ? 'pi-pause' : 'pi-play'"></i></button>
-                  <button @click="confirmDelete(item.id)" class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-rose-500 hover:text-white transition-all duration-300" v-tooltip.top="'O\'chirish'"><i class="pi pi-trash text-[13px]"></i></button>
+                  <button @click="confirmDelete(item.id)" class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-rose-500 hover:text-white transition-all duration-300" v-tooltip.top="$t('common.delete')"><i class="pi pi-trash text-[13px]"></i></button>
                 </div>
               </td>
             </tr>
@@ -176,16 +176,16 @@
 
           <div class="grid grid-cols-2 gap-3 mb-5">
              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-[#0b1120]/60 border border-slate-100 dark:border-slate-800/60">
-                <p class="text-[11px] font-black text-slate-400 mb-1">Qamrov</p>
+                <p class="text-[11px] font-black text-slate-400 mb-1">{{ $t('products.promotions.coverage') }}</p>
                 <div class="flex items-center gap-1.5">
                    <i class="pi pi-box text-indigo-500 text-[12px]"></i>
-                   <span class="text-xs font-black text-slate-700 dark:text-slate-300">{{ item.product_count || 0 }} Tovar</span>
+                   <span class="text-xs font-black text-slate-700 dark:text-slate-300">{{ item.product_count || 0 }} {{ $t('common.pcs') }}</span>
                 </div>
              </div>
              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-[#0b1120]/60 border border-slate-100 dark:border-slate-800/60 text-center">
-                <p class="text-[11px] font-black text-slate-400 mb-1">Holat</p>
+                <p class="text-[11px] font-black text-slate-400 mb-1">{{ $t('products.promotions.status') }}</p>
                 <span class="text-[11px] font-black" :class="item.is_currently_active ? 'text-emerald-500' : (item.is_active ? 'text-amber-500' : 'text-slate-400')">
-                   {{ item.is_currently_active ? 'FAOL' : (item.is_active ? 'NAVBTDA' : 'DEAKTIV') }}
+                   {{ item.is_currently_active ? $t('products.promotions.active') : (item.is_active ? $t('products.promotions.upcoming') : $t('products.promotions.deactivated')) }}
                 </span>
              </div>
           </div>
@@ -199,7 +199,7 @@
 
           <div class="mt-auto flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
               <span class="text-[11px] font-bold text-slate-400 tracking-widest italic opacity-60">
-                 Kritilgan: {{ formatDate(item.created_on).split(' ')[0] }}
+                 {{ $t('products.promotions.created_on') }}: {{ formatDate(item.created_on).split(' ')[0] }}
               </span>
               <div class="flex gap-2">
                  <button @click="openEdit(item)" class="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"><i class="pi pi-pencil text-xs"></i></button>
@@ -214,7 +214,7 @@
         <div class="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-6">
            <i class="pi pi-tags text-2xl text-slate-300"></i>
         </div>
-        <p class="text-xs font-black tracking-[0.2em] text-slate-400">Joriy aksiyalar mavjud emas</p>
+        <p class="text-xs font-black tracking-[0.2em] text-slate-400">{{ $t('products.promotions.no_promotions') }}</p>
     </div>
 
     <!-- Slide-over Modal -->

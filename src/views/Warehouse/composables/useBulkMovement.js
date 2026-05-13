@@ -18,14 +18,14 @@ export function useBulkMovement() {
   const savedState = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
   
   const bulkItems = ref(savedState.items || [])
-  const movement_type = ref(savedState.type || 'in')
+  const movement_type = ref('in')
   const note = ref(savedState.note || '')
 
   // Persistence Watcher
   watch([bulkItems, movement_type, note], () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       items: bulkItems.value,
-      type: movement_type.value,
+      type: 'in',
       note: note.value
     }))
   }, { deep: true })
