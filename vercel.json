@@ -5,10 +5,6 @@
       "destination": "https://shopcrmsystem-production.up.railway.app/api/:path*"
     },
     {
-      "source": "/media/:path*",
-      "destination": "https://shopcrmsystem-production.up.railway.app/media/:path*"
-    },
-    {
       "source": "/:path*",
       "destination": "/index.html"
     }

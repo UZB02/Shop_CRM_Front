@@ -1,7 +1,9 @@
 import axios from 'axios'
 import api from './axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api/v1"
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://shopcrmsystem-production.up.railway.app/api/v1"
 
 export const authAPI = {
     login: (credentials) => api.post('/auth/login/', credentials),
