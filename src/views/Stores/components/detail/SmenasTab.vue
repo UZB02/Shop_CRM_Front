@@ -48,23 +48,26 @@
         :placeholder="$t('common.status')"
       />
 
-      <!-- Export -->
-      <button
-        @click="exportShifts"
-        v-tooltip.top="$t('common.export')"
-        class="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all duration-300 flex items-center justify-center shadow-sm"
-      >
-        <i class="pi pi-file-excel text-xs"></i>
-      </button>
+      <!-- Actions -->
+      <div class="flex items-center gap-2">
+        <!-- Export -->
+        <button
+          @click="exportShifts"
+          v-tooltip.top="$t('common.export')"
+          class="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all duration-300 flex items-center justify-center shadow-sm"
+        >
+          <i class="pi pi-file-excel text-xs"></i>
+        </button>
 
-      <!-- Reset -->
-      <button
-        @click="resetFilters"
-        v-tooltip.top="$t('common.reset')"
-        class="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all duration-300 hover:rotate-180 flex items-center justify-center"
-      >
-        <i class="pi pi-refresh text-xs"></i>
-      </button>
+        <!-- Reset -->
+        <button
+          @click="resetFilters"
+          v-tooltip.top="$t('common.reset')"
+          class="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all duration-300 hover:rotate-180 flex items-center justify-center"
+        >
+          <i class="pi pi-refresh text-xs"></i>
+        </button>
+      </div>
     </div>
 
 

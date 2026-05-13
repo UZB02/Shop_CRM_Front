@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL ||
-    "https://shopcrmsystem-production.up.railway.app/api/v1"
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api/v1"
 
 let _memToken = null
 

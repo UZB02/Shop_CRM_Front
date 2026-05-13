@@ -31,14 +31,14 @@
         <table class="w-full text-left min-w-[700px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <th class="px-4 py-2.5 text-[11px] font-black text-slate-400 tracking-widest uppercase w-10">№</th>
-              <th class="px-4 py-2.5 text-[11px] font-black text-slate-400 tracking-widest uppercase">{{ $t('products.col_product') }}</th>
-              <th class="px-4 py-2.5 text-[11px] font-black text-slate-400 tracking-widest uppercase hidden md:table-cell">{{ $t('products.form.barcode') }}</th>
-              <th class="px-4 py-2.5 text-[11px] font-black text-slate-400 tracking-widest uppercase text-center">{{ $t('products.form.amount') }}</th>
-              <th class="px-4 py-2.5 text-[11px] font-black text-slate-400 tracking-widest uppercase text-right hidden sm:table-cell">{{ $t('products.form.purchase_price') }}</th>
-              <th class="px-4 py-2.5 text-[11px] font-black text-slate-400 tracking-widest uppercase text-right">{{ $t('products.col_price') }}</th>
-              <th class="px-4 py-2.5 text-[11px] font-black text-slate-400 tracking-widest uppercase text-right hidden lg:table-cell">{{ $t('common.date') }}</th>
-              <th class="px-4 py-2.5 text-[11px] font-black text-slate-400 tracking-widest uppercase text-center w-12">{{ $t('common.actions') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap w-10">№</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.form.barcode') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('products.form.amount') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.form.purchase_price') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.col_price') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('common.created_at') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-center w-12">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -55,24 +55,29 @@
                     <i v-else class="pi pi-image text-slate-300 text-[12px]"></i>
                   </div>
                   <div class="flex flex-col min-w-0">
-                    <div class="flex items-center flex-wrap gap-x-2 gap-y-0.5">
-                      <span class="text-[13px] font-black text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors truncate max-w-[150px] sm:max-w-[200px]">
+                    <div class="flex items-center flex-wrap gap-2">
+                      <span class="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-emerald-500 transition-colors truncate max-w-[180px]">
                         {{ item.product_name }}
                       </span>
                       <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
                     </div>
-                    <div class="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
-                      <span v-if="item.category_name" class="text-[10px] font-black text-slate-400 tracking-widest uppercase">{{ item.category_name }}</span>
-                      <span v-if="item.barcode" class="md:hidden text-[10px] font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-1 rounded">#{{ item.barcode }}</span>
-                    </div>
+                    <span class="text-[11px] text-slate-400 tracking-widest mt-0.5">{{ item.category_name }}</span>
                   </div>
                 </div>
               </td>
-              <td class="px-4 py-2 hidden md:table-cell">
+              <td class="px-4 py-2">
                 <div class="flex items-center gap-2">
-                  <code class="text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-700">
+                  <code class="text-[12px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-700">
                     {{ item.barcode || '—' }}
                   </code>
+                  <button 
+                    v-if="item.barcode"
+                    @click="$emit('show-barcode', item)"
+                    class="w-5 h-5 rounded-md bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+                    v-tooltip.right="$t('products.view_barcode') || 'Shtrix-kodni ko\'rish'"
+                  >
+                    <i class="pi pi-barcode text-[12px]"></i>
+                  </button>
                 </div>
               </td>
               <td class="px-4 py-2 text-center text-[12px]">
@@ -81,12 +86,12 @@
                   :class="settingsStore.isLowStockEnabled && item.quantity <= settingsStore.lowStockThreshold 
                     ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' 
                     : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'"
-                 >
+                >
                   {{ item.quantity }} <span class="ml-1 opacity-60 font-medium">{{ $t('common.pcs') || 'dona' }}</span>
                 </span>
               </td>
-              <td class="px-4 py-2 text-right hidden sm:table-cell">
-                <span class="text-[12px] font-bold text-slate-500 dark:text-slate-400 tracking-tight">
+              <td class="px-4 py-2 text-right">
+                <span class="text-xs font-bold text-slate-400 dark:text-slate-500 tracking-tight">
                   {{ Number(item.purchase_price || 0).toLocaleString() }}
                 </span>
               </td>
@@ -95,7 +100,7 @@
                   {{ Number(item.sale_price || 0).toLocaleString() }}
                 </span>
               </td>
-              <td class="px-4 py-2 text-right hidden lg:table-cell">
+              <td class="px-4 py-2 text-center whitespace-nowrap text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                 {{ item.added_on?.split('|')[0]?.trim() || '—' }}
               </td>
               <td class="px-4 py-2 text-center">

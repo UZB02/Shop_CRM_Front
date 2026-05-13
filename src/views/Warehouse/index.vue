@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <!-- Page Header -->
-    <WarehousePageHeader @add="openNewDialog" />
+    <WarehousePageHeader @add="openNewDialog" @export="exportStocks" />
 
     <!-- Stats, Search & View Toggle -->
     <WarehouseMinimalFilters
@@ -128,7 +128,7 @@ const {
   warehouses, loading, saving, warehouseDialog, submitted,
   viewMode, searchQuery, currentPage, rows, totalRecords,
   warehouse, filteredWarehouses,
-  loadWarehouses, saveWarehouse, confirmDelete, openNewDialog, editWarehouse, onPageChange
+  loadWarehouses, saveWarehouse, confirmDelete, openNewDialog, editWarehouse, onPageChange, exportStocks
 } = useWarehouses()
 
 const { t } = useI18n()

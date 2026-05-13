@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { useI18n } from 'vue-i18n'
-import { warehousesAPI } from '@/services/api'
+import { warehousesAPI, reportsAPI } from '@/services/api'
 import { useNotificationStore } from '@/store/notifications'
 
 export function useWarehouses() {
@@ -141,6 +141,33 @@ export function useWarehouses() {
         warehouseDialog.value = true
     }
 
+    const exportStocks = async () => {
+        try {
+            toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
+            
+            const res = await reportsAPI.exportStocks() // No params for global export
+            
+            if (res.data.type === 'text/html') {
+                toast.add({ severity: 'error', summary: t('common.error'), detail: 'Backend Error: Received HTML instead of File. Check vercel.json proxy.', life: 5000 })
+                return
+            }
+
+            const url = window.URL.createObjectURL(new Blob([res.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', `barcha_qoldiqlar_${new Date().toISOString().split('T')[0]}.xlsx`)
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            window.URL.revokeObjectURL(url)
+
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
+        } catch (error) {
+            console.error('Export stocks error:', error)
+            toast.add({ severity: 'error', summary: t('common.error'), detail: t('reports.errors.export_failed'), life: 4000 })
+        }
+    }
+
     const onPageChange = (event) => {
         loadWarehouses(event.page + 1)
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -164,7 +191,8 @@ export function useWarehouses() {
         confirmDelete,
         openNewDialog,
         editWarehouse,
-        onPageChange
+        onPageChange,
+        exportStocks
     }
 }
 

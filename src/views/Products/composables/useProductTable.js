@@ -16,8 +16,7 @@ export function useProductTable(products) {
   const formatImageUrl = (url) => {
     if (!url) return null
     if (url.startsWith('http')) return url
-    const base = 'https://shopcrmsystem-production.up.railway.app'
-    return `${base}${url.startsWith('/') ? '' : '/'}${url}`
+    return url.startsWith('/') ? url : `/${url}`
   }
   
   // Barcode modal state

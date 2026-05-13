@@ -2,12 +2,15 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { warehousesAPI, reportsAPI } from '@/services/api'
 import { useSettingsStore } from '@/store/settings'
+import { useToast } from 'primevue/usetoast'
 import i18n from '@/i18n'
 
 export function useWarehouseDetail() {
   const route = useRoute()
   const router = useRouter()
   const settingsStore = useSettingsStore()
+  const toast = useToast()
+  const { t } = i18n.global
 
   const warehouse = ref(null)
   const loading = ref(true)
@@ -158,9 +161,16 @@ export function useWarehouseDetail() {
   const exportStocks = async () => {
     if (!warehouse.value) return
     try {
+      toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
+      
       const warehouseId = warehouse.value.id || warehouse.value._id
       const res = await reportsAPI.exportStocks({ warehouse: warehouseId })
       
+      if (res.data.type === 'text/html') {
+          toast.add({ severity: 'error', summary: t('common.error'), detail: 'Backend Error: Received HTML instead of File. Check vercel.json proxy.', life: 5000 })
+          return
+      }
+
       const url = window.URL.createObjectURL(new Blob([res.data]))
       const link = document.createElement('a')
       link.href = url
@@ -169,8 +179,11 @@ export function useWarehouseDetail() {
       link.click()
       link.remove()
       window.URL.revokeObjectURL(url)
+
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
     } catch (error) {
       console.error('Export stocks error:', error)
+      toast.add({ severity: 'error', summary: t('common.error'), detail: t('reports.errors.export_failed'), life: 4000 })
     }
   }
 
