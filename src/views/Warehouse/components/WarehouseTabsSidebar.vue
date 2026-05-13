@@ -1,18 +1,19 @@
 <template>
   <!-- ── MOBILE: horizontal scrollable chips ── -->
   <div class="lg:hidden shrink-0">
-    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1.5">
       <button
         v-for="tab in tabs"
         :key="tab.id"
         @click="$emit('select', tab.id)"
-        class="flex-shrink-0 flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-medium transition-all whitespace-nowrap border"
+        class="flex-shrink-0 flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all whitespace-nowrap border"
         :class="active === tab.id
-          ? 'bg-emerald-500 text-white border-emerald-500'
-          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'"
+          ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20'
+          : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'"
       >
-        <i :class="['pi', tab.icon, 'text-[12px]']"></i>
+        <i :class="['pi', tab.icon, 'text-[13px]']"></i>
         {{ tab.label }}
+        <span v-if="tab.count !== undefined" class="px-1.5 py-0.5 rounded-lg bg-black/10 dark:bg-white/10 text-[10px] font-black">{{ tab.count }}</span>
       </button>
     </div>
   </div>

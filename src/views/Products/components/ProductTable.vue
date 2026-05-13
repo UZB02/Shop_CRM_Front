@@ -6,11 +6,11 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
-              <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
-              <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('products.form.barcode') }}</th>
-              <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.col_price') }}</th>
-              <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('products.col_inventory') }}</th>
-              <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.col_actions') }}</th>
+              <th class="px-4 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.col_product') }}</th>
+              <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-center hidden md:table-cell">{{ $t('products.form.barcode') }}</th>
+              <th class="px-4 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap">{{ $t('products.col_price') }}</th>
+              <th class="px-6 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-center hidden sm:table-cell">{{ $t('products.col_inventory') }}</th>
+              <th class="px-4 py-3 text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.col_actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -59,27 +59,27 @@
                     <div class="flex items-center flex-wrap gap-2">
                       <router-link
                         :to="`/dashboard/products/${item.id}`"
-                        class="text-[15px] font-black text-slate-800 dark:text-slate-200 hover:text-emerald-500 transition-colors tracking-tight leading-tight"
+                        class="text-[14px] font-black text-slate-800 dark:text-slate-200 hover:text-emerald-500 transition-colors tracking-tight leading-tight"
                       >
                         {{ item.name }}
                       </router-link>
                       
                       <div v-if="item.has_tur" class="flex items-center gap-1">
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-black bg-emerald-500/5 text-emerald-600 border border-emerald-500/10 tracking-widest">
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black bg-emerald-500/5 text-emerald-600 border border-emerald-500/10 tracking-widest uppercase">
                            {{ item.tur_name || $t('turlar.badge') }}
-                        </span>
-                        <span v-if="item.tur_color" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-black bg-slate-50 dark:bg-slate-800 text-slate-500 border border-slate-100 dark:border-slate-700 tracking-widest">
-                           {{ item.tur_color }}
                         </span>
                       </div>
                     </div>
                     
-                    <div class="flex items-center gap-1.5 mt-0.5 opacity-60">
-                      <span v-if="item.category_name" class="text-[11px] font-black text-slate-400 tracking-widest">
+                    <div class="flex items-center flex-wrap gap-x-2 gap-y-1 mt-0.5 opacity-60">
+                      <span v-if="item.category_name" class="text-[10px] font-black text-slate-400 tracking-widest uppercase">
                         {{ item.category_name }}
                       </span>
-                      <span v-if="item.subcategory_name && settingsStore.isSubcategoryEnabled" class="flex items-center gap-1.5 text-[11px] font-black text-slate-400 tracking-widest before:content-['•'] before:text-[9px] before:opacity-30">
-                        {{ item.subcategory_name }}
+                      <span v-if="item.barcode" class="md:hidden text-[11px] font-bold text-slate-500 tracking-tighter before:content-['#']">
+                        {{ item.barcode }}
+                      </span>
+                      <span v-if="item.quantity !== undefined" class="sm:hidden text-[11px] font-bold" :class="Number(item.quantity) <= 0 ? 'text-rose-500' : 'text-slate-500'">
+                        {{ item.quantity }} {{ item.unit_display }}
                       </span>
                     </div>
                   </div>
@@ -87,7 +87,7 @@
               </td>
 
               <!-- Barcode -->
-              <td class="px-6 py-3.5 align-middle text-center">
+              <td class="px-6 py-3.5 align-middle text-center hidden md:table-cell">
                 <div v-if="item.barcode" class="inline-flex items-center gap-2 group/barcode">
                    <i class="pi pi-barcode text-slate-300 dark:text-slate-700 group-hover/barcode:text-emerald-500 transition-colors text-[12px]"></i>
                    <code class="text-[13px] font-bold text-slate-500 dark:text-slate-400 tracking-tight font-mono">{{ item.barcode }}</code>
@@ -96,49 +96,43 @@
               </td>
 
               <!-- Price -->
-              <td class="px-6 py-3.5 align-middle">
+              <td class="px-4 py-3.5 align-middle">
                   <template v-if="item.active_promotion">
                     <div class="flex flex-col">
-                      <div class="flex items-center gap-1.5">
-                        <span class="text-[12px] font-bold text-slate-400 dark:text-slate-600 line-through">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
-                        <span class="text-[10px] font-black text-rose-500 bg-rose-500/10 px-1 rounded">-{{ item.active_promotion.discount_pct }}%</span>
+                      <div class="flex items-center gap-1">
+                        <span class="text-[10px] font-bold text-slate-400 dark:text-slate-600 line-through">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
+                        <span class="text-[9px] font-black text-rose-500 bg-rose-500/10 px-1 rounded">-{{ item.active_promotion.discount_pct }}%</span>
                       </div>
-                      <span class="text-[15px] font-black text-slate-800 dark:text-white">{{ settingsStore.formatPrice(item.active_promotion.discounted_price, item.currency_code) }}</span>
+                      <span class="text-[14px] font-black text-slate-800 dark:text-white leading-tight">{{ settingsStore.formatPrice(item.active_promotion.discounted_price, item.currency_code) }}</span>
                     </div>
                   </template>
 
                   <template v-else>
                     <div class="flex flex-col">
-                      <span class="text-[15px] font-black text-slate-800 dark:text-white leading-none">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
-                      <span class="text-[11px] font-bold text-slate-400 tracking-tighter mt-1 opacity-50">{{ item.unit_display || 'dona' }} uchun</span>
+                      <span class="text-[14px] font-black text-slate-800 dark:text-white leading-none">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
+                      <span class="text-[10px] font-bold text-slate-400 tracking-tighter mt-1 opacity-50">{{ item.unit_display || 'dona' }}</span>
                     </div>
                   </template>
               </td>
 
               <!-- Stock Quantity -->
-              <td class="px-6 py-3.5 align-middle text-center">
+              <td class="px-6 py-3.5 align-middle text-center hidden sm:table-cell">
                 <div class="flex flex-col items-center">
                   <div class="flex items-center gap-2">
                     <span 
-                      class="text-[15px] font-black tracking-tight"
+                      class="text-[14px] font-black tracking-tight"
                       :class="(settingsStore.isLowStockEnabled && Number(item.quantity) <= (item.low_stock_threshold || settingsStore.lowStockThreshold)) ? 'text-rose-500' : 'text-slate-800 dark:text-white'"
                     >
                       {{ settingsStore.formatNumber(item.quantity) || 0 }}
                     </span>
-                    <span v-if="item.status_display" 
-                      class="px-1.5 py-0.5 rounded text-[10px] font-black tracking-widest border"
-                      :class="item.status === 'active' ? 'bg-emerald-500/5 text-emerald-600 border-emerald-500/20' : 'bg-slate-50 text-slate-400 border-slate-200'"
-                    >
-                      {{ item.status_display }}
-                    </span>
                   </div>
-                  <span class="text-[10px] font-black text-slate-400 tracking-widest mt-0.5">{{ item.unit_display }} omborda</span>
+                  <span class="text-[10px] font-black text-slate-400 tracking-widest mt-0.5 uppercase">{{ item.unit_display }}</span>
                 </div>
               </td>
 
               <!-- Actions -->
-              <td class="px-6 py-3.5 align-middle">
-                <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-70 group-hover:opacity-100 transition-opacity">
+              <td class="px-4 py-3.5 align-middle">
+                <div class="flex items-center justify-end gap-1">
                   <button
                     @click="router.push(`/dashboard/products/${item.id}`)"
                     class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:text-sky-400 dark:hover:bg-sky-400/10 transition-all hover:scale-105"

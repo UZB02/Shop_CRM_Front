@@ -132,21 +132,21 @@
       </table>
     </div>
     <div v-if="totalRecords > 0" 
-         class="px-4 py-2.5 bg-slate-50/50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-      <div class="text-[11px] font-black text-slate-400 tracking-widest">
-        Showing {{ (currentPage-1)*pageSize + 1 }} - {{ Math.min(currentPage*pageSize, totalRecords) }} of {{ totalRecords }}
+         class="px-4 py-3 bg-slate-50/50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-[11px] font-black text-slate-400 tracking-widest uppercase">
+        {{ (currentPage-1)*pageSize + 1 }} - {{ Math.min(currentPage*pageSize, totalRecords) }} / {{ totalRecords }}
       </div>
-      <div class="flex items-center gap-1">
+      <div class="flex items-center gap-1.5">
         <button @click="currentPage--" :disabled="currentPage === 1"
-                class="w-8 h-8 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30
-                       border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800">
+                class="w-9 h-9 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30
+                       border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-90">
           <i class="pi pi-angle-left text-[12px]"></i>
         </button>
         
-        <div class="flex items-center gap-1 mx-1">
+        <div class="flex items-center gap-1.5">
           <template v-for="p in displayedPages" :key="p">
             <button @click="currentPage = p"
-                    class="w-8 h-8 rounded-xl text-[13px] font-black transition-all shadow-sm border focus:outline-none"
+                    class="w-9 h-9 rounded-xl text-[13px] font-black transition-all shadow-sm border focus:outline-none active:scale-90"
                     :class="currentPage === p 
                       ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
                       : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'">
@@ -156,8 +156,8 @@
         </div>
 
         <button @click="currentPage++" :disabled="currentPage === totalPages"
-                class="w-8 h-8 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30
-                       border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800">
+                class="w-9 h-9 rounded-xl flex items-center justify-center border transition-all disabled:opacity-30
+                       border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-90">
           <i class="pi pi-angle-right text-[12px]"></i>
         </button>
       </div>

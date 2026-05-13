@@ -23,27 +23,31 @@
       </div>
       <p class="text-xs text-slate-400 mt-0.5 truncate">{{ warehouse?.store_name || $t('warehouse.detail.store_unspecified') }} • {{ warehouse?.address || $t('warehouse.detail.address_unspecified') }}</p>
     </div>
-    <div class="flex items-center gap-2 shrink-0">
+    <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 shrink-0">
       <button
         @click="$emit('export')"
-        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/30 dark:bg-indigo-900/10 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+        class="h-10 sm:h-9 px-3 rounded-xl text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/30 dark:bg-emerald-900/10 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
       >
-        <i class="pi pi-file-excel text-xs"></i>
-        <span>{{ $t('common.export') }}</span>
+        <i class="pi pi-file-excel text-[12px]"></i>
+        <span class="hidden sm:inline">{{ $t('common.export') }}</span>
+        <span class="sm:hidden">Eksport</span>
       </button>
+
       <button
         @click="$emit('movement')"
-        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-sm shadow-emerald-500/10"
+        class="h-10 sm:h-9 px-3 rounded-xl text-xs font-black bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-lg shadow-emerald-500/20"
       >
-        <i class="pi pi-plus text-xs"></i>
+        <i class="pi pi-plus text-[12px]"></i>
         <span>{{ $t('warehouse.detail.bulk_movement') }}</span>
       </button>
+
       <button
         @click="$emit('transfer')"
-        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+        class="h-10 sm:h-9 px-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
       >
-        <i class="pi pi-arrow-right-arrow-left text-xs text-emerald-500"></i>
-        <span>{{ $t('warehouse.detail.new_transfer') }}</span>
+        <i class="pi pi-arrow-right-arrow-left text-[12px] text-emerald-500"></i>
+        <span class="hidden sm:inline">{{ $t('warehouse.detail.new_transfer') }}</span>
+        <span class="sm:hidden">O'tkazma</span>
       </button>
     </div>
   </div>

@@ -13,25 +13,27 @@
       <p class="text-xs text-slate-400 mt-0.5">{{ totalRecords }} {{ $t('customers.subtitle') }}</p>
     </div>
     
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 shrink-0">
-      <div class="relative group/search w-full sm:min-w-[240px]">
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+      <div class="relative group/search w-full md:w-[260px]">
         <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-[12px] transition-colors group-focus-within/search:text-emerald-500"></i>
         <input 
           :value="searchQuery" 
           @input="$emit('update:searchQuery', $event.target.value)"
           type="text" 
           :placeholder="$t('customers.search_placeholder')" 
-          class="w-full h-9 sm:h-8 pl-8 pr-4 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all outline-none"
+          class="w-full h-10 sm:h-9 pl-9 pr-4 text-[13px] rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/20 transition-all outline-none"
         />
       </div>
-      <div class="flex items-center gap-2">
+      
+      <div class="grid grid-cols-2 sm:flex sm:items-center gap-2">
         <button 
           @click="$emit('download-template')"
           :disabled="templateLoading"
-          class="flex-1 h-9 sm:h-8 px-3 rounded-lg text-xs font-medium text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50 bg-blue-50/30 dark:bg-blue-900/10 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          class="h-10 sm:h-9 px-3 rounded-xl text-xs font-bold text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50 bg-blue-50/30 dark:bg-blue-900/10 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <i :class="templateLoading ? 'pi pi-spin pi-spinner' : 'pi pi-download'" class="text-[12px]"></i>
-          <span>{{ $t('reports.download_template') }}</span>
+          <span class="hidden sm:inline">{{ $t('reports.download_template') }}</span>
+          <span class="sm:hidden">Shablon</span>
         </button>
 
         <!-- Import Button -->
@@ -46,22 +48,26 @@
           <button
             @click="triggerFileInput"
             :disabled="importing"
-            class="flex-1 h-9 sm:h-8 px-3 rounded-lg text-xs font-medium text-violet-600 dark:text-violet-400 border border-violet-100 dark:border-violet-900/50 bg-violet-50/30 dark:bg-violet-900/10 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full h-10 sm:h-9 px-3 rounded-xl text-xs font-bold text-violet-600 dark:text-violet-400 border border-violet-100 dark:border-violet-900/50 bg-violet-50/30 dark:bg-violet-900/10 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <i :class="importing ? 'pi pi-spin pi-spinner' : 'pi pi-upload'" class="text-[12px]"></i>
-            <span>{{ $t('reports.import_btn') }}</span>
+            <span class="hidden sm:inline">{{ $t('reports.import_btn') }}</span>
+            <span class="sm:hidden">Import</span>
           </button>
         </div>
+
         <button 
           @click="$router.push('/dashboard/customers/groups')"
-          class="flex-1 h-9 sm:h-8 px-3 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+          class="h-10 sm:h-9 px-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
         >
           <i class="pi pi-users text-[12px]"></i>
-          <span>{{ $t('customers.groups_btn') }}</span>
+          <span class="hidden sm:inline">{{ $t('customers.groups_btn') }}</span>
+          <span class="sm:hidden">Guruhlar</span>
         </button>
+
         <button 
           @click="$emit('add')"
-          class="flex-1 h-9 sm:h-8 px-3 rounded-lg text-xs font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
+          class="h-10 sm:h-9 px-3 rounded-xl text-xs font-black bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-lg shadow-emerald-500/20"
         >
           <i class="pi pi-plus text-[12px]"></i>
           <span>{{ $t('customers.new_customer') }}</span>
