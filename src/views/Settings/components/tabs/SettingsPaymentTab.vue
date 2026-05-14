@@ -6,8 +6,20 @@
     <SettingRow v-model="form.allow_debt" :label="$t('settings.payment.debt_label')" :desc="$t('settings.payment.debt_desc')" :disabled="readonly" :is-dirty="isFieldDirty('allow_debt')" />
 
     <SectionHeader icon="pi-percentage" color="text-purple-500">{{ $t('settings.payment.discount_title') }}</SectionHeader>
-    <SettingRow v-model="form.allow_discount" :label="$t('settings.payment.discount_label')" :desc="$t('settings.payment.discount_desc')" :disabled="readonly" :is-dirty="isFieldDirty('allow_discount')" />
-    <div v-if="form.allow_discount" class="settings-row" :class="{'opacity-40 pointer-events-none': readonly}">
+
+    <!-- Plan lock — chegirma tarifda mavjud emas -->  
+    <div v-if="planFeatures.has_discount === false" class="px-4 py-3">
+      <PlanLockBadge :hint="$t('plan.error_discount')" />
+    </div>
+
+    <SettingRow
+      v-model="form.allow_discount"
+      :label="$t('settings.payment.discount_label')"
+      :desc="$t('settings.payment.discount_desc')"
+      :disabled="readonly || !planFeatures.has_discount"
+      :is-dirty="isFieldDirty('allow_discount')"
+    />
+    <div v-if="form.allow_discount && planFeatures.has_discount !== false" class="settings-row" :class="{'opacity-40 pointer-events-none': readonly}">
       <div class="flex-1">
         <div class="flex items-center gap-2">
           <p class="row-label">{{ $t('settings.payment.max_discount_label') }}</p>
@@ -33,11 +45,18 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import SettingRow from './SettingRow.vue'
 import SectionHeader from './SectionHeader.vue'
+import PlanLockBadge from '@/components/PlanLockBadge.vue'
 
 const { t } = useI18n()
 const toast = useToast()
 
-const props = defineProps({ form: Object, active: String, readonly: Boolean, isFieldDirty: Function })
+const props = defineProps({
+  form: Object,
+  active: String,
+  readonly: Boolean,
+  isFieldDirty: Function,
+  planFeatures: { type: Object, default: () => ({}) }
+})
 
 // 🟢 Kritik qoida: allow_cash=false VA allow_card=false bir vaqtda bo'lishi mumkin emas.
 // Foydalanuvchi ikkalasini ham o'chirmoqchi bo'lsa, darhol to'xtatamiz va ogohlantiramiz.

@@ -37,7 +37,13 @@
     </div>
 
     <SectionHeader icon="pi-align-left" color="text-slate-500">{{ $t('settings.receipt.text_title') }}</SectionHeader>
-    <div class="settings-row" style="align-items: flex-start; flex-wrap: wrap;" :class="{'opacity-50 pointer-events-none': readonly}">
+
+    <!-- Plan lock: receipt_design -->
+    <div v-if="planFeatures.has_receipt_design === false" class="px-4 py-3">
+      <PlanLockBadge :hint="$t('plan.error_receipt_design')" />
+    </div>
+
+    <div class="settings-row" style="align-items: flex-start; flex-wrap: wrap;" :class="{'opacity-50 pointer-events-none': readonly || !planFeatures.has_receipt_design}">
       <div class="flex-1" style="min-width: 140px;">
         <div class="flex items-center gap-2">
           <p class="row-label">{{ $t('settings.receipt.header_label') }}</p>
@@ -45,9 +51,9 @@
         </div>
         <p class="row-desc">{{ $t('settings.receipt.header_desc') }}</p>
       </div>
-      <textarea v-model="form.receipt_header" rows="3" :placeholder="$t('settings.receipt.header_placeholder')" class="settings-input resize-none text-xs" :class="{'ring-2 ring-amber-500/20 border-amber-500/50': isFieldDirty('receipt_header')}" style="width: 100%; max-width: 280px;" :disabled="readonly"></textarea>
+      <textarea v-model="form.receipt_header" rows="3" :placeholder="$t('settings.receipt.header_placeholder')" class="settings-input resize-none text-xs" :class="{'ring-2 ring-amber-500/20 border-amber-500/50': isFieldDirty('receipt_header')}" style="width: 100%; max-width: 280px;" :disabled="readonly || !planFeatures.has_receipt_design"></textarea>
     </div>
-    <div class="settings-row" style="align-items: flex-start; flex-wrap: wrap;" :class="{'opacity-50 pointer-events-none': readonly}">
+    <div class="settings-row" style="align-items: flex-start; flex-wrap: wrap;" :class="{'opacity-50 pointer-events-none': readonly || !planFeatures.has_receipt_design}">
       <div class="flex-1" style="min-width: 140px;">
         <div class="flex items-center gap-2">
           <p class="row-label">{{ $t('settings.receipt.footer_label') }}</p>
@@ -55,7 +61,7 @@
         </div>
         <p class="row-desc">{{ $t('settings.receipt.footer_desc') }}</p>
       </div>
-      <textarea v-model="form.receipt_footer" rows="3" :placeholder="$t('settings.receipt.footer_placeholder')" class="settings-input resize-none text-xs" :class="{'ring-2 ring-amber-500/20 border-amber-500/50': isFieldDirty('receipt_footer')}" style="width: 100%; max-width: 280px;" :disabled="readonly"></textarea>
+      <textarea v-model="form.receipt_footer" rows="3" :placeholder="$t('settings.receipt.footer_placeholder')" class="settings-input resize-none text-xs" :class="{'ring-2 ring-amber-500/20 border-amber-500/50': isFieldDirty('receipt_footer')}" style="width: 100%; max-width: 280px;" :disabled="readonly || !planFeatures.has_receipt_design"></textarea>
     </div>
 
     <SectionHeader icon="pi-barcode" color="text-slate-500">{{ $t('settings.receipt.barcode_settings_title') }}</SectionHeader>
@@ -68,9 +74,16 @@
 import { useI18n } from 'vue-i18n'
 import SettingRow from './SettingRow.vue'
 import SectionHeader from './SectionHeader.vue'
+import PlanLockBadge from '@/components/PlanLockBadge.vue'
 
 const { t } = useI18n()
-defineProps({ form: Object, active: String, readonly: Boolean, isFieldDirty: Function })
+defineProps({
+  form: Object,
+  active: String,
+  readonly: Boolean,
+  isFieldDirty: Function,
+  planFeatures: { type: Object, default: () => ({}) }
+})
 </script>
 
 

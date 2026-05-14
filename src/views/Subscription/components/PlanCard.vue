@@ -104,7 +104,9 @@ const getPlanIcon = computed(() => {
     switch(props.plan) {
         case 'free': return 'pi pi-compass'
         case 'trial': return 'pi pi-calendar'
+        case 'basic':
         case 'standard': return 'pi pi-bolt'
+        case 'pro':
         case 'premium': 
         case 'enterprise': return 'pi pi-crown'
         default: return 'pi pi-star'
@@ -117,7 +119,10 @@ const getIconBgClass = computed(() => {
     switch(props.plan) {
         case 'free': return 'bg-slate-100 dark:bg-slate-800 text-slate-400'
         case 'trial': return 'bg-blue-500'
+        case 'basic':
         case 'standard': return 'bg-emerald-500'
+        case 'pro':
+        case 'premium': return 'bg-indigo-500'
         case 'enterprise': return 'bg-amber-500'
         default: return 'bg-slate-500'
     }

@@ -34,10 +34,14 @@
         </template>
       </Select>
     </div>
-    <SettingRow v-model="form.show_usd_price" :label="$t('settings.currency.show_usd_label')" :desc="$t('settings.currency.show_usd_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_usd_price')" />
-    <SettingRow v-model="form.show_rub_price" :label="$t('settings.currency.show_rub_label')" :desc="$t('settings.currency.show_rub_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_rub_price')" />
-    <SettingRow v-model="form.show_eur_price" :label="$t('settings.currency.show_eur_label')" :desc="$t('settings.currency.show_eur_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_eur_price')" />
-    <SettingRow v-model="form.show_cny_price" :label="$t('settings.currency.show_cny_label')" :desc="$t('settings.currency.show_cny_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_cny_price')" />
+    <!-- Qo'shimcha valyutalar -- plan cheklovi -->
+    <div v-if="planFeatures.has_multi_currency === false" class="px-4 py-3">
+      <PlanLockBadge :hint="$t('plan.error_multi_currency')" />
+    </div>
+    <SettingRow v-model="form.show_usd_price" :label="$t('settings.currency.show_usd_label')" :desc="$t('settings.currency.show_usd_desc')" :disabled="readonly || !planFeatures.has_multi_currency" :is-dirty="isFieldDirty('show_usd_price')" />
+    <SettingRow v-model="form.show_rub_price" :label="$t('settings.currency.show_rub_label')" :desc="$t('settings.currency.show_rub_desc')" :disabled="readonly || !planFeatures.has_multi_currency" :is-dirty="isFieldDirty('show_rub_price')" />
+    <SettingRow v-model="form.show_eur_price" :label="$t('settings.currency.show_eur_label')" :desc="$t('settings.currency.show_eur_desc')" :disabled="readonly || !planFeatures.has_multi_currency" :is-dirty="isFieldDirty('show_eur_price')" />
+    <SettingRow v-model="form.show_cny_price" :label="$t('settings.currency.show_cny_label')" :desc="$t('settings.currency.show_cny_desc')" :disabled="readonly || !planFeatures.has_multi_currency" :is-dirty="isFieldDirty('show_cny_price')" />
   </div>
 </template>
 
@@ -46,9 +50,16 @@ import { useI18n } from 'vue-i18n'
 import Select from 'primevue/select'
 import SettingRow from './SettingRow.vue'
 import SectionHeader from './SectionHeader.vue'
+import PlanLockBadge from '@/components/PlanLockBadge.vue'
 
 const { t } = useI18n()
-defineProps({ form: Object, active: String, readonly: Boolean, isFieldDirty: Function })
+defineProps({
+  form: Object,
+  active: String,
+  readonly: Boolean,
+  isFieldDirty: Function,
+  planFeatures: { type: Object, default: () => ({}) }
+})
 
 const currencyOptions = [
   { value: 'UZS', label: 'UZS', flag: '🇺🇿' },

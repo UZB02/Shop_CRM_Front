@@ -1,4 +1,14 @@
 {
+  "plan": {
+    "locked_feature": "Бу функция тарифингизда мавжуд эмас",
+    "upgrade_btn": "Тарифни янгиланг",
+    "plan_required": "Тариф чеклови",
+    "error_telegram": "Тарифингизда Telegram функцияси мавжуд эмас.",
+    "error_shift": "Тарифингизда смена тизими функцияси мавжуд эмас.",
+    "error_discount": "Тарифингизда чегирма бериш функцияси мавжуд эмас.",
+    "error_multi_currency": "Тарифингизда кўп валюта функцияси мавжуд эмас.",
+    "error_receipt_design": "Тарифингизда чек дизайни созлаш функцияси мавжуд эмас."
+  },
   "branches": {
     "title": "Филиаллар"
   },
@@ -157,7 +167,9 @@
     "otish": "Ўтиш",
     "plans": {
       "free": "Бепул",
+      "basic": "Оддий",
       "standard": "Стандарт",
+      "pro": "Про",
       "premium": "Премиум",
       "trial": "Синов режаси",
       "enterprise": "Корпоратив (Pro)"
@@ -175,7 +187,10 @@
       "has_dashboard": "Dashboard таҳлили",
       "has_qr_bulk": "Оммавий QR шакллантириш",
       "has_audit_log": "Аудит журнали",
-      "has_telegram": "Telegram хабарномалар"
+      "has_telegram": "Telegram хабарномалар",
+      "has_shift": "Смена тизими",
+      "has_discount": "Чегирма бериш",
+      "has_receipt_design": "Чек дизайни созлаш"
     },
     "limits": {
       "title": "Тариф чегаралари",

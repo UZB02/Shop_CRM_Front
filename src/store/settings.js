@@ -24,6 +24,26 @@ export const useSettingsStore = defineStore('settings', () => {
   const isLowStockEnabled      = computed(() => !!settings.value?.low_stock_enabled)
   const lowStockThreshold      = computed(() => parseInt(settings.value?.low_stock_threshold || 5))
 
+  // ─── Plan Features (Tarif imkoniyatlari) ────────────────────────────────────
+  // Qoida: plan_features hali kelmagan bo'lsa (!== false) → feature YOQILGAN hisoblanadi
+  // Bu orqaga mos kelishni ta'minlaydi — eski foydalanuvchilar uchun hech narsa o'zgarmaydi
+  const planFeatures           = computed(() => settings.value?.plan_features || {})
+  const hasPlanShift           = computed(() => planFeatures.value.has_shift           !== false)
+  const hasPlanDiscount        = computed(() => planFeatures.value.has_discount         !== false)
+  const hasPlanTelegram        = computed(() => planFeatures.value.has_telegram         !== false)
+  const hasPlanMultiCurrency   = computed(() => planFeatures.value.has_multi_currency   !== false)
+  const hasPlanReceiptDesign   = computed(() => planFeatures.value.has_receipt_design   !== false)
+  const hasPlanKpi             = computed(() => planFeatures.value.has_kpi              !== false)
+  const hasPlanSaleReturn      = computed(() => planFeatures.value.has_sale_return      !== false)
+  const hasPlanWastage         = computed(() => planFeatures.value.has_wastage          !== false)
+  const hasPlanStockAudit      = computed(() => planFeatures.value.has_stock_audit      !== false)
+  const hasPlanSubcategory     = computed(() => planFeatures.value.has_subcategory      !== false)
+  const hasPlanSupplier        = computed(() => planFeatures.value.has_supplier         !== false)
+  const hasPlanDashboard       = computed(() => planFeatures.value.has_dashboard        !== false)
+  const hasPlanQrBulk          = computed(() => planFeatures.value.has_qr_bulk          !== false)
+  const hasPlanAuditLog        = computed(() => planFeatures.value.has_audit_log        !== false)
+  const hasPlanExport          = computed(() => planFeatures.value.has_export           !== false)
+
   // Payment methods
   const allowCash     = computed(() => settings.value?.allow_cash !== false)
   const allowCard     = computed(() => !!settings.value?.allow_card)
@@ -150,6 +170,24 @@ export const useSettingsStore = defineStore('settings', () => {
     showNameOnBarcode,
     showPriceOnBarcode,
     receiptConfig,
+
+    // plan features getters
+    planFeatures,
+    hasPlanShift,
+    hasPlanDiscount,
+    hasPlanTelegram,
+    hasPlanMultiCurrency,
+    hasPlanReceiptDesign,
+    hasPlanKpi,
+    hasPlanSaleReturn,
+    hasPlanWastage,
+    hasPlanStockAudit,
+    hasPlanSubcategory,
+    hasPlanSupplier,
+    hasPlanDashboard,
+    hasPlanQrBulk,
+    hasPlanAuditLog,
+    hasPlanExport,
 
     // actions
     fetchSettings,

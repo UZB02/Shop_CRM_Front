@@ -65,6 +65,8 @@
             <i :class="['pi', tab.icon, 'text-xs w-4 flex-shrink-0']"></i>
             <span class="truncate">{{ $t(tab.tKey) }}</span>
             <span v-if="dirtyTabs[tab.key]" class="ml-auto w-2 h-2 bg-amber-500 rounded-full animate-pulse shadow-sm shadow-amber-500/50"></span>
+            <!-- Plan lock indicator in sidebar -->
+            <span v-else-if="isTabPlanLocked(tab.key)" class="ml-auto text-amber-400 text-[10px]">🔒</span>
           </button>
         </nav>
       </aside>
@@ -85,13 +87,13 @@
 
         <!-- Tab panels -->
         <template v-else-if="settings">
-          <SettingsModulesTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsModulesTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" :plan-features="planFeatures" />
           <SettingsStockTab    :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
-          <SettingsPaymentTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
-          <SettingsCurrencyTab :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
-          <SettingsReceiptTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsPaymentTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" :plan-features="planFeatures" />
+          <SettingsCurrencyTab :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" :plan-features="planFeatures" />
+          <SettingsReceiptTab  :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" :plan-features="planFeatures" />
           <SettingsTaxTab      :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
-          <SettingsTelegramTab :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" />
+          <SettingsTelegramTab :form="form" :active="activeTab" :readonly="!isOwner" :is-field-dirty="isFieldDirty" :plan-features="planFeatures" />
         </template>
 
         <!-- Error state -->
@@ -105,9 +107,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSettings, SETTINGS_TABS } from './composables/useSettings'
+import { useSettingsStore } from '@/store/settings'
 
 import SettingsModulesTab  from './components/tabs/SettingsModulesTab.vue'
 import SettingsStockTab    from './components/tabs/SettingsStockTab.vue'
@@ -119,7 +122,21 @@ import SettingsTelegramTab from './components/tabs/SettingsTelegramTab.vue'
 
 const { t } = useI18n()
 const activeTab = ref('modules')
+const settingsStore = useSettingsStore()
 const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwner, saveSettings } = useSettings()
+
+// Plan features — store'dan reaktiv olinadi
+const planFeatures = computed(() => settingsStore.planFeatures)
+
+// Sidebar'da qaysi tab plan tomonidan bloklangan
+const TAB_PLAN_MAP = {
+  modules:  () => !settingsStore.hasPlanShift || !settingsStore.hasPlanKpi || !settingsStore.hasPlanSubcategory,
+  payment:  () => !settingsStore.hasPlanDiscount,
+  currency: () => !settingsStore.hasPlanMultiCurrency,
+  receipt:  () => !settingsStore.hasPlanReceiptDesign,
+  telegram: () => !settingsStore.hasPlanTelegram,
+}
+const isTabPlanLocked = (tabKey) => TAB_PLAN_MAP[tabKey]?.() ?? false
 </script>
 
 <!-- ─────────────────────────────────────────────────
@@ -280,5 +297,3 @@ const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwn
 .slide-down-enter-active, .slide-down-leave-active { transition: all 0.2s; }
 .slide-down-enter-from, .slide-down-leave-to { opacity: 0; transform: translateY(-6px); }
 </style>
-
-

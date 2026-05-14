@@ -1,4 +1,14 @@
 {
+  "plan": {
+    "locked_feature": "Bu funksiya tarifingizda mavjud emas",
+    "upgrade_btn": "Tarifni yangilang",
+    "plan_required": "Tarif cheklovi",
+    "error_telegram": "Tarifingizda Telegram funksiyasi mavjud emas.",
+    "error_shift": "Tarifingizda smena tizimi funksiyasi mavjud emas.",
+    "error_discount": "Tarifingizda chegirma berish funksiyasi mavjud emas.",
+    "error_multi_currency": "Tarifingizda ko'p valyuta funksiyasi mavjud emas.",
+    "error_receipt_design": "Tarifingizda chek dizayni sozlash funksiyasi mavjud emas."
+  },
   "branches": {
     "title": "Filiallar"
   },
@@ -157,7 +167,9 @@
     "otish": "O'tish",
     "plans": {
       "free": "Bepul",
+      "basic": "Oddiy",
       "standard": "Standard",
+      "pro": "Pro",
       "premium": "Premium",
       "trial": "Sinov rejasi",
       "enterprise": "Korporativ (Pro)"
@@ -175,7 +187,10 @@
       "has_dashboard": "Dashboard tahlili",
       "has_qr_bulk": "Ommaviy QR shakllantirish",
       "has_audit_log": "Audit jurnali",
-      "has_telegram": "Telegram xabarnomalar"
+      "has_telegram": "Telegram xabarnomalar",
+      "has_shift": "Smena tizimi",
+      "has_discount": "Chegirma berish",
+      "has_receipt_design": "Chek dizayni sozlash"
     },
     "limits": {
       "title": "Tarif chegaralari",

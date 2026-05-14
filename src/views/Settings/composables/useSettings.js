@@ -214,6 +214,35 @@ export function useSettings() {
             })
         } catch (e) {
             console.error('❌ Settings save error:', e)
+            
+            // Plan cheklovi xatolari (400) — field-specific xabarlar
+            if (e.response?.status === 400) {
+                const data = e.response.data || {}
+                const PLAN_FIELD_KEYS = {
+                    telegram_enabled: 'plan.error_telegram',
+                    shift_enabled:    'plan.error_shift',
+                    allow_discount:   'plan.error_discount',
+                    show_usd_price:   'plan.error_multi_currency',
+                    show_rub_price:   'plan.error_multi_currency',
+                    show_eur_price:   'plan.error_multi_currency',
+                    show_cny_price:   'plan.error_multi_currency',
+                    receipt_header:   'plan.error_receipt_design',
+                    receipt_footer:   'plan.error_receipt_design',
+                }
+                for (const [field, tKey] of Object.entries(PLAN_FIELD_KEYS)) {
+                    if (data[field]) {
+                        toast.add({
+                            severity: 'warn',
+                            summary: t('plan.plan_required'),
+                            detail: typeof data[field] === 'string' ? data[field] : t(tKey),
+                            life: 7000
+                        })
+                        return
+                    }
+                }
+            }
+            
+            // Umumiy xato
             const detail = e.response?.data
                 ? (typeof e.response.data === 'string' ? e.response.data : JSON.stringify(e.response.data))
                 : t('settings.error')

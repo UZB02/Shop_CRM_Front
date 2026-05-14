@@ -293,6 +293,10 @@ export const useSubscription = () => {
         if (plan.has_qr_bulk) features.push(t('subscription.features.has_qr_bulk'))
         if (plan.has_audit_log) features.push(t('subscription.features.has_audit_log'))
         if (plan.has_telegram) features.push(t('subscription.features.has_telegram'))
+        // Yangi 3 ta feature (O'zgarish 2)
+        if (plan.has_shift) features.push(t('subscription.features.has_shift'))
+        if (plan.has_discount) features.push(t('subscription.features.has_discount'))
+        if (plan.has_receipt_design) features.push(t('subscription.features.has_receipt_design'))
         
         return features
     }

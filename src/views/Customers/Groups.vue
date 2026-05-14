@@ -100,6 +100,15 @@
               <!-- Discount Field -->
               <div class="field">
                 <label class="text-[12px] font-bold tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('customers.groups.discount') }}</label>
+
+                <!-- Plan lock: chegirma tarifda mavjud emas -->
+                <div v-if="!settingsStore.hasPlanDiscount" class="mb-2">
+                  <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400 text-[11px] font-semibold bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-lg px-3 py-2">
+                    <i class="pi pi-lock text-[12px]"></i>
+                    <span>{{ $t('plan.locked_feature') }}</span>
+                  </div>
+                </div>
+
                 <div class="relative group/input">
                   <i class="pi pi-percentage absolute left-3 top-1/2 -translate-y-1/2 text-[12px] text-slate-400 transition-colors group-focus-within/input:text-emerald-500 z-10"></i>
                   <InputNumber 
@@ -107,6 +116,7 @@
                     :min="0" :max="100" 
                     placeholder="0"
                     class="w-full"
+                    :disabled="!settingsStore.hasPlanDiscount"
                     :inputClass="'!h-11 !pl-10 !text-sm !font-semibold !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-transparent focus:!bg-white dark:focus:!bg-slate-900 focus:!ring-8 focus:!ring-emerald-500/5 transition-all w-full'"
                   />
                 </div>
@@ -148,12 +158,14 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { customerGroupsAPI } from '@/services/api'
+import { useSettingsStore } from '@/store/settings'
 import GroupPageHeader from './components/GroupPageHeader.vue'
 
 const router = useRouter()
 const toast = useToast()
 const confirm = useConfirm()
 const { t } = useI18n()
+const settingsStore = useSettingsStore()
 
 // Reactive State
 const loading = ref(false)
@@ -231,6 +243,16 @@ const handleSubmit = async () => {
     await loadGroups()
   } catch (error) {
     console.error('Save error:', error)
+    
+    // Plan cheklovi: discount_percent 400 xatosi
+    if (error?.response?.status === 400) {
+      const errData = error?.response?.data
+      if (errData?.discount_percent) {
+        toast.add({ severity: 'warn', summary: t('plan.plan_required'), detail: errData.discount_percent, life: 7000 })
+        return
+      }
+    }
+    
     const errData = error?.response?.data
     const errDetail = !errData
       ? t('customers.groups.add_error')
