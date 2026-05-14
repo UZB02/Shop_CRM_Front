@@ -78,9 +78,7 @@
                         <PlanCard 
                             v-for="plan in availablePlans"
                             :key="plan.id"
-                            :plan="plan.plan_type"
-                            :priceLabel="formatCurrency(plan.price_monthly)"
-                            :features="getPlanFeatures(plan)"
+                            :planData="plan"
                             :isCurrent="subscription.plan?.id === plan.id"
                             :popular="plan.plan_type === 'enterprise'"
                             @select="confirmChangePlan(plan.id)"
