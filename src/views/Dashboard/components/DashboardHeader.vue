@@ -7,14 +7,14 @@
       </div>
       <div class="min-w-0">
         <h1 class="text-lg sm:text-xl font-black text-slate-800 dark:text-white tracking-tight leading-tight truncate">
-          Boshqaruv Markazi
+          {{ $t('dashboard.center_title') }}
         </h1>
         <div class="flex items-center gap-2 mt-0.5 flex-wrap">
           <div v-if="loading" class="w-2.5 h-2.5 rounded-full border-2 border-emerald-500/20 border-t-emerald-500 animate-spin"></div>
           <template v-else>
             <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/5 text-emerald-500 border border-emerald-500/10 dark:bg-emerald-500/10">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span class="text-[10px] sm:text-[11px] font-black tracking-wider">Faol</span>
+              <span class="text-[10px] sm:text-[11px] font-black tracking-wider">{{ $t('dashboard.status_active') }}</span>
             </div>
             <span v-if="periodText" class="text-[10px] sm:text-[11px] font-black text-slate-400 tracking-widest hidden md:inline border-l border-slate-200 dark:border-slate-800 pl-2 ml-1">
               {{ periodText }}
@@ -32,7 +32,7 @@
           v-model="dates"
           selectionMode="range"
           :manualInput="false"
-          placeholder="Sana"
+          :placeholder="$t('dashboard.date')"
           showIcon
           iconDisplay="input"
           @update:modelValue="onDateChange"
@@ -52,7 +52,7 @@
           :options="branches"
           optionLabel="name"
           optionValue="branch_id"
-          placeholder="Filial"
+          :placeholder="$t('common.branch')"
           showClear
           @change="onFilterChange"
           class="w-full h-10"
@@ -67,7 +67,7 @@
           v-if="hasFilters"
           @click="$emit('reset')"
           class="h-10 w-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-500 border border-slate-200/60 dark:border-slate-700/40 bg-white/80 dark:bg-slate-800/80 transition-all active:scale-95 shadow-sm"
-          title="Tozalash"
+          :title="$t('dashboard.charts.total')"
         >
           <i class="pi pi-filter-slash text-[12px]"></i>
         </button>
@@ -78,7 +78,7 @@
           class="h-10 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-50 active:scale-95 group"
         >
           <i :class="['pi pi-sync text-[13px] transition-transform duration-700', loading ? 'animate-spin' : 'group-hover:rotate-180']"></i>
-          <span class="text-[12px] font-black tracking-widest">Yangilash</span>
+          <span class="text-[12px] font-black tracking-widest">{{ $t('dashboard.refresh') }}</span>
         </button>
       </div>
     </div>
@@ -87,6 +87,7 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import DatePicker from 'primevue/datepicker'
 import Select from 'primevue/select'
 
@@ -98,6 +99,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['refresh', 'update:filters', 'reset'])
+const { t } = useI18n()
 
 const dates = ref([new Date(props.filters.date_from), new Date(props.filters.date_to)])
 const selectedBranch = ref(props.filters.branch)
@@ -124,9 +126,14 @@ const hasFilters = computed(() => {
 
 const periodText = computed(() => {
   if (!props.period?.date_from || !props.period?.date_to) return null
-  const months = ['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentyabr','Oktyabr','Noyabr','Dekabr']
+  const months = [
+    t('common.months.january'), t('common.months.february'), t('common.months.march'), 
+    t('common.months.april'), t('common.months.may'), t('common.months.june'), 
+    t('common.months.july'), t('common.months.august'), t('common.months.september'), 
+    t('common.months.october'), t('common.months.november'), t('common.months.december')
+  ]
   const fmt = (s) => { const d = new Date(s); return `${d.getDate()} ${months[d.getMonth()]}` }
-  return `${fmt(props.period.date_from)} — ${fmt(props.period.date_to)} (${props.period.days} kun)`
+  return `${fmt(props.period.date_from)} — ${fmt(props.period.date_to)} (${props.period.days} ${t('dashboard.period_days', { days: '' }).trim()})`
 })
 
 const formatDate = (date) => {

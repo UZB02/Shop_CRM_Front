@@ -24,13 +24,13 @@
     <!-- Main Content Area -->
     <div v-if="dashboardStore.loading && !dashboardStore.data" class="flex flex-col items-center justify-center py-32 text-slate-400">
       <div class="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-      <p class="mt-4 font-black text-[12px] tracking-widest text-emerald-500">Ma'lumotlar tahlil qilinmoqda...</p>
+      <p class="mt-4 font-black text-[12px] tracking-widest text-emerald-500">{{ $t('dashboard.analyzing') }}</p>
     </div>
 
     <div v-else-if="dashboardStore.error" class="p-12 rounded-3xl bg-rose-50 dark:bg-rose-500/5 border border-rose-100 dark:border-rose-500/20 text-center">
       <i class="pi pi-exclamation-circle text-4xl text-rose-500 mb-4"></i>
       <h2 class="text-base font-black text-slate-800 dark:text-white tracking-tight">{{ dashboardStore.error }}</h2>
-      <button @click="refreshData" class="mt-4 px-6 py-2 bg-rose-500 text-white rounded-xl font-bold hover:bg-rose-600 transition-all text-xs tracking-widest">Qayta urinish</button>
+      <button @click="refreshData" class="mt-4 px-6 py-2 bg-rose-500 text-white rounded-xl font-bold hover:bg-rose-600 transition-all text-xs tracking-widest">{{ $t('dashboard.retry') }}</button>
     </div>
 
     <div v-else class="space-y-4">
@@ -122,15 +122,15 @@
     <div v-if="dashboardStore.data" class="mt-6 flex flex-col md:flex-row items-center justify-between gap-4 py-4 border-t border-slate-100 dark:border-slate-800">
       <div class="flex items-center gap-2">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-        <p class="text-[11px] font-black text-slate-400 tracking-widest">Tizim holati: Barcha modullar ishlamoqda</p>
+        <p class="text-[11px] font-black text-slate-400 tracking-widest">{{ $t('dashboard.system_ok') }}</p>
       </div>
       <div class="flex items-center gap-4">
         <div v-if="settingsStore.isShiftEnabled && smenaPolling" class="flex items-center gap-1.5 text-[11px] font-black text-emerald-500 tracking-widest">
           <span class="w-1 h-1 rounded-full bg-emerald-500 animate-ping"></span>
-          Smena live
+          {{ $t('dashboard.smena_live') }}
         </div>
         <p class="text-[11px] font-black text-slate-400 tracking-widest">
-          So'nggi yangilanish: {{ formatTime(dashboardStore.lastUpdated) }}
+          {{ $t('dashboard.last_updated') }} {{ formatTime(dashboardStore.lastUpdated) }}
         </p>
       </div>
     </div>
@@ -138,9 +138,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useDashboardStore } from '@/store/dashboard'
 import { useSettingsStore } from '@/store/settings'
+import { useI18n } from 'vue-i18n'
 
 // Components
 import DashboardHeader       from './components/DashboardHeader.vue'
@@ -154,19 +155,20 @@ import DashboardFinance      from './components/DashboardFinance.vue'
 
 const dashboardStore = useDashboardStore()
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 
 // Polling: only current_smena refreshes every 5 min (not entire dashboard)
 // Full dashboard only refreshes on filter change or manual refresh
 let smenaPolling = ref(false)
 let smenaInterval = null
 
-const tabs = [
-  { id: 'overview',  label: 'Boshqaruv', icon: 'pi pi-chart-bar' },
-  { id: 'sales',     label: 'Savdolar',   icon: 'pi pi-shopping-cart' },
-  { id: 'inventory', label: 'Ombor',      icon: 'pi pi-box' },
-  { id: 'customers', label: 'Mijozlar',   icon: 'pi pi-users' },
-  { id: 'finance',   label: 'Moliya',     icon: 'pi pi-dollar' }
-]
+const tabs = computed(() => [
+  { id: 'overview',  label: t('dashboard.tabs.overview'),  icon: 'pi pi-chart-bar' },
+  { id: 'sales',     label: t('dashboard.tabs.sales'),     icon: 'pi pi-shopping-cart' },
+  { id: 'inventory', label: t('dashboard.tabs.inventory'), icon: 'pi pi-box' },
+  { id: 'customers', label: t('dashboard.tabs.customers'), icon: 'pi pi-users' },
+  { id: 'finance',   label: t('dashboard.tabs.finance'),   icon: 'pi pi-dollar' }
+])
 const activeTab = ref('overview')
 
 const onFilterUpdate = (newFilters) => {

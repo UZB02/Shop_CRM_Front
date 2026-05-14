@@ -30,7 +30,7 @@
       <!-- Net profit metric: inline on sm+, full width below on xs -->
       <div class="flex items-center justify-between sm:justify-end gap-3 px-3 py-2 bg-slate-50 dark:bg-white/5 rounded-[0.9rem] border border-slate-100 dark:border-white/5 mx-0.5 sm:mx-0 sm:shrink-0">
         <div class="flex flex-col">
-          <span class="text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500">Sof Foyda</span>
+          <span class="text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500">{{ $t('dashboard.metrics.net_profit') }}</span>
           <span class="text-sm font-black tracking-tighter tabular-nums leading-none"
                 :class="netProfit >= 0 ? 'text-emerald-500 dark:text-emerald-400' : 'text-rose-500 dark:text-rose-400'">
             {{ formatPrice(netProfit) }}
@@ -39,14 +39,14 @@
 
         <!-- Optional: sales count badge -->
         <div v-if="salesCount" class="hidden md:flex flex-col items-end border-l border-slate-200 dark:border-slate-700 pl-3">
-          <span class="text-[10px] font-black tracking-[0.2em] text-slate-400">Sotuvlar</span>
+          <span class="text-[10px] font-black tracking-[0.2em] text-slate-400">{{ $t('dashboard.metrics.sales') }}</span>
           <span class="text-sm font-black tracking-tighter tabular-nums text-slate-800 dark:text-white">{{ salesCount }}</span>
         </div>
 
         <!-- Smena count badge -->
         <div v-if="settingsStore.isShiftEnabled && smenaCount" class="hidden md:flex flex-col items-end border-l border-slate-200 dark:border-slate-700 pl-3">
-          <span class="text-[10px] font-black tracking-[0.2em] text-emerald-500">Smena</span>
-          <span class="text-sm font-black tracking-tighter tabular-nums text-emerald-500">{{ smenaCount }} ochiq</span>
+          <span class="text-[10px] font-black tracking-[0.2em] text-emerald-500">{{ $t('dashboard.metrics.smena') }}</span>
+          <span class="text-sm font-black tracking-tighter tabular-nums text-emerald-500">{{ $t('dashboard.metrics.open_count', { count: smenaCount }) }}</span>
         </div>
 
         <div class="w-9 h-9 rounded-xl flex items-center justify-center border transition-all shrink-0 shadow-md"

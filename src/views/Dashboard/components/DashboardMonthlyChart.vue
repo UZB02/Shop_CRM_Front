@@ -2,12 +2,12 @@
   <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">Oylik Moliyaviy Tahlil</h3>
-        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">{{ chartData?.year }}-yil tushum va xarajatlar</p>
+        <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">{{ $t('dashboard.finance.monthly_analysis') }}</h3>
+        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">{{ $t('dashboard.finance.year_summary', { year: chartData?.year }) }}</p>
       </div>
       <div v-if="chartData?.summary" class="flex items-center gap-6">
          <div class="text-right">
-           <p class="text-[10px] font-black text-slate-400 tracking-widest">Jami Foyda</p>
+           <p class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('dashboard.metrics.gross_profit') }}</p>
            <p class="text-xs font-black text-emerald-500">{{ formatPrice(chartData.summary.total_profit) }}</p>
          </div>
          <i class="pi pi-chart-bar text-slate-300"></i>
@@ -22,6 +22,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Chart from 'primevue/chart'
 import { useSettingsStore } from '@/store/settings'
 
@@ -30,6 +31,7 @@ const props = defineProps({
 })
 
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 const formatPrice = (v) => settingsStore.formatPrice(v)
 
 const chartConfig = computed(() => {
@@ -42,14 +44,14 @@ const chartConfig = computed(() => {
     labels,
     datasets: [
       {
-        label: 'Tushum',
+        label: t('dashboard.charts.revenue'),
         backgroundColor: '#10b981',
         data: revenue,
         borderRadius: 4,
         barThickness: 15
       },
       {
-        label: 'Xarajat',
+        label: t('dashboard.charts.expense_analysis'),
         backgroundColor: '#f43f5e',
         data: expenses,
         borderRadius: 4,

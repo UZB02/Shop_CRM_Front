@@ -4,19 +4,19 @@
     <div v-if="mode === 'overview'" class="lg:col-span-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">Savdo Dinamikasi</h3>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">Kunlik tushum va sotuvlar</p>
+          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">{{ $t('dashboard.charts.sales_dynamics') }}</h3>
+          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">{{ $t('dashboard.charts.daily_summary') }}</p>
         </div>
         <div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
           <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/30"></div>
-          <span class="text-[11px] font-black tracking-widest">Tushum</span>
+          <span class="text-[11px] font-black tracking-widest">{{ $t('dashboard.charts.revenue') }}</span>
         </div>
       </div>
       <div v-if="dailySales.length" class="flex-1 min-h-[300px] relative">
         <Chart type="line" :data="lineChartData" :options="lineChartOptions" class="h-full w-full" />
       </div>
       <div v-else class="flex-1 min-h-[300px] flex items-center justify-center bg-slate-50/50 dark:bg-white/5 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
-        <p class="text-[12px] font-black text-slate-400 tracking-widest">Ma'lumot yuklanmoqda...</p>
+        <p class="text-[12px] font-black text-slate-400 tracking-widest">{{ $t('dashboard.charts.loading') }}</p>
       </div>
     </div>
 
@@ -24,8 +24,8 @@
     <div v-if="mode === 'overview' && trend3months.length" class="lg:col-span-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">3 Oylik Trend</h3>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">Oxirgi 3 oy: tushum, sotuv, foyda</p>
+          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">{{ $t('dashboard.charts.trend_3months') }}</h3>
+          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">{{ $t('dashboard.charts.trend_summary') }}</p>
         </div>
       </div>
       <div class="h-[160px]">
@@ -36,13 +36,13 @@
     <!-- Payment Breakdown (Sales mode) -->
     <div v-if="mode === 'sales'" class="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col">
       <div class="mb-4">
-        <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">To'lov Taqsimoti</h3>
-        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">Kredit / Naqd / Karta</p>
+        <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">{{ $t('dashboard.charts.payment_breakdown') }}</h3>
+        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">{{ $t('dashboard.charts.payment_types') }}</p>
       </div>
       <div class="h-[140px] relative flex items-center justify-center mb-4">
         <Chart type="doughnut" :data="pieData" :options="pieOptions" class="h-full w-full" />
         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-          <span class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.3em] mb-0.5">Jami</span>
+          <span class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-[0.3em] mb-0.5">{{ $t('dashboard.charts.total') }}</span>
           <span class="text-sm font-black text-slate-800 dark:text-white tabular-nums tracking-tighter">{{ formatPrice(totalRevenue) }}</span>
         </div>
       </div>
@@ -64,8 +64,8 @@
     <div v-if="mode === 'sales'" class="lg:col-span-2 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">Soatlik Faollik</h3>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">Kunlik gavjumlik tahlili</p>
+          <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">{{ $t('dashboard.charts.hourly_activity') }}</h3>
+          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-widest mt-0.5">{{ $t('dashboard.charts.busy_analysis') }}</p>
         </div>
         <i class="pi pi-clock text-[12px] text-slate-300"></i>
       </div>
@@ -73,15 +73,15 @@
         <Chart type="bar" :data="hourlyData" :options="hourlyOptions" class="h-full w-full" />
       </div>
       <div v-else class="flex-1 min-h-[220px] flex items-center justify-center">
-        <p class="text-[11px] font-black text-slate-400 ">Soatlik tahlil yuklanmoqda...</p>
+        <p class="text-[11px] font-black text-slate-400 ">{{ $t('dashboard.charts.hourly_loading') }}</p>
       </div>
     </div>
 
     <!-- Expense Categories (Finance mode) -->
     <div v-if="mode === 'finance'" class="lg:col-span-3 p-5 sm:p-8 rounded-2xl sm:rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 flex flex-col lg:flex-row gap-6 sm:gap-8">
       <div class="lg:w-1/3">
-        <h3 class="text-lg font-black text-slate-800 dark:text-white tracking-tight mb-1">Xarajatlar Tahlili</h3>
-        <p class="text-xs text-slate-400 dark:text-slate-500 font-bold tracking-widest mb-6">Kategoriyalar bo'yicha taqsimot</p>
+        <h3 class="text-lg font-black text-slate-800 dark:text-white tracking-tight mb-1">{{ $t('dashboard.charts.expense_analysis') }}</h3>
+        <p class="text-xs text-slate-400 dark:text-slate-500 font-bold tracking-widest mb-6">{{ $t('dashboard.charts.category_distribution') }}</p>
         
         <div class="p-6 rounded-3xl bg-rose-500/5 border border-rose-500/10 mb-6">
            <p class="text-[12px] font-black text-rose-400 tracking-[0.2em] mb-1">Jami Xarajat</p>
@@ -107,7 +107,7 @@
          </div>
          <div v-else class="text-slate-400 text-center">
             <i class="pi pi-inbox text-4xl mb-4 opacity-20"></i>
-            <p class="text-[12px] font-black tracking-widest">Ma'lumotlar topilmadi</p>
+            <p class="text-[12px] font-black tracking-widest">{{ $t('dashboard.charts.no_data') }}</p>
          </div>
       </div>
     </div>
@@ -116,6 +116,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Chart from 'primevue/chart'
 import { useSettingsStore } from '@/store/settings'
 
@@ -130,9 +131,14 @@ const props = defineProps({
 })
 
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 const formatPrice = (v) => settingsStore.formatPrice(v)
 
-const paymentLabel = (key) => ({ cash: 'Naqd', card: 'Karta', debt: 'Nasiya' }[key] || key)
+const paymentLabel = (key) => ({ 
+  cash: t('common.cash'), 
+  card: t('common.card'), 
+  debt: t('common.debt') 
+}[key] || key)
 
 const getStatusColor = (key) => {
   if (key === 'cash') return 'bg-emerald-500 shadow-emerald-500/20'
@@ -145,7 +151,7 @@ const lineChartData = computed(() => ({
   labels: props.dailySales.map(d => d.date.split('-').reverse().slice(0, 2).join('.')),
   datasets: [
     {
-      label: 'Tushum',
+      label: t('dashboard.charts.revenue'),
       data: props.dailySales.map(d => d.revenue),
       fill: true,
       borderColor: '#10b981',
@@ -206,7 +212,7 @@ const lineChartOptions = {
 
 // Pie Chart Config
 const pieData = computed(() => ({
-  labels: ['Naqd', 'Karta', 'Nasiya'],
+  labels: [t('common.cash'), t('common.card'), t('common.debt')],
   datasets: [{
     data: [props.breakdown.cash?.amount || 0, props.breakdown.card?.amount || 0, props.breakdown.debt?.amount || 0],
     backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
@@ -240,7 +246,7 @@ const expensePieData = computed(() => ({
 const hourlyData = computed(() => ({
   labels: props.hourlyHeatmap.map(h => `${h.hour}:00`),
   datasets: [{
-    label: 'Sotuvlar',
+    label: t('dashboard.metrics.sales'),
     data: props.hourlyHeatmap.map(h => h.count),
     backgroundColor: (ctx) => {
       const max = Math.max(...props.hourlyHeatmap.map(h => h.count), 1)
@@ -256,7 +262,7 @@ const hourlyData = computed(() => ({
 const hourlyOptions = {
   plugins: { legend: { display: false }, tooltip: {
     backgroundColor: '#1e293b', padding: 8, cornerRadius: 10,
-    callbacks: { label: (c) => `${c.parsed.y} ta sotuv` }
+    callbacks: { label: (c) => `${c.parsed.y} ${t('common.count')} ${t('dashboard.tabs.sales').toLowerCase()}` }
   }},
   scales: {
     x: { display: true, grid: { display: false }, ticks: { font: { size: 8, weight: 'bold' }, color: '#94a3b8', maxRotation: 0 } },
@@ -270,14 +276,14 @@ const trendData = computed(() => ({
   labels: props.trend3months.map(t => t.month),
   datasets: [
     {
-      label: 'Tushum',
+      label: t('dashboard.charts.revenue'),
       data: props.trend3months.map(t => t.revenue),
       backgroundColor: 'rgba(16,185,129,0.7)',
       borderRadius: 6, barThickness: 24
     },
     {
       type: 'line',
-      label: 'Foyda',
+      label: t('dashboard.charts.profit'),
       data: props.trend3months.map(t => t.profit),
       borderColor: '#3b82f6',
       borderWidth: 2,

@@ -23,11 +23,11 @@
 
       <!-- Main value -->
       <div>
-        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">Sof Tushum</p>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">{{ $t('dashboard.metrics.net_revenue') }}</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(sales.total_revenue) }}</h2>
         <!-- Gross + discount -->
         <div class="flex items-center gap-2 mt-1.5">
-          <span class="text-[10px] font-bold text-slate-400">Yalpi: {{ formatPrice(sales.gross_revenue) }}</span>
+          <span class="text-[10px] font-bold text-slate-400">{{ $t('dashboard.metrics.gross') }}: {{ formatPrice(sales.gross_revenue) }}</span>
           <span v-if="sales.discount_total" class="text-[10px] font-bold text-rose-400">−{{ formatPrice(sales.discount_total) }}</span>
         </div>
       </div>
@@ -40,14 +40,14 @@
       <!-- Footer: count + avg_check + return_stats -->
       <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between gap-2">
         <div>
-          <span class="text-[11px] font-black text-slate-600 dark:text-slate-300">{{ sales.count || 0 }} xarid</span>
+          <span class="text-[11px] font-black text-slate-600 dark:text-slate-300">{{ $t('dashboard.metrics.sales_count', { count: sales.count || 0 }) }}</span>
           <span v-if="sales.vs_prev_period?.count_diff" class="ml-1 text-[10px] font-black text-emerald-500">+{{ sales.vs_prev_period.count_diff }}</span>
         </div>
         <span class="text-[10px] font-bold text-slate-400">~{{ formatPrice(sales.avg_check) }}</span>
       </div>
       <!-- Return stats -->
       <div v-if="settingsStore.isSaleReturnEnabled && sales.return_stats?.count" class="flex items-center justify-between text-[10px] font-black">
-        <span class="text-rose-400">{{ sales.return_stats.count }} qaytarish</span>
+        <span class="text-rose-400">{{ sales.return_stats.count }} {{ $t('dashboard.metrics.returns') }}</span>
         <span :class="['px-1.5 py-0.5 rounded-md', sales.return_stats.return_rate > 5 ? 'bg-rose-500/10 text-rose-500' : 'bg-slate-100 dark:bg-slate-800 text-slate-500']">
           {{ sales.return_stats.return_rate }}%
         </span>
@@ -63,20 +63,20 @@
           <i class="pi pi-chart-line text-sm"></i>
         </div>
         <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-blue-500/20 bg-blue-500/8 text-blue-500">
-          {{ parseFloat(sales.margin_percent || 0).toFixed(1) }}% marja
+          {{ parseFloat(sales.margin_percent || 0).toFixed(1) }}% {{ $t('dashboard.metrics.margin') }}
         </div>
       </div>
 
       <div>
-        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">Yalpi Foyda</p>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">{{ $t('dashboard.metrics.gross_profit') }}</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(sales.total_profit) }}</h2>
       </div>
 
       <!-- Expense ratio progress bar -->
       <div class="space-y-1">
         <div class="flex justify-between text-[10px] font-black text-slate-400">
-          <span>Sof foyda</span>
-          <span class="text-rose-400">{{ expenses.expense_ratio || 0 }}% xarajat</span>
+          <span>{{ $t('dashboard.metrics.net_profit') }}</span>
+          <span class="text-rose-400">{{ expenses.expense_ratio || 0 }}% {{ $t('dashboard.metrics.expense') }}</span>
         </div>
         <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
           <div class="h-full bg-blue-500 rounded-l-full" :style="{ width: (100 - (expenses.expense_ratio || 0)) + '%' }"></div>
@@ -85,7 +85,7 @@
       </div>
 
       <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
-        <span class="text-[11px] font-black text-slate-600 dark:text-slate-300">Sof: <span class="text-emerald-500">{{ formatPrice(expenses.net_profit) }}</span></span>
+        <span class="text-[11px] font-black text-slate-600 dark:text-slate-300">{{ $t('dashboard.metrics.net') }}: <span class="text-emerald-500">{{ formatPrice(expenses.net_profit) }}</span></span>
         <span class="text-[10px] font-bold text-slate-400">COGS: {{ formatPrice(expenses.cogs) }}</span>
       </div>
     </div>
@@ -100,18 +100,18 @@
         </div>
         <div v-if="products.low_stock_count"
              class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-rose-500/20 bg-rose-500/8 text-rose-500 animate-pulse">
-          ⚠ {{ products.low_stock_count }} Defitsit
+          ⚠ {{ products.low_stock_count }} {{ $t('dashboard.metrics.deficit') }}
         </div>
       </div>
 
       <div>
-        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">Ombor Kapitali</p>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">{{ $t('dashboard.metrics.warehouse_capital') }}</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(products.warehouse_value) }}</h2>
-        <p class="text-[10px] font-bold text-slate-400 mt-1">Savat: {{ products.avg_items_per_sale }} ta/sotuv</p>
+        <p class="text-[10px] font-bold text-slate-400 mt-1">{{ $t('dashboard.metrics.avg_per_sale', { count: products.avg_items_per_sale }) }}</p>
       </div>
 
       <div v-if="settingsStore.isWastageEnabled" class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
-        <span class="text-[11px] font-black text-slate-500">Isrof: <span class="text-orange-500">{{ formatPrice(products.wastage_total) }}</span></span>
+        <span class="text-[11px] font-black text-slate-500">{{ $t('dashboard.metrics.wastage') }}: <span class="text-orange-500">{{ formatPrice(products.wastage_total) }}</span></span>
       </div>
     </div>
 
@@ -124,20 +124,20 @@
           <i class="pi pi-users text-sm"></i>
         </div>
         <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-amber-500/20 bg-amber-500/8 text-amber-600">
-          +{{ customers.new_count || 0 }} yangi
+          {{ $t('dashboard.metrics.new_customers', { count: customers.new_count || 0 }) }}
         </div>
       </div>
 
       <div>
-        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">Mijozlar Bazasi</p>
-        <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ customers.total || 0 }} ta</h2>
+        <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">{{ $t('dashboard.metrics.customer_base') }}</p>
+        <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ customers.total || 0 }} {{ $t('common.count') }}</h2>
         <p v-if="workers.total_active_workers" class="text-[10px] font-black text-emerald-500 mt-1 tracking-wider">
-          {{ workers.total_active_workers }} ta faol sotuvchi
+          {{ $t('dashboard.metrics.active_sellers', { count: workers.total_active_workers }) }}
         </p>
       </div>
 
       <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
-        <span class="text-[11px] font-black text-slate-500">Nasiya: <span class="text-rose-500">{{ formatPrice(customers.total_debt) }}</span></span>
+        <span class="text-[11px] font-black text-slate-500">{{ $t('dashboard.metrics.debt') }}: <span class="text-rose-500">{{ formatPrice(customers.total_debt) }}</span></span>
       </div>
     </div>
 
