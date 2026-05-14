@@ -20,7 +20,11 @@ export default function useExpenseTabLogic() {
       fetchDebtors,
       fetchFinancialSummary,
       exportDebtors,
-      clearFilters: clearReportsFilters
+      clearFilters: clearReportsFilters,
+      fetchRevenue,
+      fetchExpensesReport,
+      fetchPaymentMethods,
+      fetchProfitability
   } = useFinanceReports()
 
   const productCategories = ref([])
