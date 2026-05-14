@@ -44,15 +44,12 @@
             <label class="text-xs font-black tracking-widest text-slate-400 uppercase">Yangi Parol</label>
             <Password 
               v-model="password" 
+              :feedback="false"
               toggleMask 
               placeholder="••••••••" 
               class="w-full" 
               inputClass="w-full !rounded-2xl !py-3 dark:bg-slate-950 dark:border-slate-800"
               :disabled="loading"
-              :promptLabel="'Murakkab parol kiriting'"
-              :weakLabel="'Zaif'"
-              :mediumLabel="'O\'rtacha'"
-              :strongLabel="'Kuchli'"
             />
           </div>
 

@@ -46,15 +46,12 @@
                 <Password 
                   id="password" 
                   v-model="form.password" 
+                  :feedback="false"
                   toggleMask 
                   placeholder="••••••••"
                   class="w-full"
                   inputClass="w-full !p-3.5 !pl-4 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-slate-100 dark:!border-slate-700/50 focus:!border-emerald-500 dark:focus:!border-emerald-500/50 !text-slate-700 dark:!text-slate-200 transition-all"
                   :class="{ 'p-invalid': submitted && !form.password }"
-                  :promptLabel="$t('password_change.prompt')"
-                  :weakLabel="$t('password_change.weak')"
-                  :mediumLabel="$t('password_change.medium')"
-                  :strongLabel="$t('password_change.strong')"
                 />
                 <small v-if="submitted && !form.password" class="text-rose-500 text-[12px] font-semibold px-1">{{ $t('password_change.new_required') }}</small>
               </div>
