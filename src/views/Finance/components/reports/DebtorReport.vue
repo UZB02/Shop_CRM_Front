@@ -10,7 +10,7 @@
               </div>
               <div>
                  <p class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.debtor_customers') }}</p>
-                 <p class="text-sm font-bold text-slate-800 dark:text-slate-100">{{ data?.debtors_count || 0 }} ta</p>
+                 <p class="text-sm font-bold text-slate-800 dark:text-slate-100">{{ data?.summary?.total_debtors || 0 }} ta</p>
               </div>
            </div>
         </div>
@@ -23,7 +23,7 @@
               </div>
               <div>
                  <p class="text-[11px] font-bold tracking-widest text-slate-400 mb-0.5">{{ t('reports.total_debt_amount') }}</p>
-                 <p class="text-sm font-bold text-rose-500">{{ formatCurrency(data?.total_debt || 0) }}</p>
+                 <p class="text-sm font-bold text-rose-500">{{ formatCurrency(data?.summary?.total_debt || 0) }}</p>
               </div>
            </div>
         </div>
@@ -49,7 +49,7 @@
                 </tr>
              </thead>
              <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
-                <tr v-for="item in (data?.items || [])" :key="item.customer_id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-colors group">
+                <tr v-for="item in (data?.results || [])" :key="item.id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 transition-colors group">
                    <td class="px-4 py-3">
                       <div class="flex flex-col">
                         <span class="text-xs font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-500 transition-colors">{{ item.name }}</span>
@@ -57,7 +57,7 @@
                       </div>
                    </td>
                    <td class="px-4 py-3 text-[12px] font-medium text-slate-500">
-                      {{ item.last_sale_date || '—' }}
+                      {{ item.last_sale || '—' }}
                    </td>
                    <td class="px-4 py-3">
                       <span class="px-2 py-0.5 rounded-lg bg-slate-50 dark:bg-slate-800 text-[11px] font-bold text-slate-500 tracking-widest border border-slate-100 dark:border-slate-800/50">
@@ -68,7 +68,7 @@
                       <span class="text-xs font-bold text-rose-500">{{ formatCurrency(item.debt_balance) }}</span>
                    </td>
                 </tr>
-                <tr v-if="!(data?.items?.length)">
+                <tr v-if="!(data?.results?.length)">
                    <td colspan="4" class="px-4 py-12 text-center">
                       <p class="text-[12px] font-bold text-slate-400 tracking-widest">{{ t('reports.no_debtors_found') }}</p>
                    </td>

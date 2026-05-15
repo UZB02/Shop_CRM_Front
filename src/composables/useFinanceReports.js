@@ -36,7 +36,7 @@ export default function useFinanceReports() {
         payments: { summary: {}, chart: [], table: [] },
         profitability: { summary: {}, chart: [], table: [], subcategory_enabled: false },
         profitLoss: { summary: {}, data: [], year: null, months: [] },
-        debtors: { total_debt: 0, debtors_count: 0, items: [] },
+        debtors: { summary: { total_debt: 0, total_debtors: 0 }, results: [], pagination: {} },
         financialSummary: null
     })
 

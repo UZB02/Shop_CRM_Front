@@ -12,7 +12,7 @@ export default function useReports() {
     const financialSummary = ref(null)
     const profitLoss = ref(null)
     const turnover = ref([])
-    const debtors = ref({ items: [], total_debt: 0 })
+    const debtors = ref({ summary: { total_debt: 0, total_debtors: 0 }, results: [] })
     const performance = ref([])
     const inventoryValue = ref({ items: [], total_value: 0 })
     const taxReport = ref(null)
