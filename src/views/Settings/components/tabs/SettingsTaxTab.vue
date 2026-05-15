@@ -36,6 +36,7 @@
             v-model.trim="form.tin" 
             type="text" 
             maxlength="9" 
+            autocomplete="off"
             @input="form.tin = ($event.target.value.replace(/\D/g, ''))"
             :placeholder="$t('settings.tax.tin_placeholder')" 
             class="settings-input w-40 font-mono tracking-widest" 
@@ -69,7 +70,7 @@
               </div>
               <p class="row-desc">{{ $t('settings.tax.ofd_token_desc') }}</p>
             </div>
-            <input v-model.trim="form.ofd_token" type="password" :placeholder="$t('settings.tax.ofd_token_placeholder')" class="settings-input w-64" :class="{'ring-2 ring-amber-500/20 border-amber-500/50': isFieldDirty('ofd_token')}" :disabled="readonly" />
+            <input v-model.trim="form.ofd_token" type="password" autocomplete="new-password" :placeholder="$t('settings.tax.ofd_token_placeholder')" class="settings-input w-64" :class="{'ring-2 ring-amber-500/20 border-amber-500/50': isFieldDirty('ofd_token')}" :disabled="readonly" />
           </div>
           <div class="settings-row">
             <div class="flex-1">

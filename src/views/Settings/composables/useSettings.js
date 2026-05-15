@@ -253,9 +253,15 @@ export function useSettings() {
         }
     }
 
+    const resetForm = () => {
+        FORM_FIELDS.forEach(f => {
+            form[f] = originalForm.value[f] ?? null
+        })
+    }
+
     onMounted(loadSettings)
 
-    return { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwner, saveSettings }
+    return { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwner, saveSettings, resetForm }
 }
 
 

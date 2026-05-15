@@ -11,10 +11,16 @@
           {{ settings?.store_name }}
         </p>
       </div>
-      <button @click="saveSettings" :disabled="saving || !isDirty || !isOwner" class="save-btn flex-shrink-0">
-        <i :class="saving ? 'pi pi-spin pi-spinner' : 'pi pi-save'" class="text-xs"></i>
-        <span>{{ saving ? $t('settings.saving') : $t('settings.save') }}</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <button v-if="isDirty && !saving" @click="resetForm" class="reset-btn">
+          <i class="pi pi-refresh text-xs"></i>
+          <span>{{ $t('common.reset') }}</span>
+        </button>
+        <button @click="saveSettings" :disabled="saving || !isDirty || !isOwner" class="save-btn flex-shrink-0">
+          <i :class="saving ? 'pi pi-spin pi-spinner' : 'pi pi-save'" class="text-xs"></i>
+          <span>{{ saving ? $t('settings.saving') : $t('settings.save') }}</span>
+        </button>
+      </div>
     </div>
 
     <!-- Unsaved changes banner -->
@@ -123,7 +129,7 @@ import SettingsTelegramTab from './components/tabs/SettingsTelegramTab.vue'
 const { t } = useI18n()
 const activeTab = ref('modules')
 const settingsStore = useSettingsStore()
-const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwner, saveSettings } = useSettings()
+const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwner, saveSettings, resetForm } = useSettings()
 
 // Plan features — store'dan reaktiv olinadi
 const planFeatures = computed(() => settingsStore.planFeatures)
@@ -259,6 +265,26 @@ const isTabPlanLocked = (tabKey) => TAB_PLAN_MAP[tabKey]?.() ?? false
 }
 .save-btn:hover:not(:disabled) { background: #059669; }
 .save-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+/* Reset button */
+.reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.reset-btn:hover:not(:disabled) { background: #e2e8f0; color: #1e293b; }
+.dark .reset-btn { background: #1e293b; color: #94a3b8; border-color: #334155; }
+.dark .reset-btn:hover:not(:disabled) { background: #334155; color: #e2e8f0; }
 
 /* Sidebar nav buttons */
 .nav-btn {
