@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-w-[200px]" v-outside-click="() => isOpen = false">
+  <div class="relative w-full sm:w-60" v-outside-click="() => isOpen = false">
     <!-- Trigger -->
     <button
       @click="isOpen = !isOpen"

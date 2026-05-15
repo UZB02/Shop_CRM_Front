@@ -1,8 +1,8 @@
 <template>
-  <div class="relative z-[50] bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col gap-3 sm:gap-4">
-    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+  <div class="relative z-10 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col gap-3 sm:gap-4 transition-all">
+    <div class="flex flex-wrap items-center gap-3">
       <!-- Search Filter -->
-      <div v-if="activeTab !== 'payments'" class="relative flex-1 min-w-[200px] sm:w-64 group">
+      <div v-if="activeTab !== 'payments'" class="relative flex-initial w-full sm:w-64 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
           <i class="pi pi-search text-[12px]"></i>
         </div>
@@ -15,7 +15,7 @@
       </div>
 
       <!-- Date Range Filter -->
-      <div v-if="activeTab !== 'profit-loss'" class="relative flex-1 min-w-[200px] sm:flex-none sm:w-64 group">
+      <div v-if="activeTab !== 'profit-loss'" class="relative flex-initial w-full sm:w-64 group">
         <DatePicker
           v-model="filters.date"
           :selectionMode="['expenses-list', 'debtors'].includes(activeTab) ? 'single' : 'range'"
@@ -31,7 +31,7 @@
       </div>
 
       <!-- Category Filter -->
-      <div v-if="!['profit-loss', 'debtors'].includes(activeTab)" class="relative flex-1 min-w-[180px] sm:flex-none sm:w-60 group">
+      <div v-if="!['profit-loss', 'debtors'].includes(activeTab)" class="relative flex-initial w-full sm:w-60 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
           <i class="pi pi-tag text-[12px]"></i>
         </div>
@@ -72,7 +72,7 @@
       </div>
 
       <!-- Year Filter (P&L only) -->
-      <div v-if="activeTab === 'profit-loss'" class="relative flex-1 min-w-[100px] sm:flex-none sm:w-32 group">
+      <div v-if="activeTab === 'profit-loss'" class="relative flex-initial w-full sm:w-32 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
           <i class="pi pi-calendar-plus text-[12px]"></i>
         </div>
@@ -118,7 +118,7 @@
           showClear
           class="w-full"
           pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
-          pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !!tracking-wider"
+          pt:label:class="!text-xs !font-black !flex !items-center !py-0 !pl-9 !pr-3 !tracking-wider"
         />
       </div>
 
@@ -177,7 +177,7 @@
         <i class="pi pi-refresh text-[13px]"></i>
       </button>
 
-      <div class="flex-1"></div>
+      <div class="hidden xl:block flex-1"></div>
 
       <!-- Export Panel Toggle -->
       <button
