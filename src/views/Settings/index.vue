@@ -71,8 +71,6 @@
             <i :class="['pi', tab.icon, 'text-xs w-4 flex-shrink-0']"></i>
             <span class="truncate">{{ $t(tab.tKey) }}</span>
             <span v-if="dirtyTabs[tab.key]" class="ml-auto w-2 h-2 bg-amber-500 rounded-full animate-pulse shadow-sm shadow-amber-500/50"></span>
-            <!-- Plan lock indicator in sidebar -->
-            <span v-else-if="isTabPlanLocked(tab.key)" class="ml-auto text-amber-400 text-[10px]">🔒</span>
           </button>
         </nav>
       </aside>
@@ -133,16 +131,6 @@ const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwn
 
 // Plan features — store'dan reaktiv olinadi
 const planFeatures = computed(() => settingsStore.planFeatures)
-
-// Sidebar'da qaysi tab plan tomonidan bloklangan
-const TAB_PLAN_MAP = {
-  modules:  () => !settingsStore.hasPlanShift || !settingsStore.hasPlanKpi || !settingsStore.hasPlanSubcategory,
-  payment:  () => !settingsStore.hasPlanDiscount,
-  currency: () => !settingsStore.hasPlanMultiCurrency,
-  receipt:  () => !settingsStore.hasPlanReceiptDesign,
-  telegram: () => !settingsStore.hasPlanTelegram,
-}
-const isTabPlanLocked = (tabKey) => TAB_PLAN_MAP[tabKey]?.() ?? false
 </script>
 
 <!-- ─────────────────────────────────────────────────
