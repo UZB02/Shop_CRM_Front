@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { warehousesAPI, reportsAPI } from '@/services/api'
+import { warehousesAPI, reportsAPI, movementsAPI } from '@/services/api'
 import { useSettingsStore } from '@/store/settings'
 import { useToast } from 'primevue/usetoast'
 import i18n from '@/i18n'
@@ -26,6 +26,12 @@ export function useWarehouseDetail() {
   const incomingTotal = ref(0)
   const incomingPage = ref(1)
   const incomingRows = ref(10)
+
+  // Void states
+  const voidingId = ref(null)
+  const voidingReason = ref('')
+  const voidingLoading = ref(false)
+  const voidingDialogVisible = ref(false)
 
   const wastageModalVisible = ref(false)
   const selectedProductForWastage = ref(null)
@@ -136,6 +142,53 @@ export function useWarehouseDetail() {
     fetchWarehouseDetails('incoming')
   }
 
+  const openVoidDialog = (item) => {
+    voidingId.value = item.id
+    voidingReason.value = ''
+    voidingDialogVisible.value = true
+  }
+
+  const confirmVoid = async () => {
+    if (!voidingId.value) return
+    if (!voidingReason.value.trim()) {
+      toast.add({
+        severity: 'warn',
+        summary: t('common.confirm_title') || 'Ogohlantirish',
+        detail: t('warehouse.detail.void_reason_required') || 'Bekor qilish sababini kiriting',
+        life: 3000
+      })
+      return
+    }
+
+    try {
+      voidingLoading.value = true
+      const res = await movementsAPI.void(voidingId.value, {
+        reason: voidingReason.value.trim()
+      })
+      
+      toast.add({
+        severity: 'success',
+        summary: t('common.success'),
+        detail: res.data?.detail || t('warehouse.detail.void_success') || 'Kirim muvaffaqiyatli bekor qilindi.',
+        life: 3000
+      })
+      
+      voidingDialogVisible.value = false
+      await fetchWarehouseDetails('incoming')
+    } catch (err) {
+      console.error('Error voiding movement:', err)
+      const errorMsg = err.response?.data?.detail || t('warehouse.detail.void_error') || 'Bekor qilishda xatolik yuz berdi'
+      toast.add({
+        severity: 'error',
+        summary: t('common.error'),
+        detail: errorMsg,
+        life: 5000
+      })
+    } finally {
+      voidingLoading.value = false
+    }
+  }
+
   const openMovementDialog = () => {
     if (warehouse.value) {
       router.push({
@@ -216,7 +269,14 @@ export function useWarehouseDetail() {
     onIncomingPageChange,
     openMovementDialog,
     openNewTransferHandler,
-    exportStocks
+    exportStocks,
+    
+    // Void exports
+    voidingReason,
+    voidingLoading,
+    voidingDialogVisible,
+    openVoidDialog,
+    confirmVoid
   }
 }
 

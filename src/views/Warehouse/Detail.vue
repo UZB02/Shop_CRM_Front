@@ -63,6 +63,7 @@
             :page="incomingPage"
             :rows="incomingRows"
             @page-change="onIncomingPageChange"
+            @void="openVoidDialog"
           />
 
           <!-- ===== CHIQUITLAR TAB ===== -->
@@ -93,6 +94,82 @@
       :product="selectedProduct"
       @download="downloadBarcode"
     />
+
+    <!-- Void Confirmation Dialog -->
+    <Dialog 
+      v-model:visible="voidingDialogVisible"
+      modal 
+      class="!bg-white dark:!bg-slate-900 !rounded-[2rem] !border-none !shadow-2xl" 
+      :showHeader="false"
+      pt:mask:class="backdrop-blur-sm bg-slate-900/40 dark:bg-slate-950/60"
+    >
+      <div class="p-6 sm:p-8 flex flex-col gap-6 w-full max-w-md min-w-[340px] sm:min-w-[420px]">
+        <!-- Header -->
+        <div class="w-full flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500 border border-rose-500/20">
+              <i class="pi pi-ban text-sm"></i>
+            </div>
+            <div class="text-left">
+              <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight">{{ $t('warehouse.detail.void_title') }}</h3>
+              <p class="text-[10px] font-black text-rose-400 uppercase tracking-widest">{{ $t('common.confirm_title') }}</p>
+            </div>
+          </div>
+          <button @click="voidingDialogVisible = false" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
+            <i class="pi pi-times text-[12px]"></i>
+          </button>
+        </div>
+        
+        <!-- Info Alert -->
+        <div class="p-4 bg-amber-500/5 border border-amber-500/10 rounded-2xl flex gap-3 text-left">
+          <div class="text-amber-500 shrink-0">
+            <i class="pi pi-exclamation-triangle text-sm mt-0.5"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-amber-700 dark:text-amber-400 leading-tight">{{ $t('warehouse.detail.void_confirm') }}</h4>
+            <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+              {{ $t('warehouse.detail.void_warning_desc') }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Reason Input -->
+        <div class="field text-left">
+          <label class="text-[12px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
+            {{ $t('warehouse.detail.void_reason') }} <span class="text-rose-500">*</span>
+          </label>
+          <div class="custom-input-wrapper relative group/input flex items-start rounded-2xl bg-slate-50 dark:bg-slate-900/50 border !border-slate-200 dark:!border-slate-800 focus-within:!border-rose-400 focus-within:ring-4 focus-within:ring-rose-400/10 transition-all duration-300">
+            <Textarea
+              v-model="voidingReason"
+              rows="3"
+              :placeholder="$t('warehouse.detail.void_reason_placeholder')"
+              class="w-full h-full"
+              pt:root:class="!bg-transparent !border-none !shadow-none !w-full"
+              pt:textarea:class="!bg-transparent !border-none !shadow-none !text-[14px] !font-semibold !p-4 !px-4 !w-full !text-slate-700 dark:!text-slate-200 !outline-none !resize-none !min-h-[80px]"
+            />
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="flex gap-3 w-full">
+          <button 
+            @click="voidingDialogVisible = false"
+            class="flex-1 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-black tracking-widest hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition-all flex items-center justify-center"
+          >
+            {{ $t('common.cancel') }}
+          </button>
+          <button 
+            @click="confirmVoid"
+            :disabled="voidingLoading"
+            class="flex-[2] py-3 rounded-xl bg-rose-500 hover:bg-rose-600 text-slate-900 text-[11px] font-black tracking-widest shadow-lg shadow-rose-500/20 active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+          >
+            <i v-if="voidingLoading" class="pi pi-spin pi-spinner text-xs"></i>
+            <i v-else class="pi pi-check text-xs"></i>
+            {{ voidingLoading ? $t('common.saving') : $t('warehouse.detail.void_btn') }}
+          </button>
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -108,6 +185,9 @@ import CreateWastageModal from '@/components/Warehouse/CreateWastageModal.vue'
 import WarehouseProductsTab from './components/Detail/WarehouseProductsTab.vue'
 import WarehouseIncomingTab from './components/Detail/WarehouseIncomingTab.vue'
 import WarehouseBarcodeDialog from './components/Detail/WarehouseBarcodeDialog.vue'
+
+import Dialog from 'primevue/dialog'
+import Textarea from 'primevue/textarea'
 
 // Composable
 import { useWarehouseDetail } from './composables/useWarehouseDetail'
@@ -139,7 +219,14 @@ const {
   onIncomingPageChange,
   openMovementDialog,
   openNewTransferHandler,
-  exportStocks
+  exportStocks,
+  
+  // Void exports
+  voidingReason,
+  voidingLoading,
+  voidingDialogVisible,
+  openVoidDialog,
+  confirmVoid
 } = useWarehouseDetail()
 </script>
 
@@ -158,6 +245,25 @@ const {
 }
 .animate-loading {
   animation: loading 1.5s infinite ease-in-out;
+}
+
+/* Universal shaffoflik va hamma effektlarni (border, shadow, outline) o'chirish */
+.custom-input-wrapper :deep(*),
+.custom-input-wrapper :deep(*:hover),
+.custom-input-wrapper :deep(*:focus),
+.custom-input-wrapper :deep(*::before),
+.custom-input-wrapper :deep(*::after) {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+:deep(.p-textarea) {
+  font-family: inherit !important;
+  width: 100% !important;
 }
 </style>
 
