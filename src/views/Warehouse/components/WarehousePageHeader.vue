@@ -14,6 +14,7 @@
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <button
+        v-if="settingsStore.hasPlanExport"
         @click="$emit('export')"
         class="h-8 px-3 rounded-lg text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/30 dark:bg-emerald-900/10 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
       >
@@ -42,9 +43,11 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotificationStore } from '@/store/notifications'
+import { useSettingsStore } from '@/store/settings'
 
 const { t } = useI18n()
 const notificationStore = useNotificationStore()
+const settingsStore = useSettingsStore()
 
 const limitTooltip = computed(() => {
   const w = notificationStore.usage?.warehouses

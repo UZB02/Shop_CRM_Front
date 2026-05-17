@@ -181,6 +181,7 @@
 
       <!-- Export Panel Toggle -->
       <button
+        v-if="settingsStore.hasPlanExport"
         @click="showExport = !showExport"
         class="h-10 px-4 rounded-xl text-xs font-black tracking-widest transition-all flex items-center gap-2.5 border"
         :class="showExport 

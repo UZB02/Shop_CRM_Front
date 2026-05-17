@@ -12,7 +12,7 @@
       @refresh="loadKpiData"
     />
 
-    <template v-if="settingsStore.isKpiEnabled">
+    <template v-if="settingsStore.isKpiEnabled && settingsStore.hasPlanKpi">
       <!-- Stats Summary -->
       <KpiStatsCards v-if="kpiList.length > 0" :stats="globalStats" />
 

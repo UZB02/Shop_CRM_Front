@@ -40,12 +40,13 @@
               <label class="text-[11px] font-black tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.discount') }}</label>
               <div class="flex gap-2">
                 <div class="relative flex-1 flex items-center">
-                  <InputNumber 
-                    v-model="newGroup.discount" 
-                    :min="0" :max="100" 
-                    placeholder="0" 
-                    mode="decimal" 
+                  <InputNumber
+                    v-model="newGroup.discount"
+                    :min="0" :max="100"
+                    placeholder="0"
+                    mode="decimal"
                     class="w-full"
+                    :disabled="!settingsStore.hasPlanDiscount"
                     pt:root:class="!h-9"
                     pt:input:class="!h-9 !px-3 !text-[13px] !font-bold !rounded-xl !bg-white dark:!bg-slate-900 !border-slate-200 dark:!border-slate-700 w-full !text-left focus:!border-emerald-500/50"
                   />
@@ -125,6 +126,9 @@ import { customerGroupsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
+import { useSettingsStore } from '@/store/settings'
+
+const settingsStore = useSettingsStore()
 
 const props = defineProps({
   visible: Boolean

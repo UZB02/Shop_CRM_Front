@@ -25,6 +25,7 @@
     </div>
     <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 shrink-0">
       <button
+        v-if="settingsStore.hasPlanExport"
         @click="$emit('export')"
         class="h-10 sm:h-9 px-3 rounded-xl text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/30 dark:bg-emerald-900/10 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
       >
@@ -54,6 +55,8 @@
 </template>
 
 <script setup>
+import { useSettingsStore } from '@/store/settings'
+const settingsStore = useSettingsStore()
 defineProps({ warehouse: Object })
 defineEmits(['movement', 'transfer', 'export'])
 </script>

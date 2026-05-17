@@ -299,12 +299,12 @@ router.beforeEach(async (to, from, next) => {
     if (to.path.includes('/shifts') || to.path.includes('/workers/kpi')) {
         if (!settingsStore.initialized) await settingsStore.fetchSettings()
         
-        if (to.path.includes('/shifts') && !settingsStore.isShiftEnabled) {
+        if (to.path.includes('/shifts') && (!settingsStore.isShiftEnabled || !settingsStore.hasPlanShift)) {
             next({ name: 'dashboard' })
             return
         }
-        
-        if (to.path.includes('/workers/kpi') && !settingsStore.isKpiEnabled) {
+
+        if (to.path.includes('/workers/kpi') && (!settingsStore.isKpiEnabled || !settingsStore.hasPlanKpi)) {
             next({ name: 'workers' })
             return
         }

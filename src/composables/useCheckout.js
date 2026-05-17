@@ -62,7 +62,7 @@ export function useCheckout(props, emit) {
     }
   })
 
-  const allowDiscount = computed(() => settingsStore.allowDiscount)
+  const allowDiscount = computed(() => settingsStore.allowDiscount && settingsStore.hasPlanDiscount)
 
   // Settings dan chegirma limiti (0 = cheksiz)
   const maxDiscountPct = computed(() => settingsStore.maxDiscount)

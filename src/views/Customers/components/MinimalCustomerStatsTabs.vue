@@ -33,15 +33,15 @@
         />
       </div>
 
-      <div class="flex items-center gap-1">
-        <button 
+      <div v-if="settingsStore.hasPlanExport" class="flex items-center gap-1">
+        <button
           @click="$emit('export', 'excel')"
           class="h-8 w-8 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/10 hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
           title="Excel"
         >
           <i class="pi pi-file-excel text-[12px]"></i>
         </button>
-        <button 
+        <button
           @click="$emit('export', 'pdf')"
           class="h-8 w-8 rounded-lg flex items-center justify-center text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/10 hover:bg-rose-500 hover:text-white transition-all shadow-sm"
           title="PDF"
@@ -73,6 +73,9 @@
 </template>
 
 <script setup>
+import { useSettingsStore } from '@/store/settings'
+const settingsStore = useSettingsStore()
+
 defineProps({
   tabs: Array,
   activeTab: String,

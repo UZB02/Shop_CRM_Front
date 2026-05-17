@@ -100,7 +100,7 @@ const navTabs = computed(() => {
     { id: 'permissions', label: t('workers.permissions'), icon: 'pi pi-shield' }
   ]
   
-  if (settingsStore.isKpiEnabled) {
+  if (settingsStore.isKpiEnabled && settingsStore.hasPlanKpi) {
     tabs.push({ id: 'kpi', label: t('kpi.title'), icon: 'pi pi-chart-bar' })
   }
   

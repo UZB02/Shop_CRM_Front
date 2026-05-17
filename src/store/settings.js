@@ -1,17 +1,21 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
-import { settingsAPI } from '@/services/api'
+import { settingsAPI, subscriptionAPI } from '@/services/api'
+import { useNotificationStore } from '@/store/notifications'
 
 export const useSettingsStore = defineStore('settings', () => {
   // ─── State ───────────────────────────────────────────────────────────────
   const settings = ref(null)
   const loading = ref(false)
   const initialized = ref(false)
+  const notificationStore = useNotificationStore()
+  const { subscription } = storeToRefs(notificationStore)
 
   // ─── Getters (computed) ───────────────────────────────────────────────────
 
   // Modules
   const isSubcategoryEnabled   = computed(() => !!settings.value?.subcategory_enabled)
+
   const isSaleReturnEnabled    = computed(() => !!settings.value?.sale_return_enabled)
   const isWastageEnabled       = computed(() => !!settings.value?.wastage_enabled)
   const isStockAuditEnabled    = computed(() => !!settings.value?.stock_audit_enabled)
@@ -25,9 +29,20 @@ export const useSettingsStore = defineStore('settings', () => {
   const lowStockThreshold      = computed(() => parseInt(settings.value?.low_stock_threshold || 5))
 
   // ─── Plan Features (Tarif imkoniyatlari) ────────────────────────────────────
-  // Qoida: plan_features hali kelmagan bo'lsa (!== false) → feature YOQILGAN hisoblanadi
-  // Bu orqaga mos kelishni ta'minlaydi — eski foydalanuvchilar uchun hech narsa o'zgarmaydi
-  const planFeatures           = computed(() => settings.value?.plan_features || {})
+  // Manba 1: subscription.plan (asosiy — eng ishonchli)
+  // Manba 2: settings API plan_features (zaxira)
+  // Qoida: ikkala manba ham yo'q bo'lsa → feature YOQILGAN hisoblanadi (orqaga moslik)
+  const planFeatures = computed(() => {
+    // Subscription plan — asosiy manba (eng ishonchli va yangi ma'lumot)
+    const subPlan = subscription.value?.plan
+    if (subPlan && 'has_export' in subPlan) return subPlan
+
+    // settings API plan_features — zaxira manba
+    const feats = settings.value?.plan_features
+    if (feats && typeof feats === 'object' && 'has_export' in feats) return feats
+
+    return {}
+  })
   const hasPlanShift           = computed(() => planFeatures.value.has_shift           !== false)
   const hasPlanDiscount        = computed(() => planFeatures.value.has_discount         !== false)
   const hasPlanTelegram        = computed(() => planFeatures.value.has_telegram         !== false)
@@ -87,7 +102,25 @@ export const useSettingsStore = defineStore('settings', () => {
         : (res.data?.results?.[0] || res.data)
 
       if (data) {
-        settings.value = { ...data }  // brand-new object → forces full reactivity
+        // Agar settings API plan_features ni qaytarmasa yoki bo'sh object bo'lsa → subscription API dan olamiz
+        const hasPlanFeatures = data.plan_features && typeof data.plan_features === 'object' && 'has_export' in data.plan_features
+        if (!hasPlanFeatures) {
+          try {
+            const subRes = await subscriptionAPI.getStatus()
+            const sub = subRes.data
+            // plan_features ni turli response strukturalaridan olib olamiz
+            const plan = sub?.plan
+            if (plan && 'has_export' in plan) {
+              data.plan_features = plan
+            } else if (sub && 'has_export' in sub) {
+              data.plan_features = sub
+            }
+            console.log('📋 Settings store: plan_features subscription dan olindi', data.plan_features)
+          } catch (e) {
+            console.warn('⚠️ Settings store: plan_features olib bo\'lmadi', e)
+          }
+        }
+        settings.value = { ...data }
         initialized.value = true
         console.log('✅ Settings store: fetched & initialized', data)
       }

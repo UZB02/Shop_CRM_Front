@@ -152,7 +152,7 @@
               <td class="px-4 py-2 text-center">
                 <div class="flex gap-1 justify-center items-center">
                   <button
-                    v-if="settingsStore.isKpiEnabled"
+                    v-if="settingsStore.isKpiEnabled && settingsStore.hasPlanKpi"
                     class="w-7 h-7 rounded-lg border transition-all active:scale-90 flex items-center justify-center"
                     :class="data.kpi_summary 
                       ? 'bg-emerald-500/5 hover:bg-emerald-500/10 border-emerald-500/10 text-emerald-600 dark:text-emerald-400' 

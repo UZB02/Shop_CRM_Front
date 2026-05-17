@@ -6,7 +6,7 @@
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <router-link
-        v-if="settingsStore.isKpiEnabled"
+        v-if="settingsStore.isKpiEnabled && settingsStore.hasPlanKpi"
         :to="{ name: 'workers-kpi' }"
         class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap bg-indigo-500 hover:bg-indigo-600 text-white shadow-sm active:scale-95"
       >

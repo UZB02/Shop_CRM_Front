@@ -1,7 +1,7 @@
 <template>
   <div v-show="active === 'receipt'" class="settings-section">
     <SectionHeader icon="pi-receipt" color="text-slate-500">{{ $t('settings.receipt.title') }}</SectionHeader>
-    <SettingRow v-model="form.show_store_logo"  :label="$t('settings.receipt.logo_label')"        :desc="$t('settings.receipt.logo_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_store_logo')" />
+    <SettingRow v-model="form.show_store_logo"  :label="$t('settings.receipt.logo_label')"        :desc="$t('settings.receipt.logo_desc')" :disabled="readonly || !planFeatures.has_receipt_design" :is-dirty="isFieldDirty('show_store_logo')" />
     <SettingRow v-model="form.show_worker_name" :label="$t('settings.receipt.worker_name_label')" :desc="$t('settings.receipt.worker_name_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_worker_name')" />
 
     <SectionHeader icon="pi-map-marker" color="text-slate-500">{{ $t('settings.receipt.info_title') }}</SectionHeader>

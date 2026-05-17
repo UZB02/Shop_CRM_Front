@@ -83,7 +83,7 @@
             <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
             <span class="text-xs font-bold tracking-widest text-slate-500">{{ t('reports.monthly_distribution') }}</span>
           </div>
-          <button class="text-xs font-bold tracking-widest text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-2">
+          <button v-if="settingsStore.hasPlanExport" class="text-xs font-bold tracking-widest text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-2">
             <i class="pi pi-download"></i>
             {{ t('common.export') }}
           </button>

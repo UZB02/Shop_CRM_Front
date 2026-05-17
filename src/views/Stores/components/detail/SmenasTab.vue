@@ -52,6 +52,7 @@
       <div class="flex items-center gap-2">
         <!-- Export -->
         <button
+          v-if="settingsStore.hasPlanExport"
           @click="exportShifts"
           v-tooltip.top="$t('common.export')"
           class="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all duration-300 flex items-center justify-center shadow-sm"
@@ -170,10 +171,12 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSmenasTab } from '../../composables/useSmenasTab'
+import { useSettingsStore } from '@/store/settings'
 import DatePicker from 'primevue/datepicker'
 import Select from 'primevue/select'
 
 const { t } = useI18n()
+const settingsStore = useSettingsStore()
 const { shifts, loading, branches, filters, resetFilters, exportShifts } = useSmenasTab()
 
 const statusOptions = computed(() => [

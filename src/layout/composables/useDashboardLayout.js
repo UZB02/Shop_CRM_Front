@@ -118,6 +118,7 @@ export function useDashboardLayout() {
     })
   })
 
+
   const currentPageTitle = computed(() => {
     const item = menuItems.value.find(i => route.path.startsWith(i.to) && i.to !== '/dashboard')
       ?? menuItems.value.find(i => i.to === '/dashboard')

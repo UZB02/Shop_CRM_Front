@@ -16,9 +16,9 @@
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
-        <!-- Sales export buttons (only visible when in sales tab) -->
-        <template v-if="activeTab === 'sales'">
-          <Button 
+        <!-- Sales export buttons (only visible when in sales tab and plan allows) -->
+        <template v-if="activeTab === 'sales' && settingsStore.hasPlanExport">
+          <Button
             @click="exportSales('excel')"
             :loading="exportLoadingType === 'excel'"
             :disabled="!!exportLoadingType"
