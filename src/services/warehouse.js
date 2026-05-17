@@ -37,7 +37,8 @@ export const movementsAPI = {
     getAll: (params) => api.get('/warehouse/movements/', { params }),
     getById: (id) => api.get(`/warehouse/movements/${id}/`),
     create: (data) => api.post('/warehouse/movements/', data),
-    bulkCreate: (data) => api.post('/warehouse/movements/bulk/', data)
+    bulkCreate: (data) => api.post('/warehouse/movements/bulk/', data),
+    void: (id, data) => api.post(`/warehouse/movements/${id}/void/`, data)
 }
 
 export const wastagesAPI = {

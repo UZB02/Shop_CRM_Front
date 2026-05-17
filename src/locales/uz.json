@@ -781,7 +781,17 @@
       "address_unspecified": "Manzil ko'rsatilmagan",
       "no_warehouse_products": "Omborda mahsulotlar mavjud emas",
       "no_search_results": "Qidiruv natijasi topilmadi",
-      "total_count": "{Count} ta jami yozuv"
+      "total_count": "{Count} ta jami yozuv",
+      "void_title": "Kirimni bekor qilish",
+      "void_confirm": "Ushbu kirimni bekor qilishni tasdiqlaysizmi?",
+      "void_warning_desc": "Kirim bekor qilingandan so'ng, bu mahsulotlar zaxiradan olib tashlanadi va bu amalni ortga qaytarib bo'lmaydi.",
+      "void_reason": "Bekor qilish sababi",
+      "void_reason_placeholder": "Masalan: Narx xato kiritilgan",
+      "void_btn": "Bekor qilish",
+      "void_status_voided": "Bekor qilingan",
+      "void_reason_required": "Iltimos, bekor qilish sababini kiriting",
+      "void_success": "Kirim muvaffaqiyatli bekor qilindi.",
+      "void_error": "Bekor qilishda xatolik yuz berdi"
     },
     "wastage": {
       "title": "Chiqitlar",
