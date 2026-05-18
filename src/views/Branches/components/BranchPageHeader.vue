@@ -20,7 +20,7 @@
         <span>{{ $t('common.export') }}</span>
       </button>
       <button
-        v-if="branch?.id && settingsStore.hasPlanQrBulk"
+        v-if="branch?.id"
         @click="router.push({ name: 'branch-bulk', params: { id: branch.id } })"
         class="flex-none h-8 px-3 rounded-lg text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-sm shadow-emerald-500/10"
       >
