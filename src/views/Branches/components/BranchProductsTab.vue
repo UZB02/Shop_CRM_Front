@@ -9,6 +9,7 @@
           <input
             v-model="searchQuery"
             type="text"
+            @focus="$event.target.select()"
             :placeholder="$t('warehouse.detail.search_products')"
             class="h-8 pl-8 pr-4 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 w-64 transition-all"
           />

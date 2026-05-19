@@ -71,6 +71,11 @@ export function useProducts() {
                 console.log('API Products Response (current):', response.data)
                 products.value = response.data.results || response.data || []
                 totalProducts.value = response.data.count || (Array.isArray(response.data) ? response.data.length : 0)
+                
+                // Agar qidiruv shtrix-kod orqali bo'lsa va mahsulot topilgan bo'lsa, qidiruv maydonini tozalaymiz
+                if (searchQuery.value && /^\d{5,18}$/.test(searchQuery.value.trim()) && products.value.length > 0) {
+                    searchQuery.value = ''
+                }
             }
         } catch (error) {
             if (requestId === lastRequestId) {

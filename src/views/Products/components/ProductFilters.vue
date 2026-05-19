@@ -6,6 +6,8 @@
       <input
         :value="searchQuery"
         @input="onSearch($event.target.value)"
+        @keyup.enter="handleEnter"
+        @focus="$event.target.select()"
         type="text"
         :placeholder="$t('products.search_placeholder')"
         class="w-full h-10 sm:h-9 pl-9 pr-8 text-[13px] font-bold rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 transition-all shadow-sm"
@@ -91,6 +93,12 @@ const onSearch = (val) => {
   emit('update:searchQuery', val)
   clearTimeout(searchTimeout)
   searchTimeout = setTimeout(() => emit('search', val), 400)
+}
+
+const handleEnter = (e) => {
+  clearTimeout(searchTimeout)
+  emit('search', props.searchQuery)
+  e.target.select()
 }
 </script>
 

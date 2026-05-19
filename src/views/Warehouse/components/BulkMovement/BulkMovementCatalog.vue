@@ -15,6 +15,7 @@
           type="text" 
           :placeholder="$t('common.search') + '...'" 
           @keyup.enter="handleSearchEnter"
+          @focus="$event.target.select()"
           class="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-lg pl-10 pr-4 py-1.5 text-[13px] font-bold outline-none focus:ring-2 focus:ring-emerald-500/10 placeholder:text-slate-300 transition-all"
         />
       </div>
@@ -138,13 +139,16 @@ watch(selectedCategoryId, (newVal) => {
   fetchProducts(searchQuery.value, newVal)
 })
 
-const handleSearchEnter = () => {
+const handleSearchEnter = (e) => {
   const query = searchQuery.value.trim()
   if (!query) return
   
   // If it looks like a barcode (only digits and 5-18 chars)
   if (/^\d{5,18}$/.test(query)) {
     emit('scan', query)
+    searchQuery.value = ''
+  } else {
+    e.target.select()
   }
 }
 
