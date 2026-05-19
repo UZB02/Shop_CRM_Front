@@ -88,7 +88,17 @@ export function useCheckout() {
                     if (fields.length > 0) {
                         const firstField = fields[0]
                         let fieldError = errData[firstField]
-                        if (Array.isArray(fieldError)) fieldError = fieldError[0]
+                        
+                        // Array bo'lgan xatoliklarni (masalan, "items") to'g'ri qayta ishlash
+                        if (Array.isArray(fieldError)) {
+                            const realError = fieldError.find(err => err && typeof err === 'object' && Object.keys(err).length > 0)
+                            if (realError) {
+                                fieldError = realError
+                            } else if (fieldError.length > 0) {
+                                fieldError = fieldError[0]
+                            }
+                        }
+
                         if (typeof fieldError === 'object' && fieldError !== null) {
                             const subFields = Object.keys(fieldError)
                             if (subFields.length > 0) {

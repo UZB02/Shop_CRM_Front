@@ -56,33 +56,36 @@
         <div 
           v-for="item in cart" 
           :key="item.cartItemId" 
-          class="flex items-center gap-3 bg-white dark:bg-[#0f172a] p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 shadow-sm hover:border-emerald-500/40 transition-all group"
+          class="flex items-center gap-2.5 bg-white dark:bg-[#0f172a] p-2 rounded-xl border border-slate-100 dark:border-slate-800/60 shadow-sm hover:border-emerald-500/40 transition-all group"
         >
           <!-- Compact Icon -->
-          <div class="w-12 h-12 bg-slate-50 dark:bg-slate-900 rounded-xl flex items-center justify-center border border-slate-50 dark:border-slate-800/50 flex-shrink-0">
-             <i class="pi pi-box text-slate-200 dark:text-slate-800 text-lg group-hover:text-emerald-500 transition-colors"></i>
+          <div class="w-8 h-8 bg-slate-50 dark:bg-slate-900 rounded-lg flex items-center justify-center border border-slate-50 dark:border-slate-800/50 flex-shrink-0">
+             <i class="pi pi-box text-slate-200 dark:text-slate-800 text-sm group-hover:text-emerald-500 transition-colors"></i>
           </div>
           
+          <!-- Middle Info: Name & Variant Badges + Price -->
           <div class="flex-1 min-w-0">
-            <h4 class="text-[14px] font-bold text-slate-800 dark:text-white truncate font-outfit tracking-tight">{{ item.name }}</h4>
-            <div v-if="item.tur_id" class="flex items-center gap-1 mt-1">
-              <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 tracking-widest leading-none">
+            <!-- Line 1: Name + Badges -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <h4 class="text-[13px] font-bold text-slate-800 dark:text-white truncate font-outfit tracking-tight leading-tight">{{ item.name }}</h4>
+              <span v-if="item.tur_id" class="px-1.5 py-0.5 rounded text-[9px] font-black bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 tracking-wider leading-none">
                 {{ item.tur_name }}
               </span>
-              <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 tracking-widest leading-none">
+              <span v-if="item.tur_color" class="px-1.5 py-0.5 rounded text-[9px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 tracking-wider leading-none">
                 {{ item.tur_color }}
               </span>
             </div>
-            <div class="mt-1">
-              <span class="text-[14px] font-black text-emerald-500 font-outfit">
+            <!-- Line 2: Price -->
+            <div class="mt-0.5">
+              <span class="text-[13px] font-black text-emerald-500 font-outfit whitespace-nowrap">
                 {{ settingsStore.formatPrice(item.sale_price || item.price || 0, item.currency_code) }}
               </span>
             </div>
           </div>
 
-          <!-- Vertical/Compact Qty Controller -->
-          <div class="flex items-center gap-3 bg-slate-50 dark:bg-slate-900 p-1 rounded-lg border border-slate-100/30 dark:border-slate-800/50">
-            <button @click="item.qty > 1 ? $emit('update-qty', item.cartItemId, item.qty - 1) : $emit('remove', item.cartItemId)" class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">-</button>
+          <!-- Compact Qty Controller -->
+          <div class="flex items-center gap-1 bg-slate-50 dark:bg-slate-900 p-0.5 rounded-lg border border-slate-100/30 dark:border-slate-800/50 flex-shrink-0">
+            <button @click="item.qty > 1 ? $emit('update-qty', item.cartItemId, item.qty - 1) : $emit('remove', item.cartItemId)" class="w-6 h-6 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all font-bold text-xs bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800">-</button>
             <input 
               type="number" 
               :value="item.qty"
@@ -93,14 +96,23 @@
                 else if (val === 0) $emit('remove', item.cartItemId);
                 else e.target.value = item.qty;
               }"
-              class="w-10 text-[13px] font-black text-center bg-transparent border-none outline-none dark:text-slate-300 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              class="w-7 text-[12px] font-black text-center bg-transparent border-none outline-none dark:text-slate-300 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <button 
               @click="item.stock_available === undefined || item.qty < item.stock_available ? $emit('update-qty', item.cartItemId, item.qty + 1) : null" 
               :disabled="item.stock_available !== undefined && item.qty >= item.stock_available"
-              class="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:text-emerald-500 disabled:opacity-30 disabled:hover:text-slate-400 transition-all font-bold text-sm bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800"
+              class="w-6 h-6 rounded-md flex items-center justify-center text-slate-400 hover:text-emerald-500 disabled:opacity-30 disabled:hover:text-slate-400 transition-all font-bold text-xs bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800"
             >+</button>
           </div>
+
+          <!-- Quick Remove Button -->
+          <button 
+            @click="$emit('remove', item.cartItemId)"
+            class="w-7 h-7 rounded-lg bg-rose-50 dark:bg-rose-950/20 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all duration-200 cursor-pointer flex-shrink-0 hover:scale-105 active:scale-95"
+            :title="$t('common.remove')"
+          >
+            <i class="pi pi-trash text-[11px]"></i>
+          </button>
         </div>
       </div>
     </div><!-- end scroll area -->
