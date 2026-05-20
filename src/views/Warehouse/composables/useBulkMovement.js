@@ -1,7 +1,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStockMovement } from './useStockMovement'
-import { warehousesAPI, branchesAPI, salesAPI } from '@/services/api'
+import { warehousesAPI, branchesAPI, salesAPI, suppliersAPI } from '@/services/api'
 
 export function useBulkMovement() {
   const route = useRoute()
@@ -20,13 +20,16 @@ export function useBulkMovement() {
   const bulkItems = ref(savedState.items || [])
   const movement_type = ref('in')
   const note = ref(savedState.note || '')
+  const supplier = ref(savedState.supplier || null)
+  const suppliersList = ref([])
 
   // Persistence Watcher
-  watch([bulkItems, movement_type, note], () => {
+  watch([bulkItems, movement_type, note, supplier], () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       items: bulkItems.value,
       type: 'in',
-      note: note.value
+      note: note.value,
+      supplier: supplier.value
     }))
   }, { deep: true })
 
@@ -90,6 +93,10 @@ export function useBulkMovement() {
         })
       }
 
+      if (movement_type.value === 'in' && supplier.value) {
+        payload.supplier = typeof supplier.value === 'object' ? supplier.value.id : supplier.value
+      }
+
       if (isBranch) payload.branch = entityId
       else payload.warehouse = entityId
 
@@ -146,8 +153,12 @@ export function useBulkMovement() {
         const res = await warehousesAPI.getById(entityId)
         displayName.value = res.data.name
       }
+      
+      // Load suppliers list for selection
+      const supRes = await suppliersAPI.getAll({ page: 1, limit: 1000 })
+      suppliersList.value = supRes.data?.results || []
     } catch (error) {
-      console.error('Error fetching entity:', error)
+      console.error('Error fetching entity or suppliers:', error)
     }
   })
 
@@ -168,7 +179,9 @@ export function useBulkMovement() {
     handleCancel,
     loadProducts,
     scanAndAdd,
-    router
+    router,
+    supplier,
+    suppliersList
   }
 }
 

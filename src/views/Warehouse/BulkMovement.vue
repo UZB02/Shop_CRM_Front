@@ -26,7 +26,9 @@ const {
   handleSave,
   handleCancel,
   scanAndAdd,
-  router
+  router,
+  supplier,
+  suppliersList
 } = useBulkMovement()
 
 const { templateLoading, downloadTemplate } = useTemplateDownload()
@@ -107,6 +109,8 @@ const selectTur = (tur) => {
             :items="bulkItems"
             v-model:type="movement_type"
             v-model:note="note"
+            v-model:supplier="supplier"
+            :suppliers="suppliersList"
             @remove="removeBulkItem"
             @update-qty="updateQty"
             @update-price="updatePrice"
@@ -143,6 +147,8 @@ const selectTur = (tur) => {
                 :items="bulkItems"
                 v-model:type="movement_type"
                 v-model:note="note"
+                v-model:supplier="supplier"
+                :suppliers="suppliersList"
                 @remove="removeBulkItem"
                 @update-qty="updateQty"
                 @update-price="updatePrice"

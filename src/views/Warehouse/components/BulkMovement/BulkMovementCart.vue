@@ -12,7 +12,40 @@
           </span>
         </div>
 
-
+        <!-- Supplier Dropdown (Only for IN) -->
+        <div v-if="type === 'in'" class="relative group flex-1 max-w-[200px]">
+          <Dropdown
+            :model-value="supplier"
+            @update:model-value="$emit('update:supplier', $event)"
+            :options="suppliers"
+            option-label="name"
+            option-value="id"
+            :filter="true"
+            :placeholder="$t('suppliers.title')"
+            class="w-full h-[40px] items-center text-[13px] font-bold bg-slate-50/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl"
+            :pt="{
+              root: { class: 'shadow-none' },
+              input: { class: 'py-2 px-3' }
+            }"
+          >
+            <template #value="slotProps">
+              <div v-if="slotProps.value" class="flex items-center gap-2">
+                <i class="pi pi-truck text-slate-400 text-[12px]"></i>
+                <span class="truncate">{{ suppliers.find(s => s.id === slotProps.value)?.name || '...' }}</span>
+              </div>
+              <div v-else class="flex items-center gap-2 text-slate-400">
+                <i class="pi pi-truck text-[12px]"></i>
+                <span class="truncate">{{ $t('suppliers.title') }}</span>
+              </div>
+            </template>
+            <template #option="slotProps">
+              <div class="flex items-center gap-2 text-[13px] font-bold">
+                <i class="pi pi-truck text-slate-400 text-[12px]"></i>
+                <span>{{ slotProps.option.name }}</span>
+              </div>
+            </template>
+          </Dropdown>
+        </div>
 
         <!-- Notes (Integrated in Header) -->
         <div class="relative group flex-1 max-w-xl">
@@ -31,8 +64,41 @@
 
     </div>
 
-    <!-- Mobile-only Control Strip (Note only) -->
-    <div class="lg:hidden px-6 py-4 flex flex-col gap-3 bg-white dark:bg-[#0f172a] border-b border-slate-100 dark:border-slate-800">
+    <!-- Mobile-only Control Strip (Note & Supplier) -->
+    <div class="lg:hidden px-4 py-3 flex flex-col gap-3 bg-white dark:bg-[#0f172a] border-b border-slate-100 dark:border-slate-800">
+       <div v-if="type === 'in'" class="w-full">
+         <Dropdown
+            :model-value="supplier"
+            @update:model-value="$emit('update:supplier', $event)"
+            :options="suppliers"
+            option-label="name"
+            option-value="id"
+            :filter="true"
+            :placeholder="$t('suppliers.title')"
+            class="w-full h-[40px] items-center text-[13px] font-bold bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl"
+            :pt="{
+              root: { class: 'shadow-none' },
+              input: { class: 'py-2 px-3' }
+            }"
+          >
+            <template #value="slotProps">
+              <div v-if="slotProps.value" class="flex items-center gap-2">
+                <i class="pi pi-truck text-slate-400 text-[12px]"></i>
+                <span class="truncate">{{ suppliers.find(s => s.id === slotProps.value)?.name || '...' }}</span>
+              </div>
+              <div v-else class="flex items-center gap-2 text-slate-400">
+                <i class="pi pi-truck text-[12px]"></i>
+                <span class="truncate">{{ $t('suppliers.title') }}</span>
+              </div>
+            </template>
+            <template #option="slotProps">
+              <div class="flex items-center gap-2 text-[13px] font-bold">
+                <i class="pi pi-truck text-slate-400 text-[12px]"></i>
+                <span>{{ slotProps.option.name }}</span>
+              </div>
+            </template>
+          </Dropdown>
+       </div>
        <input 
           :value="note"
           @input="$emit('update:note', $event.target.value)"
@@ -172,16 +238,22 @@
 
 <script setup>
 import TurBadge from '@/components/common/TurBadge.vue'
+import Dropdown from 'primevue/dropdown'
 
 const props = defineProps({
   items: Array,
   type: String,
   note: String,
+  supplier: [Number, String],
+  suppliers: {
+    type: Array,
+    default: () => []
+  },
   saving: Boolean,
   validCount: Number
 })
 
-const emit = defineEmits(['update:type', 'update:note', 'remove', 'update-qty', 'update-price', 'save'])
+const emit = defineEmits(['update:type', 'update:note', 'update:supplier', 'remove', 'update-qty', 'update-price', 'save'])
 </script>
 
 <style scoped>

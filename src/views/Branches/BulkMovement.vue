@@ -23,7 +23,9 @@ const {
   updatePrice,
   handleSave,
   handleCancel,
-  router
+  router,
+  supplier,
+  suppliersList
 } = useBulkMovement()
 </script>
 
@@ -52,6 +54,8 @@ const {
             :items="bulkItems"
             v-model:type="movement_type"
             v-model:note="note"
+            v-model:supplier="supplier"
+            :suppliers="suppliersList"
             @remove="removeBulkItem"
             @update-qty="updateQty"
             @update-price="updatePrice"
@@ -87,6 +91,8 @@ const {
                 :items="bulkItems"
                 v-model:type="movement_type"
                 v-model:note="note"
+                v-model:supplier="supplier"
+                :suppliers="suppliersList"
                 @remove="removeBulkItem"
                 @update-qty="updateQty"
                 @update-price="updatePrice"
