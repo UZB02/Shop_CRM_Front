@@ -68,7 +68,9 @@
                 <span class="text-white text-xs font-black">{{ sup.name?.[0]?.toUpperCase() || 'S' }}</span>
               </div>
               <div class="min-w-0">
-                <p class="text-[13px] font-semibold text-slate-800 dark:text-slate-100 truncate">{{ sup.name }}</p>
+                <router-link :to="`/dashboard/suppliers/${sup.id}`" class="text-[13px] font-semibold text-slate-800 dark:text-slate-100 truncate hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors block">
+                  {{ sup.name }}
+                </router-link>
                 <p class="text-[11px] text-slate-400 truncate">{{ sup.created_on || '—' }}</p>
               </div>
             </div>

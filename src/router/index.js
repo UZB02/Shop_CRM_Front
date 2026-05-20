@@ -226,6 +226,12 @@ const routes = [
                 name: 'suppliers',
                 component: () => import('@/views/Suppliers/index.vue'),
                 meta: { permission: 'suppliers' }
+            },
+            {
+                path: 'suppliers/:id',
+                name: 'supplier-detail',
+                component: () => import('@/views/Suppliers/Detail.vue'),
+                meta: { permission: 'suppliers' }
             }
         ]
     }

@@ -42,10 +42,8 @@
         </label>
         <div class="relative">
           <input
-            v-model="modelForm.amount"
-            type="number"
-            min="1"
-            step="1"
+            v-model="formattedAmount"
+            type="text"
             :placeholder="$t('suppliers.payment.amount_ph')"
             class="w-full h-10 pl-3 pr-16 rounded-xl border text-[13px] outline-none transition-all bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
             :class="submitted && (!modelForm.amount || Number(modelForm.amount) <= 0)
@@ -134,7 +132,7 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-defineProps({
+const props = defineProps({
   visible: { type: Boolean, default: false },
   supplier: { type: Object, default: null },
   modelForm: { type: Object, required: true },
@@ -142,6 +140,16 @@ defineProps({
   saving: { type: Boolean, default: false }
 })
 defineEmits(['update:visible', 'save'])
+
+const formattedAmount = computed({
+  get: () => {
+    if (!props.modelForm.amount) return ''
+    return String(props.modelForm.amount).replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+  },
+  set: (val) => {
+    props.modelForm.amount = val.replace(/\D/g, '')
+  }
+})
 
 const paymentTypes = computed(() => [
   { value: 'cash', label: t('common.cash'), icon: 'pi pi-money-bill' },

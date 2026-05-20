@@ -165,24 +165,64 @@
     </div>
 
     <!-- Suppliers (Finance Tab) -->
-    <div v-if="type === 'finance'" class="md:col-span-2 lg:col-span-3 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">{{ $t('dashboard.top_lists.suppliers') }}</h3>
-        <p class="text-[12px] font-black text-rose-500 tracking-[0.2em] px-3 py-1 rounded-full bg-rose-500/5 border border-rose-500/10">{{ $t('dashboard.top_lists.total_debt') }}: {{ formatPrice(suppliers.total_debt) }}</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div v-for="s in suppliers.top_debtors" :key="s.supplier_id" class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center gap-3 group hover:border-rose-500/30 transition-all">
-          <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-all">
-             <i class="pi pi-truck text-xs"></i>
+    <div v-if="type === 'finance'" class="md:col-span-2 lg:col-span-3 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+      <!-- Decorative background -->
+      <div class="absolute -right-20 -top-20 w-64 h-64 bg-rose-500/5 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-1000 pointer-events-none"></div>
+      
+      <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h3 class="text-base font-black text-slate-800 dark:text-white tracking-tight flex items-center gap-2">
+            <i class="pi pi-truck text-emerald-500 bg-emerald-500/10 p-2 rounded-xl text-sm"></i>
+            {{ $t('dashboard.top_lists.suppliers') }}
+          </h3>
+          <p class="text-[11px] text-slate-400 font-bold mt-1 tracking-widest uppercase">{{ $t('dashboard.top_lists.suppliers_desc', 'Qarzdorlik va to\'lovlar nazorati') }}</p>
+        </div>
+        
+        <div class="flex items-center gap-3 bg-rose-50 dark:bg-rose-500/10 px-4 py-2.5 rounded-2xl border border-rose-100 dark:border-rose-500/20 shadow-sm">
+          <div class="w-8 h-8 rounded-full bg-rose-500/20 flex items-center justify-center shrink-0">
+            <i class="pi pi-exclamation-triangle text-rose-500 text-[12px]"></i>
           </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-[13px] font-black text-slate-800 dark:text-white truncate">{{ s.name }}</p>
-            <p class="text-[11px] text-slate-400 font-bold tracking-tighter">{{ s.company }}</p>
-          </div>
-          <div class="text-right">
-            <p class="text-[13px] font-black text-rose-500">{{ formatPrice(s.debt_balance) }}</p>
+          <div class="flex flex-col items-end">
+            <span class="text-[9px] font-black text-rose-400 tracking-widest uppercase">{{ $t('dashboard.top_lists.total_debt') }}</span>
+            <span class="text-[15px] font-black text-rose-600 dark:text-rose-400 tracking-tight leading-none mt-0.5">{{ formatPrice(suppliers.total_debt) }}</span>
           </div>
         </div>
+      </div>
+
+      <div v-if="!suppliers.top_debtors?.length" class="relative z-10 flex flex-col items-center justify-center py-10 px-4 bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-4 border border-emerald-100 dark:border-emerald-500/20">
+          <i class="pi pi-check-circle text-2xl"></i>
+        </div>
+        <h4 class="text-[13px] font-black text-slate-700 dark:text-slate-200 tracking-tight mb-1">{{ $t('dashboard.top_lists.no_debtors_title', 'Barchasi joyida!') }}</h4>
+        <p class="text-[11px] font-bold text-slate-400 tracking-widest text-center">{{ $t('dashboard.top_lists.no_debtors', 'Ayni vaqtda yetkazib beruvchilardan yirik qarzlar mavjud emas.') }}</p>
+      </div>
+
+      <div v-else class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <router-link 
+          v-for="s in suppliers.top_debtors" 
+          :key="s.supplier_id" 
+          :to="`/dashboard/suppliers/${s.supplier_id}`"
+          class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/60 flex items-center gap-4 hover:border-rose-500/40 hover:shadow-lg hover:shadow-rose-500/5 transition-all group/item"
+        >
+          <div class="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 flex items-center justify-center text-slate-400 group-hover/item:bg-rose-500 group-hover/item:border-rose-500 group-hover/item:text-white transition-all shadow-sm">
+             <i class="pi pi-truck text-sm"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-[14px] font-black text-slate-800 dark:text-white truncate group-hover/item:text-rose-500 transition-colors">{{ s.name }}</p>
+            <p class="text-[11px] text-slate-400 font-bold tracking-widest truncate">{{ s.company || '—' }}</p>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="text-[9px] font-black text-slate-400 tracking-widest uppercase block mb-0.5">{{ $t('suppliers.table.debt') }}</span>
+            <p class="text-[14px] font-black text-rose-500">{{ formatPrice(s.debt_balance) }}</p>
+          </div>
+        </router-link>
+      </div>
+      
+      <div class="mt-6 flex justify-end relative z-10">
+        <router-link to="/dashboard/suppliers" class="text-[11px] font-black text-slate-400 hover:text-emerald-500 transition-colors tracking-widest flex items-center gap-1.5 uppercase">
+          {{ $t('dashboard.top_lists.view_all_suppliers', 'Barcha yetkazuvchilar') }}
+          <i class="pi pi-arrow-right text-[10px]"></i>
+        </router-link>
       </div>
     </div>
 
