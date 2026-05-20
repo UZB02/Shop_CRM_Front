@@ -33,6 +33,11 @@
             <!-- Store Header -->
             <div class="text-center py-4 border-b-2 border-dashed border-slate-300 dark:border-slate-600 mb-3 print:border-black">
               <p class="text-sm font-black tracking-[0.3em] text-slate-400 dark:text-slate-500 mb-1 print:text-black">★ ★ ★</p>
+
+              <!-- Logo -->
+              <div v-if="settingsStore.receiptConfig.showLogo && settingsStore.storeLogoUrl" class="flex justify-center mb-2">
+                <img :src="settingsStore.storeLogoUrl" alt="Store Logo" class="max-w-[120px] max-h-[120px] object-contain grayscale print:grayscale" />
+              </div>
               
               <p v-if="settingsStore.receiptConfig.header" class="text-sm font-bold text-slate-500 mb-1 whitespace-pre-line print:text-black print:font-bold">{{ settingsStore.receiptConfig.header }}</p>
               

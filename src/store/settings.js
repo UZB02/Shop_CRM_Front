@@ -1,13 +1,15 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
-import { settingsAPI, subscriptionAPI } from '@/services/api'
+import { settingsAPI, subscriptionAPI, storesAPI } from '@/services/api'
 import { useNotificationStore } from '@/store/notifications'
+import { useAuthStore } from '@/store/auth'
 
 export const useSettingsStore = defineStore('settings', () => {
   // ─── State ───────────────────────────────────────────────────────────────
   const settings = ref(null)
   const loading = ref(false)
   const initialized = ref(false)
+  const storeLogoUrl = ref(null)
   const notificationStore = useNotificationStore()
   const { subscription } = storeToRefs(notificationStore)
 
@@ -123,6 +125,17 @@ export const useSettingsStore = defineStore('settings', () => {
         settings.value = { ...data }
         initialized.value = true
         console.log('✅ Settings store: fetched & initialized', data)
+
+        // Fetch store logo URL
+        const authStore = useAuthStore()
+        if (authStore.user?.store_id) {
+            try {
+                const storeRes = await storesAPI.getById(authStore.user.store_id)
+                storeLogoUrl.value = storeRes.data?.logo_url || null
+            } catch(e) {
+                console.warn('⚠️ Settings store: store details fetch error', e)
+            }
+        }
       }
     } catch (e) {
       console.error('❌ Settings store: failed to fetch', e)
@@ -175,6 +188,7 @@ export const useSettingsStore = defineStore('settings', () => {
     settings,
     loading,
     initialized,
+    storeLogoUrl,
 
     // getters
     isSubcategoryEnabled,
@@ -227,6 +241,7 @@ export const useSettingsStore = defineStore('settings', () => {
     updateLocalSettings,
     formatPrice,
     formatNumber,
+    setStoreLogoUrl: (url) => { storeLogoUrl.value = url }
   }
 })
 
