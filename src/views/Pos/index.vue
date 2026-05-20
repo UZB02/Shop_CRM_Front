@@ -377,20 +377,22 @@ const printReceipt = () => {
   doc.open()
   doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Savdo cheki</title><style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Courier New',monospace;font-size:9.5px;color:#1e293b;background:#fff;padding:8px 12px;width:80mm;}
-    .text-center{text-align:center;} .font-black{font-weight:900;} .font-bold{font-weight:700;}
-    .text-slate-400{color:#94a3b8;} .text-slate-500{color:#64748b;} .text-slate-700{color:#334155;}
-    .text-slate-800{color:#1e293b;} .text-slate-900{color:#0f172a;}
-    .text-emerald-500{color:#10b981;} .text-emerald-600{color:#059669;}
-    .text-rose-400{color:#f87171;} .text-rose-500{color:#ef4444;} .text-amber-500{color:#f59e0b;}
-    .text-xs{font-size:9px;} .text-sm{font-size:10px;} .text-lg{font-size:14px;}
-    .text-xl{font-size:16px;font-weight:900;} .{text-transform:;}
+    body{font-family:"Inter", system-ui, sans-serif;font-size:12px;color:#000;background:#fff;padding:8px 12px;width:80mm;}
+    body *{color:#000 !important; font-family:"Inter", system-ui, sans-serif !important; font-weight:bold !important;}
+    .font-black, .text-xl, .text-2xl, h2 {font-weight:bold !important;}
+    .text-center{text-align:center;}
+    .text-slate-400{color:#000;} .text-slate-500{color:#000;} .text-slate-700{color:#000;}
+    .text-slate-800{color:#000;} .text-slate-900{color:#000;}
+    .text-emerald-500{color:#000;} .text-emerald-600{color:#000;}
+    .text-rose-400{color:#000;} .text-rose-500{color:#000;} .text-amber-500{color:#000;}
+    .text-xs{font-size:11px;} .text-sm{font-size:13px;} .text-base{font-size:14px;}
+    .text-lg{font-size:16px;} .text-xl{font-size:20px;font-weight:900;} .text-2xl{font-size:24px;font-weight:900;} .{text-transform:;}
     .tracking-widest{letter-spacing:0.15em;} .tracking-tighter{letter-spacing:-0.02em;}
     .font-outfit{font-family:'Courier New',monospace;}
     .flex{display:flex;} .justify-between{justify-content:space-between;} .items-center{align-items:center;}
     .space-y-1>*+*{margin-top:2px;} .space-y-1\\.5>*+*{margin-top:3px;} .space-y-2\\.5>*+*{margin-top:6px;}
-    .border-b-2{border-bottom:1.5px dashed #cbd5e1;} .border-t-2{border-top:1.5px dashed #cbd5e1;}
-    .border-t{border-top:1px dashed #e2e8f0;}
+    .border-b-2{border-bottom:1.5px dashed #000;} .border-t-2{border-top:1.5px dashed #000;}
+    .border-t{border-top:1px dashed #000;}
     .py-4{padding:8px 0;} .pt-3{padding-top:6px;} .pt-2{padding-top:4px;} .pb-2{padding-bottom:4px;}
     .mb-1{margin-bottom:2px;} .mb-2{margin-bottom:4px;} .mb-3{margin-bottom:8px;} .mt-0\\.5{margin-top:2px;}
     .leading-none{line-height:1;} .leading-tight{line-height:1.25;} .leading-relaxed{line-height:1.5;}

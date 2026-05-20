@@ -28,28 +28,28 @@
 
         <!-- Receipt Paper -->
         <div class="flex-1 overflow-y-auto px-4 py-4">
-          <div id="printable-receipt" class="receipt-paper mx-auto max-w-[340px] font-mono print:text-black">
+          <div id="printable-receipt" class="receipt-paper mx-auto max-w-[340px] print:text-black">
 
             <!-- Store Header -->
             <div class="text-center py-4 border-b-2 border-dashed border-slate-300 dark:border-slate-600 mb-3 print:border-black">
-              <p class="text-[12px] font-black tracking-[0.3em] text-slate-400 dark:text-slate-500 mb-1 print:text-black">★ ★ ★</p>
+              <p class="text-sm font-black tracking-[0.3em] text-slate-400 dark:text-slate-500 mb-1 print:text-black">★ ★ ★</p>
               
-              <p v-if="settingsStore.receiptConfig.header" class="text-[11px] font-bold text-slate-500 mb-1 whitespace-pre-line print:text-black print:font-bold">{{ settingsStore.receiptConfig.header }}</p>
+              <p v-if="settingsStore.receiptConfig.header" class="text-sm font-bold text-slate-500 mb-1 whitespace-pre-line print:text-black print:font-bold">{{ settingsStore.receiptConfig.header }}</p>
               
-              <h2 class="text-lg font-black tracking-tighter text-slate-900 dark:text-white font-outfit print:text-black print:font-black print:text-xl">
+              <h2 class="text-xl font-black tracking-tighter text-slate-900 dark:text-white print:text-black print:font-black print:text-xl">
                 {{ settingsStore.storeName }}
               </h2>
               
-              <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 tracking-widest mt-0.5 print:text-black print:font-bold">{{ t.branch_name || $t('pos.store') }}</p>
+              <p class="text-sm font-bold text-slate-500 dark:text-slate-400 tracking-widest mt-0.5 print:text-black print:font-bold">{{ t.branch_name || $t('pos.store') }}</p>
               
-              <div v-if="settingsStore.receiptConfig.address || settingsStore.receiptConfig.phone" class="mt-2 text-[10px] text-slate-400 font-bold leading-tight print:text-black print:font-bold">
+              <div v-if="settingsStore.receiptConfig.address || settingsStore.receiptConfig.phone" class="mt-2 text-xs text-slate-400 font-bold leading-tight print:text-black print:font-bold">
                 <p v-if="settingsStore.receiptConfig.address">{{ settingsStore.receiptConfig.address }}</p>
                 <p v-if="settingsStore.receiptConfig.phone">{{ $t('pos.phone_short') }} {{ settingsStore.receiptConfig.phone }}</p>
               </div>
             </div>
 
             <!-- Meta Info -->
-            <div class="space-y-1 text-[9.5px] mb-3 print:text-[10px] print:text-black">
+            <div class="space-y-1 text-xs mb-3 print:text-xs print:text-black">
               <div class="flex justify-between">
                 <span class="text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold">{{ $t('pos.date') }}</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black print:text-black print:font-black">{{ t.created_on || '—' }}</span>
@@ -78,11 +78,11 @@
 
             <!-- Items -->
             <div class="border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3 print:border-black">
-              <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center print:text-black print:font-black print:text-[11px]">{{ $t('pos.products_title') }}</p>
+              <p class="text-xs font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center print:text-black print:font-black print:text-xs">{{ $t('pos.products_title') }}</p>
               <div class="space-y-2.5">
                 <div v-for="(item, idx) in t.items" :key="item.id || idx">
                   <!-- Product name -->
-                  <p class="text-[12px] font-black text-slate-800 dark:text-slate-200 truncate leading-tight print:text-black print:font-black print:text-[13px]">
+                  <p class="text-sm font-black text-slate-800 dark:text-slate-200 truncate leading-tight print:text-black print:font-black print:text-sm">
                     {{ item.product_name || $t('pos.product') }}
                     <span v-if="item.tur_name" class="text-slate-400 font-normal print:text-black print:font-bold">
                        ({{ item.tur_name }}{{ item.tur_color ? ' / ' + item.tur_color : '' }})
@@ -90,17 +90,17 @@
                   </p>
                   <!-- qty × price = total -->
                   <div class="flex justify-between items-center mt-0.5">
-                    <span class="text-[11px] text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold print:text-[11px]">
+                    <span class="text-xs text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold print:text-xs">
                       {{ num(item.quantity) }} {{ item.unit || $t('pos.unit_piece') }} × {{ fmt(item.unit_price) }}
                     </span>
-                    <span class="text-[12px] font-black text-slate-700 dark:text-slate-300 print:text-black print:font-black print:text-[13px]">
+                    <span class="text-sm font-black text-slate-700 dark:text-slate-300 print:text-black print:font-black print:text-sm">
                       {{ fmt(num(item.quantity) * num(item.unit_price)) }}
                     </span>
                   </div>
                   <!-- item discount if any -->
                   <div v-if="num(item.item_discount_pct) > 0" class="flex justify-between items-center print:text-black">
-                    <span class="text-[8.5px] text-rose-400 font-bold print:text-black print:font-bold print:text-[9.5px]">{{ $t('pos.discount') }} {{ item.item_discount_pct }}%:</span>
-                    <span class="text-[8.5px] text-rose-400 font-bold print:text-black print:font-black print:text-[9.5px]">-{{ fmt(num(item.quantity) * num(item.unit_price) * num(item.item_discount_pct) / 100) }}</span>
+                    <span class="text-xs text-rose-400 font-bold print:text-black print:font-bold print:text-xs">{{ $t('pos.discount') }} {{ item.item_discount_pct }}%:</span>
+                    <span class="text-xs text-rose-400 font-bold print:text-black print:font-black print:text-xs">-{{ fmt(num(item.quantity) * num(item.unit_price) * num(item.item_discount_pct) / 100) }}</span>
                   </div>
                 </div>
               </div>
@@ -109,25 +109,25 @@
             <!-- Totals -->
             <div class="border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3 space-y-1.5 print:border-black">
               <!-- Jami Narx (Subtotal) -->
-              <div class="flex justify-between items-center text-[11px] print:text-[14px] print:text-black">
+              <div class="flex justify-between items-center text-sm print:text-sm print:text-black">
                 <span class="text-slate-500 dark:text-slate-400 font-bold print:text-black print:font-bold">{{ $t('pos.total_price') }}</span>
                 <span class="text-slate-800 dark:text-slate-200 font-black print:text-black print:font-black">{{ fmt(t.total_price) }}</span>
               </div>
 
               <!-- Discount if any -->
-              <div v-if="num(t.discount_amount) > 0" class="flex justify-between items-center text-[10px] print:text-[12px] print:text-black">
+              <div v-if="num(t.discount_amount) > 0" class="flex justify-between items-center text-xs print:text-xs print:text-black">
                 <span class="text-rose-400 font-bold print:text-black print:font-bold">{{ $t('pos.discount') }}:</span>
                 <span class="text-rose-500 font-black print:text-black print:font-black">-{{ fmt(t.discount_amount) }}</span>
               </div>
 
               <!-- Final paid line (TO'LANDI) -->
               <div class="flex justify-between items-center pt-2 border-t border-dashed border-slate-200 dark:border-slate-700 print:border-black">
-                <span class="text-xs font-black text-slate-800 dark:text-slate-100 font-outfit tracking-tight print:text-black print:font-black print:text-sm">{{ $t('pos.paid_caps') }}</span>
-                <span class="text-xl font-black text-emerald-500 dark:text-emerald-400 font-outfit print:text-black print:font-black print:text-2xl">{{ fmt(t.paid_amount) }}</span>
+                <span class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight print:text-black print:font-black print:text-sm">{{ $t('pos.paid_caps') }}</span>
+                <span class="text-2xl font-black text-emerald-500 dark:text-emerald-400 print:text-black print:font-black print:text-2xl">{{ fmt(t.paid_amount) }}</span>
               </div>
 
               <!-- Debt amount (Qarz) -->
-              <div v-if="num(t.debt_amount) > 0" class="flex justify-between items-center text-[11px] print:text-[14px] print:text-black">
+              <div v-if="num(t.debt_amount) > 0" class="flex justify-between items-center text-sm print:text-sm print:text-black">
                 <span class="font-black text-amber-500 print:text-black print:font-black">{{ $t('pos.debt') }}</span>
                 <span class="font-black text-amber-500 print:text-black print:font-black">{{ fmt(t.debt_amount) }}</span>
               </div>
@@ -135,21 +135,21 @@
 
             <!-- Payment Breakdown -->
             <div class="border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3 print:border-black">
-              <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center print:text-black print:font-black print:text-[11px]">{{ $t('pos.payment_method_title') }}</p>
+              <p class="text-xs font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 text-center print:text-black print:font-black print:text-xs">{{ $t('pos.payment_method_title') }}</p>
               <div class="space-y-1.5">
-                <div class="flex justify-between items-center text-[9.5px] print:text-[11px] print:text-black">
+                <div class="flex justify-between items-center text-xs print:text-xs print:text-black">
                   <span class="text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold">{{ $t('pos.type') }}</span>
                   <span class="font-black text-emerald-600 dark:text-emerald-400 tracking-wider print:text-black print:font-black">
                     {{ t.payment_type === 'cash' ? $t('pos.cash') : t.payment_type === 'card' ? $t('pos.card') : t.payment_type === 'debt' ? $t('pos.debt') : (t.payment_type_display || t.payment_type || '—') }}
                   </span>
                 </div>
                 <!-- Naqd Pul -->
-                <div v-if="num(t.cash_amount) > 0" class="flex justify-between items-center text-[11px] print:text-[14px] print:text-black">
+                <div v-if="num(t.cash_amount) > 0" class="flex justify-between items-center text-sm print:text-sm print:text-black">
                   <span class="text-slate-500 dark:text-slate-400 font-bold print:text-black print:font-bold">{{ $t('pos.cash') }}:</span>
                   <span class="text-slate-800 dark:text-slate-200 font-black print:text-black print:font-black">{{ fmt(t.cash_amount) }}</span>
                 </div>
                 <!-- Karta -->
-                <div v-if="num(t.card_amount) > 0" class="flex justify-between items-center text-[11px] print:text-[14px] print:text-black">
+                <div v-if="num(t.card_amount) > 0" class="flex justify-between items-center text-sm print:text-sm print:text-black">
                   <span class="text-slate-500 dark:text-slate-400 font-bold print:text-black print:font-bold">{{ $t('pos.card') }}:</span>
                   <span class="text-slate-800 dark:text-slate-200 font-black print:text-black print:font-black">{{ fmt(t.card_amount) }}</span>
                 </div>
@@ -158,12 +158,12 @@
 
             <!-- Footer -->
             <div class="text-center border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 pb-2 print:border-black">
-               <p v-if="settingsStore.receiptConfig.promo" class="text-[11px] font-black text-emerald-600 dark:text-emerald-400 mb-2 italic print:text-black print:font-black">
+               <p v-if="settingsStore.receiptConfig.promo" class="text-sm font-black text-emerald-600 dark:text-emerald-400 mb-2 italic print:text-black print:font-black">
                 {{ settingsStore.receiptConfig.promo }}
               </p>
-              <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-widest leading-relaxed print:text-black print:font-bold">
+              <p class="text-sm font-bold text-slate-400 dark:text-slate-500 tracking-widest leading-relaxed print:text-black print:font-bold">
                 {{ settingsStore.receiptConfig.footer || $t('pos.thank_you_for_purchase') }}<br/>
-                <span class="text-[10px]">★ ★ ★</span>
+                <span class="text-xs">★ ★ ★</span>
               </p>
             </div>
 
@@ -224,8 +224,13 @@ const t = computed(() => props.transaction || {})
   background: #fff;
   border-radius: 12px;
   border: 1.5px solid #e2e8f0;
-  padding: 8px 16px;
+  padding: 12px 20px;
   box-shadow: 0 4px 24px 0 rgba(0,0,0,0.06);
+  font-family: "Inter", system-ui, sans-serif !important;
+}
+.receipt-paper * {
+  font-family: "Inter", system-ui, sans-serif !important;
+  font-weight: bold !important;
 }
 .dark .receipt-paper {
   background: #0f172a;
