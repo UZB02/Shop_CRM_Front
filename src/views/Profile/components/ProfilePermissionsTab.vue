@@ -5,8 +5,8 @@
         <i class="pi pi-shield"></i>
       </div>
       <div>
-        <h3 class="text-xl font-black text-slate-900 dark:text-white font-outfit tracking-tight">Tizim ruxsatlari</h3>
-        <p class="text-sm text-slate-500 font-medium">Sizga tizimda quyidagi bo'limlarga ruxsat berilgan</p>
+        <h3 class="text-xl font-black text-slate-900 dark:text-white font-outfit tracking-tight">{{ $t('profile.permissions.title') }}</h3>
+        <p class="text-sm text-slate-500 font-medium">{{ $t('profile.permissions.subtitle') }}</p>
       </div>
     </div>
 
@@ -20,13 +20,17 @@
 
       <div v-if="!permissions?.length" class="col-span-full py-16 text-center opacity-40">
         <i class="pi pi-lock text-5xl text-slate-300 block mb-4"></i>
-        <p class="text-lg font-black text-slate-400 tracking-widest uppercase">Hech qanday ruxsat yo'q</p>
+        <p class="text-lg font-black text-slate-400 tracking-widest uppercase">{{ $t('profile.permissions.no_permissions') }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   permissions: Array
 })

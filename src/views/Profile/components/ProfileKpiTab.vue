@@ -28,23 +28,23 @@
           </svg>
           <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
             <span class="text-4xl font-black text-slate-900 dark:text-white font-outfit">{{ completionPct }}%</span>
-            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Bajarildi</span>
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{{ $t('profile.kpi.completed') }}</span>
           </div>
         </div>
 
         <div class="flex-1 space-y-6 w-full">
           <div>
-            <h3 class="text-2xl font-black text-slate-900 dark:text-white font-outfit mb-2">Oylik Reja Ko'rsatkichi</h3>
-            <p class="text-slate-500 font-medium text-sm">Sizning joriy oydagi savdo ko'rsatkichingiz reja asosida tahlil qilinmoqda.</p>
+            <h3 class="text-2xl font-black text-slate-900 dark:text-white font-outfit mb-2">{{ $t('profile.kpi.target_title') }}</h3>
+            <p class="text-slate-500 font-medium text-sm">{{ $t('profile.kpi.target_desc') }}</p>
           </div>
           
           <div class="grid grid-cols-2 gap-8">
             <div>
-              <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Reja summasi</p>
+              <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{{ $t('profile.kpi.target_amount') }}</p>
               <p class="text-xl font-bold text-slate-800 dark:text-slate-200">{{ formatCurrency(kpi?.target_amount) }}</p>
             </div>
             <div>
-              <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Sof savdo</p>
+              <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{{ $t('profile.kpi.net_sales') }}</p>
               <p class="text-xl font-bold text-emerald-500">{{ formatCurrency(kpi?.net_sales_amount) }}</p>
             </div>
           </div>
@@ -54,7 +54,7 @@
               <i class="pi pi-star-fill"></i>
             </div>
             <div>
-              <p class="text-[11px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">Kutilayotgan Bonus</p>
+              <p class="text-[11px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">{{ $t('profile.kpi.bonus') }}</p>
               <p class="text-lg font-black text-slate-900 dark:text-white font-outfit">{{ formatCurrency(kpi?.bonus_amount) }}</p>
             </div>
           </div>
@@ -66,6 +66,9 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   kpi: Object
@@ -74,10 +77,10 @@ const props = defineProps({
 const completionPct = computed(() => parseFloat(props.kpi?.completion_pct || 0).toFixed(2))
 
 const mainStats = computed(() => [
-  { label: 'Sotuvlar soni', value: props.kpi?.sales_count || 0, icon: 'pi-shopping-cart', sub: 'Muvaffaqiyatli', color: 'text-indigo-500' },
-  { label: "O'rtacha chek", value: formatCurrency(props.kpi?.avg_sale), icon: 'pi-ticket', sub: 'Har bir sotuvdan', color: 'text-slate-800 dark:text-white' },
-  { label: 'Qaytaruvlar', value: props.kpi?.returns_count || 0, icon: 'pi-refresh', sub: formatCurrency(props.kpi?.returns_amount), color: 'text-rose-500' },
-  { label: 'Yil / Oy', value: `${props.kpi?.year} / ${props.kpi?.month}`, icon: 'pi-calendar', sub: 'Hisobot davri', color: 'text-slate-600' }
+  { label: t('profile.kpi.sales_count'), value: props.kpi?.sales_count || 0, icon: 'pi-shopping-cart', sub: t('profile.kpi.sales_sub'), color: 'text-indigo-500' },
+  { label: t('profile.kpi.avg_receipt'), value: formatCurrency(props.kpi?.avg_sale), icon: 'pi-ticket', sub: t('profile.kpi.avg_sub'), color: 'text-slate-800 dark:text-white' },
+  { label: t('profile.kpi.returns'), value: props.kpi?.returns_count || 0, icon: 'pi-refresh', sub: formatCurrency(props.kpi?.returns_amount), color: 'text-rose-500' },
+  { label: t('profile.kpi.period'), value: `${props.kpi?.year} / ${props.kpi?.month}`, icon: 'pi-calendar', sub: t('profile.kpi.period_sub'), color: 'text-slate-600' }
 ])
 
 const formatCurrency = (val) => {

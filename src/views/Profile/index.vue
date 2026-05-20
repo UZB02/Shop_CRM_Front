@@ -22,10 +22,10 @@
 
         <!-- Mini performance widget: Standardized rounding -->
         <div v-if="settingsStore.isKpiEnabled && currentWorker?.current_kpi" class="mt-4 p-5 bg-indigo-600 rounded-xl text-white shadow-xl shadow-indigo-600/10">
-          <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Oylik KPI</p>
+          <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">{{ $t('kpi.title') }}</p>
           <div class="flex items-end justify-between mb-4">
             <h4 class="text-xl font-black font-outfit">{{ parseFloat(currentWorker.current_kpi.completion_pct || 0).toFixed(2) }}%</h4>
-            <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-md">{{ currentWorker.current_kpi.sales_count }} sotuv</span>
+            <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-md">{{ currentWorker.current_kpi.sales_count }} {{ $t('kpi.table.sales_count') || 'sotuv' }}</span>
           </div>
           <div class="h-1 w-full bg-white/20 rounded-full overflow-hidden">
             <div class="h-full bg-white rounded-full transition-all duration-1000" :style="{ width: currentWorker.current_kpi.completion_pct + '%' }"></div>
@@ -110,10 +110,10 @@ const {
 
 const navTabs = computed(() => {
   const tabs = [
-    { id: 'details',    label: 'Ma\'lumotlar',  icon: 'pi-id-card', desc: 'Profil ma\'lumotlari' },
-    { id: 'kpi',        label: 'KPI Natijalar', icon: 'pi-chart-bar', desc: 'Ish ko\'rsatkichlari' },
-    { id: 'permissions', label: 'Ruxsatlar',     icon: 'pi-shield',    desc: 'Vakolatlar' },
-    { id: 'security',    label: 'Xavfsizlik',    icon: 'pi-lock',      desc: 'Parol va himoya' }
+    { id: 'details',    label: t('profile.tabs.info'),  icon: 'pi-id-card', desc: t('profile.tabs.info_sub') },
+    { id: 'kpi',        label: t('profile.tabs.kpi'), icon: 'pi-chart-bar', desc: t('profile.tabs.kpi_sub') },
+    { id: 'permissions', label: t('profile.tabs.permissions'),     icon: 'pi-shield',    desc: t('profile.tabs.permissions_sub') },
+    { id: 'security',    label: t('profile.tabs.security'),    icon: 'pi-lock',      desc: t('profile.tabs.security_sub') }
   ]
   
   if (!settingsStore.isKpiEnabled) {

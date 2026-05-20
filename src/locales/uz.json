@@ -524,7 +524,7 @@
   },
   "profile": {
     "title": "Foydalanuvchi profili",
-    "edit_title": "Profilni tahrirlash",
+    "edit_title": "Tahrirlash",
     "username": "Foydalanuvchi nomi",
     "email": "Elektron pochta",
     "contact": "Telefon",
@@ -533,7 +533,60 @@
     "cancel": "Bekor qilish",
     "logout": "Chiqish",
     "close": "Yopish",
-    "success_update": "Profil muvaffaqiyatli yangilandi"
+    "success_update": "Profil muvaffaqiyatli yangilandi",
+    "tabs": {
+      "info": "Ma'lumotlar",
+      "info_sub": "Profil ma'lumotlari",
+      "kpi": "KPI Natijalar",
+      "kpi_sub": "Ish ko'rsatkichlari",
+      "permissions": "Ruxsatlar",
+      "permissions_sub": "Vakolatlar",
+      "security": "Xavfsizlik",
+      "security_sub": "Parol va himoya"
+    },
+    "info": {
+      "personal": "Shaxsiy ma'lumotlar",
+      "contact": "Bog'lanish ma'lumotlari",
+      "username": "Username",
+      "email": "Email manzil",
+      "phone1": "Asosiy telefon",
+      "phone2": "Qo'shimcha telefon",
+      "workplace": "Ish faoliyati",
+      "status_loc": "Tizimdagi status va joylashuv",
+      "store_id": "Do'kon identifikatori (ID)",
+      "store": "Do'kon",
+      "branch": "Filial",
+      "salary": "Oylik maosh",
+      "created": "Tizimga kirgan sana",
+      "save_btn": "SAQLASH",
+      "cancel_btn": "BEKOR QILISH"
+    },
+    "kpi": {
+      "sales_count": "Sotuvlar soni",
+      "sales_sub": "Muvaffaqiyatli",
+      "avg_receipt": "O'rtacha chek",
+      "avg_sub": "Har bir sotuvdan",
+      "returns": "Qaytaruvlar",
+      "period": "Yil / Oy",
+      "period_sub": "Hisobot davri",
+      "completed": "Bajarildi",
+      "target_title": "Oylik Reja Ko'rsatkichi",
+      "target_desc": "Sizning joriy oydagi savdo ko'rsatkichingiz reja asosida tahlil qilinmoqda.",
+      "target_amount": "Reja summasi",
+      "net_sales": "Sof savdo",
+      "bonus": "Kutilayotgan Bonus"
+    },
+    "permissions": {
+      "title": "Tizim ruxsatlari",
+      "subtitle": "Sizning hisobingizga biriktirilgan vakolatlar",
+      "no_permissions": "Sizda tizimga kirish bo'yicha hech qanday vakolat mavjud emas.",
+      "contact_admin": "Iltimos, do'kon administratori bilan bog'laning."
+    },
+    "security": {
+      "current_ph": "Joriy parolni kiriting",
+      "new_ph": "Yangi parolni kiriting",
+      "confirm_ph": "Yangi parolni tasdiqlang"
+    }
   },
   "password_change": {
     "title": "Parolni yangilash",

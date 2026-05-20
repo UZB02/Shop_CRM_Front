@@ -7,8 +7,8 @@
           <i class="pi pi-id-card"></i>
         </div>
         <div class="flex-1">
-          <h3>Shaxsiy ma'lumotlar</h3>
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Bog'lanish ma'lumotlari</p>
+          <h3>{{ $t('profile.info.personal') }}</h3>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{{ $t('profile.info.contact') }}</p>
         </div>
         <button 
           @click="$emit('toggle-edit')" 
@@ -21,12 +21,12 @@
 
       <div class="card-content">
         <div class="info-row">
-          <span class="label">Username</span>
+          <span class="label">{{ $t('profile.info.username') }}</span>
           <p class="value">@{{ profile?.username }}</p>
         </div>
 
         <div class="info-row">
-          <span class="label">Email manzil</span>
+          <span class="label">{{ $t('profile.info.email') }}</span>
           <div v-if="isEditing" class="edit-input-wrap">
             <i class="pi pi-envelope"></i>
             <input v-model="form.email" placeholder="example@mail.com" />
@@ -35,7 +35,7 @@
         </div>
 
         <div class="info-row">
-          <span class="label">Asosiy telefon</span>
+          <span class="label">{{ $t('profile.info.phone1') }}</span>
           <div v-if="isEditing" class="edit-input-wrap">
             <i class="pi pi-phone"></i>
             <InputMask v-model="form.phone1" mask="+999 (99) 999-99-99" placeholder="+998" />
@@ -44,7 +44,7 @@
         </div>
 
         <div class="info-row">
-          <span class="label">Qo'shimcha telefon</span>
+          <span class="label">{{ $t('profile.info.phone2') }}</span>
           <div v-if="isEditing" class="edit-input-wrap">
             <i class="pi pi-phone"></i>
             <InputMask v-model="form.phone2" mask="+999 (99) 999-99-99" placeholder="+998" />
@@ -63,13 +63,13 @@
           >
             <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
             <i v-else class="pi pi-check text-xs"></i>
-            <span>SAQLASH</span>
+            <span>{{ $t('profile.info.save_btn') }}</span>
           </button>
           <button 
             @click="$emit('toggle-edit')" 
             class="px-5 h-11 rounded-lg text-[13px] font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           >
-            BEKOR QILISH
+            {{ $t('profile.info.cancel_btn') }}
           </button>
         </div>
       </Transition>
@@ -82,25 +82,29 @@
           <i class="pi pi-briefcase"></i>
         </div>
         <div>
-          <h3>Ish faoliyati</h3>
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Tizimdagi status va joylashuv</p>
+          <h3>{{ $t('profile.info.workplace') }}</h3>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{{ $t('profile.info.status_loc') }}</p>
         </div>
       </div>
       <div class="card-content">
         <div class="info-row">
-          <span class="label">Do'kon</span>
+          <span class="label">{{ $t('profile.info.store_id') }}</span>
+          <p class="value font-mono">#{{ profile?.store_id }}</p>
+        </div>
+        <div class="info-row">
+          <span class="label">{{ $t('profile.info.store') }}</span>
           <p class="value font-black text-indigo-500">{{ profile?.store_name }}</p>
         </div>
         <div class="info-row">
-          <span class="label">Filial</span>
+          <span class="label">{{ $t('profile.info.branch') }}</span>
           <p class="value">{{ profile?.branch_name }}</p>
         </div>
         <div class="info-row">
-          <span class="label">Oylik maosh</span>
+          <span class="label">{{ $t('profile.info.salary') }}</span>
           <p class="value text-emerald-600 font-black">{{ formatCurrency(profile?.salary) }}</p>
         </div>
         <div class="info-row">
-          <span class="label">Tizimga kirgan sana</span>
+          <span class="label">{{ $t('profile.info.created') }}</span>
           <p class="value">{{ profile?.created_on }}</p>
         </div>
       </div>

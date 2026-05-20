@@ -5,8 +5,8 @@
         <i class="pi pi-lock"></i>
       </div>
       <div>
-        <h3 class="text-xl font-black text-slate-900 dark:text-white font-outfit tracking-tight">Xavfsizlik sozlamalari</h3>
-        <p class="text-sm text-slate-500 font-medium">Hisobingizni himoya qilish uchun parolingizni yangilang</p>
+        <h3 class="text-xl font-black text-slate-900 dark:text-white font-outfit tracking-tight">{{ $t('password_change.title') }}</h3>
+        <p class="text-sm text-slate-500 font-medium">{{ $t('password_change.subtitle') }}</p>
       </div>
     </div>
 
@@ -14,29 +14,29 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         <div class="space-y-2">
-          <label class="field-label">Joriy parol</label>
+          <label class="field-label">{{ $t('password_change.current_password') }}</label>
           <ProfilePasswordInput 
             v-model="form.current_password" 
             icon="pi-shield" 
-            placeholder="Joriy parolni kiriting"
+            :placeholder="$t('profile.security.current_ph')"
           />
         </div>
         
         <div class="space-y-2 md:col-start-1">
-          <label class="field-label">Yangi parol</label>
+          <label class="field-label">{{ $t('password_change.new_password') }}</label>
           <ProfilePasswordInput 
             v-model="form.new_password" 
             icon="pi-key" 
-            placeholder="Yangi parolni kiriting"
+            :placeholder="$t('profile.security.new_ph')"
           />
         </div>
 
         <div class="space-y-2">
-          <label class="field-label">Tasdiqlash</label>
+          <label class="field-label">{{ $t('password_change.confirm_password') }}</label>
           <ProfilePasswordInput 
             v-model="form.new_password2" 
             icon="pi-check-circle" 
-            placeholder="Yangi parolni tasdiqlang"
+            :placeholder="$t('profile.security.confirm_ph')"
           />
         </div>
       </div>
@@ -49,7 +49,7 @@
         >
           <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
           <i v-else class="pi pi-check-circle text-xs"></i>
-          <span>PAROLNI YANGILASH</span>
+          <span>{{ $t('password_change.update') }}</span>
         </button>
       </div>
     </div>
@@ -57,7 +57,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import ProfilePasswordInput from './ProfilePasswordInput.vue'
+
+const { t } = useI18n()
 
 defineProps({
   form: Object,

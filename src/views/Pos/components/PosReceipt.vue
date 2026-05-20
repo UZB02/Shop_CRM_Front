@@ -35,8 +35,8 @@
               <p class="text-sm font-black tracking-[0.3em] text-slate-400 dark:text-slate-500 mb-1 print:text-black">★ ★ ★</p>
 
               <!-- Logo -->
-              <div v-if="settingsStore.receiptConfig.showLogo && settingsStore.storeLogoUrl" class="flex justify-center mb-2">
-                <img :src="settingsStore.storeLogoUrl" alt="Store Logo" class="max-w-[120px] max-h-[120px] object-contain grayscale print:grayscale" />
+              <div v-if="settingsStore.receiptConfig.showLogo && settingsStore.storeLogoUrl" class="flex justify-center mb-2 print:flex print:justify-center" style="text-align: center; width: 100%;">
+                <img :src="settingsStore.storeLogoUrl" alt="Store Logo" class="grayscale print:grayscale" style="width: 120px; max-width: 100%; height: auto; max-height: 120px; object-fit: contain; margin: 0 auto; display: block;" />
               </div>
               
               <p v-if="settingsStore.receiptConfig.header" class="text-sm font-bold text-slate-500 mb-1 whitespace-pre-line print:text-black print:font-bold">{{ settingsStore.receiptConfig.header }}</p>

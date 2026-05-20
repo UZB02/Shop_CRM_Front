@@ -27,13 +27,13 @@
         class="edit-btn"
       >
         <i class="pi pi-pencil text-xs text-emerald-500"></i>
-        <span>Tahrirlash</span>
+        <span>{{ $t('profile.edit_title') }}</span>
       </button>
 
       <button 
         @click="$emit('logout')"
         class="logout-btn"
-        v-tooltip.bottom="'Tizimdan chiqish'"
+        v-tooltip.bottom="$t('profile.logout')"
       >
         <i class="pi pi-sign-out text-xs"></i>
       </button>
@@ -42,6 +42,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   profile: Object
 })
