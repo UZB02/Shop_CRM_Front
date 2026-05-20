@@ -442,7 +442,8 @@
     "reports": "Hisobotlar",
     "customers": "Mijozlar",
     "settings": "Sozlamalar",
-    "subscription": "Obuna"
+    "subscription": "Obuna",
+    "suppliers": "Yetkazib beruvchilar"
   },
   "landing": {
     "nav": {
@@ -1825,6 +1826,70 @@
       "expense_trend": "3 Oylik Xarajat Trendi",
       "trend_loading": "Trend tahlili yuklanmoqda...",
       "no_data": "Ma'lumot yo'q"
+    }
+  },
+  "suppliers": {
+    "title": "Yetkazib beruvchilar",
+    "management_title": "Yetkazib beruvchilar boshqaruvi",
+    "count_suffix": "ta yetkazuvchi",
+    "search_placeholder": "Nomi, telefon, kompaniya bo'yicha qidirish...",
+    "new_supplier": "Yangi yetkazuvchi",
+    "no_suppliers": "Yetkazib beruvchilar mavjud emas",
+    "no_suppliers_desc": "Hali hech qanday yetkazib beruvchi kiritilmagan",
+    "pay_tooltip": "To'lov qo'shish",
+    "deactivate": "Nofaol qilish",
+    "activate": "Faollashtirish",
+    "plan_required_detail": "Yetkazib beruvchilar moduli tarifingizda mavjud emas. Tarifni yangilang.",
+    "stats": {
+      "total": "Jami",
+      "total_debt": "Umumiy qarz",
+      "active": "Faol",
+      "top_debtor": "Ko'p qarzli"
+    },
+    "table": {
+      "name": "Nomi",
+      "phone": "Telefon",
+      "company": "Kompaniya",
+      "debt": "Qarz balansi",
+      "status": "Holati",
+      "actions": "Amallar"
+    },
+    "form": {
+      "new_title": "Yangi yetkazuvchi",
+      "edit_title": "Yetkazuvchini tahrirlash",
+      "subtitle": "Yetkazib beruvchi ma'lumotlarini kiriting",
+      "name": "To'liq nomi",
+      "name_ph": "Masalan: Abdullayev Savdo",
+      "phone": "Telefon raqami",
+      "company": "Kompaniya nomi",
+      "company_ph": "Masalan: Abdullayev LLC",
+      "address": "Manzil",
+      "address_ph": "Masalan: Toshkent, Yunusobod",
+      "description": "Izoh",
+      "description_ph": "Qo'shimcha ma'lumot...",
+      "current_debt": "Joriy qarz",
+      "add_btn": "Qo'shish"
+    },
+    "payment": {
+      "title": "To'lov qo'shish",
+      "current_debt": "Joriy qarz",
+      "amount": "To'lov summasi",
+      "amount_ph": "Masalan: 50000",
+      "amount_required": "To'lov summasi 0 dan katta bo'lishi shart",
+      "type": "To'lov turi",
+      "transfer": "O'tkazma",
+      "desc_ph": "Masalan: May oyi uchun to'lov",
+      "immutable_warning": "To'lov qo'shilgandan so'ng uni tahrirlash yoki o'chirish mumkin emas — bu moliyaviy xavfsizlik sababli.",
+      "save_btn": "To'lovni saqlash"
+    },
+    "messages": {
+      "added": "Yangi yetkazuvchi qo'shildi",
+      "updated": "\"{Name}\" ma'lumotlari yangilandi",
+      "deleted": "\"{Name}\" nofaol holga o'tkazildi",
+      "delete_confirm": "\"{Name}\" yetkazuvchisini nofaol qilishni tasdiqlaysizmi?",
+      "delete_header": "Tasdiqlash",
+      "delete_error": "Yetkazuvchini o'chirishda xatolik",
+      "payment_added": "To'lov muvaffaqiyatli qo'shildi. Qarz balansi yangilandi."
     }
   }
 }

@@ -220,6 +220,12 @@ const routes = [
                 name: 'profile',
                 component: () => import('@/views/Profile/index.vue'),
                 meta: { permission: null }
+            },
+            {
+                path: 'suppliers',
+                name: 'suppliers',
+                component: () => import('@/views/Suppliers/index.vue'),
+                meta: { permission: 'suppliers' }
             }
         ]
     }
