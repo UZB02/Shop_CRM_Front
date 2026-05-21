@@ -251,7 +251,8 @@
     "creating_request": "To'lov so'rovi yaratilmoqda...",
     "topup_success_detail": "Balans muvaffaqiyatli to'ldirildi!",
     "payment_auto_update_detail": "To'lov amalga oshirilgandan so'ng balans avtomatik yangilanadi.",
-    "min_topup_error": "Minimal to'ldirish summasi 10 000 so'm bo'lishi kerak."
+    "min_topup_error": "Minimal to'ldirish summasi 10 000 so'm bo'lishi kerak.",
+    "payment_secure_subtitle": "Xavfsiz obuna to'lovi"
   },
   "workers": {
     "title": "Xodimlar",
