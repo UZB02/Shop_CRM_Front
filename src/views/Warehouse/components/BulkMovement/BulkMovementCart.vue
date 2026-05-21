@@ -109,52 +109,73 @@
     </div>
 
     <!-- Payment & Summary Strip (Only for IN) -->
-    <div v-if="type === 'in' && validCount > 0" class="px-4 lg:px-6 py-3 border-b border-slate-200/60 dark:border-slate-800/50 bg-white dark:bg-slate-900/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+    <div v-if="type === 'in' && validCount > 0" class="px-4 lg:px-6 py-3 border-b border-slate-200/60 dark:border-slate-800/50 bg-white dark:bg-slate-900/30 flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
       
-      <!-- Jami summa -->
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-          <i class="pi pi-wallet text-sm"></i>
+      <!-- Summary Stats (Jami & Qarz) -->
+      <div class="flex flex-wrap items-center gap-6">
+        <!-- Jami summa -->
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+            <i class="pi pi-wallet text-sm"></i>
+          </div>
+          <div>
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">{{ $t('common.total') }}</span>
+            <span class="text-[15px] font-black text-slate-800 dark:text-white">{{ Number(totalCost).toLocaleString('ru-RU') }} UZS</span>
+          </div>
         </div>
-        <div>
-          <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">{{ $t('common.total') }}</span>
-          <span class="text-[15px] font-black text-slate-800 dark:text-white">{{ Number(totalCost).toLocaleString('ru-RU') }} UZS</span>
+
+        <!-- Qarz (Faqat qarz bo'lganda ko'rinadi) -->
+        <div v-if="debtAmount > 0" class="flex items-center gap-3 transition-all duration-300">
+          <div class="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-100/50 dark:border-rose-900/30 flex items-center justify-center text-rose-600 dark:text-rose-400">
+            <i class="pi pi-exclamation-circle text-sm animate-pulse"></i>
+          </div>
+          <div>
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Qarzga yoziladi</span>
+            <span class="text-[15px] font-black text-rose-600 dark:text-rose-400">{{ Number(debtAmount).toLocaleString('ru-RU') }} UZS</span>
+          </div>
         </div>
       </div>
       
-      <!-- To'lov qismi -->
-      <div class="flex items-center gap-2 w-full sm:w-auto">
+      <!-- To'lov boshqaruvlari (Birlashtirilgan premium maydon) -->
+      <div class="flex items-center h-10 w-full md:w-[350px] flex-shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:border-emerald-400 dark:focus-within:border-emerald-500/60 transition-colors">
         
-        <!-- To'lov summasi input -->
-        <div class="flex items-center h-10 w-36 sm:w-52 flex-shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:border-emerald-400 dark:focus-within:border-emerald-500/60 transition-colors">
-          <span class="pl-3 pr-2 text-[9px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap flex-shrink-0 border-r border-slate-100 dark:border-slate-800 h-full flex items-center select-none">To'lov</span>
-          <input
-            type="number"
-            :value="paidAmount || ''"
-            placeholder="0"
-            @input="$emit('update:paidAmount', $event.target.value ? Number($event.target.value) : 0)"
-            class="flex-1 min-w-0 h-full bg-transparent border-none outline-none ring-0 px-3 text-[14px] font-black text-right text-emerald-600 dark:text-emerald-400 placeholder:text-slate-300 dark:placeholder:text-slate-600"
-          />
-        </div>
+        <!-- Prefix yozuvi -->
+        <span class="pl-3 pr-2 text-[9px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap flex-shrink-0 border-r border-slate-100 dark:border-slate-850 h-full flex items-center select-none">To'lov</span>
         
-        <!-- To'lov turi Dropdown -->
-        <Dropdown
-          :model-value="paymentType"
-          @update:model-value="$emit('update:paymentType', $event)"
-          :options="[
-            { label: 'Naqd', value: 'cash' },
-            { label: 'Karta', value: 'card' },
-            { label: 'O\'tkazma', value: 'transfer' }
-          ]"
-          option-label="label"
-          option-value="value"
-          class="h-10 w-28 sm:w-32 flex-shrink-0"
-          :pt="{
-            root: { class: 'shadow-none border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 overflow-hidden' },
-            input: { class: 'py-0 px-3 text-[13px] font-bold text-slate-700 dark:text-slate-200 flex items-center h-10' },
-            trigger: { class: 'px-2 text-slate-400 flex items-center' }
+        <!-- Summa kiritish inputi -->
+        <input
+          type="text"
+          inputmode="numeric"
+          :value="paidAmount ? Number(paidAmount).toLocaleString('ru-RU') : ''"
+          placeholder="0"
+          @input="e => {
+            const raw = e.target.value.replace(/\D/g, '');
+            const num = raw ? parseInt(raw) : 0;
+            $emit('update:paidAmount', num);
+            e.target.value = raw ? Number(raw).toLocaleString('ru-RU') : '';
           }"
+          class="flex-1 min-w-0 h-full bg-transparent border-none outline-none ring-0 px-3 text-[14px] font-black text-right text-emerald-600 dark:text-emerald-400 placeholder:text-slate-300 dark:placeholder:text-slate-600"
         />
+        
+        <!-- Vertikal ajratuvchi chiziq -->
+        <div class="h-5 w-[1px] bg-slate-100 dark:bg-slate-800 flex-shrink-0"></div>
+        
+        <!-- To'lov turi Select (Overlap xatolarini butunlay yo'qotuvchi chiroyli native yechim) -->
+        <div class="relative h-full w-28 flex-shrink-0">
+          <select
+            :value="paymentType"
+            @change="$emit('update:paymentType', $event.target.value)"
+            class="h-full w-full pl-3 pr-8 text-[13px] font-black text-slate-700 dark:text-slate-200 bg-transparent border-none outline-none appearance-none cursor-pointer text-center"
+          >
+            <option value="cash" class="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200">Naqd</option>
+            <option value="card" class="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200">Karta</option>
+            <option value="transfer" class="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200">O'tkazma</option>
+          </select>
+          <!-- O'ng tomondagi chiroyli dropdown strelkasi -->
+          <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 flex items-center">
+            <i class="pi pi-chevron-down text-[9px]"></i>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -309,6 +330,12 @@ const props = defineProps({
 
 const totalCost = computed(() => {
   return props.items.reduce((acc, item) => acc + (Number(item.quantity || 0) * Number(item.unit_cost || 0)), 0)
+})
+
+const debtAmount = computed(() => {
+  const paid = Number(props.paidAmount || 0)
+  const diff = totalCost.value - paid
+  return diff > 0 ? diff : 0
 })
 
 const emit = defineEmits(['update:type', 'update:note', 'update:supplier', 'update:paidAmount', 'update:paymentType', 'remove', 'update-qty', 'update-price', 'save'])
