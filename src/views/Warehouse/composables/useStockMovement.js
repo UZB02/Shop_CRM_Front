@@ -70,6 +70,15 @@ export function useStockMovement() {
             const data = error.response?.data
             let errorMsg = 'Xatolik yuz berdi'
             if (data) {
+                const fieldLabels = {
+                    paid_amount: "To'lov summasi",
+                    supplier: "Yetkazib beruvchi",
+                    branch: "Filial",
+                    warehouse: "Ombor",
+                    movement_type: "Harakat turi",
+                    items: "Mahsulotlar"
+                }
+
                 if (data.non_field_errors?.length) {
                     errorMsg = data.non_field_errors[0]
                 } else if (data.detail) {
@@ -79,11 +88,25 @@ export function useStockMovement() {
                     const firstItemErr = data.items.find(e => e && Object.keys(e).length > 0)
                     if (firstItemErr) {
                         const fieldName = Object.keys(firstItemErr)[0]
-                        errorMsg = `${fieldName}: ${firstItemErr[fieldName]}`
+                        const rawMsg = Array.isArray(firstItemErr[fieldName]) ? firstItemErr[fieldName][0] : firstItemErr[fieldName]
+                        if (fieldName === 'non_field_errors') {
+                            errorMsg = rawMsg
+                        } else {
+                            const label = fieldLabels[fieldName] || fieldName
+                            errorMsg = `${label}: ${rawMsg}`
+                        }
                     }
                 } else if (typeof data === 'object') {
                     const firstKey = Object.keys(data)[0]
-                    if (firstKey) errorMsg = `${firstKey}: ${Array.isArray(data[firstKey]) ? data[firstKey][0] : data[firstKey]}`
+                    if (firstKey) {
+                        const rawMsg = Array.isArray(data[firstKey]) ? data[firstKey][0] : data[firstKey]
+                        if (firstKey.startsWith('items[')) {
+                            errorMsg = rawMsg
+                        } else {
+                            const label = fieldLabels[firstKey] || firstKey
+                            errorMsg = `${label}: ${rawMsg}`
+                        }
+                    }
                 }
             }
             toast.add({

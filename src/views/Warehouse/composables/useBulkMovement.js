@@ -20,7 +20,7 @@ export function useBulkMovement() {
   const savedState = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
   
   const bulkItems = ref(savedState.items || [])
-  const movement_type = ref('in')
+  const movement_type = ref(savedState.type || 'in')
   const note = ref(savedState.note || '')
   const supplier = ref(savedState.supplier || null)
   const paidAmount = ref(savedState.paidAmount || '')
@@ -31,7 +31,7 @@ export function useBulkMovement() {
   watch([bulkItems, movement_type, note, supplier, paidAmount, paymentType], () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       items: bulkItems.value,
-      type: 'in',
+      type: movement_type.value,
       note: note.value,
       supplier: supplier.value,
       paidAmount: paidAmount.value,
@@ -79,10 +79,30 @@ export function useBulkMovement() {
 
   const handleSave = async () => {
     const validItems = bulkItems.value.filter(item => item.product?.id && item.quantity > 0)
-    if (validItems.length === 0) return
+    if (validItems.length === 0) {
+      toast.add({
+        severity: 'warn',
+        summary: 'Diqqat',
+        detail: 'Kamida bitta mahsulot kiritilishi shart.',
+        life: 5000
+      })
+      return
+    }
+
+    // Frontend validation: check if any item is has_tur=true but has no tur_id
+    const missingTurItem = validItems.find(item => item.product.has_tur && item.product.tur_id == null)
+    if (missingTurItem) {
+      toast.add({
+        severity: 'error',
+        summary: 'Xatolik',
+        detail: `"${missingTurItem.product.name}" mahsuloti tur tizimiga ega. tur_id ko'rsatilishi shart.`,
+        life: 7000
+      })
+      return
+    }
 
     // Frontend validatsiya: paid_amount > 0 bo'lsa supplier majburiy
-    const paid = Number(paidAmount.value)
+    const paid = Number(paidAmount.value || 0)
     if (movement_type.value === 'in' && paid > 0 && !supplier.value) {
       toast.add({
         severity: 'warn',
@@ -100,7 +120,7 @@ export function useBulkMovement() {
         toast.add({
           severity: 'error',
           summary: 'Xatolik',
-          detail: `paid_amount (${paid.toLocaleString('ru-RU')}) jami tannarxdan (${totalCost.toLocaleString('ru-RU')}) oshib ketishi mumkin emas.`,
+          detail: `To'lov summasi jami narxdan (${totalCost.toLocaleString('ru-RU')}) oshib ketishi mumkin emas.`,
           life: 7000
         })
         return
@@ -111,33 +131,33 @@ export function useBulkMovement() {
       const payload = {
         isBulk: true,
         movement_type: movement_type.value,
-        note: note.value,
+        description: note.value || '',
+        paid_amount: movement_type.value === 'in' ? Number(paid).toFixed(2) : '0.00',
+        payment_type: movement_type.value === 'in' && paid > 0 ? paymentType.value : 'cash',
+        supplier: movement_type.value === 'in' && supplier.value 
+          ? (typeof supplier.value === 'object' ? supplier.value.id : Number(supplier.value)) 
+          : null,
         items: validItems.map(item => {
           const itemData = {
-            product: item.product.id,
-            quantity: item.quantity,
-            unit_cost: item.unit_cost || 0
+            product: Number(item.product.id),
+            quantity: Number(item.quantity).toFixed(3),
+            unit_cost: Number(item.unit_cost || 0).toFixed(2)
           }
           if (item.product.has_tur && item.product.tur_id != null) {
-            itemData.tur_id = item.product.tur_id
+            itemData.tur_id = Number(item.product.tur_id)
           }
           return itemData
         })
       }
 
-      if (movement_type.value === 'in') {
-        if (supplier.value) {
-          payload.supplier = typeof supplier.value === 'object' ? supplier.value.id : supplier.value
-        }
-        if (paid > 0) {
-          payload.paid_amount = paid
-          payload.payment_type = paymentType.value
-        }
-        // paid_amount = 0 yoki ko'rsatilmagan → to'liq summa qarzga yoziladi (backend default)
+      // Mutual exclusion validation: exactly one of branch or warehouse must be provided, the other is null
+      if (isBranch) {
+        payload.branch = Number(entityId)
+        payload.warehouse = null
+      } else {
+        payload.branch = null
+        payload.warehouse = Number(entityId)
       }
-
-      if (isBranch) payload.branch = Number(entityId)
-      else payload.warehouse = Number(entityId)
 
       await saveMovement(payload)
       

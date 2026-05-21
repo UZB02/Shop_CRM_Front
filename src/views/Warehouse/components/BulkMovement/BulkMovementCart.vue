@@ -126,24 +126,13 @@
       <div class="flex items-center gap-2 w-full sm:w-auto">
         
         <!-- To'lov summasi input -->
-        <div class="flex items-center h-10 flex-1 sm:w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:border-emerald-400 dark:focus-within:border-emerald-500/60 transition-colors">
+        <div class="flex items-center h-10 w-36 sm:w-52 flex-shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:border-emerald-400 dark:focus-within:border-emerald-500/60 transition-colors">
           <span class="pl-3 pr-2 text-[9px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap flex-shrink-0 border-r border-slate-100 dark:border-slate-800 h-full flex items-center select-none">To'lov</span>
           <input
-            type="text"
-            inputmode="numeric"
-            :value="paidAmount > 0 ? Number(paidAmount).toLocaleString('ru-RU') : ''"
+            type="number"
+            :value="paidAmount || ''"
             placeholder="0"
-            @keydown="e => {
-              if ([8, 9, 13, 27, 35, 36, 37, 38, 39, 40, 46].includes(e.keyCode)) return;
-              if ((e.ctrlKey || e.metaKey) && [65, 67, 86, 88].includes(e.keyCode)) return;
-              if (!/^\d$/.test(e.key)) e.preventDefault();
-            }"
-            @input="e => {
-              const raw = e.target.value.replace(/\D/g, '');
-              const num = parseInt(raw) || 0;
-              e.target.value = raw ? Number(raw).toLocaleString('ru-RU') : '';
-              $emit('update:paidAmount', num);
-            }"
+            @input="$emit('update:paidAmount', $event.target.value ? Number($event.target.value) : 0)"
             class="flex-1 min-w-0 h-full bg-transparent border-none outline-none ring-0 px-3 text-[14px] font-black text-right text-emerald-600 dark:text-emerald-400 placeholder:text-slate-300 dark:placeholder:text-slate-600"
           />
         </div>
