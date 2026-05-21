@@ -14,19 +14,25 @@
         <span>{{ $t('kpi.title') }}</span>
       </router-link>
 
-      <button
-        @click="notificationStore.canAddWorker ? $emit('add') : null"
-        v-tooltip.bottom="limitTooltip"
-        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
-        :class="[
-          notificationStore.canAddWorker 
-            ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm active:scale-95' 
-            : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50'
-        ]"
+      <!-- Navigate to /workers/add page instead of modal -->
+      <router-link
+        v-if="notificationStore.canAddWorker"
+        :to="{ name: 'worker-add' }"
+        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 whitespace-nowrap bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm active:scale-95"
       >
-        <i :class="notificationStore.canAddWorker ? 'pi pi-user-plus' : 'pi pi-lock'" class="text-xs"></i>
+        <i class="pi pi-user-plus text-xs"></i>
         <span>{{ $t('workers.new_worker') }}</span>
-      </button>
+      </router-link>
+
+      <!-- Limit reached: show disabled button -->
+      <span
+        v-else
+        v-tooltip.bottom="limitTooltip"
+        class="flex-1 sm:flex-none h-8 px-3 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 whitespace-nowrap bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed grayscale bg-opacity-50"
+      >
+        <i class="pi pi-lock text-xs"></i>
+        <span>{{ $t('workers.new_worker') }}</span>
+      </span>
     </div>
   </div>
 </template>
@@ -48,7 +54,4 @@ const limitTooltip = computed(() => {
 })
 
 defineProps({ totalWorkers: Number })
-defineEmits(['add'])
 </script>
-
-

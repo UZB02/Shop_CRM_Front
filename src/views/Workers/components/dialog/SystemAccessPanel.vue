@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 flex flex-col min-h-0 font-inter h-full">
+  <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 flex flex-col min-h-0 font-inter">
     <!-- Login form (visible when enabled) -->
     <Transition name="fade-slide">
       <div v-if="createLogin" class="flex-1 flex flex-col min-h-0">

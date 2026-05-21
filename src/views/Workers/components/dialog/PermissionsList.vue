@@ -18,7 +18,7 @@
     </div>
 
     <!-- Permissions list -->
-    <div class="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar transition-all pr-1 min-h-[300px]">
+    <div class="space-y-1.5 custom-scrollbar pr-1">
       <PermissionItem
         v-for="perm in permissionsList"
         :key="perm.value"

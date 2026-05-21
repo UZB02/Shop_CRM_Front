@@ -132,6 +132,18 @@ const routes = [
                 meta: { permission: 'workers' }
             },
             {
+                path: 'workers/add',
+                name: 'worker-add',
+                component: () => import('@/views/Workers/Add.vue'),
+                meta: { permission: 'workers' }
+            },
+            {
+                path: 'workers/edit/:id',
+                name: 'worker-edit',
+                component: () => import('@/views/Workers/Add.vue'),
+                meta: { permission: 'workers' }
+            },
+            {
                 path: 'workers/kpi',
                 name: 'workers-kpi',
                 component: () => import('@/views/Workers/KPIView.vue'),

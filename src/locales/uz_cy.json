@@ -304,6 +304,19 @@
       "salary": "Ойлик маош (UZS)",
       "status": "Статус",
       "system_access": "Тизимга кириш",
+      "system_access_permissions": "Тизимга кириш ва рухсатлар",
+      "create_login_desc": "Username ва парол яратиш",
+      "login_disabled": "Кириш ўчирилган",
+      "permissions_on_login": "Рухсатлар тизимга кириш ёқилганда кўрсатилади",
+      "checklist_name": "Исм ва фамилия",
+      "checklist_email": "Email",
+      "checklist_phone": "Телефон",
+      "checklist_branch": "Филиал",
+      "checklist_login": "Тизимга кириш",
+      "ready": "Тайёр",
+      "view": "Кўриниш",
+      "avatar_fallback": "Янги ходим",
+      "active_status": "Фаол",
       "username": "Фойдаланувчи номи",
       "password": "Тизим пароли",
       "access_denied": "Кириш чекланган",
@@ -358,6 +371,10 @@
       "sozlamalar": {
         "label": "Созламалар",
         "desc": "Тизим созламалари"
+      },
+      "yetkazib_beruvchilar": {
+        "label": "Етказиб берувчилар",
+        "desc": "Етказиб берувчилар бўлимини кўриш"
       }
     },
     "messages": {

@@ -3,7 +3,6 @@
     <!-- Header -->
     <WorkerPageHeader
       :totalWorkers="totalRecords"
-      @add="openNew"
     />
 
     <!-- Main layout -->
@@ -42,18 +41,6 @@
       </div>
     </div>
 
-    <!-- Worker Dialog Component -->
-    <WorkerDialog
-      v-model:visible="workerDialog"
-      v-model:createLogin="createLogin"
-      :worker="worker"
-      :branches="branches"
-      :saving="saving"
-      :submitted="submitted"
-      @save="saveWorker"
-      @hide="hideDialog"
-    />
-
     <!-- KPI Target Modal -->
     <SetTargetModal 
       v-model="targetModalVisible" 
@@ -65,11 +52,10 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 // Components
 import WorkerTable from './components/WorkerTable.vue'
-import WorkerDialog from './components/WorkerDialog.vue'
 import WorkerFilters from './components/WorkerFilters.vue'
 import WorkerPageHeader from './components/WorkerPageHeader.vue'
 import BranchSidebar from './components/BranchSidebar.vue'
@@ -79,6 +65,7 @@ import SetTargetModal from './components/SetTargetModal.vue'
 import { useWorkers } from './composables/useWorkers'
 import { useWorkerActions } from './composables/useWorkerActions'
 
+const router = useRouter()
 const route = useRoute()
 
 // List & Filters Logic
@@ -104,8 +91,7 @@ const {
     saving,
     submitted,
     createLogin,
-    openNew,
-    editWorker,
+    editWorker: legacyEditWorker,
     saveWorker,
     confirmDeleteWorker,
     hideDialog,
@@ -113,6 +99,10 @@ const {
     selectedKpi,
     openTargetModal
 } = useWorkerActions(loadWorkers)
+
+const editWorker = (w) => {
+    router.push({ name: 'worker-edit', params: { id: w.id || w._id } })
+}
 
 const onBranchSelect = (branchId) => {
   filters.value.branch = branchId
@@ -127,13 +117,7 @@ onMounted(async () => {
     // Check for edit query param
     if (route.query.edit) {
         const id = route.query.edit
-        const workerToEdit = workers.value.find(w => (w.id || w._id).toString() === id.toString())
-        if (workerToEdit) {
-            editWorker(workerToEdit)
-        } else {
-            // If not in current list (already handled in editWorker with API call internally)
-            editWorker({ id })
-        }
+        router.push({ name: 'worker-edit', params: { id } })
     }
 })
 </script>
