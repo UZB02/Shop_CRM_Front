@@ -27,6 +27,13 @@ export const useSubscription = () => {
     const paymentMethod = ref('click')
     const isExtending = ref(false)
     
+    // Topup specific states
+    const topupDialog = ref(false)
+    const topupAmount = ref(150000)
+    const topupLoading = ref(false)
+    const pollingActive = ref(false)
+    const topupStatusText = ref('')
+    
     // Billing specific states
     const loadingBilling = ref(false)
     const invoices = ref([])
@@ -276,6 +283,126 @@ export const useSubscription = () => {
         }
     }
 
+    const startBalancePolling = (topupId, initialBalance) => {
+        let attempts = 0
+        const maxAttempts = 15 // ~105 seconds total
+        
+        const pollInterval = setInterval(async () => {
+            if (!pollingActive.value) {
+                clearInterval(pollInterval)
+                return
+            }
+            
+            attempts++
+            try {
+                await loadBalanceData()
+                
+                // If balance has increased, payment was successful!
+                if (Number(currentBalance.value) > Number(initialBalance)) {
+                    clearInterval(pollInterval)
+                    pollingActive.value = false
+                    topupDialog.value = false
+                    
+                    toast.add({
+                        severity: 'success',
+                        summary: t('common.success') || 'Muvaffaqiyat',
+                        detail: "Balans muvaffaqiyatli to'ldirildi!",
+                        life: 5000
+                    })
+                    
+                    // Force refresh subscription data
+                    await loadSubscription(true)
+                }
+            } catch (e) {
+                console.error('Polling error:', e)
+            }
+            
+            if (attempts >= maxAttempts) {
+                clearInterval(pollInterval)
+                pollingActive.value = false
+                topupStatusText.value = ''
+                
+                toast.add({
+                    severity: 'info',
+                    summary: 'To\'lov kutilmoqda',
+                    detail: 'To\'lov amalga oshirilgandan so\'ng balans avtomatik yangilanadi.',
+                    life: 5000
+                })
+            }
+        }, 7000)
+    }
+
+    const handleTopup = async () => {
+        if (!topupAmount.value || Number(topupAmount.value) < 10000) {
+            toast.add({
+                severity: 'warn',
+                summary: 'Xato',
+                detail: 'Minimal to\'ldirish summasi 10 000 so\'m bo\'lishi kerak.',
+                life: 4000
+            })
+            return
+        }
+
+        topupLoading.value = true
+        topupStatusText.value = 'To\'lov so\'rovi yaratilmoqda...'
+        
+        try {
+            const initialBalance = currentBalance.value
+            
+            const response = await subscriptionAPI.topupBalance({
+                amount: Math.round(Number(topupAmount.value)),
+                provider: 'click'
+            })
+            
+            const data = response?.data || {}
+            
+            if (data.payment_url) {
+                // Click to'lov tizimining to'g'ri billing manzili 'services/pay' hisoblanadi.
+                // Agar backend '/pay/details' (xato manzil) qaytarsa, uni avtomatik to'g'rilaymiz:
+                let finalUrl = data.payment_url
+                if (finalUrl.includes('/pay/details')) {
+                    finalUrl = finalUrl.replace('/pay/details', '/services/pay')
+                }
+
+                // Open payment in new window/tab
+                window.open(finalUrl, '_blank')
+                
+                pollingActive.value = true
+                topupStatusText.value = 'To\'lov oynasi yangi tabda ochildi. Tasdiqlashingiz kutilmoqda...'
+                
+                // Start dynamic polling
+                startBalancePolling(data.topup_id, initialBalance)
+            } else {
+                throw new Error('Payment URL not received')
+            }
+        } catch (error) {
+            console.error('Topup error:', error)
+            pollingActive.value = false
+            topupStatusText.value = ''
+            
+            let errorMsg = t('common.error_message')
+            if (error.response?.data) {
+                const data = error.response.data
+                if (data.amount && Array.isArray(data.amount)) {
+                    errorMsg = data.amount[0]
+                } else if (typeof data.amount === 'string') {
+                    errorMsg = data.amount
+                } else {
+                    errorMsg = data.error || data.detail || errorMsg
+                }
+            }
+            
+            toast.add({
+                severity: 'error',
+                summary: t('common.error'),
+                detail: errorMsg,
+                life: 6000
+            })
+        } finally {
+            topupLoading.value = false
+        }
+    }
+
     const getPlanFeatures = (plan) => {
         if (!plan) return []
         const features = []
@@ -334,7 +461,15 @@ export const useSubscription = () => {
         finalPrice,
         getDiscountLabel,
         getFinalPriceLabel,
-        selectedPlanType
+        selectedPlanType,
+        
+        // Topup variables & handlers
+        topupDialog,
+        topupAmount,
+        topupLoading,
+        pollingActive,
+        topupStatusText,
+        handleTopup
     }
 }
 

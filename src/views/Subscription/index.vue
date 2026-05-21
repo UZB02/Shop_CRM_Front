@@ -55,7 +55,7 @@
                     <span class="text-base font-black text-white leading-none">{{ formatCurrency(currentBalance) }}</span>
                 </div>
                 <div class="h-8 w-px bg-emerald-500/50 hidden sm:block"></div>
-                <Button icon="pi pi-plus" :label="$t('subscription.topup') || 'To\'ldirish'" class="!bg-white !text-emerald-700 !border-none !rounded-lg !py-1.5 !px-3 !text-[11px] !font-bold shadow-sm hover:!bg-emerald-50 transition-colors" />
+                <Button icon="pi pi-plus" :label="$t('subscription.topup') || 'To\'ldirish'" class="!bg-white !text-emerald-700 !border-none !rounded-lg !py-1.5 !px-3 !text-[11px] !font-bold shadow-sm hover:!bg-emerald-50 transition-colors" @click="topupDialog = true" />
             </div>
         </div>
 
@@ -123,6 +123,18 @@
       :activeCoupon="activeCoupon"
       @process="processPayment"
     />
+
+    <!-- Topup Dialog -->
+    <TopupDialog
+      v-model:visible="topupDialog"
+      v-model:amount="topupAmount"
+      :currentBalance="currentBalance"
+      :loading="topupLoading"
+      :pollingActive="pollingActive"
+      :statusText="topupStatusText"
+      @process="handleTopup"
+      @refresh-balance="loadBalanceData"
+    />
   </div>
 </template>
 
@@ -137,6 +149,7 @@ import TabPanel from 'primevue/tabpanel'
 import SubscriptionStatus from './components/SubscriptionStatus.vue'
 import PlanCard from './components/PlanCard.vue'
 import PaymentDialog from './components/PaymentDialog.vue'
+import TopupDialog from './components/TopupDialog.vue'
 import BillingTab from './components/BillingTab.vue'
 import CouponsTab from './components/CouponsTab.vue'
 import FaqAndPromo from './components/FaqAndPromo.vue'
@@ -183,7 +196,16 @@ const {
     activeCoupon,
     getDiscountLabel,
     getFinalPriceLabel,
-    selectedPlanType
+    selectedPlanType,
+    
+    // Topup variables & handlers
+    topupDialog,
+    topupAmount,
+    topupLoading,
+    pollingActive,
+    topupStatusText,
+    handleTopup,
+    loadBalanceData
 } = useSubscription()
 
 const formatCurrency = (value) => settingsStore.formatPrice(value)

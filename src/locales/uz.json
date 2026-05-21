@@ -234,7 +234,12 @@
     "coupons_title": "Kuponlarim",
     "coupons_desc": "Siz tomoningizdan qo'llanilgan barcha faol kuponlar ro'yxati va yangi kuponlar kiritish",
     "no_coupons": "Qo'llanilgan kuponlar tarixi bo'sh",
-    "showing_coupons": "{start}-{end} dan joriy {total} ta kupon ko'rsatilyapti"
+    "showing_coupons": "{start}-{end} dan joriy {total} ta kupon ko'rsatilyapti",
+    "topup_balance": "Balansni to'ldirish",
+    "topup_action": "Click orqali to'ldirish",
+    "payment_waiting": "To'lov kutilmoqda...",
+    "payment_redirect_desc": "To'lov sahifasi yangi oynada ochildi. Telefonda to'lovni tasdiqlang. Balans avtomatik yangilanadi.",
+    "refresh_balance": "Balansni yangilash"
   },
   "workers": {
     "title": "Xodimlar",
