@@ -113,8 +113,10 @@
                   <span class="text-xs font-black tracking-wide text-slate-800 dark:text-slate-200">Click</span>
                   
                   <!-- Selected indicator check -->
-                  <div v-if="method === 'click'" class="absolute -right-6 -top-6 w-12 h-12 bg-emerald-500 rotate-45 flex items-end justify-center pb-1">
-                    <i class="pi pi-check text-[8px] text-white -rotate-45 font-bold mb-0.5"></i>
+                  <div v-if="method === 'click'" class="absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm animate-scale-in">
+                    <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                    </svg>
                   </div>
                 </div>
 
@@ -222,5 +224,20 @@ defineEmits(['update:visible', 'update:method', 'process'])
 .modal-fade-leave-to > div:last-child {
   transform: scale(0.97) translateY(4px);
   opacity: 0;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 </style>
