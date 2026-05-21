@@ -237,9 +237,21 @@
     "showing_coupons": "{start}-{end} дан жорий {total} та купон кўрсатиляпти",
     "topup_balance": "Балансни тўлдириш",
     "topup_action": "Click орқали тўлдириш",
-    "payment_waiting": "Тўлов кутилмоqda...",
+    "payment_waiting": "Тўлов кутилмоқда...",
     "payment_redirect_desc": "Тўлов саҳифаси янги ойнада очилди. Телефонда тўловни тасдиқланг. Баланс автоматик янгиланади.",
-    "refresh_balance": "Балансни янгилаш"
+    "refresh_balance": "Балансни янгилаш",
+    "topup_subtitle": "Ҳисобингизни xавфсиз тўлдириш",
+    "expected_balance": "Янги баланс",
+    "topup_amount": "Тўлдириш суммаси",
+    "payment_provider": "Тўлов провайдери",
+    "secure_note": "Click тизими орқали 256-bit шифрланган хавфсиз тўлов кафолатланади.",
+    "quick_amounts_title": "Тезкор суммани танлаш",
+    "coming_soon": "Тез кунда",
+    "click_payment": "Click тўлови",
+    "creating_request": "Тўлов сўрови яратилмоқда...",
+    "topup_success_detail": "Баланс муваффақиятли тўлдирилди!",
+    "payment_auto_update_detail": "Тўлов амалга ошиrilgandan сўнг баланс автоматик янгиланади.",
+    "min_topup_error": "Минимал тўлдириш суммаси 10 000 сўм бўлиши керак."
   },
   "workers": {
     "title": "Ходимлар",

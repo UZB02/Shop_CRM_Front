@@ -306,7 +306,7 @@ export const useSubscription = () => {
                     toast.add({
                         severity: 'success',
                         summary: t('common.success') || 'Muvaffaqiyat',
-                        detail: "Balans muvaffaqiyatli to'ldirildi!",
+                        detail: t('subscription.topup_success_detail') || "Balans muvaffaqiyatli to'ldirildi!",
                         life: 5000
                     })
                     
@@ -324,8 +324,8 @@ export const useSubscription = () => {
                 
                 toast.add({
                     severity: 'info',
-                    summary: 'To\'lov kutilmoqda',
-                    detail: 'To\'lov amalga oshirilgandan so\'ng balans avtomatik yangilanadi.',
+                    summary: t('subscription.payment_waiting') || 'To\'lov kutilmoqda',
+                    detail: t('subscription.payment_auto_update_detail') || 'To\'lov amalga oshirilgandan so\'ng balans avtomatik yangilanadi.',
                     life: 5000
                 })
             }
@@ -336,15 +336,15 @@ export const useSubscription = () => {
         if (!topupAmount.value || Number(topupAmount.value) < 10000) {
             toast.add({
                 severity: 'warn',
-                summary: 'Xato',
-                detail: 'Minimal to\'ldirish summasi 10 000 so\'m bo\'lishi kerak.',
+                summary: t('common.error') || 'Xato',
+                detail: t('subscription.min_topup_error') || 'Minimal to\'ldirish summasi 10 000 so\'m bo\'lishi kerak.',
                 life: 4000
             })
             return
         }
 
         topupLoading.value = true
-        topupStatusText.value = 'To\'lov so\'rovi yaratilmoqda...'
+        topupStatusText.value = t('subscription.creating_request') || 'To\'lov so\'rovi yaratilmoqda...'
         
         try {
             const initialBalance = currentBalance.value
@@ -368,7 +368,7 @@ export const useSubscription = () => {
                 window.open(finalUrl, '_blank')
                 
                 pollingActive.value = true
-                topupStatusText.value = 'To\'lov oynasi yangi tabda ochildi. Tasdiqlashingiz kutilmoqda...'
+                topupStatusText.value = t('subscription.payment_redirect_desc') || 'To\'lov oynasi yangi tabda ochildi. Tasdiqlashingiz kutilmoqda...'
                 
                 // Start dynamic polling
                 startBalancePolling(data.topup_id, initialBalance)
