@@ -48,10 +48,30 @@
       <div class="flex items-center justify-between min-w-max gap-8 px-2">
         <div class="flex items-center gap-1 p-1 bg-slate-100/50 dark:bg-slate-950/50 rounded-lg">
           <button 
-            class="flex items-center gap-2 px-4 py-1.5 rounded-md transition-all duration-300 whitespace-nowrap bg-white dark:bg-slate-800 text-emerald-500 shadow-sm scale-[1.02]"
+            @click="activeTab = 'profile'"
+            :class="activeTab === 'profile' ? 'bg-white dark:bg-slate-800 text-emerald-500 shadow-sm scale-[1.02]' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 hover:dark:text-slate-300'"
+            class="flex items-center gap-2 px-4 py-1.5 rounded-md transition-all duration-300 whitespace-nowrap"
           >
             <i class="pi pi-user text-[12px]"></i>
             <span class="text-[12px] font-black tracking-widest">{{ $t('common.profile') }}</span>
+          </button>
+
+          <button 
+            @click="activeTab = 'purchases'"
+            :class="activeTab === 'purchases' ? 'bg-white dark:bg-slate-800 text-emerald-500 shadow-sm scale-[1.02]' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 hover:dark:text-slate-300'"
+            class="flex items-center gap-2 px-4 py-1.5 rounded-md transition-all duration-300 whitespace-nowrap"
+          >
+            <i class="pi pi-box text-[12px]"></i>
+            <span class="text-[12px] font-black tracking-widest">Kirimlar</span>
+          </button>
+
+          <button 
+            @click="activeTab = 'payments'"
+            :class="activeTab === 'payments' ? 'bg-white dark:bg-slate-800 text-emerald-500 shadow-sm scale-[1.02]' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 hover:dark:text-slate-300'"
+            class="flex items-center gap-2 px-4 py-1.5 rounded-md transition-all duration-300 whitespace-nowrap"
+          >
+            <i class="pi pi-credit-card text-[12px]"></i>
+            <span class="text-[12px] font-black tracking-widest">To'lovlar</span>
           </button>
         </div>
         
@@ -73,30 +93,40 @@
         </div>
       </div>
 
-      <div v-else-if="supplier" class="grid grid-cols-1 lg:grid-cols-12 gap-4 animate-fade-in">
-        <!-- Main Info -->
-        <div class="lg:col-span-8 space-y-4">
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
-            <h2 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest mb-4">{{ $t('common.summary') }}</h2>
-            <div class="space-y-3">
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800/60">
-                <span class="text-xs font-semibold text-slate-500">{{ $t('suppliers.table.company') }}</span>
-                <span class="text-sm font-black text-slate-800 dark:text-slate-200">{{ supplier.company || '—' }}</span>
-              </div>
-              <div class="py-2" v-if="supplier.description">
-                <span class="block text-xs font-semibold text-slate-500 mb-1">{{ $t('suppliers.form.description') }}</span>
-                <p class="text-sm text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl">{{ supplier.description }}</p>
+      <div v-else-if="supplier" class="animate-fade-in">
+        <div v-if="activeTab === 'profile'" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <!-- Main Info -->
+          <div class="lg:col-span-8 space-y-4">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+              <h2 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest mb-4">{{ $t('common.summary') }}</h2>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800/60">
+                  <span class="text-xs font-semibold text-slate-500">{{ $t('suppliers.table.company') }}</span>
+                  <span class="text-sm font-black text-slate-800 dark:text-slate-200">{{ supplier.company || '—' }}</span>
+                </div>
+                <div class="py-2" v-if="supplier.description">
+                  <span class="block text-xs font-semibold text-slate-500 mb-1">{{ $t('suppliers.form.description') }}</span>
+                  <p class="text-sm text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl">{{ supplier.description }}</p>
+                </div>
               </div>
             </div>
           </div>
+
+          <!-- Sidebar -->
+          <SupplierProfileSidebar 
+            :supplier="supplier"
+            class="lg:col-span-4"
+            @pay-debt="openPayment"
+          />
         </div>
 
-        <!-- Sidebar -->
-        <SupplierProfileSidebar 
-          :supplier="supplier"
-          class="lg:col-span-4"
-          @pay-debt="openPayment"
-        />
+        <div v-else-if="activeTab === 'purchases'">
+          <SupplierPurchasesTab :supplierId="supplier.id" />
+        </div>
+
+        <div v-else-if="activeTab === 'payments'">
+          <SupplierPaymentsTab :supplierId="supplier.id" />
+        </div>
       </div>
     </div>
 
@@ -123,13 +153,17 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useSupplierDetail } from './composables/useSupplierDetail'
 import { useSettingsStore } from '@/store/settings'
 
 import SupplierDialog from './components/SupplierDialog.vue'
 import SupplierPaymentDialog from './components/SupplierPaymentDialog.vue'
 import SupplierProfileSidebar from './components/SupplierProfileSidebar.vue'
+import SupplierPurchasesTab from './components/SupplierPurchasesTab.vue'
+import SupplierPaymentsTab from './components/SupplierPaymentsTab.vue'
+
+const activeTab = ref('profile')
 
 const settingsStore = useSettingsStore()
 const { 

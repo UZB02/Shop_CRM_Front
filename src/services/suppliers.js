@@ -6,6 +6,8 @@ export const suppliersAPI = {
     create: (data) => api.post('/warehouse/suppliers/', data),
     update: (id, data) => api.patch(`/warehouse/suppliers/${id}/`, data),
     delete: (id) => api.delete(`/warehouse/suppliers/${id}/`),
+    getPurchases: (id, params) => api.get(`/warehouse/suppliers/${id}/purchases/`, { params }),
+    getPayments: (id, params) => api.get(`/warehouse/suppliers/${id}/payments/`, { params }),
 
     // Export / Import
     export: (params) => api.get('/export/suppliers/', { params, responseType: 'blob' }),

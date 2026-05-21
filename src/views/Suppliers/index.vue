@@ -5,6 +5,7 @@
       :totalRecords="totalRecords"
       v-model:searchQuery="searchQuery"
       v-model:statusFilter="statusFilter"
+      v-model:hasDebtFilter="hasDebtFilter"
       @add="openNew"
       @export="exportSuppliers"
     />
@@ -84,7 +85,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, watch } from 'vue'
 import Paginator from 'primevue/paginator'
 
 import SupplierPageHeader from './components/SupplierPageHeader.vue'
@@ -111,6 +112,7 @@ const {
   paymentForm,
   searchQuery,
   statusFilter,
+  hasDebtFilter,
   currentPage,
   rows,
   totalRecords,
@@ -139,6 +141,10 @@ const topDebtor = computed(() => {
 
 onMounted(async () => {
   await loadSuppliers()
+})
+
+watch([statusFilter, hasDebtFilter], () => {
+  loadSuppliers(1)
 })
 </script>
 

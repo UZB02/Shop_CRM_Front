@@ -12,6 +12,9 @@
           <th class="px-4 py-3 text-left text-[11px] font-black text-slate-400 tracking-widest uppercase hidden md:table-cell">
             {{ $t('suppliers.table.company') }}
           </th>
+          <th class="px-4 py-3 text-left text-[11px] font-black text-slate-400 tracking-widest uppercase hidden lg:table-cell">
+            {{ $t('suppliers.table.address') }}
+          </th>
           <th class="px-4 py-3 text-right text-[11px] font-black text-slate-400 tracking-widest uppercase">
             {{ $t('suppliers.table.debt') }}
           </th>
@@ -27,7 +30,7 @@
       <!-- Loading skeleton -->
       <tbody v-if="loading">
         <tr v-for="i in 6" :key="i" class="border-b border-slate-50 dark:border-slate-800/50">
-          <td class="px-4 py-3" colspan="6">
+          <td class="px-4 py-3" colspan="7">
             <div class="h-6 rounded-lg bg-slate-100 dark:bg-slate-800 animate-pulse w-full" />
           </td>
         </tr>
@@ -36,7 +39,7 @@
       <!-- Empty state -->
       <tbody v-else-if="!suppliers.length">
         <tr>
-          <td colspan="6" class="px-4 py-20 text-center">
+          <td colspan="7" class="px-4 py-20 text-center">
             <div class="flex flex-col items-center gap-3">
               <div class="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700">
                 <i class="pi pi-users text-2xl text-slate-300 dark:text-slate-600" />
@@ -85,6 +88,12 @@
           <!-- Company -->
           <td class="px-4 py-3 hidden md:table-cell">
             <span v-if="sup.company" class="text-[13px] text-slate-600 dark:text-slate-300">{{ sup.company }}</span>
+            <span v-else class="text-[12px] text-slate-300 italic">—</span>
+          </td>
+
+          <!-- Address -->
+          <td class="px-4 py-3 hidden lg:table-cell">
+            <span v-if="sup.address" class="text-[13px] text-slate-600 dark:text-slate-300 truncate max-w-[200px] block" :title="sup.address">{{ sup.address }}</span>
             <span v-else class="text-[12px] text-slate-300 italic">—</span>
           </td>
 

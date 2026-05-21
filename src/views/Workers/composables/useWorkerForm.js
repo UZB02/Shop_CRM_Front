@@ -24,11 +24,12 @@ export const PERMISSIONS_LIST = [
     { label: 'Xodimlar', value: 'xodimlar', icon: 'pi-id-card', desc: 'Xodimlarni boshqarish' },
     { label: 'Sozlamalar', value: 'sozlamalar', icon: 'pi-cog', desc: 'Tizim sozlamalari' },
     { label: 'Obuna', value: 'obuna', icon: 'pi-credit-card', desc: 'Obuna va tarif rejalari' },
+    { label: 'Yetkazib beruvchilar', value: 'yetkazib_beruvchilar', icon: 'pi-truck', desc: "Yetkazib beruvchilar bo'limini ko'rish" },
 ]
 
 export const ROLE_PERMISSIONS = {
-    owner: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'moliya', 'mijozlar', 'sozlamalar', 'obuna'],
-    manager: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'moliya', 'mijozlar'],
+    owner: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'moliya', 'mijozlar', 'sozlamalar', 'obuna', 'yetkazib_beruvchilar'],
+    manager: ['boshqaruv', 'sotuv', 'dokonlar', 'ombor', 'mahsulotlar', 'xodimlar', 'savdolar', 'moliya', 'mijozlar', 'yetkazib_beruvchilar'],
     seller: ['sotuv', 'savdolar', 'mijozlar', 'ombor', 'mahsulotlar']
 }
 

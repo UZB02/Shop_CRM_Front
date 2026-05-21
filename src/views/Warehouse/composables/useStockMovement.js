@@ -67,7 +67,25 @@ export function useStockMovement() {
             bulkVisible.value = false
             return response.data
         } catch (error) {
-            const errorMsg = error.response?.data?.detail || error.response?.data?.non_field_errors?.[0] || 'Xatolik yuz berdi'
+            const data = error.response?.data
+            let errorMsg = 'Xatolik yuz berdi'
+            if (data) {
+                if (data.non_field_errors?.length) {
+                    errorMsg = data.non_field_errors[0]
+                } else if (data.detail) {
+                    errorMsg = data.detail
+                } else if (Array.isArray(data.items)) {
+                    // Bulk operatsiyada har bir item xatosi
+                    const firstItemErr = data.items.find(e => e && Object.keys(e).length > 0)
+                    if (firstItemErr) {
+                        const fieldName = Object.keys(firstItemErr)[0]
+                        errorMsg = `${fieldName}: ${firstItemErr[fieldName]}`
+                    }
+                } else if (typeof data === 'object') {
+                    const firstKey = Object.keys(data)[0]
+                    if (firstKey) errorMsg = `${firstKey}: ${Array.isArray(data[firstKey]) ? data[firstKey][0] : data[firstKey]}`
+                }
+            }
             toast.add({
                 severity: 'error',
                 summary: 'Xatolik',

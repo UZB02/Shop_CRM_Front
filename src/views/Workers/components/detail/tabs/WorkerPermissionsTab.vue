@@ -21,7 +21,9 @@
           <div class="w-4 h-4 rounded bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-emerald-500 border border-slate-100 dark:border-slate-600">
             <i class="pi pi-check text-[9px]"></i>
           </div>
-          <span class="text-[12px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-tight">{{ perm }}</span>
+          <span class="text-[12px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-tight">
+            {{ getPermLabel(perm) }}
+          </span>
         </div>
         
         <div v-if="!worker?.permissions?.length" class="w-full py-8 text-center opacity-40">
@@ -34,9 +36,18 @@
 </template>
 
 <script setup>
+import { PERMISSIONS_LIST } from '../../../composables/useWorkerForm.js'
+
 defineProps({
   worker: Object
 })
+
+// Returns human-readable label for a raw permission code
+const PERM_MAP = Object.fromEntries(PERMISSIONS_LIST.map(p => [p.value, p.label]))
+
+function getPermLabel(code) {
+  return PERM_MAP[code] || code
+}
 </script>
 
 

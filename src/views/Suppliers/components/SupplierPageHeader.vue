@@ -51,6 +51,18 @@
           {{ opt.label }}
         </button>
       </div>
+      
+      <!-- Has Debt Filter -->
+      <button
+        @click="$emit('update:hasDebtFilter', !hasDebtFilter)"
+        class="h-9 px-3 rounded-xl text-[12px] font-bold transition-all flex items-center gap-1.5 whitespace-nowrap border"
+        :class="hasDebtFilter
+          ? 'bg-red-50 text-red-600 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 shadow-sm'
+          : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-700 dark:hover:bg-slate-800'"
+      >
+        <i class="pi" :class="hasDebtFilter ? 'pi-filter-slash text-[11px]' : 'pi-filter text-[11px]'" />
+        <span class="hidden sm:inline">{{ $t('suppliers.filters.has_debt') }}</span>
+      </button>
 
       <!-- Export -->
       <div class="relative" ref="exportMenuRef">
@@ -99,9 +111,10 @@ const { t } = useI18n()
 defineProps({
   totalRecords: { type: Number, default: 0 },
   searchQuery: { type: String, default: '' },
-  statusFilter: { type: String, default: 'active' }
+  statusFilter: { type: String, default: 'active' },
+  hasDebtFilter: { type: Boolean, default: false }
 })
-defineEmits(['update:searchQuery', 'update:statusFilter', 'add', 'export'])
+defineEmits(['update:searchQuery', 'update:statusFilter', 'update:hasDebtFilter', 'add', 'export'])
 
 const showExport = ref(false)
 const exportMenuRef = ref(null)

@@ -104,7 +104,7 @@ export function useDashboardLayout() {
       { label: t('menu.trades'), icon: 'pi pi-shopping-cart', to: '/dashboard/trades', key: 'trades' },
       { label: t('menu.finance'), icon: 'pi pi-wallet', to: '/dashboard/finance', key: 'moliya' },
       { label: t('menu.customers'), icon: 'pi pi-id-card', to: '/dashboard/customers', key: 'customers' },
-      { label: t('menu.suppliers'), icon: 'pi pi-truck', to: '/dashboard/suppliers', key: 'suppliers' },
+      { label: t('menu.suppliers'), icon: 'pi pi-truck', to: '/dashboard/suppliers', key: 'yetkazib_beruvchilar' },
       { label: t('menu.settings'), icon: 'pi pi-cog', to: '/dashboard/settings', key: 'settings' },
       { label: t('menu.subscription'), icon: 'pi pi-verified', to: '/dashboard/subscription', key: 'subscription' },
     ]

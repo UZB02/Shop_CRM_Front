@@ -28,7 +28,9 @@ const {
   scanAndAdd,
   router,
   supplier,
-  suppliersList
+  suppliersList,
+  paidAmount,
+  paymentType
 } = useBulkMovement()
 
 const { templateLoading, downloadTemplate } = useTemplateDownload()
@@ -110,6 +112,8 @@ const selectTur = (tur) => {
             v-model:type="movement_type"
             v-model:note="note"
             v-model:supplier="supplier"
+            v-model:paidAmount="paidAmount"
+            v-model:paymentType="paymentType"
             :suppliers="suppliersList"
             @remove="removeBulkItem"
             @update-qty="updateQty"
@@ -148,6 +152,8 @@ const selectTur = (tur) => {
                 v-model:type="movement_type"
                 v-model:note="note"
                 v-model:supplier="supplier"
+                v-model:paidAmount="paidAmount"
+                v-model:paymentType="paymentType"
                 :suppliers="suppliersList"
                 @remove="removeBulkItem"
                 @update-qty="updateQty"

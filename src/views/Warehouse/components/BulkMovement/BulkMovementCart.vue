@@ -108,6 +108,67 @@
        />
     </div>
 
+    <!-- Payment & Summary Strip (Only for IN) -->
+    <div v-if="type === 'in' && validCount > 0" class="px-4 lg:px-6 py-3 border-b border-slate-200/60 dark:border-slate-800/50 bg-white dark:bg-slate-900/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+      
+      <!-- Jami summa -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+          <i class="pi pi-wallet text-sm"></i>
+        </div>
+        <div>
+          <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">{{ $t('common.total') }}</span>
+          <span class="text-[15px] font-black text-slate-800 dark:text-white">{{ Number(totalCost).toLocaleString('ru-RU') }} UZS</span>
+        </div>
+      </div>
+      
+      <!-- To'lov qismi -->
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        
+        <!-- To'lov summasi input -->
+        <div class="flex items-center h-10 flex-1 sm:w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:border-emerald-400 dark:focus-within:border-emerald-500/60 transition-colors">
+          <span class="pl-3 pr-2 text-[9px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap flex-shrink-0 border-r border-slate-100 dark:border-slate-800 h-full flex items-center select-none">To'lov</span>
+          <input
+            type="text"
+            inputmode="numeric"
+            :value="paidAmount > 0 ? Number(paidAmount).toLocaleString('ru-RU') : ''"
+            placeholder="0"
+            @keydown="e => {
+              if ([8, 9, 13, 27, 35, 36, 37, 38, 39, 40, 46].includes(e.keyCode)) return;
+              if ((e.ctrlKey || e.metaKey) && [65, 67, 86, 88].includes(e.keyCode)) return;
+              if (!/^\d$/.test(e.key)) e.preventDefault();
+            }"
+            @input="e => {
+              const raw = e.target.value.replace(/\D/g, '');
+              const num = parseInt(raw) || 0;
+              e.target.value = raw ? Number(raw).toLocaleString('ru-RU') : '';
+              $emit('update:paidAmount', num);
+            }"
+            class="flex-1 min-w-0 h-full bg-transparent border-none outline-none ring-0 px-3 text-[14px] font-black text-right text-emerald-600 dark:text-emerald-400 placeholder:text-slate-300 dark:placeholder:text-slate-600"
+          />
+        </div>
+        
+        <!-- To'lov turi Dropdown -->
+        <Dropdown
+          :model-value="paymentType"
+          @update:model-value="$emit('update:paymentType', $event)"
+          :options="[
+            { label: 'Naqd', value: 'cash' },
+            { label: 'Karta', value: 'card' },
+            { label: 'O\'tkazma', value: 'transfer' }
+          ]"
+          option-label="label"
+          option-value="value"
+          class="h-10 w-28 sm:w-32 flex-shrink-0"
+          :pt="{
+            root: { class: 'shadow-none border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 overflow-hidden' },
+            input: { class: 'py-0 px-3 text-[13px] font-bold text-slate-700 dark:text-slate-200 flex items-center h-10' },
+            trigger: { class: 'px-2 text-slate-400 flex items-center' }
+          }"
+        />
+      </div>
+    </div>
+
     <!-- Main Content: Card Grid -->
     <div class="flex-1 overflow-y-auto px-4 lg:px-6 py-4 custom-scrollbar bg-[#f8fafc] dark:bg-[#0f172a]/20">
       
@@ -239,6 +300,8 @@
 <script setup>
 import TurBadge from '@/components/common/TurBadge.vue'
 import Dropdown from 'primevue/dropdown'
+import InputNumber from 'primevue/inputnumber'
+import { computed } from 'vue'
 
 const props = defineProps({
   items: Array,
@@ -249,11 +312,17 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  paidAmount: [Number, String],
+  paymentType: String,
   saving: Boolean,
   validCount: Number
 })
 
-const emit = defineEmits(['update:type', 'update:note', 'update:supplier', 'remove', 'update-qty', 'update-price', 'save'])
+const totalCost = computed(() => {
+  return props.items.reduce((acc, item) => acc + (Number(item.quantity || 0) * Number(item.unit_cost || 0)), 0)
+})
+
+const emit = defineEmits(['update:type', 'update:note', 'update:supplier', 'update:paidAmount', 'update:paymentType', 'remove', 'update-qty', 'update-price', 'save'])
 </script>
 
 <style scoped>

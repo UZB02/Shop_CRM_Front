@@ -225,13 +225,13 @@ const routes = [
                 path: 'suppliers',
                 name: 'suppliers',
                 component: () => import('@/views/Suppliers/index.vue'),
-                meta: { permission: 'suppliers' }
+                meta: { permission: 'yetkazib_beruvchilar' }
             },
             {
                 path: 'suppliers/:id',
                 name: 'supplier-detail',
                 component: () => import('@/views/Suppliers/Detail.vue'),
-                meta: { permission: 'suppliers' }
+                meta: { permission: 'yetkazib_beruvchilar' }
             }
         ]
     }

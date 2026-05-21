@@ -23,6 +23,7 @@ export function useSuppliers() {
     // Filters
     const searchQuery = ref('')
     const statusFilter = ref('active') // 'active' | 'inactive' | ''
+    const hasDebtFilter = ref(false)
 
     // Dialogs
     const supplierDialog = ref(false)
@@ -69,6 +70,7 @@ export function useSuppliers() {
         try {
             const params = { page, page_size: rows.value }
             if (statusFilter.value) params.status = statusFilter.value
+            if (hasDebtFilter.value) params.has_debt = 'true'
             const res = await suppliersAPI.getAll(params)
             const data = res.data
             if (data.results !== undefined) {
@@ -284,6 +286,7 @@ export function useSuppliers() {
         paymentForm,
         searchQuery,
         statusFilter,
+        hasDebtFilter,
         currentPage,
         rows,
         totalRecords,

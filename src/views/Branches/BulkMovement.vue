@@ -25,7 +25,9 @@ const {
   handleCancel,
   router,
   supplier,
-  suppliersList
+  suppliersList,
+  paidAmount,
+  paymentType
 } = useBulkMovement()
 </script>
 
@@ -55,6 +57,8 @@ const {
             v-model:type="movement_type"
             v-model:note="note"
             v-model:supplier="supplier"
+            v-model:paidAmount="paidAmount"
+            v-model:paymentType="paymentType"
             :suppliers="suppliersList"
             @remove="removeBulkItem"
             @update-qty="updateQty"
@@ -92,6 +96,8 @@ const {
                 v-model:type="movement_type"
                 v-model:note="note"
                 v-model:supplier="supplier"
+                v-model:paidAmount="paidAmount"
+                v-model:paymentType="paymentType"
                 :suppliers="suppliersList"
                 @remove="removeBulkItem"
                 @update-qty="updateQty"

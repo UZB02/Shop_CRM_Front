@@ -1,11 +1,13 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useToast } from 'primevue/usetoast'
 import { useStockMovement } from './useStockMovement'
 import { warehousesAPI, branchesAPI, salesAPI, suppliersAPI } from '@/services/api'
 
 export function useBulkMovement() {
   const route = useRoute()
   const router = useRouter()
+  const toast = useToast()
   const entityId = route.params.id
   const isBranch = route.path.includes('/branches/')
   
@@ -21,15 +23,19 @@ export function useBulkMovement() {
   const movement_type = ref('in')
   const note = ref(savedState.note || '')
   const supplier = ref(savedState.supplier || null)
+  const paidAmount = ref(savedState.paidAmount || '')
+  const paymentType = ref(savedState.paymentType || 'cash')
   const suppliersList = ref([])
 
   // Persistence Watcher
-  watch([bulkItems, movement_type, note, supplier], () => {
+  watch([bulkItems, movement_type, note, supplier, paidAmount, paymentType], () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       items: bulkItems.value,
       type: 'in',
       note: note.value,
-      supplier: supplier.value
+      supplier: supplier.value,
+      paidAmount: paidAmount.value,
+      paymentType: paymentType.value
     }))
   }, { deep: true })
 
@@ -75,6 +81,32 @@ export function useBulkMovement() {
     const validItems = bulkItems.value.filter(item => item.product?.id && item.quantity > 0)
     if (validItems.length === 0) return
 
+    // Frontend validatsiya: paid_amount > 0 bo'lsa supplier majburiy
+    const paid = Number(paidAmount.value)
+    if (movement_type.value === 'in' && paid > 0 && !supplier.value) {
+      toast.add({
+        severity: 'warn',
+        summary: 'Diqqat',
+        detail: 'Qisman to\'lov kiritilganda yetkazib beruvchini tanlash majburiy.',
+        life: 5000
+      })
+      return
+    }
+
+    // Frontend validatsiya: paid_amount > totalCost
+    if (movement_type.value === 'in' && paid > 0) {
+      const totalCost = validItems.reduce((acc, item) => acc + (Number(item.quantity || 0) * Number(item.unit_cost || 0)), 0)
+      if (paid > totalCost) {
+        toast.add({
+          severity: 'error',
+          summary: 'Xatolik',
+          detail: `paid_amount (${paid.toLocaleString('ru-RU')}) jami tannarxdan (${totalCost.toLocaleString('ru-RU')}) oshib ketishi mumkin emas.`,
+          life: 7000
+        })
+        return
+      }
+    }
+
     try {
       const payload = {
         isBulk: true,
@@ -93,21 +125,29 @@ export function useBulkMovement() {
         })
       }
 
-      if (movement_type.value === 'in' && supplier.value) {
-        payload.supplier = typeof supplier.value === 'object' ? supplier.value.id : supplier.value
+      if (movement_type.value === 'in') {
+        if (supplier.value) {
+          payload.supplier = typeof supplier.value === 'object' ? supplier.value.id : supplier.value
+        }
+        if (paid > 0) {
+          payload.paid_amount = paid
+          payload.payment_type = paymentType.value
+        }
+        // paid_amount = 0 yoki ko'rsatilmagan → to'liq summa qarzga yoziladi (backend default)
       }
 
-      if (isBranch) payload.branch = entityId
-      else payload.warehouse = entityId
+      if (isBranch) payload.branch = Number(entityId)
+      else payload.warehouse = Number(entityId)
 
       await saveMovement(payload)
       
-      // Clear persistence on success
+      // Muvaffaqiyatli saqlanganda localStorage tozalanadi
       localStorage.removeItem(STORAGE_KEY)
       
       router.back()
     } catch (error) {
       console.error('Error saving bulk movement:', error)
+      // Xato useStockMovement ichida toast orqali ko'rsatiladi
     }
   }
 
@@ -181,7 +221,9 @@ export function useBulkMovement() {
     scanAndAdd,
     router,
     supplier,
-    suppliersList
+    suppliersList,
+    paidAmount,
+    paymentType
   }
 }
 

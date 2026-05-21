@@ -15,7 +15,7 @@
         <div class="perm-check-icon">
           <i class="pi pi-check text-xs"></i>
         </div>
-        <span class="text-[14px] font-bold text-slate-700 dark:text-slate-200 capitalize tracking-tight">{{ perm }}</span>
+        <span class="text-[14px] font-bold text-slate-700 dark:text-slate-200 capitalize tracking-tight">{{ getPermLabel(perm) }}</span>
       </div>
 
       <div v-if="!permissions?.length" class="col-span-full py-16 text-center opacity-40">
@@ -28,12 +28,20 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { PERMISSIONS_LIST } from '@/views/Workers/composables/useWorkerForm.js'
 
 const { t } = useI18n()
 
 defineProps({
   permissions: Array
 })
+
+// Map raw backend codes → human-readable labels
+const PERM_LABEL_MAP = Object.fromEntries(PERMISSIONS_LIST.map(p => [p.value, p.label]))
+
+function getPermLabel(code) {
+  return PERM_LABEL_MAP[code] || code
+}
 </script>
 
 <style scoped>

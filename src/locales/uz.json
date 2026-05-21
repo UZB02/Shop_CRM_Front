@@ -359,6 +359,10 @@
       "sozlamalar": {
         "label": "Sozlamalar",
         "desc": "Tizim sozlamalari"
+      },
+      "yetkazib_beruvchilar": {
+        "label": "Yetkazib beruvchilar",
+        "desc": "Yetkazib beruvchilar bo'limini ko'rish"
       }
     },
     "messages": {
@@ -1850,6 +1854,7 @@
       "name": "Nomi",
       "phone": "Telefon",
       "company": "Kompaniya",
+      "address": "Manzil",
       "debt": "Qarz balansi",
       "status": "Holati",
       "actions": "Amallar"
@@ -1881,6 +1886,9 @@
       "desc_ph": "Masalan: May oyi uchun to'lov",
       "immutable_warning": "To'lov qo'shilgandan so'ng uni tahrirlash yoki o'chirish mumkin emas — bu moliyaviy xavfsizlik sababli.",
       "save_btn": "To'lovni saqlash"
+    },
+    "filters": {
+      "has_debt": "Qarzli"
     },
     "messages": {
       "added": "Yangi yetkazuvchi qo'shildi",
