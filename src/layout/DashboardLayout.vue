@@ -1,6 +1,22 @@
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950 flex overflow-hidden">
-    <Toast :pt="{
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
+    <!-- Impersonation Alert Banner -->
+    <div 
+      v-if="isImpersonated" 
+      class="bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 text-white py-2.5 px-4 text-center font-bold text-xs md:text-sm shadow-lg flex items-center justify-center gap-3 z-[999] relative shrink-0"
+    >
+      <i class="pi pi-eye-slash text-base animate-pulse"></i>
+      <span>Siz ayni damda do'kon tizimini SUPERADMIN impersonation rejimida kuzatmoqdasiz (30 daqiqa).</span>
+      <button 
+        @click="exitImpersonation" 
+        class="h-7 px-3 bg-white text-orange-700 rounded-full font-bold text-xs hover:bg-slate-100 transition-all active:scale-95 shadow cursor-pointer"
+      >
+        Tizimdan Chiqish
+      </button>
+    </div>
+
+    <div class="flex flex-1 overflow-hidden">
+      <Toast :pt="{
         root: { class: 'w-[22rem] md:w-[26rem] !pt-4' },
         message: ({ props }) => ({
             class: [
@@ -73,6 +89,7 @@
 
     <!-- GLOBAL DIALOGS -->
     <CalculatorWidget v-model:visible="isCalculatorOpen" />
+    </div>
   </div>
 </template>
 
@@ -201,6 +218,16 @@ onUnmounted(() => {
   window.removeEventListener('rate-limit-error', handleRateLimitError)
   notificationStore.stopPolling()
 })
+
+/* --- Impersonation Status & Exit Controls --- */
+const isImpersonated = ref(localStorage.getItem('impersonated_by_admin') === 'true')
+
+const exitImpersonation = () => {
+  localStorage.removeItem('impersonated_by_admin')
+  notificationStore.reset()
+  authStore.logout()
+  window.close()
+}
 
 /* --- Logout with confirmation --- */
 const isConfirmingLogout = ref(false)

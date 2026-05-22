@@ -37,6 +37,12 @@ const routes = [
         meta: { requiresAuth: false }
     },
     {
+        path: '/impersonate',
+        name: 'impersonate-landing',
+        component: () => import('@/views/ImpersonateLanding.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
         path: '/reset-password/:uid/:token',
         name: 'reset-password',
         component: () => import('@/views/ResetPasswordView.vue'),
