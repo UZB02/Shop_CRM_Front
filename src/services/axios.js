@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL ||
-    "https://shopcrmsystem-production.up.railway.app/api/v1"
+    "https://api.siriuspos.uz/api/v1"
 
 let _memToken = null
 

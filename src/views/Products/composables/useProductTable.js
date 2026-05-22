@@ -16,7 +16,7 @@ export function useProductTable(products) {
   const formatImageUrl = (url) => {
     if (!url) return null
     if (url.startsWith('http')) return url
-    const base = 'https://shopcrmsystem-production.up.railway.app'
+    const base = 'https://api.siriuspos.uz'
     return `${base}${url.startsWith('/') ? '' : '/'}${url}`
   }
   

@@ -3,7 +3,7 @@ import api from './axios'
 
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL ||
-    "https://shopcrmsystem-production.up.railway.app/api/v1"
+    "https://api.siriuspos.uz/api/v1"
 
 export const authAPI = {
     login: (credentials) => api.post('/auth/login/', credentials),
