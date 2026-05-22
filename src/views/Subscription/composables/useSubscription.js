@@ -333,11 +333,11 @@ export const useSubscription = () => {
     }
 
     const handleTopup = async () => {
-        if (!topupAmount.value || Number(topupAmount.value) < 10000) {
+        if (!topupAmount.value || Number(topupAmount.value) < 1000) {
             toast.add({
                 severity: 'warn',
                 summary: t('common.error') || 'Xato',
-                detail: t('subscription.min_topup_error') || 'Minimal to\'ldirish summasi 10 000 so\'m bo\'lishi kerak.',
+                detail: t('subscription.min_topup_error') || 'Minimal to\'ldirish summasi 1 000 so\'m bo\'lishi kerak.',
                 life: 4000
             })
             return

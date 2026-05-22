@@ -251,7 +251,7 @@
     "creating_request": "Тўлов сўрови яратилмоқда...",
     "topup_success_detail": "Баланс муваффақиятли тўлдирилди!",
     "payment_auto_update_detail": "Тўлов амалга ошиrilgandan сўнг баланс автоматик янгиланади.",
-    "min_topup_error": "Минимал тўлдириш суммаси 10 000 сўм бўлиши керак.",
+    "min_topup_error": "Минимал тўлдириш суммаси 1 000 сўм бўлиши керак.",
     "payment_secure_subtitle": "Хавфсиз обуна тўлови"
   },
   "workers": {
