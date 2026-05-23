@@ -33,18 +33,18 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 onMounted(async () => {
-  const { access, refresh } = route.query
-  
-  if (access) {
+  const { access: queryAccess, refresh: queryRefresh } = route.query
+
+  const processTokens = async (accessToken, refreshToken) => {
     // Save tokens and metadata locally
-    localStorage.setItem('access', access)
-    if (refresh) localStorage.setItem('refresh', refresh)
+    localStorage.setItem('access', accessToken)
+    if (refreshToken) localStorage.setItem('refresh', refreshToken)
     
     // Set admin impersonation flag
     localStorage.setItem('impersonated_by_admin', 'true')
     
     // Update API client authorization headers
-    authStore.token = access
+    authStore.token = accessToken
     
     // Validate session and retrieve permissions
     const success = await authStore.verifySession()
@@ -60,6 +60,38 @@ onMounted(async () => {
       alert("Sessiyani tasdiqlashda xatolik yuz berdi. Iltimos superadmin panelidan qayta urinib ko'ring.")
       router.push('/login')
     }
+  }
+
+  // If tokens are passed via URL query, use them as fallback
+  if (queryAccess) {
+    await processTokens(queryAccess, queryRefresh)
+    return
+  }
+
+  // Otherwise, use secure postMessage channel from window.opener
+  if (window.opener) {
+    const handleMessage = async (event) => {
+      if (event.data && event.data.type === 'impersonate-tokens') {
+        const { access, refresh } = event.data
+        if (access) {
+          window.removeEventListener('message', handleMessage)
+          await processTokens(access, refresh)
+        }
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    // Notify opener that child window is ready to receive tokens
+    window.opener.postMessage({ type: 'impersonate-ready' }, '*')
+
+    // Set a safety timeout of 5 seconds to redirect to login if no message is received
+    setTimeout(() => {
+      window.removeEventListener('message', handleMessage)
+      if (!localStorage.getItem('access')) {
+        router.push('/login')
+      }
+    }, 5000)
   } else {
     router.push('/login')
   }
