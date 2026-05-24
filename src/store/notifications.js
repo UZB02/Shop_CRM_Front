@@ -93,23 +93,55 @@ export const useNotificationStore = defineStore('notifications', {
         async fetchNotifications(silent = false) {
             if (!silent) this.loading.notifications = true
             try {
+                // 1. Fetch system notifications
                 const res = await notificationsAPI.getAll(null, silent ? { silent: true } : {})
+                let systemNotifications = []
+                let unreadCount = 0
                 if (res.data) {
-                    let results = res.data.results || (Array.isArray(res.data) ? res.data : [])
-                    let unreadCount = res.data.unread_count || 0
-                    
-                    // Local o'qilganlarni hisobga olish
-                    results.forEach(item => {
-                        if (!item.is_read && this.locallyReadIds.includes(item.id)) {
-                            item.is_read = true
-                            unreadCount = Math.max(0, unreadCount - 1)
-                        }
-                    })
-                    
-                    this.items = results
-                    this.unreadCountFromBackend = unreadCount
+                    systemNotifications = res.data.results || (Array.isArray(res.data) ? res.data : [])
+                    unreadCount = res.data.unread_count || 0
                 }
-                console.log('📦 Notifications loaded:', this.items.length, 'Unread:', this.unreadCountFromBackend)
+
+                // 2. Fetch announcements from store-level endpoint
+                let announcements = []
+                try {
+                    const annRes = await announcementsAPI.getAll(silent ? { silent: true } : {})
+                    const annData = annRes.data?.results || (Array.isArray(annRes.data) ? annRes.data : [])
+                    announcements = annData.map(a => ({
+                        id: a.id,
+                        title: a.title,
+                        body: a.body,
+                        type: a.type || 'info',
+                        type_display: a.type_display || 'E\'lon',
+                        is_read: a.is_read || false,
+                        source: 'announcement',
+                        time: a.created_on || a.created_at,
+                        link: a.link || null
+                    }))
+
+                    // Count unread announcements
+                    const unreadAnnouncementsCount = announcements.filter(
+                        a => !a.is_read && !this.locallyReadIds.includes(a.id)
+                    ).length
+                    unreadCount += unreadAnnouncementsCount
+                } catch (annErr) {
+                    console.error('❌ Fetch announcements error:', annErr)
+                }
+
+                // 3. Merge system notifications and announcements
+                const allItems = [...systemNotifications, ...announcements]
+
+                // Apply local read state overrides
+                allItems.forEach(item => {
+                    if (!item.is_read && this.locallyReadIds.includes(item.id)) {
+                        item.is_read = true
+                    }
+                })
+
+                this.items = allItems
+                this.unreadCountFromBackend = unreadCount
+
+                console.log('📦 Notifications & Announcements loaded:', this.items.length, 'Unread:', this.unreadCountFromBackend)
             } catch (err) {
                 console.error('❌ Fetch notifications error:', err)
             } finally {
@@ -218,6 +250,7 @@ export const useNotificationStore = defineStore('notifications', {
             // 1. Tizimga kirgandagi boshlang'ich yuklash (Initial Load on login/startup)
             console.log('⏱️ [Schedule] Login qilinganda boshlang\'ich yuklash bajarilmoqda...')
             await Promise.allSettled([
+                this.fetchNotifications(),
                 this.fetchSubscription()
             ])
             
