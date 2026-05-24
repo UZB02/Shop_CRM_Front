@@ -46,6 +46,10 @@
                    <i class="pi pi-ticket mr-2 !text-[11px]"></i>
                    {{ $t('subscription.tabs.coupons') || "Kuponlar" }}
                 </Tab>
+                <Tab v-if="isOwner" value="referrals" class="!text-[12px] !font-bold !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
+                   <i class="pi pi-share-alt mr-2 !text-[11px]"></i>
+                   Takliflar (Referral)
+                </Tab>
             </TabList>
 
             <!-- Compact Balance Widget -->
@@ -107,6 +111,11 @@
                         @coupon-applied="onCouponApplied"
                     />
                 </TabPanel>
+
+                <!-- Tab: Referrals (IsOwner only) -->
+                <TabPanel v-if="isOwner" value="referrals">
+                    <ReferralsTab />
+                </TabPanel>
             </TabPanels>
         </Tabs>
     </div>
@@ -152,6 +161,7 @@ import PaymentDialog from './components/PaymentDialog.vue'
 import TopupDialog from './components/TopupDialog.vue'
 import BillingTab from './components/BillingTab.vue'
 import CouponsTab from './components/CouponsTab.vue'
+import ReferralsTab from './components/ReferralsTab.vue'
 import FaqAndPromo from './components/FaqAndPromo.vue'
 import { useSettingsStore } from '@/store/settings'
 import { useAuthStore } from '@/store/auth'
