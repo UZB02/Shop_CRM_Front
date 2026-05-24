@@ -477,7 +477,51 @@
     "customers": "Мижозлар",
     "settings": "Созламалар",
     "subscription": "Обуна",
-    "suppliers": "Етказиб берувчилар"
+    "suppliers": "Етказиб берувчилар",
+    "support": "Қўллаб-қувватлаш"
+  },
+  "support_page": {
+    "title": "Қўллаб-қувватлаш",
+    "subtitle": "Тизим бўйиcha юзага келган техник ва тўлов муаммолари бўйиcha мурожаат қилиш",
+    "create_btn": "Янги Мурожаат",
+    "search_placeholder": "Сарлавҳа бўйиcha қидириш...",
+    "all_statuses": "Барча ҳолатлар",
+    "all_priorities": "Барча даражалар",
+    "list_title": "Мурожаатлар рўйхати",
+    "count_suffix": "та",
+    "loading": "Юкланмоқда...",
+    "empty_title": "Ҳозирча мурожаатлар йўқ",
+    "empty_desc": "Янги мурожаat яратиш учун юқоридаги тугмани босинг",
+    "priority_label": "устуворлик",
+    "ticket_id": "Мурожаат ID",
+    "opened_at": "Очилган вақти",
+    "view_details": "Тафсилотларни кўриш",
+    "view_details_desc": "Мурожаат тафсилотлари, суперадмин жавоблари ва ёзишмалар тарихини кўриш uchun чап томондаги рўйхатдан мурожаатni танланг.",
+    "description_title": "Мурожаат тавсифи",
+    "main_ticket": "АСОСИЙ МУРОЖААТ",
+    "you": "Сиз",
+    "operator": "Суперадмин",
+    "create_modal_title": "Янги мурожаат яратиш",
+    "create_modal_subject": "Мурожаат сарлавҳаси *",
+    "create_modal_subject_placeholder": "Муаммонинг қисқача мазмуни...",
+    "create_modal_priority": "Мурожаат даражаси",
+    "create_modal_desc": "Муаммо тафсилоти *",
+    "create_modal_desc_placeholder": "Кузатилган хатолик ёки саволни batafsil баён этинг...",
+    "cancel": "Бекор қилиш",
+    "submit": "Юбориш",
+    "chat_input_placeholder": "Жавоб ёзиш... (Enter юбориш, Shift+Enter янги қатор)",
+    "priorities": {
+      "low": "Паст",
+      "medium": "Ўртача",
+      "high": "Юқori",
+      "urgent": "Шошилинч"
+    },
+    "statuses": {
+      "open": "Янги",
+      "in_progress": "Кўрилмоқда",
+      "resolved": "Ҳал этилган",
+      "closed": "Ёпилган"
+    }
   },
   "landing": {
     "nav": {

@@ -5,7 +5,7 @@ import { useNotificationStore } from './notifications'
 const ALL_PERMISSIONS = [
     'dashboard', 'stores', 'warehouse', 'products',
     'workers', 'trades', 'moliya', 'customers', 'settings', 'pos', 'subscription', 'suppliers',
-    'yetkazib_beruvchilar'
+    'yetkazib_beruvchilar', 'support'
 ]
 
 const PERMISSION_MAP = {
@@ -23,7 +23,8 @@ const PERMISSION_MAP = {
     'yetkazuvchilar': 'suppliers',
     'suppliers': 'suppliers',
     // Yetkazib beruvchilar bo'limi uchun alohida ruxsat (GET endpointlar)
-    'yetkazib_beruvchilar': 'yetkazib_beruvchilar'
+    'yetkazib_beruvchilar': 'yetkazib_beruvchilar',
+    'support': 'support'
 }
 
 function buildPermissions(userData) {

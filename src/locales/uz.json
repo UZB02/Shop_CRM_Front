@@ -478,7 +478,51 @@
     "customers": "Mijozlar",
     "settings": "Sozlamalar",
     "subscription": "Obuna",
-    "suppliers": "Yetkazib beruvchilar"
+    "suppliers": "Yetkazib beruvchilar",
+    "support": "Qo'llab-quvvatlash"
+  },
+  "support_page": {
+    "title": "Qo'llab-quvvatlash (Support)",
+    "subtitle": "Tizim bo'yicha yuzaga kelgan texnik va to'lov muammolari bo'yicha murojaat qilish",
+    "create_btn": "Yangi Murojaat",
+    "search_placeholder": "Sarlavha bo'yicha qidirish...",
+    "all_statuses": "Barcha holatlar",
+    "all_priorities": "Barcha darajalar",
+    "list_title": "Murojaatlar ro'yxati",
+    "count_suffix": "ta",
+    "loading": "Yuklanmoqda...",
+    "empty_title": "Hozircha murojaatlar yo'q",
+    "empty_desc": "Yangi murojaat yaratish uchun yuqoridagi tugmani bosing",
+    "priority_label": "ustuvorlik",
+    "ticket_id": "Murojaat ID",
+    "opened_at": "Ochilgan vaqti",
+    "view_details": "Tafsilotlarni ko'rish",
+    "view_details_desc": "Murojaat tafsilotlari, superadmin javoblari va yozishmalar tarixini ko'rish uchun chap tomondagi ro'yxatdan murojaatni tanlang.",
+    "description_title": "Murojaat tavsifi",
+    "main_ticket": "ASOSIY MUROJAAT",
+    "you": "Siz",
+    "operator": "Superadmin",
+    "create_modal_title": "Yangi murojaat yaratish",
+    "create_modal_subject": "Murojaat sarlavhasi *",
+    "create_modal_subject_placeholder": "Muammoning qisqacha mazmuni...",
+    "create_modal_priority": "Murojaat darajasi",
+    "create_modal_desc": "Muammo tafsiloti *",
+    "create_modal_desc_placeholder": "Kuzatilgan xatolik yoki savolni batafsil bayon eting...",
+    "cancel": "Bekor qilish",
+    "submit": "Yuborish",
+    "chat_input_placeholder": "Javob yozish... (Enter yuborish, Shift+Enter yangi qator)",
+    "priorities": {
+      "low": "Past",
+      "medium": "O'rtacha",
+      "high": "Yuqori",
+      "urgent": "Shoshilinch"
+    },
+    "statuses": {
+      "open": "Yangi",
+      "in_progress": "Ko'rilmoqda",
+      "resolved": "Hal etilgan",
+      "closed": "Yopilgan"
+    }
   },
   "landing": {
     "nav": {

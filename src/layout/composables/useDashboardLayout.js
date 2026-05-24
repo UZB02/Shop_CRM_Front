@@ -107,6 +107,7 @@ export function useDashboardLayout() {
       { label: t('menu.suppliers'), icon: 'pi pi-truck', to: '/dashboard/suppliers', key: 'yetkazib_beruvchilar' },
       { label: t('menu.settings'), icon: 'pi pi-cog', to: '/dashboard/settings', key: 'settings' },
       { label: t('menu.subscription'), icon: 'pi pi-verified', to: '/dashboard/subscription', key: 'subscription' },
+      { label: t('menu.support') || 'Qo\'llab-quvvatlash', icon: 'pi pi-envelope', to: '/dashboard/support', key: 'support' },
     ]
     return list
   })

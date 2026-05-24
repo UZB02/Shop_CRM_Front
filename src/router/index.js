@@ -240,6 +240,12 @@ const routes = [
                 meta: { permission: null }
             },
             {
+                path: 'support',
+                name: 'support',
+                component: () => import('@/views/Support/index.vue'),
+                meta: { permission: 'support' }
+            },
+            {
                 path: 'suppliers',
                 name: 'suppliers',
                 component: () => import('@/views/Suppliers/index.vue'),
