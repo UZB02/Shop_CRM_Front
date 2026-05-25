@@ -194,7 +194,7 @@
               class="flex-1 rounded-lg text-[11px] font-black py-2 shadow-md shadow-emerald-500/10 hover:shadow-emerald-500/20 transition-all duration-150 border-none bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white flex items-center justify-center gap-1.5 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
             >
               <i class="pi pi-check text-[10px]"></i>
-              <span>{{ t('subscription.confirm_change') || "Tarifni almashtirish" }}</span>
+              <span>{{ isExtending ? (t('subscription.confirm_extend') || "Obunani uzaytirish") : (t('subscription.confirm_change') || "Tarifni almashtirish") }}</span>
             </button>
           </div>
 

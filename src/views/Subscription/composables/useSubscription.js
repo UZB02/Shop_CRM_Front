@@ -267,18 +267,10 @@ export const useSubscription = () => {
         processing.value = true
         try {
             let response;
-            if (isExtending.value) {
-                const payload = {
-                    plan_id: selectedPlanId.value,
-                    duration: 30
-                }
-                response = await subscriptionAPI.extend(payload)
-            } else {
-                const payload = {
-                    plan_id: selectedPlanId.value
-                }
-                response = await subscriptionAPI.changePlan(payload)
+            const payload = {
+                plan_id: selectedPlanId.value
             }
+            response = await subscriptionAPI.changePlan(payload)
 
             const data = response?.data || {}
             

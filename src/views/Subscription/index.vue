@@ -133,6 +133,7 @@
       :activeCoupon="activeCoupon"
       :currentBalance="currentBalance"
       :finalPrice="finalPrice"
+      :isExtending="isExtending"
       @process="processPayment"
       @topup-required="handleTopupRequired"
     />
@@ -194,6 +195,7 @@ const {
     processing,
     selectedPlanId,
     paymentMethod,
+    isExtending,
     dialogHeader,
     getSelectedPriceLabel,
     loadSubscription,

@@ -259,6 +259,7 @@
     "available_balance": "Mavjud balans",
     "balance_charge_desc": "To'lov do'koningiz hisob balansidan avtomatik ravishda yechiladi. Tarif darhol faollashadi.",
     "confirm_change": "Tarifni almashtirish",
+    "confirm_extend": "Obunani uzaytirish",
     "insufficient_balance": "Balans yetarli emas!",
     "topup_action_btn": "Balansni to'ldirish"
   },
