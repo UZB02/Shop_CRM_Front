@@ -137,10 +137,27 @@ const formatCurrency = (value) => settingsStore.formatPrice(value)
 const formatDiscountValue = (coupon) => {
   if (!coupon || coupon.discount_value === undefined) return ''
   const val = parseFloat(coupon.discount_value)
-  if (coupon.type === 'percent' || coupon.type === 'percent_off' || (coupon.type_display && coupon.type_display.toLowerCase().includes('foiz'))) {
+  
+  const typeKeys = [
+    coupon.type,
+    coupon.discount_type,
+    coupon.coupon_type,
+    coupon.type_display,
+    coupon.discount_type_display
+  ]
+  
+  const matches = (keywords) => {
+    return typeKeys.some(v => {
+      if (!v) return false
+      const str = String(v).toLowerCase()
+      return keywords.some(keyword => str.includes(keyword))
+    })
+  }
+
+  if (matches(['percent', 'percentage', 'foiz', '%'])) {
     return `${val}%`
   }
-  if (coupon.type === 'free_days' || (coupon.type_display && coupon.type_display.toLowerCase().includes('kun'))) {
+  if (matches(['free_days', 'free-days', 'kun'])) {
     return `+${parseInt(coupon.discount_value)} kun`
   }
   return formatCurrency(coupon.discount_value)

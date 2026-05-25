@@ -18,6 +18,7 @@
             :label="$t('subscription.help')" 
             text 
             class="!text-[12px] !font-bold !rounded-lg !text-emerald-500 !py-1.5" 
+            @click="router.push('/dashboard/support')"
          />
       </div>
     </div>
@@ -130,7 +131,10 @@
       :discountLabel="getDiscountLabel"
       :finalPriceLabel="getFinalPriceLabel"
       :activeCoupon="activeCoupon"
+      :currentBalance="currentBalance"
+      :finalPrice="finalPrice"
       @process="processPayment"
+      @topup-required="handleTopupRequired"
     />
 
     <!-- Topup Dialog -->
@@ -149,6 +153,7 @@
 
 <script setup>
 import { onMounted, ref, watch, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
@@ -169,7 +174,11 @@ import { useSubscription } from './composables/useSubscription'
 
 const settingsStore = useSettingsStore()
 const authStore = useAuthStore()
-const activeTab = ref('overview')
+const route = useRoute()
+const router = useRouter()
+
+const allowedTabs = ['overview', 'plans', 'billing', 'coupons', 'referrals']
+const activeTab = ref(allowedTabs.includes(route.query.tab) ? route.query.tab : 'overview')
 
 const isOwner = computed(() => {
     const u = authStore.user
@@ -207,6 +216,8 @@ const {
     getDiscountLabel,
     getFinalPriceLabel,
     selectedPlanType,
+    finalPrice,
+    handleTopupRequired,
     
     // Topup variables & handlers
     topupDialog,
@@ -231,10 +242,22 @@ const onCouponApplied = async () => {
 }
 
 watch(activeTab, (newTab) => {
+    // Persist active tab to URL query params
+    if (route.query.tab !== newTab) {
+        router.replace({ query: { ...route.query, tab: newTab } })
+    }
+
     if (newTab === 'billing' && !invoices.value.length && !balanceTransactions.value.length) {
         loadBillingData()
     } else if (newTab === 'coupons' && !coupons.value.length) {
         loadCouponsData()
+    }
+})
+
+// Sync activeTab when route query changes (for back/forward navigation)
+watch(() => route.query.tab, (newTab) => {
+    if (newTab && allowedTabs.includes(newTab) && newTab !== activeTab.value) {
+        activeTab.value = newTab
     }
 })
 
@@ -245,6 +268,12 @@ watch(couponsPage, () => {
 onMounted(() => {
     loadSubscription()
     if (isOwner.value) {
+        loadCouponsData()
+    }
+    // Load initial tab data on refresh/load
+    if (activeTab.value === 'billing') {
+        loadBillingData()
+    } else if (activeTab.value === 'coupons') {
         loadCouponsData()
     }
 })

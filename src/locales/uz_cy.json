@@ -146,6 +146,7 @@
     "status_warning": "Тугамоқда",
     "status_expired": "Муддати ўтган",
     "current_plan": "Жорий тариф",
+    "selected_plan": "Танланган тариф",
     "expires_at": "Тугаш муддати",
     "days_left": "{days} кун қолди",
     "popular": "Оммабоп",
@@ -252,7 +253,14 @@
     "topup_success_detail": "Баланс муваффақиятли тўлдирилди!",
     "payment_auto_update_detail": "Тўлов амалга ошиrilgandan сўнг баланс автоматик янгиланади.",
     "min_topup_error": "Минимал тўлдириш суммаси 1 000 сўм бўлиши керак.",
-    "payment_secure_subtitle": "Хавфсиз обуна тўлови"
+    "payment_secure_subtitle": "Хавфсиз обуна тўлови",
+    "wallet_balance": "Ҳисоб баланси (Wallet)",
+    "balance_deduction": "Балансдан ечиб олинади",
+    "available_balance": "Мавжуд баланс",
+    "balance_charge_desc": "Тўлов дўконингиз ҳисоб балансидан автоматик равишда ечилади. Тариф дарҳол фаоллашади.",
+    "confirm_change": "Тарифни алмаштириш",
+    "insufficient_balance": "Баланс етарли эмас!",
+    "topup_action_btn": "Балансни тўлдириш"
   },
   "workers": {
     "title": "Ходимлар",

@@ -4,6 +4,7 @@ import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/store/auth'
 import { useNotificationStore } from '@/store/notifications'
+import { useConfirmStore } from '@/store/confirm'
 
 export const useSubscription = () => {
     const toast = useToast()
@@ -78,20 +79,35 @@ export const useSubscription = () => {
         const rawPrice = selectedPlanObject.value.price_monthly || 0
         const val = parseFloat(activeCoupon.value.discount_value || 0)
         
-        const typeStr = String(activeCoupon.value.type || '').toLowerCase()
-        const typeDisplayStr = String(activeCoupon.value.type_display || '').toLowerCase()
+        const couponObj = activeCoupon.value
+        const typeKeys = [
+            couponObj.type,
+            couponObj.discount_type,
+            couponObj.coupon_type,
+            couponObj.type_display,
+            couponObj.discount_type_display
+        ]
         
-        if (
-            typeStr.includes('percent') || 
-            typeStr.includes('percentage') || 
-            typeStr.includes('foiz') || 
-            typeDisplayStr.includes('foiz') || 
-            typeDisplayStr.includes('percent') ||
-            typeDisplayStr.includes('percentage')
-        ) {
+        const matchesKeyword = (keywords) => {
+            return typeKeys.some(val => {
+                if (!val) return false
+                const str = String(val).toLowerCase()
+                return keywords.some(keyword => str.includes(keyword))
+            })
+        }
+        
+        // 1. Free Days Check
+        if (matchesKeyword(['free_days', 'free-days', 'kun'])) {
+            return 0
+        }
+        
+        // 2. Percentage Check
+        if (matchesKeyword(['percent', 'percentage', 'foiz', '%'])) {
             return (rawPrice * val) / 100
         }
-        return val // fixed discount
+        
+        // 3. Fallback: Fixed Discount
+        return val
     })
 
     const finalPrice = computed(() => {
@@ -239,45 +255,83 @@ export const useSubscription = () => {
         }
     }
 
+    const handleTopupRequired = (requiredAmount) => {
+        paymentDialog.value = false
+        topupAmount.value = requiredAmount
+        topupDialog.value = true
+    }
+
     const processPayment = async () => {
         if (!selectedPlanId.value) return
         
         processing.value = true
         try {
-            // In a real app, this would involve a redirect or specific payment API call
-            const payload = {
-                plan_id: selectedPlanId.value,
-                duration: 30, // Default 30 days
-                method: paymentMethod.value
-            }
-
             let response;
             if (isExtending.value) {
-                // Assuming there's an extend endpoint or changePlan handles it
+                const payload = {
+                    plan_id: selectedPlanId.value,
+                    duration: 30
+                }
                 response = await subscriptionAPI.extend(payload)
             } else {
+                const payload = {
+                    plan_id: selectedPlanId.value
+                }
                 response = await subscriptionAPI.changePlan(payload)
             }
 
+            const data = response?.data || {}
+            
+            const newPlanName = data.new_plan || selectedPlanObject.value?.name || t('subscription.plans.custom')
+            const endDate = data.end_date || ''
+            const chargedAmountStr = data.amount ? `${new Intl.NumberFormat('uz-UZ').format(data.amount)} so'm` : ''
+            
             // Successfully processed
             toast.add({ 
                 severity: 'success', 
-                summary: t('common.success'), 
-                detail: t('common.updated'), 
-                life: 5000 
+                summary: t('common.success') || 'Muvaffaqiyat', 
+                detail: `Tarif muvaffaqiyatli yangilandi! Yangi tarif: ${newPlanName}.${endDate ? ` Amaldagi muddat: ${endDate} gacha.` : ''}${chargedAmountStr ? ` Balansdan ${chargedAmountStr} yechildi.` : ''}`, 
+                life: 7000 
             })
             
-            await loadSubscription() // Reload fresh data
+            // Reload fresh data and billing history
+            await Promise.all([
+                loadSubscription(true),
+                loadBalanceData(),
+                loadBillingData()
+            ])
             paymentDialog.value = false
 
         } catch (error) {
             console.error('Payment error:', error)
-            toast.add({ 
-                severity: 'error', 
-                summary: t('common.error'), 
-                detail: error.response?.data?.message || t('common.error_message'), 
-                life: 5000 
-            })
+            const data = error.response?.data || {}
+            
+            if (error.response?.status === 400 && data.required !== undefined) {
+                const requiredAmount = data.required
+                const currentBalVal = data.current_balance
+                
+                const detailMsg = `Hisobingizda mablag' yetarli emas! Sizga yana ${new Intl.NumberFormat('uz-UZ').format(requiredAmount)} so'm kerak. Hozirgi balansingiz: ${new Intl.NumberFormat('uz-UZ').format(currentBalVal)} so'm. Balansni to'ldirish oynasini ochamizmi?`
+                
+                const confirmStore = useConfirmStore()
+                confirmStore.require({
+                    header: "Mablag' yetarli emas",
+                    message: detailMsg,
+                    icon: 'pi pi-wallet text-amber-500 text-lg',
+                    acceptLabel: 'Ha',
+                    rejectLabel: "Yo'q",
+                    accept: () => {
+                        handleTopupRequired(requiredAmount)
+                    }
+                })
+            } else {
+                const detailMsg = data.message || data.error || data.detail || t('common.error_message')
+                toast.add({ 
+                    severity: 'error', 
+                    summary: t('common.error') || 'Xatolik', 
+                    detail: detailMsg, 
+                    life: 6000 
+                })
+            }
         } finally {
             processing.value = false
         }
@@ -469,7 +523,8 @@ export const useSubscription = () => {
         topupLoading,
         pollingActive,
         topupStatusText,
-        handleTopup
+        handleTopup,
+        handleTopupRequired
     }
 }
 

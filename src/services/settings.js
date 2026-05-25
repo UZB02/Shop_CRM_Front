@@ -27,7 +27,7 @@ export const announcementsAPI = {
 export const subscriptionAPI = {
     getStatus: (config = {}) => api.get('/subscription/', config),
     extend: (data) => api.post('/subscription/extend/', data),
-    changePlan: (data) => api.post('/subscription/plan/', data),
+    changePlan: (data) => api.post('/subscription/change-plan/', data),
     getInvoices: (config = {}) => api.get('/subscription/invoices/', config),
     getBalance: (config = {}) => api.get('/subscription/balance/', config),
     topupBalance: (data) => api.post('/subscription/balance/topup/', data),

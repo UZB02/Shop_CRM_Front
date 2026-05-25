@@ -146,6 +146,7 @@
     "status_warning": "Tugamoqda",
     "status_expired": "Muddati o'tgan",
     "current_plan": "Joriy tarif",
+    "selected_plan": "Tanlangan tarif",
     "expires_at": "Tugash muddati",
     "days_left": "{days} kun qoldi",
     "popular": "Ommabop",
@@ -252,7 +253,14 @@
     "topup_success_detail": "Balans muvaffaqiyatli to'ldirildi!",
     "payment_auto_update_detail": "To'lov amalga oshirilgandan so'ng balans avtomatik yangilanadi.",
     "min_topup_error": "Minimal to'ldirish summasi 1 000 so'm bo'lishi kerak.",
-    "payment_secure_subtitle": "Xavfsiz obuna to'lovi"
+    "payment_secure_subtitle": "Xavfsiz obuna to'lovi",
+    "wallet_balance": "Hisob balansi (Wallet)",
+    "balance_deduction": "Balansdan yechib olinadi",
+    "available_balance": "Mavjud balans",
+    "balance_charge_desc": "To'lov do'koningiz hisob balansidan avtomatik ravishda yechiladi. Tarif darhol faollashadi.",
+    "confirm_change": "Tarifni almashtirish",
+    "insufficient_balance": "Balans yetarli emas!",
+    "topup_action_btn": "Balansni to'ldirish"
   },
   "workers": {
     "title": "Xodimlar",
