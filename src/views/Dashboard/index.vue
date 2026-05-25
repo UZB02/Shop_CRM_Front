@@ -116,6 +116,11 @@
           type="finance"
         />
       </div>
+
+      <!-- ── Tab: Audit Log (Tizim jurnali) ──────────────── -->
+      <div v-else-if="activeTab === 'audit'" class="animate-in">
+        <DashboardAuditLog />
+      </div>
     </div>
 
     <!-- Footer: last updated time -->
@@ -138,9 +143,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useDashboardStore } from '@/store/dashboard'
 import { useSettingsStore } from '@/store/settings'
+import { useAuthStore } from '@/store/auth'
 import { useI18n } from 'vue-i18n'
 
 // Components
@@ -152,9 +159,13 @@ import DashboardAlerts       from './components/DashboardAlerts.vue'
 import DashboardTopLists     from './components/DashboardTopLists.vue'
 import DashboardMonthlyChart from './components/DashboardMonthlyChart.vue'
 import DashboardFinance      from './components/DashboardFinance.vue'
+import DashboardAuditLog     from './components/DashboardAuditLog.vue'
 
+const route = useRoute()
+const router = useRouter()
 const dashboardStore = useDashboardStore()
 const settingsStore = useSettingsStore()
+const authStore = useAuthStore()
 const { t } = useI18n()
 
 // Polling: only current_smena refreshes every 5 min (not entire dashboard)
@@ -162,14 +173,44 @@ const { t } = useI18n()
 let smenaPolling = ref(false)
 let smenaInterval = null
 
-const tabs = computed(() => [
-  { id: 'overview',  label: t('dashboard.tabs.overview'),  icon: 'pi pi-chart-bar' },
-  { id: 'sales',     label: t('dashboard.tabs.sales'),     icon: 'pi pi-shopping-cart' },
-  { id: 'inventory', label: t('dashboard.tabs.inventory'), icon: 'pi pi-box' },
-  { id: 'customers', label: t('dashboard.tabs.customers'), icon: 'pi pi-users' },
-  { id: 'finance',   label: t('dashboard.tabs.finance'),   icon: 'pi pi-dollar' }
-])
+const isOwner = computed(() => {
+  const u = authStore.user
+  if (!u) return false
+  return u.is_owner || u.role === 'owner' || u.worker?.role === 'owner' || u.is_superuser
+})
+
+const hasAuditAccess = computed(() => {
+  return isOwner.value && settingsStore.hasPlanAuditLog
+})
+
+const tabs = computed(() => {
+  const base = [
+    { id: 'overview',  label: t('dashboard.tabs.overview'),  icon: 'pi pi-chart-bar' },
+    { id: 'sales',     label: t('dashboard.tabs.sales'),     icon: 'pi pi-shopping-cart' },
+    { id: 'inventory', label: t('dashboard.tabs.inventory'), icon: 'pi pi-box' },
+    { id: 'customers', label: t('dashboard.tabs.customers'), icon: 'pi pi-users' },
+    { id: 'finance',   label: t('dashboard.tabs.finance'),   icon: 'pi pi-dollar' }
+  ]
+  if (hasAuditAccess.value) {
+    base.push({ id: 'audit', label: t('dashboard.tabs.audit'), icon: 'pi pi-history' })
+  }
+  return base
+})
 const activeTab = ref('overview')
+
+// Sync activeTab to URL query parameter tab
+watch(activeTab, (newTab) => {
+  if (route.query.tab !== newTab) {
+    router.replace({ query: { ...route.query, tab: newTab } })
+  }
+})
+
+// Sync query parameter tab to activeTab
+watch(() => route.query.tab, (newQueryTab) => {
+  if (newQueryTab && tabs.value.some(t => t.id === newQueryTab) && activeTab.value !== newQueryTab) {
+    activeTab.value = newQueryTab
+  }
+})
 
 const onFilterUpdate = (newFilters) => {
   dashboardStore.updateFilters(newFilters)
@@ -187,6 +228,15 @@ const formatTime = (date) => {
 }
 
 onMounted(async () => {
+  // Restore tab from URL if present and authorized
+  const queryTab = route.query.tab
+  if (queryTab && tabs.value.some(t => t.id === queryTab)) {
+    activeTab.value = queryTab
+  } else {
+    // If not present, initialize URL query param with current activeTab
+    router.replace({ query: { ...route.query, tab: activeTab.value } })
+  }
+
   await dashboardStore.fetchDashboard()
   
   // Only poll current_smena every 5 minutes (lightweight) if shifts are enabled

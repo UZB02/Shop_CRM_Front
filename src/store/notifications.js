@@ -102,8 +102,9 @@ export const useNotificationStore = defineStore('notifications', {
                     unreadCount = res.data.unread_count || 0
                 }
 
-                // 2. Fetch announcements from store-level endpoint
+                // 2. Fetch announcements from store-level endpoint (Temporarily disabled)
                 let announcements = []
+                /*
                 try {
                     const annRes = await announcementsAPI.getAll(silent ? { silent: true } : {})
                     const annData = annRes.data?.results || (Array.isArray(annRes.data) ? annRes.data : [])
@@ -127,6 +128,7 @@ export const useNotificationStore = defineStore('notifications', {
                 } catch (annErr) {
                     console.error('❌ Fetch announcements error:', annErr)
                 }
+                */
 
                 // 3. Merge system notifications and announcements
                 const allItems = [...systemNotifications, ...announcements]
@@ -256,7 +258,8 @@ export const useNotificationStore = defineStore('notifications', {
             
             this.initialFetchDone = true
 
-            // 2. Har kuni aniq soat 09:00 da avtomatik ishga tushadigan rejalashtiruvchi (Daily Scheduler at 09:00 AM)
+            // 2. Har kuni aniq soat 09:00 da avtomatik ishga tushadigan rejalashtiruvchi (Daily Scheduler at 09:00 AM) - VAQTINCHA MUZLATILDI (Backend o'zi boshqaradi)
+            /*
             const scheduleDailyFetch = () => {
                 const now = new Date()
                 const target = new Date()
@@ -286,6 +289,7 @@ export const useNotificationStore = defineStore('notifications', {
             }
 
             scheduleDailyFetch()
+            */
         },
 
         stopPolling() {

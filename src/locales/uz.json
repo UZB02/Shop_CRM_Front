@@ -19,6 +19,8 @@
     "max": "Maksimal qiymat: {max}"
   },
   "common": {
+    "yes": "Ha",
+    "no": "Yo'q",
     "all": "Barchasi",
     "loading": "Yuklanmoqda...",
     "save": "Saqlash",
@@ -1828,7 +1830,8 @@
       "sales": "Savdolar",
       "inventory": "Ombor",
       "customers": "Mijozlar",
-      "finance": "Moliya"
+      "finance": "Moliya",
+      "audit": "Tizim jurnali"
     },
     "metrics": {
       "net_profit": "Sof Foyda",

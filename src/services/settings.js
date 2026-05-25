@@ -35,4 +35,9 @@ export const subscriptionAPI = {
     getMyCoupons: (params) => api.get('/subscription/my-coupons/', { params })
 }
 
+export const auditLogsAPI = {
+    getAll: (params) => api.get('/audit-logs/', { params })
+}
+
+
 

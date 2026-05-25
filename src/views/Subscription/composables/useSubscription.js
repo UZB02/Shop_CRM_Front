@@ -277,70 +277,89 @@ export const useSubscription = () => {
     const processPayment = async () => {
         if (!selectedPlanId.value) return
         
-        processing.value = true
-        try {
-            let response;
-            const payload = {
-                plan_id: selectedPlanId.value,
-                is_yearly: isYearly.value
-            }
-            response = await subscriptionAPI.changePlan(payload)
+        const confirmStore = useConfirmStore()
+        
+        const actionHeader = isExtending.value 
+            ? "Obunani uzaytirish"
+            : "Tarifni o'zgartirish"
+            
+        const planName = selectedPlanObject.value?.name || t(`subscription.plans.${selectedPlanType.value}`) || selectedPlanType.value || ''
+        const actionMessage = isExtending.value
+            ? `Siz rostdan ham obunangizni ${getFinalPriceLabel.value || ''} evaziga uzaytirmoqchimisiz? To'lov do'koningiz balansidan yechiladi.`
+            : `Siz rostdan ham do'koningiz tarifini "${planName}" ga o'zgartirmoqchimisiz? Hisobingizdan ${getFinalPriceLabel.value || ''} yechib olinadi.`
 
-            const data = response?.data || {}
-            
-            const newPlanName = data.new_plan || selectedPlanObject.value?.name || t('subscription.plans.custom')
-            const endDate = data.end_date || ''
-            const chargedAmountStr = data.amount ? `${new Intl.NumberFormat('uz-UZ').format(data.amount)} so'm` : ''
-            
-            // Successfully processed
-            toast.add({ 
-                severity: 'success', 
-                summary: t('common.success') || 'Muvaffaqiyat', 
-                detail: `Tarif muvaffaqiyatli yangilandi! Yangi tarif: ${newPlanName}.${endDate ? ` Amaldagi muddat: ${endDate} gacha.` : ''}${chargedAmountStr ? ` Balansdan ${chargedAmountStr} yechildi.` : ''}`, 
-                life: 7000 
-            })
-            
-            // Reload fresh data and billing history
-            await Promise.all([
-                loadSubscription(true),
-                loadBalanceData(),
-                loadBillingData()
-            ])
-            paymentDialog.value = false
-
-        } catch (error) {
-            console.error('Payment error:', error)
-            const data = error.response?.data || {}
-            
-            if (error.response?.status === 400 && data.required !== undefined) {
-                const requiredAmount = data.required
-                const currentBalVal = data.current_balance
-                
-                const detailMsg = `Hisobingizda mablag' yetarli emas! Sizga yana ${new Intl.NumberFormat('uz-UZ').format(requiredAmount)} so'm kerak. Hozirgi balansingiz: ${new Intl.NumberFormat('uz-UZ').format(currentBalVal)} so'm. Balansni to'ldirish oynasini ochamizmi?`
-                
-                const confirmStore = useConfirmStore()
-                confirmStore.require({
-                    header: "Mablag' yetarli emas",
-                    message: detailMsg,
-                    icon: 'pi pi-wallet text-amber-500 text-lg',
-                    acceptLabel: 'Ha',
-                    rejectLabel: "Yo'q",
-                    accept: () => {
-                        handleTopupRequired(requiredAmount)
+        confirmStore.require({
+            header: actionHeader,
+            message: actionMessage,
+            icon: 'pi pi-exclamation-triangle text-emerald-500 text-lg',
+            acceptLabel: t('common.yes') || 'Ha',
+            rejectLabel: t('common.no') || "Yo'q",
+            accept: async () => {
+                processing.value = true
+                try {
+                    let response;
+                    const payload = {
+                        plan_id: selectedPlanId.value,
+                        is_yearly: isYearly.value
                     }
-                })
-            } else {
-                const detailMsg = data.message || data.error || data.detail || t('common.error_message')
-                toast.add({ 
-                    severity: 'error', 
-                    summary: t('common.error') || 'Xatolik', 
-                    detail: detailMsg, 
-                    life: 6000 
-                })
+                    response = await subscriptionAPI.changePlan(payload)
+
+                    const data = response?.data || {}
+                    
+                    const newPlanName = data.new_plan || selectedPlanObject.value?.name || t('subscription.plans.custom')
+                    const endDate = data.end_date || ''
+                    const chargedAmountStr = data.amount ? `${new Intl.NumberFormat('uz-UZ').format(data.amount)} so'm` : ''
+                    
+                    // Successfully processed
+                    toast.add({ 
+                        severity: 'success', 
+                        summary: t('common.success') || 'Muvaffaqiyat', 
+                        detail: `Tarif muvaffaqiyatli yangilandi! Yangi tarif: ${newPlanName}.${endDate ? ` Amaldagi muddat: ${endDate} gacha.` : ''}${chargedAmountStr ? ` Balansdan ${chargedAmountStr} yechildi.` : ''}`, 
+                        life: 7000 
+                    })
+                    
+                    // Reload fresh data and billing history
+                    await Promise.all([
+                        loadSubscription(true),
+                        loadBalanceData(),
+                        loadBillingData()
+                    ])
+                    paymentDialog.value = false
+
+                } catch (error) {
+                    console.error('Payment error:', error)
+                    const data = error.response?.data || {}
+                    
+                    if (error.response?.status === 400 && data.required !== undefined) {
+                        const requiredAmount = data.required
+                        const currentBalVal = data.current_balance
+                        
+                        const detailMsg = `Hisobingizda mablag' yetarli emas! Sizga yana ${new Intl.NumberFormat('uz-UZ').format(requiredAmount)} so'm kerak. Hozirgi balansingiz: ${new Intl.NumberFormat('uz-UZ').format(currentBalVal)} so'm. Balansni to'ldirish oynasini ochamizmi?`
+                        
+                        confirmStore.require({
+                            header: "Mablag' yetarli emas",
+                            message: detailMsg,
+                            icon: 'pi pi-wallet text-amber-500 text-lg',
+                            acceptLabel: 'Ha',
+                            rejectLabel: "Yo'q",
+                            accept: () => {
+                                handleTopupRequired(requiredAmount)
+                            }
+                        })
+                    } else {
+                        const detailMsg = data.message || data.error || data.detail || t('common.error_message')
+                        toast.add({ 
+                            severity: 'error', 
+                            summary: t('common.error') || 'Xatolik', 
+                            detail: detailMsg, 
+                            life: 6000 
+                        })
+                    }
+                } finally {
+                    processing.value = false
+                }
             }
-        } finally {
-            processing.value = false
-        }
+        })
     }
 
     const startBalancePolling = (topupId, initialBalance) => {
