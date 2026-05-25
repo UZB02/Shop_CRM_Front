@@ -134,6 +134,8 @@
       :currentBalance="currentBalance"
       :finalPrice="finalPrice"
       :isExtending="isExtending"
+      v-model:isYearly="isYearly"
+      :hasYearlyOption="hasYearlyOption"
       @process="processPayment"
       @topup-required="handleTopupRequired"
     />
@@ -196,6 +198,8 @@ const {
     selectedPlanId,
     paymentMethod,
     isExtending,
+    isYearly,
+    hasYearlyOption,
     dialogHeader,
     getSelectedPriceLabel,
     loadSubscription,

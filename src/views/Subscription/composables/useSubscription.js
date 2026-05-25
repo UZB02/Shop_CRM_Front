@@ -27,6 +27,7 @@ export const useSubscription = () => {
     const selectedPlanId = ref(null)
     const paymentMethod = ref('click')
     const isExtending = ref(false)
+    const isYearly = ref(false)
     
     // Topup specific states
     const topupDialog = ref(false)
@@ -66,9 +67,15 @@ export const useSubscription = () => {
 
     const dialogHeader = computed(() => isExtending.value ? t('subscription.uzaytirish') : t('subscription.sotib_olish'))
 
+    const hasYearlyOption = computed(() => {
+        return !!(selectedPlanObject.value && selectedPlanObject.value.price_yearly)
+    })
+
     const getSelectedPriceLabel = computed(() => {
         if (!selectedPlanObject.value) return ''
-        const price = selectedPlanObject.value.price_monthly
+        const price = isYearly.value 
+            ? (selectedPlanObject.value.price_yearly || selectedPlanObject.value.price_monthly * 12) 
+            : (selectedPlanObject.value.price_monthly || 0)
         return `${new Intl.NumberFormat('uz-UZ').format(price)} so'm`
     })
 
@@ -76,7 +83,9 @@ export const useSubscription = () => {
 
     const discountAmount = computed(() => {
         if (!activeCoupon.value || !selectedPlanObject.value) return 0
-        const rawPrice = selectedPlanObject.value.price_monthly || 0
+        const rawPrice = isYearly.value 
+            ? (selectedPlanObject.value.price_yearly || selectedPlanObject.value.price_monthly * 12) 
+            : (selectedPlanObject.value.price_monthly || 0)
         const val = parseFloat(activeCoupon.value.discount_value || 0)
         
         const couponObj = activeCoupon.value
@@ -112,7 +121,9 @@ export const useSubscription = () => {
 
     const finalPrice = computed(() => {
         if (!selectedPlanObject.value) return 0
-        const rawPrice = selectedPlanObject.value.price_monthly || 0
+        const rawPrice = isYearly.value 
+            ? (selectedPlanObject.value.price_yearly || selectedPlanObject.value.price_monthly * 12) 
+            : (selectedPlanObject.value.price_monthly || 0)
         return Math.max(rawPrice - discountAmount.value, 0)
     })
 
@@ -244,6 +255,7 @@ export const useSubscription = () => {
     const confirmChangePlan = (planId) => {
         selectedPlanId.value = planId
         isExtending.value = false
+        isYearly.value = false
         paymentDialog.value = true
     }
 
@@ -251,6 +263,7 @@ export const useSubscription = () => {
         if (subscription.value.plan) {
             selectedPlanId.value = subscription.value.plan.id
             isExtending.value = true
+            isYearly.value = false
             paymentDialog.value = true
         }
     }
@@ -268,7 +281,8 @@ export const useSubscription = () => {
         try {
             let response;
             const payload = {
-                plan_id: selectedPlanId.value
+                plan_id: selectedPlanId.value,
+                is_yearly: isYearly.value
             }
             response = await subscriptionAPI.changePlan(payload)
 
@@ -483,6 +497,8 @@ export const useSubscription = () => {
         selectedPlanId,
         paymentMethod,
         isExtending,
+        isYearly,
+        hasYearlyOption,
         dialogHeader,
         getSelectedPriceLabel,
         loadSubscription,

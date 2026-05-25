@@ -92,6 +92,38 @@
               </div>
             </div>
 
+            <!-- Billing Interval Options -->
+            <div v-if="hasYearlyOption" class="space-y-1.5">
+              <label class="block text-[9px] font-bold tracking-widest text-slate-450 dark:text-slate-500 uppercase px-1">
+                {{ t('subscription.billing_period') || 'Obuna davri' }}
+              </label>
+              <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-100/70 dark:bg-[#121620] rounded-xl border border-slate-150 dark:border-slate-850/80">
+                <button
+                  type="button"
+                  @click="$emit('update:isYearly', false)"
+                  class="rounded-lg py-2 text-[10px] font-black tracking-wider text-center cursor-pointer transition-all duration-200 border-none"
+                  :class="!isYearly 
+                    ? 'bg-white dark:bg-[#1c2234] text-emerald-600 dark:text-emerald-400 shadow-sm shadow-slate-200/50 dark:shadow-none' 
+                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 bg-transparent'"
+                >
+                  Oylik (30 kun)
+                </button>
+                <button
+                  type="button"
+                  @click="$emit('update:isYearly', true)"
+                  class="rounded-lg py-2 text-[10px] font-black tracking-wider text-center cursor-pointer transition-all duration-200 border-none flex items-center justify-center gap-1"
+                  :class="isYearly 
+                    ? 'bg-white dark:bg-[#1c2234] text-emerald-600 dark:text-emerald-400 shadow-sm shadow-slate-200/50 dark:shadow-none' 
+                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 bg-transparent'"
+                >
+                  Yillik (365 kun)
+                  <span class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    -20%
+                  </span>
+                </button>
+              </div>
+            </div>
+
             <!-- Wallet / Balance Select Section -->
             <div class="space-y-2">
               <label class="block text-[9px] font-bold tracking-widest text-slate-450 dark:text-slate-550 uppercase px-1">
@@ -230,10 +262,18 @@ const props = defineProps({
   isExtending: {
     type: Boolean,
     default: false
+  },
+  isYearly: {
+    type: Boolean,
+    default: false
+  },
+  hasYearlyOption: {
+    type: Boolean,
+    default: false
   }
 })
 
-defineEmits(['update:visible', 'update:method', 'process', 'topup-required'])
+defineEmits(['update:visible', 'update:method', 'process', 'topup-required', 'update:isYearly'])
 </script>
 
 <style scoped>
