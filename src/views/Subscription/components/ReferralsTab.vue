@@ -32,12 +32,14 @@ const loadData = async () => {
   }
 }
 
-// Generate referral link dynamically (fallback if link not in response)
+// Generate referral link dynamically (directing traffic to the landing page on https://www.siriuspos.uz/)
 const referralLink = computed(() => {
   if (!stats.value) return ''
-  if (stats.value.referral_link) return stats.value.referral_link
-  const baseUrl = window.location.origin
-  return `${baseUrl}/referral/${stats.value.referral_code}`
+  if (stats.value.referral_link) {
+    // Clean any legacy backend mock app.example.com placeholders if present
+    return stats.value.referral_link.replace('https://app.example.com', 'https://www.siriuspos.uz').replace('app.example.com', 'www.siriuspos.uz')
+  }
+  return `https://www.siriuspos.uz/referral/${stats.value.referral_code}`
 })
 
 // Copy clipboard helpers
