@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { workersAPI } from '@/services/api'
@@ -89,6 +89,25 @@ const loadWorker = async () => {
         loading.value = false
     }
 }
+
+watch(activeTab, (newTab) => {
+  router.replace({
+    query: {
+      ...route.query,
+      tab: newTab
+    }
+  })
+})
+
+// Keep activeTab in sync with browser query changes (e.g. back/forward navigation)
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    if (newTab && newTab !== activeTab.value) {
+      activeTab.value = newTab
+    }
+  }
+)
 
 onMounted(() => {
     if (route.query.tab) {

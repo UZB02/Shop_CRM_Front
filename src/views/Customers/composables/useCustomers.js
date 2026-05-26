@@ -1,5 +1,5 @@
 import { ref, computed, watch, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
@@ -7,6 +7,7 @@ import { customersAPI, customerGroupsAPI, reportsAPI } from '@/services/api'
 
 export function useCustomers() {
   const router = useRouter()
+  const route = useRoute()
   const toast = useToast()
   const confirm = useConfirm()
   const { t } = useI18n()
@@ -17,7 +18,8 @@ export function useCustomers() {
   const customerDialog = ref(false)
   const submitted = ref(false)
 
-  const activeTab = ref('no_debt')
+  // Initialize activeTab from URL query params (default: 'no_debt')
+  const activeTab = ref(route.query.tab || 'no_debt')
   const groupedData = ref({
     debtors: { count: 0, results: [], total_debt_balance: 0, current_page: 1 },
     no_debt: { count: 0, results: [], current_page: 1 }
@@ -46,11 +48,27 @@ export function useCustomers() {
   const activeCustomers = computed(() => groupedData.value[activeTab.value]?.results || [])
   const totalRecords = computed(() => groupedData.value[activeTab.value]?.count || 0)
 
-  // Watch for tab change to reset page and reload
-  watch(activeTab, () => {
+  // Watch for tab change to sync query parameters and reload
+  watch(activeTab, (newTab) => {
+    router.replace({
+      query: {
+        ...route.query,
+        tab: newTab
+      }
+    })
     page.value = 1
     loadCustomers()
   })
+
+  // Watch for browser router query changes (e.g. back/forward navigation)
+  watch(
+    () => route.query.tab,
+    (newTab) => {
+      if (newTab && newTab !== activeTab.value) {
+        activeTab.value = newTab
+      }
+    }
+  )
 
   watch(minDebt, () => {
     if (activeTab.value === 'debtors') {

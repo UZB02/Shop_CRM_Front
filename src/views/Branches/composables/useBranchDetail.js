@@ -1,24 +1,42 @@
 import { ref, onMounted, computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { branchesAPI, reportsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
 export function useBranchDetail() {
     const route = useRoute()
+    const router = useRouter()
     const { t } = useI18n()
     const toast = useToast()
 
     const branch = ref(null)
     const loading = ref(true)
     const tabLoading = ref(false)
-    const activeTab = ref('products')
+    // Initialize activeTab from URL query params (default: 'products')
+    const activeTab = ref(route.query.tab || 'products')
 
     // Refresh only the relevant tab when changed
     watch(activeTab, (tab) => {
+        router.replace({
+            query: {
+                ...route.query,
+                tab
+            }
+        })
         if (tab === 'transfers' || tab === 'incoming') return // These have their own fetch logic
         fetchDetail(tab)
     })
+
+    // Keep activeTab in sync with browser query changes (e.g. back/forward navigation)
+    watch(
+        () => route.query.tab,
+        (newTab) => {
+            if (newTab && newTab !== activeTab.value) {
+                activeTab.value = newTab
+            }
+        }
+    )
 
     // Edit State
     const editModalVisible = ref(false)

@@ -146,7 +146,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
@@ -166,8 +167,12 @@ import TradeDetailModal from '@/views/Customers/components/TradeDetailModal.vue'
 import SaleReturnModal from './components/SaleReturnModal.vue'
 import ReturnDetailModal from './components/ReturnDetailModal.vue'
 
+const route = useRoute()
+const router = useRouter()
 const settingsStore = useSettingsStore()
-const activeTab = ref('sales')
+
+// Initialize activeTab from URL query params (default: 'sales')
+const activeTab = ref(route.query.tab || 'sales')
 
 const {
   loading,
@@ -227,7 +232,29 @@ const handleReturnSuccess = () => {
 }
 
 watch(activeTab, (newTab) => {
+  router.replace({
+    query: {
+      ...route.query,
+      tab: newTab
+    }
+  })
   if (newTab === 'returns' && returns.value.length === 0) {
+    loadReturns()
+  }
+})
+
+// Keep activeTab in sync with browser query changes
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    if (newTab && newTab !== activeTab.value) {
+      activeTab.value = newTab
+    }
+  }
+)
+
+onMounted(() => {
+  if (activeTab.value === 'returns' && returns.value.length === 0) {
     loadReturns()
   }
 })

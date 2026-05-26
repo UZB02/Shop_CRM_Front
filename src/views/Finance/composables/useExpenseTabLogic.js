@@ -1,10 +1,14 @@
 import { ref, computed, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import useExpenses from '@/composables/useExpenses'
 import useFinanceReports, { getInitialFilters } from '@/composables/useFinanceReports'
 import { categoriesAPI } from '@/services/api'
 import i18n from '@/i18n'
 
 export default function useExpenseTabLogic() {
+  const router = useRouter()
+  const route = useRoute()
+
   const { 
     expenses: expenseList, loading: crudLoading, filters: crudFilters, exportFilters, isManager, 
     branches, categories, shifts,
@@ -32,7 +36,8 @@ export default function useExpenseTabLogic() {
   // Synced loading state
   const loading = computed(() => crudLoading.value || reportsLoading.value)
 
-  const activeTab = ref('profit-loss')
+  // Initialize activeTab from URL query params (default: 'profit-loss')
+  const activeTab = ref(route.query.tab || 'profit-loss')
   const userIsManager = computed(() => isManager())
   const { t } = i18n.global
 
@@ -151,9 +156,26 @@ export default function useExpenseTabLogic() {
       fetchTabReport()
   }, { deep: true, flush: 'sync' })
 
+  // Watch for tab change to sync query parameters and reload
   watch(activeTab, (newTab) => {
+    router.replace({
+      query: {
+        ...route.query,
+        tab: newTab
+      }
+    })
     fetchTabReport()
   })
+
+  // Watch for browser router query changes (e.g. back/forward navigation)
+  watch(
+    () => route.query.tab,
+    (newTab) => {
+      if (newTab && newTab !== activeTab.value) {
+        activeTab.value = newTab
+      }
+    }
+  )
 
   watch(exportFilters, (newVal) => {
       if (newVal.date_from) reportsFilters.date_from = newVal.date_from
@@ -185,5 +207,3 @@ export default function useExpenseTabLogic() {
     })
   }
 }
-
-

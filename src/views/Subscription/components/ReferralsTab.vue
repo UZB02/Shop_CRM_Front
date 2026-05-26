@@ -75,12 +75,47 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-5">
     
-    <!-- Title Section -->
-    <div class="mb-4">
-      <h2 class="text-sm font-black tracking-[0.2em] text-slate-800 dark:text-slate-200 uppercase">Referral Tizimi</h2>
-      <p class="text-[12px] text-slate-400 font-medium tracking-widest mt-1">Platformaga do'stlaringizni taklif qiling va bepul obuna muddati yoki chegirmalarga ega bo'ling.</p>
+    <!-- Title & Compact Metrics Strip (Clean corporate header) -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-50/50 dark:bg-slate-900/20 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/40">
+      <div>
+        <h2 class="text-xs font-black tracking-[0.2em] text-slate-800 dark:text-slate-200 uppercase">Referral Tizimi</h2>
+        <p class="text-[11px] text-slate-400 font-medium mt-0.5">Platformaga do'stlaringizni taklif etib, bonuslarga ega bo'ling.</p>
+      </div>
+
+      <!-- Compact Metrics Strip -->
+      <div v-if="stats" class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+        <div class="px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-black/10 flex items-center gap-2 shadow-sm">
+          <div class="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-500 flex items-center justify-center border border-blue-100/50 dark:border-blue-900/30">
+            <i class="pi pi-users text-[10px]"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider leading-none">Jami Takliflar</span>
+            <span class="text-xs font-black text-slate-800 dark:text-slate-100 mt-0.5">{{ stats.total_leads || 0 }} ta</span>
+          </div>
+        </div>
+
+        <div class="px-3 py-1.5 rounded-xl border border-emerald-500/15 bg-emerald-500/5 flex items-center gap-2 shadow-sm">
+          <div class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-500 flex items-center justify-center border border-emerald-100/50 dark:border-emerald-900/30">
+            <i class="pi pi-check-circle text-[10px]"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider leading-none">Mukofotlanganlar</span>
+            <span class="text-xs font-black text-emerald-600 dark:text-emerald-400 mt-0.5">{{ stats.total_rewarded || 0 }} ta do'kon</span>
+          </div>
+        </div>
+
+        <div class="px-3 py-1.5 rounded-xl border border-purple-500/15 bg-purple-500/5 flex items-center gap-2 shadow-sm">
+          <div class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-500 flex items-center justify-center border border-purple-100/50 dark:border-purple-900/30">
+            <i class="pi pi-calendar-plus text-[10px]"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider leading-none">Bonus Jamg'arma</span>
+            <span class="text-xs font-black text-purple-600 dark:text-purple-400 mt-0.5">+{{ stats.total_days_earned || 0 }} kun</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Loading Spinner -->
@@ -89,86 +124,78 @@ onMounted(() => {
       <span class="text-xs text-slate-400 font-bold">Ma'lumotlar yuklanmoqda...</span>
     </div>
 
-    <div v-else-if="stats" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Grid (Symmetric layout like modern SaaS dashboards) -->
+    <div v-else-if="stats" class="grid grid-cols-1 lg:grid-cols-3 gap-5">
       
-      <!-- 1. Code Sharing panel (Col-span 2) -->
-      <div class="lg:col-span-2 space-y-6">
+      <!-- LEFT PORTAL (2 Columns wide): Sharing & Active Rewards -->
+      <div class="lg:col-span-2 space-y-5">
         
-        <!-- Invite Card with Gradient -->
-        <div class="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 text-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
-          <!-- Decorative circle background -->
-          <div class="absolute -right-6 -bottom-6 w-36 h-36 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-          <div class="absolute -top-10 -left-10 w-24 h-24 bg-teal-400/20 rounded-full blur-xl pointer-events-none"></div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/55 dark:border-slate-800/40 rounded-2xl p-5 space-y-5 shadow-sm relative overflow-hidden">
+          <!-- Subtle decorative color burst -->
+          <div class="absolute -right-16 -top-16 w-32 h-32 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div class="relative z-10 space-y-4">
-            <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
-              <i class="pi pi-gift text-xl text-emerald-100 animate-bounce"></i>
-            </div>
-            <div>
-              <h3 class="text-base font-black tracking-wide leading-snug">Do'stingizni taklif eting va ajoyib mukofotlarga ega bo'ling!</h3>
-              <p class="text-xs text-emerald-50/90 font-medium mt-2 leading-relaxed">
-                Sizning referral havolangiz orqali so'rov yuborgan va keyinchalik do'kon ochgan har bir do'stingiz uchun sizga bonus beriladi! Global sozlamalarga muvofiq bepul obuna muddatlari uzaytiriladi yoki chegirmalarga ega bo'lasiz.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Copy links panel -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-2xl p-5 space-y-5 shadow-sm">
-          
-          <!-- Code Card -->
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-100 dark:border-slate-800">
-            <div>
-              <span class="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-0.5">Sizning taklif kodingiz</span>
-              <span class="text-lg font-black text-slate-800 dark:text-slate-100 tracking-wider uppercase">{{ stats.referral_code }}</span>
-            </div>
-            <Button
-              :icon="copiedCode ? 'pi pi-check' : 'pi pi-copy'"
-              :label="copiedCode ? 'Nusxalandi!' : 'Kodni nusxalash'"
-              class="!rounded-lg !py-2 !px-4 !text-[11px] !font-black shadow-sm"
-              :class="copiedCode ? '!bg-emerald-500 !text-white !border-emerald-600' : '!bg-white dark:!bg-slate-900 !text-slate-700 dark:!text-slate-200 !border-slate-200 dark:!border-slate-800'"
-              @click="copyToClipboard(stats.referral_code)"
-            />
+          <div>
+            <span class="text-[8px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Hamkorlik Portali</span>
+            <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 mt-2">Do'stingizni taklif qiling, mukofotga ega bo'ling!</h3>
+            <p class="text-[11px] text-slate-450 dark:text-slate-500 font-semibold leading-relaxed mt-1">
+              Sizning referral havolangiz orqali kelib do'kon ochgan har bir yangi foydalanuvchi uchun global sozlamalarga muvofiq bepul kunlar yoki keyingi to'lovga chegirmalarga ega bo'lasiz.
+            </p>
           </div>
 
-          <!-- Link Card -->
-          <div class="flex flex-col gap-2">
-            <span class="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">Taklif havolasi (Referral URL)</span>
-            <div class="flex gap-2">
-              <input
-                type="text"
-                readonly
-                :value="referralLink"
-                class="flex-1 h-10 px-3 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-500 outline-none"
-              />
-              <Button
-                :icon="copiedLink ? 'pi pi-check' : 'pi pi-copy'"
-                class="!rounded-lg !w-10 !h-10 shrink-0"
-                :class="copiedLink ? '!bg-emerald-500 !text-white !border-emerald-600' : '!bg-white dark:!bg-slate-900 !text-slate-700 dark:!text-slate-200 !border-slate-200 dark:!border-slate-800'"
+          <!-- Unified Copy Panels side-by-side or stacked cleanly -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <!-- Code sharing widget (1 Column) -->
+            <div class="p-3 bg-slate-50/70 dark:bg-slate-950/60 rounded-xl border border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
+              <div>
+                <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Taklif Kodi</span>
+                <span class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-wider uppercase mt-0.5 block">{{ stats.referral_code }}</span>
+              </div>
+              <button
+                @click="copyToClipboard(stats.referral_code)"
+                :class="['w-8 h-8 rounded-lg flex items-center justify-center transition active:scale-90 border cursor-pointer',
+                         copiedCode ? 'bg-emerald-500 border-emerald-600 text-white shadow-md' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300']"
+                :title="copiedCode ? 'Nusxalandi!' : 'Kodni nusxalash'"
+              >
+                <i :class="copiedCode ? 'pi pi-check' : 'pi pi-copy'" class="text-[10px]"></i>
+              </button>
+            </div>
+
+            <!-- Link sharing widget (2 Columns) -->
+            <div class="md:col-span-2 p-3 bg-slate-50/70 dark:bg-slate-950/60 rounded-xl border border-slate-100 dark:border-slate-800/60 flex items-center gap-3">
+              <div class="flex-1 min-w-0">
+                <span class="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Taklif Havolasi (Referral URL)</span>
+                <span class="text-xs font-semibold text-slate-500 truncate block mt-1 select-all" title="Nusxalash uchun bosing">{{ referralLink }}</span>
+              </div>
+              <button
                 @click="copyToClipboard(referralLink, true)"
-              />
+                :class="['w-8 h-8 rounded-lg flex items-center justify-center transition active:scale-90 border shrink-0 cursor-pointer',
+                         copiedLink ? 'bg-emerald-500 border-emerald-600 text-white shadow-md' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300']"
+                :title="copiedLink ? 'Nusxalandi!' : 'Havolani nusxalash'"
+              >
+                <i :class="copiedLink ? 'pi pi-check' : 'pi pi-copy'" class="text-[10px]"></i>
+              </button>
             </div>
           </div>
 
         </div>
 
-        <!-- NEW FEATURE: PENDING DISCOUNT CARD -->
+        <!-- ACTIVE PENDING REWARD ALERT -->
         <transition name="fade">
           <div 
             v-if="stats.pending_discount_pct > 0" 
-            class="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 dark:border-amber-500/10 rounded-2xl p-5 flex items-start gap-4 shadow-sm animate-pulse-subtle"
+            class="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/15 dark:border-amber-500/10 rounded-2xl p-4 flex items-start gap-3.5 shadow-sm animate-pulse-subtle"
           >
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center border border-amber-500/20 shrink-0">
-              <i class="pi pi-gift text-lg"></i>
+            <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-500 flex items-center justify-center border border-amber-500/20 shrink-0">
+              <i class="pi pi-gift text-sm"></i>
             </div>
-            <div class="space-y-1">
-              <span class="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider block">Kutilayotgan mukofot chegirmasi</span>
-              <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">
-                Keyingi obuna to'lovingiz uchun <span class="text-amber-500 text-base font-black">{{ stats.pending_discount_pct }}% chegirma</span> yozildi!
+            <div class="space-y-1 min-w-0">
+              <span class="text-[9px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest block">Kutilayotgan Mukofot Chegirmasi</span>
+              <h4 class="text-xs font-black text-slate-800 dark:text-slate-100">
+                Keyingi to'lovingiz uchun <span class="text-amber-500 font-extrabold">{{ stats.pending_discount_pct }}% chegirma</span> hisoblandi!
               </h4>
-              <p class="text-[11px] text-slate-400 font-semibold leading-relaxed">
-                Ushbu chegirma tarifni o'zgartirganingizda avtomatik ravishda qo'llaniladi.  
-                <span class="text-amber-500 block sm:inline mt-0.5 sm:mt-0 font-bold">(Amal qilish muddati: {{ formatDate(stats.pending_discount_expires_at) }} gacha)</span>
+              <p class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold leading-relaxed">
+                Ushbu chegirma obunani uzaytirganingizda avtomatik qo'llaniladi.  
+                <span class="text-amber-500 font-bold block sm:inline mt-0.5 sm:mt-0">(Amal muddati: {{ stats.pending_discount_expires_at }} gacha)</span>
               </p>
             </div>
           </div>
@@ -176,90 +203,49 @@ onMounted(() => {
 
       </div>
 
-      <!-- 2. Owner Stats widgets (Col span 1) -->
-      <div class="space-y-4">
+      <!-- RIGHT PORTAL (1 Column wide): Professional Step-by-Step Tracker -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-2xl p-5 shadow-sm">
+        <h3 class="text-[10px] font-black tracking-wider text-slate-800 dark:text-slate-200 uppercase mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/60">Tizim Qanday Ishlaydi?</h3>
         
-        <!-- Total Invites Widget -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-2xl p-5 flex items-center justify-between shadow-sm">
-          <div>
-            <span class="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Jami takliflar</span>
-            <span class="text-2xl font-black text-slate-800 dark:text-slate-100">
-              {{ stats.total_leads || 0 }} <span class="text-xs text-slate-400 font-bold">ta so'rov</span>
-            </span>
-          </div>
-          <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-500 flex items-center justify-center border border-blue-100/50 dark:border-blue-900/30">
-            <i class="pi pi-users text-lg"></i>
-          </div>
-        </div>
+        <!-- Vertical Timeline Tracker -->
+        <div class="relative pl-6 space-y-5">
+          <!-- Connecting Line -->
+          <div class="absolute left-[9px] top-2 bottom-2 w-0.5 bg-slate-100 dark:bg-slate-800/80"></div>
 
-        <!-- Earned bonus Widget -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-2xl p-5 flex items-center justify-between shadow-sm">
-          <div>
-            <span class="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Mukofotlanganlar</span>
-            <span class="text-2xl font-black text-emerald-500">
-              {{ stats.total_rewarded || 0 }} <span class="text-xs text-slate-400 font-bold">ta do'kon</span>
-            </span>
-          </div>
-          <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-500 flex items-center justify-center border border-emerald-100/50 dark:border-emerald-900/30">
-            <i class="pi pi-check-circle text-lg"></i>
-          </div>
-        </div>
-
-        <!-- Total Days Widget -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-2xl p-5 flex items-center justify-between shadow-sm">
-          <div>
-            <span class="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Jami bonus kunlar</span>
-            <span class="text-2xl font-black text-purple-500">
-              +{{ stats.total_days_earned || 0 }} <span class="text-xs text-slate-400 font-bold">kun bepul</span>
-            </span>
-          </div>
-          <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-500 flex items-center justify-center border border-purple-100/50 dark:border-purple-900/30">
-            <i class="pi pi-calendar-plus text-lg"></i>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- 3. Explanatory Process Panel (Col span 3) -->
-      <div class="lg:col-span-3">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-2xl p-6 shadow-sm">
-          <h3 class="text-xs font-black tracking-wider text-slate-800 dark:text-slate-200 uppercase mb-5">Tizim Qanday Ishlaydi?</h3>
-          
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-            
-            <!-- Step 1 -->
-            <div class="flex flex-col items-center text-center space-y-2.5 relative z-10">
-              <div class="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-center text-xs font-black">
-                1
-              </div>
-              <h4 class="text-xs font-black text-slate-800 dark:text-slate-200">Havolani ulashing</h4>
-              <p class="text-[11px] text-slate-400 font-medium max-w-[200px] leading-relaxed">
-                Referral kodingiz yoki taklif havolangizni do'stlaringizga ulashing.
-              </p>
+          <!-- Step 1 -->
+          <div class="relative space-y-1">
+            <!-- Bullet node -->
+            <div class="absolute -left-[23px] top-0 w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-center text-[9px] font-black text-slate-700 dark:text-slate-200 shadow-sm">
+              1
             </div>
+            <h4 class="text-[11px] font-black text-slate-800 dark:text-slate-200 leading-none">Havolani ulashing</h4>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold leading-relaxed">
+              Referral kodingiz yoki taklif havolangizni do'stlaringizga yuboring.
+            </p>
+          </div>
 
-            <!-- Step 2 -->
-            <div class="flex flex-col items-center text-center space-y-2.5 relative z-10">
-              <div class="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-center text-xs font-black">
-                2
-              </div>
-              <h4 class="text-xs font-black text-slate-800 dark:text-slate-200">Do'stingiz ariza topshiradi</h4>
-              <p class="text-[11px] text-slate-400 font-medium max-w-[200px] leading-relaxed">
-                Ular havolaga kirib, do'kon ochish istagi haqida forma to'ldirishadi.
-              </p>
+          <!-- Step 2 -->
+          <div class="relative space-y-1">
+            <!-- Bullet node -->
+            <div class="absolute -left-[23px] top-0 w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-center text-[9px] font-black text-slate-700 dark:text-slate-200 shadow-sm">
+              2
             </div>
+            <h4 class="text-[11px] font-black text-slate-800 dark:text-slate-200 leading-none">Do'stingiz ariza yuboradi</h4>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold leading-relaxed">
+              Ular havolaga kirib, do'kon ochish istagi haqida ariza yuborishadi.
+            </p>
+          </div>
 
-            <!-- Step 3 -->
-            <div class="flex flex-col items-center text-center space-y-2.5 relative z-10">
-              <div class="w-11 h-11 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-500 border border-emerald-200/60 dark:border-emerald-900/30 flex items-center justify-center text-xs font-black">
-                3
-              </div>
-              <h4 class="text-xs font-black text-slate-800 dark:text-slate-200">Bonusga ega bo'ling</h4>
-              <p class="text-[11px] text-slate-400 font-medium max-w-[200px] leading-relaxed">
-                Ular Sirius POS do'konini ochganlaridan so'ng, sizga avtomatik tarzda bepul kunlar yoki chegirma beriladi.
-              </p>
+          <!-- Step 3 -->
+          <div class="relative space-y-1">
+            <!-- Bullet node -->
+            <div class="absolute -left-[23px] top-0 w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-250/60 dark:border-emerald-900/30 flex items-center justify-center text-[9px] font-black text-emerald-500 shadow-sm animate-pulse">
+              3
             </div>
-
+            <h4 class="text-[11px] font-black text-slate-800 dark:text-slate-200 leading-none">Mukofotni faollashtiring</h4>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold leading-relaxed">
+              Do'stingiz SiriusPOS'dan do'kon ochganida, sizga mukofot yoziladi.
+            </p>
           </div>
         </div>
       </div>

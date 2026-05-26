@@ -44,7 +44,7 @@
     <div class="md:hidden mb-4 flex gap-2 overflow-x-auto pb-1">
       <button
         v-for="tab in SETTINGS_TABS" :key="tab.key"
-        @click="activeTab = tab.key"
+        @click="setActiveTab(tab.key)"
         class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border relative"
         :class="activeTab === tab.key
           ? 'bg-emerald-500 border-emerald-500 text-white'
@@ -64,7 +64,7 @@
         <nav class="sticky top-4 space-y-0.5">
           <button
             v-for="tab in SETTINGS_TABS" :key="tab.key"
-            @click="activeTab = tab.key"
+            @click="setActiveTab(tab.key)"
             class="nav-btn w-full text-left relative"
             :class="activeTab === tab.key ? 'nav-btn--active' : 'nav-btn--inactive'"
           >
@@ -111,7 +111,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSettings, SETTINGS_TABS } from './composables/useSettings'
 import { useSettingsStore } from '@/store/settings'
@@ -125,7 +126,33 @@ import SettingsTaxTab      from './components/tabs/SettingsTaxTab.vue'
 import SettingsTelegramTab from './components/tabs/SettingsTelegramTab.vue'
 
 const { t } = useI18n()
-const activeTab = ref('modules')
+const route = useRoute()
+const router = useRouter()
+
+// Initialize activeTab from URL query params (default: 'modules')
+const activeTab = ref(route.query.tab || 'modules')
+
+// Keep activeTab in sync when browser query changes (e.g. back/forward navigation)
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    if (newTab && newTab !== activeTab.value) {
+      activeTab.value = newTab
+    }
+  }
+)
+
+// Update URL query parameter when activeTab changes
+const setActiveTab = (tabKey) => {
+  activeTab.value = tabKey
+  router.replace({
+    query: {
+      ...route.query,
+      tab: tabKey
+    }
+  })
+}
+
 const settingsStore = useSettingsStore()
 const { loading, saving, settings, form, isDirty, isFieldDirty, dirtyTabs, isOwner, saveSettings, resetForm } = useSettings()
 

@@ -15,7 +15,8 @@ export function useWarehouseDetail() {
   const warehouse = ref(null)
   const loading = ref(true)
   const tabLoading = ref(false)
-  const activeTab = ref('products')
+  // Initialize activeTab from URL query params (default: 'products')
+  const activeTab = ref(route.query.tab || 'products')
   
   const barcodeVisible = ref(false)
   const selectedProduct = ref(null)
@@ -207,9 +208,25 @@ export function useWarehouseDetail() {
 
   // Watchers
   watch(activeTab, (tab) => {
+    router.replace({
+      query: {
+        ...route.query,
+        tab
+      }
+    })
     if (tab === 'transfers') return
     fetchWarehouseDetails(tab)
   })
+
+  // Keep activeTab in sync with browser query changes (e.g. back/forward navigation)
+  watch(
+    () => route.query.tab,
+    (newTab) => {
+      if (newTab && newTab !== activeTab.value) {
+        activeTab.value = newTab
+      }
+    }
+  )
 
   const exportStocks = async () => {
     if (!warehouse.value) return
