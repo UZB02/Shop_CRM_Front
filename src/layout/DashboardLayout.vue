@@ -76,7 +76,12 @@
         <div v-if="subscriptionWarning" class="md:hidden mb-4 p-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 text-sm">
           <div class="flex items-start gap-2">
             <i class="pi pi-exclamation-triangle mt-0.5 flex-shrink-0" />
-            <span>{{ subscriptionWarning }}</span>
+            <div class="flex flex-col gap-1">
+              <span>{{ subscriptionWarning }}</span>
+              <span v-if="notificationStore.subscription?.bonus_days > 0" class="text-[11px] text-amber-600 dark:text-amber-500 font-bold">
+                 └── {{ notificationStore.subscription.bonus_days }} kun bonus (kupon/referral) hisobida
+              </span>
+            </div>
           </div>
           <button class="mt-2 w-full py-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 font-semibold text-xs" @click="router.push('/dashboard/subscription')">
             {{ $t('common.pay_action') }} →

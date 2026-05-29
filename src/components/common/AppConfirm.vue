@@ -24,17 +24,16 @@
             'w-16 h-16 rounded-[24px] flex items-center justify-center shadow-xl mb-6 rotate-3 transform transition-transform hover:rotate-0 duration-500',
             isDanger ? 'bg-rose-500 text-white shadow-rose-500/30' : 'bg-emerald-500 text-white shadow-emerald-500/30'
           ]">
-            <i :class="[store.options.icon, 'text-2xl']"></i>
+            <i :class="store.options.icon" class="text-2xl !text-white"></i>
           </div>
 
           <!-- Text -->
-          <div class="space-y-2 mb-8">
+          <div class="space-y-2 mb-8 w-full">
             <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-tight leading-none">
               {{ store.options.header }}
             </h3>
-            <p class="text-[16px] font-bold text-slate-400 dark:text-slate-500 leading-relaxed px-2">
-              {{ store.options.message }}
-            </p>
+            <div v-html="store.options.message" class="text-[14px] font-bold text-slate-400 dark:text-slate-500 leading-relaxed px-2">
+            </div>
           </div>
         </div>
 

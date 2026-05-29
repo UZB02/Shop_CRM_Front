@@ -105,6 +105,7 @@ export function useSuppliers() {
     const saveSupplier = async () => {
         submitted.value = true
         if (!supplierForm.value.name?.trim()) return
+        if (supplierForm.value.phone && supplierForm.value.phone.trim().length < 13) return
 
         saving.value = true
         try {

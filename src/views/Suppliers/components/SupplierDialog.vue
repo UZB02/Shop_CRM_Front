@@ -58,9 +58,19 @@
           <input
             v-model="modelForm.phone"
             type="tel"
-            placeholder="+998 90 123 45 67"
-            class="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 text-[13px] outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/20 transition-all bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
+            placeholder="+998901234567"
+            @keydown="onPhoneKeydown"
+            @paste="onPhonePaste"
+            @input="onPhoneInput"
+            class="w-full h-10 px-3 rounded-xl border text-[13px] outline-none transition-all bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 duration-200"
+            :class="submitted && modelForm.phone && modelForm.phone.length < 13
+              ? 'border-red-300 dark:border-red-500 ring-1 ring-red-200 dark:ring-red-500/20'
+              : 'border-slate-200 dark:border-slate-700 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/20'"
           />
+          <p v-if="submitted && modelForm.phone && modelForm.phone.length < 13" class="text-[11px] text-red-400 mt-1 flex items-center gap-1">
+            <i class="pi pi-exclamation-circle text-[10px]" />
+            {{ $t('validation.invalid_phone') }}
+          </p>
         </div>
         <div>
           <label class="block text-[12px] font-bold text-slate-500 dark:text-slate-400 mb-1.5">
@@ -153,5 +163,56 @@ const isEdit = computed(() => !!props.supplier?.id)
 const formatMoney = (val) => {
   const n = Number(val) || 0
   return n.toLocaleString('uz-UZ') + ' UZS'
+}
+
+const ALLOWED_KEYS = [
+  'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+  'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+  'Home', 'End'
+]
+
+const onPhoneKeydown = (e) => {
+  if (e.ctrlKey || e.metaKey) return
+  if (ALLOWED_KEYS.includes(e.key)) return
+  if (e.key === '+' && e.target.selectionStart === 0) return
+  if (!/^\d$/.test(e.key)) {
+    e.preventDefault()
+  }
+}
+
+const onPhonePaste = (e) => {
+  e.preventDefault()
+  const text = (e.clipboardData || window.clipboardData).getData('text')
+  let digits = text.replace(/\D/g, '')
+  if (digits.length > 0) {
+    if (!digits.startsWith('998')) {
+      digits = '998' + digits
+    }
+  }
+  digits = digits.slice(0, 12)
+  props.modelForm.phone = digits.length > 0 ? '+' + digits : ''
+}
+
+const onPhoneInput = (e) => {
+  let val = e.target.value
+  if (!val) {
+    props.modelForm.phone = ''
+    return
+  }
+  if (!val.startsWith('+')) {
+    val = '+' + val
+  }
+  let digits = val.slice(1).replace(/\D/g, '')
+  if (digits.length > 0) {
+    if (!digits.startsWith('998')) {
+      if ('998'.startsWith(digits)) {
+        // Allow typing the prefix sequence
+      } else {
+        digits = '998' + digits
+      }
+    }
+  }
+  digits = digits.slice(0, 12)
+  props.modelForm.phone = '+' + digits
 }
 </script>

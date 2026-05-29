@@ -51,12 +51,14 @@
       class="hidden md:flex items-center gap-2 mr-auto
              bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800
              text-amber-700 dark:text-amber-400
-             px-3 py-1.5 rounded-lg text-xs font-medium"
+             px-3 py-1.5 rounded-lg text-xs font-medium cursor-help"
+      v-tooltip.bottom="tooltipText"
     >
       <i class="pi pi-exclamation-triangle text-amber-500" />
       <span class="truncate max-w-xs">{{ subscriptionWarning }}</span>
+      <i v-if="bonusDays > 0" class="pi pi-info-circle text-[10px] text-amber-600 dark:text-amber-400 ml-0.5 animate-pulse" />
       <button
-        class="ml-2 underline underline-offset-2 text-amber-600 hover:text-amber-800 font-semibold whitespace-nowrap"
+        class="ml-2 underline underline-offset-2 text-amber-600 hover:text-amber-800 font-semibold whitespace-nowrap cursor-pointer"
         @click="router.push('/dashboard/subscription')"
       >
         {{ $t('common.pay') }} →
@@ -120,13 +122,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import NotificationBell from './NotificationBell.vue'
+import { useNotificationStore } from '@/store/notifications'
 
 const router = useRouter()
 const isReloading = ref(false)
+const notificationStore = useNotificationStore()
+
+const bonusDays = computed(() => notificationStore.subscription?.bonus_days || 0)
+const tooltipText = computed(() => {
+  if (bonusDays.value > 0) {
+    return `${bonusDays.value} kun bonus (kupon/referral) hisobida`
+  }
+  return ''
+})
 
 const handleReload = () => {
   isReloading.value = true

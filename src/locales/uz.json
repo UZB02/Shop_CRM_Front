@@ -15,6 +15,7 @@
   "validation": {
     "required": "Ushbu maydonni to'ldirish shart",
     "invalid_email": "Elektron pochta manzili noto'g'ri",
+    "invalid_phone": "Telefon raqami noto'g'ri shakllantirilgan (+998901234567 kabi bo'lishi kerak)",
     "min": "Minimal qiymat: {min}",
     "max": "Maksimal qiymat: {max}"
   },
@@ -144,6 +145,17 @@
   },
   "subscription": {
     "title": "Obuna sozlamalari",
+    "bonus_days_info": "shu jumladan {days} kun bonus (kupon/referral)",
+    "billing_period": "Obuna davri",
+    "change_plan_header": "Tarifni o'zgartirish",
+    "extend_plan_header": "Obunani uzaytirish",
+    "confirm_extend_msg": "Siz rostdan ham joriy obunangizni uzaytirmoqchimisiz?",
+    "confirm_change_msg": "Siz rostdan ham do'koningiz tarifini \"{name}\" ga o'zgartirmoqchimisiz?",
+    "price_deduction": "Hisobingizdan {price} yechib olinadi.",
+    "warning_days_lost": "Joriy tarifdagi {days} kun qolgan muddat yo'qoladi.",
+    "warning_new_period": "Yangi tarif bugundan boshlab 30 kun amal qiladi.",
+    "warning_bonus_kept": "🎉 +{days} kun bonus mukofoti saqlanadi",
+    "warning_confirm_action": "O'tishni tasdiqlaysizmi?",
     "status_active": "Faol",
     "status_warning": "Tugamoqda",
     "status_expired": "Muddati o'tgan",

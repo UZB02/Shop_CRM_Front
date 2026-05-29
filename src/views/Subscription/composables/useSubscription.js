@@ -280,18 +280,66 @@ export const useSubscription = () => {
         const confirmStore = useConfirmStore()
         
         const actionHeader = isExtending.value 
-            ? "Obunani uzaytirish"
-            : "Tarifni o'zgartirish"
+            ? t('subscription.extend_plan_header')
+            : t('subscription.change_plan_header')
             
         const planName = selectedPlanObject.value?.name || t(`subscription.plans.${selectedPlanType.value}`) || selectedPlanType.value || ''
-        const actionMessage = isExtending.value
-            ? `Siz rostdan ham obunangizni ${getFinalPriceLabel.value || ''} evaziga uzaytirmoqchimisiz? To'lov do'koningiz balansidan yechiladi.`
-            : `Siz rostdan ham do'koningiz tarifini "${planName}" ga o'zgartirmoqchimisiz? Hisobingizdan ${getFinalPriceLabel.value || ''} yechib olinadi.`
+        
+        let actionMessage = ''
+        let confirmIcon = 'pi pi-bolt'
+        if (isExtending.value) {
+            actionMessage = `
+                <div class="text-sm text-slate-600 dark:text-slate-300 font-bold leading-normal text-center mb-1">
+                    ${t('subscription.confirm_extend_msg')}
+                </div>
+                <div class="mt-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-xs font-bold text-slate-500 dark:text-slate-400">
+                    ${t('subscription.price_deduction', { price: `<span class="text-emerald-500 dark:text-emerald-400 font-black">${getFinalPriceLabel.value || ''}</span>` })}
+                </div>
+            `
+        } else {
+            const currentPlanId = subscription.value.plan?.id
+            const daysLeft = subscription.value.days_left || 0
+            const bonusDays = subscription.value.bonus_days || 0
+            
+            if (selectedPlanId.value !== currentPlanId && daysLeft > 0) {
+                confirmIcon = 'pi pi-exclamation-triangle'
+                actionMessage = `
+                    <div class="space-y-2.5 text-left bg-amber-500/[0.04] dark:bg-amber-500/[0.02] p-3 rounded-2xl border border-amber-500/10 mb-3">
+                        <div class="flex items-start gap-2">
+                            <span class="text-amber-500 text-sm shrink-0">⚠️</span>
+                            <span class="text-xs font-bold text-slate-600 dark:text-slate-300 leading-tight">
+                                ${t('subscription.warning_days_lost', { days: `<span class="text-amber-500 font-extrabold">${daysLeft}</span>` })}
+                            </span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 dark:text-slate-500 font-bold pl-5 border-l border-slate-200 dark:border-slate-700/50 leading-tight">
+                            ${t('subscription.warning_new_period')}
+                        </div>
+                        ${bonusDays > 0 ? `
+                        <div class="flex items-center gap-2 pl-5 text-[11px] text-emerald-500 font-black">
+                            ${t('subscription.warning_bonus_kept', { days: bonusDays })}
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 leading-normal font-bold">
+                        ${t('subscription.price_deduction', { price: `<span class="text-emerald-500 dark:text-emerald-400 font-extrabold">${getFinalPriceLabel.value || ''}</span>` })} ${t('subscription.warning_confirm_action')}
+                    </div>
+                `
+            } else {
+                actionMessage = `
+                    <div class="text-sm text-slate-600 dark:text-slate-300 font-bold leading-normal text-center mb-1">
+                        ${t('subscription.confirm_change_msg', { name: planName })}
+                    </div>
+                    <div class="mt-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-xs font-bold text-slate-500 dark:text-slate-400">
+                        ${t('subscription.price_deduction', { price: `<span class="text-emerald-500 dark:text-emerald-400 font-black">${getFinalPriceLabel.value || ''}</span>` })}
+                    </div>
+                `
+            }
+        }
 
         confirmStore.require({
             header: actionHeader,
             message: actionMessage,
-            icon: 'pi pi-exclamation-triangle text-emerald-500 text-lg',
+            icon: confirmIcon,
             acceptLabel: t('common.yes') || 'Ha',
             rejectLabel: t('common.no') || "Yo'q",
             accept: async () => {
@@ -309,12 +357,29 @@ export const useSubscription = () => {
                     const newPlanName = data.new_plan || selectedPlanObject.value?.name || t('subscription.plans.custom')
                     const endDate = data.end_date || ''
                     const chargedAmountStr = data.amount ? `${new Intl.NumberFormat('uz-UZ').format(data.amount)} so'm` : ''
+                    const bonusDaysVal = data.bonus_days !== undefined ? Number(data.bonus_days) : 0
+                    
+                    let successDetail = `✅ "${newPlanName}" tarifga o'tildi`
+                    if (endDate) {
+                        let formattedDate = endDate
+                        if (/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+                            const [yyyy, mm, dd] = endDate.split('-')
+                            formattedDate = `${dd}.${mm}.${yyyy}`
+                        }
+                        successDetail += `\nTugash sanasi: ${formattedDate}`
+                    }
+                    if (bonusDaysVal > 0) {
+                        successDetail += `\n[+${bonusDaysVal} bonus kun hisobga olindi]`
+                    }
+                    if (chargedAmountStr) {
+                        successDetail += `\nBalansdan ${chargedAmountStr} yechildi.`
+                    }
                     
                     // Successfully processed
                     toast.add({ 
                         severity: 'success', 
                         summary: t('common.success') || 'Muvaffaqiyat', 
-                        detail: `Tarif muvaffaqiyatli yangilandi! Yangi tarif: ${newPlanName}.${endDate ? ` Amaldagi muddat: ${endDate} gacha.` : ''}${chargedAmountStr ? ` Balansdan ${chargedAmountStr} yechildi.` : ''}`, 
+                        detail: successDetail, 
                         life: 7000 
                     })
                     

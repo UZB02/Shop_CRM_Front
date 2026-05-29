@@ -27,19 +27,25 @@
            <Tag :value="subscription.status_display || getStatusLabel(subscription.status)" :severity="getStatusSeverity(subscription)" class="!text-[11px] !font-black !px-3 !py-1 !rounded-md" />
         </div>
 
-        <div class="mt-4 flex flex-wrap gap-3 pt-4 border-t border-slate-100 dark:border-white/5">
-           <div v-if="remainingDays !== null" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-colors" :class="{
-              'bg-rose-50 dark:bg-rose-500/10 border-rose-100 dark:border-rose-500/20': subscription.expires_soon || remainingDays <= 0,
-              'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5': !subscription.expires_soon && remainingDays > 0
-           }">
-              <i class="pi pi-clock text-[12px]" :class="(subscription.expires_soon || remainingDays <= 0) ? 'text-rose-500 dark:text-rose-400' : 'text-amber-500 dark:text-amber-400'" />
-              <span class="text-[12px] font-black" :class="(subscription.expires_soon || remainingDays <= 0) ? 'text-rose-700 dark:text-rose-200' : 'text-amber-700 dark:text-amber-200'">{{ $t('subscription.days_left', { days: remainingDays }) }}</span>
+        <div class="mt-4 flex flex-col gap-2 pt-4 border-t border-slate-100 dark:border-white/5">
+           <div class="flex flex-wrap gap-3">
+              <div v-if="remainingDays !== null" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-colors" :class="{
+                 'bg-rose-50 dark:bg-rose-500/10 border-rose-100 dark:border-rose-500/20': subscription.expires_soon || remainingDays <= 0,
+                 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5': !subscription.expires_soon && remainingDays > 0
+              }">
+                 <i class="pi pi-clock text-[12px]" :class="(subscription.expires_soon || remainingDays <= 0) ? 'text-rose-500 dark:text-rose-400' : 'text-amber-500 dark:text-amber-400'" />
+                 <span class="text-[12px] font-black" :class="(subscription.expires_soon || remainingDays <= 0) ? 'text-rose-700 dark:text-rose-200' : 'text-amber-700 dark:text-amber-200'">{{ $t('subscription.days_left', { days: remainingDays }) }}</span>
+              </div>
+              <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                 <i class="pi pi-calendar text-emerald-500 dark:text-emerald-400 text-[12px]" />
+                 <span class="text-[12px] font-black text-emerald-700 dark:text-emerald-200">
+                    {{ subscription.start_date }} - {{ subscription.end_date }}
+                 </span>
+              </div>
            </div>
-           <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
-              <i class="pi pi-calendar text-emerald-500 dark:text-emerald-400 text-[12px]" />
-              <span class="text-[12px] font-black text-emerald-700 dark:text-emerald-200">
-                 {{ subscription.start_date }} - {{ subscription.end_date }}
-              </span>
+           <div v-if="subscription.bonus_days > 0" class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-bold ml-1">
+              <span class="text-emerald-500 dark:text-emerald-400">└──</span>
+              <span>{{ $t('subscription.bonus_days_info', { days: subscription.bonus_days }) }}</span>
            </div>
         </div>
       </div>
