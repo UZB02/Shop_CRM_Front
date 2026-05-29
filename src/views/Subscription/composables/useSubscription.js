@@ -312,7 +312,7 @@ export const useSubscription = () => {
                             </span>
                         </div>
                         <div class="text-[11px] text-slate-400 dark:text-slate-500 font-bold pl-5 border-l border-slate-200 dark:border-slate-700/50 leading-tight">
-                            ${t('subscription.warning_new_period')}
+                            ${t('subscription.warning_new_period', { days: isYearly.value ? 365 : 30 })}
                         </div>
                         ${bonusDays > 0 ? `
                         <div class="flex items-center gap-2 pl-5 text-[11px] text-emerald-500 font-black">
