@@ -14,7 +14,15 @@
         <div class="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl space-y-1">
           <span class="text-[9px] font-black text-slate-400 tracking-wider block">KIM BAJARDI (ACTOR)</span>
           <span class="text-xs font-black text-slate-700 dark:text-slate-200">{{ log.actor || 'Tizim' }}</span>
-          <span v-if="log.is_impersonated" class="text-[9px] font-medium text-rose-500 block">Superadmin: {{ log.impersonated_by_name }}</span>
+          <div v-if="log.is_impersonated" class="mt-1 space-y-1">
+            <span class="px-2 py-0.5 inline-flex items-center gap-1 rounded bg-amber-500/10 dark:bg-rose-500/10 text-amber-600 dark:text-rose-450 border border-amber-500/20 dark:border-rose-500/20 text-[9px] font-black tracking-wide">
+              <i class="pi pi-shield text-[8px] animate-pulse"></i>
+              Superadmin tomonidan bajarildi
+            </span>
+            <span v-if="log.impersonated_by_name" class="text-[9px] font-bold text-slate-400 dark:text-slate-500 block pl-0.5">
+              Superadmin: {{ log.impersonated_by_name }}
+            </span>
+          </div>
         </div>
         <div class="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl space-y-1">
           <span class="text-[9px] font-black text-slate-400 tracking-wider block">VAQT (CREATED AT)</span>

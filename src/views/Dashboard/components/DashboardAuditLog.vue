@@ -173,12 +173,12 @@
               <td class="py-3.5 px-5">
                 <div class="flex flex-col">
                   <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200">{{ log.actor || 'Tizim' }}</span>
-                  <div class="flex items-center gap-1.5 mt-0.5" v-if="log.is_impersonated">
-                    <span class="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-500 border border-rose-500/20 text-[9px] font-black tracking-wider flex items-center gap-1">
-                      <i class="pi pi-shield text-[8px]"></i>
-                      Superadmin orqali
+                  <div class="flex flex-col gap-0.5 mt-0.5" v-if="log.is_impersonated">
+                    <span class="px-2 py-0.5 w-max rounded bg-amber-500/10 dark:bg-rose-500/10 text-amber-600 dark:text-rose-450 border border-amber-500/20 dark:border-rose-500/20 text-[9px] font-black tracking-wide flex items-center gap-1">
+                      <i class="pi pi-shield text-[8px] animate-pulse"></i>
+                      Superadmin tomonidan bajarildi
                     </span>
-                    <span class="text-[9px] font-medium text-slate-400">({{ log.impersonated_by_name }})</span>
+                    <span v-if="log.impersonated_by_name" class="text-[9px] font-bold text-slate-400 pl-0.5">({{ log.impersonated_by_name }})</span>
                   </div>
                 </div>
               </td>
