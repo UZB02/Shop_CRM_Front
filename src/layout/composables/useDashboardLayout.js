@@ -95,16 +95,25 @@ export function useDashboardLayout() {
 
   const menuItems = computed(() => {
     const list = [
+      // 1. Bosh sahifa
       { label: t('menu.dashboard'), icon: 'pi pi-home', to: '/dashboard', key: 'dashboard' },
+
+      // 2. Sotuv operatsiyalari
       { label: t('menu.sales'), icon: 'pi pi-calculator', to: '/dashboard/pos', key: 'pos' },
-      { label: t('menu.stores'), icon: 'pi pi-shop', to: '/dashboard/stores', key: 'stores' },
-      { label: t('menu.inventory'), icon: 'pi pi-box', to: '/dashboard/warehouse', key: 'warehouse' },
-      { label: t('menu.products'), icon: 'pi pi-tag', to: '/dashboard/products', key: 'products' },
-      { label: t('menu.workers'), icon: 'pi pi-users', to: '/dashboard/workers', key: 'workers' },
       { label: t('menu.trades'), icon: 'pi pi-shopping-cart', to: '/dashboard/trades', key: 'trades' },
       { label: t('menu.finance'), icon: 'pi pi-wallet', to: '/dashboard/finance', key: 'moliya' },
-      { label: t('menu.customers'), icon: 'pi pi-id-card', to: '/dashboard/customers', key: 'customers' },
+
+      // 3. Tovar boshqaruvi
+      { label: t('menu.products'), icon: 'pi pi-tag', to: '/dashboard/products', key: 'products' },
+      { label: t('menu.inventory'), icon: 'pi pi-box', to: '/dashboard/warehouse', key: 'warehouse' },
       { label: t('menu.suppliers'), icon: 'pi pi-truck', to: '/dashboard/suppliers', key: 'yetkazib_beruvchilar' },
+
+      // 4. CRM & HR
+      { label: t('menu.customers'), icon: 'pi pi-id-card', to: '/dashboard/customers', key: 'customers' },
+      { label: t('menu.workers'), icon: 'pi pi-users', to: '/dashboard/workers', key: 'workers' },
+
+      // 5. Tizim boshqaruvi
+      { label: t('menu.stores'), icon: 'pi pi-shop', to: '/dashboard/stores', key: 'stores' },
       { label: t('menu.settings'), icon: 'pi pi-cog', to: '/dashboard/settings', key: 'settings' },
       { label: t('menu.subscription'), icon: 'pi pi-verified', to: '/dashboard/subscription', key: 'subscription' },
       { label: t('menu.support') || 'Qo\'llab-quvvatlash', icon: 'pi pi-envelope', to: '/dashboard/support', key: 'support' },

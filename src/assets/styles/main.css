@@ -361,5 +361,83 @@ body {
 .dark .p-datepicker {
     border-color: #334155 !important;
     background: #1e293b !important;
+}
+
+/* =============================================
+   PREMIUM SCROLLBAR — Enterprise Style
+   ============================================= */
+
+/* Global scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.2) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.2);
+  border-radius: 100px;
+  transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Dark mode — global scrollbar */
+.dark *::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.35);
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.65);
+}
+
+/* Sidebar nav — ingichka, hover'da emerald rangli */
+.sidebar-nav {
+  scrollbar-width: none;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 100px;
+  transition: background 0.3s ease;
+}
+
+.sidebar-nav:hover::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.4);
+}
+
+.sidebar-nav:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.7);
+}
+
+.dark .sidebar-nav:hover::-webkit-scrollbar-thumb {
+  background: rgba(52, 211, 153, 0.35);
+}
+
+.dark .sidebar-nav:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(52, 211, 153, 0.65);
 }
 

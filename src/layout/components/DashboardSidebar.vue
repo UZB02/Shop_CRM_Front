@@ -55,7 +55,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
+    <nav class="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 sidebar-nav">
       <RouterLink
         v-for="item in filteredMenu"
         :key="item.key"
