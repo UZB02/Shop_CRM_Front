@@ -68,12 +68,18 @@
                         <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black bg-emerald-500/5 text-emerald-600 border border-emerald-500/10 tracking-widest uppercase">
                            {{ item.tur_name || $t('turlar.badge') }}
                         </span>
+                        <span v-if="item.tur_color" class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 tracking-widest uppercase">
+                           {{ item.tur_color }}
+                        </span>
                       </div>
                     </div>
                     
                     <div class="flex items-center flex-wrap gap-x-2 gap-y-1 mt-0.5 opacity-60">
                       <span v-if="item.category_name" class="text-[10px] font-black text-slate-400 tracking-widest uppercase">
                         {{ item.category_name }}
+                        <template v-if="item.subcategory_name">
+                           / {{ item.subcategory_name }}
+                        </template>
                       </span>
                       <span v-if="item.barcode" class="md:hidden text-[11px] font-bold text-slate-500 tracking-tighter before:content-['#']">
                         {{ item.barcode }}
@@ -88,9 +94,9 @@
 
               <!-- Barcode -->
               <td class="px-6 py-3.5 align-middle text-center hidden md:table-cell">
-                <div v-if="item.barcode" class="inline-flex items-center gap-2 group/barcode">
+                <div v-if="item.barcode || item.barcode_image_url" class="inline-flex items-center gap-2 group/barcode">
                    <i class="pi pi-barcode text-slate-300 dark:text-slate-700 group-hover/barcode:text-emerald-500 transition-colors text-[12px]"></i>
-                   <code class="text-[13px] font-bold text-slate-500 dark:text-slate-400 tracking-tight font-mono">{{ item.barcode }}</code>
+                   <code class="text-[13px] font-bold text-slate-500 dark:text-slate-400 tracking-tight font-mono">{{ item.barcode || 'Shtrix-kod mavjud' }}</code>
                 </div>
                 <span v-else class="text-[11px] font-black text-slate-200 dark:text-slate-800 tracking-widest">—</span>
               </td>
@@ -141,7 +147,7 @@
                     <i class="pi pi-eye text-[16px]"></i>
                   </button>
                   <button
-                    v-if="item.barcode"
+                    v-if="item.barcode || item.barcode_image_url"
                     @click="viewBarcode(item)"
                     class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:text-indigo-400 dark:hover:bg-indigo-400/10 transition-all hover:scale-105"
                     v-tooltip.top="'Shtrix-kod'"

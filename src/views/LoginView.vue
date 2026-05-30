@@ -41,10 +41,6 @@
                 :loading="loading"
                 @click="handleLogin" />
 
-        <div class="text-center mt-6 text-sm">
-          <span class="text-slate-500">Akkauntingiz yo'qmi? </span>
-          <router-link to="/register" class="text-emerald-500 font-medium hover:underline">Ro'yxatdan o'tish</router-link>
-        </div>
       </div>
     </div>
   </div>

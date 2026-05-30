@@ -9,6 +9,7 @@ export const productsAPI = {
     getLowStock: () => api.get('/warehouse/stocks/low-stock/'),
     getBarcode: (id) => api.get(`/products/${id}/barcode/`, { responseType: 'blob' }),
     getTurlar: (productId) => api.get(`/warehouse/products/${productId}/turlar/`),
+    getTurBarcode: (productId, turId, params) => api.get(`/warehouse/products/${productId}/turlar/${turId}/barcode/`, { params, responseType: 'blob' }),
     createTur: (productId, data) => api.post(`/warehouse/products/${productId}/turlar/`, data),
     updateTur: (productId, turId, data) => api.patch(`/warehouse/products/${productId}/turlar/${turId}/`, data),
     deleteTur: (productId, turId) => api.delete(`/warehouse/products/${productId}/turlar/${turId}/`)

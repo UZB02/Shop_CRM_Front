@@ -1,7 +1,9 @@
 import { ref, watch } from 'vue'
 import api from '@/services/api'
+import { useSettingsStore } from '@/store/settings'
 
 export function useProductTable(products) {
+  const settingsStore = useSettingsStore()
   const imageErrors = ref({})
   
   const handleImageError = (id) => {
@@ -34,10 +36,13 @@ export function useProductTable(products) {
     barcodeError.value = false
     barcodeLoading.value = true
     try {
-      const res = await api.get(
-        `/warehouse/products/${item.id || item._id}/barcode/`,
-        { responseType: 'blob' }
-      )
+      let endpoint = `/warehouse/products/${item.id || item._id}/barcode/`
+      const params = {}
+      if (item.tur_id) {
+        endpoint = `/warehouse/products/${item.id || item._id}/turlar/${item.tur_id}/barcode/`
+        params.show_tur = settingsStore.showTurOnBarcode
+      }
+      const res = await api.get(endpoint, { params, responseType: 'blob' })
       barcodeUrl.value = URL.createObjectURL(res.data)
     } catch {
       barcodeError.value = true

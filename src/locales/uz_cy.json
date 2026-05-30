@@ -1286,7 +1286,9 @@
       "show_name_on_barcode_label": "Штрих-кодда номини чиқариш",
       "show_name_on_barcode_desc": "Штрих-код ёрлиғида маҳсулот номи кўринсин",
       "show_price_on_barcode_label": "Штрих-кодда нархни чиқариш",
-      "show_price_on_barcode_desc": "Штрих-код ёрлиғида маҳсулот нархи кўринсин"
+      "show_price_on_barcode_desc": "Штрих-код ёрлиғида маҳсулот нархи кўринсин",
+      "show_tur_on_barcode_label": "Штрих-кодда тур номини чиқариш",
+      "show_tur_on_barcode_desc": "Штрих-код ёрлиғида маҳсулот турини кўрсатиш"
     },
     "tax": {
       "title": "Солиқ (tax)",

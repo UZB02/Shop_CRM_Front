@@ -190,7 +190,9 @@
       :visible="barcodeVisible"
       :product="selectedTurForBarcode"
       :barcodeUrl="selectedTurForBarcode?.barcode_image_url"
-      @close="barcodeVisible = false"
+      :loading="barcodeLoading"
+      :error="barcodeError"
+      @close="closeBarcodeModal"
       @download="downloadBarcode"
       @print="printBarcode"
     />
@@ -209,6 +211,7 @@ import { productsAPI } from '@/services/api'
 import { getErrorMessage } from '@/services/axios'
 import { useI18n } from 'vue-i18n'
 import ProductBarcodeModal from '../ProductBarcodeModal.vue'
+import { useSettingsStore } from '@/store/settings'
 
 const props = defineProps({
   product: { type: Object, required: true }
@@ -219,6 +222,7 @@ const emit = defineEmits(['refresh'])
 const { t } = useI18n()
 const confirm = useConfirm()
 const toast = useToast()
+const settingsStore = useSettingsStore()
 
 const hasTur = ref(props.product.has_tur)
 const turlar = ref([])
@@ -240,8 +244,12 @@ const turForm = ref({
 
 const barcodeVisible = ref(false)
 const selectedTurForBarcode = ref(null)
+const barcodeLoading = ref(false)
+const barcodeError = ref(false)
 
-const showBarcode = (tur) => {
+const showBarcode = async (tur) => {
+  barcodeLoading.value = true
+  barcodeError.value = false
   selectedTurForBarcode.value = {
     ...tur,
     name: `${props.product.name} (${tur.name})`,
@@ -250,6 +258,26 @@ const showBarcode = (tur) => {
     sale_price: tur.effective_price
   }
   barcodeVisible.value = true
+
+  try {
+    const res = await productsAPI.getTurBarcode(props.product.id, tur.id, {
+      show_tur: settingsStore.showTurOnBarcode
+    })
+    selectedTurForBarcode.value.barcode_image_url = URL.createObjectURL(res.data)
+  } catch (e) {
+    barcodeError.value = true
+    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Shtrix-kod yuklanmadi', life: 3000 })
+  } finally {
+    barcodeLoading.value = false
+  }
+}
+
+const closeBarcodeModal = () => {
+  barcodeVisible.value = false
+  if (selectedTurForBarcode.value?.barcode_image_url) {
+    URL.revokeObjectURL(selectedTurForBarcode.value.barcode_image_url)
+    selectedTurForBarcode.value.barcode_image_url = null
+  }
 }
 
 const downloadBarcode = () => {

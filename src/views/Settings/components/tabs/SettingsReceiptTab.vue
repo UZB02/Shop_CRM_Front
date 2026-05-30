@@ -94,6 +94,7 @@
     <SectionHeader icon="pi-barcode" color="text-slate-500">{{ $t('settings.receipt.barcode_settings_title') }}</SectionHeader>
     <SettingRow v-model="form.show_name_on_barcode"  :label="$t('settings.receipt.show_name_on_barcode_label')"  :desc="$t('settings.receipt.show_name_on_barcode_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_name_on_barcode')" />
     <SettingRow v-model="form.show_price_on_barcode" :label="$t('settings.receipt.show_price_on_barcode_label')" :desc="$t('settings.receipt.show_price_on_barcode_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_price_on_barcode')" />
+    <SettingRow v-model="form.show_tur_on_barcode" :label="$t('settings.receipt.show_tur_on_barcode_label')" :desc="$t('settings.receipt.show_tur_on_barcode_desc')" :disabled="readonly" :is-dirty="isFieldDirty('show_tur_on_barcode')" />
   </div>
 </template>
 

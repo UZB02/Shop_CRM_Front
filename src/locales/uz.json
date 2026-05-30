@@ -1287,7 +1287,9 @@
       "show_name_on_barcode_label": "Shtrix-kodda nomini chiqarish",
       "show_name_on_barcode_desc": "Shtrix-kod yorlig'ida mahsulot nomi ko'rinsin",
       "show_price_on_barcode_label": "Shtrix-kodda narxni chiqarish",
-      "show_price_on_barcode_desc": "Shtrix-kod yorlig'ida mahsulot narxi ko'rinsin"
+      "show_price_on_barcode_desc": "Shtrix-kod yorlig'ida mahsulot narxi ko'rinsin",
+      "show_tur_on_barcode_label": "Shtrix-kodda tur nomini chiqarish",
+      "show_tur_on_barcode_desc": "Shtrix-kod yorlig'ida mahsulot turini ko'rsatish"
     },
     "tax": {
       "title": "Soliq (tax)",

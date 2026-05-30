@@ -17,7 +17,7 @@ const FORM_FIELDS = [
     'require_cash_count', 'telegram_enabled', 'telegram_chat_id',
     'tax_enabled', 'tax_percent', 'ofd_enabled', 'ofd_token',
     'ofd_device_id', 'tin', 'ofd_provider',
-    'show_name_on_barcode', 'show_price_on_barcode', 'auto_pdf_on_smena_close'
+    'show_name_on_barcode', 'show_price_on_barcode', 'show_tur_on_barcode', 'auto_pdf_on_smena_close'
 ]
 
 // Mapping fields to tabs for precise change tracking
@@ -26,7 +26,7 @@ export const TAB_FIELDS = {
     stock: ['low_stock_enabled', 'low_stock_threshold'],
     payment: ['allow_cash', 'allow_card', 'allow_debt', 'allow_discount', 'max_discount_percent'],
     currency: ['default_currency', 'show_usd_price', 'show_rub_price', 'show_eur_price', 'show_cny_price'],
-    receipt: ['receipt_header', 'receipt_footer', 'receipt_address', 'receipt_phone', 'receipt_promo_text', 'show_store_logo', 'show_worker_name', 'show_name_on_barcode', 'show_price_on_barcode'],
+    receipt: ['receipt_header', 'receipt_footer', 'receipt_address', 'receipt_phone', 'receipt_promo_text', 'show_store_logo', 'show_worker_name', 'show_name_on_barcode', 'show_price_on_barcode', 'show_tur_on_barcode'],
     tax: ['tax_enabled', 'tax_percent', 'ofd_enabled', 'ofd_token', 'ofd_device_id', 'tin', 'ofd_provider'],
     telegram: ['telegram_enabled', 'telegram_chat_id']
 }

@@ -81,6 +81,7 @@ export const useSettingsStore = defineStore('settings', () => {
   // Barcode
   const showNameOnBarcode  = computed(() => !!settings.value?.show_name_on_barcode)
   const showPriceOnBarcode = computed(() => !!settings.value?.show_price_on_barcode)
+  const showTurOnBarcode   = computed(() => settings.value?.show_tur_on_barcode !== false) // default true
 
   // Receipt
   const receiptConfig = computed(() => ({
@@ -216,6 +217,7 @@ export const useSettingsStore = defineStore('settings', () => {
     storeName,
     showNameOnBarcode,
     showPriceOnBarcode,
+    showTurOnBarcode,
     receiptConfig,
 
     // plan features getters
