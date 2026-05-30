@@ -49,7 +49,7 @@
             <!-- Product Info -->
             <div class="flex items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
               <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center overflow-hidden shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-500">
-                <img v-if="item.product.image" :src="item.product.image" class="w-full h-full object-contain p-1" />
+                <img v-if="item.product.image_url || item.product.image" :src="item.product.image_url || item.product.image" class="w-full h-full object-cover" />
                 <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-base sm:text-lg"></i>
               </div>
               <div class="flex-1 min-w-0">

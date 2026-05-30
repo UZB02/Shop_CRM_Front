@@ -43,13 +43,13 @@
             <!-- Mini Thumb -->
             <div class="relative shrink-0">
               <div class="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-900 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm group-hover:scale-110 transition-transform">
-                <img v-if="product.image" :src="product.image" class="w-full h-full object-contain p-1" />
+                <img v-if="product.image_url || product.image" :src="product.image_url || product.image" class="w-full h-full object-cover" />
                 <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-base"></i>
               </div>
               
               <!-- Quantity in Cart Overlay -->
               <Transition name="scale">
-                <div v-if="getItemQty(product)" class="absolute -top-1 -right-1 min-w-[15px] h-[15px] bg-emerald-500 text-white rounded-full flex items-center justify-center text-[9px] font-black shadow-lg border-2 border-white dark:border-slate-900 z-[20]">
+                <div v-if="getItemQty(product)" class="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-emerald-500 text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-lg border-[1.5px] border-white dark:border-slate-900 z-[20] tabular-nums">
                   {{ getItemQty(product) }}
                 </div>
               </Transition>
