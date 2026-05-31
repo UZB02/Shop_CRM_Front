@@ -45,13 +45,13 @@
           <div class="flex flex-col md:flex-row overflow-hidden flex-grow relative">
             
             <!-- Left Side: Product List -->
-            <div class="flex-grow p-6 overflow-y-auto custom-scrollbar flex flex-col h-full">
-              <div class="flex items-center justify-between mb-4 shrink-0">
+            <div class="flex-grow flex flex-col min-h-0">
+              <div class="flex items-center justify-between p-6 pb-4 shrink-0">
                 <h3 class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">{{ $t('customers.trades.items_title') }}</h3>
                 <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-100 dark:border-emerald-500/10 leading-none">{{ trade.items?.length }} {{ $t('common.pcs') }}</span>
               </div>
 
-              <div class="flex-grow">
+              <div class="flex-grow overflow-y-auto custom-scrollbar px-6 pb-6">
                  <div class="space-y-2.5">
                    <div v-for="(item, idx) in processedItems" :key="idx" 
                         class="group flex items-center gap-4 p-3 rounded-[14px] transition-all duration-200 border border-slate-100 dark:border-white/5 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-white/[0.02] shadow-sm hover:shadow-md"
@@ -111,8 +111,8 @@
             </div>
 
             <!-- Right Side: Sidebar -->
-            <div class="w-full md:w-[320px] lg:w-[340px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0">
-              <div class="flex-grow overflow-y-auto custom-scrollbar p-6 space-y-6">
+            <div class="w-full md:w-[320px] lg:w-[340px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0 min-h-0">
+              <div class="flex-grow overflow-y-auto custom-scrollbar p-6 space-y-6 flex flex-col">
                 
                 <!-- Summary Section -->
                 <div>

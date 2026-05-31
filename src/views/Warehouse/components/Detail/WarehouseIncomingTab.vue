@@ -18,6 +18,7 @@
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.amount') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('products.form.purchase_price') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.all') }}</th>
+              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('menu.suppliers') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_worker') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest">{{ $t('warehouse.detail.col_description') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest text-right">{{ $t('common.date') }}</th>
@@ -68,6 +69,18 @@
                 >
                   {{ Number(item.total_cost).toLocaleString() }}
                 </span>
+              </td>
+              <!-- Supplier -->
+              <td class="px-4 py-2.5">
+                <div class="flex items-center gap-1.5" v-if="item.supplier_name">
+                  <div class="w-5 h-5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-[10px] font-bold text-indigo-500 border border-indigo-100 dark:border-indigo-500/20">
+                    {{ item.supplier_name.charAt(0) }}
+                  </div>
+                  <span class="text-[12px] font-medium text-slate-600 dark:text-slate-400">
+                    {{ item.supplier_name }}
+                  </span>
+                </div>
+                <span v-else class="text-[12px] text-slate-400">—</span>
               </td>
               <!-- Worker -->
               <td class="px-4 py-2.5">
