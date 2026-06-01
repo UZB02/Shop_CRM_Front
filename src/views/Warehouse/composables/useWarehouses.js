@@ -105,7 +105,7 @@ export function useWarehouses() {
 
     const confirmDelete = (data) => {
         confirm.require({
-            message: t('warehouse.messages.delete_confirm', { name: data.name }),
+            message: t('warehouse.messages.delete_confirm', { Name: data.name }),
             header: t('warehouse.messages.confirm_title'),
             icon: 'pi pi-exclamation-triangle',
             acceptClass: 'p-button-danger rounded-xl',

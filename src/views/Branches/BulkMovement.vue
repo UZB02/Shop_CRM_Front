@@ -1,12 +1,15 @@
 <script setup>
 import { ref } from 'vue'
 import Dialog from 'primevue/dialog'
+import Dropdown from 'primevue/dropdown'
+import { useToast } from 'primevue/usetoast'
 import { useBulkMovement } from '@/views/Warehouse/composables/useBulkMovement'
 import BulkMovementHeader from '@/views/Warehouse/components/BulkMovement/BulkMovementHeader.vue'
 import BulkMovementCatalog from '@/views/Warehouse/components/BulkMovement/BulkMovementCatalog.vue'
 import BulkMovementCart from '@/views/Warehouse/components/BulkMovement/BulkMovementCart.vue'
 import { useTemplateDownload } from '@/composables/useTemplateDownload'
 
+const toast = useToast()
 const activeTab = ref('cart') // 'cart' or 'catalog'
 
 const {
@@ -30,8 +33,27 @@ const {
   supplier,
   suppliersList,
   paidAmount,
-  paymentType
+  paymentType,
+  totalCost,
+  debtAmount
 } = useBulkMovement()
+
+const showSaveDialog = ref(false)
+
+const promptSave = () => {
+  if (validItemsCount.value === 0) {
+    toast.add({ severity: 'warn', summary: 'Diqqat', detail: 'Kamida bitta mahsulot kiritilishi shart.', life: 5000 })
+    return
+  }
+  showSaveDialog.value = true
+}
+
+const confirmSave = async () => {
+  await handleSave()
+  if (!saving.value) {
+    showSaveDialog.value = false
+  }
+}
 
 const { templateLoading, downloadTemplate } = useTemplateDownload()
 
@@ -96,7 +118,7 @@ const selectTur = (tur) => {
       :type="movement_type"
       :templateLoading="templateLoading.movements"
       @back="handleCancel"
-      @save="handleSave"
+      @save="promptSave"
       @download-template="downloadTemplate('movements')"
     />
 
@@ -118,7 +140,7 @@ const selectTur = (tur) => {
             @remove="removeBulkItem"
             @update-qty="updateQty"
             @update-price="updatePrice"
-            @save="handleSave"
+            @save="promptSave"
             :saving="saving"
             :validCount="validItemsCount"
           />
@@ -158,7 +180,7 @@ const selectTur = (tur) => {
                 @remove="removeBulkItem"
                 @update-qty="updateQty"
                 @update-price="updatePrice"
-                @save="handleSave"
+                @save="promptSave"
                 :saving="saving"
                 :validCount="validItemsCount"
               />
@@ -239,6 +261,116 @@ const selectTur = (tur) => {
           <div class="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity">
             <i class="pi pi-plus-circle text-emerald-500"></i>
           </div>
+        </button>
+      </div>
+    </Dialog>
+
+    <!-- Checkout/Save Dialog -->
+    <Dialog 
+      v-model:visible="showSaveDialog" 
+      :header="movement_type === 'in' ? 'Kirimni tasdiqlash' : 'Chiqimni tasdiqlash'"
+      modal 
+      class="w-full max-w-md"
+      :pt="{ 
+        root: { class: 'dark:bg-slate-900 border-none rounded-3xl shadow-2xl overflow-hidden' },
+        header: { class: 'px-6 pt-6 pb-4 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 font-black tracking-tighter text-xl' },
+        content: { class: 'px-6 pb-6 pt-6 dark:bg-slate-900' }
+      }"
+    >
+      <div class="flex flex-col gap-5">
+        <!-- Jami & Qarz -->
+        <div v-if="movement_type === 'in'" class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center justify-between border border-slate-100 dark:border-slate-700/50">
+           <div>
+             <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">{{ $t('common.total') }}</span>
+             <span class="text-xl font-black text-slate-800 dark:text-white">{{ Number(totalCost).toLocaleString('ru-RU') }} UZS</span>
+           </div>
+           <div v-if="debtAmount > 0" class="text-right">
+             <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest block">Qarzga yoziladi</span>
+             <span class="text-xl font-black text-rose-600 dark:text-rose-400">{{ Number(debtAmount).toLocaleString('ru-RU') }} UZS</span>
+           </div>
+        </div>
+
+        <div v-if="movement_type === 'in'" class="flex flex-col gap-1.5">
+           <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">{{ $t('suppliers.title') }}</label>
+           <Dropdown
+            v-model="supplier"
+            :options="suppliersList"
+            option-label="name"
+            option-value="id"
+            :filter="true"
+            :placeholder="$t('suppliers.title')"
+            class="w-full h-12 items-center text-[13px] font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl"
+            :pt="{
+              root: { class: 'shadow-none' },
+              input: { class: 'py-3 px-4 text-[14px]' }
+            }"
+          >
+            <template #value="slotProps">
+              <div v-if="slotProps.value" class="flex items-center gap-2">
+                <i class="pi pi-truck text-emerald-500 text-[14px]"></i>
+                <span class="truncate">{{ suppliersList.find(s => s.id === slotProps.value)?.name || '...' }}</span>
+              </div>
+              <div v-else class="flex items-center gap-2 text-slate-400">
+                <i class="pi pi-truck text-[14px]"></i>
+                <span class="truncate">{{ $t('suppliers.title') }}</span>
+              </div>
+            </template>
+            <template #option="slotProps">
+              <div class="flex items-center gap-2 text-[14px] font-bold">
+                <i class="pi pi-truck text-slate-400 text-[13px]"></i>
+                <span>{{ slotProps.option.name }}</span>
+              </div>
+            </template>
+          </Dropdown>
+        </div>
+
+        <div v-if="movement_type === 'in'" class="flex flex-col gap-1.5">
+           <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">To'lov</label>
+           <div class="flex items-center h-12 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:border-emerald-400 dark:focus-within:border-emerald-500/60 transition-colors">
+              <span class="pl-4 pr-3 text-[11px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap flex-shrink-0 border-r border-slate-100 dark:border-slate-800 h-full flex items-center select-none">To'lov</span>
+              <input
+                type="text"
+                inputmode="numeric"
+                :value="paidAmount ? Number(paidAmount).toLocaleString('ru-RU') : ''"
+                placeholder="0"
+                @input="e => {
+                  const raw = e.target.value.replace(/\D/g, '');
+                  const num = raw ? parseInt(raw) : 0;
+                  paidAmount = num;
+                  e.target.value = raw ? Number(raw).toLocaleString('ru-RU') : '';
+                }"
+                class="flex-1 min-w-0 h-full bg-transparent border-none outline-none ring-0 px-3 text-[15px] font-black text-right text-emerald-600 dark:text-emerald-400 placeholder:text-slate-300 dark:placeholder:text-slate-600"
+              />
+              <div class="h-6 w-[1px] bg-slate-100 dark:bg-slate-800 flex-shrink-0"></div>
+              <div class="relative h-full w-28 flex-shrink-0">
+                <select
+                  v-model="paymentType"
+                  class="h-full w-full pl-3 pr-8 text-[14px] font-black text-slate-700 dark:text-slate-200 bg-transparent border-none outline-none appearance-none cursor-pointer text-center"
+                >
+                  <option value="cash" class="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200">Naqd</option>
+                  <option value="card" class="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200">Karta</option>
+                  <option value="transfer" class="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200">O'tkazma</option>
+                </select>
+                <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 flex items-center">
+                  <i class="pi pi-chevron-down text-[10px]"></i>
+                </div>
+              </div>
+           </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+           <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Izoh</label>
+           <textarea 
+             v-model="note" 
+             class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-[14px] font-bold outline-none focus:border-emerald-500/50 transition-all resize-none" 
+             rows="2" 
+             placeholder="Kirim/chiqim uchun umumiy tavsif..."></textarea>
+        </div>
+
+        <button @click="confirmSave" :disabled="saving" class="mt-2 w-full h-12 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-black tracking-widest uppercase transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
+           <i v-if="saving" class="pi pi-spin pi-spinner"></i>
+           <i v-else class="pi pi-check"></i>
+           Saqlash
         </button>
       </div>
     </Dialog>

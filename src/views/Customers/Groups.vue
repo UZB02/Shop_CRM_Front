@@ -269,7 +269,7 @@ const handleSubmit = async () => {
 
 const confirmDelete = (group) => {
   confirm.require({
-    message: t('customers.groups.delete_confirm', { name: group.name }),
+    message: t('customers.groups.delete_confirm', { Name: group.name }),
     header: t('common.confirm_title') || 'Tasdiqlash',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger p-button-sm !rounded-xl',

@@ -175,8 +175,8 @@ const addGroup = async () => {
 
 const confirmDelete = (group) => {
   confirm.require({
-    message: t('customers.groups.delete_confirm', { name: group.name }),
-    header: t('common.confirm') || 'Tasdiqlash',
+    message: t('customers.groups.delete_confirm', { Name: group.name }),
+    header: t('common.confirm_title') || 'Tasdiqlash',
     icon: 'pi pi-exclamation-triangle',
     rejectProps: { label: t('common.cancel') || 'Bekor qilish', severity: 'secondary', outlined: true },
     acceptProps: { label: t('common.delete') || "O'chirish", severity: 'danger' },

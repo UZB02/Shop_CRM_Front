@@ -169,7 +169,7 @@ export function useWorkerActions(loadWorkersCallback) {
                 toast.add({
                     severity: 'success',
                     summary: t('common.updated'),
-                    detail: t('workers.messages.updated', { name: `${worker.value.first_name} ${worker.value.last_name}` }),
+                    detail: t('workers.messages.updated', { Name: `${worker.value.first_name} ${worker.value.last_name}` }),
                     life: 5000
                 })
             } else {
@@ -209,7 +209,7 @@ export function useWorkerActions(loadWorkersCallback) {
     const confirmDeleteWorker = (data) => {
         const name = data.full_name || `${data.first_name || ''} ${data.last_name || ''}`.trim() || 'Xodim'
         confirm.require({
-            message: t('workers.messages.delete_confirm', { name }),
+            message: t('workers.messages.delete_confirm', { Name: name }),
             header: t('workers.messages.delete_header'),
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: t('common.yes_delete'),
@@ -218,7 +218,7 @@ export function useWorkerActions(loadWorkersCallback) {
             accept: async () => {
                 try {
                     await workersAPI.delete(data.id || data._id)
-                    toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('workers.messages.deleted', { name }), life: 5000 })
+                    toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('workers.messages.deleted', { Name: name }), life: 5000 })
                     
                     // Real-time sync of subscription limits after deletion
                     notificationStore.fetchSubscription()

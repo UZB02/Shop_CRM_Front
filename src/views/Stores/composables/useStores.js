@@ -271,7 +271,7 @@ export function useStores() {
 
     const confirmDeleteBranch = (data) => {
         confirm.require({
-            message: t('stores.branch_delete_confirm', { name: data.name }),
+            message: t('stores.branch_delete_confirm', { Name: data.name }),
             header: t('stores.confirm_title'),
             icon: 'pi pi-exclamation-triangle',
             acceptClass: 'p-button-danger',

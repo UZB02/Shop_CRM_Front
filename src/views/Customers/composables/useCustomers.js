@@ -165,7 +165,7 @@ export function useCustomers() {
 
   const confirmDelete = (data) => {
     confirm.require({
-      message: t('customers.messages.delete_confirm', { name: data.name }),
+      message: t('customers.messages.delete_confirm', { Name: data.name }),
       header: t('common.confirm_title') || 'Tasdiqlash',
       icon: 'pi pi-exclamation-triangle',
       acceptClass: 'p-button-danger',

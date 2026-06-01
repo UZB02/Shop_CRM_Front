@@ -43,6 +43,18 @@ export function useBulkMovement() {
     return bulkItems.value.filter(item => item.product?.id && item.quantity > 0).length
   })
 
+  const totalCost = computed(() => {
+    return bulkItems.value
+      .filter(item => item.product?.id && item.quantity > 0)
+      .reduce((acc, item) => acc + (Number(item.quantity || 0) * Number(item.unit_cost || 0)), 0)
+  })
+
+  const debtAmount = computed(() => {
+    const paid = Number(paidAmount.value || 0)
+    const diff = totalCost.value - paid
+    return diff > 0 ? diff : 0
+  })
+
   const addItem = (product) => {
     const existing = bulkItems.value.find(item => 
       item.product.id === product.id && 
@@ -243,7 +255,9 @@ export function useBulkMovement() {
     supplier,
     suppliersList,
     paidAmount,
-    paymentType
+    paymentType,
+    totalCost,
+    debtAmount
   }
 }
 

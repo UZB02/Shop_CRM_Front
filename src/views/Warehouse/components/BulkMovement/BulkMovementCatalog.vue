@@ -58,7 +58,7 @@
                 <i v-else class="pi pi-box text-slate-200 dark:text-slate-700 text-sm"></i>
               </div>
               
-              <div v-if="getItemQty(product)" class="absolute -top-2 -right-2 min-w-[20px] h-[20px] bg-emerald-500 text-white rounded-full flex items-center justify-center text-[12px] font-black shadow-lg border-2 border-white dark:border-slate-900 z-[20]">
+              <div v-if="getItemQty(product)" class="absolute -top-2 -right-2 min-w-[20px] h-[20px] px-1.5 bg-emerald-500 text-white rounded-full flex items-center justify-center text-[11px] font-black shadow-lg border-2 border-white dark:border-slate-900 z-[20]">
                 {{ getItemQty(product) }}
               </div>
             </div>
@@ -71,7 +71,12 @@
               </div>
             </div>
 
-            <div class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
+            <div class="flex flex-col items-end justify-center ml-2 shrink-0">
+              <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 leading-none">{{ Number(product.sale_price || 0).toLocaleString('ru-RU') }}</span>
+              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{{ product.currency_code || product.price_currency || 'UZS' }}</span>
+            </div>
+
+            <div class="w-6 h-6 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
               <i class="pi pi-plus text-[12px]"></i>
             </div>
           </div>
