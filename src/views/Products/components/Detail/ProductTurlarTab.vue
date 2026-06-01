@@ -200,7 +200,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import ToggleSwitch from 'primevue/toggleswitch'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
@@ -314,12 +314,16 @@ const fetchTurlar = async () => {
   }
 }
 
+const isRefreshing = ref(false)
+
 const toggleTurSystem = async () => {
   saving.value = true
   try {
     await productsAPI.update(props.product.id, { has_tur: hasTur.value })
     toast.add({ severity: 'success', summary: t('common.updated'), life: 3000 })
+    isRefreshing.value = true
     emit('refresh')
+    setTimeout(() => isRefreshing.value = false, 1000)
     if (hasTur.value) {
       fetchTurlar()
     }
@@ -374,7 +378,9 @@ const saveTur = async () => {
     }
     turDialog.value = false
     fetchTurlar()
+    isRefreshing.value = true
     emit('refresh')
+    setTimeout(() => isRefreshing.value = false, 1000)
   } catch (err) {
     toast.add({ severity: 'error', summary: t('common.error'), detail: getErrorMessage(err), life: 5000 })
   } finally {
@@ -393,7 +399,9 @@ const confirmDelete = (tur) => {
         await productsAPI.deleteTur(props.product.id, tur.id)
         toast.add({ severity: 'success', summary: t('turlar.messages.deleted'), life: 3000 })
         fetchTurlar()
+        isRefreshing.value = true
         emit('refresh')
+        setTimeout(() => isRefreshing.value = false, 1000)
       } catch (err) {
         toast.add({ severity: 'error', summary: t('common.error'), detail: getErrorMessage(err), life: 5000 })
       }
@@ -408,6 +416,20 @@ onMounted(() => {
 watch(() => props.product.has_tur, (newVal) => {
   hasTur.value = newVal
   if (newVal) fetchTurlar()
+})
+
+onBeforeUnmount(async () => {
+  if (isRefreshing.value) return
+  
+  if (hasTur.value && turlar.value.length === 0) {
+    try {
+      await productsAPI.update(props.product.id, { has_tur: false })
+      toast.add({ severity: 'warn', summary: t('common.warning'), detail: t('turlar.messages.auto_disabled'), life: 6000 })
+      emit('refresh')
+    } catch (err) {
+      console.error('Failed to auto-disable empty tur system:', err)
+    }
+  }
 })
 </script>
 

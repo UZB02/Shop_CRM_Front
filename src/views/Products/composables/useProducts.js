@@ -103,15 +103,20 @@ export function useProducts() {
     }
 
     const confirmDeleteProduct = (data) => {
+        const displayName = data.tur_name || data.name
         confirm.require({
-            message: `"${data.name}" ni o'chirishni tasdiqlaysizmi?`,
+            message: `"${displayName}" ni o'chirishni tasdiqlaysizmi?`,
             header: 'Tasdiqlash',
             icon: 'pi pi-exclamation-triangle',
             acceptClass: 'p-button-danger',
             accept: async () => {
                 try {
                     const id = data.id || data._id
-                    await productsAPI.delete(id)
+                    if (data.has_tur && data.tur_id) {
+                        await productsAPI.deleteTur(id, data.tur_id)
+                    } else {
+                        await productsAPI.delete(id)
+                    }
                     toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot o\'chirildi', life: 5000 })
                     
                     // Sync limits after deletion
@@ -120,7 +125,7 @@ export function useProducts() {
                     loadProducts()
                 } catch (error) {
                     console.error('Product deletion error:', error)
-                    toast.add({ severity: 'error', summary: 'Xatolik', detail: 'O\'chirishda xatolik yuz berdi', life: 5000 })
+                    toast.add({ severity: 'error', summary: 'Xatolik', detail: getErrorMessage(error, 'O\'chirishda xatolik yuz berdi'), life: 5000 })
                 }
             }
         })

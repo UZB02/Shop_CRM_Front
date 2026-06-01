@@ -33,7 +33,7 @@
         <!-- Category -->
         <div class="flex flex-col gap-2" :class="{ 'col-span-2': !settingsStore.isSubcategoryEnabled }">
           <label class="text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">
-            {{ $t('products.form.category') }} <span class="text-rose-500 ml-0.5">*</span>
+            {{ $t('products.form.category') }}
           </label>
           <Select
             :modelValue="modelValue.category"
@@ -46,7 +46,6 @@
             class="w-full h-11"
             pt:root:class="!h-11 !rounded-xl !border-slate-200 dark:!border-slate-700 !bg-slate-50 dark:!bg-slate-800/40 !shadow-sm focus:!ring-4 focus:!ring-emerald-500/10 focus:!border-emerald-500"
             pt:label:class="!text-[13px] !font-bold !text-slate-700 dark:!text-white !flex !items-center !px-4"
-            :class="{ '!border-rose-400 !bg-rose-50/5': submitted && !modelValue.category }"
           />
         </div>
 
@@ -81,6 +80,36 @@
             @input="$emit('update:modelValue', { ...modelValue, barcode: $event.target.value })"
             type="text"
             placeholder="00000000000"
+            class="w-full h-11 pl-11 pr-5 rounded-xl text-[14px] font-mono font-bold tracking-widest text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
+          />
+        </div>
+      </div>
+
+      <!-- IKPU Code -->
+      <div class="flex flex-col gap-2">
+        <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">IKPU Kod (Ixtiyoriy)</label>
+        <div class="relative group">
+          <i class="pi pi-qrcode absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors text-xs"></i>
+          <input
+            :value="modelValue.ikpu_code"
+            @input="$emit('update:modelValue', { ...modelValue, ikpu_code: $event.target.value })"
+            type="text"
+            placeholder="17 raqamli kod"
+            class="w-full h-11 pl-11 pr-5 rounded-xl text-[14px] font-mono font-bold tracking-widest text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
+          />
+        </div>
+      </div>
+
+      <!-- Marking Code -->
+      <div class="flex flex-col gap-2">
+        <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Markirovka Kodi (Ixtiyoriy)</label>
+        <div class="relative group">
+          <i class="pi pi-verified absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors text-xs"></i>
+          <input
+            :value="modelValue.marking_code"
+            @input="$emit('update:modelValue', { ...modelValue, marking_code: $event.target.value })"
+            type="text"
+            placeholder="Markirovka kodi"
             class="w-full h-11 pl-11 pr-5 rounded-xl text-[14px] font-mono font-bold tracking-widest text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
           />
         </div>

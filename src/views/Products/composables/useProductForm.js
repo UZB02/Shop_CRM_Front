@@ -23,10 +23,11 @@ export function useProductForm() {
         category: null,
         subcategory: null,
         unit: 'dona',
-        purchase_price: 0,
         sale_price: 0,
         price_currency: settingsStore.settings?.default_currency || 'UZS',
         barcode: '',
+        ikpu_code: null,
+        marking_code: null,
         imageUrl: ''
     })
 
@@ -83,8 +84,9 @@ export function useProductForm() {
                     price_currency: data.currency_code || data.price_currency || settingsStore.settings?.default_currency || 'UZS',
                     unit: data.unit || 'dona',
                     imageUrl: data.image || data.imageUrl,
-                    purchase_price: Number(data.purchase_price) || 0,
-                    sale_price: Number(data.sale_price) || 0
+                    sale_price: Number(data.sale_price) || 0,
+                    ikpu_code: data.ikpu_code || null,
+                    marking_code: data.marking_code || null
                 }
 
                 // If editing and has category, fetch subcategories
@@ -139,8 +141,8 @@ export function useProductForm() {
 
     const onSave = async () => {
         submitted.value = true
-        if (!product.value.name || !product.value.category || !product.value.purchase_price || !product.value.sale_price) {
-            toast.add({ severity: 'warn', summary: 'Ogohlantirish', detail: 'Iltimos, barcha majburiy maydonlarni to\'ldiring', life: 5000 })
+        if (!product.value.name) {
+            toast.add({ severity: 'warn', summary: 'Ogohlantirish', detail: 'Iltimos, mahsulot nomini kiriting', life: 5000 })
             return
         }
 
@@ -150,13 +152,14 @@ export function useProductForm() {
 
             const payload = {
                 name: product.value.name,
-                category: product.value.category,
-                subcategory: product.value.subcategory,
-                unit: product.value.unit,
-                purchase_price: product.value.purchase_price.toString(),
-                sale_price: product.value.sale_price.toString(),
-                currency_code: product.value.price_currency,
-                barcode: product.value.barcode || ''
+                category: product.value.category || null,
+                subcategory: product.value.subcategory || null,
+                unit: product.value.unit || 'dona',
+                sale_price: product.value.sale_price ? product.value.sale_price.toString() : '0',
+                currency_code: product.value.price_currency || 'UZS',
+                barcode: product.value.barcode || null,
+                ikpu_code: product.value.ikpu_code || null,
+                marking_code: product.value.marking_code || null
             }
 
             Object.keys(payload).forEach(key => {

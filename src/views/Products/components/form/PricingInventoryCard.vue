@@ -33,21 +33,6 @@
       <!-- Pricing Grid -->
       <div class="grid grid-cols-1 gap-5">
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-black tracking_widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.purchase_price') }}</label>
-          <div class="relative group">
-            <input
-              :value="modelValue.purchase_price"
-              @input="$emit('update:modelValue', { ...modelValue, purchase_price: Number($event.target.value) })"
-              type="number"
-              placeholder="0"
-              class="w-full h-11 px-4 pr-14 rounded-xl text-[14px] font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-mono shadow-sm"
-            />
-            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] font-black text-slate-400 bg-slate-200/50 dark:bg-slate-700/50 px-2 py-0.5 rounded">
-              {{ currencies.find(c => c.id === modelValue.price_currency)?.name || 'UZS' }}
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-col gap-2">
           <label class="text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.sale_price') }}</label>
           <div class="relative group">
             <input

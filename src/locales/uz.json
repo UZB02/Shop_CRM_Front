@@ -66,6 +66,7 @@
     "required_field": "Maydonni to'ldirish shart",
     "success": "Muvaffaqiyatli",
     "error_message": "Xatolik yuz berdi",
+    "warning": "Ogohlantirish",
     "saving": "Ishlanmoqda...",
     "confirm_title": "Tasdiqlash",
     "pcs": "Dona",
@@ -1741,7 +1742,8 @@
       "added": "Yangi tur qo'shildi",
       "updated": "Tur yangilandi",
       "deleted": "Tur o'chirildi",
-      "delete_error_stock": "Omborda qoldig'i bor turni o'chirib bo'lmaydi"
+      "delete_error_stock": "Omborda qoldig'i bor turni o'chirib bo'lmaydi",
+      "auto_disabled": "Tur yoqildi, lekin tur qo'shilmadi. Shuning uchun tur tizimi avtomatik o'chirildi."
     },
     "badge": "Turli",
     "select_tur": "Turni tanlang (razmer/rang)"
