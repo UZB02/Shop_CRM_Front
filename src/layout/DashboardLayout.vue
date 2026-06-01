@@ -141,6 +141,20 @@ const handleRateLimitError = (event) => {
   })
 }
 
+let lastNetworkErrorToastTime = 0
+const handleNetworkError = (event) => {
+  const now = Date.now()
+  if (now - lastNetworkErrorToastTime < 5000) return
+  lastNetworkErrorToastTime = now
+
+  toast.add({
+    severity: 'error',
+    summary: 'Aloqa xatosi',
+    detail: event.detail || "Internet bilan aloqa yo'q yoki serverga ulanib bo'lmadi.",
+    life: 5000
+  })
+}
+
 const notificationStore = useNotificationStore()
 let initialSessionNotified = false
 
@@ -216,11 +230,13 @@ watch(() => notificationStore.initialFetchDone, (done) => {
 
 onMounted(() => {
   window.addEventListener('rate-limit-error', handleRateLimitError)
+  window.addEventListener('network-error', handleNetworkError)
   notificationStore.startPolling()
 })
 
 onUnmounted(() => {
   window.removeEventListener('rate-limit-error', handleRateLimitError)
+  window.removeEventListener('network-error', handleNetworkError)
   notificationStore.stopPolling()
 })
 

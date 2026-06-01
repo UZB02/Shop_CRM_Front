@@ -176,8 +176,9 @@ export function useStores() {
             }
             storeDialog.value = false
             loadData()
-        } catch {
-            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.save_error'), life: 5000 })
+        } catch (error) {
+            const detail = error?.response?.data?.detail || t('stores.save_error')
+            toast.add({ severity: 'error', summary: t('stores.error'), detail: detail, life: 5000 })
         } finally {
             saving.value = false
         }
@@ -261,7 +262,8 @@ export function useStores() {
                 "color: #ef4444; font-weight: bold;", 
                 error
             )
-            toast.add({ severity: 'error', summary: t('stores.error'), detail: t('stores.save_error'), life: 5000 })
+            const detail = error.response?.data?.detail || t('stores.save_error')
+            toast.add({ severity: 'error', summary: t('stores.error'), detail: detail, life: 5000 })
         } finally {
             saving.value = false
         }

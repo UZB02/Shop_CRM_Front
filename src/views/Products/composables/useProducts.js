@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 import { productsAPI, reportsAPI } from '@/services/api'
+import { getErrorMessage } from '@/services/axios'
 import { useNotificationStore } from '@/store/notifications'
 
 export function useProducts() {
@@ -80,7 +81,7 @@ export function useProducts() {
         } catch (error) {
             if (requestId === lastRequestId) {
                 console.error('Error loading products:', error)
-                toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Mahsulotlarni yuklashda xatolik', life: 5000 })
+                toast.add({ severity: 'error', summary: 'Xatolik', detail: getErrorMessage(error, 'Mahsulotlarni yuklashda xatolik'), life: 5000 })
             }
         } finally {
             if (requestId === lastRequestId) {

@@ -96,7 +96,8 @@ export function useWarehouses() {
             warehouseDialog.value = false
             loadWarehouses(currentPage.value)
         } catch (error) {
-            toast.add({ severity: 'error', summary: t('warehouse.messages.error'), detail: t('warehouse.messages.save_error'), life: 5000 })
+            const detail = error.response?.data?.detail || t('warehouse.messages.save_error')
+            toast.add({ severity: 'error', summary: t('warehouse.messages.error'), detail: detail, life: 5000 })
         } finally {
             saving.value = false
         }

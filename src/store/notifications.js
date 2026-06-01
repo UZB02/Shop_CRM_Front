@@ -64,10 +64,38 @@ export const useNotificationStore = defineStore('notifications', {
         },
         hasLowStock: (state) => Array.isArray(state.items) && state.items.some(i => i.type === 'low_stock' && !i.is_read),
 
-        canAddBranch: (state) => state.usage?.branches?.can_add ?? true,
-        canAddWarehouse: (state) => state.usage?.warehouses?.can_add ?? true,
-        canAddWorker: (state) => state.usage?.workers?.can_add ?? true,
-        canAddProduct: (state) => state.usage?.products?.can_add ?? true,
+        canAddBranch: (state) => {
+            const u = state.usage?.branches;
+            if (!u) return true;
+            if (u.unlimited) return true;
+            if (typeof u.limit === 'number' && typeof u.used === 'number') return u.used < u.limit;
+            if (typeof u.can_add === 'boolean') return u.can_add;
+            return true;
+        },
+        canAddWarehouse: (state) => {
+            const u = state.usage?.warehouses;
+            if (!u) return true;
+            if (u.unlimited) return true;
+            if (typeof u.limit === 'number' && typeof u.used === 'number') return u.used < u.limit;
+            if (typeof u.can_add === 'boolean') return u.can_add;
+            return true;
+        },
+        canAddWorker: (state) => {
+            const u = state.usage?.workers;
+            if (!u) return true;
+            if (u.unlimited) return true;
+            if (typeof u.limit === 'number' && typeof u.used === 'number') return u.used < u.limit;
+            if (typeof u.can_add === 'boolean') return u.can_add;
+            return true;
+        },
+        canAddProduct: (state) => {
+            const u = state.usage?.products;
+            if (!u) return true;
+            if (u.unlimited) return true;
+            if (typeof u.limit === 'number' && typeof u.used === 'number') return u.used < u.limit;
+            if (typeof u.can_add === 'boolean') return u.can_add;
+            return true;
+        },
 
         allNotifications: (state) => {
             if (!Array.isArray(state.items)) return []

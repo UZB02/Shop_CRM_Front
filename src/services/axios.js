@@ -54,6 +54,12 @@ api.interceptors.response.use(
 
         console.error(`❌ API ERROR [${error.config?.method?.toUpperCase()}] ${error.config?.url}:`, error.response?.data || error.message)
         
+        if (error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+            window.dispatchEvent(new CustomEvent('network-error', {
+                detail: "Internet bilan aloqa yo'q yoki serverga ulanib bo'lmadi. Iltimos, ulanishni tekshiring."
+            }))
+        }
+
         const status = error.response?.status
         const original = error.config
 
@@ -114,9 +120,13 @@ api.interceptors.response.use(
     }
 )
 
-export const getErrorMessage = (error) => {
+export const getErrorMessage = (error, fallback = "Xatolik yuz berdi") => {
+    if (error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+        return "Internet bilan aloqa yo'q yoki serverga ulanib bo'lmadi. Iltimos, ulanishni tekshiring."
+    }
+
     const data = error.response?.data
-    if (!data) return error.message || "Xatolik yuz berdi"
+    if (!data) return error.message || fallback
 
     if (typeof data === 'string') return data
     if (data.detail) return data.detail
@@ -136,7 +146,7 @@ export const getErrorMessage = (error) => {
         }
     }
     
-    return "Xatolik yuz berdi"
+    return fallback
 }
 
 export default api

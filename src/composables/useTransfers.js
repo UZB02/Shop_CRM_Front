@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { transfersAPI, warehousesAPI, branchesAPI } from '@/services/api'
+import { getErrorMessage } from '@/services/axios'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 
@@ -160,7 +161,7 @@ export function useTransfers() {
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: errorData?.detail || errorData?.error || t('common.error_message'),
+                detail: getErrorMessage(error),
                 life: 5000
             })
             return { success: false }
@@ -185,7 +186,7 @@ export function useTransfers() {
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.error || t('common.error_message'),
+                detail: getErrorMessage(error),
                 life: 3000
             })
         } finally {
@@ -209,7 +210,7 @@ export function useTransfers() {
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.error || t('common.error_message'),
+                detail: getErrorMessage(error),
                 life: 3000
             })
         } finally {

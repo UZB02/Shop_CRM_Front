@@ -110,8 +110,9 @@ const settingsStore = useSettingsStore()
 const notificationStore = useNotificationStore()
 
 const limitTooltip = computed(() => {
+  if (notificationStore.canAddBranch) return null
   const b = notificationStore.usage?.branches
-  if (!b || b.can_add) return null
+  if (!b) return null
   return t('subscription.limit_reached', { used: b.used, limit: b.limit })
 })
 

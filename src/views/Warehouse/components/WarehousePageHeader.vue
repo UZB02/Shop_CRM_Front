@@ -50,8 +50,9 @@ const notificationStore = useNotificationStore()
 const settingsStore = useSettingsStore()
 
 const limitTooltip = computed(() => {
+  if (notificationStore.canAddWarehouse) return null
   const w = notificationStore.usage?.warehouses
-  if (!w || w.can_add) return null
+  if (!w) return null
   return t('subscription.limit_reached', { used: w.used, limit: w.limit })
 })
 
