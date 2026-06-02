@@ -431,8 +431,19 @@ const printReceipt = async () => {
         detail: 'Chek muvaffaqiyatli chop etildi ✓',
         life: 2500
       })
+      
+      // Chek muvaffaqiyatli chop etilgach, biroz kutib modalni avtomatik yopamiz
+      setTimeout(() => {
+        showReceipt.value = false
+      }, 300)
     }
-    // method === 'browser' bo'lsa brauzer dialogi o'zi ko'rinadi
+    // method === 'browser' bo'lsa brauzer dialogi o'zi ko'rinadi. 
+    // Uni yopish ham qo'shib qo'yamiz.
+    else if (result.method === 'browser') {
+      setTimeout(() => {
+        showReceipt.value = false
+      }, 1000)
+    }
   } catch (err) {
     console.warn('[POS] QZ print xato, dialog fallbackga o\'tmoqda:', err)
     toast.add({
@@ -442,6 +453,11 @@ const printReceipt = async () => {
       life: 2000
     })
     browserPrintFallback(htmlContent)
+    
+    // Fallback orqali dialog ochilsa ham, birozdan keyin orqadagi oynani yopamiz
+    setTimeout(() => {
+      showReceipt.value = false
+    }, 1000)
   }
 }
 </script>
