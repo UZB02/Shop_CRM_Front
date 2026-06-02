@@ -49,7 +49,7 @@
                 </Tab>
                 <Tab v-if="isOwner" value="referrals" class="!text-[12px] !font-bold !px-5 !py-2 !rounded-lg !border-none !transition-all data-[active]:!bg-white dark:data-[active]:!bg-slate-900 data-[active]:!text-emerald-500 data-[active]:!shadow-sm">
                    <i class="pi pi-share-alt mr-2 !text-[11px]"></i>
-                   Takliflar (Referral)
+                   {{ $t('subscription.tabs.referrals') || "Takliflar (Referral)" }}
                 </Tab>
             </TabList>
 
