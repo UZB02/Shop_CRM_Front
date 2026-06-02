@@ -123,7 +123,7 @@
 
           <!-- Actions -->
           <td class="px-4 py-3 text-right">
-            <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div class="flex items-center justify-end gap-1">
               <!-- Pay button -->
               <button
                 v-if="sup.status === 'active'"
@@ -141,27 +141,13 @@
               >
                 <i class="pi pi-pencil text-[12px]" />
               </button>
-              <!-- Deactivate / restore -->
+              <!-- Delete -->
               <button
                 @click="$emit('delete', sup)"
-                v-tooltip.top="sup.status === 'active' ? $t('suppliers.deactivate') : $t('suppliers.activate')"
-                class="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
-                :class="sup.status === 'active'
-                  ? 'text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10'
-                  : 'text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10'"
+                v-tooltip.top="$t('common.delete') || 'O\'chirish'"
+                class="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
               >
-                <i :class="sup.status === 'active' ? 'pi pi-ban' : 'pi pi-check'" class="text-[12px]" />
-              </button>
-            </div>
-            <!-- Mobile fallback -->
-            <div class="flex items-center justify-end gap-1 sm:hidden">
-              <button v-if="sup.status === 'active'" @click="$emit('pay', sup)"
-                class="w-7 h-7 rounded-lg flex items-center justify-center text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10">
-                <i class="pi pi-wallet text-[12px]" />
-              </button>
-              <button @click="$emit('edit', sup)"
-                class="w-7 h-7 rounded-lg flex items-center justify-center text-blue-400 bg-blue-50 dark:bg-blue-500/10">
-                <i class="pi pi-pencil text-[12px]" />
+                <i class="pi pi-trash text-[12px]" />
               </button>
             </div>
           </td>

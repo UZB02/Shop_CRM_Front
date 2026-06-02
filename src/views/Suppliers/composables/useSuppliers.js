@@ -158,20 +158,23 @@ export function useSuppliers() {
             acceptClass: 'p-button-danger',
             accept: async () => {
                 try {
-                    await suppliersAPI.delete(sup.id)
+                    const res = await suppliersAPI.delete(sup.id)
+                    const backendMsg = res?.data?.message || res?.data?.detail || t('suppliers.messages.deleted', { Name: sup.name })
+                    
                     toast.add({
                         severity: 'success',
                         summary: t('common.success'),
-                        detail: t('suppliers.messages.deleted', { Name: sup.name }),
+                        detail: backendMsg,
                         life: 3000
                     })
                     await loadSuppliers(currentPage.value)
                 } catch (err) {
+                    const errorMsg = err.response?.data?.message || err.response?.data?.detail || t('suppliers.messages.delete_error')
                     toast.add({
                         severity: 'error',
                         summary: t('common.error'),
-                        detail: t('suppliers.messages.delete_error'),
-                        life: 3000
+                        detail: errorMsg,
+                        life: 4000
                     })
                 }
             }
