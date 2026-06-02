@@ -1,0 +1,253 @@
+<template>
+  <!-- QZ Tray Status Indicator -->
+  <div class="flex items-center gap-2 relative">
+    <!-- Status Badge -->
+    <button
+      @click="togglePanel"
+      :title="statusLabel"
+      class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-black tracking-wider transition-all border"
+      :class="badgeClass"
+    >
+      <span class="w-1.5 h-1.5 rounded-full" :class="dotClass" />
+      <i class="pi pi-print text-xs" />
+      <span class="hidden sm:inline">{{ statusLabel }}</span>
+    </button>
+
+    <!-- Settings Dropdown Panel -->
+    <Transition name="fade-down">
+      <div
+        v-if="showPanel"
+        v-click-outside="closePanel"
+        class="absolute top-full right-0 mt-2 w-72 bg-white dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800 rounded-2xl shadow-2xl z-[9999] overflow-hidden"
+      >
+        <!-- Header -->
+        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-print text-slate-500 dark:text-slate-400 text-sm" />
+            <span class="text-xs font-black text-slate-700 dark:text-slate-200 tracking-wide">
+              Printer Sozlamalari
+            </span>
+          </div>
+          <button @click="closePanel" class="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-all">
+            <i class="pi pi-times text-xs" />
+          </button>
+        </div>
+
+        <!-- QZ Status -->
+        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">QZ Tray Holati</span>
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full" :class="isConnected ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]' : 'bg-slate-300 dark:bg-slate-700'" />
+              <span class="text-[11px] font-black" :class="isConnected ? 'text-emerald-500' : 'text-slate-400'">
+                {{ isConnected ? 'Ulangan' : 'Ulanmagan' }}
+              </span>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button
+              v-if="!isConnected"
+              @click="handleConnect"
+              :disabled="isConnecting"
+              class="flex-1 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black tracking-wider transition-all disabled:opacity-60 disabled:cursor-wait"
+            >
+              <i class="pi pi-link mr-1" />
+              {{ isConnecting ? 'Ulanmoqda...' : 'Ulash' }}
+            </button>
+            <button
+              v-else
+              @click="handleDisconnect"
+              class="flex-1 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-black tracking-wider transition-all"
+            >
+              <i class="pi pi-times mr-1" />
+              Uzish
+            </button>
+          </div>
+
+          <!-- QZ xato -->
+          <p v-if="qzError && !isConnected" class="mt-2 text-[10px] text-rose-400 font-bold leading-tight">
+            <i class="pi pi-exclamation-triangle mr-1" />
+            {{ qzError }}
+          </p>
+        </div>
+
+        <!-- Printer Tanlash -->
+        <div v-if="isConnected && printers.length" class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Default Printer</p>
+          <div class="space-y-1 max-h-36 overflow-y-auto pr-1">
+            <button
+              v-for="p in printers"
+              :key="p"
+              @click="selectPrinter(p)"
+              class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-[11px] font-bold transition-all"
+              :class="defaultPrinter === p
+                ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800'
+                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'"
+            >
+              <i class="pi pi-print text-xs" :class="defaultPrinter === p ? 'text-emerald-500' : 'text-slate-400'" />
+              <span class="flex-1 truncate">{{ p }}</span>
+              <i v-if="defaultPrinter === p" class="pi pi-check text-xs text-emerald-500" />
+            </button>
+          </div>
+        </div>
+
+        <!-- QZ yuklab olish havolasi -->
+        <div v-if="!isConnected" class="px-4 py-3">
+          <p class="text-[11px] text-slate-400 dark:text-slate-500 leading-relaxed mb-2">
+            Silent chop etish uchun kompyuteringizga <strong class="text-slate-600 dark:text-slate-300">QZ Tray</strong> ilovasini o'rnating.
+          </p>
+          <a
+            href="https://qz.io/download/"
+            target="_blank"
+            class="flex items-center justify-center gap-1.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-500 dark:text-slate-400 hover:border-emerald-400 hover:text-emerald-500 transition-all"
+          >
+            <i class="pi pi-download text-xs" />
+            QZ Tray yuklab olish
+          </a>
+          <p class="text-[10px] text-slate-400 mt-2 text-center">
+            * O'rnatmasangiz ham, oddiy dialog orqali chop etiladi
+          </p>
+        </div>
+
+        <!-- Test Print tugmasi -->
+        <div v-if="isConnected" class="px-4 py-3">
+          <button
+            @click="testPrint"
+            :disabled="isPrinting"
+            class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-500 dark:text-slate-400 hover:border-emerald-400 hover:text-emerald-500 transition-all disabled:opacity-60"
+          >
+            <i class="pi pi-print mr-1" />
+            {{ isPrinting ? 'Chop etilmoqda...' : 'Test chek chiqarish' }}
+          </button>
+        </div>
+      </div>
+    </Transition>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { usePrinter } from '@/composables/usePrinter'
+
+const {
+  isConnected,
+  isConnecting,
+  printers,
+  defaultPrinter,
+  qzError,
+  connect,
+  disconnect,
+  setDefaultPrinter,
+  print,
+  loadPrinters
+} = usePrinter()
+
+const showPanel = ref(false)
+const isPrinting = ref(false)
+
+const togglePanel = () => { showPanel.value = !showPanel.value }
+const closePanel = () => { showPanel.value = false }
+
+// Badge reng sinflari
+const badgeClass = computed(() => {
+  if (isConnected.value) {
+    return 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-100 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400'
+  }
+  if (isConnecting.value) {
+    return 'bg-amber-50 dark:bg-amber-950/20 border-amber-100 dark:border-amber-800 text-amber-500 animate-pulse'
+  }
+  if (qzError.value) {
+    return 'bg-rose-50 dark:bg-rose-950/20 border-rose-100 dark:border-rose-800 text-rose-500'
+  }
+  return 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400'
+})
+
+const dotClass = computed(() => {
+  if (isConnected.value) return 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]'
+  if (isConnecting.value) return 'bg-amber-400 animate-pulse'
+  if (qzError.value) return 'bg-rose-400'
+  return 'bg-slate-300 dark:bg-slate-700'
+})
+
+const statusLabel = computed(() => {
+  if (isConnecting.value) return 'Ulanmoqda...'
+  if (isConnected.value) return defaultPrinter.value ? defaultPrinter.value.split('\\').pop() : 'Ulangan'
+  if (qzError.value) return 'Xato'
+  return 'QZ Tray'
+})
+
+// Auto-connect — sahifa ochilganda urinib ko'radi
+onMounted(async () => {
+  await connect()
+})
+
+// Ulash — avval disconnect qilib, keyin qayta ulanish
+const handleConnect = async () => {
+  // Agar isConnecting stuck qolsa — avval reset qilamiz
+  await disconnect()
+  await connect()
+}
+
+const handleDisconnect = async () => {
+  await disconnect()
+}
+
+const selectPrinter = (printerName) => {
+  setDefaultPrinter(printerName)
+}
+
+// Test chek
+const testPrint = async () => {
+  isPrinting.value = true
+  try {
+    const testHtml = buildTestHtml()
+    await print({ htmlContent: testHtml })
+  } catch (err) {
+    console.error('Test print xato:', err)
+  } finally {
+    isPrinting.value = false
+  }
+}
+
+const buildTestHtml = () => `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:8px 12px;width:80mm;}
+  body *{color:#000 !important;font-weight:bold !important;}
+  .text-center{text-align:center;}
+  .flex{display:flex;} .justify-between{justify-content:space-between;}
+  .border-t{border-top:1.5px dashed #000;margin:6px 0;padding-top:6px;}
+</style>
+</head><body>
+<div class="text-center" style="padding:8px 0;">
+  <p style="letter-spacing:0.2em;margin-bottom:4px;">★ ★ ★</p>
+  <h2 style="font-size:18px;font-weight:900;">TEST CHEKI</h2>
+  <p style="font-size:11px;margin-top:4px;">QZ Tray muvaffaqiyatli ishlayapti!</p>
+</div>
+<div class="border-t">
+  <div class="flex justify-between"><span>Sana:</span><span>${new Date().toLocaleString('uz-UZ')}</span></div>
+</div>
+<div class="border-t" style="margin-top:8px;text-align:center;">
+  <p style="font-size:11px;">★ ★ ★</p>
+</div>
+</body></html>`
+
+// v-click-outside directive
+const vClickOutside = {
+  mounted(el, binding) {
+    el._clickOutside = (e) => { if (!el.contains(e.target)) binding.value(e) }
+    document.addEventListener('click', el._clickOutside, true)
+  },
+  unmounted(el) {
+    document.removeEventListener('click', el._clickOutside, true)
+  }
+}
+</script>
+
+<style scoped>
+.fade-down-enter-active { transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
+.fade-down-leave-active { transition: all 0.15s ease; }
+.fade-down-enter-from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+.fade-down-leave-to { opacity: 0; transform: translateY(-4px); }
+</style>

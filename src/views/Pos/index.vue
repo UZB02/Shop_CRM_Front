@@ -50,6 +50,10 @@
 
         <!-- Shift & Actions -->
         <div class="flex items-center gap-3">
+          <PrinterStatusBar />
+
+          <div class="h-6 w-px bg-slate-100 dark:bg-slate-800"></div>
+
           <div v-if="activeShift && settingsStore.isShiftEnabled && settingsStore.hasPlanShift" class="px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl flex items-center gap-2 border border-emerald-100 dark:border-emerald-500/20">
              <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-pulse"></span>
              <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">{{ $t('pos.shift_number') }}{{ activeShift.id }}</span>
@@ -190,11 +194,14 @@
   import PosReceipt from './components/PosReceipt.vue'
   import CheckoutModal from './components/CheckoutModal.vue'
   import ShiftModal from './components/ShiftModal.vue'
+  import PrinterStatusBar from './components/PrinterStatusBar.vue'
+  import { usePrinter } from '@/composables/usePrinter'
   
   const authStore = useAuthStore()
   const settingsStore = useSettingsStore()
   const toast = useToast()
   const { t } = useI18n()
+  const { print: qzPrint } = usePrinter()
   
   const {
     activeShift,
@@ -366,43 +373,76 @@ const onCheckoutConfirm = async (paymentData) => {
   }
 }
 
-const printReceipt = () => {
+// ─── Chek HTML ni to'liq quradigan yordamchi ────────────────────────────────
+const buildReceiptHtml = () => {
   const el = document.getElementById('printable-receipt')
-  if (!el) return
-  const html = el.innerHTML
+  if (!el) return null
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"/><title>Savdo cheki</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:8px 12px;width:80mm;}
+  body *{color:#000 !important;font-family:"Inter",system-ui,sans-serif !important;font-weight:bold !important;}
+  .font-black,.text-xl,.text-2xl,h2{font-weight:900 !important;}
+  .text-center{text-align:center;}
+  .text-slate-400,.text-slate-500,.text-slate-700,.text-slate-800,.text-slate-900,
+  .text-emerald-500,.text-emerald-600,.text-rose-400,.text-rose-500,.text-amber-500{color:#000 !important;}
+  .text-xs{font-size:11px;} .text-sm{font-size:13px;} .text-xl{font-size:20px;font-weight:900;} .text-2xl{font-size:24px;font-weight:900;}
+  .tracking-widest{letter-spacing:0.15em;} .tracking-tighter{letter-spacing:-0.02em;}
+  .flex{display:flex;} .justify-between{justify-content:space-between;} .items-center{align-items:center;}
+  .space-y-1>*+*{margin-top:2px;} .space-y-1\\.5>*+*{margin-top:3px;} .space-y-2\\.5>*+*{margin-top:6px;}
+  .border-b-2{border-bottom:1.5px dashed #000;} .border-t-2{border-top:1.5px dashed #000;}
+  .border-t{border-top:1px dashed #000;}
+  .py-4{padding:8px 0;} .pt-3{padding-top:6px;} .pt-2{padding-top:4px;} .pb-2{padding-bottom:4px;}
+  .mb-1{margin-bottom:2px;} .mb-2{margin-bottom:4px;} .mb-3{margin-bottom:8px;} .mt-0\\.5{margin-top:2px;}
+  .leading-none{line-height:1;} .leading-tight{line-height:1.25;} .leading-relaxed{line-height:1.5;}
+  .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .receipt-paper{border:none !important;box-shadow:none !important;padding:0 !important;}
+  img{display:block;margin:0 auto;max-width:100%;}
+</style>
+</head><body>${el.innerHTML}</body></html>`
+}
+
+// ─── Dialog fallback yordamchi ───────────────────────────────────────────────
+const browserPrintFallback = (htmlContent) => {
   const iframe = document.createElement('iframe')
-  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:80mm;height:auto;border:none;'
+  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:80mm;border:none;visibility:hidden;'
   document.body.appendChild(iframe)
   const doc = iframe.contentDocument || iframe.contentWindow.document
-  doc.open()
-  doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Savdo cheki</title><style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:"Inter", system-ui, sans-serif;font-size:12px;color:#000;background:#fff;padding:8px 12px;width:80mm;}
-    body *{color:#000 !important; font-family:"Inter", system-ui, sans-serif !important; font-weight:bold !important;}
-    .font-black, .text-xl, .text-2xl, h2 {font-weight:bold !important;}
-    .text-center{text-align:center;}
-    .text-slate-400{color:#000;} .text-slate-500{color:#000;} .text-slate-700{color:#000;}
-    .text-slate-800{color:#000;} .text-slate-900{color:#000;}
-    .text-emerald-500{color:#000;} .text-emerald-600{color:#000;}
-    .text-rose-400{color:#000;} .text-rose-500{color:#000;} .text-amber-500{color:#000;}
-    .text-xs{font-size:11px;} .text-sm{font-size:13px;} .text-base{font-size:14px;}
-    .text-lg{font-size:16px;} .text-xl{font-size:20px;font-weight:900;} .text-2xl{font-size:24px;font-weight:900;} .{text-transform:;}
-    .tracking-widest{letter-spacing:0.15em;} .tracking-tighter{letter-spacing:-0.02em;}
-    .font-outfit{font-family:'Courier New',monospace;}
-    .flex{display:flex;} .justify-between{justify-content:space-between;} .items-center{align-items:center;}
-    .space-y-1>*+*{margin-top:2px;} .space-y-1\\.5>*+*{margin-top:3px;} .space-y-2\\.5>*+*{margin-top:6px;}
-    .border-b-2{border-bottom:1.5px dashed #000;} .border-t-2{border-top:1.5px dashed #000;}
-    .border-t{border-top:1px dashed #000;}
-    .py-4{padding:8px 0;} .pt-3{padding-top:6px;} .pt-2{padding-top:4px;} .pb-2{padding-bottom:4px;}
-    .mb-1{margin-bottom:2px;} .mb-2{margin-bottom:4px;} .mb-3{margin-bottom:8px;} .mt-0\\.5{margin-top:2px;}
-    .leading-none{line-height:1;} .leading-tight{line-height:1.25;} .leading-relaxed{line-height:1.5;}
-    .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    .receipt-paper{border:none!important;box-shadow:none!important;padding:0!important;}
-  </style></head><body>${html}</body></html>`)
-  doc.close()
-  iframe.contentWindow.focus()
-  iframe.contentWindow.print()
-  setTimeout(() => document.body.removeChild(iframe), 1000)
+  doc.open(); doc.write(htmlContent); doc.close()
+  setTimeout(() => {
+    iframe.contentWindow.focus()
+    iframe.contentWindow.print()
+    setTimeout(() => { if (document.body.contains(iframe)) document.body.removeChild(iframe) }, 2000)
+  }, 300)
+}
+
+// ─── Asosiy chop etish: QZ ulangan → silent, aks holda → dialog ─────────────
+const printReceipt = async () => {
+  const htmlContent = buildReceiptHtml()
+  if (!htmlContent) return
+
+  try {
+    const result = await qzPrint({ htmlContent })
+    if (result.method === 'qz') {
+      toast.add({
+        severity: 'success',
+        summary: t('common.success'),
+        detail: 'Chek muvaffaqiyatli chop etildi ✓',
+        life: 2500
+      })
+    }
+    // method === 'browser' bo'lsa brauzer dialogi o'zi ko'rinadi
+  } catch (err) {
+    console.warn('[POS] QZ print xato, dialog fallbackga o\'tmoqda:', err)
+    toast.add({
+      severity: 'warn',
+      summary: 'Printer xatosi',
+      detail: 'Dialog orqali chop etilyapti...',
+      life: 2000
+    })
+    browserPrintFallback(htmlContent)
+  }
 }
 </script>
 
