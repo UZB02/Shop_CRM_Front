@@ -24,18 +24,46 @@ const printers = ref([])
 const defaultPrinter = ref(null)
 const qzError = ref(null)
 
-// QZ Tray security — unsigned/development rejimi
-// Production uchun: https://qz.io/wiki/2.1-signing-messages
+// QZ Tray Demo sertifikati — "QZ Tray Demo Cert"
+// C:\Program Files\QZ Tray\override.crt ga o'rnatilgan
+// Sertifikat yaratildi: 2026-06-01, amal qilish muddati: 2046-06-01
+const QZ_CERTIFICATE = `-----BEGIN CERTIFICATE-----
+MIIECzCCAvOgAwIBAgIGAZ6HE7C5MA0GCSqGSIb3DQEBCwUAMIGiMQswCQYDVQQG
+EwJVUzELMAkGA1UECAwCTlkxEjAQBgNVBAcMCUNhbmFzdG90YTEbMBkGA1UECgwS
+UVogSW5kdXN0cmllcywgTExDMRswGQYDVQQLDBJRWiBJbmR1c3RyaWVzLCBMTEMx
+HDAaBgkqhkiG9w0BCQEWDXN1cHBvcnRAcXouaW8xGjAYBgNVBAMMEVFaIFRyYXkg
+RGVtbyBDZXJ0MB4XDTI2MDYwMTA2NDQzNVoXDTQ2MDYwMTA2NDQzNVowgaIxCzAJ
+BgNVBAYTAlVTMQswCQYDVQQIDAJOWTESMBAGA1UEBwwJQ2FuYXN0b3RhMRswGQYD
+VQQKDBJRWiBJbmR1c3RyaWVzLCBMTEMxGzAZBgNVBAsMElFaIEluZHVzdHJpZXMs
+IExMQzEcMBoGCSqGSIb3DQEJARYNc3VwcG9ydEBxei5pbzEaMBgGA1UEAwwRUVog
+VHJheSBEZW1vIENlcnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCs
+RghS7+nH0zrfj1cf5QVewu8Y1RnQrLUOek6+eUFPNb/8x3OOl7QuRQJuWPFUAAoU
+1GYtA1hjE3s8eibn9k5LNPwldc3uE9pbsnN09WQvDphzWJhqzWVPzO9LviS4J+8O
+gCtbbp6tF8xcP9oYVVkv9/FX4jtzzPUJj8qswCHgnpfnH0k3WegZ4DEH3JHNx4zK
+NhSHtWJxFTbZvh7k3tsnG8bmjF/UN5Ep4bioonw8OHM0NdZ54uZp46EjUaaDBw70
+9rLAUSTb1TzT/EJimWyXVd+YIE2dOpxJZ/aVYuDyW3nvKwgg5VQw90/adQk18zEe
+xZJH2wk3vgZUUSbfSz8tAgMBAAGjRTBDMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYD
+VR0PAQH/BAQDAgEGMB0GA1UdDgQWBBQ/+2tkoOOoQe7pn51yldAK4X5fbTANBgkq
+hkiG9w0BAQsFAAOCAQEApk2N8o7NqvcCwsby5uRKnYeizs+GFPjked8TxO+WNfO/
+mSufoSTeEZrVPFWr4O32HKAop0p8EnIPewx7I6cUEYFJkmDxQIf6YCLnNsvIdBDd
+ka/KLl6BotTwqBAl+AU5zRJ6FMA0vV+5PtEyysHthYc44pq8XV8bebugtUoPFh6G
+GRKNBly3zwtp/vGua+kWgbVGTdG9CxxtFuL6/G54036qUMsqfjAtJ1H1mOk2fFBy
+3GkXTo35aWHY+CBS06x2jA3YtiMN9Lu+/DSrVOOkm30Uas96/fVLqsSx+fFnefm/
+qjoklk2jNkSYLlpT9TpDq8Cy7uF2/ncz2A9rYemBDA==
+-----END CERTIFICATE-----`
+
+// QZ Tray security — override.crt o'rnatilgan, sertifikat taniladi
+// Dialog ko'rsatmasdan avtomatik ruxsat beradi
 function setupQZSecurity() {
-  // setCertificatePromise: callback (resolve, reject) shaklida bo'lishi kerak
+  // Sertifikatni yuborish — QZ Tray override.crt bilan solishtiradi
   qz.security.setCertificatePromise(function (resolve, reject) {
-    resolve(null) // unsigned/demo rejim
+    resolve(QZ_CERTIFICATE)
   })
 
-  // setSignaturePromise: (toSign) => (resolve, reject) shaklida bo'lishi kerak
+  // Imzo: override.crt rejimida bo'sh imzo ham qabul qilinadi
   qz.security.setSignaturePromise(function (toSign) {
     return function (resolve, reject) {
-      resolve(null) // unsigned/demo rejim
+      resolve(null)
     }
   })
 }
