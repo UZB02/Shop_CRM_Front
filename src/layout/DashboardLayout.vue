@@ -17,7 +17,7 @@
 
     <div class="flex flex-1 overflow-hidden">
       <Toast :pt="{
-        root: { class: 'w-[22rem] md:w-[26rem] !pt-4' },
+        root: { class: '!right-4 !left-4 sm:!left-auto sm:!right-6 !w-auto sm:!w-[24rem] !pt-4' },
         message: ({ props }) => ({
             class: [
                 'rounded-2xl border-none shadow-2xl backdrop-blur-xl transition-all duration-300 p-4 mb-3',
