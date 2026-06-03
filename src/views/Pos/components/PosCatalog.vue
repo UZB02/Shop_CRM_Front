@@ -169,6 +169,9 @@ const loading = ref(false)
 const selectedCategoryId = ref('all')
 const selectedSubcategoryId = ref('all')
 
+// Store the real branch-specific counts fetched from the products endpoint
+const realCounts = ref({})
+
 // Debounce helper
 const debounce = (fn, delay) => {
   let timeoutId
@@ -182,7 +185,17 @@ const activeSubcategories = computed(() => {
   if (selectedCategoryId.value === 'all') return []
   const cat = categories.value.find(c => c.id === selectedCategoryId.value)
   if (!cat || !cat.subcategories || cat.subcategories.length === 0) return []
-  return [{ id: 'all', name: 'Barchasi' }, ...cat.subcategories]
+  
+  const barchasiKey = `${cat.id}_all`
+  const barchasiCount = realCounts.value[barchasiKey] ?? cat.product_count ?? cat.subcategories.reduce((acc, sub) => acc + (sub.product_count || 0), 0)
+  
+  return [
+    { id: 'all', name: 'Barchasi', product_count: barchasiCount }, 
+    ...cat.subcategories.map(sub => ({
+      ...sub,
+      product_count: realCounts.value[`${cat.id}_${sub.id}`] ?? sub.product_count
+    }))
+  ]
 })
 
 const selectCategory = (cat) => {
@@ -192,7 +205,9 @@ const selectCategory = (cat) => {
 
 const fetchCategories = async () => {
   try {
-    const res = await categoriesAPI.getAll()
+    const branchId = props.activeShift?.branch || authStore.user?.branch_id || authStore.user?.worker?.branch_id
+    const params = branchId ? { branch_id: branchId } : {}
+    const res = await categoriesAPI.getAll(params)
     const rawCats = res.data.results || res.data
     categories.value = [{ id: 'all', name: t('common.all') }, ...rawCats]
   } catch (error) { console.error('Categories Error:', error) }
@@ -217,6 +232,30 @@ const fetchProducts = async (search = '', categoryId = 'all', subcategoryId = 'a
     const res = await branchesAPI.getProducts(branchId, params)
     const rawStocks = res.data.results || res.data
     products.value = rawStocks
+    
+    // Update the real count for the selected category/subcategory
+    if (res.data && res.data.count !== undefined && !search) {
+      realCounts.value[`${categoryId}_${subcategoryId}`] = res.data.count
+      
+      // If we fetched "all" subcategories for a category, calculate counts dynamically
+      if (subcategoryId === 'all' && rawStocks) {
+        const counts = {}
+        rawStocks.forEach(p => {
+          const subId = p.subcategory_id || p.subcategory?.id || p.subcategory
+          if (subId) {
+            counts[subId] = (counts[subId] || 0) + 1
+          }
+        })
+        
+        // Update realCounts for each subcategory in this category
+        const cat = categories.value.find(c => c.id === categoryId)
+        if (cat && cat.subcategories) {
+          cat.subcategories.forEach(sub => {
+             realCounts.value[`${categoryId}_${sub.id}`] = counts[sub.id] || 0
+          })
+        }
+      }
+    }
   } catch (error) { console.error('Fetch Products Error:', error) }
   finally { loading.value = false }
 }

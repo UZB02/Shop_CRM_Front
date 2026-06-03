@@ -284,7 +284,7 @@ const selectTur = (tur) => {
              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">{{ $t('common.total') }}</span>
              <span class="text-xl font-black text-slate-800 dark:text-white">{{ Number(totalCost).toLocaleString('ru-RU') }} UZS</span>
            </div>
-           <div v-if="debtAmount > 0" class="text-right">
+           <div v-if="debtAmount > 0 && supplier" class="text-right">
              <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest block">Qarzga yoziladi</span>
              <span class="text-xl font-black text-rose-600 dark:text-rose-400">{{ Number(debtAmount).toLocaleString('ru-RU') }} UZS</span>
            </div>
