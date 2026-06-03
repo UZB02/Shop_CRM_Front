@@ -5,6 +5,8 @@ export function useCheckout(props, emit) {
   const settingsStore = useSettingsStore()
   const paymentType = ref('cash')
   const discountAmount = ref(0)
+  const autoDiscountAmount = ref(0)
+  const totalDiscountAmount = computed(() => (discountAmount.value || 0) + (autoDiscountAmount.value || 0))
   const cashAmount = ref(0)
   const cardAmount = ref(0)
   const debtCashAmount = ref(0)
@@ -54,6 +56,7 @@ export function useCheckout(props, emit) {
       description.value = ''
       emit('update:selected-customer', null)
       discountAmount.value = 0
+      autoDiscountAmount.value = 0
       vipMessage.value = ''
       debtCashAmount.value = 0
       debtCardAmount.value = 0
@@ -76,14 +79,14 @@ export function useCheckout(props, emit) {
 
   // Chegirma limiti tekshiruvi
   const isDiscountValid = computed(() => {
-    if (!allowDiscount.value || !discountAmount.value) return true
+    if (!allowDiscount.value || !totalDiscountAmount.value) return true
     if (!maxDiscountPct.value) return true  // 0 = cheksiz
-    return discountAmount.value <= maxDiscountAmount.value
+    return totalDiscountAmount.value <= maxDiscountAmount.value
   })
 
   // Haqiqiy to'lanadigan summa = asl narx - chegirma
   const paidAmount = computed(() => {
-    const paid = (props.total || 0) - (discountAmount.value || 0)
+    const paid = (props.total || 0) - totalDiscountAmount.value
     return paid > 0 ? paid : 0
   })
 
@@ -109,7 +112,7 @@ export function useCheckout(props, emit) {
   watch(() => props.selectedCustomer, (val) => {
     vipMessage.value = ''
     if (!val) {
-      discountAmount.value = 0
+      autoDiscountAmount.value = 0
       return
     }
 
@@ -126,8 +129,10 @@ export function useCheckout(props, emit) {
         calculatedDiscount = maxDiscountAmount.value
       }
 
-      discountAmount.value = calculatedDiscount
+      autoDiscountAmount.value = calculatedDiscount
       vipMessage.value = `${groupName || 'VIP'} mijoz! ${pct}% chegirma avtomat hisoblandi.`
+    } else {
+      autoDiscountAmount.value = 0
     }
   })
 
@@ -176,7 +181,7 @@ export function useCheckout(props, emit) {
       return (debtCashAmount.value + debtCardAmount.value) <= paidAmount.value
     }
     if (paymentType.value === 'cash' || paymentType.value === 'card') {
-      return (discountAmount.value || 0) <= (props.total || 0)
+      return totalDiscountAmount.value <= (props.total || 0)
     }
     return true
   })
@@ -184,6 +189,7 @@ export function useCheckout(props, emit) {
   const resetValues = () => {
     paymentType.value = 'cash'
     discountAmount.value = 0
+    autoDiscountAmount.value = 0
     vipMessage.value = ''
     cashAmount.value = 0
     cardAmount.value = 0
@@ -208,8 +214,8 @@ export function useCheckout(props, emit) {
       description: description.value
     }
 
-    if ((discountAmount.value || 0) > 0) {
-      data.discount_amount = discountAmount.value
+    if (totalDiscountAmount.value > 0) {
+      data.discount_amount = totalDiscountAmount.value
     }
 
     if (paymentType.value === 'mixed') {
@@ -230,6 +236,8 @@ export function useCheckout(props, emit) {
   return {
     paymentType,
     discountAmount,
+    autoDiscountAmount,
+    totalDiscountAmount,
     paidAmount,
     cashAmount,
     cardAmount,
