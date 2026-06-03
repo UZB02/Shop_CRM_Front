@@ -2,6 +2,7 @@ import { subscriptionAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 import { useConfirmStore } from '@/store/confirm'
+import { useSettingsStore } from '@/store/settings'
 
 export const useSubscriptionPayment = (state, plans, coupons, loaders) => {
     const toast = useToast()
@@ -146,7 +147,9 @@ export const useSubscriptionPayment = (state, plans, coupons, loaders) => {
                     await Promise.all([
                         loadSubscription(true),
                         loadBalanceData(),
-                        loadBillingData()
+                        loadBillingData(),
+                        // ✅ Plan o'zgarganda plan_features ni ham yangilash (has_promotion va boshqalar)
+                        useSettingsStore().fetchSettings()
                     ])
                     paymentDialog.value = false
 

@@ -1,5 +1,6 @@
 <template>
-  <div class="space-y-4 animate-in fade-in duration-500 font-inter max-w-[1200px] mx-auto pb-10">
+  <!-- ✅ has_promotion tekshiruvi: tarif ruxsat bersa → sahifani ko'rsat -->
+  <div v-if="hasPlanPromotion" class="space-y-4 animate-in fade-in duration-500 font-inter max-w-[1200px] mx-auto pb-10">
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-[#0f172a] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-sm transition-all overflow-hidden relative">
       <div class="relative z-10">
@@ -230,12 +231,64 @@
       @submit="submitForm"
     />
   </div>
+
+  <!-- ✅ has_promotion: false → Tarif cheklovi banneri -->
+  <div v-else class="flex flex-col items-center justify-center min-h-[60vh] animate-in fade-in duration-500">
+    <div class="w-full max-w-md bg-white dark:bg-[#0f172a] rounded-3xl border border-slate-200 dark:border-slate-800/60 shadow-xl p-10 text-center space-y-6">
+      <!-- Lock icon -->
+      <div class="w-20 h-20 mx-auto rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+        <i class="pi pi-lock text-3xl text-indigo-400"></i>
+      </div>
+
+      <!-- Text -->
+      <div class="space-y-2">
+        <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tight">
+          Bu funksiya tarifingizda mavjud emas
+        </h2>
+        <p class="text-sm text-slate-400 font-medium leading-relaxed">
+          Aksiya yaratish va boshqarish imkoniyati faqat
+          <span class="text-indigo-500 font-bold">Premium</span> yoki undan yuqori tariflarda mavjud.
+        </p>
+      </div>
+
+      <!-- Feature list -->
+      <div class="text-left space-y-2.5 p-4 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+        <div class="flex items-center gap-2.5 text-[13px] text-slate-500 dark:text-slate-400 font-medium">
+          <i class="pi pi-check-circle text-indigo-500 text-sm"></i>
+          Vaqtinchalik chegirmalar yarating
+        </div>
+        <div class="flex items-center gap-2.5 text-[13px] text-slate-500 dark:text-slate-400 font-medium">
+          <i class="pi pi-check-circle text-indigo-500 text-sm"></i>
+          Mahsulotlarni aksiyaga bog'lang
+        </div>
+        <div class="flex items-center gap-2.5 text-[13px] text-slate-500 dark:text-slate-400 font-medium">
+          <i class="pi pi-check-circle text-indigo-500 text-sm"></i>
+          POS'da avtomatik chegirma
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <button
+        @click="router.push('/dashboard/subscription')"
+        class="w-full h-12 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black tracking-wide transition-all shadow-lg shadow-indigo-600/20 active:scale-95 flex items-center justify-center gap-2.5"
+      >
+        <i class="pi pi-arrow-up-right text-sm"></i>
+        Tarifni yangilash
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useSettingsStore } from '@/store/settings'
 import { usePromotionManager } from './composables/usePromotionManager'
 import PromotionSlideOver from './components/PromotionSlideOver.vue'
+
+const router = useRouter()
+const settingsStore = useSettingsStore()
+const { hasPlanPromotion } = settingsStore
 
 const viewMode = ref('table')
 

@@ -13,7 +13,9 @@ export const authAPI = {
     getMe: () => api.get('/auth/me'),
     changePassword: (data) => api.post('/auth/change-password/', data),
     sendResetEmail: (data) => api.post('/auth/send-reset-email/', data),
-    resetPassword: (uid, token, data) => api.post(`/auth/reset-password/${uid}/${token}/`, data)
+    resetPassword: (uid, token, data) => api.post(`/auth/reset-password/${uid}/${token}/`, data),
+    // ✅ Xavfsiz impersonate: bir martalik kod → JWT token (token URL da ko'rinmaydi)
+    impersonateExchange: (code) => api.post('/superadmin/impersonate-exchange/', { code }),
 }
 
 

@@ -54,7 +54,9 @@
         <span class="sm:hidden">Kategoriyalar</span>
       </button>
 
+      <!-- ✅ has_promotion: faqat tarif ruxsat bersa ko'rinadi -->
       <button
+        v-if="settingsStore.hasPlanPromotion"
         @click="router.push('/dashboard/products/promotions')"
         class="h-10 sm:h-9 px-3 rounded-xl text-xs font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/50 bg-indigo-50/30 dark:bg-indigo-900/10 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
       >

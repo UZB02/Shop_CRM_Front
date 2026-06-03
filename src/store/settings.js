@@ -60,6 +60,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const hasPlanQrBulk          = computed(() => planFeatures.value.has_qr_bulk          !== false)
   const hasPlanAuditLog        = computed(() => planFeatures.value.has_audit_log        !== false)
   const hasPlanExport          = computed(() => planFeatures.value.has_export           !== false)
+  const hasPlanPromotion       = computed(() => planFeatures.value.has_promotion        !== false)
 
   // Payment methods
   const allowCash     = computed(() => settings.value?.allow_cash !== false)
@@ -237,6 +238,7 @@ export const useSettingsStore = defineStore('settings', () => {
     hasPlanQrBulk,
     hasPlanAuditLog,
     hasPlanExport,
+    hasPlanPromotion,
 
     // actions
     fetchSettings,

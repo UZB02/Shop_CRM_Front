@@ -14,20 +14,16 @@ export function useImport() {
     const showResultDialog = ref(false)
 
     /**
-     * IsManagerOrAbove ruxsatini tekshirish
-     * Backend: IsManagerOrAbove permission class ga mos keladi
+     * ✅ Permission-based tekshiruv (rol emas, ruxsat asosida)
+     * Backend: CanAccess('mahsulotlar') → mahsulot import uchun
      */
     const isManagerOrAbove = () => {
         const user = authStore.user
         if (!user) return false
-        return (
-            user.is_owner ||
-            user.is_superuser ||
-            user.is_staff ||
-            ['owner', 'manager'].includes(
-                (user.role || user.worker?.role || '').toLowerCase()
-            )
-        )
+        // Owner, superuser, staff — har doim ruxsat
+        if (user.is_owner || user.is_superuser || user.is_staff) return true
+        // ✅ YANGI: 'mahsulotlar' permissioni bo'lsa import qila oladi
+        return user.permissions?.includes('mahsulotlar') ?? false
     }
 
     /**

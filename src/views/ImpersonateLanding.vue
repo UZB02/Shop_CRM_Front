@@ -27,18 +27,20 @@
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
+import { authAPI } from '@/services/auth'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-// ✅ F-03: Faqat superadmin panel domenidan kelgan xabarlar qabul qilinadi
-const ALLOWED_ORIGIN = 'https://maincontrol.siriuspos.uz'
+// ✅ F-03: Environment-based origin — dev: localhost:5174, prod: maincontrol.siriuspos.uz
+const ALLOWED_ORIGIN = window.location.hostname === 'localhost'
+  ? 'http://localhost:5174'          // Dev: Admin panel port
+  : 'https://maincontrol.siriuspos.uz' // Prod: Superadmin panel domeni
 
 onMounted(async () => {
-  const { access: queryAccess, refresh: queryRefresh } = route.query
-
-  const processTokens = async (accessToken, refreshToken) => {
+  // refresh ixtiyoriy — exchange faqat access token qaytarishi mumkin
+  const processTokens = async (accessToken, refreshToken = null) => {
     // Save tokens and metadata locally
     localStorage.setItem('access', accessToken)
     if (refreshToken) localStorage.setItem('refresh', refreshToken)
@@ -65,9 +67,17 @@ onMounted(async () => {
     }
   }
 
-  // If tokens are passed via URL query, use them as fallback
-  if (queryAccess) {
-    await processTokens(queryAccess, queryRefresh)
+  // ✅ URL query orqali bir martalik kod — to'g'ridan token emas
+  const { code: queryCode } = route.query
+
+  if (queryCode) {
+    try {
+      const res = await authAPI.impersonateExchange(queryCode)
+      await processTokens(res.data.access)
+    } catch (e) {
+      alert("Impersonate kodi yaroqsiz yoki muddati o'tgan. Superadmin panelidan qayta urinib ko'ring.")
+      router.push('/login')
+    }
     return
   }
 
@@ -78,10 +88,17 @@ onMounted(async () => {
       if (event.origin !== ALLOWED_ORIGIN) return
 
       if (event.data && event.data.type === 'impersonate-tokens') {
-        const { access, refresh } = event.data
-        if (access) {
+        // ✅ Kod orqali exchange — JWT token postMessage da ko'rinmaydi
+        const { code } = event.data
+        if (code) {
           window.removeEventListener('message', handleMessage)
-          await processTokens(access, refresh)
+          try {
+            const res = await authAPI.impersonateExchange(code)
+            await processTokens(res.data.access)
+          } catch (e) {
+            alert("Impersonate kodi yaroqsiz yoki muddati o'tgan. Superadmin panelidan qayta urinib ko'ring.")
+            router.push('/login')
+          }
         }
       }
     }
