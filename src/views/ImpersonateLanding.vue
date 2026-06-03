@@ -32,6 +32,9 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
+// ✅ F-03: Faqat superadmin panel domenidan kelgan xabarlar qabul qilinadi
+const ALLOWED_ORIGIN = 'https://maincontrol.siriuspos.uz'
+
 onMounted(async () => {
   const { access: queryAccess, refresh: queryRefresh } = route.query
 
@@ -71,6 +74,9 @@ onMounted(async () => {
   // Otherwise, use secure postMessage channel from window.opener
   if (window.opener) {
     const handleMessage = async (event) => {
+      // ✅ F-03: Boshqa domendan kelgan xabarlarni e'tiborsiz qoldirish
+      if (event.origin !== ALLOWED_ORIGIN) return
+
       if (event.data && event.data.type === 'impersonate-tokens') {
         const { access, refresh } = event.data
         if (access) {
@@ -82,8 +88,8 @@ onMounted(async () => {
 
     window.addEventListener('message', handleMessage)
 
-    // Notify opener that child window is ready to receive tokens
-    window.opener.postMessage({ type: 'impersonate-ready' }, '*')
+    // ✅ F-03: Faqat superadmin paneliga signal yuborish (wildcard '*' o'rniga)
+    window.opener.postMessage({ type: 'impersonate-ready' }, ALLOWED_ORIGIN)
 
     // Set a safety timeout of 5 seconds to redirect to login if no message is received
     setTimeout(() => {
