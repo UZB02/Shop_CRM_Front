@@ -13,6 +13,7 @@ import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 const toast = useToast()
 const confirm = useConfirm()
 const activeTab = ref('cart') // 'cart' or 'catalog'
+const showErrors = ref(false)
 
 const {
   warehouseName,
@@ -47,6 +48,17 @@ const promptSave = () => {
     toast.add({ severity: 'warn', summary: 'Diqqat', detail: 'Kamida bitta mahsulot kiritilishi shart.', life: 5000 })
     return
   }
+
+  if (movement_type.value === 'in') {
+    const validItems = bulkItems.value.filter(item => item.product?.id && item.quantity > 0)
+    const itemWithZeroCost = validItems.find(item => !item.unit_cost || Number(item.unit_cost) <= 0)
+    if (itemWithZeroCost) {
+      showErrors.value = true
+      return
+    }
+  }
+
+  showErrors.value = false
   showSaveDialog.value = true
 }
 
@@ -176,6 +188,7 @@ const selectTur = (tur) => {
             @save="promptSave"
             :saving="saving"
             :validCount="validItemsCount"
+            :showErrors="showErrors"
           />
         </section>
 
@@ -216,6 +229,7 @@ const selectTur = (tur) => {
                 @save="promptSave"
                 :saving="saving"
                 :validCount="validItemsCount"
+                :showErrors="showErrors"
               />
               <BulkMovementCatalog 
                 v-else

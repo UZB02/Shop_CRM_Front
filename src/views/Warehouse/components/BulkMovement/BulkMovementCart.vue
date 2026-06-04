@@ -116,7 +116,7 @@
 
             <!-- Xarid narxi (faqat kirim uchun) -->
             <div v-if="type === 'in'" class="flex flex-col gap-1">
-              <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">{{ $t('products.form.purchase_price') }}</span>
+              <span class="text-[10px] font-black uppercase tracking-[0.15em] transition-colors" :class="showErrors && (!item.unit_cost || item.unit_cost <= 0) ? 'text-rose-500' : 'text-slate-400'">{{ $t('products.form.purchase_price') }}</span>
               <div class="relative">
                 <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[8px] font-bold text-slate-400 select-none leading-none z-10">UZS</span>
                 <input
@@ -139,10 +139,14 @@
                     $emit('update-price', index, num);
                   }"
                   class="w-full h-9 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-600/50 rounded-lg pl-9 pr-2 text-[14px] font-black text-right text-slate-800 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/40 transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600"
-                  :class="{ '!border-rose-400 !bg-rose-50 dark:!bg-rose-500/10 focus:!ring-rose-500/20': item.product.sale_price > 0 && item.unit_cost > item.product.sale_price }"
+                  :class="{ '!border-rose-400 !bg-rose-50 dark:!bg-rose-500/10 focus:!ring-rose-500/20': (item.product.sale_price > 0 && item.unit_cost > item.product.sale_price) || (showErrors && (!item.unit_cost || item.unit_cost <= 0)) }"
                 />
               </div>
-              <div v-if="item.product.sale_price > 0 && item.unit_cost > item.product.sale_price" class="flex items-center justify-end gap-1 mt-0.5 animate-in fade-in slide-in-from-top-1">
+              <div v-if="showErrors && (!item.unit_cost || item.unit_cost <= 0)" class="flex items-center justify-end gap-1 mt-0.5 animate-in fade-in slide-in-from-top-1">
+                <i class="pi pi-exclamation-circle text-[8px] text-rose-500"></i>
+                <span class="text-[9px] font-bold text-rose-500 leading-none">Narx kiritilmagan</span>
+              </div>
+              <div v-else-if="item.product.sale_price > 0 && item.unit_cost > item.product.sale_price" class="flex items-center justify-end gap-1 mt-0.5 animate-in fade-in slide-in-from-top-1">
                 <i class="pi pi-exclamation-triangle text-[8px] text-rose-500"></i>
                 <span class="text-[9px] font-bold text-rose-500 leading-none">Sotish narxidan qimmat</span>
               </div>
@@ -173,7 +177,8 @@ const props = defineProps({
   paidAmount: [Number, String],
   paymentType: String,
   saving: Boolean,
-  validCount: Number
+  validCount: Number,
+  showErrors: Boolean
 })
 
 const emit = defineEmits(['update:type', 'update:note', 'update:supplier', 'update:paidAmount', 'update:paymentType', 'remove', 'update-qty', 'update-price', 'save'])
