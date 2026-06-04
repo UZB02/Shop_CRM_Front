@@ -36,9 +36,10 @@
           <label class="text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ $t('products.form.sale_price') }}</label>
           <div class="relative group">
             <input
-              :value="modelValue.sale_price"
-              @input="$emit('update:modelValue', { ...modelValue, sale_price: Number($event.target.value) })"
-              type="number"
+              :value="formatPrice(modelValue.sale_price)"
+              @input="handlePriceInput"
+              type="text"
+              inputmode="numeric"
               placeholder="0"
               class="w-full h-11 px-4 pr-14 rounded-xl text-[14px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/20 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-mono shadow-sm"
             />
@@ -84,13 +85,28 @@
 <script setup>
 import Select from 'primevue/select'
 
-defineProps({
+const props = defineProps({
   modelValue: Object,
   units: Array,
   currencies: Array
 })
 
-defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue'])
+
+const formatPrice = (value) => {
+  if (value === null || value === undefined || value === '') return ''
+  return value.toString().replace(/\s/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+}
+
+const handlePriceInput = (event) => {
+  let rawStr = event.target.value.replace(/\s/g, '')
+  rawStr = rawStr.replace(/[^\d]/g, '')
+  
+  const numValue = rawStr ? Number(rawStr) : null
+  
+  emit('update:modelValue', { ...props.modelValue, sale_price: numValue })
+  event.target.value = formatPrice(rawStr)
+}
 </script>
 
 

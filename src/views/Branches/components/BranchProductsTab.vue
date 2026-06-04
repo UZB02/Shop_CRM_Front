@@ -45,7 +45,7 @@
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.form.purchase_price') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-right">{{ $t('products.col_price') }}</th>
               <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-center">{{ $t('common.created_at') }}</th>
-              <th class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-center w-12">{{ $t('common.actions') }}</th>
+              <th v-if="settingsStore.isWastageEnabled" class="px-4 py-2.5 text-[12px] font-bold text-slate-400 tracking-widest whitespace-nowrap text-center w-12">{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -104,10 +104,9 @@
               <td class="px-4 py-2 text-center whitespace-nowrap text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                 {{ product.added_on || '—' }}
               </td>
-              <td class="px-4 py-2 text-center">
+              <td v-if="settingsStore.isWastageEnabled" class="px-4 py-2 text-center">
                 <div class="flex items-center justify-center gap-1.5">
                   <button 
-                    v-if="settingsStore.isWastageEnabled"
                     @click="$emit('create-wastage', product)"
                     v-tooltip.left="$t('warehouse.wastage.create_title')"
                     class="w-7 h-7 rounded-lg bg-rose-500/5 text-rose-500 border border-rose-500/10 hover:bg-rose-500/10 transition-all flex items-center justify-center active:scale-90"

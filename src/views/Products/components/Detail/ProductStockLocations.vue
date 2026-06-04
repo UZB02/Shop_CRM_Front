@@ -10,14 +10,14 @@
       </span>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       <div 
         v-for="(loc, idx) in sortedLocations" 
         :key="idx"
         class="bg-slate-50/50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-white/5 overflow-hidden flex flex-col transition-all hover:border-indigo-500/30 hover:shadow-md hover:shadow-indigo-500/5 group"
       >
         <!-- Location Header -->
-        <div class="p-2.5 flex items-center justify-between gap-2 border-b border-slate-100/60 dark:border-white/5 bg-white/50 dark:bg-transparent">
+        <div class="p-2.5 flex items-center justify-between gap-2 bg-white/50 dark:bg-transparent">
           <div class="flex items-center gap-2 min-w-0">
             <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 shadow-sm" 
                  :class="loc.type === 'warehouse' ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-500' : 'bg-sky-50 dark:bg-sky-500/10 text-sky-500'">
@@ -28,7 +28,7 @@
                     :class="loc.type === 'warehouse' ? 'text-amber-600' : 'text-sky-600'">
                 {{ loc.type === 'warehouse' ? $t('products.detail.warehouse') : $t('products.detail.branch') }}
               </span>
-              <p class="text-[12px] font-bold text-slate-800 dark:text-slate-100 truncate leading-tight">
+              <p class="text-[13px] font-bold text-slate-800 dark:text-slate-100 line-clamp-2 leading-tight" :title="loc.name">
                 {{ loc.name }}
               </p>
             </div>
@@ -42,8 +42,8 @@
         </div>
 
         <!-- Variants / Turlar List -->
-        <div class="p-2 flex-1 flex flex-col gap-1.5 bg-slate-50/30 dark:bg-transparent">
-          <div v-if="loc.turlar && loc.turlar.length" class="space-y-1">
+        <div v-if="loc.turlar && loc.turlar.length" class="p-2 flex-1 flex flex-col gap-1.5 bg-slate-50/30 dark:bg-transparent border-t border-slate-100/60 dark:border-white/5">
+          <div class="space-y-1">
              <div 
                v-for="(tur, tIdx) in loc.turlar" 
                :key="tIdx"
@@ -60,9 +60,6 @@
                  <span class="text-[11px] font-bold text-slate-900 dark:text-white">{{ tur.quantity }}</span>
                </div>
              </div>
-          </div>
-          <div v-else class="flex-1 flex items-center justify-center py-2 opacity-40">
-             <span class="text-[9px] font-bold tracking-widest uppercase">{{ $t('common.no_data') }}</span>
           </div>
         </div>
       </div>
