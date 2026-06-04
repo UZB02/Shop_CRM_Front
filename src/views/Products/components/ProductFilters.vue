@@ -23,16 +23,7 @@
 
     <!-- Filters Group -->
     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5 sm:pb-0">
-      <!-- Subcategory filter -->
-      <select
-        v-if="subcategories && subcategories.length > 0"
-        :value="selectedSubcategory"
-        @change="$emit('update:selectedSubcategory', $event.target.value || null); $emit('change')"
-        class="h-10 sm:h-9 px-3 text-[12px] font-bold rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 transition-all appearance-none pr-8 min-w-[130px] shadow-sm"
-      >
-        <option value="">{{ $t('subcategories.title') }}</option>
-        <option v-for="s in subcategories" :key="s.id" :value="s.id">{{ s.name }}</option>
-      </select>
+
 
       <!-- Promotion filter -->
       <select

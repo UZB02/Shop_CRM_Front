@@ -38,8 +38,11 @@
           :categories="categories"
           :selectedId="selectedCategory"
           :totalProducts="totalProducts"
+          :subcategories="subcategories"
+          :selectedSubcategoryId="selectedSubcategory"
           readonly
           @select="onCategorySelect"
+          @select-sub="onSubcategorySelect"
         />
       </div>
 
@@ -105,6 +108,12 @@ const onCategorySelect = (cat) => {
   selectedSubcategory.value = null
   currentPage.value = 1
   fetchSubcategories(selectedCategory.value)
+  loadProducts()
+}
+
+const onSubcategorySelect = (subId) => {
+  selectedSubcategory.value = subId
+  currentPage.value = 1
   loadProducts()
 }
 

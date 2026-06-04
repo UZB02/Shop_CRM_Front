@@ -95,41 +95,71 @@
       <div
         v-for="cat in filteredCategories"
         :key="cat._id || cat.id"
-        class="group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all text-sm"
-        :class="isSelected(cat)
-          ? 'bg-emerald-500 text-white'
-          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200'"
-        @click="selectCategory(cat)"
+        class="flex flex-col"
       >
-        <div class="flex items-center gap-2.5 min-w-0 flex-1">
-          <div
-            class="w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold shrink-0 transition-all"
-            :class="isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 group-hover:text-emerald-600'"
-          >{{ cat.name?.substring(0, 2).toUpperCase() }}</div>
-          <span class="text-xs font-medium truncate">{{ cat.name }}</span>
+        <div
+          class="group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all text-sm"
+          :class="isSelected(cat)
+            ? 'bg-emerald-500 text-white'
+            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200'"
+          @click="selectCategory(cat)"
+        >
+          <div class="flex items-center gap-2.5 min-w-0 flex-1">
+            <div
+              class="w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold shrink-0 transition-all"
+              :class="isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 group-hover:text-emerald-600'"
+            >{{ cat.name?.substring(0, 2).toUpperCase() }}</div>
+            <span class="text-xs font-medium truncate">{{ cat.name }}</span>
+          </div>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <span
+              v-if="cat.product_count !== undefined"
+              class="text-xs font-semibold px-1.5 py-0.5 rounded-md transition-all"
+              :class="[
+                isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400',
+                !readonly ? 'group-hover:hidden' : ''
+              ]"
+            >{{ cat.product_count }}</span>
+
+            <div v-if="!readonly" class="hidden group-hover:flex gap-0.5">
+              <button class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-white/20 dark:hover:bg-slate-700 transition-all" @click.stop="$emit('edit', cat)">
+                <i class="pi pi-pencil text-[11px]"></i>
+              </button>
+              <button
+                class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-rose-500/20 hover:text-rose-500 transition-all"
+                :class="isSelected(cat) ? 'text-white/70' : 'text-slate-400'"
+                @click.stop="$emit('delete', cat)"
+              >
+                <i class="pi pi-trash text-[11px]"></i>
+              </button>
+            </div>
+            
+            <i v-if="isSelected(cat) && subcategories?.length" class="pi pi-chevron-down text-[10px] ml-1 opacity-70"></i>
+          </div>
         </div>
 
-        <div class="flex items-center gap-1 shrink-0">
-          <span
-            v-if="cat.product_count !== undefined"
-            class="text-xs font-semibold px-1.5 py-0.5 rounded-md transition-all"
-            :class="[
-              isSelected(cat) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400',
-              !readonly ? 'group-hover:hidden' : ''
-            ]"
-          >{{ cat.product_count }}</span>
-
-          <div v-if="!readonly" class="hidden group-hover:flex gap-0.5">
-            <button class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-white/20 dark:hover:bg-slate-700 transition-all" @click.stop="$emit('edit', cat)">
-              <i class="pi pi-pencil text-[11px]"></i>
-            </button>
-            <button
-              class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-rose-500/20 hover:text-rose-500 transition-all"
-              :class="isSelected(cat) ? 'text-white/70' : 'text-slate-400'"
-              @click.stop="$emit('delete', cat)"
-            >
-              <i class="pi pi-trash text-[11px]"></i>
-            </button>
+        <!-- Subcategories Accordion -->
+        <div v-if="isSelected(cat) && subcategories?.length > 0" class="pl-8 pr-1 py-1 space-y-0.5 mt-0.5">
+          <div 
+            class="px-3 py-2 rounded-lg cursor-pointer text-[11px] transition-all flex items-center justify-between"
+            :class="!selectedSubcategoryId ? 'text-emerald-600 font-bold bg-emerald-50 dark:bg-emerald-500/10' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'"
+            @click="$emit('select-sub', null)"
+          >
+            <span>Barcha subkategoriyalar</span>
+          </div>
+          <div
+            v-for="sub in subcategories"
+            :key="sub.id"
+            class="px-3 py-2 rounded-lg cursor-pointer text-[11px] transition-all flex items-center justify-between"
+            :class="selectedSubcategoryId === sub.id ? 'text-emerald-600 font-bold bg-emerald-50 dark:bg-emerald-500/10' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'"
+            @click="$emit('select-sub', sub.id)"
+          >
+            <span class="truncate pr-2">{{ sub.name }}</span>
+            <span v-if="sub.product_count !== undefined" class="text-[10px] px-1.5 py-0.5 rounded-md font-semibold"
+              :class="selectedSubcategoryId === sub.id ? 'bg-emerald-500/20 text-emerald-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'">
+              {{ sub.product_count }}
+            </span>
           </div>
         </div>
       </div>
@@ -149,10 +179,12 @@ const props = defineProps({
   categories: { type: Array, default: () => [] },
   selectedId: [String, Number, null],
   totalProducts: Number,
-  readonly: { type: Boolean, default: false }
+  readonly: { type: Boolean, default: false },
+  subcategories: { type: Array, default: () => [] },
+  selectedSubcategoryId: [String, Number, null]
 })
 
-const emit = defineEmits(['select', 'add', 'edit', 'delete'])
+const emit = defineEmits(['select', 'add', 'edit', 'delete', 'select-sub'])
 const catSearch = ref('')
 
 const filteredCategories = computed(() => {
