@@ -34,6 +34,36 @@
         >{{ cat.product_count }}</span>
       </button>
     </div>
+
+    <!-- Mobile Subcategories -->
+    <div v-if="selectedId && subcategories?.length > 0" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 mt-1 border-t border-slate-100 dark:border-slate-800/50">
+      <button
+        @click="$emit('select-sub', null)"
+        class="flex-shrink-0 flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-bold transition-all whitespace-nowrap"
+        :class="!selectedSubcategoryId
+          ? 'bg-emerald-500/10 text-emerald-600'
+          : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'"
+      >
+        Barcha subkategoriyalar
+      </button>
+
+      <button
+        v-for="sub in subcategories"
+        :key="sub.id"
+        @click="$emit('select-sub', sub.id)"
+        class="flex-shrink-0 flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-bold transition-all whitespace-nowrap"
+        :class="selectedSubcategoryId === sub.id
+          ? 'bg-emerald-500/10 text-emerald-600'
+          : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'"
+      >
+        {{ sub.name }}
+        <span
+          v-if="sub.product_count !== undefined"
+          class="px-1.5 py-0.5 rounded-md text-[10px] font-black"
+          :class="selectedSubcategoryId === sub.id ? 'bg-emerald-500/20 text-emerald-600' : 'bg-slate-200 dark:bg-slate-700 text-slate-400'"
+        >{{ sub.product_count }}</span>
+      </button>
+    </div>
   </div>
 
   <!-- ── DESKTOP: vertical sidebar ── -->
