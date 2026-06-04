@@ -9,7 +9,7 @@
         <p class="plan-lock-title">{{ $t('plan.locked_feature') }}</p>
         <p v-if="hint" class="plan-lock-hint">{{ hint }}</p>
       </div>
-      <router-link to="/subscription" class="plan-lock-btn">
+      <router-link to="/dashboard/subscription" class="plan-lock-btn">
         {{ $t('plan.upgrade_btn') }} 🔒
       </router-link>
     </div>
