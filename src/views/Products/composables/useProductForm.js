@@ -20,6 +20,7 @@ export function useProductForm() {
 
     const product = ref({
         name: '',
+        status: 'active',
         category: null,
         subcategory: null,
         unit: 'dona',
@@ -79,6 +80,7 @@ export function useProductForm() {
 
                 product.value = {
                     ...data,
+                    status: data.status || 'active',
                     category: data.category_id || data.category?._id || data.category?.id || data.category,
                     subcategory: data.subcategory_id || data.subcategory?._id || data.subcategory?.id || data.subcategory,
                     price_currency: data.currency_code || data.price_currency || settingsStore.settings?.default_currency || 'UZS',
@@ -152,6 +154,7 @@ export function useProductForm() {
 
             const payload = {
                 name: product.value.name,
+                status: product.value.status || 'active',
                 category: product.value.category || null,
                 subcategory: product.value.subcategory || null,
                 unit: product.value.unit || 'dona',

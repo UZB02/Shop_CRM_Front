@@ -84,35 +84,25 @@
           />
         </div>
       </div>
-
-      <!-- IKPU Code -->
-      <div class="flex flex-col gap-2">
-        <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">IKPU Kod (Ixtiyoriy)</label>
-        <div class="relative group">
-          <i class="pi pi-qrcode absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors text-xs"></i>
-          <input
-            :value="modelValue.ikpu_code"
-            @input="$emit('update:modelValue', { ...modelValue, ikpu_code: $event.target.value })"
-            type="text"
-            placeholder="17 raqamli kod"
-            class="w-full h-11 pl-11 pr-5 rounded-xl text-[14px] font-mono font-bold tracking-widest text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
-          />
+      
+      <!-- Status Toggle -->
+      <div class="flex items-center justify-between p-4 rounded-xl border border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-800/30">
+        <div class="flex items-center gap-3">
+          <div :class="['w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300', modelValue.status === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-200 dark:bg-slate-800 text-slate-400']">
+            <i :class="['pi', modelValue.status === 'active' ? 'pi-check' : 'pi-power-off', 'text-[12px]']"></i>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold tracking-[0.2em] text-slate-400 mb-0.5">{{ $t('common.status') }}</p>
+            <p :class="['text-[13px] font-bold tracking-widest transition-colors', modelValue.status === 'active' ? 'text-emerald-500' : 'text-slate-400']">
+              {{ modelValue.status === 'active' ? $t('common.active') : $t('common.inactive') }}
+            </p>
+          </div>
         </div>
-      </div>
-
-      <!-- Marking Code -->
-      <div class="flex flex-col gap-2">
-        <label class="text-[12px] font-black tracking-widest text-slate-400 dark:text-slate-500 ml-1">Markirovka Kodi (Ixtiyoriy)</label>
-        <div class="relative group">
-          <i class="pi pi-verified absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600 group-focus-within:text-emerald-500 transition-colors text-xs"></i>
-          <input
-            :value="modelValue.marking_code"
-            @input="$emit('update:modelValue', { ...modelValue, marking_code: $event.target.value })"
-            type="text"
-            placeholder="Markirovka kodi"
-            class="w-full h-11 pl-11 pr-5 rounded-xl text-[14px] font-mono font-bold tracking-widest text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
-          />
-        </div>
+        <ToggleSwitch 
+          :modelValue="modelValue.status === 'active'" 
+          @update:modelValue="$emit('update:modelValue', { ...modelValue, status: $event ? 'active' : 'inactive' })"
+          class="scale-90"
+        />
       </div>
     </div>
   </div>
@@ -120,6 +110,7 @@
 
 <script setup>
 import Select from 'primevue/select'
+import ToggleSwitch from 'primevue/toggleswitch'
 import { useSettingsStore } from '@/store/settings'
 
 const settingsStore = useSettingsStore()

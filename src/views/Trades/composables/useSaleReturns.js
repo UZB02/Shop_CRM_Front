@@ -2,6 +2,7 @@ import { ref, watch } from 'vue'
 import { saleReturnsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
+import { getErrorMessage } from '@/services/axios'
 
 export function useSaleReturns() {
   const toast = useToast()
@@ -120,14 +121,11 @@ export function useSaleReturns() {
       return response.data
     } catch (error) {
       console.error('Error creating return:', error)
-      let detail = t('common.error_message')
-      if (error.response?.data?.message) detail = error.response.data.message
-      else if (typeof error.response?.data === 'string') detail = error.response.data
       
       toast.add({ 
         severity: 'error', 
         summary: t('common.error'), 
-        detail: detail, 
+        detail: getErrorMessage(error, t('common.error_message')), 
         life: 5000 
       })
       throw error

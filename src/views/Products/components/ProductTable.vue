@@ -64,6 +64,11 @@
                         {{ item.name }}
                       </router-link>
                       
+                      <span v-if="item.status_display" class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-black tracking-widest uppercase"
+                        :class="item.status === 'active' ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-600 border border-rose-500/20'">
+                        {{ item.status_display }}
+                      </span>
+                      
                       <div v-if="item.has_tur" class="flex items-center gap-1">
                         <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black bg-emerald-500/5 text-emerald-600 border border-emerald-500/10 tracking-widest uppercase">
                            {{ item.tur_name || $t('turlar.badge') }}
