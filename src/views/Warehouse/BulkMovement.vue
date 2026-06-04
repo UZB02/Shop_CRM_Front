@@ -8,8 +8,10 @@ import BulkMovementHeader from './components/BulkMovement/BulkMovementHeader.vue
 import BulkMovementCatalog from './components/BulkMovement/BulkMovementCatalog.vue'
 import BulkMovementCart from './components/BulkMovement/BulkMovementCart.vue'
 import { useTemplateDownload } from '@/composables/useTemplateDownload'
+import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
 
 const toast = useToast()
+const confirm = useConfirm()
 const activeTab = ref('cart') // 'cart' or 'catalog'
 
 const {
@@ -49,6 +51,37 @@ const promptSave = () => {
 }
 
 const confirmSave = async () => {
+  if (movement_type.value === 'in' && supplier.value && debtAmount.value > 0) {
+    const formattedTotal = Number(totalCost.value).toLocaleString('ru-RU') + ' UZS'
+    const formattedPaid = Number(paidAmount.value || 0).toLocaleString('ru-RU') + ' UZS'
+    const formattedDebt = Number(debtAmount.value).toLocaleString('ru-RU') + ' UZS'
+    
+    const message = `
+      <div class="flex flex-col gap-2.5 text-left bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl mb-4 text-[13px] border border-slate-100 dark:border-slate-700/50 w-full">
+        <div class="flex justify-between items-center w-full"><span class="text-slate-500 dark:text-slate-400">Jami hisoblangan:</span> <span class="font-black text-slate-800 dark:text-white">${formattedTotal}</span></div>
+        <div class="flex justify-between items-center w-full"><span class="text-slate-500 dark:text-slate-400">To'lanmoqda:</span> <span class="font-black text-emerald-500">${formattedPaid}</span></div>
+        <div class="h-px bg-slate-200 dark:bg-slate-700/50 w-full my-1"></div>
+        <div class="flex justify-between items-center w-full"><span class="text-rose-500 font-bold uppercase tracking-wider text-[11px]">Qarzga yoziladi:</span> <span class="font-black text-rose-500 text-[15px]">${formattedDebt}</span></div>
+      </div>
+      <p class="text-center text-[14px]">Davom etishni xohlaysizmi?</p>
+    `
+
+    confirm.require({
+      header: 'Diqqat',
+      message,
+      acceptLabel: 'Ha',
+      rejectLabel: 'Yo\'q',
+      acceptClass: 'p-button-danger',
+      accept: async () => {
+        await executeSave()
+      }
+    })
+  } else {
+    await executeSave()
+  }
+}
+
+const executeSave = async () => {
   await handleSave()
   if (!saving.value) {
     showSaveDialog.value = false
