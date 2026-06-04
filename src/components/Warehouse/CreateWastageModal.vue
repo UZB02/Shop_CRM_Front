@@ -260,10 +260,15 @@ const handleSave = async () => {
     onHide()
   } catch (err) {
     console.error('❌ Create wastage error:', err)
+    const data = err.response?.data
+    const detail =
+      (data?.non_field_errors && data.non_field_errors[0]) ||
+      data?.detail ||
+      t('common.error_message')
     toast.add({ 
       severity: 'error', 
       summary: t('common.error'), 
-      detail: err.response?.data?.detail || t('common.error_message'), 
+      detail, 
       life: 5000 
     })
   } finally {

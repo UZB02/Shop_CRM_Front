@@ -207,7 +207,12 @@ export function useSuppliers() {
             submitted.value = false
             await loadSuppliers(currentPage.value)
         } catch (err) {
-            const msg = err.response?.data?.detail || err.response?.data?.amount?.[0] || t('common.error_message')
+            const data = err.response?.data
+            const msg =
+                (data?.non_field_errors && data.non_field_errors[0]) ||
+                data?.detail ||
+                data?.amount?.[0] ||
+                t('common.error_message')
             toast.add({ severity: 'error', summary: t('common.error'), detail: msg, life: 5000 })
         } finally {
             paymentSaving.value = false
