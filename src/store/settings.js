@@ -22,6 +22,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const isWastageEnabled       = computed(() => !!settings.value?.wastage_enabled)
   const isStockAuditEnabled    = computed(() => !!settings.value?.stock_audit_enabled)
   const isKpiEnabled           = computed(() => !!settings.value?.kpi_enabled)
+  const isPromotionEnabled     = computed(() => !!settings.value?.promotion_enabled)
   const isShiftEnabled         = computed(() => !!settings.value?.shift_enabled)
   const isTelegramEnabled      = computed(() => !!settings.value?.telegram_enabled)
   const isTaxEnabled           = computed(() => !!settings.value?.tax_enabled)
@@ -31,20 +32,21 @@ export const useSettingsStore = defineStore('settings', () => {
   const lowStockThreshold      = computed(() => parseInt(settings.value?.low_stock_threshold || 5))
 
   // ─── Plan Features (Tarif imkoniyatlari) ────────────────────────────────────
-  // Manba 1: subscription.plan (asosiy — eng ishonchli)
-  // Manba 2: settings API plan_features (zaxira)
+  // Manba 1: settings API plan_features (asosiy — /settings/ endpointi eng yangi ma'lumot beradi)
+  // Manba 2: subscription.plan (zaxira — settings yuklanmagan hollarda)
   // Qoida: ikkala manba ham yo'q bo'lsa → feature YOQILGAN hisoblanadi (orqaga moslik)
   const planFeatures = computed(() => {
-    // Subscription plan — asosiy manba (eng ishonchli va yangi ma'lumot)
-    const subPlan = subscription.value?.plan
-    if (subPlan && 'has_export' in subPlan) return subPlan
-
-    // settings API plan_features — zaxira manba
+    // settings API plan_features — ASOSIY MANBA (backend har doim yangilaydi)
     const feats = settings.value?.plan_features
-    if (feats && typeof feats === 'object' && 'has_export' in feats) return feats
+    if (feats && typeof feats === 'object' && Object.keys(feats).some(k => k.startsWith('has_'))) return feats
+
+    // subscription.plan — ZAXIRA (settings yuklanmagan holat uchun)
+    const subPlan = subscription.value?.plan
+    if (subPlan && typeof subPlan === 'object' && Object.keys(subPlan).some(k => k.startsWith('has_'))) return subPlan
 
     return {}
   })
+
   const hasPlanShift           = computed(() => planFeatures.value.has_shift           !== false)
   const hasPlanDiscount        = computed(() => planFeatures.value.has_discount         !== false)
   const hasPlanTelegram        = computed(() => planFeatures.value.has_telegram         !== false)
@@ -198,6 +200,7 @@ export const useSettingsStore = defineStore('settings', () => {
     isWastageEnabled,
     isStockAuditEnabled,
     isKpiEnabled,
+    isPromotionEnabled,
     isShiftEnabled,
     isTelegramEnabled,
     isTaxEnabled,

@@ -1246,6 +1246,8 @@
       "stock_audit_desc": "Ombor auditi va tekshiruv moduli",
       "kpi_label": "KPI moduli",
       "kpi_desc": "Xodimlar samaradorligini baholash",
+      "promotion_label": "Aksiyalar (Promotion)",
+      "promotion_desc": "Mahsulotlarga vaqtinchalik chegirma va aksiyalar berish",
       "price_list_label": "Narxlar ro'yxati",
       "price_list_desc": "Mahsulotlar narxlar jadvalini yoqish",
       "supplier_credit_label": "Ta'minotchi kredit",

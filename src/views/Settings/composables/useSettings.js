@@ -7,7 +7,7 @@ import { useSettingsStore } from '@/store/settings'
 
 const FORM_FIELDS = [
     'subcategory_enabled', 'sale_return_enabled', 'wastage_enabled',
-    'stock_audit_enabled', 'kpi_enabled',
+    'stock_audit_enabled', 'kpi_enabled', 'promotion_enabled',
     'default_currency', 'show_usd_price', 'show_rub_price', 'show_eur_price', 'show_cny_price',
     'allow_cash', 'allow_card', 'allow_debt', 'allow_discount',
     'max_discount_percent', 'receipt_header', 'receipt_footer',
@@ -22,7 +22,7 @@ const FORM_FIELDS = [
 
 // Mapping fields to tabs for precise change tracking
 export const TAB_FIELDS = {
-    modules: ['subcategory_enabled', 'sale_return_enabled', 'wastage_enabled', 'stock_audit_enabled', 'kpi_enabled', 'shift_enabled', 'shifts_per_day', 'require_cash_count', 'auto_pdf_on_smena_close'],
+    modules: ['subcategory_enabled', 'sale_return_enabled', 'wastage_enabled', 'stock_audit_enabled', 'kpi_enabled', 'promotion_enabled', 'shift_enabled', 'shifts_per_day', 'require_cash_count', 'auto_pdf_on_smena_close'],
     stock: ['low_stock_enabled', 'low_stock_threshold'],
     payment: ['allow_cash', 'allow_card', 'allow_debt', 'allow_discount', 'max_discount_percent'],
     currency: ['default_currency', 'show_usd_price', 'show_rub_price', 'show_eur_price', 'show_cny_price'],
@@ -87,6 +87,10 @@ export function useSettings() {
                 settings.value = data
                 settingsId.value = data.id || null // ✅ ID ni alohida saqlab qo'yamiz
                 FORM_FIELDS.forEach(f => { form[f] = data[f] ?? null })
+                // promotion_enabled backend'da yo'q → plan_features dan default qiymati olamiz
+                if (form.promotion_enabled === null) {
+                    form.promotion_enabled = data.plan_features?.has_promotion !== false
+                }
                 originalForm.value = { ...form }
                 loading.value = false
                 return
@@ -103,6 +107,10 @@ export function useSettings() {
                 settings.value = data
                 settingsId.value = data.id || null // ✅ ID ni alohida saqlab qo'yamiz
                 FORM_FIELDS.forEach(f => { form[f] = data[f] ?? null })
+                // promotion_enabled backend'da yo'q → plan_features dan default qiymati olamiz
+                if (form.promotion_enabled === null) {
+                    form.promotion_enabled = data.plan_features?.has_promotion !== false
+                }
                 originalForm.value = { ...form }
 
                 // Global Pinia store'ni yangilash → butun ilova bo'ylab reaktiv yangilanish

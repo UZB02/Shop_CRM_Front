@@ -42,7 +42,15 @@
       </div>
     </div>
 
-    <!-- ── Shift bo'limi ──────────────────────────────────────────── -->
+    <!-- promotion -->
+    <div class="relative">
+      <SettingRow v-model="form.promotion_enabled" :label="$t('settings.modules.promotion_label')" :desc="$t('settings.modules.promotion_desc')" :disabled="readonly || !planFeatures.has_promotion" :is-dirty="isFieldDirty('promotion_enabled')" />
+      <div v-if="planFeatures.has_promotion === false" class="px-4 pb-3">
+        <PlanLockBadge />
+      </div>
+    </div>
+
+
     <SectionHeader icon="pi-clock" color="text-indigo-500">{{ $t('settings.modules.shift_title') }}</SectionHeader>
 
     <!-- Smena yoqish/o'chirish -->
