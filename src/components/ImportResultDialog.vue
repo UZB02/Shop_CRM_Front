@@ -99,7 +99,7 @@
                   #{{ err.row }}
                 </td>
                 <td class="px-3 py-2 text-slate-600 dark:text-slate-400">
-                  {{ err.reason }}
+                  {{ err.reason || err.error || err.message || 'Noma\'lum xatolik' }}
                 </td>
               </tr>
             </tbody>

@@ -21,10 +21,10 @@ export const useSettingsStore = defineStore('settings', () => {
   const isSaleReturnEnabled    = computed(() => !!settings.value?.sale_return_enabled)
   const isWastageEnabled       = computed(() => !!settings.value?.wastage_enabled)
   const isStockAuditEnabled    = computed(() => !!settings.value?.stock_audit_enabled)
-  const isKpiEnabled           = computed(() => !!settings.value?.kpi_enabled)
-  const isPromotionEnabled     = computed(() => !!settings.value?.promotion_enabled)
-  const isShiftEnabled         = computed(() => !!settings.value?.shift_enabled)
-  const isTelegramEnabled      = computed(() => !!settings.value?.telegram_enabled)
+  const isKpiEnabled           = computed(() => !!settings.value?.kpi_enabled && hasPlanKpi.value)
+  const isPromotionEnabled     = computed(() => !!settings.value?.promotion_enabled && hasPlanPromotion.value)
+  const isShiftEnabled         = computed(() => !!settings.value?.shift_enabled && hasPlanShift.value)
+  const isTelegramEnabled      = computed(() => !!settings.value?.telegram_enabled && hasPlanTelegram.value)
   const isTaxEnabled           = computed(() => !!settings.value?.tax_enabled)
   const isOfdEnabled           = computed(() => !!settings.value?.ofd_enabled)
   const isAutoPdfEnabled       = computed(() => !!settings.value?.auto_pdf_on_smena_close)
@@ -68,7 +68,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const allowCash     = computed(() => settings.value?.allow_cash !== false)
   const allowCard     = computed(() => !!settings.value?.allow_card)
   const allowDebt     = computed(() => !!settings.value?.allow_debt)
-  const allowDiscount = computed(() => !!settings.value?.allow_discount)
+  const allowDiscount = computed(() => !!settings.value?.allow_discount && hasPlanDiscount.value)
   const maxDiscount   = computed(() => parseFloat(settings.value?.max_discount_percent || 0))
 
   // Currency

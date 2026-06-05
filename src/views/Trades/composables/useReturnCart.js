@@ -121,7 +121,7 @@ export function useReturnCart(props, emit, close) {
         product: it.product,
         quantity: it.quantity.toString(),
         unit_price: it.unit_price.toString(),
-        ...(it.tur_id && { tur: it.tur_id })
+        ...(it.tur_id && { tur_id: it.tur_id })
       }))
     }
 
