@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[calc(100dvh-160px)] lg:h-[calc(100vh-120px)] flex flex-col bg-slate-50 dark:bg-[#0f172a] animate-in fade-in duration-500 overflow-hidden font-outfit">
+  <div class="min-h-[calc(100dvh-160px)] lg:h-[calc(100vh-120px)] flex flex-col bg-slate-50 dark:bg-[#0f172a] animate-in fade-in duration-500 pb-[140px] lg:pb-0 lg:overflow-hidden font-outfit">
     
     <!-- Top Bar -->
     <TransferHeader 
@@ -49,8 +49,8 @@
       </div>
 
       <!-- Mobile & Small Tablet Layout (Tabbed) -->
-      <div class="lg:hidden flex-1 flex flex-col overflow-hidden">
-        <div class="flex-1 overflow-hidden">
+      <div class="lg:hidden flex-1 flex flex-col">
+        <div class="flex-1">
           <transition 
             enter-active-class="transition-all duration-300 ease-out"
             leave-active-class="transition-all duration-200 ease-in"
@@ -89,7 +89,7 @@
         </div>
 
         <!-- Mobile Sticky Save Action -->
-        <div v-if="activeTab === 'cart'" class="p-3 bg-white/80 dark:bg-[#0f1422]/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shrink-0 z-[60]">
+        <div v-if="activeTab === 'cart'" class="fixed bottom-[132px] left-0 right-0 p-3 bg-white/80 dark:bg-[#0f1422]/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shrink-0 z-[60] lg:hidden">
           <button
             @click="submitTransfer"
             :disabled="subLoading || !isValid"
@@ -102,7 +102,7 @@
         </div>
 
         <!-- Mobile Bottom Navigation -->
-        <div class="h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-around px-4 shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-[60]">
+        <div class="fixed bottom-[68px] left-0 right-0 h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-around px-4 shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-[60] lg:hidden">
           <button 
             @click="activeTab = 'cart'"
             class="flex-1 flex flex-col items-center gap-1 transition-all relative"
