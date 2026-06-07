@@ -71,7 +71,7 @@
       />
 
       <!-- PAGE CONTENT -->
-      <main class="flex-1 p-4 sm:p-5 lg:p-6 lg:pt-4 min-w-0">
+      <main class="flex-1 p-4 sm:p-5 lg:p-6 lg:pt-4 min-w-0 pb-[84px] lg:pb-6">
         <!-- Subscription warning (mobile only) -->
         <div v-if="subscriptionWarning" class="md:hidden mb-4 p-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 text-sm">
           <div class="flex items-start gap-2">
@@ -95,6 +95,9 @@
     <!-- GLOBAL DIALOGS -->
     <CalculatorWidget v-model:visible="isCalculatorOpen" />
     </div>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <MobileBottomNav @open-menu="sidebarOpen = true" />
   </div>
 </template>
 
@@ -113,6 +116,7 @@ import DashboardSidebar from './components/DashboardSidebar.vue'
 import DashboardHeader from './components/DashboardHeader.vue'
 import SubscriptionBarrier from '@/components/SubscriptionBarrier.vue'
 import CalculatorWidget from '@/components/CalculatorWidget.vue'
+import MobileBottomNav from '@/components/layout/MobileBottomNav.vue'
 
 const confirmStore = useConfirmStore()
 const toast = useToast()

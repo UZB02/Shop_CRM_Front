@@ -22,7 +22,7 @@
     </div>
 
     <!-- Right: Actions -->
-    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+    <div class="hidden lg:flex items-center gap-2 sm:gap-3 shrink-0">
       <button
         @click="$emit('back')"
         class="hidden sm:block h-8 px-3.5 rounded-lg text-[12px] font-black tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all uppercase"

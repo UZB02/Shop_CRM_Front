@@ -19,7 +19,7 @@
       </div>
       
       <!-- View Toggle -->
-      <div class="flex items-center gap-1 bg-slate-50 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-100 dark:border-slate-700">
+      <div class="hidden sm:flex items-center gap-1 bg-slate-50 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-100 dark:border-slate-700">
         <button 
           @click="$emit('update:viewMode', 'grid')"
           class="w-7 h-7 flex items-center justify-center rounded-md transition-all"

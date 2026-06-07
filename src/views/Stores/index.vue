@@ -1,15 +1,17 @@
 <template>
-  <div class="space-y-4">
-    <!-- Header -->
-    <StorePageHeader
-      :storeName="storeDetail?.name"
-      :branchCount="allStoreBranches?.length || 0"
-      :hasStore="!!storeDetail"
-      :showAddBranch="activeTab === 'branches'"
-      @add-store="openNewStoreDialog"
-      @edit-store="openEditStoreDialog"
-      @add-branch="openNewBranchDialog"
-    />
+  <div class="space-y-4 pb-[80px] lg:pb-0 relative min-h-[calc(100vh-4rem)]">
+    <!-- Sticky Header Wrapper -->
+    <div class="sticky top-0 z-30 -mx-4 px-4 pt-3 pb-3 bg-slate-50/90 dark:bg-[#0f172a]/90 backdrop-blur-xl lg:backdrop-blur-none lg:static lg:mx-0 lg:p-0 lg:bg-transparent dark:lg:bg-transparent shadow-sm lg:shadow-none border-b border-slate-200 dark:border-slate-800 lg:border-none dark:lg:border-none">
+      <StorePageHeader
+        :storeName="storeDetail?.name"
+        :branchCount="allStoreBranches?.length || 0"
+        :hasStore="!!storeDetail"
+        :showAddBranch="activeTab === 'branches'"
+        @add-store="openNewStoreDialog"
+        @edit-store="openEditStoreDialog"
+        @add-branch="openNewBranchDialog"
+      />
+    </div>
 
     <!-- Main layout -->
     <div v-if="loading" class="flex flex-col lg:flex-row gap-4">
@@ -65,6 +67,28 @@
         </button>
       </div>
     </template>
+
+    <!-- Mobile Sticky Action Bar -->
+    <div v-if="storeDetail" class="lg:hidden fixed bottom-[68px] left-0 right-0 z-40 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.1)] flex items-center justify-around gap-2">
+      <button
+        @click="openEditStoreDialog"
+        class="flex-[0.5] h-12 rounded-xl text-[12px] font-black text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-all flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
+      >
+        <i class="pi pi-pencil text-xs"></i>
+      </button>
+
+      <button
+        v-if="activeTab === 'branches'"
+        @click="notificationStore.canAddBranch ? openNewBranchDialog() : null"
+        :disabled="!notificationStore.canAddBranch"
+        class="flex-[2] h-12 rounded-xl text-[12px] font-black bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:grayscale"
+      >
+        <div class="flex items-center gap-2">
+          <i :class="notificationStore.canAddBranch ? 'pi pi-plus' : 'pi pi-lock'" class="text-xs"></i>
+          <span>{{ $t('stores.new_branch') }}</span>
+        </div>
+      </button>
+    </div>
 
     <!-- Dialogs -->
     <StoreDialog

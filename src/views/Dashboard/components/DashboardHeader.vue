@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4 sm:mb-6 sticky top-0 z-20 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-md pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0">
     <!-- 1. Title & Status Section -->
     <div class="flex items-center gap-3 min-w-0 shrink-0">
       <div class="p-2.5 sm:p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 shadow-inner">
@@ -24,8 +24,28 @@
       </div>
     </div>
 
-    <!-- 2. Filters & Actions Bar -->
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 grow lg:grow-0">
+    <!-- Mobile Actions (Visible only on small screens) -->
+    <div class="flex items-center gap-2 lg:hidden w-full">
+      <button 
+        @click="mobileFiltersOpen = true"
+        class="flex-1 h-11 px-4 rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white/80 dark:bg-slate-800/80 flex items-center justify-center gap-2 shadow-sm text-slate-600 dark:text-slate-300 active:scale-95 transition-all"
+      >
+        <i class="pi pi-filter text-[13px]"></i>
+        <span class="text-[13px] font-black tracking-wide">{{ $t('common.filters') || 'Filtrlar' }}</span>
+        <div v-if="hasFilters" class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]"></div>
+      </button>
+
+      <button
+        @click="$emit('refresh')"
+        :disabled="loading"
+        class="h-11 w-11 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center shadow-lg shadow-emerald-500/20 disabled:opacity-50 active:scale-95 shrink-0"
+      >
+        <i :class="['pi pi-sync text-[14px] transition-transform duration-700', loading ? 'animate-spin' : '']"></i>
+      </button>
+    </div>
+
+    <!-- 2. Filters & Actions Bar (Desktop / Tablet) -->
+    <div class="hidden lg:flex flex-row items-center gap-2 shrink-0">
       <!-- Date Range -->
       <div class="relative group flex-1 lg:flex-none">
         <DatePicker
@@ -82,6 +102,70 @@
         </button>
       </div>
     </div>
+
+    <!-- Mobile Filters Drawer -->
+    <Drawer v-model:visible="mobileFiltersOpen" position="bottom" class="!h-auto !max-h-[85vh] !rounded-t-[1.5rem]" pt:root:class="dark:bg-slate-900" pt:header:class="!pt-4 !pb-2 !px-5" pt:content:class="!px-5 !pb-6">
+      <template #header>
+        <div class="flex flex-col w-full">
+          <div class="w-10 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-3"></div>
+          <h3 class="text-base font-black text-slate-800 dark:text-white">{{ $t('common.filters') || 'Filtrlar' }}</h3>
+        </div>
+      </template>
+      <div class="flex flex-col gap-5 mt-2">
+        <!-- Date Range -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-black tracking-widest text-slate-400">{{ $t('dashboard.date') }}</label>
+          <DatePicker
+            v-model="dates"
+            selectionMode="range"
+            :manualInput="false"
+            showIcon
+            iconDisplay="input"
+            @update:modelValue="onDateChange"
+            class="w-full h-12"
+            pt:root:class="!bg-transparent !border-none"
+            pt:input:class="!w-full !h-12 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/40 !bg-slate-50 dark:!bg-slate-800/50 focus:!border-emerald-500/50 !text-[13px] !font-bold !pl-4 !shadow-sm !text-slate-700 dark:!text-slate-200"
+          />
+        </div>
+
+        <!-- Branch Selection -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-black tracking-widest text-slate-400">{{ $t('common.branch') }}</label>
+          <Select
+            v-model="selectedBranch"
+            :options="branches"
+            optionLabel="name"
+            optionValue="branch_id"
+            :placeholder="$t('common.branch')"
+            showClear
+            @change="onFilterChange"
+            class="w-full h-12"
+            pt:root:class="!h-12 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/40 !bg-slate-50 dark:!bg-slate-800/50 focus:!border-emerald-500/50 transition-all shadow-sm"
+            pt:label:class="!text-[13px] !font-bold !flex !items-center !py-0 !pl-4 !pr-4 !text-slate-700 dark:!text-slate-200 truncate"
+          />
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <button
+            v-if="hasFilters"
+            @click="$emit('reset'); mobileFiltersOpen = false"
+            class="flex-1 h-12 rounded-xl flex items-center justify-center gap-2 text-rose-500 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 transition-all active:scale-95 font-bold text-[13px]"
+          >
+            <i class="pi pi-filter-slash"></i>
+            <span>{{ $t('common.reset') || 'Tozalash' }}</span>
+          </button>
+          
+          <button
+            @click="mobileFiltersOpen = false; $emit('refresh')"
+            class="flex-[2] h-12 rounded-xl bg-emerald-500 text-white font-black text-[13px] transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95"
+          >
+            <i class="pi pi-check"></i>
+            <span>{{ $te('common.apply') ? $t('common.apply') : 'Qo\'llash' }}</span>
+          </button>
+        </div>
+      </div>
+    </Drawer>
   </div>
 </template>
 
@@ -90,6 +174,7 @@ import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DatePicker from 'primevue/datepicker'
 import Select from 'primevue/select'
+import Drawer from 'primevue/drawer'
 
 const props = defineProps({
   loading:  Boolean,
@@ -103,6 +188,7 @@ const { t } = useI18n()
 
 const dates = ref([new Date(props.filters.date_from), new Date(props.filters.date_to)])
 const selectedBranch = ref(props.filters.branch)
+const mobileFiltersOpen = ref(false)
 
 const hasFilters = computed(() => {
   const f = props.filters

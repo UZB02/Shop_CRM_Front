@@ -26,8 +26,8 @@
         <h3 class="text-[13px] font-black tracking-[0.2em] uppercase">{{ $t('warehouse.bulk.empty_cart') }}</h3>
       </div>
 
-      <!-- Cards Grid: 2 → 3 → 4 columns -->
-      <div v-else class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pb-10">
+      <!-- Cards Grid: 1 → 2 → 3 → 4 columns -->
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pb-10">
         <div
           v-for="(item, index) in items"
           :key="index"

@@ -37,7 +37,7 @@
           </div>
         </div>
         <p :class="['text-base sm:text-lg font-black tracking-tighter', lowStockCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600']">
-          {{ lowStockCount > 0 ? $t('common.count', { count: lowStockCount }) : $t('dashboard.alerts.good') }}
+          {{ lowStockCount > 0 ? `${lowStockCount} ${$t('common.count')}` : $t('dashboard.alerts.good') }}
         </p>
       </div>
     </div>
@@ -54,7 +54,7 @@
             <p class="text-[11px] text-slate-400 font-bold tracking-widest mt-0.5">{{ $t('dashboard.alerts.replenish_desc') }}</p>
           </div>
         </div>
-        <span v-if="lowStock.length" class="px-3 py-1 rounded-full bg-rose-500/10 text-rose-500 text-[12px] font-black border border-rose-500/20">{{ $t('common.count', { count: lowStock.length }) }}</span>
+        <span v-if="lowStock.length" class="px-3 py-1 rounded-full bg-rose-500/10 text-rose-500 text-[12px] font-black border border-rose-500/20">{{ lowStock.length }} {{ $t('common.count') }}</span>
       </div>
       
       <div v-if="!lowStock.length" class="flex flex-col items-center justify-center py-12 text-center text-slate-400">

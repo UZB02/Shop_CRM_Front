@@ -1,17 +1,32 @@
 <template>
   <div class="space-y-4">
-    <!-- Page Header -->
-    <WarehousePageHeader @add="openNewDialog" @export="exportStocks" />
+    <!-- Sticky Wrapper for Mobile Header & Filters -->
+    <div class="sticky top-0 z-30 -mx-4 px-4 pt-3 pb-3 bg-slate-50/90 dark:bg-[#0f172a]/90 backdrop-blur-xl lg:backdrop-blur-none lg:static lg:mx-0 lg:p-0 lg:bg-transparent dark:lg:bg-transparent shadow-sm lg:shadow-none border-b border-slate-200 dark:border-slate-800 lg:border-none dark:lg:border-none">
+      <!-- Page Header -->
+      <WarehousePageHeader @add="openNewDialog" @export="exportStocks" />
 
-    <!-- Stats, Search & View Toggle -->
-    <WarehouseMinimalFilters
-      v-model:searchQuery="searchQuery"
-      v-model:viewMode="viewMode"
-      :count="warehouses.length"
-    />
+      <!-- Stats, Search & View Toggle -->
+      <WarehouseMinimalFilters
+        v-model:searchQuery="searchQuery"
+        v-model:viewMode="viewMode"
+        :count="warehouses.length"
+        class="mt-3 lg:mt-4"
+      />
+    </div>
+
+    <!-- Mobile FAB for Add Warehouse -->
+    <div class="lg:hidden fixed bottom-[88px] right-4 z-40">
+      <button 
+        @click="notificationStore.canAddWarehouse ? openNewDialog() : null"
+        class="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 flex items-center justify-center transition-all active:scale-95"
+        :class="{'grayscale opacity-50': !notificationStore.canAddWarehouse}"
+      >
+        <i :class="notificationStore.canAddWarehouse ? 'pi pi-plus' : 'pi pi-lock'" class="text-xl"></i>
+      </button>
+    </div>
 
     <!-- Main Content -->
-    <div class="relative min-h-[400px]">
+    <div class="relative min-h-[400px] pb-[100px] lg:pb-0">
       <!-- Loading State -->
       <div v-if="loading && !warehouses.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div v-for="i in 3" :key="i" class="h-64 rounded-xl bg-white dark:bg-slate-900 animate-pulse border border-slate-100 dark:border-slate-800 shadow-sm"></div>
@@ -66,13 +81,25 @@
 
       <!-- Table Display -->
       <div v-else class="pb-12 h-full">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm h-full">
+        <!-- Desktop Table -->
+        <div class="hidden md:block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm h-full">
            <WarehouseTable
               :warehouses="filteredWarehouses"
               @edit="editWarehouse"
               @delete="confirmDelete"
               @move="goToBulk"
            />
+        </div>
+        <!-- Mobile Cards fallback when in table view -->
+        <div class="md:hidden grid grid-cols-1 gap-4">
+          <WarehouseCard
+            v-for="w in filteredWarehouses"
+            :key="w.id || w._id"
+            :warehouse="w"
+            @edit="editWarehouse"
+            @delete="confirmDelete"
+            @move="goToBulk(w)"
+          />
         </div>
       </div>
 

@@ -25,7 +25,7 @@
       <button 
         @click="notificationStore.canAddWarehouse ? $emit('add') : null"
         v-tooltip.bottom="limitTooltip"
-        class="h-8 px-3 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 whitespace-nowrap"
+        class="hidden lg:flex h-8 px-3 rounded-lg text-xs font-medium transition-all items-center gap-1.5 whitespace-nowrap"
         :class="[
           notificationStore.canAddWarehouse 
             ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm active:scale-95' 

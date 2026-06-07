@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-5">
 
-    <!-- ===== MODERN FILTER BAR (WorkerHistoryTab style) ===== -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 bg-white dark:bg-slate-900/40 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800/50 shadow-inner mb-2">
+    <!-- ===== MODERN FILTER BAR ===== -->
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-2 bg-white dark:bg-slate-900/40 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800/50 shadow-sm mb-2">
 
       <!-- Date From -->
       <DatePicker
@@ -10,8 +10,8 @@
         dateFormat="dd.mm.yy"
         showIcon
         iconDisplay="input"
-        class="!h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 !w-full"
-        inputClass="!text-[12px] !font-black !!tracking-tighter !h-10 !bg-transparent !border-none !px-4"
+        class="!h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 !w-full col-span-1"
+        inputClass="!text-[12px] !font-black !tracking-tighter !h-10 !bg-transparent !border-none !px-3"
         :placeholder="$t('common.date_from')"
       />
 
@@ -21,8 +21,8 @@
         dateFormat="dd.mm.yy"
         showIcon
         iconDisplay="input"
-        class="!h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 !w-full"
-        inputClass="!text-[12px] !font-black !!tracking-tighter !h-10 !bg-transparent !border-none !px-4"
+        class="!h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 !w-full col-span-1"
+        inputClass="!text-[12px] !font-black !tracking-tighter !h-10 !bg-transparent !border-none !px-3"
         :placeholder="$t('common.date_to')"
       />
 
@@ -33,7 +33,7 @@
         optionLabel="name"
         optionValue="id"
         showClear
-        class="!text-[12px] !font-black !!tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-2"
+        class="!text-[12px] !font-black !tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-1 col-span-1"
         :placeholder="$t('branches.title')"
       />
 
@@ -44,29 +44,29 @@
         optionLabel="label"
         optionValue="id"
         showClear
-        class="!text-[12px] !font-black !!tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-2"
+        class="!text-[12px] !font-black !tracking-tighter !h-10 !rounded-xl !bg-slate-50 dark:!bg-slate-800/40 !border-none !ring-0 flex items-center px-1 col-span-1"
         :placeholder="$t('common.status')"
       />
 
       <!-- Actions -->
-      <div class="flex items-center gap-2">
+      <div class="col-span-2 sm:col-span-2 lg:col-span-1 flex items-center justify-end gap-2 lg:justify-start">
         <!-- Export -->
         <button
           v-if="settingsStore.hasPlanExport"
           @click="exportShifts"
           v-tooltip.top="$t('common.export')"
-          class="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all duration-300 flex items-center justify-center shadow-sm"
+          class="flex-1 lg:flex-none h-10 w-full lg:w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all duration-300 flex items-center justify-center shadow-sm"
         >
-          <i class="pi pi-file-excel text-xs"></i>
+          <i class="pi pi-file-excel text-[14px]"></i>
         </button>
 
         <!-- Reset -->
         <button
           @click="resetFilters"
           v-tooltip.top="$t('common.reset')"
-          class="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all duration-300 hover:rotate-180 flex items-center justify-center"
+          class="flex-1 lg:flex-none h-10 w-full lg:w-10 rounded-xl bg-slate-50 dark:bg-slate-800/40 border-none text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all duration-300 hover:rotate-180 flex items-center justify-center shadow-sm"
         >
-          <i class="pi pi-refresh text-xs"></i>
+          <i class="pi pi-refresh text-[14px]"></i>
         </button>
       </div>
     </div>

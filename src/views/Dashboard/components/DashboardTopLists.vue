@@ -29,7 +29,7 @@
           </div>
           <div class="text-right">
             <p class="text-[13px] font-black text-emerald-600 dark:text-emerald-400">{{ formatPrice(s.sales_total) }}</p>
-            <p class="text-[11px] text-slate-400 font-bold">{{ $t('common.count', { count: s.sales_count }) }}</p>
+            <p class="text-[11px] text-slate-400 font-bold">{{ s.sales_count }} {{ $t('common.count') }}</p>
           </div>
         </div>
       </div>
@@ -85,7 +85,8 @@
         <h3 class="text-sm font-black text-slate-800 dark:text-white tracking-tight">{{ $t('dashboard.top_lists.seller_ranking') }}</h3>
         <span v-if="workers.total_active_workers" class="text-[11px] font-black text-slate-400 tracking-widest">{{ $t('dashboard.top_lists.active_count', { count: workers.total_active_workers }) }}</span>
       </div>
-      <div class="overflow-x-auto no-scrollbar">
+      <!-- Desktop Table -->
+      <div class="hidden md:block overflow-x-auto no-scrollbar">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="text-[11px] font-black text-slate-400 tracking-widest border-b border-slate-50 dark:border-slate-800">
@@ -116,7 +117,7 @@
                 </span>
               </td>
               <td class="py-4 text-right">
-                <p class="text-xs font-bold text-slate-600 dark:text-slate-400">{{ $t('common.count', { count: w.sales_count }) }}</p>
+                <p class="text-xs font-bold text-slate-600 dark:text-slate-400">{{ w.sales_count }} {{ $t('common.count') }}</p>
               </td>
               <td class="py-4 text-right">
                 <p class="text-xs font-bold text-slate-600 dark:text-slate-400">{{ formatPrice(w.avg_check) }}</p>
@@ -130,6 +131,45 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Cards -->
+      <div class="md:hidden space-y-3">
+        <div v-for="(w, idx) in workers.ranking" :key="`mobile-${w.worker_id}`" class="p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 flex flex-col gap-3 relative">
+          <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-[12px] font-black text-slate-500 shadow-sm">
+            {{ idx + 1 }}
+          </div>
+          
+          <div class="flex items-start justify-between pl-4">
+            <div>
+              <p class="text-sm font-black text-slate-800 dark:text-white">{{ w.name }}</p>
+              <span :class="['inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-black ', 
+                w.role === 'owner' ? 'bg-purple-500/10 text-purple-500' : 
+                w.role === 'manager' ? 'bg-blue-500/10 text-blue-500' : 'bg-slate-500/10 text-slate-500']">
+                {{ w.role }}
+              </span>
+            </div>
+            <div class="text-right">
+              <p class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('dashboard.charts.revenue') }}</p>
+              <p class="text-sm font-black text-slate-800 dark:text-white">{{ formatPrice(w.revenue) }}</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center justify-between pt-3 border-t border-slate-200/60 dark:border-slate-700/50">
+             <div class="text-left">
+               <p class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('dashboard.metrics.sales') }}</p>
+               <p class="text-xs font-bold text-slate-600 dark:text-slate-400">{{ w.sales_count }} {{ $t('common.count') }}</p>
+             </div>
+             <div class="text-center">
+               <p class="text-[10px] font-black text-slate-400 tracking-widest">{{ $t('dashboard.metrics.avg_check') }}</p>
+               <p class="text-xs font-bold text-slate-600 dark:text-slate-400">{{ formatPrice(w.avg_check) }}</p>
+             </div>
+             <div class="text-right">
+               <p class="text-[10px] font-black text-blue-400 tracking-widest">{{ $t('dashboard.charts.profit') }}</p>
+               <p class="text-xs font-black text-blue-600 dark:text-blue-400">{{ formatPrice(w.profit) }}</p>
+             </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -175,7 +215,7 @@
             <i class="pi pi-truck text-emerald-500 bg-emerald-500/10 p-2 rounded-xl text-sm"></i>
             {{ $t('dashboard.top_lists.suppliers') }}
           </h3>
-          <p class="text-[11px] text-slate-400 font-bold mt-1 tracking-widest uppercase">{{ $t('dashboard.top_lists.suppliers_desc', 'Qarzdorlik va to\'lovlar nazorati') }}</p>
+          <p class="text-[11px] text-slate-400 font-bold mt-1 tracking-widest uppercase">{{ $te('dashboard.top_lists.suppliers_desc') ? $t('dashboard.top_lists.suppliers_desc') : 'Qarzdorlik va to\'lovlar nazorati' }}</p>
         </div>
         
         <div class="flex items-center gap-3 bg-rose-50 dark:bg-rose-500/10 px-4 py-2.5 rounded-2xl border border-rose-100 dark:border-rose-500/20 shadow-sm">
@@ -193,8 +233,8 @@
         <div class="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-4 border border-emerald-100 dark:border-emerald-500/20">
           <i class="pi pi-check-circle text-2xl"></i>
         </div>
-        <h4 class="text-[13px] font-black text-slate-700 dark:text-slate-200 tracking-tight mb-1">{{ $t('dashboard.top_lists.no_debtors_title', 'Barchasi joyida!') }}</h4>
-        <p class="text-[11px] font-bold text-slate-400 tracking-widest text-center">{{ $t('dashboard.top_lists.no_debtors', 'Ayni vaqtda yetkazib beruvchilardan yirik qarzlar mavjud emas.') }}</p>
+        <h4 class="text-[13px] font-black text-slate-700 dark:text-slate-200 tracking-tight mb-1">{{ $te('dashboard.top_lists.no_debtors_title') ? $t('dashboard.top_lists.no_debtors_title') : 'Barchasi joyida!' }}</h4>
+        <p class="text-[11px] font-bold text-slate-400 tracking-widest text-center">{{ $te('dashboard.top_lists.no_debtors') ? $t('dashboard.top_lists.no_debtors') : 'Ayni vaqtda yetkazib beruvchilardan yirik qarzlar mavjud emas.' }}</p>
       </div>
 
       <div v-else class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -220,7 +260,7 @@
       
       <div class="mt-6 flex justify-end relative z-10">
         <router-link to="/dashboard/suppliers" class="text-[11px] font-black text-slate-400 hover:text-emerald-500 transition-colors tracking-widest flex items-center gap-1.5 uppercase">
-          {{ $t('dashboard.top_lists.view_all_suppliers', 'Barcha yetkazuvchilar') }}
+          {{ $te('dashboard.top_lists.view_all_suppliers') ? $t('dashboard.top_lists.view_all_suppliers') : 'Barcha yetkazuvchilar' }}
           <i class="pi pi-arrow-right text-[10px]"></i>
         </router-link>
       </div>

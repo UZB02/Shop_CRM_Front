@@ -26,8 +26,8 @@
         </div>
       </div>
 
-      <!-- Products table -->
-      <div v-if="products.length" class="overflow-x-auto">
+      <!-- Products table (Desktop) -->
+      <div v-if="products.length" class="hidden md:block overflow-x-auto">
         <table class="w-full text-left min-w-[700px]">
           <thead>
             <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
@@ -91,14 +91,29 @@
                 </span>
               </td>
               <td class="px-4 py-2 text-right">
-                <span class="text-xs font-bold text-slate-400 dark:text-slate-500 tracking-tight">
+                <span class="text-[12px] font-bold text-slate-500 dark:text-slate-400 tracking-tight">
                   {{ Number(item.purchase_price || 0).toLocaleString() }}
                 </span>
               </td>
               <td class="px-4 py-2 text-right">
-                <span class="text-xs font-black text-slate-800 dark:text-slate-200 tracking-tight">
-                  {{ Number(item.sale_price || 0).toLocaleString() }}
-                </span>
+                <div class="flex flex-col items-end justify-center">
+                  <div v-if="item.active_promotion" class="flex items-center gap-1.5 mb-0.5">
+                    <span class="text-[10px] font-black text-rose-500 bg-rose-500/10 px-1 rounded">-{{ item.active_promotion.discount_pct }}%</span>
+                    <span class="text-[11px] font-bold text-slate-400 line-through">{{ Number(item.sale_price || 0).toLocaleString() }}</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-[13px] font-black tracking-tight" :class="item.active_promotion ? 'text-rose-600 dark:text-rose-400' : 'text-slate-800 dark:text-slate-200'">
+                      {{ Number(item.active_promotion ? item.active_promotion.discounted_price : (item.sale_price || 0)).toLocaleString() }}
+                    </span>
+                    <span 
+                      v-if="!item.active_promotion && item.purchase_price && item.sale_price > item.purchase_price" 
+                      class="text-[9px] font-black text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-1 rounded uppercase tracking-widest"
+                      title="Ustama (Margin)"
+                    >
+                      +{{ Math.round(((item.sale_price - item.purchase_price) / item.purchase_price) * 100) }}%
+                    </span>
+                  </div>
+                </div>
               </td>
               <td class="px-4 py-2 text-center whitespace-nowrap text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                 {{ item.added_on?.split('|')[0]?.trim() || '—' }}
@@ -119,7 +134,84 @@
         </table>
       </div>
 
-      <div v-else class="flex flex-col items-center justify-center py-12 text-center">
+      <!-- Mobile Product Cards -->
+      <div v-if="products.length" class="md:hidden grid grid-cols-1 gap-3 p-3">
+        <div 
+          v-for="(item, index) in products"
+          :key="`mob-${item.product_id}`"
+          class="bg-white/60 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm relative transition-all active:scale-[0.98]"
+        >
+          <!-- Absolute Action Menu -->
+          <div class="absolute top-3 right-3 flex items-center gap-1">
+            <button 
+              v-if="item.barcode"
+              @click="$emit('show-barcode', item)"
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800 text-slate-400 active:scale-95 shadow-sm"
+            >
+              <i class="pi pi-barcode text-sm"></i>
+            </button>
+            <button 
+              v-if="settingsStore.isWastageEnabled"
+              @click="$emit('open-wastage', item)"
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-rose-50 dark:bg-rose-500/10 text-rose-500 active:scale-95 shadow-sm"
+            >
+              <i class="pi pi-exclamation-circle text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Product Info -->
+          <div class="flex gap-3">
+            <div class="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center overflow-hidden shrink-0">
+               <img v-if="item.image_url" :src="item.image_url" class="w-full h-full object-cover" />
+               <i v-else class="pi pi-image text-slate-300 text-xl"></i>
+            </div>
+            <div class="flex-1 flex flex-col justify-center min-w-0 pr-16">
+              <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 truncate">{{ item.product_name }}</h3>
+              <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-0.5 truncate">{{ item.category_name }}</span>
+              <div class="mt-1.5 flex flex-wrap gap-1.5">
+                 <TurBadge :tur-name="item.tur_name" :tur-color="item.tur_color" />
+                 <span class="px-1.5 py-0.5 rounded-md font-bold text-[9px] uppercase tracking-widest" :class="settingsStore.isLowStockEnabled && item.quantity <= settingsStore.lowStockThreshold ? 'bg-rose-500/10 text-rose-600' : 'bg-emerald-500/10 text-emerald-600'">
+                   {{ item.quantity }} dona
+                 </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price & Added Date -->
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1">{{ $t('products.form.purchase_price') }} / {{ $t('products.col_price') }}</span>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[12px] font-bold text-slate-500">{{ Number(item.purchase_price || 0).toLocaleString() }}</span>
+                <i class="pi pi-angle-right text-[10px] text-slate-300"></i>
+                
+                <!-- If has promotion -->
+                <template v-if="item.active_promotion">
+                  <span class="text-[11px] font-bold text-slate-400 line-through">{{ Number(item.sale_price || 0).toLocaleString() }}</span>
+                  <span class="text-[13px] font-black text-rose-500">{{ Number(item.active_promotion.discounted_price).toLocaleString() }}</span>
+                  <span class="text-[9px] font-black text-rose-500 bg-rose-500/10 px-1 rounded">-{{ item.active_promotion.discount_pct }}%</span>
+                </template>
+                
+                <!-- Normal price with margin -->
+                <template v-else>
+                  <span class="text-[13px] font-black text-emerald-600 dark:text-emerald-400">{{ Number(item.sale_price || 0).toLocaleString() }}</span>
+                  <span 
+                    v-if="item.purchase_price && item.sale_price > item.purchase_price" 
+                    class="text-[9px] font-black text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-1 rounded uppercase tracking-widest"
+                  >
+                    +{{ Math.round(((item.sale_price - item.purchase_price) / item.purchase_price) * 100) }}%
+                  </span>
+                </template>
+              </div>
+            </div>
+            <div class="text-[10px] font-bold text-slate-400 text-right mt-auto">
+              {{ item.added_on?.split('|')[0]?.trim() || '—' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="!products.length" class="flex flex-col items-center justify-center py-12 text-center">
         <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mb-3">
           <i class="pi pi-inbox text-slate-400 text-lg"></i>
         </div>

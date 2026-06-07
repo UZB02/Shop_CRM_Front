@@ -23,7 +23,7 @@
       </div>
       <p class="text-xs text-slate-400 mt-0.5 truncate">{{ warehouse?.store_name || $t('warehouse.detail.store_unspecified') }} • {{ warehouse?.address || $t('warehouse.detail.address_unspecified') }}</p>
     </div>
-    <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 shrink-0">
+    <div class="hidden lg:flex items-center gap-2 shrink-0">
       <button
         v-if="settingsStore.hasPlanExport"
         @click="$emit('export')"

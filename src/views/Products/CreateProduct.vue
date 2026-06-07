@@ -1,13 +1,14 @@
 <template>
-  <!-- Responsive height: Fixed on desktop (lg+), auto on mobile -->
-  <div class="lg:h-[calc(100vh-4rem)] flex flex-col p-4 md:p-5 lg:p-6 lg:pt-2 lg:overflow-hidden min-h-screen lg:min-h-0">
+  <!-- Responsive wrapper -->
+  <div class="lg:h-[calc(100vh-4rem)] flex flex-col p-4 md:p-5 lg:p-6 lg:pt-2 lg:overflow-hidden min-h-screen lg:min-h-0 pb-[88px] lg:pb-0 relative">
+    
     <!-- Compact Sticky Header -->
     <ProductFormHeader 
       :isEdit="isEdit" 
       :saving="saving" 
       :product="product"
       @save="onSave" 
-      class="shrink-0 mb-6"
+      class="shrink-0 mb-6 lg:mb-6"
     />
 
     <!-- Main Content Area -->
@@ -21,10 +22,10 @@
         <p class="text-[12px] font-black tracking-[0.2em] text-slate-400">Yuklanmoqda...</p>
       </div>
 
-      <!-- Grid: 1 col on mobile, 1 col on md, 3 cols on lg (single screen) -->
-      <div v-else class="grid grid-cols-1 lg:grid-cols-12 gap-5 animate-app-in pb-10 lg:pb-0">
+      <!-- Grid Layout -->
+      <div v-else class="grid grid-cols-1 lg:grid-cols-12 gap-5 animate-app-in pb-4 lg:pb-0">
         
-        <!-- Column 1: Basic Info (4/12) -->
+        <!-- Column 1: Basic Info -->
         <div class="lg:col-span-4 flex flex-col">
           <GeneralInfoCard 
             v-model="product"
@@ -35,7 +36,7 @@
           />
         </div>
 
-        <!-- Column 2: Financials & Stock (4/12) -->
+        <!-- Column 2: Financials & Stock -->
         <div class="lg:col-span-4 flex flex-col">
           <PricingInventoryCard 
             v-model="product"
@@ -45,9 +46,8 @@
           />
         </div>
 
-        <!-- Column 3: Media & Settings (4/12) -->
+        <!-- Column 3: Media & Settings -->
         <div class="lg:col-span-4 flex flex-col gap-5">
-          <!-- Image Section -->
           <div class="h-full min-h-0">
             <ImageUploadCard 
               :imageUrl="product.imageUrl"
@@ -58,14 +58,26 @@
             />
           </div>
         </div>
-
       </div>
+    </div>
+
+    <!-- Sticky Mobile Save Bar -->
+    <div class="lg:hidden fixed bottom-[68px] left-0 right-0 z-40 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.1)]">
+       <Button 
+        :label="isEdit ? $t('products.form.save') : $t('products.form.add')" 
+        icon="pi pi-check" 
+        @click="onSave" 
+        :loading="saving"
+        class="w-full !rounded-xl !bg-emerald-500 hover:!bg-emerald-600 !border-none !h-12 !text-[14px] !font-black !text-white !shadow-lg !shadow-emerald-500/30 transition-all active:scale-[0.98] !flex !items-center !justify-center !gap-2"
+        pt:icon:class="!text-sm"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
+import Button from 'primevue/button'
 import { useProductForm } from './composables/useProductForm'
 
 // Professional Components

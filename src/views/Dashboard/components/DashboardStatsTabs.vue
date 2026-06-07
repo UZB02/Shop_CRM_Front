@@ -1,5 +1,5 @@
 <template>
-  <div class="p-1.5 bg-white dark:bg-slate-900 shadow-xl dark:shadow-2xl shadow-emerald-500/5 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 relative overflow-hidden transition-colors duration-300">
+  <div class="sticky top-[68px] sm:static z-10 p-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md sm:bg-white sm:dark:bg-slate-900 shadow-xl dark:shadow-2xl shadow-emerald-500/5 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 relative overflow-hidden transition-colors duration-300 -mx-4 px-4 sm:mx-0 sm:px-1.5 mt-2 sm:mt-0">
     <!-- Background glow -->
     <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 dark:bg-emerald-500/20 blur-[80px] pointer-events-none"></div>
 

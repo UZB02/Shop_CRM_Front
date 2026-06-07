@@ -1,12 +1,14 @@
 <template>
-  <div class="space-y-4">
-    <!-- Header -->
-    <BranchPageHeader
-      :branch="branch"
-      @edit="openEditModal"
-      @transfer="openNewTransferHandler"
-      @export="exportStocks"
-    />
+  <div class="space-y-4 pb-[80px] lg:pb-0 relative min-h-[calc(100vh-4rem)]">
+    <!-- Sticky Header Wrapper -->
+    <div class="sticky top-0 z-30 -mx-4 px-4 pt-3 pb-3 bg-slate-50/90 dark:bg-[#0f172a]/90 backdrop-blur-xl lg:backdrop-blur-none lg:static lg:mx-0 lg:p-0 lg:bg-transparent dark:lg:bg-transparent shadow-sm lg:shadow-none border-b border-slate-200 dark:border-slate-800 lg:border-none dark:lg:border-none">
+      <BranchPageHeader
+        :branch="branch"
+        @edit="openEditModal"
+        @transfer="openNewTransferHandler"
+        @export="exportStocks"
+      />
+    </div>
 
     <!-- Main layout -->
     <div v-if="loading && !branch" class="flex flex-col lg:flex-row gap-4">
@@ -72,6 +74,43 @@
           />
         </Transition>
       </div>
+    </div>
+
+    <!-- Mobile Sticky Action Bar -->
+    <div v-if="branch" class="lg:hidden fixed bottom-[68px] left-0 right-0 z-40 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.1)] flex items-center justify-around gap-2">
+      <!-- Edit Branch Button -->
+      <button
+        @click="openEditModal"
+        class="w-11 h-11 shrink-0 rounded-xl text-[12px] font-black text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-all flex items-center justify-center active:scale-95 shadow-sm"
+      >
+        <i class="pi pi-pencil text-xs"></i>
+      </button>
+
+      <!-- Transfer Button -->
+      <button
+        @click="openNewTransferHandler"
+        class="w-11 h-11 shrink-0 rounded-xl text-[12px] font-black text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-all flex items-center justify-center active:scale-95 shadow-sm"
+      >
+        <i class="pi pi-arrow-right-arrow-left text-xs"></i>
+      </button>
+
+      <!-- Bulk Movement Button -->
+      <button
+        @click="router.push({ name: 'branch-bulk', params: { id: branch.id || branch._id } })"
+        class="flex-1 h-11 rounded-xl text-[11px] sm:text-[12px] font-black bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-lg shadow-emerald-500/20"
+      >
+        <i class="pi pi-plus text-xs"></i>
+        <span class="truncate">{{ $t('warehouse.detail.bulk_movement') }}</span>
+      </button>
+
+      <!-- Export Stocks Button -->
+      <button
+        v-if="activeTab === 'products'"
+        @click="exportStocks"
+        class="w-11 h-11 shrink-0 rounded-xl text-[12px] font-black bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all flex items-center justify-center active:scale-95"
+      >
+        <i class="pi pi-file-excel text-xs"></i>
+      </button>
     </div>
 
     <!-- Edit Dialog -->

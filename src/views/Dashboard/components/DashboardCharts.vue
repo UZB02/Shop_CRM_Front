@@ -12,10 +12,10 @@
           <span class="text-[11px] font-black tracking-widest">{{ $t('dashboard.charts.revenue') }}</span>
         </div>
       </div>
-      <div v-if="dailySales.length" class="flex-1 min-h-[300px] relative">
+      <div v-if="dailySales.length" class="flex-1 min-h-[250px] sm:min-h-[300px] relative mt-2 sm:mt-0 -mx-2 sm:mx-0">
         <Chart type="line" :data="lineChartData" :options="lineChartOptions" class="h-full w-full" />
       </div>
-      <div v-else class="flex-1 min-h-[300px] flex items-center justify-center bg-slate-50/50 dark:bg-white/5 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+      <div v-else class="flex-1 min-h-[250px] sm:min-h-[300px] flex items-center justify-center bg-slate-50/50 dark:bg-white/5 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
         <p class="text-[12px] font-black text-slate-400 tracking-widest">{{ $t('dashboard.charts.loading') }}</p>
       </div>
     </div>

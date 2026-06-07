@@ -1,17 +1,27 @@
 <template>
-  <div class="space-y-4">
+  <div class="space-y-4 relative min-h-[calc(100vh-6rem)]">
 
-    <!-- Header -->
-    <ProductPageHeader
-      :totalProducts="totalProducts"
-      :templateLoading="templateLoading.products"
-      :importing="importing"
-      :canImport="isManagerOrAbove()"
-      @add-category="openCategoryDialog"
-      @export-stocks="exportStocks()"
-      @download-template="downloadTemplate('products')"
-      @import="importData('products', $event, loadProducts)"
-    />
+    <!-- Mobile FAB -->
+    <div class="md:hidden fixed bottom-20 right-4 z-40">
+      <button @click="router.push('/dashboard/products/create')" class="w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-[16px] shadow-lg shadow-emerald-500/30 flex items-center justify-center active:scale-95 transition-transform">
+        <i class="pi pi-plus text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Sticky Header Wrapper for Mobile -->
+    <div class="sticky top-0 z-30 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl -mx-4 px-4 py-3 sm:mx-0 sm:px-0 sm:py-0 border-b border-slate-200/50 dark:border-slate-800/50 sm:border-none sm:bg-transparent sm:backdrop-blur-none">
+      <!-- Header -->
+      <ProductPageHeader
+        :totalProducts="totalProducts"
+        :templateLoading="templateLoading.products"
+        :importing="importing"
+        :canImport="isManagerOrAbove()"
+        @add-category="openCategoryDialog"
+        @export-stocks="exportStocks()"
+        @download-template="downloadTemplate('products')"
+        @import="importData('products', $event, loadProducts)"
+      />
+    </div>
 
     <!-- Category Management Dialog -->
     <CategoryDialog
@@ -76,6 +86,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import ProductTable from './components/ProductTable.vue'
 import CategoryDialog from './components/CategoryDialog.vue'
 import CategoryList from './components/CategoryList.vue'
@@ -101,6 +112,7 @@ const {
 
 const { templateLoading, downloadTemplate } = useTemplateDownload()
 const { importing, importResult, showResultDialog, isManagerOrAbove, importData } = useImport()
+const router = useRouter()
 
 
 const onCategorySelect = (cat) => {

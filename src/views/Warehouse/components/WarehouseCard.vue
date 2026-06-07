@@ -17,19 +17,19 @@
           </div>
         </div>
 
-        <!-- Hover Actions -->
-        <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-300">
+        <!-- Actions (Hover on Desktop, Always Visible on Mobile) -->
+        <div class="flex gap-1.5 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-all duration-300 absolute top-3 right-3 lg:static">
           <button
             @click="$emit('edit', warehouse)"
-            class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-500 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-95"
+            class="w-10 h-10 lg:w-8 lg:h-8 rounded-full lg:rounded-lg flex items-center justify-center bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-500 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-95"
           >
-            <i class="pi pi-pencil text-[12px]"></i>
+            <i class="pi pi-pencil text-[14px] lg:text-[12px]"></i>
           </button>
           <button
             @click="$emit('delete', warehouse)"
-            class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm active:scale-95"
+            class="w-10 h-10 lg:w-8 lg:h-8 rounded-full lg:rounded-lg flex items-center justify-center bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm active:scale-95"
           >
-            <i class="pi pi-trash text-[12px]"></i>
+            <i class="pi pi-trash text-[14px] lg:text-[12px]"></i>
           </button>
         </div>
       </div>

@@ -7,10 +7,22 @@
           {{ $t('menu.stores') }}
         </router-link>
         <i class="pi pi-chevron-right text-[10px] text-slate-300"></i>
-        <span class="text-[12px] font-bold text-slate-600 dark:text-slate-300 tracking-widest truncate">{{ branch?.name || '...' }}</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <h1 class="text-[18px] lg:text-[20px] font-black text-slate-800 dark:text-slate-100 tracking-tight truncate leading-none">
+          {{ branch?.name || '...' }}
+        </h1>
+        <span 
+          v-if="branch?.status" 
+          class="px-2 py-0.5 rounded text-[10px] font-black tracking-widest uppercase border"
+          :class="branch.status === 'active' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-slate-50 text-slate-500 border-slate-200'"
+        >
+          {{ branch.status === 'active' ? $t('stores.status_active') : $t('stores.status_inactive') }}
+        </span>
       </div>
     </div>
-    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 -mb-1 w-full sm:w-auto">
+    
+    <div class="hidden lg:flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 -mb-1 w-full sm:w-auto">
       <button
         v-if="settingsStore.hasPlanExport"
         @click="$emit('export')"

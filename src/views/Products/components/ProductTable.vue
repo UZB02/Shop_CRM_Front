@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
-    <!-- Main Table Container -->
-    <div class="bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800/60 rounded-2xl overflow-hidden shadow-sm">
+    <!-- Desktop Table (Hidden on Mobile) -->
+    <div class="hidden md:block bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800/60 rounded-2xl overflow-hidden shadow-sm">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
@@ -189,6 +189,86 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Mobile Cards (Hidden on Desktop) -->
+    <div class="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- Skeleton Loading -->
+      <div v-if="loading" v-for="i in 6" :key="`mob-sk-${i}`" class="animate-pulse bg-white dark:bg-slate-900 rounded-[20px] p-4 border border-slate-100 dark:border-slate-800">
+        <div class="flex gap-3">
+          <div class="w-16 h-16 rounded-xl bg-slate-100 dark:bg-slate-800 shrink-0"></div>
+          <div class="flex-1 space-y-2 py-1">
+            <div class="h-4 w-3/4 bg-slate-100 dark:bg-slate-800 rounded"></div>
+            <div class="h-3 w-1/2 bg-slate-100 dark:bg-slate-800 rounded"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Cards -->
+      <div v-else v-for="item in products" :key="`mob-${item.id}`" 
+           class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-md rounded-[20px] p-4 border border-slate-100 dark:border-slate-800 shadow-sm relative transition-all active:scale-[0.98]">
+        
+        <!-- Action Menu -->
+        <div class="absolute top-3 right-3 flex items-center gap-1">
+           <button @click="router.push('/dashboard/products/edit/' + item.id)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800 text-slate-500 shadow-sm transition-all active:scale-95">
+              <i class="pi pi-pencil text-[12px]"></i>
+           </button>
+        </div>
+
+        <div class="flex gap-3">
+          <!-- Image -->
+          <div class="w-20 h-20 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-center p-1 shrink-0">
+             <img v-if="formatImageUrl(item.image) && !imageErrors[item.id]" :src="formatImageUrl(item.image)" @error="handleImageError(item.id)" class="w-full h-full object-contain rounded-xl" alt="" />
+             <i v-else class="pi pi-image text-2xl text-slate-200 dark:text-slate-600"></i>
+          </div>
+
+          <!-- Info -->
+          <div class="flex-1 flex flex-col justify-center min-w-0 pr-10">
+            <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 truncate">{{ item.name }}</h3>
+            <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-0.5 truncate">{{ item.category_name }}</span>
+            
+            <div class="flex items-center gap-2 mt-2">
+               <span v-if="item.status_display" class="px-1.5 py-0.5 rounded-md text-[9px] font-black tracking-widest uppercase" :class="item.status === 'active' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-600'">
+                 {{ item.status_display }}
+               </span>
+               <span v-if="item.quantity !== undefined" class="text-[11px] font-bold" :class="Number(item.quantity) <= 0 ? 'text-rose-500' : 'text-slate-500'">
+                 Qoldiq: {{ item.quantity }} {{ item.unit_display }}
+               </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex flex-col">
+               <template v-if="item.active_promotion">
+                 <div class="flex items-center gap-1">
+                   <span class="text-[10px] font-bold text-slate-400 line-through">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
+                   <span class="text-[9px] font-black text-rose-500 bg-rose-500/10 px-1 rounded">-{{ item.active_promotion.discount_pct }}%</span>
+                 </div>
+                 <span class="text-lg font-black text-emerald-600 dark:text-emerald-400">{{ settingsStore.formatPrice(item.active_promotion.discounted_price, item.currency_code) }}</span>
+               </template>
+               <template v-else>
+                 <span class="text-lg font-black text-slate-800 dark:text-white">{{ settingsStore.formatPrice(item.sale_price, item.currency_code) }}</span>
+               </template>
+            </div>
+
+            <div class="flex items-center gap-2">
+               <button v-if="item.barcode || item.barcode_image_url" @click="viewBarcode(item)" class="w-10 h-10 flex items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500">
+                  <i class="pi pi-barcode"></i>
+               </button>
+               <button @click="$emit('delete', item)" class="w-10 h-10 rounded-xl flex items-center justify-center text-rose-500 bg-rose-50 dark:bg-rose-500/10">
+                 <i class="pi pi-trash"></i>
+               </button>
+            </div>
+        </div>
+      </div>
+      
+      <!-- Empty state Mobile -->
+      <div v-if="!loading && products.length === 0" class="col-span-full py-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800">
+         <i class="pi pi-box text-4xl text-slate-300 dark:text-slate-600 mb-3 block"></i>
+         <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">{{ $t('products.not_found') }}</p>
+         <p class="text-[13px] text-slate-500 mt-1">Hech qanday mahsulot topilmadi.</p>
       </div>
     </div>
 

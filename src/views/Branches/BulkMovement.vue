@@ -242,31 +242,45 @@ const selectTur = (tur) => {
           </transition>
         </div>
 
-        <!-- Mobile Bottom Tabs -->
-        <div class="h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-around px-4 shrink-0 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-[60]">
-          <button 
-            @click="activeTab = 'cart'"
-            class="flex-1 flex flex-col items-center gap-1 transition-all relative"
-            :class="activeTab === 'cart' ? 'text-emerald-500 scale-110' : 'text-slate-400'"
-          >
-            <div class="relative">
-              <i class="pi pi-shopping-cart text-lg"></i>
-              <span v-if="validItemsCount > 0" class="absolute -top-1.5 -right-1.5 min-w-[14px] h-[14px] bg-rose-500 text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white dark:border-slate-900 shadow-sm">
-                {{ validItemsCount }}
-              </span>
-            </div>
-            <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('warehouse.bulk.products_list') }}</span>
-          </button>
+        <!-- Mobile Bottom Tabs & Actions -->
+        <div class="fixed bottom-[68px] left-0 right-0 h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-3 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-[60] gap-2 lg:hidden">
+          
+          <div class="flex items-center gap-1 flex-1">
+            <button 
+              @click="activeTab = 'cart'"
+              class="flex-1 flex flex-col items-center justify-center py-2 rounded-xl transition-all relative"
+              :class="activeTab === 'cart' ? 'text-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/10' : 'text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
+            >
+              <div class="relative">
+                <i class="pi pi-shopping-cart text-[15px] mb-1"></i>
+                <span v-if="validItemsCount > 0" class="absolute -top-1.5 -right-2 min-w-[14px] h-[14px] bg-rose-500 text-white rounded-full flex items-center justify-center text-[9px] font-black shadow-sm">
+                  {{ validItemsCount }}
+                </span>
+              </div>
+              <span class="text-[9px] font-black uppercase tracking-widest leading-none text-center px-1">{{ $t('warehouse.bulk.products_list') }}</span>
+            </button>
 
-          <div class="w-px h-8 bg-slate-100 dark:bg-slate-800"></div>
+            <button 
+              @click="activeTab = 'catalog'"
+              class="flex-1 flex flex-col items-center justify-center py-2 rounded-xl transition-all"
+              :class="activeTab === 'catalog' ? 'text-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/10' : 'text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
+            >
+              <i class="pi pi-th-large text-[15px] mb-1"></i>
+              <span class="text-[9px] font-black uppercase tracking-widest leading-none text-center px-1">{{ $t('menu.products') }}</span>
+            </button>
+          </div>
+
+          <div class="w-px h-8 bg-slate-100 dark:bg-slate-800 mx-1 shrink-0"></div>
 
           <button 
-            @click="activeTab = 'catalog'"
-            class="flex-1 flex flex-col items-center gap-1 transition-all"
-            :class="activeTab === 'catalog' ? 'text-emerald-500 scale-110' : 'text-slate-400'"
+            @click="promptSave"
+            :disabled="saving || validItemsCount === 0"
+            class="h-11 px-4 sm:px-6 rounded-xl text-[10px] sm:text-[11px] font-black text-white transition-all shadow-lg active:scale-95 disabled:opacity-30 flex items-center justify-center gap-1.5 shrink-0"
+            :class="movement_type === 'in' ? 'bg-emerald-500 shadow-emerald-500/20' : 'bg-rose-500 shadow-rose-500/20'"
           >
-            <i class="pi pi-th-large text-lg"></i>
-            <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('menu.products') }}</span>
+            <i v-if="saving" class="pi pi-spin pi-spinner text-xs"></i>
+            <i v-else class="pi pi-check text-xs"></i>
+            <span class="uppercase tracking-widest">{{ $t('warehouse.bulk.save') }}</span>
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[100dvh] flex flex-col bg-slate-50 dark:bg-[#0f172a] animate-in fade-in duration-500 overflow-hidden font-outfit">
+  <div class="h-[calc(100dvh-160px)] lg:h-[calc(100vh-120px)] flex flex-col bg-slate-50 dark:bg-[#0f172a] animate-in fade-in duration-500 overflow-hidden font-outfit">
     
     <!-- Top Bar -->
     <TransferHeader 
@@ -59,20 +59,23 @@
             mode="out-in"
           >
             <div :key="activeTab" class="h-full flex flex-col p-4 gap-4">
-              <div v-if="activeTab === 'cart'" class="flex-1 flex flex-col gap-4 overflow-hidden">
-                <TransferSidebar
-                  v-model:target-type="targetType"
-                  :transfer-form="transferForm"
-                  :filtered-branches="filteredBranches"
-                  :filtered-warehouses="filteredWarehouses"
-                  :source-name="sourceName"
-                  :selected-destination-name="selectedDestinationName"
-                  :is-valid="isValid"
-                />
-                <TransferProductList 
-                  :items="transferForm.items"
-                  @remove="removeItem"
-                />
+              <div v-if="activeTab === 'cart'" class="flex-1 overflow-y-auto custom-scrollbar pb-4 mobile-cart-wrapper">
+                <div class="flex flex-col gap-4 min-h-min">
+                  <TransferSidebar
+                    v-model:target-type="targetType"
+                    :transfer-form="transferForm"
+                    :filtered-branches="filteredBranches"
+                    :filtered-warehouses="filteredWarehouses"
+                    :source-name="sourceName"
+                    :selected-destination-name="selectedDestinationName"
+                    :is-valid="isValid"
+                    class="!w-full"
+                  />
+                  <TransferProductList 
+                    :items="transferForm.items"
+                    @remove="removeItem"
+                  />
+                </div>
               </div>
               <TransferCatalog 
                 v-else
@@ -83,6 +86,19 @@
               />
             </div>
           </transition>
+        </div>
+
+        <!-- Mobile Sticky Save Action -->
+        <div v-if="activeTab === 'cart'" class="p-3 bg-white/80 dark:bg-[#0f1422]/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shrink-0 z-[60]">
+          <button
+            @click="submitTransfer"
+            :disabled="subLoading || !isValid"
+            class="w-full h-12 rounded-xl text-white text-[13px] font-black tracking-widest uppercase transition-all shadow-lg active:scale-95 disabled:opacity-30 flex items-center justify-center gap-2 bg-emerald-600 shadow-emerald-500/20"
+          >
+            <i v-if="subLoading" class="pi pi-spin pi-spinner text-[12px]"></i>
+            <i v-else class="pi pi-send text-[13px]"></i>
+            {{ $t('warehouse.transfer.send') }}
+          </button>
         </div>
 
         <!-- Mobile Bottom Navigation -->
@@ -98,7 +114,7 @@
                 {{ transferForm.items.length }}
               </span>
             </div>
-            <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('warehouse.transfer.items_list') || 'Ro\'yxat' }}</span>
+            <span class="text-[9px] font-black uppercase tracking-wider text-center line-clamp-1 w-full px-1">{{ $t('warehouse.transfer.items_list') || 'Ro\'yxat' }}</span>
           </button>
 
           <div class="w-px h-8 bg-slate-100 dark:bg-slate-800"></div>
@@ -109,7 +125,7 @@
             :class="activeTab === 'catalog' ? 'text-emerald-500 scale-105' : 'text-slate-400'"
           >
             <i class="pi pi-th-large text-lg"></i>
-            <span class="text-[10px] font-black uppercase tracking-widest">{{ $t('menu.products') }}</span>
+            <span class="text-[9px] font-black uppercase tracking-wider text-center line-clamp-1 w-full px-1">{{ $t('menu.products') }}</span>
           </button>
         </div>
       </div>
@@ -227,6 +243,21 @@ const handleCancel = () => {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1023px) {
+  .mobile-cart-wrapper :deep(.overflow-y-auto) {
+    overflow: visible !important;
+  }
+  .mobile-cart-wrapper :deep(.pb-6) {
+    padding-bottom: 0 !important;
+  }
+  .mobile-cart-wrapper :deep(.min-h-0) {
+    min-height: auto !important;
+  }
+  .mobile-cart-wrapper :deep(.flex-1) {
+    flex: none !important;
+  }
 }
 </style>
 

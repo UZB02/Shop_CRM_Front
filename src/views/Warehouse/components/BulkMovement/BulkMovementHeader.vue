@@ -31,7 +31,7 @@
         <span class="text-[11px] sm:text-[12px] font-black text-slate-800 dark:text-slate-200 leading-none">{{ validCount }} / {{ totalCount }}</span>
       </div>
 
-      <div class="flex items-center gap-2">
+      <div class="hidden md:flex items-center gap-2">
         <button
           @click="$emit('download-template')"
           :disabled="templateLoading"
@@ -57,6 +57,8 @@
           {{ $t('warehouse.bulk.save') }}
         </button>
       </div>
+
+      <!-- Mobile Save/Actions menu can be placed elsewhere -->
     </div>
   </div>
 </template>

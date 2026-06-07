@@ -1,12 +1,15 @@
 <template>
-  <div class="space-y-4">
-    <!-- Header -->
-    <WarehouseDetailPageHeader
-      :warehouse="warehouse"
-      @movement="openMovementDialog"
-      @transfer="openNewTransferHandler"
-      @export="exportStocks"
-    />
+  <div class="space-y-4 pb-[130px] lg:pb-0 relative min-h-[calc(100vh-4rem)]">
+    <!-- Sticky Header Wrapper -->
+    <div class="sticky top-0 z-30 -mx-4 px-4 pt-3 pb-3 bg-slate-50/90 dark:bg-[#0f172a]/90 backdrop-blur-xl lg:backdrop-blur-none lg:static lg:mx-0 lg:p-0 lg:bg-transparent dark:lg:bg-transparent shadow-sm lg:shadow-none border-b border-slate-200 dark:border-slate-800 lg:border-none dark:lg:border-none">
+      <!-- Header -->
+      <WarehouseDetailPageHeader
+        :warehouse="warehouse"
+        @movement="openMovementDialog"
+        @transfer="openNewTransferHandler"
+        @export="exportStocks"
+      />
+    </div>
 
     <!-- Main layout -->
     <div v-if="loading && !warehouse" class="flex flex-col lg:flex-row gap-4">
@@ -76,6 +79,33 @@
           </div>
         </Transition>
       </div>
+    </div>
+
+    <!-- Mobile Sticky Action Bar -->
+    <div class="lg:hidden fixed bottom-[68px] left-0 right-0 z-40 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.1)] flex items-center justify-around gap-2">
+      <button
+        @click="openMovementDialog"
+        class="flex-1 h-12 rounded-xl text-[12px] font-black bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-lg shadow-emerald-500/20"
+      >
+        <i class="pi pi-plus text-xs"></i>
+        <span>Kirim / Chiqim</span>
+      </button>
+
+      <button
+        @click="openNewTransferHandler"
+        class="flex-1 h-12 rounded-xl text-[12px] font-black text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-all flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
+      >
+        <i class="pi pi-arrow-right-arrow-left text-xs text-emerald-500"></i>
+        <span>O'tkazma</span>
+      </button>
+
+      <button
+        v-if="settingsStore.hasPlanExport"
+        @click="exportStocks"
+        class="flex-none w-12 h-12 rounded-xl text-[12px] font-black text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/30 dark:bg-emerald-900/10 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all flex flex-col items-center justify-center gap-0.5 active:scale-95"
+      >
+        <i class="pi pi-file-excel text-[14px]"></i>
+      </button>
     </div>
 
     <!-- Wastage Modal -->

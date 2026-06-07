@@ -118,42 +118,69 @@
         </div>
 
         <!-- Mobile Cards -->
-        <div class="md:hidden divide-y divide-slate-50 dark:divide-slate-800/50">
+        <div class="md:hidden flex flex-col gap-3 p-4 bg-slate-50/50 dark:bg-slate-900/30">
           <div
             v-for="branch in filtered"
             :key="branch.id"
-            class="flex items-center gap-4 px-5 py-4 hover:bg-emerald-50/30 dark:hover:bg-emerald-500/5 transition-colors"
+            class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-sm relative transition-all active:scale-[0.98]"
           >
-            <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-center text-emerald-500 shrink-0">
-              <i class="pi pi-sitemap text-lg"></i>
-            </div>
-            <router-link :to="`/dashboard/branches/${branch.id}`" class="flex-1 min-w-0">
-              <p class="text-[15px] font-black text-slate-800 dark:text-slate-200 tracking-tight truncate hover:text-emerald-500 transition-colors">{{ branch.name }}</p>
-              <div class="flex flex-col gap-0.5 mt-1">
-                <p v-if="branch.region_name || branch.district_name" class="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                  <i class="pi pi-map text-[9px]"></i>
-                  {{ [branch.region_name, branch.district_name].filter(Boolean).join(', ') }}
-                </p>
-                <p class="text-[11px] font-bold text-slate-400 truncate flex items-center gap-1">
-                  <i v-if="!branch.region_name && !branch.district_name" class="pi pi-map-marker text-[10px] text-emerald-500/60"></i> 
-                  {{ branch.address || '—' }}
-                </p>
-              </div>
-            </router-link>
-            <div class="flex items-center gap-1 shrink-0">
+            <!-- Absolute Action Menu -->
+            <div class="absolute top-3 right-3 flex items-center gap-1">
               <button
                 @click="$router.push(`/dashboard/branches/${branch.id}/bulk`)"
-                class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 active:scale-95"
-                v-tooltip.top="$t('warehouse.bulk.title')"
-              ><i class="pi pi-database text-sm"></i></button>
+                class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 active:scale-95 shadow-sm"
+              ><i class="pi pi-database text-[12px]"></i></button>
               <button
                 @click="$emit('edit', branch)"
-                class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 active:scale-95"
-              ><i class="pi pi-pencil text-sm"></i></button>
+                class="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 active:scale-95 shadow-sm"
+              ><i class="pi pi-pencil text-[12px]"></i></button>
               <button
                 @click="$emit('delete', branch)"
-                class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 active:scale-95"
-              ><i class="pi pi-trash text-sm"></i></button>
+                class="w-8 h-8 rounded-full bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center text-rose-500 active:scale-95 shadow-sm"
+              ><i class="pi pi-trash text-[12px]"></i></button>
+            </div>
+
+            <!-- Branch Info -->
+            <router-link :to="`/dashboard/branches/${branch.id}`" class="flex gap-3">
+              <div class="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-center text-emerald-500 shrink-0">
+                <i class="pi pi-sitemap text-xl"></i>
+              </div>
+              <div class="flex-1 flex flex-col justify-center min-w-0 pr-24">
+                <h3 class="text-[15px] font-black text-slate-800 dark:text-slate-100 truncate hover:text-emerald-500 transition-colors">{{ branch.name }}</h3>
+                <span class="text-[10px] font-black text-slate-400 tracking-widest uppercase mt-0.5 truncate">{{ $t('stores.branch_label') }}</span>
+              </div>
+            </router-link>
+
+            <!-- Metadata -->
+            <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700/50 flex flex-col gap-2">
+              <div class="flex items-start gap-2">
+                <i class="pi pi-map-marker text-[12px] text-slate-400 mt-0.5"></i>
+                <div class="flex flex-col">
+                  <span v-if="branch.region_name || branch.district_name" class="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                    {{ [branch.region_name, branch.district_name].filter(Boolean).join(', ') }}
+                  </span>
+                  <span class="text-[12px] font-bold text-slate-600 dark:text-slate-300 leading-tight">
+                    {{ branch.address || '—' }}
+                  </span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-1">
+                <a :href="'tel:' + branch.phone" class="inline-flex items-center gap-1.5 text-[12px] font-bold text-slate-500 dark:text-slate-400">
+                  <i class="pi pi-phone text-[11px] text-emerald-500/60"></i>
+                  {{ branch.phone || '—' }}
+                </a>
+                <span
+                  class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-black tracking-widest border"
+                  :class="branch.status === 'active'
+                    ? 'bg-emerald-500/5 text-emerald-600 border-emerald-500/20'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'"
+                >
+                  <span class="w-1.5 h-1.5 rounded-full"
+                    :class="branch.status === 'active' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'"
+                  ></span>
+                  {{ branch.status === 'active' ? $t('stores.status_active') : $t('stores.status_inactive') }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
