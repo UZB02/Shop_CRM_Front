@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="fixed inset-y-0 left-0 z-50 flex flex-col
+    class="fixed inset-y-0 left-0 z-[110] flex flex-col
            bg-white dark:bg-slate-900
            border-r border-slate-200 dark:border-slate-800
            transition-[transform,width] duration-300 ease-in-out

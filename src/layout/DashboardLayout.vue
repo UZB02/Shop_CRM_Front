@@ -38,7 +38,7 @@
 
     <!-- MOBILE OVERLAY -->
     <Transition name="overlay">
-      <div v-if="sidebarOpen" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" @click="sidebarOpen = false" />
+      <div v-if="sidebarOpen" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] lg:hidden" @click="sidebarOpen = false" />
     </Transition>
 
     <!-- SIDEBAR -->

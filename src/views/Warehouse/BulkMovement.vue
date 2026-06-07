@@ -243,7 +243,7 @@ const selectTur = (tur) => {
         </div>
 
         <!-- Mobile Bottom Tabs & Actions -->
-        <div class="fixed bottom-[68px] left-0 right-0 h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-3 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-[60] gap-2 lg:hidden">
+        <div class="fixed left-0 right-0 h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-3 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-[60] gap-2 lg:hidden" style="bottom: calc(68px + env(safe-area-inset-bottom, 0px))">
           
           <div class="flex items-center gap-1 flex-1">
             <button 

@@ -89,7 +89,7 @@
         </div>
 
         <!-- Mobile Sticky Save Action -->
-        <div v-if="activeTab === 'cart'" class="fixed bottom-[132px] left-0 right-0 p-3 bg-white/80 dark:bg-[#0f1422]/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shrink-0 z-[60] lg:hidden">
+        <div v-if="activeTab === 'cart'" class="fixed left-0 right-0 p-3 bg-white/80 dark:bg-[#0f1422]/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shrink-0 z-[60] lg:hidden" style="bottom: calc(132px + env(safe-area-inset-bottom, 0px))">
           <button
             @click="submitTransfer"
             :disabled="subLoading || !isValid"
@@ -102,7 +102,7 @@
         </div>
 
         <!-- Mobile Bottom Navigation -->
-        <div class="fixed bottom-[68px] left-0 right-0 h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-around px-4 shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-[60] lg:hidden">
+        <div class="fixed left-0 right-0 h-16 bg-white dark:bg-[#0f1422] border-t border-slate-200 dark:border-slate-800 flex items-center justify-around px-4 shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-[60] lg:hidden" style="bottom: calc(68px + env(safe-area-inset-bottom, 0px))">
           <button 
             @click="activeTab = 'cart'"
             class="flex-1 flex flex-col items-center gap-1 transition-all relative"

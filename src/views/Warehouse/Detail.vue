@@ -82,7 +82,7 @@
     </div>
 
     <!-- Mobile Sticky Action Bar -->
-    <div class="lg:hidden fixed bottom-[68px] left-0 right-0 z-40 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.1)] flex items-center justify-around gap-2">
+    <div class="lg:hidden fixed left-0 right-0 z-40 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.1)] flex items-center justify-around gap-2" style="bottom: calc(68px + env(safe-area-inset-bottom, 0px))">
       <button
         @click="openMovementDialog"
         class="flex-1 h-12 rounded-xl text-[12px] font-black bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-lg shadow-emerald-500/20"
