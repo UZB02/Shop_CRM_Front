@@ -8,12 +8,12 @@
       leave-from-class="opacity-100 translate-y-0 sm:scale-100"
       leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
     >
-      <div v-if="visible" class="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-4">
+      <div v-if="visible" class="fixed inset-0 z-[120] flex items-center justify-center">
         <!-- Minimalist Backdrop -->
-        <div class="absolute inset-0 bg-slate-900/60 dark:bg-[#040814]/80 backdrop-blur-sm transition-opacity" @click="close"></div>
+        <div class="absolute inset-0 bg-white dark:bg-[#0f1524] transition-opacity"></div>
         
         <!-- Premium Full-Featured Modal Wrapper -->
-        <div class="relative w-[98%] max-w-[1300px] h-[96vh] bg-white dark:bg-[#0f1524] rounded-[28px] overflow-hidden shadow-2xl border border-slate-200 dark:border-white/5 flex flex-col">
+        <div class="relative w-full h-full bg-white dark:bg-[#0f1524] overflow-hidden flex flex-col">
           
           <!-- Header -->
           <div class="px-6 py-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between shrink-0 bg-white/50 dark:bg-white/[0.02]">
@@ -38,41 +38,49 @@
           </div>
 
           <!-- Layout Body -->
-          <div class="flex flex-col md:flex-row flex-grow overflow-hidden relative">
+          <div class="flex flex-col lg:flex-row flex-grow overflow-y-auto lg:overflow-hidden relative custom-scrollbar pb-6 lg:pb-0">
             
             <!-- Left Side: Items Selection -->
-            <div class="flex-grow p-6 flex flex-col gap-5 overflow-y-auto custom-scrollbar h-full">
+            <div class="flex-none lg:flex-grow p-4 md:p-6 flex flex-col lg:flex-row gap-5 lg:h-full lg:overflow-hidden">
               
-              <!-- Product Search (Only if not from specific sale) -->
-              <SaleReturnSearch 
-                 v-if="!initialSale"
-                 v-model:query="productQuery"
-                 :search-results="searchResults"
-                 :format-currency="formatCurrency"
-                 @search="onSearchProducts"
-                 @add="addProduct"
-              />
+              <!-- Left Column: Initial Sale Items or Search -->
+              <div class="flex-[1.2] flex flex-col lg:overflow-hidden gap-2 lg:gap-0">
+                <!-- Product Search (Only if not from specific sale) -->
+                <SaleReturnSearch 
+                   v-if="!initialSale"
+                   v-model:query="productQuery"
+                   :search-results="searchResults"
+                   :format-currency="formatCurrency"
+                   @search="onSearchProducts"
+                   @add="addProduct"
+                />
 
-              <!-- Initial Sale Items List -->
-              <SaleReturnInitialItems 
-                 v-if="initialSale"
-                 :initial-sale="initialSale"
-                 :format-currency="formatCurrency"
-                 :is-already-added="isAlreadyAdded"
-                 @add="addFromSale"
-              />
+                <!-- Initial Sale Items List -->
+                <div v-if="initialSale" class="lg:h-full lg:overflow-y-auto custom-scrollbar lg:pr-2">
+                  <SaleReturnInitialItems 
+                     :initial-sale="initialSale"
+                     :format-currency="formatCurrency"
+                     :is-already-added="isAlreadyAdded"
+                     @add="addFromSale"
+                  />
+                </div>
+              </div>
 
-              <!-- Selected Items (The Return Cart) -->
-              <SaleReturnCart 
-                 :items="returnItems"
-                 :format-currency="formatCurrency"
-                 @update-qty="updateQty"
-                 @remove="removeItem"
-              />
+              <!-- Middle Column: Selected Items (The Return Cart) -->
+              <div class="flex-[0.9] flex flex-col lg:overflow-hidden">
+                <SaleReturnCart 
+                   class="lg:h-full"
+                   :items="returnItems"
+                   :format-currency="formatCurrency"
+                   @update-qty="updateQty"
+                   @remove="removeItem"
+                />
+              </div>
             </div>
 
             <!-- Right Side: Confirmation & Details -->
             <SaleReturnDetails 
+               class="flex-none lg:h-full"
                :initial-sale="initialSale"
                :customers="customers"
                v-model:customer-id="selectedCustomerId"

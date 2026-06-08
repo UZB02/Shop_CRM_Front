@@ -1,13 +1,12 @@
 <template>
   <div class="pos-workspace min-h-screen font-inter text-slate-900 dark:text-slate-100 flex flex-col pt-0 transition-colors duration-300">
     <!-- RetailOS Style Header -->
-    <header class="bg-white dark:bg-[#0f172a] border-b border-slate-100 dark:border-slate-800/60 px-8 py-3 flex items-center justify-between sticky top-0 z-50">
-      <div class="flex items-center gap-10">
-        <!-- Logo -->
-        <h1 class="text-xl font-black font-outfit m-0 tracking-tighter leading-none dark:text-white">Sirius CRM</h1>
+    <header class="bg-white dark:bg-[#0f172a] border-b border-slate-100 dark:border-slate-800/60 px-8 py-3 flex items-center justify-between gap-8 sticky top-0 z-50">
+      <div class="flex items-center flex-1 mr-4">
+        <!-- Logo removed as requested -->
 
         <!-- Integrated Search -->
-        <div class="hidden lg:flex w-[400px] relative group">
+        <div class="hidden lg:flex w-full max-w-[400px] relative group">
           <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-emerald-500 transition-colors" />
           <input 
             ref="searchRef"
@@ -412,8 +411,13 @@ const browserPrintFallback = (htmlContent) => {
   doc.open(); doc.write(htmlContent); doc.close()
   setTimeout(() => {
     iframe.contentWindow.focus()
+    iframe.contentWindow.onafterprint = () => {
+      if (document.body.contains(iframe)) document.body.removeChild(iframe)
+    }
     iframe.contentWindow.print()
-    setTimeout(() => { if (document.body.contains(iframe)) document.body.removeChild(iframe) }, 2000)
+    setTimeout(() => {
+      if (document.body.contains(iframe)) document.body.removeChild(iframe)
+    }, 300000)
   }, 300)
 }
 

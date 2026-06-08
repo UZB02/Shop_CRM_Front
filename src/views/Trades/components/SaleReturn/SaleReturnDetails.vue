@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full md:w-[320px] lg:w-[340px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0">
-    <div class="flex-grow flex flex-col gap-6 overflow-y-auto custom-scrollbar p-6">
+  <div class="w-full lg:w-[320px] xl:w-[340px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0 lg:h-full">
+    <div class="flex flex-col gap-6 lg:flex-grow lg:overflow-y-auto custom-scrollbar p-4 md:p-6">
       
       <!-- Customer Section -->
       <div v-if="!initialSale" class="space-y-2">
@@ -50,16 +50,35 @@
            </div>
         </div>
 
-        <button 
-          @click="$emit('submit')"
-          :disabled="loading || disabled"
-          class="w-full h-12 bg-rose-500 hover:bg-rose-600 dark:bg-rose-500/90 dark:hover:bg-rose-500 disabled:opacity-50 disabled:bg-slate-200 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 text-white rounded-[14px] text-xs font-black tracking-widest transition-all duration-200 hover:shadow-lg hover:shadow-rose-500/20 active:scale-95 flex items-center justify-center gap-2 border border-rose-600/20 leading-none"
-        >
-          <i v-if="loading" class="pi pi-spinner pi-spin"></i>
-          <i v-else class="pi pi-check-circle"></i>
-          Tasdiqlash va Qaytarish
-        </button>
-        <p class="text-[11px] font-medium text-slate-400 dark:text-slate-500 text-center leading-relaxed">"Tasdiqlash" tugmasini bossangiz, mahsulotlar stokga qaytadi va tranzaksiya saqlanadi.</p>
+        <div v-if="!showConfirm" class="w-full">
+          <button 
+            @click="showConfirm = true"
+            :disabled="loading || disabled"
+            class="w-full h-12 bg-rose-500 hover:bg-rose-600 dark:bg-rose-500/90 dark:hover:bg-rose-500 disabled:opacity-50 disabled:bg-slate-200 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 text-white rounded-[14px] text-xs font-black tracking-widest transition-all duration-200 hover:shadow-lg hover:shadow-rose-500/20 active:scale-95 flex items-center justify-center gap-2 border border-rose-600/20 leading-none"
+          >
+            <i v-if="loading" class="pi pi-spinner pi-spin"></i>
+            <i v-else class="pi pi-check-circle"></i>
+            Tasdiqlash va Qaytarish
+          </button>
+          <p class="text-[11px] font-medium text-slate-400 dark:text-slate-500 text-center leading-relaxed mt-4">"Tasdiqlash" tugmasini bossangiz, mahsulotlar stokga qaytadi va tranzaksiya saqlanadi.</p>
+        </div>
+
+        <!-- Inline Confirmation -->
+        <div v-else class="w-full flex flex-col gap-3 p-4 rounded-[16px] border border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 shadow-sm animate-in">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+              <i class="pi pi-exclamation-triangle text-sm"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight pt-0.5">Haqiqatan ham ushbu mahsulotlarni qaytarmoqchimisiz?</p>
+          </div>
+          <div class="flex items-center gap-2 mt-1">
+            <button @click="showConfirm = false" class="flex-1 h-10 rounded-xl bg-white dark:bg-[#1a2333] border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-600 dark:text-slate-300 transition-all hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95">Bekor qilish</button>
+            <button @click="handleFinalSubmit" :disabled="loading" class="flex-1 h-10 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50">
+              <i v-if="loading" class="pi pi-spinner pi-spin"></i>
+              Ha, qaytarish
+            </button>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -67,7 +86,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   initialSale: Object,
@@ -91,6 +110,18 @@ const internalReason = computed({
   get: () => props.reason,
   set: (val) => emit('update:reason', val)
 })
+
+const showConfirm = ref(false)
+
+// Reset confirmation state if disabled becomes true
+watch(() => props.disabled, (val) => {
+  if (val) showConfirm.value = false
+})
+
+const handleFinalSubmit = () => {
+  emit('submit')
+  showConfirm.value = false
+}
 </script>
 
 <style scoped>

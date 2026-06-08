@@ -42,16 +42,16 @@
           </div>
 
           <!-- Layout Body -->
-          <div class="flex flex-col md:flex-row overflow-hidden flex-grow relative">
+          <div class="flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden flex-grow relative custom-scrollbar pb-6 lg:pb-0">
             
             <!-- Left Side: Product List -->
-            <div class="flex-grow flex flex-col min-h-0">
+            <div class="flex-none lg:flex-grow flex flex-col min-h-0 lg:overflow-hidden">
               <div class="flex items-center justify-between p-6 pb-4 shrink-0">
                 <h3 class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">{{ $t('customers.trades.items_title') }}</h3>
                 <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-100 dark:border-emerald-500/10 leading-none">{{ trade.items?.length }} {{ $t('common.pcs') }}</span>
               </div>
 
-              <div class="flex-grow overflow-y-auto custom-scrollbar px-6 pb-6">
+              <div class="lg:flex-grow lg:overflow-y-auto custom-scrollbar px-6 pb-6">
                  <div class="space-y-2.5">
                    <div v-for="(item, idx) in processedItems" :key="idx" 
                         class="group flex items-center gap-4 p-3 rounded-[14px] transition-all duration-200 border border-slate-100 dark:border-white/5 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-white/[0.02] shadow-sm hover:shadow-md"
@@ -111,8 +111,8 @@
             </div>
 
             <!-- Right Side: Sidebar -->
-            <div class="w-full md:w-[320px] lg:w-[340px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0 min-h-0">
-              <div class="flex-grow overflow-y-auto custom-scrollbar p-6 space-y-6 flex flex-col">
+            <div class="flex-none w-full lg:w-[320px] xl:w-[340px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0 lg:h-full">
+              <div class="flex flex-col lg:flex-grow lg:overflow-y-auto custom-scrollbar p-6 space-y-6">
                 
                 <!-- Summary Section -->
                 <div>
@@ -204,10 +204,10 @@
                     <button 
                       v-if="canFullCancel" 
                       @click="showCancelConfirm = true"
-                      class="w-full h-8 text-slate-400 dark:text-slate-500 hover:text-[#ff3b5c] hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-[10px] text-[11px] font-black tracking-[0.15em] transition-all flex items-center justify-center gap-1.5"
+                      class="w-full h-10 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-[12px] border border-rose-100 dark:border-rose-500/20 text-[13px] font-bold transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm"
                     >
-                      <i class="pi pi-times-circle text-[12px]"></i>
-                      BEKOR QILISH (TOTAL)
+                      <i class="pi pi-times-circle text-[14px]"></i>
+                      To'liq bekor qilish
                     </button>
                   </template>
                   

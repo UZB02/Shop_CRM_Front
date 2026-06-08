@@ -109,15 +109,24 @@
           </p>
         </div>
 
-        <!-- Test Print tugmasi -->
-        <div v-if="isConnected" class="px-4 py-3">
+        <!-- Actions -->
+        <div class="px-4 py-3 space-y-2">
           <button
+            v-if="isConnected"
             @click="testPrint"
             :disabled="isPrinting"
-            class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-500 dark:text-slate-400 hover:border-emerald-400 hover:text-emerald-500 transition-all disabled:opacity-60"
+            class="w-full py-2 rounded-xl border border-emerald-200 dark:border-emerald-800/50 text-[11px] font-black text-emerald-600 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all disabled:opacity-60 flex items-center justify-center"
           >
-            <i class="pi pi-print mr-1" />
-            {{ isPrinting ? 'Chop etilmoqda...' : 'Test chek chiqarish' }}
+            <i class="pi pi-print mr-2" />
+            {{ isPrinting ? 'Chop etilmoqda...' : 'Test chek chiqarish (QZ Tray)' }}
+          </button>
+          
+          <button
+            @click="openBrowserPrint"
+            class="w-full py-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-600 dark:text-slate-300 transition-all flex items-center justify-center"
+          >
+            <i class="pi pi-cog mr-2" />
+            Brauzer printer sozlamalari
           </button>
         </div>
       </div>
@@ -207,6 +216,29 @@ const testPrint = async () => {
   } finally {
     isPrinting.value = false
   }
+}
+
+const openBrowserPrint = () => {
+  const testHtml = buildTestHtml()
+  const iframe = document.createElement('iframe')
+  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:80mm;border:none;visibility:hidden;'
+  document.body.appendChild(iframe)
+  const doc = iframe.contentDocument || iframe.contentWindow.document
+  doc.open()
+  doc.write(testHtml)
+  doc.close()
+  setTimeout(() => {
+    iframe.contentWindow.focus()
+    iframe.contentWindow.onafterprint = () => {
+      if (document.body.contains(iframe)) document.body.removeChild(iframe)
+    }
+    iframe.contentWindow.print()
+    
+    // Agar onafterprint ushlamasa, ehtiyot shart 5 daqiqadan keyin o'chiramiz
+    setTimeout(() => {
+      if (document.body.contains(iframe)) document.body.removeChild(iframe)
+    }, 300000)
+  }, 300)
 }
 
 const buildTestHtml = () => `<!DOCTYPE html>
