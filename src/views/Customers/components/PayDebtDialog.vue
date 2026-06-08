@@ -77,12 +77,16 @@
               <div class="relative">
                 <InputNumber 
                   v-model="payment.amount" 
-                  :min="0" :max="parseFloat(customerDebt)"
+                  :min="0"
                   mode="decimal"
                   class="w-full"
-                  pt:input:class="!w-full !rounded-[1.3rem] !bg-slate-50/80 dark:!bg-slate-900/50 !border-slate-100 dark:!border-slate-800 !px-6 !py-5 !text-[16px] !font-bold !text-slate-800 dark:!text-white focus:!border-emerald-500 focus:!ring-0 focus:!bg-white dark:focus:!bg-slate-900 transition-all border shadow-none"
+                  :pt:input:class="['!w-full !rounded-[1.3rem] !bg-slate-50/80 dark:!bg-slate-900/50 !px-6 !py-5 !text-[16px] !font-bold !text-slate-800 dark:!text-white focus:!ring-0 focus:!bg-white dark:focus:!bg-slate-900 transition-all border shadow-none', payment.amount > parseFloat(customerDebt) ? '!border-rose-500 focus:!border-rose-500' : '!border-slate-100 dark:!border-slate-800 focus:!border-emerald-500']"
                   placeholder="0.00"
                 />
+                <p v-if="payment.amount > parseFloat(customerDebt)" class="text-[11px] font-bold text-rose-500 mt-2 ml-2 tracking-wide flex items-center gap-1.5 animate-in slide-in-from-top-1">
+                  <i class="pi pi-exclamation-triangle text-[10px]"></i>
+                  Qarz summasidan ortiqcha to'lov kiritish mumkin emas
+                </p>
               </div>
             </div>
 
@@ -127,8 +131,8 @@
             </button>
             <button 
               @click="submitPayment"
-              :disabled="saving || !payment.amount || payment.amount <= 0"
-              class="flex-[2] h-12 rounded-xl bg-emerald-500 text-white text-[12px] font-black tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 disabled:opacity-30 transition-all flex items-center justify-center gap-2"
+              :disabled="saving || !payment.amount || payment.amount <= 0 || payment.amount > parseFloat(customerDebt)"
+              class="flex-[2] h-12 rounded-xl bg-emerald-500 text-white text-[12px] font-black tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 disabled:opacity-30 disabled:hover:bg-emerald-500 disabled:active:scale-100 transition-all flex items-center justify-center gap-2"
             >
               <i v-if="saving" class="pi pi-spin pi-spinner text-[12px]"></i>
               {{ saving ? $t('common.saving') : $t('common.pay') }}

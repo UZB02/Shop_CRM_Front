@@ -150,7 +150,7 @@ export const useAuthStore = defineStore('auth', {
             } catch (err) {
                 console.warn('⚠️ Session verification failed:', err.message)
                 if (err.response?.status === 401) {
-                    this.logout()
+                    this.logout(true) // skip API call since we are already 401
                     return false
                 }
                 
@@ -173,10 +173,10 @@ export const useAuthStore = defineStore('auth', {
             localStorage.setItem('permissions', JSON.stringify(sections))
         },
 
-        logout() {
+        logout(skipApiCall = false) {
             // Invalidate refresh token on server (fire-and-forget)
             const refresh = localStorage.getItem('refresh')
-            if (refresh) {
+            if (refresh && !skipApiCall) {
                 authAPI.logout({ refresh }).catch(() => {})
             }
 
