@@ -139,10 +139,10 @@
 
                 <!-- Payment Breakdown Cards -->
                 <div class="grid grid-cols-1 gap-3">
-                  <div class="p-4 bg-white dark:bg-[#131d31] rounded-[16px] border border-slate-200 dark:border-transparent shadow-sm relative overflow-hidden flex flex-col justify-between group h-[80px]">
+                  <div class="p-4 bg-white dark:bg-[#131d31] rounded-[16px] border border-slate-200 dark:border-transparent shadow-sm relative overflow-hidden flex flex-col justify-between group min-h-[80px] h-auto">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-xl -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-500"></div>
-                    <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.15em] relative z-10 block mb-1.5">{{ $t('common.paid') }}</span>
-                    <div class="flex items-end justify-between relative z-10 mt-auto">
+                    <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.15em] relative z-10 block mb-2">{{ $t('common.paid') }}</span>
+                    <div class="flex items-end justify-between relative z-10 mt-auto gap-3">
                       <span class="text-[17px] font-black text-emerald-500 tracking-tight leading-none">{{ formatCurrency(trade.paid_amount) }}</span>
                       <div class="scale-90 origin-bottom-right">
                         <TradeStatusBadge :status="trade.payment_type" :display-label="trade.payment_type_display" />
@@ -150,10 +150,10 @@
                     </div>
                   </div>
 
-                  <div v-if="summary.hasDebt" class="p-4 bg-rose-50 dark:bg-rose-500/5 rounded-[16px] border border-rose-100 dark:border-transparent shadow-sm relative overflow-hidden flex flex-col justify-between h-[80px]">
+                  <div v-if="summary.hasDebt" class="p-4 bg-rose-50 dark:bg-rose-500/5 rounded-[16px] border border-rose-100 dark:border-transparent shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[80px] h-auto">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 rounded-full blur-xl -mr-12 -mt-12"></div>
-                    <span class="text-[10px] font-black text-rose-500/70 tracking-[0.15em] relative z-10 block mb-1.5">{{ $t('customers.details.debt') }}</span>
-                    <div class="flex items-end justify-between relative z-10 mt-auto">
+                    <span class="text-[10px] font-black text-rose-500/70 tracking-[0.15em] relative z-10 block mb-2">{{ $t('customers.details.debt') }}</span>
+                    <div class="flex items-end justify-between relative z-10 mt-auto gap-3">
                       <span class="text-[17px] font-black text-rose-500 tracking-tight leading-none">{{ formatCurrency(trade.debt_amount) }}</span>
                     </div>
                   </div>
