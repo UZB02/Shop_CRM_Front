@@ -91,6 +91,37 @@
           </div>
         </div>
 
+        <!-- Paper Size Selector -->
+        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Qog'oz O'lchami</p>
+          <div class="flex items-center gap-2">
+            <button
+              v-for="size in ['80', '58']"
+              :key="size"
+              @click="setPaperSize(size); customSizeInput = ''"
+              class="flex-1 py-1.5 rounded-xl text-[11px] font-black tracking-wider transition-all border"
+              :class="paperSize === size
+                ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
+                : 'text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'"
+            >
+              {{ size }}mm
+            </button>
+            <div class="relative w-[70px]">
+              <input
+                v-model="customSizeInput"
+                @input="handleCustomSize"
+                type="number"
+                placeholder="Boshqa"
+                class="w-full py-1.5 pl-2 pr-6 rounded-xl text-[11px] font-black transition-all border bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                :class="!['80', '58'].includes(paperSize)
+                  ? 'border-emerald-400 text-emerald-600 dark:text-emerald-400'
+                  : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'"
+              />
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 pointer-events-none">mm</span>
+            </div>
+          </div>
+        </div>
+
         <!-- QZ yuklab olish havolasi -->
         <div v-if="!isConnected" class="px-4 py-3">
           <p class="text-[11px] text-slate-400 dark:text-slate-500 leading-relaxed mb-2">
@@ -126,7 +157,7 @@
             class="w-full py-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-600 dark:text-slate-300 transition-all flex items-center justify-center"
           >
             <i class="pi pi-cog mr-2" />
-            Brauzer printer sozlamalari
+            Brauzer orqali test
           </button>
         </div>
       </div>
@@ -144,18 +175,28 @@ const {
   printers,
   defaultPrinter,
   qzError,
+  paperSize,
   connect,
   disconnect,
   setDefaultPrinter,
+  setPaperSize,
   print,
   loadPrinters
 } = usePrinter()
 
 const showPanel = ref(false)
 const isPrinting = ref(false)
+const customSizeInput = ref(!['80', '58'].includes(paperSize.value) ? paperSize.value : '')
 
 const togglePanel = () => { showPanel.value = !showPanel.value }
 const closePanel = () => { showPanel.value = false }
+
+const handleCustomSize = (e) => {
+  const val = e.target.value
+  if (val && !isNaN(val) && Number(val) > 10) {
+    setPaperSize(val)
+  }
+}
 
 // Badge reng sinflari
 const badgeClass = computed(() => {
@@ -221,7 +262,7 @@ const testPrint = async () => {
 const openBrowserPrint = () => {
   const testHtml = buildTestHtml()
   const iframe = document.createElement('iframe')
-  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:80mm;border:none;visibility:hidden;'
+  iframe.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:${paperSize.value}mm;border:none;visibility:hidden;`
   document.body.appendChild(iframe)
   const doc = iframe.contentDocument || iframe.contentWindow.document
   doc.open()
@@ -244,8 +285,9 @@ const openBrowserPrint = () => {
 const buildTestHtml = () => `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"/>
 <style>
+  @page { margin: 0; }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:8px 12px;width:80mm;}
+  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:8px 12px;width:${paperSize.value}mm;}
   body *{color:#000 !important;font-weight:bold !important;}
   .text-center{text-align:center;}
   .flex{display:flex;} .justify-between{justify-content:space-between;}

@@ -28,7 +28,7 @@
 
         <!-- Receipt Paper -->
         <div class="flex-1 overflow-y-auto px-4 py-4">
-          <div id="printable-receipt" class="receipt-paper mx-auto max-w-[340px] print:text-black">
+          <div id="printable-receipt" class="receipt-paper mx-auto max-w-[340px] print:text-black" :style="{ '--receipt-width': paperSize + 'mm' }">
 
             <!-- Store Header -->
             <div class="text-center py-4 border-b-2 border-dashed border-slate-300 dark:border-slate-600 mb-3 print:border-black">
@@ -204,6 +204,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useSettingsStore } from '@/store/settings'
+import { usePrinter } from '@/composables/usePrinter'
 
 const props = defineProps({
   transaction: Object,
@@ -213,6 +214,7 @@ const props = defineProps({
 defineEmits(['update:visible', 'print', 'download'])
 
 const settingsStore = useSettingsStore()
+const { paperSize } = usePrinter()
 
 // Safe numeric conversion (handles string values from backend)
 const num = (val) => parseFloat(val) || 0
@@ -252,12 +254,13 @@ const t = computed(() => props.transaction || {})
 
 /* Print styles */
 @media print {
+  @page { margin: 0; }
   body * { visibility: hidden; }
   #printable-receipt, #printable-receipt * { visibility: visible; }
   #printable-receipt {
     position: absolute;
     left: 0; top: 0;
-    width: 80mm;
+    width: var(--receipt-width, 80mm);
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;

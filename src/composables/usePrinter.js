@@ -24,6 +24,9 @@ const printers = ref([])
 const defaultPrinter = ref(null)
 const qzError = ref(null)
 
+// Qog'oz o'lchami holati (80 yoki 58)
+const paperSize = ref(localStorage.getItem('pos_paper_size') || '80')
+
 // Sirius POS — QZ Tray sertifikati
 // Yaratildi: 2026-06-02, amal qiladi: 2046-06-02
 // override.crt: C:\Program Files\QZ Tray\override.crt ga o'rnatilgan
@@ -206,13 +209,19 @@ export function usePrinter() {
     localStorage.setItem('pos_default_printer', printerName)
   }
 
+  // ─── Qog'oz o'lchamini saqlash ─────────────────────────────────────────────
+  const setPaperSize = (size) => {
+    paperSize.value = size
+    localStorage.setItem('pos_paper_size', size)
+  }
+
   // ─── HTML chekni QZ Tray orqali chop etish ────────────────────────────────
   const printWithQZ = async (htmlContent, printerName = null) => {
     const printer = printerName || defaultPrinter.value
     if (!printer) throw new Error('Printer tanlanmagan')
 
     const config = qz.configs.create(printer, {
-      size: { width: 80, units: 'mm' },
+      size: { width: parseInt(paperSize.value), units: 'mm' },
       margins: { top: 0, right: 2, bottom: 0, left: 2 },
       units: 'mm',
       colorType: 'blackwhite',
@@ -246,7 +255,7 @@ export function usePrinter() {
   // ─── Fallback: Brauzer dialog orqali chop etish ───────────────────────────
   const printWithBrowserDialog = (htmlContent) => {
     const iframe = document.createElement('iframe')
-    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:80mm;height:auto;border:none;visibility:hidden;'
+    iframe.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:${paperSize.value}mm;height:auto;border:none;visibility:hidden;`
     document.body.appendChild(iframe)
 
     const doc = iframe.contentDocument || iframe.contentWindow.document
@@ -290,11 +299,13 @@ export function usePrinter() {
     printers: readonly(printers),
     defaultPrinter: readonly(defaultPrinter),
     qzError: readonly(qzError),
+    paperSize: readonly(paperSize),
 
     // Metodlar
     connect,
     disconnect,
     setDefaultPrinter,
+    setPaperSize,
     print,
     printWithQZ,
     printRaw,
