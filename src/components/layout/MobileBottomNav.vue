@@ -3,19 +3,19 @@
     <div class="flex items-center justify-around h-[68px] px-2">
       <router-link to="/dashboard" class="flex flex-col items-center justify-center w-16 h-full text-slate-500 dark:text-slate-400 active:scale-95 transition-transform" active-class="text-emerald-500 dark:text-emerald-400 font-bold">
         <i class="pi pi-home text-[22px] mb-1"></i>
-        <span class="text-[10px]">Asosiy</span>
+        <span class="text-[10px]">{{ t('menu.dashboard') }}</span>
       </router-link>
-      <router-link to="/dashboard/pos" class="flex flex-col items-center justify-center w-16 h-full text-slate-500 dark:text-slate-400 active:scale-95 transition-transform" active-class="text-emerald-500 dark:text-emerald-400 font-bold">
-        <i class="pi pi-shopping-cart text-[22px] mb-1"></i>
-        <span class="text-[10px]">Sotuv</span>
+      <router-link to="/dashboard/workers" class="flex flex-col items-center justify-center w-16 h-full text-slate-500 dark:text-slate-400 active:scale-95 transition-transform" active-class="text-emerald-500 dark:text-emerald-400 font-bold">
+        <i class="pi pi-users text-[22px] mb-1"></i>
+        <span class="text-[10px]">{{ t('menu.workers') }}</span>
       </router-link>
       <router-link to="/dashboard/products" class="flex flex-col items-center justify-center w-16 h-full text-slate-500 dark:text-slate-400 active:scale-95 transition-transform" active-class="text-emerald-500 dark:text-emerald-400 font-bold">
-        <i class="pi pi-box text-[22px] mb-1"></i>
-        <span class="text-[10px]">Tovarlar</span>
+        <i class="pi pi-tag text-[22px] mb-1"></i>
+        <span class="text-[10px]">{{ t('menu.products') }}</span>
       </router-link>
       <router-link to="/dashboard/warehouse" class="flex flex-col items-center justify-center w-16 h-full text-slate-500 dark:text-slate-400 active:scale-95 transition-transform" active-class="text-emerald-500 dark:text-emerald-400 font-bold">
-        <i class="pi pi-building text-[22px] mb-1"></i>
-        <span class="text-[10px]">Ombor</span>
+        <i class="pi pi-box text-[22px] mb-1"></i>
+        <span class="text-[10px]">{{ t('menu.inventory') }}</span>
       </router-link>
       <button @click="$emit('open-menu')" class="flex flex-col items-center justify-center w-16 h-full text-slate-500 dark:text-slate-400 active:scale-95 transition-transform">
         <i class="pi pi-bars text-[22px] mb-1"></i>
@@ -26,5 +26,9 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineEmits(['open-menu'])
 </script>
