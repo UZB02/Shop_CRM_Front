@@ -12,6 +12,9 @@ export const reportsAPI = {
     // JSON Reports
     getFinancialReport: (params) => api.get('/finance/financial-report/', { params }),
     getProfitLoss: (params) => api.get('/export/profit-loss/', { params }),
+
+    // Excel / PDF export (Binary)
+    exportProfitLoss: (params) => api.get('/export/profit-loss/', { params, responseType: 'blob' }),
     getProductTurnover: (params) => api.get('/export/product-turnover/', { params }),
     getDebtorReport: (params) => api.get('/finance/debtor-report/', { params }),
     getWorkerPerformance: (params) => api.get('/export/worker-performance/', { params }),

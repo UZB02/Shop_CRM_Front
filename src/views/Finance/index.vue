@@ -170,7 +170,7 @@ const {
   branches, categories, shifts,
   expenseList, crudFilters, exportFilters,
   reportsFilters, dynamicCategories,
-  netProfit, exportDebtors
+  netProfit, exportDebtors, exportProfitLoss
 } = useExpenseTabLogic()
 
 // Local state for CRUD operations
@@ -182,6 +182,8 @@ const detailVisible = ref(false)
 const handleExport = (format) => {
   if (activeTab.value === 'debtors') {
     exportDebtors(format)
+  } else if (activeTab.value === 'profit-loss') {
+    exportProfitLoss(format)
   } else {
     exportExpenses(format)
   }

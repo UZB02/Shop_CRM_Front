@@ -78,16 +78,10 @@
 
     <!-- Detailed Monthly Table -->
     <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
-       <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between bg-slate-50/30 dark:bg-slate-800/20">
-          <div class="flex items-center gap-2">
-            <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
-            <span class="text-xs font-bold tracking-widest text-slate-500">{{ t('reports.monthly_distribution') }}</span>
-          </div>
-          <button v-if="settingsStore.hasPlanExport" class="text-xs font-bold tracking-widest text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-2">
-            <i class="pi pi-download"></i>
-            {{ t('common.export') }}
-          </button>
-       </div>
+        <div class="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center gap-2 bg-slate-50/30 dark:bg-slate-800/20">
+          <div class="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
+          <span class="text-xs font-bold tracking-widest text-slate-500">{{ t('reports.monthly_distribution') }}</span>
+        </div>
        <div class="overflow-x-auto max-h-[500px] custom-scrollbar overflow-y-auto">
           <table class="w-full text-left border-collapse">
              <thead>

@@ -208,6 +208,36 @@ export default function useFinanceReports() {
         }
     }
 
+    const exportProfitLoss = async (format = 'excel') => {
+        try {
+            const params = { format }
+            if (filters.date_from) params.date_from = filters.date_from
+            if (filters.date_to)   params.date_to   = filters.date_to
+            if (filters.branch)    params.branch     = filters.branch
+
+            toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
+
+            const res = await reportsAPI.exportProfitLoss(params)
+            const url  = window.URL.createObjectURL(new Blob([res.data]))
+            const link = document.createElement('a')
+            link.href  = url
+            const today = new Date().toISOString().split('T')[0]
+            link.setAttribute('download', `daromad_zarar_${today}.${format === 'excel' ? 'xlsx' : 'pdf'}`)
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            window.URL.revokeObjectURL(url)
+
+            toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
+        } catch (error) {
+            console.error('P&L Export error:', error)
+            const detail = error.response?.status === 403
+                ? t('reports.errors.subscription_required')
+                : t('reports.errors.export_failed')
+            toast.add({ severity: 'error', summary: t('common.error'), detail, life: 4000 })
+        }
+    }
+
     const clearFilters = () => {
         Object.assign(filters, getInitialFilters())
     }
@@ -224,6 +254,7 @@ export default function useFinanceReports() {
         fetchDebtors,
         fetchFinancialSummary,
         exportDebtors,
+        exportProfitLoss,
         clearFilters
     }
 }

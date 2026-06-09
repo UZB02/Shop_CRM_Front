@@ -198,10 +198,29 @@
         <i class="pi pi-refresh text-[13px]"></i>
       </button>
 
+      <!-- P&L Export buttons (profit-loss tab only) -->
+      <template v-if="activeTab === 'profit-loss' && settingsStore.hasPlanExport">
+        <div class="flex items-center gap-2 ml-auto">
+          <button
+            @click="$emit('export', 'excel')"
+            class="h-10 px-4 rounded-xl text-xs font-black tracking-widest text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 bg-white dark:bg-slate-900 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 dark:hover:bg-emerald-500 dark:hover:border-emerald-500 transition-all flex items-center gap-2 active:scale-95 shadow-sm shrink-0"
+          >
+            <i class="pi pi-file-excel text-xs"></i>
+            Excel
+          </button>
+          <button
+            @click="$emit('export', 'pdf')"
+            class="h-10 px-4 rounded-xl text-xs font-black tracking-widest text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 bg-white dark:bg-slate-900 hover:bg-rose-500 hover:text-white hover:border-rose-500 dark:hover:bg-rose-500 dark:hover:border-rose-500 transition-all flex items-center gap-2 active:scale-95 shadow-sm shrink-0"
+          >
+            <i class="pi pi-file-pdf text-xs"></i>
+            PDF
+          </button>
+        </div>
+      </template>
 
-      <!-- Export Panel Toggle -->
+      <!-- Export Panel Toggle (other tabs) -->
       <button
-        v-if="settingsStore.hasPlanExport && !showExport"
+        v-if="settingsStore.hasPlanExport && !showExport && activeTab !== 'profit-loss'"
         @click="showExport = true"
         class="h-10 px-4 rounded-xl text-xs font-black tracking-widest transition-all flex items-center gap-2.5 border text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm shrink-0"
       >
