@@ -194,19 +194,33 @@ export function useCustomers() {
     }).format(val || 0)
   }
 
-  const exportDebtors = async (format = 'excel') => {
+  const exportData = async (format = 'excel') => {
+    console.log('exportData triggered with format:', format, 'tab:', activeTab.value)
     try {
       const params = { format }
       if (searchQuery.value) params.search = searchQuery.value
-      if (minDebt.value) params.min_debt = minDebt.value
+      
+      let apiCall = null
+      let fileName = ''
+
+      if (activeTab.value === 'debtors') {
+        if (minDebt.value) params.min_debt = minDebt.value
+        apiCall = reportsAPI.exportDebtorReport(params)
+        fileName = `qarzdorlar_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`
+      } else {
+        // activeTab === 'no_debt' (Mijozlar)
+        // Additional filters like group or status can be added here if needed
+        apiCall = reportsAPI.exportCustomers(params)
+        fileName = `mijozlar_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`
+      }
       
       toast.add({ severity: 'info', summary: t('common.processing'), detail: t('reports.export_started'), life: 2000 })
 
-      const res = await reportsAPI.exportDebtorReport(params)
+      const res = await apiCall
       const url = window.URL.createObjectURL(new Blob([res.data]))
       const link = document.createElement('a')
       link.href = url
-      link.setAttribute('download', `qarzdorlar_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`)
+      link.setAttribute('download', fileName)
       document.body.appendChild(link)
       link.click()
       link.remove()
@@ -214,7 +228,7 @@ export function useCustomers() {
 
       toast.add({ severity: 'success', summary: t('common.success'), detail: t('reports.export_success'), life: 3000 })
     } catch (error) {
-      console.error('Debtor Export error:', error)
+      console.error('Export error:', error)
       const detail = error.response?.status === 403
         ? t('reports.errors.subscription_required')
         : t('reports.errors.export_failed')
@@ -253,7 +267,7 @@ export function useCustomers() {
     confirmDelete,
     hideDialog,
     formatCurrency,
-    exportDebtors
+    exportData
   }
 }
 

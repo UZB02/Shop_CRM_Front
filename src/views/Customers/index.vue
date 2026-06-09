@@ -19,7 +19,7 @@
       v-model:activeTab="activeTab"
       v-model:minDebt="minDebt"
       :totalDebt="groupedData.debtors.total_debt_balance"
-      @export="exportDebtors"
+      @export="exportData"
     />
 
     <!-- Table Section -->
@@ -92,7 +92,7 @@ const {
   saveCustomer,
   confirmDelete,
   hideDialog,
-  exportDebtors
+  exportData
 } = useCustomers()
 
 const { templateLoading, downloadTemplate } = useTemplateDownload()
