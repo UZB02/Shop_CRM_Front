@@ -3,7 +3,8 @@
     <!-- Header with Filters -->
     <KpiPageHeader 
       v-model:period="period"
-      v-model:searchQuery="searchQuery"
+      v-model:selectedWorker="selectedWorker"
+      :workerOptions="workerOptions"
       :showCharts="showCharts"
       :loading="loading"
       :hasData="kpiList.length > 0"
@@ -77,7 +78,8 @@ const {
   loading,
   kpiList,
   period,
-  searchQuery,
+  selectedWorker,
+  workerOptions,
   targetModalVisible,
   selectedKpi,
   showCharts,

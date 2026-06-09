@@ -74,11 +74,28 @@ export function useShift() {
             })
             return true
         } catch (error) {
+            const errData = error.response?.data
+            let detail = "Smenani ochib bo'lmadi"
+            if (errData) {
+                if (errData.error) detail = errData.error
+                else if (errData.detail) detail = errData.detail
+                else if (errData.message) detail = errData.message
+                else if (typeof errData === 'object') {
+                    const firstKey = Object.keys(errData)[0]
+                    if (firstKey && errData[firstKey]) {
+                        const val = errData[firstKey]
+                        detail = Array.isArray(val) ? val[0] : (typeof val === 'string' ? val : detail)
+                    }
+                } else if (typeof errData === 'string') {
+                    detail = errData
+                }
+            }
+
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.error || 'Smenani ochib bo\'lmadi',
-                life: 3000
+                detail,
+                life: 5000
             })
             return false
         } finally {
@@ -104,11 +121,28 @@ export function useShift() {
             })
             return true
         } catch (error) {
+            const errData = error.response?.data
+            let detail = "Smenani yopib bo'lmadi"
+            if (errData) {
+                if (errData.error) detail = errData.error
+                else if (errData.detail) detail = errData.detail
+                else if (errData.message) detail = errData.message
+                else if (typeof errData === 'object') {
+                    const firstKey = Object.keys(errData)[0]
+                    if (firstKey && errData[firstKey]) {
+                        const val = errData[firstKey]
+                        detail = Array.isArray(val) ? val[0] : (typeof val === 'string' ? val : detail)
+                    }
+                } else if (typeof errData === 'string') {
+                    detail = errData
+                }
+            }
+
             toast.add({
                 severity: 'error',
                 summary: t('common.error'),
-                detail: error.response?.data?.error || 'Smenani yopib bo\'lmadi',
-                life: 3000
+                detail,
+                life: 5000
             })
             return false
         } finally {

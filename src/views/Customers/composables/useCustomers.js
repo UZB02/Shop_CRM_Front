@@ -2,14 +2,14 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { useConfirm } from 'primevue/useconfirm'
+import { useConfirmStore } from '@/store/confirm'
 import { customersAPI, customerGroupsAPI, reportsAPI } from '@/services/api'
 
 export function useCustomers() {
   const router = useRouter()
   const route = useRoute()
   const toast = useToast()
-  const confirm = useConfirm()
+  const confirm = useConfirmStore()
   const { t } = useI18n()
 
   const loading = ref(false)

@@ -50,17 +50,17 @@
         />
       </div>
 
-      <!-- Search -->
-      <div class="relative group/search w-full sm:min-w-[180px]">
-        <span class="absolute inset-y-0 left-3 flex items-center text-slate-300 pointer-events-none group-focus-within/search:text-emerald-500 transition-colors">
-          <i class="pi pi-search text-[12px]"></i>
-        </span>
-        <input 
-          :value="searchQuery" 
-          @input="$emit('update:searchQuery', $event.target.value)"
-          type="text"
-          :placeholder="$t('common.search') + '...'" 
-          class="w-full h-8 pl-8 pr-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-200 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all outline-none"
+      <!-- Worker Filter -->
+      <div class="relative w-full sm:min-w-[160px] kpi-worker-select">
+        <i class="pi pi-user absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-400 text-[12px] z-10"></i>
+        <Select 
+          :modelValue="selectedWorker"
+          @update:modelValue="$emit('update:selectedWorker', $event); $emit('filter-change')"
+          :options="workerOptions"
+          optionLabel="full_name"
+          optionValue="id"
+          :placeholder="$t('workers.title')"
+          class="w-full"
         />
       </div>
       
@@ -78,16 +78,18 @@
 
 <script setup>
 import DatePicker from 'primevue/datepicker'
+import Select from 'primevue/select'
 
 defineProps({
   period: Date,
-  searchQuery: String,
+  selectedWorker: [String, Number],
+  workerOptions: Array,
   showCharts: Boolean,
   loading: Boolean,
   hasData: Boolean
 })
 
-defineEmits(['update:period', 'update:searchQuery', 'filter-change', 'refresh', 'toggle-charts'])
+defineEmits(['update:period', 'update:selectedWorker', 'filter-change', 'refresh', 'toggle-charts'])
 
 const calendarPt = {
   panel: { class: 'shadow-2xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden min-w-[320px]' },
@@ -126,6 +128,51 @@ const calendarPt = {
 
 .kpi-calendar-compact :deep(.p-inputtext:focus) {
   border-color: #10b981 !important;
+}
+
+.kpi-worker-select :deep(.p-select) {
+  height: 32px;
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.dark .kpi-worker-select :deep(.p-select) {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+.kpi-worker-select :deep(.p-select:hover),
+.kpi-worker-select :deep(.p-select:focus-within) {
+  border-color: #10b981 !important;
+}
+
+.kpi-worker-select :deep(.p-select-label) {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+  padding-left: 1.75rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: flex;
+  align-items: center;
+}
+
+.dark .kpi-worker-select :deep(.p-select-label) {
+  color: #f1f5f9 !important;
+}
+
+.kpi-worker-select :deep(.p-select-dropdown) {
+  width: 24px;
+}
+
+.kpi-worker-select :deep(.p-select-dropdown svg) {
+  width: 10px;
+  height: 10px;
 }
 </style>
 

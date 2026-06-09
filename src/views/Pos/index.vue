@@ -432,7 +432,7 @@ const printReceipt = async () => {
       toast.add({
         severity: 'success',
         summary: t('common.success'),
-        detail: 'Chek muvaffaqiyatli chop etildi ✓',
+        detail: 'Chek chop etishga yuborildi ✓',
         life: 2500
       })
       

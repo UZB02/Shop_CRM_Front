@@ -10,18 +10,34 @@ export function useKpi() {
   const loading = ref(false)
   const kpiList = ref([])
   const period = ref(new Date())
-  const searchQuery = ref('')
+  const selectedWorker = ref(null)
   const targetModalVisible = ref(false)
   const selectedKpi = ref(null)
   const showCharts = ref(false)
+  
+  const workerOptions = ref([])
+
+  // Load workers for filter
+  const loadWorkers = async () => {
+    try {
+      const { workersAPI } = await import('@/services/api')
+      const res = await workersAPI.getAll()
+      const loadedWorkers = res.data?.results || res.data || []
+      workerOptions.value = [
+        { id: null, full_name: t('common.all') },
+        ...loadedWorkers.map(w => ({
+          id: w.id,
+          full_name: w.full_name || `${w.first_name || ''} ${w.last_name || ''}`.trim() || w.name || t('workers.unknown')
+        }))
+      ]
+    } catch (error) {
+      console.error('Error loading workers for KPI filter:', error)
+    }
+  }
 
   const filteredKpiList = computed(() => {
-    if (!searchQuery.value) return kpiList.value
-    const query = searchQuery.value.toLowerCase()
-    return kpiList.value.filter(item => 
-      item.worker_name?.toLowerCase().includes(query) ||
-      item.worker?.toString().includes(query)
-    )
+    // API orqali filter qilinmoqda, shuning uchun client-side filter shart emas
+    return kpiList.value
   })
 
   // 1. Global Analytics Stats
@@ -112,6 +128,9 @@ export function useKpi() {
         month: period.value.getMonth() + 1,
         year: period.value.getFullYear()
       }
+      if (selectedWorker.value) {
+        params.worker = selectedWorker.value
+      }
       const res = await kpiAPI.getAll(params)
       kpiList.value = res.data?.results || res.data || []
     } catch (error) {
@@ -126,13 +145,17 @@ export function useKpi() {
     targetModalVisible.value = true
   }
 
-  onMounted(loadKpiData)
+  onMounted(() => {
+    loadWorkers()
+    loadKpiData()
+  })
 
   return {
     loading,
     kpiList,
     period,
-    searchQuery,
+    selectedWorker,
+    workerOptions,
     targetModalVisible,
     selectedKpi,
     showCharts,

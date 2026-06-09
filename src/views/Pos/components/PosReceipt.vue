@@ -189,7 +189,7 @@
               {{ $t('common.print') }}
             </button>
           </div>
-          <button @click="$emit('print'); $emit('update:visible', false)"
+          <button @click="$emit('update:visible', false)"
             class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black tracking-[0.18em] shadow-lg shadow-emerald-500/25 transition-all active:scale-[0.98]">
             <i class="pi pi-plus mr-2" />
             {{ $t('pos.start_new_sale') }}
