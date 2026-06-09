@@ -68,7 +68,7 @@
           <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
             <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">{{ $t('pos.cash_balance') }}</span>
             <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
-              {{ formatCurrency(xReport?.net_income || shift?.net_income) }}
+              {{ formatCurrency(displayNetIncome) }}
             </span>
           </div>
         </div>
@@ -96,11 +96,11 @@
            </div>
         </div>
 
-        <!-- Money Input (Only if open and trying to close) -->
-        <div v-if="shift?.status === 'open'" class="space-y-2 animate-fadein">
+        <!-- Money Input — faqat require_cash_count=true bo'lganda -->
+        <div v-if="shift?.status === 'open' && settingsStore.requireCashCount" class="space-y-2 animate-fadein">
           <div class="flex items-center justify-between ml-1 mb-1">
             <label class="text-[12px] font-black text-slate-400 tracking-widest block">{{ $t('pos.counted_cash_in_register') }}</label>
-            <span v-if="settingsStore.requireCashCount" class="text-[10px] font-black text-rose-500 tracking-tighter bg-rose-50 dark:bg-rose-950/20 px-1.5 py-0.5 rounded-md border border-rose-100 dark:border-rose-800/30 animate-pulse">
+            <span class="text-[10px] font-black text-rose-500 tracking-tighter bg-rose-50 dark:bg-rose-950/20 px-1.5 py-0.5 rounded-md border border-rose-100 dark:border-rose-800/30 animate-pulse">
               {{ $t('common.required') }}
             </span>
           </div>
@@ -111,6 +111,15 @@
             placeholder="0.00"
             autofocus
           />
+        </div>
+
+        <!-- require_cash_count=false bo'lganda info xabari -->
+        <div v-else-if="shift?.status === 'open' && !settingsStore.requireCashCount"
+             class="flex items-center gap-3 p-3.5 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 animate-fadein">
+          <i class="pi pi-info-circle text-slate-400 text-lg"></i>
+          <span class="text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-wider leading-tight">
+            {{ $t('pos.shift_will_close_without_count') }}
+          </span>
         </div>
       </div>
 
@@ -137,7 +146,7 @@
         <button 
           v-else
           @click="handleSubmit"
-          :disabled="loading || (!isClosing && !authStore.user?.branch_id) || (settingsStore.requireCashCount && (isClosing ? cashCounted === null : cashStart === null))"
+          :disabled="loading || (!isClosing && !authStore.user?.branch_id) || (isClosing && settingsStore.requireCashCount && cashCounted === null)"
           class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl disabled:opacity-50"
           :class="[
              isClosing ? 'bg-rose-500 hover:bg-rose-600 hover:shadow-rose-400/30' : 'bg-[#10b981] hover:bg-[#059669] hover:shadow-emerald-500/30'
@@ -177,20 +186,36 @@ const cashCounted = ref(0)
 
 const formatCurrency = (val) => settingsStore.formatPrice(val)
 
-// Backend logic: cash_end bo'lmasa, x-report dagi expected_cash ni ko'rsatamiz
+// Backend logic: cash_end bo'lmasa, x-report yoki shift dagi expected_cash ni ko'rsatamiz
 const displayCash = computed(() => {
   if (props.shift?.status === 'closed' && props.shift?.cash_end !== null) {
      return props.shift.cash_end
   }
-  return props.xReport?.expected_cash || 0
+  // xReport null bo'lsa → shift.expected_cash dan olamiz
+  return props.xReport?.expected_cash
+      ?? props.xReport?.cash_end
+      ?? props.xReport?.total_cash
+      ?? props.shift?.expected_cash
+      ?? props.shift?.cash_start
+      ?? 0
+})
+
+// net_income: xReport null bo'lsa shift dan olamiz
+const displayNetIncome = computed(() => {
+  return props.xReport?.net_income
+      ?? props.xReport?.total_income
+      ?? props.xReport?.income
+      ?? props.shift?.net_income
+      ?? props.shift?.expected_cash
+      ?? 0
 })
 
 const handleSubmit = () => {
   if (props.isClosing) {
-    emit('confirm', cashCounted.value)
+    // require_cash_count=false bo'lsa null yubor → backend cash_end qabul qilmaydi
+    const cashValue = settingsStore.requireCashCount ? cashCounted.value : null
+    emit('confirm', cashValue)
   } else {
-    // Backend advice: get branch from user data
-    // Usually it's in user.branch_id or user.worker.branch
     const branchId = authStore.user?.branch_id || 
                      authStore.user?.worker?.branch || 
                      authStore.user?.branch;

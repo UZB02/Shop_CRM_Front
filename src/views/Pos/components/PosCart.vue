@@ -58,9 +58,19 @@
           :key="item.cartItemId" 
           class="flex items-center gap-2.5 bg-white dark:bg-[#0f172a] p-2 rounded-xl border border-slate-100 dark:border-slate-800/60 shadow-sm hover:border-emerald-500/40 transition-all group"
         >
-          <!-- Compact Icon -->
-          <div class="w-8 h-8 bg-slate-50 dark:bg-slate-900 rounded-lg flex items-center justify-center border border-slate-50 dark:border-slate-800/50 flex-shrink-0">
-             <i class="pi pi-box text-slate-200 dark:text-slate-800 text-sm group-hover:text-emerald-500 transition-colors"></i>
+          <!-- Product Image or Fallback Icon -->
+          <div class="w-10 h-10 bg-slate-50 dark:bg-slate-900 rounded-lg flex items-center justify-center border border-slate-100 dark:border-slate-800/50 flex-shrink-0 overflow-hidden">
+            <img
+              v-if="item.image || item.product_image || item.photo || item.thumbnail"
+              :src="item.image || item.product_image || item.photo || item.thumbnail"
+              :alt="item.name"
+              class="w-full h-full object-cover rounded-lg"
+              @error="(e) => { e.target.style.display='none'; e.target.nextElementSibling.style.display='flex' }"
+            />
+            <i
+              :style="(item.image || item.product_image || item.photo || item.thumbnail) ? 'display:none' : 'display:flex'"
+              class="pi pi-box text-slate-200 dark:text-slate-800 text-sm group-hover:text-emerald-500 transition-colors"
+            ></i>
           </div>
           
           <!-- Middle Info: Name & Variant Badges + Price -->

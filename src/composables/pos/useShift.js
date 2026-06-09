@@ -103,14 +103,16 @@ export function useShift() {
         }
     }
 
-    const closeShift = async (cashCounted) => {
+    const closeShift = async (cashCounted = null) => {
         if (!activeShift.value) return
         posLoading.value = true
         try {
-            // cash_counted -> cash_end (backend talabi)
-            await shiftsAPI.close(activeShift.value.id, {
-                cash_end: cashCounted
-            })
+            // cash_end faqat cashCounted berilganda yuboriladi (require_cash_count=true holati)
+            const payload = {}
+            if (cashCounted !== null && cashCounted !== undefined) {
+                payload.cash_end = cashCounted
+            }
+            await shiftsAPI.close(activeShift.value.id, payload)
             activeShift.value = null
             activeXReport.value = null
             toast.add({

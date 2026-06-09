@@ -29,6 +29,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const isOfdEnabled           = computed(() => !!settings.value?.ofd_enabled)
   const isAutoPdfEnabled       = computed(() => !!settings.value?.auto_pdf_on_smena_close)
   const isLowStockEnabled      = computed(() => !!settings.value?.low_stock_enabled)
+  const requireCashCount        = computed(() => !!settings.value?.require_cash_count)
   const lowStockThreshold      = computed(() => parseInt(settings.value?.low_stock_threshold || 5))
 
   // ─── Plan Features (Tarif imkoniyatlari) ────────────────────────────────────
@@ -207,6 +208,7 @@ export const useSettingsStore = defineStore('settings', () => {
     isOfdEnabled,
     isAutoPdfEnabled,
     isLowStockEnabled,
+    requireCashCount,
     lowStockThreshold,
     allowCash,
     allowCard,

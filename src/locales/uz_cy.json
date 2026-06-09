@@ -1862,7 +1862,8 @@
     "cash_correct_no_diff": "Касса тўғри (Фарқ йўқ)",
     "cashier_shortage": "Кассир {amount} кам",
     "cashier_surplus": "Кассир {amount} ортиқча",
-    "counted_cash_in_register": "Кассада саналган пул"
+    "counted_cash_in_register": "Кассада саналган пул",
+    "shift_will_close_without_count": "Смена нақд санашсиз ёпилади"
   },
   "dashboard": {
     "center_title": "Бошқарув Маркази",

@@ -1865,7 +1865,8 @@
     "cash_correct_no_diff": "Kassa to'g'ri (Farq yo'q)",
     "cashier_shortage": "Kassir {amount} kam",
     "cashier_surplus": "Kassir {amount} ortiqcha",
-    "counted_cash_in_register": "Kassada sanalgan pul"
+    "counted_cash_in_register": "Kassada sanalgan pul",
+    "shift_will_close_without_count": "Smena naqd sanashsiz yopiladi"
   },
   "dashboard": {
     "center_title": "Boshqaruv Markazi",
