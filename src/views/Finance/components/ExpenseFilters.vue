@@ -2,7 +2,7 @@
   <div class="relative z-10 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col gap-3 sm:gap-4 transition-all">
     <div class="flex flex-wrap items-center gap-3">
       <!-- Search Filter -->
-      <div v-if="activeTab !== 'payments'" class="relative flex-initial w-full sm:w-64 group">
+      <div v-if="!['payments', 'summary', 'profit-loss'].includes(activeTab)" class="relative flex-initial w-full sm:w-64 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
           <i class="pi pi-search text-[12px]"></i>
         </div>
@@ -15,10 +15,10 @@
       </div>
 
       <!-- Date Range Filter -->
-      <div v-if="activeTab !== 'profit-loss'" class="relative flex-initial w-full sm:w-64 group">
+      <div v-if="!['profit-loss', 'debtors'].includes(activeTab)" class="relative flex-initial w-full sm:w-64 group">
         <DatePicker
           v-model="filters.date"
-          :selectionMode="['expenses-list', 'debtors'].includes(activeTab) ? 'single' : 'range'"
+          :selectionMode="activeTab === 'expenses-list' ? 'single' : 'range'"
           :manualInput="false"
           dateFormat="yy-mm-dd"
           :placeholder="$t('common.date')"
@@ -26,12 +26,12 @@
           iconDisplay="input"
           class="w-full"
           pt:root:class="!h-10 !rounded-xl !bg-transparent !border-none transition-all"
-          pt:input:class="!w-full !h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 !bg-slate-50/50 dark:!bg-slate-800/40 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !text-sm !font-black !pl-4 !shadow-none select-none !tracking-wider !text-slate-700 dark:!text-slate-200 placeholder:!text-slate-400"
+          pt:input:class="!w-full !h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 !bg-slate-50/50 dark:!bg-slate-800/40 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !text-sm !font-black uppercase !pl-4 !shadow-none select-none !tracking-wider !text-slate-700 dark:!text-slate-200 placeholder:!text-slate-400"
         />
       </div>
 
       <!-- Category Filter -->
-      <div v-if="!['profit-loss', 'debtors'].includes(activeTab)" class="relative flex-initial w-full sm:w-60 group">
+      <div v-if="!['profit-loss', 'debtors', 'summary'].includes(activeTab)" class="relative flex-initial w-full sm:w-60 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
           <i class="pi pi-tag text-[12px]"></i>
         </div>
@@ -52,7 +52,7 @@
       </div>
 
       <!-- Group By Filter (Only for Reports) -->
-      <div v-if="activeTab && ['revenue', 'payments', 'expenses'].includes(activeTab)" class="relative flex-1 min-w-[140px] sm:flex-none sm:w-40 group">
+      <div v-if="['revenue', 'payments', 'expenses'].includes(activeTab)" class="relative flex-1 min-w-[140px] sm:flex-none sm:w-40 group">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
           <i class="pi pi-th-large text-[12px]"></i>
         </div>
@@ -60,7 +60,28 @@
           v-model="filters.group_by"
           :options="[
             { label: $t('finance.day'), value: 'day' },
-            { label: $t('finance.month'), value: 'month' }
+            { label: $t('finance.month'), value: 'month' },
+            ...(activeTab === 'expenses' ? [{ label: $t('finance.year') || 'Yil', value: 'year' }] : [])
+          ]"
+          optionLabel="label"
+          optionValue="value"
+          :placeholder="$t('finance.group_by')"
+          class="w-full"
+          pt:root:class="!h-10 !rounded-xl !border !border-slate-200/60 dark:!border-slate-700/50 focus:!border-emerald-500/50 focus:!ring-4 focus:!ring-emerald-500/10 !bg-slate-50/50 dark:!bg-slate-800/40 transition-all"
+          pt:label:class="!text-sm !font-black !flex !items-center !py-0 !pl-9 !pr-3 !tracking-wider"
+        />
+      </div>
+
+      <!-- Group By Filter for Profitability -->
+      <div v-if="activeTab === 'profitability'" class="relative flex-1 min-w-[140px] sm:flex-none sm:w-40 group">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+          <i class="pi pi-sitemap text-[12px]"></i>
+        </div>
+        <Select
+          v-model="filters.group_by"
+          :options="[
+            { label: $t('finance.category') || 'Kategoriya', value: 'category' },
+            { label: $t('finance.subcategory') || 'Ost-kategoriya', value: 'subcategory' }
           ]"
           optionLabel="label"
           optionValue="value"
@@ -177,19 +198,15 @@
         <i class="pi pi-refresh text-[13px]"></i>
       </button>
 
-      <div class="hidden xl:block flex-1"></div>
 
       <!-- Export Panel Toggle -->
       <button
-        v-if="settingsStore.hasPlanExport"
-        @click="showExport = !showExport"
-        class="h-10 px-4 rounded-xl text-xs font-black tracking-widest transition-all flex items-center gap-2.5 border"
-        :class="showExport 
-          ? 'text-emerald-600 bg-emerald-50 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20 shadow-lg shadow-emerald-500/5' 
-          : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm'"
+        v-if="settingsStore.hasPlanExport && !showExport"
+        @click="showExport = true"
+        class="h-10 px-4 rounded-xl text-xs font-black tracking-widest transition-all flex items-center gap-2.5 border text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm shrink-0"
       >
         <i class="pi pi-sliders-h text-xs"></i>
-        {{ showExport ? $t('common.close') : $t('reports.title') }}
+        {{ $t('reports.title') }}
       </button>
     </div>
 
@@ -204,10 +221,6 @@
     >
       <div v-if="showExport" class="pt-4 border-t border-slate-100 dark:border-slate-800/60 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3 w-full sm:w-auto">
-          <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg">
-            <i class="pi pi-filter text-[13px] text-slate-400"></i>
-            <span class="text-[13px] font-black tracking-widest text-slate-500">{{ $t('reports.title') }}</span>
-          </div>
           <div class="flex items-center gap-2 flex-1 sm:flex-none">
             <DatePicker
               v-model="exportFilters.date_from"
@@ -215,7 +228,7 @@
               :placeholder="$t('common.date_from')"
               class="flex-1 sm:w-36"
               pt:root:class="!h-9 !rounded-xl !border !border-slate-200 dark:!border-slate-700 bg-white dark:bg-slate-900"
-              pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-black !h-full !tracking-wider"
+              pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-black uppercase !h-full !tracking-wider"
             />
             <span class="text-slate-300 dark:text-slate-700">-</span>
             <DatePicker
@@ -224,7 +237,7 @@
               :placeholder="$t('common.date_to')"
               class="flex-1 sm:w-36"
               pt:root:class="!h-9 !rounded-xl !border !border-slate-200 dark:!border-slate-700 bg-white dark:bg-slate-900"
-              pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-black !h-full !tracking-wider"
+              pt:input:class="!bg-transparent !border-none !shadow-none !text-xs !font-black uppercase !h-full !tracking-wider"
             />
           </div>
           <div v-if="isManager" class="relative flex-1 sm:flex-none sm:w-48 group">
@@ -262,8 +275,17 @@
              @click="$emit('export-wastage')"
              class="col-span-2 sm:col-span-1 h-9 px-5 rounded-xl text-xs font-black tracking-widest text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center gap-2.5 active:scale-95 whitespace-nowrap shadow-sm"
           >
-            <i class="pi pi-trash text-xs"></i>
+            <i class="pi pi-file-excel text-xs"></i>
             {{ $t('reports.wastage_export') }}
+          </button>
+          
+          <!-- Close Export Panel Button -->
+          <button
+            @click="showExport = false"
+            class="h-9 px-4 rounded-xl text-xs font-black tracking-widest text-slate-500 hover:text-rose-500 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all flex items-center justify-center gap-2 shadow-sm"
+          >
+            <i class="pi pi-times text-[11px]"></i>
+            {{ $t('common.close') }}
           </button>
         </div>
       </div>
@@ -315,27 +337,6 @@ const wastageReasons = computed(() => [
 ])
 </script>
 
-<style scoped>
-:deep(.p-datepicker-input) {
-  background-color: rgb(30 41 59 / 0.4) !important; /* dark:bg-slate-800/40 */
-  border-color: rgb(51 65 85 / 0.5) !important; /* dark:border-slate-700/50 */
-  color: #e2e8f0 !important; /* text-slate-200 */
-  font-weight: 900 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  font-size: 0.875rem !important;
-  box-shadow: none !important;
-}
 
-:deep(.p-datepicker:not(.p-datepicker-inline) .p-datepicker-input) {
-   background-color: rgb(30 41 59 / 0.4) !important;
-}
-
-html:not(.dark) :deep(.p-datepicker-input) {
-  background-color: rgb(248 250 252 / 0.5) !important; /* bg-slate-50/50 */
-  border-color: rgb(226 232 240 / 0.6) !important; /* border-slate-200/60 */
-  color: #334155 !important; /* text-slate-700 */
-}
-</style>
 
 
