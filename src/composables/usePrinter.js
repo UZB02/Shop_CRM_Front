@@ -116,6 +116,20 @@ function withTimeout(promise, ms = 10000) {
   return Promise.race([promise, timeout])
 }
 
+// QZ Tray uzilishlarini eshitish
+function setupQZCallbacks() {
+  qz.websocket.setClosedCallbacks((evt) => {
+    console.log('[usePrinter] QZ Tray connection closed', evt)
+    isConnected.value = false
+    isConnecting.value = false
+  })
+
+  qz.websocket.setErrorCallbacks((err) => {
+    console.warn('[usePrinter] QZ Tray websocket xatosi:', err)
+    isConnected.value = false
+  })
+}
+
 export function usePrinter() {
 
   // ─── QZ Tray bilan ulanish ────────────────────────────────────────────────
@@ -131,6 +145,7 @@ export function usePrinter() {
 
     try {
       setupQZSecurity()
+      setupQZCallbacks()
 
       // Allaqachon WebSocket ochiq bo'lsa — ulanish kerak emas
       if (qz.websocket.isActive()) {
@@ -276,18 +291,31 @@ export function usePrinter() {
   const print = async ({ htmlContent, printerName = null } = {}) => {
     if (!htmlContent) return false
 
-    // QZ Tray ulangan bo'lsa — silent print
-    if (isConnected.value) {
+    // Agar QZ faol bo'lsa
+    if (isConnected.value && qz.websocket.isActive()) {
       try {
         await printWithQZ(htmlContent, printerName)
         return { method: 'qz', success: true }
       } catch (err) {
-        console.warn('[usePrinter] QZ chop etishda xato:', err)
-        throw err
+        // Asl xatoni stringga aylantiramiz
+        const msg = String(err?.message || err)
+        console.warn('[usePrinter] QZ chop etishda xato (string):', msg)
+        
+        // Agar xato connection uzilishi bilan bog'liq bo'lsa, xatoni yashirib fallbackga o'tamiz
+        if (msg.includes('not been established') || msg.includes('websocket')) {
+          isConnected.value = false
+        } else {
+          // console.error qilib to'liq errni chiqaramiz ko'rish uchun
+          console.error('[usePrinter] Noma\'lum QZ xatosi:', err)
+          throw err
+        }
       }
+    } else if (isConnected.value) {
+      // Status ulangan, lekin aslida socket uzilgan bo'lsa
+      isConnected.value = false
     }
 
-    // Ulanmagan — dialog fallback
+    // Ulanmagan yoki xato bergan — dialog fallback
     printWithBrowserDialog(htmlContent)
     return { method: 'browser', success: true }
   }
