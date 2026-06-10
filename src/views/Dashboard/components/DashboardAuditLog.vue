@@ -89,15 +89,11 @@
           Ko'proq
         </button>
 
-        <!-- Action Buttons: Reset and Search -->
+        <!-- Action Buttons: Reset -->
         <div class="flex items-center gap-1.5 ml-auto sm:ml-0 whitespace-nowrap">
           <button @click="resetFilters" class="h-10 px-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] font-black text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
             <i class="pi pi-filter-slash text-[10px]"></i>
             Tozalash
-          </button>
-          <button @click="fetchLogs(1)" :disabled="loading" class="h-10 px-4.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black tracking-wider active:scale-95 transition-all flex items-center gap-1.5 shadow-md shadow-emerald-500/10 cursor-pointer disabled:opacity-50">
-            <i class="pi pi-search text-[10px]"></i>
-            Qidirish
           </button>
         </div>
       </div>

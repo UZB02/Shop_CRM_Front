@@ -12,6 +12,7 @@ const branches = ref([])
 const shifts = ref([])
 const loading = ref(false)
 const summaryData = ref({ totalExpenses: 0, summary: [] })
+const lastCategoryStatus = ref(null)
 
 // List endpoint accepts: branch, category, smena, date (YYYY-MM-DD — single date)
 const filters = ref({
@@ -49,12 +50,14 @@ export default function useExpenses() {
 
     // ─── Category CRUD ──────────────────────────────────────────────────────────
 
-    const fetchCategories = async (statusArg = null) => {
+    const fetchCategories = async (statusArg = undefined) => {
         try {
-            // Agar statusArg passed bo'lmasa, barchasini oladi (yoki backend defaultiga ko'ra)
+            if (statusArg !== undefined) {
+                lastCategoryStatus.value = statusArg
+            }
             const params = {}
-            if (statusArg && typeof statusArg === 'string') {
-                params.status = statusArg
+            if (lastCategoryStatus.value && typeof lastCategoryStatus.value === 'string') {
+                params.status = lastCategoryStatus.value
             }
 
             const res = await expenseCategoriesAPI.getAll(params)

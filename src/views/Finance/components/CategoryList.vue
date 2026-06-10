@@ -24,6 +24,23 @@
       </button>
     </div>
 
+    <!-- Filters Toolbar -->
+    <div class="flex items-center justify-between gap-2 border-b border-slate-150/50 dark:border-slate-800/60 pb-2">
+      <div class="flex gap-1 bg-slate-100 dark:bg-slate-800/80 p-0.5 rounded-xl">
+        <button
+          v-for="opt in statusFilterOptions"
+          :key="opt.value"
+          @click="changeStatusFilter(opt.value)"
+          class="px-3 py-1.5 rounded-lg text-[10px] font-black tracking-wider transition-all cursor-pointer select-none"
+          :class="categoryStatusFilter === opt.value
+            ? 'bg-white dark:bg-slate-700 text-rose-500 dark:text-white shadow-sm'
+            : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
+        >
+          {{ opt.label }}
+        </button>
+      </div>
+    </div>
+
     <!-- Category table -->
     <div class="bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm overflow-x-auto custom-scrollbar">
       <table class="w-full text-left border-collapse min-w-[450px]">
@@ -163,6 +180,19 @@ const adding = ref(false)
 const editingId = ref(null)
 const editingName = ref('')
 
+const categoryStatusFilter = ref(null)
+
+const statusFilterOptions = [
+  { label: 'Barchasi', value: null },
+  { label: 'Faol', value: 'active' },
+  { label: 'Nofaol', value: 'inactive' }
+]
+
+const changeStatusFilter = (val) => {
+  categoryStatusFilter.value = val
+  fetchCategories(val)
+}
+
 const addCategory = async () => {
   if (!newCategoryName.value.trim()) return
   adding.value = true
@@ -200,7 +230,9 @@ const executeDelete = async (id) => {
   deletingId.value = null
 }
 
-onMounted(fetchCategories)
+onMounted(() => {
+  fetchCategories(categoryStatusFilter.value)
+})
 </script>
 <style scoped>
 .custom-scrollbar::-webkit-scrollbar {

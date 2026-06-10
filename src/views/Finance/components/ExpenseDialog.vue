@@ -51,7 +51,7 @@
               <i class="pi pi-tag absolute left-4 text-xs text-slate-400 group-focus-within/input:text-rose-500 transition-colors pointer-events-none z-10 flex-shrink-0"></i>
               <Select
                 v-model="expense.category"
-                :options="categories"
+                :options="activeCategoriesOnly"
                 optionLabel="name"
                 optionValue="id"
                 :placeholder="$t('products.form.select_category')"
@@ -218,6 +218,20 @@ const props = defineProps({
   branches: { type: Array, default: () => [] },
   saving: Boolean,
   submitted: Boolean
+})
+
+const activeCategoriesOnly = computed(() => {
+  const list = props.categories ? props.categories.filter(c => c.status === 'active') : []
+  if (props.expense?.category && props.categories) {
+    const currentCat = props.categories.find(c => c.id === props.expense.category)
+    if (currentCat && currentCat.status !== 'active') {
+      // Avoid duplicate push
+      if (!list.some(c => c.id === currentCat.id)) {
+        list.push(currentCat)
+      }
+    }
+  }
+  return list
 })
 
 const emit = defineEmits(['update:visible', 'save', 'hide'])

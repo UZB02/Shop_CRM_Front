@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { auditLogsAPI } from '@/services/settings'
 import { workersAPI } from '@/services/workers'
 
@@ -19,6 +19,14 @@ export function useAuditLogs() {
     search_query: null,
     is_impersonated: null
   })
+
+  let debounceTimer = null
+  watch(() => filters.value, () => {
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => {
+      fetchLogs(1)
+    }, 400)
+  }, { deep: true })
 
   const workersList = ref([])
 
@@ -136,7 +144,6 @@ export function useAuditLogs() {
       search_query: null,
       is_impersonated: null
     }
-    fetchLogs(1)
   }
 
   const showDetails = (log) => {
