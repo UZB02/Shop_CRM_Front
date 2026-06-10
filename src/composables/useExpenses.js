@@ -44,12 +44,7 @@ export default function useExpenses() {
     // ✅ Permission-based tekshiruv (rol emas, ruxsat asosida)
     // Backend: CanAccess('moliya') → moliya bo'limiga kirish uchun
     const isManager = () => {
-        const user = authStore.user
-        if (!user) return false
-        // Owner, superuser, staff — har doim ruxsat
-        if (user.is_owner || user.is_superuser || user.is_staff) return true
-        // ✅ YANGI: rol emas, permission tekshiruvi
-        return user.permissions?.includes('moliya') ?? false
+        return authStore.hasAccess('moliya')
     }
 
     // ─── Category CRUD ──────────────────────────────────────────────────────────

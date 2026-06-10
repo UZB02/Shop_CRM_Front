@@ -18,12 +18,7 @@ export function useImport() {
      * Backend: CanAccess('mahsulotlar') → mahsulot import uchun
      */
     const isManagerOrAbove = () => {
-        const user = authStore.user
-        if (!user) return false
-        // Owner, superuser, staff — har doim ruxsat
-        if (user.is_owner || user.is_superuser || user.is_staff) return true
-        // ✅ YANGI: 'mahsulotlar' permissioni bo'lsa import qila oladi
-        return user.permissions?.includes('mahsulotlar') ?? false
+        return authStore.hasAccess('mahsulotlar')
     }
 
     /**
