@@ -173,11 +173,15 @@ export const useAuthStore = defineStore('auth', {
             localStorage.setItem('permissions', JSON.stringify(sections))
         },
 
-        logout(skipApiCall = false) {
-            // Invalidate refresh token on server (fire-and-forget)
+        async logout(skipApiCall = false) {
+            // Invalidate refresh token on server
             const refresh = localStorage.getItem('refresh')
             if (refresh && !skipApiCall) {
-                authAPI.logout({ refresh }).catch(() => {})
+                try {
+                    await authAPI.logout({ refresh })
+                } catch (e) {
+                    console.warn('Backend logout failed:', e)
+                }
             }
 
             try {

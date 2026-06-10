@@ -340,7 +340,14 @@ const selectTur = (tur) => {
 }
 
 
-const handleShiftAction = () => {
+const handleShiftAction = async () => {
+  if (activeShift.value) {
+    try {
+      await fetchShiftStatus()
+    } catch (err) {
+      console.warn('Shift status update failed:', err)
+    }
+  }
   showShiftModal.value = true
 }
 

@@ -35,6 +35,7 @@ export function usePOS() {
     return {
         // --- Shift ---
         activeShift:      shift.activeShift,
+        activeXReport:    shift.activeXReport,
         shiftLoading:     shift.shiftLoading,
         fetchShiftStatus: shift.fetchShiftStatus,
         openShift:        shift.openShift,
