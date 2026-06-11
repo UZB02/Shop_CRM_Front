@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { workersAPI, branchesAPI } from '@/services/api'
 import { useNotificationStore } from '@/store/notifications'
+import { useAuthStore } from '@/store/auth'
 import { ROLE_PERMISSIONS, WORKER_ROLES, WORKER_STATUSES, PERMISSIONS_LIST } from './useWorkerForm'
 
 export function useWorkerEdit() {
@@ -12,6 +13,12 @@ export function useWorkerEdit() {
   const { t } = useI18n()
   const toast = useToast()
   const notificationStore = useNotificationStore()
+  const authStore = useAuthStore()
+
+  const isManager = computed(() => {
+    const role = (authStore.user?.role || authStore.user?.worker?.role || '').toLowerCase()
+    return role === 'manager'
+  })
 
   const workerId = computed(() => route.params.id)
   const isEdit = computed(() => !!workerId.value)
@@ -178,6 +185,13 @@ export function useWorkerEdit() {
           permissions: createLogin.value ? [...toRaw(w.permissions || [])] : []
         }
         if (w.password) payload.password = w.password
+      }
+
+      // Explicitly remove restricted fields for managers to prevent 400 errors from backend
+      if (isManager.value) {
+        delete payload.role
+        delete payload.salary
+        delete payload.permissions
       }
 
       if (isEdit.value) {

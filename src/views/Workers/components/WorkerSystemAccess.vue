@@ -43,7 +43,7 @@
       </div>
 
       <!-- Right: Permissions grid (no scroll) -->
-      <div v-if="createLogin">
+      <div v-if="createLogin && !isManager">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2">
             <span class="text-[11px] font-black text-slate-400 tracking-widest uppercase">{{ $t('workers.form.permissions') }}</span>
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-      <div v-else class="flex items-center justify-center rounded-lg border border-dashed border-slate-200 dark:border-slate-700">
+      <div v-else-if="!isManager" class="flex items-center justify-center rounded-lg border border-dashed border-slate-200 dark:border-slate-700">
         <p class="text-xs text-slate-400 py-6">{{ $t('workers.form.permissions_on_login') }}</p>
       </div>
     </div>
@@ -93,6 +93,14 @@
 <script setup>
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
+import { computed } from 'vue'
+import { useAuthStore } from '@/store/auth'
+
+const authStore = useAuthStore()
+const isManager = computed(() => {
+  const role = (authStore.user?.role || authStore.user?.worker?.role || '').toLowerCase()
+  return role === 'manager'
+})
 
 defineProps({
   worker: Object,

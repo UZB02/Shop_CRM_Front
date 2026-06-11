@@ -13,12 +13,12 @@
           size="small" class="sr-select w-full !text-sm"
           :class="{'!border-rose-400': submitted && !worker.branch}" :placeholder="$t('common.choose')" />
       </div>
-      <div>
+      <div v-if="!isManager">
         <label class="block text-[10px] font-bold text-slate-400 mb-1">{{ $t('workers.form.role') }}</label>
         <Select v-model="worker.role" :options="localizedRoles" optionLabel="label" optionValue="value"
           size="small" class="sr-select w-full !text-sm" @change="onRoleChange" />
       </div>
-      <div>
+      <div v-if="!isManager">
         <label class="block text-[10px] font-bold text-slate-400 mb-1">{{ $t('workers.form.salary') }}</label>
         <InputNumber v-model="worker.salary" mode="decimal" class="sr-number w-full"
           inputClass="!text-emerald-500 !font-black !text-sm !py-2" placeholder="0" />
@@ -35,6 +35,14 @@
 <script setup>
 import Select from 'primevue/select'
 import InputNumber from 'primevue/inputnumber'
+import { computed } from 'vue'
+import { useAuthStore } from '@/store/auth'
+
+const authStore = useAuthStore()
+const isManager = computed(() => {
+  const role = (authStore.user?.role || authStore.user?.worker?.role || '').toLowerCase()
+  return role === 'manager'
+})
 
 defineProps({
   worker: Object,

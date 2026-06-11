@@ -167,7 +167,7 @@
                     @click="$emit('edit', data)">
                     <i class="pi pi-pencil text-[11px]"></i>
                   </button>
-                  <button
+                  <button v-if="!isManager"
                     class="w-7 h-7 rounded-lg bg-rose-500/5 hover:bg-rose-500/10 border border-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center transition-all active:scale-90"
                     v-tooltip.top="$t('common.delete')"
                     @click="$emit('delete', data)">
@@ -236,6 +236,13 @@ import { useSettingsStore } from '@/store/settings'
 const { t } = useI18n()
 const router = useRouter()
 const settingsStore = useSettingsStore()
+
+import { useAuthStore } from '@/store/auth'
+const authStore = useAuthStore()
+const isManager = computed(() => {
+  const role = (authStore.user?.role || authStore.user?.worker?.role || '').toLowerCase()
+  return role === 'manager'
+})
 
 const showSalaries = ref(false)
 
