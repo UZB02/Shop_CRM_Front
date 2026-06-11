@@ -189,7 +189,7 @@
               {{ $t('common.print') }}
             </button>
           </div>
-          <button @click="$emit('update:visible', false)"
+          <button @click="handleStartNewSale"
             class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black tracking-[0.18em] shadow-lg shadow-emerald-500/25 transition-all active:scale-[0.98]">
             <i class="pi pi-plus mr-2" />
             {{ $t('pos.start_new_sale') }}
@@ -204,17 +204,19 @@
 <script setup>
 import { computed } from 'vue'
 import { useSettingsStore } from '@/store/settings'
-import { usePrinter } from '@/composables/usePrinter'
 
 const props = defineProps({
   transaction: Object,
   visible: Boolean
 })
 
-defineEmits(['update:visible', 'print', 'download'])
+const emit = defineEmits(['update:visible', 'print', 'download'])
+
+const handleStartNewSale = () => {
+  emit('update:visible', false)
+}
 
 const settingsStore = useSettingsStore()
-const { paperSize } = usePrinter()
 
 // Safe numeric conversion (handles string values from backend)
 const num = (val) => parseFloat(val) || 0

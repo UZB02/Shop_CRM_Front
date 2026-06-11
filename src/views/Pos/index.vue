@@ -181,7 +181,7 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, onBeforeUnmount } from 'vue'
+  import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { usePOS } from '@/composables/usePOS'
   import { useAuthStore } from '@/store/auth'
@@ -373,6 +373,11 @@ const onCheckoutConfirm = async (paymentData) => {
       if (catalogRef.value) {
         catalogRef.value.fetchProducts(searchQueryGlobal.value)
       }
+      
+      // Darhol avtomatik chop etish
+      nextTick(() => {
+        printReceipt()
+      })
     }
   } catch (error) {
     console.error('Checkout error:', error)
@@ -387,7 +392,7 @@ const buildReceiptHtml = () => {
 <html><head><meta charset="UTF-8"/><title>Savdo cheki</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:8px 12px;width:80mm;}
+  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:4px 6px;width:100%;max-width:80mm;margin:0 auto;}
   body *{color:#000 !important;font-family:"Inter",system-ui,sans-serif !important;font-weight:bold !important;}
   .font-black,.text-xl,.text-2xl,h2{font-weight:900 !important;}
   .text-center{text-align:center;}
@@ -412,7 +417,7 @@ const buildReceiptHtml = () => {
 // ─── Dialog fallback yordamchi ───────────────────────────────────────────────
 const browserPrintFallback = (htmlContent) => {
   const iframe = document.createElement('iframe')
-  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:80mm;border:none;visibility:hidden;'
+  iframe.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:100%;max-width:80mm;border:none;visibility:hidden;`
   document.body.appendChild(iframe)
   const doc = iframe.contentDocument || iframe.contentWindow.document
   doc.open(); doc.write(htmlContent); doc.close()

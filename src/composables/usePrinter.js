@@ -236,7 +236,6 @@ export function usePrinter() {
     if (!printer) throw new Error('Printer tanlanmagan')
 
     const config = qz.configs.create(printer, {
-      size: { width: parseInt(paperSize.value), units: 'mm' },
       margins: { top: 0, right: 2, bottom: 0, left: 2 },
       units: 'mm',
       colorType: 'blackwhite',
