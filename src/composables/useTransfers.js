@@ -173,13 +173,24 @@ export function useTransfers() {
     const confirmTransfer = async (id) => {
         subLoading.value = true
         try {
-            await transfersAPI.confirm(id)
-            toast.add({
-                severity: 'success',
-                summary: t('common.success'),
-                detail: 'Transfer tasdiqlandi',
-                life: 3000
-            })
+            const res = await transfersAPI.confirm(id)
+            const data = res.data?.data
+            
+            if (data) {
+                toast.add({
+                    severity: 'success',
+                    summary: 'O\'tkazma tasdiqlandi ✅',
+                    detail: `${data.from_location_name} ➔ ${data.to_location_name} (${data.items?.length || 0} xil mahsulot)`,
+                    life: 5000
+                })
+            } else {
+                toast.add({
+                    severity: 'success',
+                    summary: t('common.success'),
+                    detail: res.data?.message || 'Transfer tasdiqlandi',
+                    life: 3000
+                })
+            }
             return true
         } catch (error) {
             console.error('Error confirming transfer:', error)

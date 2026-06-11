@@ -114,7 +114,6 @@
               <div v-if="isManager" class="flex justify-end gap-1">
                 <!-- Edit -->
                 <button
-                  v-if="deletingId !== cat.id"
                   @click="startEdit(cat)"
                   class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all active:scale-90"
                   :title="$t('common.edit')"
@@ -123,7 +122,6 @@
                 </button>
                 <!-- Toggle status -->
                 <button
-                  v-if="deletingId !== cat.id"
                   @click="toggleStatus(cat)"
                   class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 transition-all active:scale-90"
                   :class="cat.status === 'active'
@@ -133,26 +131,6 @@
                 >
                   <i :class="cat.status === 'active' ? 'pi pi-eye-slash' : 'pi pi-eye'" class="text-[12px]"></i>
                 </button>
-                <!-- Delete (soft) -->
-                <button
-                  v-if="deletingId !== cat.id"
-                  @click="deletingId = cat.id"
-                  class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all active:scale-90"
-                  :title="$t('common.delete')"
-                >
-                  <i class="pi pi-trash text-[12px]"></i>
-                </button>
-
-                <!-- Inline Confirmation -->
-                <div v-if="deletingId === cat.id" class="flex items-center gap-1 animate-in slide-in-from-right-2 fade-in duration-200">
-                  <span class="text-[10px] font-bold text-rose-500 mr-1 hidden sm:inline-block">O'chirasizmi?</span>
-                  <button @click="deletingId = null" class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95" title="Bekor qilish">
-                    <i class="pi pi-times text-[12px]"></i>
-                  </button>
-                  <button @click="executeDelete(cat.id)" class="w-8 h-8 rounded-xl bg-rose-500 text-white flex items-center justify-center hover:bg-rose-600 transition-all shadow-sm shadow-rose-500/20 active:scale-95" title="O'chirish">
-                    <i class="pi pi-check text-[12px]"></i>
-                  </button>
-                </div>
               </div>
             </td>
           </tr>
@@ -219,15 +197,8 @@ const cancelEdit = () => {
   editingId.value = null
 }
 
-const deletingId = ref(null)
-
 const toggleStatus = async (cat) => {
   await updateCategory(cat.id, { status: cat.status === 'active' ? 'inactive' : 'active' })
-}
-
-const executeDelete = async (id) => {
-  await deleteCategory(id)
-  deletingId.value = null
 }
 
 onMounted(() => {
