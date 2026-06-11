@@ -191,7 +191,7 @@ const loadHistory = async () => {
 }
 
 const openDialog = (kpi) => {
-    selectedKpi.value = kpi
+    selectedKpi.value = { ...kpi, worker: kpi.worker || props.workerId }
     dialogVisible.value = true
 }
 

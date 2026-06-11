@@ -279,7 +279,7 @@ export function useWorkerActions(loadWorkersCallback) {
             // If kpiData is missing or has no ID, we still open the modal.
             // Documentation suggests that setting a target is how a KPI is "opened" (created).
             // In this case, we use the workerId as the primary identifier.
-            const finalKpi = (kpiData && kpiData.id) ? kpiData : {
+            const finalKpi = (kpiData && kpiData.id) ? { ...kpiData, worker: kpiData.worker || workerId } : {
                 id: workerId, 
                 worker: workerId,
                 worker_name: workerData.full_name || `${workerData.first_name || ''} ${workerData.last_name || ''}`.trim(),

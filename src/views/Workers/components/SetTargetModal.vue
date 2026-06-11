@@ -27,8 +27,7 @@
         <div class="relative">
           <InputNumber
             v-model="form.target_amount"
-            mode="currency"
-            currency="UZS"
+            mode="decimal"
             locale="uz-UZ"
             placeholder="0"
             class="premium-input"
@@ -43,8 +42,7 @@
         <div class="relative">
           <InputNumber
             v-model="form.bonus_amount"
-            mode="currency"
-            currency="UZS"
+            mode="decimal"
             locale="uz-UZ"
             placeholder="0"
             class="premium-input"
@@ -117,7 +115,11 @@ watch(() => props.kpi, (newKpi) => {
 const onSave = async () => {
   loading.value = true
   try {
-    await kpiAPI.setTarget(props.kpi.worker || props.kpi.id, {
+    const workerId = (props.kpi?.worker && typeof props.kpi.worker === 'object')
+      ? (props.kpi.worker.id || props.kpi.worker._id)
+      : (props.kpi?.worker || props.kpi?.worker_id || props.kpi?.id)
+
+    await kpiAPI.setTarget(workerId, {
       target_amount: Number(form.value.target_amount || 0),
       bonus_amount: Number(form.value.bonus_amount || 0),
       month: props.kpi.month,
