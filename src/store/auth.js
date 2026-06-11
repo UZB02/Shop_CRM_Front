@@ -201,6 +201,8 @@ export const useAuthStore = defineStore('auth', {
             Object.keys(localStorage).forEach(key => {
                 if (!preservedKeys.includes(key)) localStorage.removeItem(key)
             })
+
+            window.location.href = '/login'
         }
     }
 })

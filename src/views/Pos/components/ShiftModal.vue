@@ -146,7 +146,7 @@
         <button 
           v-else
           @click="handleSubmit"
-          :disabled="loading || (!isClosing && !authStore.user?.branch_id) || (isClosing && settingsStore.requireCashCount && cashCounted === null)"
+          :disabled="loading || (!isClosing && !hasBranchId) || (isClosing && settingsStore.requireCashCount && cashCounted === null)"
           class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl disabled:opacity-50"
           :class="[
              isClosing ? 'bg-rose-500 hover:bg-rose-600 hover:shadow-rose-400/30' : 'bg-[#10b981] hover:bg-[#059669] hover:shadow-emerald-500/30'
@@ -185,6 +185,8 @@ const cashStart = ref(0)
 const cashCounted = ref(0)
 
 const formatCurrency = (val) => settingsStore.formatPrice(val)
+
+const hasBranchId = computed(() => !!(authStore.user?.branch_id || authStore.user?.worker?.branch || authStore.user?.branch))
 
 // Backend logic: cash_end bo'lmasa, x-report yoki shift dagi expected_cash ni ko'rsatamiz
 const displayCash = computed(() => {
