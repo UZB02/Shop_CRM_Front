@@ -36,6 +36,7 @@
               <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('transfers.col_direction') }}</th>
               <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-center">{{ $t('transfers.col_product') }}</th>
               <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('transfers.col_worker') }}</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide">{{ $t('transfers.col_confirmed_by') }}</th>
               <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-center">{{ $t('transfers.col_status') }}</th>
               <th class="px-5 py-3 text-xs font-semibold text-slate-400 tracking-wide text-right">{{ $t('transfers.col_actions') }}</th>
             </tr>
@@ -76,7 +77,21 @@
   
               <!-- Worker -->
               <td class="px-5 py-3.5">
-                <span class="text-xs text-slate-500 dark:text-slate-400">{{ t.worker_name || '—' }}</span>
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-xs font-medium text-slate-600 dark:text-slate-300">{{ t.worker_name || '—' }}</span>
+                  <span class="text-[11px] text-slate-400">{{ $t('transfers.col_worker') }}</span>
+                </div>
+              </td>
+
+              <!-- Confirmed by -->
+              <td class="px-5 py-3.5">
+                <div v-if="t.confirmed_by_name" class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                    <i class="pi pi-check text-emerald-600 dark:text-emerald-400 text-[9px]"></i>
+                  </div>
+                  <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">{{ t.confirmed_by_name }}</span>
+                </div>
+                <span v-else class="text-xs text-slate-300 dark:text-slate-600">—</span>
               </td>
   
               <!-- Status -->
@@ -158,6 +173,9 @@
             <div class="flex flex-col items-end shrink-0">
               <span class="text-[12px] font-bold text-slate-400 tracking-widest">{{ t.item_count ?? t.items?.length ?? 0 }} {{ $t('common.pcs') }}</span>
               <span class="text-[12px] text-slate-500 dark:text-slate-500 mt-0.5">{{ t.worker_name?.split(' ')[0] }}</span>
+              <span v-if="t.confirmed_by_name" class="text-[11px] text-emerald-500 mt-0.5 flex items-center gap-1">
+                <i class="pi pi-check text-[9px]"></i>{{ t.confirmed_by_name?.split(' ')[0] }}
+              </span>
             </div>
           </div>
 

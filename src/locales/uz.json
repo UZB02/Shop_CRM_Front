@@ -1573,6 +1573,7 @@
     "col_worker": "Xodim",
     "col_status": "Holat",
     "col_actions": "Amallar",
+    "col_confirmed_by": "Tasdiqlagan",
     "confirm_msg": "Ushbu o'tkazmani tasdiqlashni xohlaysizmi?",
     "cancel_msg": "Ushbu o'tkazmani bekor qilishni xohlaysizmi?",
     "confirm_btn": "Tasdiqlash",

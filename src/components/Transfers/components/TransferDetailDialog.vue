@@ -113,18 +113,45 @@
         </div>
 
         <!-- Meta info row -->
-        <div class="grid grid-cols-2 gap-3 text-sm">
-          <div v-if="transfer.worker_name"
-            class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"
-          >
-            <div class="text-xs text-slate-400 mb-0.5">{{ $t('transfers.col_worker') }}</div>
-            <div class="font-medium text-slate-700 dark:text-slate-200">{{ transfer.worker_name }}</div>
+        <div class="space-y-2 text-sm">
+          <!-- Worker + Confirmed by (row) -->
+          <div class="grid grid-cols-2 gap-2">
+            <div v-if="transfer.worker_name"
+              class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"
+            >
+              <div class="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+                <i class="pi pi-user text-slate-500 dark:text-slate-400 text-[11px]"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('transfers.col_worker') }}</div>
+                <div class="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">{{ transfer.worker_name }}</div>
+              </div>
+            </div>
+
+            <div v-if="transfer.confirmed_by_name"
+              class="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20"
+            >
+              <div class="w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
+                <i class="pi pi-shield text-emerald-600 dark:text-emerald-400 text-[11px]"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[11px] font-bold text-emerald-500 uppercase tracking-wider mb-0.5">{{ $t('transfers.col_confirmed_by') }}</div>
+                <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-300 truncate">{{ transfer.confirmed_by_name }}</div>
+              </div>
+            </div>
           </div>
+
+          <!-- Confirmed date (full width if exists) -->
           <div v-if="transfer.confirmed_at"
-            class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20"
+            class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"
           >
-            <div class="text-xs text-emerald-600 dark:text-emerald-400 mb-0.5">{{ $t('transfers.status.confirmed') }}</div>
-            <div class="font-medium text-slate-700 dark:text-slate-200">{{ transfer.confirmed_at }}</div>
+            <div class="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+              <i class="pi pi-calendar-check text-slate-500 dark:text-slate-400 text-[11px]"></i>
+            </div>
+            <div>
+              <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('transfers.status.confirmed') }}</div>
+              <div class="text-xs font-semibold text-slate-700 dark:text-slate-200">{{ transfer.confirmed_at }}</div>
+            </div>
           </div>
         </div>
 
