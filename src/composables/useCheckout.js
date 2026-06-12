@@ -5,14 +5,12 @@ export function useCheckout(props, emit) {
   const settingsStore = useSettingsStore()
   const paymentType = ref('cash')
   const discountAmount = ref(0)
-  const autoDiscountAmount = ref(0)
-  const totalDiscountAmount = computed(() => (discountAmount.value || 0) + (autoDiscountAmount.value || 0))
+  const totalDiscountAmount = computed(() => discountAmount.value || 0)
   const cashAmount = ref(0)
   const cardAmount = ref(0)
   const debtCashAmount = ref(0)
   const debtCardAmount = ref(0)
   const description = ref('')
-  const vipMessage = ref('')
 
   const isMixedUpdating = ref(false)
   
@@ -56,8 +54,6 @@ export function useCheckout(props, emit) {
       description.value = ''
       emit('update:selected-customer', null)
       discountAmount.value = 0
-      autoDiscountAmount.value = 0
-      vipMessage.value = ''
       debtCashAmount.value = 0
       debtCardAmount.value = 0
       cashAmount.value = props.total || 0
@@ -108,33 +104,7 @@ export function useCheckout(props, emit) {
     return rem > 0 ? rem : 0
   })
 
-  // VIP Mijoz Chegirma Mantiq - Soddalashtirilgan (Backend ma'lumotlariga tayanadi)
-  watch(() => props.selectedCustomer, (val) => {
-    vipMessage.value = ''
-    if (!val) {
-      autoDiscountAmount.value = 0
-      return
-    }
 
-    // Backenddan to'g'ridan-to'g'ri kelayotgan group_discount dan foydalanamiz
-    const discountPct = val.group_discount || (val.group_info?.discount) || 0
-    const groupName = val.group_name || (val.group_info?.name) || ''
-
-    if (discountPct && parseFloat(discountPct) > 0) {
-      const pct = parseFloat(discountPct)
-      let calculatedDiscount = Math.floor(((props.total || 0) * pct) / 100)
-      
-      // Limitdan oshib ketmasligi uchun (Global Settings)
-      if (maxDiscountAmount.value > 0 && calculatedDiscount > maxDiscountAmount.value) {
-        calculatedDiscount = maxDiscountAmount.value
-      }
-
-      autoDiscountAmount.value = calculatedDiscount
-      vipMessage.value = `${groupName || 'VIP'} mijoz! ${pct}% chegirma avtomat hisoblandi.`
-    } else {
-      autoDiscountAmount.value = 0
-    }
-  })
 
   // To'lanadigan summa o'zgarganda to'lov maydonlarini sinxronlash (Aralash to'lovda overflow bo'lmasligi uchun)
   watch(paidAmount, (newVal) => {
@@ -189,8 +159,6 @@ export function useCheckout(props, emit) {
   const resetValues = () => {
     paymentType.value = 'cash'
     discountAmount.value = 0
-    autoDiscountAmount.value = 0
-    vipMessage.value = ''
     cashAmount.value = 0
     cardAmount.value = 0
     debtCashAmount.value = 0
@@ -236,7 +204,6 @@ export function useCheckout(props, emit) {
   return {
     paymentType,
     discountAmount,
-    autoDiscountAmount,
     totalDiscountAmount,
     paidAmount,
     cashAmount,
@@ -256,7 +223,6 @@ export function useCheckout(props, emit) {
     isSumOverflow,
     isDebtOverflow,
     isValid,
-    vipMessage,
     handleConfirm,
     resetValues
   }

@@ -26,29 +26,13 @@
           <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
             <div class="flex-1 flex flex-col gap-1.5 min-w-0">
               <label class="text-[11px] font-black tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.name') }}</label>
-              <div class="relative">
-                <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-[12px] text-slate-300 transition-colors group-focus-within:text-emerald-500"></i>
-                <InputText 
-                  v-model="newGroup.name" 
-                  :placeholder="$t('customers.groups.name_placeholder')" 
-                  class="!h-9 !pl-8 !text-[13px] !font-bold !rounded-xl !bg-white dark:!bg-slate-900 !border-slate-200 dark:!border-slate-700 focus:!ring-4 focus:!ring-emerald-500/10 transition-all w-full" 
-                />
-              </div>
-            </div>
-            
-            <div class="w-full sm:w-[130px] flex flex-col gap-1.5 flex-shrink-0">
-              <label class="text-[11px] font-black tracking-widest text-slate-400 ml-1">{{ $t('customers.groups.discount') }}</label>
               <div class="flex gap-2">
-                <div class="relative flex-1 flex items-center">
-                  <InputNumber
-                    v-model="newGroup.discount"
-                    :min="0" :max="100"
-                    placeholder="0"
-                    mode="decimal"
-                    class="w-full"
-                    :disabled="!settingsStore.hasPlanDiscount"
-                    pt:root:class="!h-9"
-                    pt:input:class="!h-9 !px-3 !text-[13px] !font-bold !rounded-xl !bg-white dark:!bg-slate-900 !border-slate-200 dark:!border-slate-700 w-full !text-left focus:!border-emerald-500/50"
+                <div class="relative flex-1">
+                  <i class="pi pi-tag absolute left-3 top-1/2 -translate-y-1/2 text-[12px] text-slate-300 transition-colors group-focus-within:text-emerald-500"></i>
+                  <InputText 
+                    v-model="newGroup.name" 
+                    :placeholder="$t('customers.groups.name_placeholder')" 
+                    class="!h-9 !pl-8 !text-[13px] !font-bold !rounded-xl !bg-white dark:!bg-slate-900 !border-slate-200 dark:!border-slate-700 focus:!ring-4 focus:!ring-emerald-500/10 transition-all w-full" 
                   />
                 </div>
                 <Button 
@@ -93,9 +77,7 @@
               </div>
               <div class="flex flex-col">
                 <p class="text-[14px] font-black text-slate-700 dark:text-slate-200 tracking-tighter leading-none mb-1">{{ g.name }}</p>
-                <div class="flex items-center gap-1.5 leading-none">
-                  <span class="text-[11px] font-bold text-emerald-500 tracking-wider">{{ g.discount }}% OFF</span>
-                  <div class="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                <div class="flex items-center gap-1.5 leading-none mt-1">
                   <span class="text-[10px] font-medium text-slate-400 tracking-widest">{{ $t('customers.groups.loyalty_system') }}</span>
                 </div>
               </div>
@@ -121,14 +103,10 @@ import { ref, onMounted, watch } from 'vue'
 import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
-import InputNumber from 'primevue/inputnumber'
 import { customerGroupsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
-import { useSettingsStore } from '@/store/settings'
-
-const settingsStore = useSettingsStore()
 
 const props = defineProps({
   visible: Boolean
@@ -142,7 +120,7 @@ const { t } = useI18n()
 const loading = ref(false)
 const saving = ref(false)
 const groups = ref([])
-const newGroup = ref({ name: '', discount: 0 })
+const newGroup = ref({ name: '' })
 
 const loadGroups = async () => {
   loading.value = true
@@ -163,7 +141,7 @@ const addGroup = async () => {
   try {
     await customerGroupsAPI.create(newGroup.value)
     toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.groups.added_message') || "Guruh qo'shildi", life: 5000 })
-    newGroup.value = { name: '', discount: 0 }
+    newGroup.value = { name: '' }
     loadGroups()
     emit('groups-updated')
   } catch (error) {

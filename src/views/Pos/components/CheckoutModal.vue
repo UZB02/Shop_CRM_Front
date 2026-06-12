@@ -93,16 +93,7 @@
               />
             </div>
             
-            <!-- VIP Message -->
-            <div v-if="vipMessage" class="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-800/30">
-              <div class="flex items-center gap-2">
-                <i class="pi pi-verified text-indigo-500 text-xs flex-shrink-0" />
-                <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400 tracking-widest leading-snug">{{ vipMessage }}</span>
-              </div>
-              <span class="flex-shrink-0 text-[10px] font-black tracking-widest text-indigo-600 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-900/50 px-1.5 py-0.5 rounded ml-1">
-                -{{ settingsStore.formatPrice(autoDiscountAmount, currencyCode) }}
-              </span>
-            </div>
+
 
             <div v-if="paymentType === 'debt' && !selectedCustomer"
               class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-800/30">
@@ -331,7 +322,6 @@ const emit = defineEmits(['update:visible', 'update:selected-customer', 'search-
 const { 
   paymentType, 
   discountAmount, 
-  autoDiscountAmount,
   totalDiscountAmount,
   paidAmount, 
   cashAmount, 
@@ -351,7 +341,6 @@ const {
   isSumOverflow, 
   isDebtOverflow,
   isValid, 
-  vipMessage,
   handleConfirm 
 } = useCheckout(props, emit)
 

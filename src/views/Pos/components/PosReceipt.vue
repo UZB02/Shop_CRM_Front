@@ -71,10 +71,7 @@
                 <span class="text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold">{{ $t('pos.customer') }}</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black print:text-black print:font-black">{{ t.customer_name }}</span>
               </div>
-              <div v-if="num(t.customer_group_discount) > 0" class="flex justify-between">
-                <span class="text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold">{{ $t('pos.group_discount') }}</span>
-                <span class="text-rose-500 font-black print:text-black print:font-black">{{ num(t.customer_group_discount) }}%</span>
-              </div>
+
               <div v-if="t.receipt_number" class="flex justify-between">
                 <span class="text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold">{{ $t('pos.receipt_no') }}</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black print:text-black print:font-black">{{ t.receipt_number }}</span>
