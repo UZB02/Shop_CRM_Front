@@ -43,7 +43,12 @@
                  <i class="pi pi-user absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-emerald-500 transition-colors"></i>
                  <InputText id="name" v-model.trim="customer.name" required="true" autofocus :class="{ '!border-rose-500': submitted && !customer.name }" :placeholder="$t('customers.form.name_placeholder')" class="!h-11 !pl-10 !text-sm !font-bold !rounded-2xl !bg-slate-50 dark:!bg-slate-800/40 !border-transparent focus:!bg-white dark:focus:!bg-slate-900 focus:!ring-8 focus:!ring-emerald-500/5 transition-all w-full" />
               </div>
-              <small class="p-error text-[11px] font-bold mt-1 ml-1" v-if="submitted && !customer.name">{{ $t('customers.form.name_required') }}</small>
+              <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0">
+                <div v-if="submitted && !customer.name" class="flex items-center gap-1.5 mt-1.5 ml-1">
+                  <i class="pi pi-exclamation-circle text-rose-500 text-[11px] shrink-0"></i>
+                  <span class="text-[12px] font-bold text-rose-500">{{ $t('customers.form.name_required') }}</span>
+                </div>
+              </Transition>
             </div>
 
             <!-- Phone Number -->
@@ -53,7 +58,12 @@
                 <i class="pi pi-phone absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-emerald-500 transition-colors"></i>
                 <InputMask id="phone" v-model="customer.phone" mask="+999999999999" placeholder="+998" :class="{ '!border-rose-500': submitted && !customer.phone }" class="!h-11 !pl-10 !text-sm !font-bold !rounded-2xl !bg-slate-50 dark:!bg-slate-800/40 !border-transparent focus:!bg-white dark:focus:!bg-slate-900 focus:!ring-8 focus:!ring-emerald-500/5 transition-all w-full" />
               </div>
-              <small class="p-error text-[11px] font-bold mt-1 ml-1" v-if="submitted && !customer.phone">{{ $t('customers.form.phone_required') }}</small>
+              <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0">
+                <div v-if="submitted && !customer.phone" class="flex items-center gap-1.5 mt-1.5 ml-1">
+                  <i class="pi pi-exclamation-circle text-rose-500 text-[11px] shrink-0"></i>
+                  <span class="text-[12px] font-bold text-rose-500">{{ $t('customers.form.phone_required') }}</span>
+                </div>
+              </Transition>
             </div>
 
             <!-- Customer Group -->

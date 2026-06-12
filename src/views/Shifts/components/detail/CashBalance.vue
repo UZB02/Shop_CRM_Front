@@ -1,76 +1,152 @@
 <template>
-  <div class="bg-white dark:bg-[#0f172a] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-     <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-        <i class="pi pi-box text-slate-400"></i> {{ $t('shifts.cash.title') }}
-     </h3>
-     
-     <div class="relative">
-        <!-- The continuous vertical timeline line -->
-        <div class="absolute left-[11px] top-3 bottom-12 w-[2px] bg-slate-200 dark:bg-slate-700/50 z-0"></div>
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
 
-        <div class="space-y-6">
-           <!-- Items container with left padding to align with timeline -->
-           <div class="space-y-6 pl-[34px] relative z-10">
-              <!-- Boshlang'ich kassa -->
-              <div class="relative">
-                 <!-- Timeline node -->
-                 <div class="absolute -left-[34px] top-1 w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-4 border-white dark:border-[#0f172a] shrink-0">
-                    <div class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-                 </div>
-                 <div>
-                    <p class="text-[13px] font-bold text-slate-500 dark:text-slate-400">{{ $t('shifts.cash.start') }}</p>
-                    <p class="text-[15px] font-bold text-slate-900 dark:text-white mt-1">{{ formatCurrency(xReport.cash_start) }}</p>
-                 </div>
-              </div>
+    <!-- Card Header -->
+    <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+        <i class="pi pi-wallet text-slate-500 dark:text-slate-400 text-sm"></i>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-slate-800 dark:text-white leading-none">{{ $t('shifts.cash.title') }}</h3>
+        <p class="text-[11px] text-slate-400 mt-0.5">{{ $t('shifts.cash.subtitle') }}</p>
+      </div>
+    </div>
 
-              <!-- Tushum -->
-              <div class="relative">
-                 <div class="absolute -left-[34px] top-1 w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-4 border-white dark:border-[#0f172a] text-emerald-500 shrink-0">
-                    <i class="pi pi-plus text-[10px] font-black"></i>
-                 </div>
-                 <div>
-                    <p class="text-[13px] font-bold text-slate-500 dark:text-slate-400">{{ $t('shifts.cash.income') }}</p>
-                    <p class="text-[15px] font-bold text-emerald-600 dark:text-emerald-400 mt-1">+ {{ formatCurrency(xReport.by_payment.total_cash ?? xReport.by_payment.cash) }}</p>
-                 </div>
-              </div>
-           </div>
-
-           <!-- Cards Section -->
-           <div class="space-y-2 relative z-10 pt-2">
-              <!-- Kutilayotgan qoldiq -->
-              <div class="bg-slate-50/80 dark:bg-[#1e293b]/40 rounded-[14px] pl-[34px] pr-4 py-4 border border-slate-200 dark:border-slate-700/50 flex justify-between items-center backdrop-blur-md">
-                 <span class="text-[13px] font-bold text-slate-600 dark:text-slate-400">{{ $t('shifts.cash.expected') }}</span>
-                 <span class="text-base font-bold text-slate-800 dark:text-white">{{ formatCurrency(xReport.expected_cash) }}</span>
-              </div>
-              
-              <!-- Yakuniy kassa -->
-              <div class="bg-emerald-50/80 dark:bg-emerald-900/10 rounded-[14px] pl-[34px] pr-4 py-4 border border-emerald-200/60 dark:border-emerald-800/40 flex justify-between items-center backdrop-blur-md">
-                 <span class="text-[13px] font-bold text-emerald-700 dark:text-emerald-500">
-                    {{ $t('shifts.cash.end') }} <span class="opacity-60 text-[11px] ml-1">({{ $t('shifts.cash.counted') }})</span>
-                 </span>
-                 <span class="text-[17px] font-black text-emerald-600 dark:text-emerald-500">{{ formatCurrency(xReport.cash_end ?? xReport.expected_cash) }}</span>
-              </div>
-
-              <!-- Kassa farqi (Agar farq bo'lsa) -->
-              <div v-if="xReport.cash_difference && parseFloat(xReport.cash_difference) !== 0" 
-                   class="rounded-[14px] pl-[34px] pr-4 py-4 border flex justify-between items-start backdrop-blur-md"
-                   :class="parseFloat(xReport.cash_difference) < 0 ? 'bg-rose-50/80 dark:bg-rose-900/10 border-rose-200/60 dark:border-rose-900/30' : 'bg-amber-50/80 dark:bg-amber-900/10 border-amber-200/60 dark:border-amber-900/30'"
-              >
-                 <div class="flex flex-col gap-2.5">
-                   <span class="text-[13px] font-bold" :class="parseFloat(xReport.cash_difference) < 0 ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400'">
-                     {{ $t('shifts.cash.difference') }} ({{ parseFloat(xReport.cash_difference) < 0 ? $t('shifts.cash.shortage') : $t('shifts.cash.surplus') }})
-                   </span>
-                   <div v-if="xReport.discrepancy_reason" class="text-[13px] font-bold" :class="parseFloat(xReport.cash_difference) < 0 ? 'text-rose-500/90 dark:text-rose-300' : 'text-amber-500/90 dark:text-amber-300'">
-                     {{ $t('shifts.cash.reason') }}: <span class="font-medium">{{ xReport.discrepancy_reason }}</span>
-                   </div>
-                 </div>
-                 <span class="text-[17px] font-black shrink-0" :class="parseFloat(xReport.cash_difference) < 0 ? 'text-rose-600 dark:text-rose-500' : 'text-amber-600 dark:text-amber-500'">
-                   {{ parseFloat(xReport.cash_difference) > 0 ? '+' : '' }}{{ formatCurrency(xReport.cash_difference) }}
-                 </span>
-              </div>
-           </div>
+    <!-- Flow Section: Start → Income → Expected -->
+    <div class="px-5 pt-5 pb-3">
+      <!-- Boshlang'ich + Tushum Row -->
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <!-- Boshlang'ich kassa -->
+        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3.5 border border-slate-100 dark:border-slate-700/60">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-6 h-6 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center">
+              <i class="pi pi-sign-in text-[10px] text-slate-400"></i>
+            </div>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Boshlanish</span>
+          </div>
+          <p class="text-[15px] font-black text-slate-800 dark:text-white tabular-nums">{{ formatCurrency(xReport.cash_start) }}</p>
         </div>
-     </div>
+
+        <!-- Naqd tushum -->
+        <div class="bg-emerald-50 dark:bg-emerald-900/10 rounded-xl p-3.5 border border-emerald-100 dark:border-emerald-800/30">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-6 h-6 rounded-lg bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-700/50 flex items-center justify-center">
+              <i class="pi pi-arrow-down text-[10px] text-emerald-500"></i>
+            </div>
+            <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">Tushum</span>
+          </div>
+          <p class="text-[15px] font-black text-emerald-700 dark:text-emerald-400 tabular-nums">+ {{ formatCurrency(xReport.by_payment?.total_cash ?? xReport.by_payment?.cash) }}</p>
+        </div>
+      </div>
+
+      <!-- Divider with equals sign -->
+      <div class="flex items-center gap-3 mb-3">
+        <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700/50"></div>
+        <div class="flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full">
+          <i class="pi pi-equals text-[10px] text-slate-400"></i>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Kutilayotgan</span>
+        </div>
+        <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700/50"></div>
+      </div>
+
+      <!-- Kutilayotgan qoldiq -->
+      <div class="bg-slate-900 dark:bg-slate-800 rounded-xl px-4 py-3.5 flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+            <i class="pi pi-calculator text-white/70 text-xs"></i>
+          </div>
+          <span class="text-[13px] font-bold text-slate-300">{{ $t('shifts.cash.expected') }}</span>
+        </div>
+        <span class="text-[17px] font-black text-white tabular-nums">{{ formatCurrency(xReport.expected_cash) }}</span>
+      </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="mx-5 border-t border-dashed border-slate-200 dark:border-slate-700/50"></div>
+
+    <!-- Actual Count Section -->
+    <div class="px-5 pt-3 pb-5 space-y-2">
+
+      <!-- Yakuniy kassa (sanalgan) -->
+      <div class="rounded-xl px-4 py-3.5 flex items-center justify-between border bg-emerald-50 dark:bg-emerald-900/15 border-emerald-200 dark:border-emerald-800/40">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-700/50 flex items-center justify-center shrink-0">
+            <i class="pi pi-check text-emerald-600 dark:text-emerald-400 text-xs"></i>
+          </div>
+          <div>
+            <p class="text-[13px] font-bold text-emerald-700 dark:text-emerald-400">{{ $t('shifts.cash.end') }}</p>
+            <p class="text-[11px] text-emerald-500/70 dark:text-emerald-600">{{ $t('shifts.cash.counted') }}</p>
+          </div>
+        </div>
+        <span class="text-[17px] font-black text-emerald-600 dark:text-emerald-400 tabular-nums">{{ formatCurrency(xReport.cash_end ?? xReport.expected_cash) }}</span>
+      </div>
+
+      <!-- Kassa farqi — ZERO: Ideal holat -->
+      <div
+        v-if="!xReport.cash_difference || parseFloat(xReport.cash_difference) === 0"
+        class="rounded-xl px-4 py-3 flex items-center gap-3 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800/30"
+      >
+        <i class="pi pi-check-circle text-emerald-500 text-base shrink-0"></i>
+        <span class="text-[13px] font-bold text-emerald-600 dark:text-emerald-400">Kassa to'g'ri — farq yo'q ✅</span>
+      </div>
+
+      <!-- Kassa farqi — SHORTAGE: Kamomad -->
+      <div
+        v-else-if="parseFloat(xReport.cash_difference) < 0"
+        class="rounded-xl border border-rose-200 dark:border-rose-800/40 overflow-hidden"
+      >
+        <!-- Farq header -->
+        <div class="px-4 py-3 bg-rose-600 dark:bg-rose-900/40 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center shrink-0">
+              <i class="pi pi-arrow-down-right text-white text-xs"></i>
+            </div>
+            <div>
+              <p class="text-[13px] font-bold text-white">{{ $t('shifts.cash.difference') }}</p>
+              <p class="text-[11px] text-rose-200">{{ $t('shifts.cash.shortage') }}</p>
+            </div>
+          </div>
+          <span class="text-[19px] font-black text-white tabular-nums">{{ formatCurrency(xReport.cash_difference) }}</span>
+        </div>
+        <!-- Sababi -->
+        <div v-if="xReport.discrepancy_reason" class="px-4 py-3 bg-rose-50 dark:bg-rose-900/10 flex items-start gap-2.5">
+          <i class="pi pi-comment text-rose-400 text-sm mt-0.5 shrink-0"></i>
+          <div>
+            <p class="text-[11px] font-bold text-rose-400 uppercase tracking-widest mb-0.5">{{ $t('shifts.cash.reason') }}</p>
+            <p class="text-[13px] font-medium text-rose-700 dark:text-rose-300 leading-snug">{{ xReport.discrepancy_reason }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kassa farqi — SURPLUS: Ortiqcha -->
+      <div
+        v-else
+        class="rounded-xl border border-amber-200 dark:border-amber-800/40 overflow-hidden"
+      >
+        <!-- Farq header -->
+        <div class="px-4 py-3 bg-amber-500 dark:bg-amber-900/40 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center shrink-0">
+              <i class="pi pi-arrow-up-right text-white text-xs"></i>
+            </div>
+            <div>
+              <p class="text-[13px] font-bold text-white">{{ $t('shifts.cash.difference') }}</p>
+              <p class="text-[11px] text-amber-100">{{ $t('shifts.cash.surplus') }}</p>
+            </div>
+          </div>
+          <span class="text-[19px] font-black text-white tabular-nums">+{{ formatCurrency(xReport.cash_difference) }}</span>
+        </div>
+        <!-- Sababi -->
+        <div v-if="xReport.discrepancy_reason" class="px-4 py-3 bg-amber-50 dark:bg-amber-900/10 flex items-start gap-2.5">
+          <i class="pi pi-comment text-amber-400 text-sm mt-0.5 shrink-0"></i>
+          <div>
+            <p class="text-[11px] font-bold text-amber-400 uppercase tracking-widest mb-0.5">{{ $t('shifts.cash.reason') }}</p>
+            <p class="text-[13px] font-medium text-amber-700 dark:text-amber-300 leading-snug">{{ xReport.discrepancy_reason }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -80,5 +156,3 @@ defineProps({
   formatCurrency: { type: Function, required: true }
 })
 </script>
-
-

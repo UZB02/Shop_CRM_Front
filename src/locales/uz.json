@@ -1525,11 +1525,12 @@
     },
     "cash": {
       "title": "Kassa holati",
+      "subtitle": "Smena davomidagi kassa harakati",
       "start": "Boshlang'ich kassa",
       "income": "Tushum (naqd qiymatda)",
       "end": "Yakuniy kassa",
       "expected": "Kutilayotgan qoldiq",
-      "counted": "Sanaldagi pul",
+      "counted": "Sanalgan pul",
       "difference": "Kassa farqi",
       "shortage": "Kamomad",
       "surplus": "Ortiqcha",
