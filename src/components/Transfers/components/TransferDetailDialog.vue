@@ -132,7 +132,7 @@
               class="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20"
             >
               <div class="w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
-                <i class="pi pi-shield text-emerald-600 dark:text-emerald-400 text-[11px]"></i>
+                <i class="pi pi-verified text-emerald-600 dark:text-emerald-400 text-[11px]"></i>
               </div>
               <div class="min-w-0">
                 <div class="text-[11px] font-bold text-emerald-500 uppercase tracking-wider mb-0.5">{{ $t('transfers.col_confirmed_by') }}</div>
@@ -146,7 +146,7 @@
             class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"
           >
             <div class="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
-              <i class="pi pi-calendar-check text-slate-500 dark:text-slate-400 text-[11px]"></i>
+              <i class="pi pi-calendar text-slate-500 dark:text-slate-400 text-[11px]"></i>
             </div>
             <div>
               <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ $t('transfers.status.confirmed') }}</div>
