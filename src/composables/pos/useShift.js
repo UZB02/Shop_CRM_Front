@@ -103,16 +103,11 @@ export function useShift() {
         }
     }
 
-    const closeShift = async (cashCounted = null) => {
+    const closeShift = async (payloadData = {}) => {
         if (!activeShift.value) return
         posLoading.value = true
         try {
-            // cash_end faqat cashCounted berilganda yuboriladi (require_cash_count=true holati)
-            const payload = {}
-            if (cashCounted !== null && cashCounted !== undefined) {
-                payload.cash_end = cashCounted
-            }
-            await shiftsAPI.close(activeShift.value.id, payload)
+            await shiftsAPI.close(activeShift.value.id, payloadData)
             activeShift.value = null
             activeXReport.value = null
             toast.add({
@@ -138,6 +133,11 @@ export function useShift() {
                 } else if (typeof errData === 'string') {
                     detail = errData
                 }
+            }
+
+            if (errData && errData.discrepancy_reason) {
+                // Return specific error for frontend UI to catch and prompt for reason
+                throw { needsReason: true, message: errData.discrepancy_reason }
             }
 
             toast.add({

@@ -183,6 +183,7 @@ const handleNotifications = (newItems, oldItems) => {
           if (latest.type === 'low_stock') severity = 'warn'
           if (latest.type === 'subscription_expiry') severity = 'warn' // To'q sariq
           if (latest.type === 'subscription_expired') severity = 'error' // Qizil
+          if (latest.type === 'cash_discrepancy') severity = 'error' // Qizil
         } 
         // 2. Announcement (Admin xabarlari)
         else if (latest.source === 'announcement') {

@@ -4,22 +4,22 @@
     @update:visible="$emit('update:visible', $event)"
     modal 
     :header="isClosing ? $t('pos.close_shift') : $t('pos.open_new_shift')" 
-    :style="{ width: '400px' }"
+    :style="{ width: '420px' }"
     class="shift-dialog"
   >
-    <div class="space-y-6 pt-2">
-      <!-- Icon/Header Illustration -->
-      <div class="flex flex-col items-center gap-2 mb-4">
-        <div class="w-16 h-16 rounded-3xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
-          <i class="pi pi-briefcase text-2xl" :class="isClosing ? 'text-rose-500' : 'text-emerald-500'"></i>
-        </div>
-        <p class="text-xs text-slate-500 font-bold tracking-widest text-center">
-           {{ isClosing ? $t('pos.cash_calculation') : $t('pos.prepare_cash_register') }}
-        </p>
-      </div>
-
+    <div class="space-y-4 pt-1">
       <!-- Opening Shift Inputs -->
       <div v-if="!isClosing" class="space-y-4">
+        <!-- Icon/Header Illustration only for opening -->
+        <div class="flex flex-col items-center gap-2 mb-6">
+          <div class="w-16 h-16 rounded-3xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
+            <i class="pi pi-briefcase text-2xl text-emerald-500"></i>
+          </div>
+          <p class="text-xs text-slate-500 font-bold tracking-widest text-center">
+             {{ $t('pos.prepare_cash_register') }}
+          </p>
+        </div>
+
         <div class="space-y-1.5">
           <label class="text-[13px] font-bold text-slate-400 ml-1">{{ $t('pos.starting_cash') }}</label>
           <InputNumber 
@@ -39,35 +39,26 @@
       </div>
 
       <!-- Closing Shift / Summary Section -->
-      <div v-else class="space-y-5">
+      <div v-else class="space-y-4">
         <!-- Shift Meta Info -->
-        <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2.5">
-           <div class="flex justify-between items-center text-[12px] font-black tracking-wider">
-             <span class="text-slate-400">{{ $t('pos.shift_id_status') }}</span>
-             <div class="flex items-center gap-2">
-               <span class="text-slate-800 dark:text-white">#{{ shift?.id }}</span>
-               <span :class="shift?.status === 'open' ? 'bg-emerald-500' : 'bg-slate-500'" class="w-1.5 h-1.5 rounded-full shadow-pulse"></span>
-               <span :class="shift?.status === 'open' ? 'text-emerald-500' : 'text-slate-500'">{{ (shift?.status === 'open' ? $t('pos.open_caps') : $t('pos.closed_caps')) }}</span>
-             </div>
-           </div>
-           <div class="flex justify-between items-center text-[12px] font-black tracking-wider">
-             <span class="text-slate-400">{{ $t('pos.opened_time') }}</span>
+        <div class="px-5 py-3.5 bg-slate-50 dark:bg-[#141b2d] rounded-2xl border border-slate-100 dark:border-[#1e293b]">
+           <div class="flex justify-between items-center text-[13px] font-bold">
+             <span class="text-slate-500 dark:text-slate-400">{{ $t('pos.opened_time') }}</span>
              <span class="text-slate-800 dark:text-white">{{ formatDate(shift?.opened_at || shift?.start_time || shift?.created_at) }}</span>
            </div>
         </div>
 
         <!-- Cash Details Grid -->
-        <!-- Summary Cards -->
         <div class="grid grid-cols-2 gap-3">
-          <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">{{ $t('pos.final_cash') }}</span>
-            <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
+          <div class="p-4 bg-slate-50 dark:bg-[#141b2d] rounded-2xl border border-slate-100 dark:border-[#1e293b] flex flex-col justify-center">
+            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">{{ $t('pos.final_cash') }}</span>
+            <span class="text-base font-black text-slate-800 dark:text-white font-outfit">
               {{ formatCurrency(displayCash) }}
             </span>
           </div>
-          <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <span class="text-[10px] font-black text-slate-400 tracking-widest block mb-1">{{ $t('pos.cash_balance') }}</span>
-            <span class="text-sm font-black text-slate-800 dark:text-white font-outfit">
+          <div class="p-4 bg-slate-50 dark:bg-[#141b2d] rounded-2xl border border-slate-100 dark:border-[#1e293b] flex flex-col justify-center">
+            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">{{ $t('pos.cash_balance') }}</span>
+            <span class="text-base font-black text-slate-800 dark:text-white font-outfit">
               {{ formatCurrency(displayNetIncome) }}
             </span>
           </div>
@@ -97,46 +88,69 @@
         </div>
 
         <!-- Money Input — faqat require_cash_count=true bo'lganda -->
-        <div v-if="shift?.status === 'open' && settingsStore.requireCashCount" class="space-y-2 animate-fadein">
-          <div class="flex items-center justify-between ml-1 mb-1">
-            <label class="text-[12px] font-black text-slate-400 tracking-widest block">{{ $t('pos.counted_cash_in_register') }}</label>
-            <span class="text-[10px] font-black text-rose-500 tracking-tighter bg-rose-50 dark:bg-rose-950/20 px-1.5 py-0.5 rounded-md border border-rose-100 dark:border-rose-800/30 animate-pulse">
-              {{ $t('common.required') }}
+        <div v-if="shift?.status === 'open' && settingsStore.requireCashCount" class="space-y-2 mt-2 animate-fadein">
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-[13px] font-bold text-slate-700 dark:text-slate-300">{{ $t('pos.counted_cash_in_register') }}</label>
+            <span class="text-[10px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-100 dark:border-rose-500/20">
+              Majburiy
             </span>
           </div>
-          <InputNumber 
-            v-model="cashCounted" 
-            class="w-full sr-input text-lg"
-            :min="0"
-            placeholder="0.00"
-            autofocus
-          />
+          <div class="p-1 bg-slate-50 dark:bg-[#141b2d] rounded-xl border border-slate-200 dark:border-[#1e293b]">
+            <InputNumber 
+              v-model="cashCounted" 
+              class="w-full text-xl font-bold bg-transparent border-none outline-none px-3 py-2 text-slate-800 dark:text-white dark:bg-transparent [&>input]:bg-transparent [&>input]:text-white [&>input]:border-none [&>input]:shadow-none"
+              :min="0"
+              placeholder="0"
+              autofocus
+            />
+          </div>
+        </div>
+
+        <!-- Discrepancy Reason -->
+        <div v-if="showReasonInput" class="space-y-2 mt-2 animate-fadein">
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-[13px] font-bold text-rose-500">{{ $t('pos.discrepancy_reason') }}</label>
+            <span class="text-[10px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-100 dark:border-rose-500/20">
+              Majburiy
+            </span>
+          </div>
+          <div v-if="discrepancyError" class="p-3 mb-2 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-500 text-[13px] font-bold leading-relaxed">
+            {{ discrepancyError }}
+          </div>
+          <div class="p-1 bg-slate-50 dark:bg-[#141b2d] rounded-xl border border-slate-200 dark:border-[#1e293b]">
+            <textarea 
+              v-model="discrepancyReason" 
+              class="w-full text-sm font-medium bg-transparent border-none outline-none p-3 text-slate-800 dark:text-white resize-none placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-0"
+              rows="3" 
+              :placeholder="$t('pos.enter_discrepancy_reason')"
+            ></textarea>
+          </div>
         </div>
 
         <!-- require_cash_count=false bo'lganda info xabari -->
         <div v-else-if="shift?.status === 'open' && !settingsStore.requireCashCount"
-             class="flex items-center gap-3 p-3.5 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 animate-fadein">
+             class="flex items-center gap-3 p-3.5 bg-slate-50 dark:bg-[#141b2d] rounded-2xl border border-slate-100 dark:border-[#1e293b] animate-fadein">
           <i class="pi pi-info-circle text-slate-400 text-lg"></i>
-          <span class="text-[12px] font-black text-slate-500 dark:text-slate-400 tracking-wider leading-tight">
+          <span class="text-[12px] font-bold text-slate-500 dark:text-slate-400 leading-tight">
             {{ $t('pos.shift_will_close_without_count') }}
           </span>
         </div>
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex gap-3">
+      <div class="flex gap-3 pt-3">
         <button 
           @click="$emit('update:visible', false)"
-          class="flex-1 py-4 px-4 rounded-2xl font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 transition-all hover:bg-slate-200"
+          class="flex-[1] py-3.5 px-4 rounded-[14px] font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-[#1e293b] transition-all hover:bg-slate-200 dark:hover:bg-[#334155] active:scale-[0.98]"
         >
-          {{ shift?.status === 'closed' ? $t('common.close') : $t('common.cancel') }}
+          {{ shift?.status === 'closed' ? $t('common.close') : 'Bekor qilish' }}
         </button>
         
         <!-- Case: Success / Download for closed shift -->
         <button 
           v-if="isClosing && shift?.status === 'closed'"
           @click="$emit('download', shift.id)"
-          class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl bg-[#151c2f] hover:bg-[#0f1422] shadow-slate-400/20"
+          class="flex-[1.5] py-3.5 px-4 rounded-[14px] font-bold text-white transition-all shadow-lg bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98]"
         >
            <i class="pi pi-download mr-2"></i>
            {{ $t('common.download') }}
@@ -146,10 +160,10 @@
         <button 
           v-else
           @click="handleSubmit"
-          :disabled="loading || (!isClosing && !hasBranchId) || (isClosing && settingsStore.requireCashCount && cashCounted === null)"
-          class="flex-[2] py-4 px-4 rounded-2xl font-bold text-white transition-all shadow-xl disabled:opacity-50"
+          :disabled="loading || (!isClosing && !hasBranchId) || (isClosing && settingsStore.requireCashCount && cashCounted === null) || (isClosing && showReasonInput && !discrepancyReason.trim())"
+          class="flex-[1.5] py-3.5 px-4 rounded-[14px] font-bold text-white transition-all shadow-lg disabled:opacity-50 active:scale-[0.98]"
           :class="[
-             isClosing ? 'bg-rose-500 hover:bg-rose-600 hover:shadow-rose-400/30' : 'bg-[#10b981] hover:bg-[#059669] hover:shadow-emerald-500/30'
+             isClosing ? 'bg-[#9f1239] hover:bg-[#be123c]' : 'bg-[#10b981] hover:bg-[#059669]'
           ]"
         >
            <i v-if="loading" class="pi pi-spin pi-spinner mr-2"></i>
@@ -175,14 +189,16 @@ const props = defineProps({
   isClosing: Boolean,
   shift: Object,
   xReport: Object, // Backend x-report ma'lumotlari
-  loading: Boolean
+  loading: Boolean,
+  discrepancyError: String
 })
 
-const emit = defineEmits(['update:visible', 'confirm', 'download'])
+const emit = defineEmits(['update:visible', 'update:discrepancyError', 'confirm', 'download'])
 
 const authStore = useAuthStore()
 const cashStart = ref(0)
-const cashCounted = ref(0)
+const cashCounted = ref(null)
+const discrepancyReason = ref('')
 
 const formatCurrency = (val) => settingsStore.formatPrice(val)
 
@@ -202,6 +218,21 @@ const displayCash = computed(() => {
       ?? 0
 })
 
+const expectedCash = computed(() => {
+  return props.xReport?.expected_cash
+      ?? props.shift?.expected_cash
+      ?? 0
+})
+
+const needsReasonLocal = computed(() => {
+  if (!settingsStore.requireCashCount || cashCounted.value === null) return false
+  const diff = Math.abs(cashCounted.value - parseFloat(expectedCash.value))
+  const threshold = parseFloat(settingsStore.cashDiscrepancyThreshold || 0)
+  return threshold > 0 && diff > threshold
+})
+
+const showReasonInput = computed(() => needsReasonLocal.value || !!props.discrepancyError)
+
 // net_income: xReport null bo'lsa shift dan olamiz
 const displayNetIncome = computed(() => {
   return props.xReport?.net_income
@@ -213,10 +244,16 @@ const displayNetIncome = computed(() => {
 })
 
 const handleSubmit = () => {
+  emit('update:discrepancyError', '')
   if (props.isClosing) {
-    // require_cash_count=false bo'lsa null yubor → backend cash_end qabul qilmaydi
-    const cashValue = settingsStore.requireCashCount ? cashCounted.value : null
-    emit('confirm', cashValue)
+    const payload = {}
+    if (settingsStore.requireCashCount && cashCounted.value !== null) {
+      payload.cash_end = cashCounted.value
+    }
+    if (showReasonInput.value && discrepancyReason.value) {
+      payload.discrepancy_reason = discrepancyReason.value
+    }
+    emit('confirm', payload)
   } else {
     const branchId = authStore.user?.branch_id || 
                      authStore.user?.worker?.branch || 
@@ -246,17 +283,19 @@ watch(() => props.visible, (newVal) => {
   if (newVal && !props.isClosing) {
     cashStart.value = 0
   } else if (newVal && props.isClosing) {
-    cashCounted.value = 0
+    cashCounted.value = null
+    discrepancyReason.value = ''
+    emit('update:discrepancyError', '')
   }
 })
 </script>
 
 <style scoped>
 :deep(.shift-dialog) {
-  border-radius: 32px !important;
+  border-radius: 24px !important;
   overflow: hidden;
-  border: none;
-  box-shadow: 0 40px 60px -20px rgb(0 0 0 / 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 40px 60px -20px rgb(0 0 0 / 0.5);
 }
 
 :deep(.shift-dialog .p-dialog-header) {
@@ -264,6 +303,7 @@ watch(() => props.visible, (newVal) => {
   background: white;
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
+  font-size: 1.25rem;
 }
 
 :deep(.shift-dialog .p-dialog-content) {
@@ -271,9 +311,19 @@ watch(() => props.visible, (newVal) => {
   background: white;
 }
 
+/* Premium Dark Mode Styling */
 .dark :deep(.shift-dialog .p-dialog-header),
 .dark :deep(.shift-dialog .p-dialog-content) {
-  background: #0f172a;
+  background: #1c1c1e;
+  color: #fff;
+}
+
+.dark :deep(.shift-dialog .p-dialog-header-icons button) {
+  color: #a1a1aa;
+}
+.dark :deep(.shift-dialog .p-dialog-header-icons button:hover) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 </style>
 

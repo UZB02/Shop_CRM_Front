@@ -1518,7 +1518,13 @@
       "title": "Касса ҳолати",
       "start": "Бошланғич касса",
       "income": "Тушум (нақд қийматда)",
-      "end": "Якуний касса"
+      "end": "Якуний касса",
+      "expected": "Кутилаётган қолдиқ",
+      "counted": "Саналдаги пул",
+      "difference": "Касса фарқи",
+      "shortage": "Камомад",
+      "surplus": "Ортиқча",
+      "reason": "Сабаби"
     },
     "tabs": {
       "general": "Умумий",
@@ -1863,7 +1869,9 @@
     "cashier_shortage": "Кассир {amount} кам",
     "cashier_surplus": "Кассир {amount} ортиқча",
     "counted_cash_in_register": "Кассада саналган пул",
-    "shift_will_close_without_count": "Смена нақд санашсиз ёпилади"
+    "shift_will_close_without_count": "Смена нақд санашсиз ёпилади",
+    "discrepancy_reason": "Касса фарқи сабаби",
+    "enter_discrepancy_reason": "Фарқ нима сабабдан келиб чиққанини батафсил ёзинг..."
   },
   "dashboard": {
     "center_title": "Бошқарув Маркази",

@@ -1527,7 +1527,13 @@
       "title": "Kassa holati",
       "start": "Boshlang'ich kassa",
       "income": "Tushum (naqd qiymatda)",
-      "end": "Yakuniy kassa"
+      "end": "Yakuniy kassa",
+      "expected": "Kutilayotgan qoldiq",
+      "counted": "Sanaldagi pul",
+      "difference": "Kassa farqi",
+      "shortage": "Kamomad",
+      "surplus": "Ortiqcha",
+      "reason": "Sababi"
     },
     "info": {
       "title": "Vaqt va xodimlar",
@@ -1866,7 +1872,9 @@
     "cashier_shortage": "Kassir {amount} kam",
     "cashier_surplus": "Kassir {amount} ortiqcha",
     "counted_cash_in_register": "Kassada sanalgan pul",
-    "shift_will_close_without_count": "Smena naqd sanashsiz yopiladi"
+    "shift_will_close_without_count": "Smena naqd sanashsiz yopiladi",
+    "discrepancy_reason": "Kassa farqi sababi",
+    "enter_discrepancy_reason": "Farq nima sababdan kelib chiqqanini batafsil yozing..."
   },
   "dashboard": {
     "center_title": "Boshqaruv Markazi",

@@ -221,7 +221,7 @@ const getSeverity = (item) => {
 
     // 1. Tizim Bildirishnomalari (Notification)
     if (item.source === 'notification') {
-        if (item.type === 'subscription_expired') return 'error'
+        if (item.type === 'subscription_expired' || item.type === 'cash_discrepancy') return 'error'
         if (item.type === 'subscription_expiry' || item.type === 'low_stock') return 'warn'
     } 
     
@@ -250,6 +250,7 @@ const getIcon = (type) => {
         case 'low_stock':            return 'pi pi-exclamation-triangle'
         case 'subscription_expiry':  return 'pi pi-clock'
         case 'subscription_expired': return 'pi pi-ban'
+        case 'cash_discrepancy':     return 'pi pi-exclamation-circle'
         
         // Announcement
         case 'info':                 return 'pi pi-info-circle'

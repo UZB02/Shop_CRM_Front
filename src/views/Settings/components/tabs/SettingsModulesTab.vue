@@ -85,6 +85,29 @@
 
     <template v-if="planFeatures.has_shift !== false">
       <SettingRow v-model="form.require_cash_count" :label="$t('settings.modules.cash_count_label')" :desc="$t('settings.modules.cash_count_desc')" :disabled="!form.shift_enabled || readonly" :is-dirty="isFieldDirty('require_cash_count')" />
+      
+      <div class="settings-row" :class="{'opacity-40 pointer-events-none': !form.shift_enabled || readonly}">
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <p class="row-label">{{ $t('settings.modules.cash_discrepancy_threshold_label', 'Kassa farqi ruxsati (so\'m)') }}</p>
+            <span v-if="isFieldDirty('cash_discrepancy_threshold')" class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+          </div>
+          <p class="row-desc">{{ $t('settings.modules.cash_discrepancy_threshold_desc', 'Smenani yopishda shuncha so\'mgacha farqqa ruxsat beriladi') }}</p>
+        </div>
+        <div class="w-40">
+          <InputNumber 
+            v-model="form.cash_discrepancy_threshold" 
+            inputId="cash_discrepancy_threshold" 
+            class="w-full settings-input !p-0 [&>input]:w-full [&>input]:bg-transparent [&>input]:border-none [&>input]:outline-none [&>input]:px-3 [&>input]:py-2" 
+            :class="{'ring-2 ring-amber-500/20 border-amber-500/50': isFieldDirty('cash_discrepancy_threshold')}"
+            :min="0" 
+            :use-grouping="true" 
+            :disabled="readonly" 
+            placeholder="0" 
+          />
+        </div>
+      </div>
+
       <SettingRow v-model="form.auto_pdf_on_smena_close" :label="$t('settings.modules.auto_pdf_label')" :desc="$t('settings.modules.auto_pdf_desc')" :disabled="!form.shift_enabled || readonly" :is-dirty="isFieldDirty('auto_pdf_on_smena_close')" />
     </template>
   </div>
@@ -95,6 +118,7 @@ import { watch } from 'vue'
 import SettingRow from './SettingRow.vue'
 import SectionHeader from './SectionHeader.vue'
 import PlanLockBadge from '@/components/PlanLockBadge.vue'
+import InputNumber from 'primevue/inputnumber'
 
 const props = defineProps({
   form: Object,
@@ -109,6 +133,7 @@ watch(() => props.form.shift_enabled, (val) => {
   if (!val) {
     props.form.require_cash_count = false
     props.form.shifts_per_day = 1
+    props.form.cash_discrepancy_threshold = 0
   }
 })
 </script>

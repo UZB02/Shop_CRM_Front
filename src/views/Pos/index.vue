@@ -130,6 +130,8 @@
         :shift="activeShift" 
         :x-report="activeXReport"
         :loading="posLoading" 
+        :discrepancy-error="shiftDiscrepancyError"
+        @update:discrepancy-error="shiftDiscrepancyError = $event"
         @confirm="onShiftConfirm"
         @download="onDownloadShift"
       />
@@ -253,6 +255,7 @@
   }
 
 const showShiftModal = ref(false)
+const shiftDiscrepancyError = ref('')
 const showCheckout = ref(false)
 const showReceipt = ref(false)
 const lastTransaction = ref(null)
@@ -352,13 +355,18 @@ const handleShiftAction = async () => {
 }
 
 const onShiftConfirm = async (data) => {
-  // activeShift bo'lsa smena yopiladi: data faqat cashCounted summasi
-  // activeShift bo'lmasa smena ochiladi: data = { branch, cash_start }
-  let success = activeShift.value 
-    ? await closeShift(data) 
-    : await openShift(data.branch, data.cash_start)
-    
-  if (success) showShiftModal.value = false
+  shiftDiscrepancyError.value = ''
+  try {
+    let success = activeShift.value 
+      ? await closeShift(data) 
+      : await openShift(data.branch, data.cash_start)
+      
+    if (success) showShiftModal.value = false
+  } catch (err) {
+    if (err && err.needsReason) {
+      shiftDiscrepancyError.value = err.message
+    }
+  }
 }
 
 const onCheckoutConfirm = async (paymentData) => {
