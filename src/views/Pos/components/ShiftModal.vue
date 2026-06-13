@@ -1,330 +1,434 @@
 <template>
-  <Dialog 
-    :visible="visible" 
-    @update:visible="$emit('update:visible', $event)"
-    modal 
-    :header="isClosing ? $t('pos.close_shift') : $t('pos.open_new_shift')" 
-    :style="{ width: '420px' }"
-    class="shift-dialog"
-  >
-    <div class="space-y-4 pt-1">
-      <!-- Opening Shift Inputs -->
-      <div v-if="!isClosing" class="space-y-4">
-        <!-- Icon/Header Illustration only for opening -->
-        <div class="flex flex-col items-center gap-2 mb-6">
-          <div class="w-16 h-16 rounded-3xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
-            <i class="pi pi-briefcase text-2xl text-emerald-500"></i>
-          </div>
-          <p class="text-xs text-slate-500 font-bold tracking-widest text-center">
-             {{ $t('pos.prepare_cash_register') }}
-          </p>
-        </div>
+  <Teleport to="body">
+    <Transition name="modal-fade">
+      <div
+        v-if="visible"
+        class="fixed inset-0 z-[300] flex items-center justify-center p-4"
+        @mousedown.self="close"
+      >
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="close" />
 
-        <div class="space-y-1.5">
-          <label class="text-[13px] font-bold text-slate-400 ml-1">{{ $t('pos.starting_cash') }}</label>
-          <InputNumber 
-            v-model="cashStart" 
-            class="w-full sr-input"
-            :min="0"
-            placeholder="0.00"
-            autofocus
-          />
-        </div>
-        <div class="p-3 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-500/10 flex items-center gap-3">
-          <i class="pi pi-info-circle text-emerald-500"></i>
-          <span class="text-[12px] font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">
-            {{ $t('pos.shift_opened_in_branch', { branch: authStore.user?.branch_name || authStore.user?.worker?.branch_name || $t('pos.unselected') }) }}
-          </span>
+        <!-- ── Modal Panel ──────────────────────────────────────────────── -->
+        <div class="modal-panel relative w-full max-w-sm flex flex-col rounded-3xl overflow-hidden">
+
+          <!-- OPEN SHIFT -->
+          <template v-if="!isClosing">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-5 pt-5 pb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-2xl bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center">
+                  <i class="pi pi-play text-emerald-400 text-sm" />
+                </div>
+                <div>
+                  <h2 class="text-[15px] font-black text-white leading-none">{{ $t('pos.open_new_shift') }}</h2>
+                  <p class="text-[11px] text-slate-500 font-medium mt-0.5">{{ $t('pos.prepare_cash_register') }}</p>
+                </div>
+              </div>
+              <button @click="close" class="close-btn"><i class="pi pi-times text-xs" /></button>
+            </div>
+
+            <div class="px-5 pb-5 space-y-3">
+              <!-- Branch -->
+              <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl bg-emerald-500/8 border border-emerald-500/12">
+                <i class="pi pi-map-marker text-emerald-400 text-sm flex-shrink-0" />
+                <span class="text-[13px] font-bold text-emerald-300 truncate">
+                  {{ authStore.user?.branch_name || authStore.user?.worker?.branch_name || $t('pos.unselected') }}
+                </span>
+              </div>
+
+              <!-- Cash start -->
+              <div>
+                <label class="block text-[11px] font-black text-slate-500 tracking-widest uppercase mb-2">
+                  {{ $t('pos.starting_cash') }}
+                </label>
+                <InputNumber
+                  v-model="cashStart"
+                  class="shift-input w-full"
+                  :min="0"
+                  placeholder="0"
+                  autofocus
+                  :use-grouping="true"
+                />
+              </div>
+
+              <!-- Actions -->
+              <div class="flex gap-2.5 pt-1">
+                <button @click="close" class="btn-cancel flex-1">{{ 'Bekor qilish' }}</button>
+                <button
+                  @click="handleSubmit"
+                  :disabled="loading || !hasBranchId"
+                  class="btn-primary flex-[2] bg-emerald-500 hover:bg-emerald-400 shadow-emerald-500/25"
+                >
+                  <i v-if="loading" class="pi pi-spin pi-spinner mr-1.5" />
+                  <i v-else class="pi pi-play mr-1.5" />
+                  {{ $t('pos.open_shift') }}
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <!-- CLOSE SHIFT -->
+          <template v-else>
+            <!-- Header -->
+            <div class="flex items-center justify-between px-5 pt-5 pb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-2xl bg-rose-500/15 border border-rose-500/20 flex items-center justify-center">
+                  <i class="pi pi-lock text-rose-400 text-sm" />
+                </div>
+                <div>
+                  <h2 class="text-[15px] font-black text-white leading-none">{{ $t('pos.close_shift') }}</h2>
+                  <p class="text-[11px] text-slate-500 font-medium mt-0.5">
+                    <i class="pi pi-clock mr-1" />
+                    {{ formatDate(shift?.opened_at || shift?.start_time || shift?.created_at) }}
+                  </p>
+                </div>
+              </div>
+              <button @click="close" class="close-btn"><i class="pi pi-times text-xs" /></button>
+            </div>
+
+            <div class="px-5 pb-5 space-y-3">
+              <!-- Stats: horizontal compact row -->
+              <div class="grid grid-cols-2 gap-2">
+                <div class="stat-row">
+                  <i class="pi pi-wallet text-emerald-400 text-sm" />
+                  <div>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{{ $t('pos.final_cash') }}</p>
+                    <p class="text-[13px] font-black text-white">{{ formatCurrency(displayCash) }}</p>
+                  </div>
+                </div>
+                <div class="stat-row">
+                  <i class="pi pi-chart-bar text-violet-400 text-sm" />
+                  <div>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{{ $t('pos.cash_balance') }}</p>
+                    <p class="text-[13px] font-black text-white">{{ formatCurrency(displayNetIncome) }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Difference badge (closed shift) -->
+              <div
+                v-if="(shift?.status === 'closed' || shift?.cash_difference !== null) && shift?.cash_difference !== undefined"
+                class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl border text-[12px] font-bold"
+                :class="diffClass.wrap"
+              >
+                <i :class="['text-sm', diffClass.pi]" />
+                <span :class="diffClass.text">{{ diffMessage }}</span>
+              </div>
+
+              <!-- Cash count input -->
+              <div v-if="shift?.status === 'open' && settingsStore.requireCashCount">
+                <div class="flex items-center justify-between mb-2">
+                  <label class="text-[11px] font-black text-slate-400 tracking-widest uppercase">
+                    {{ $t('pos.counted_cash_in_register') }}
+                  </label>
+                  <span class="badge-required">Majburiy</span>
+                </div>
+                <InputNumber
+                  v-model="cashCounted"
+                  class="shift-input w-full"
+                  :min="0"
+                  placeholder="0"
+                  autofocus
+                  :use-grouping="true"
+                />
+              </div>
+
+              <!-- No count needed info -->
+              <div
+                v-else-if="shift?.status === 'open' && !settingsStore.requireCashCount"
+                class="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-white/4 border border-white/8 text-[12px] font-medium text-slate-400"
+              >
+                <i class="pi pi-info-circle text-slate-500 flex-shrink-0" />
+                {{ $t('pos.shift_will_close_without_count') }}
+              </div>
+
+              <!-- Discrepancy reason -->
+              <div v-if="showReasonInput" class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[11px] font-black text-rose-400 tracking-widest uppercase">
+                    {{ $t('pos.discrepancy_reason') }}
+                  </label>
+                  <span class="badge-required">Majburiy</span>
+                </div>
+                <div
+                  v-if="discrepancyError"
+                  class="flex items-start gap-2 px-3.5 py-2.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-[12px] font-bold text-rose-300"
+                >
+                  <i class="pi pi-exclamation-triangle text-rose-400 flex-shrink-0 mt-px" />
+                  {{ discrepancyError }}
+                </div>
+                <textarea
+                  v-model="discrepancyReason"
+                  class="reason-textarea"
+                  rows="2"
+                  :placeholder="$t('pos.enter_discrepancy_reason')"
+                />
+              </div>
+
+              <!-- Actions -->
+              <div class="flex gap-2.5 pt-1">
+                <button @click="close" class="btn-cancel flex-1">
+                  {{ shift?.status === 'closed' ? $t('common.close') : 'Bekor qilish' }}
+                </button>
+
+                <!-- Download (closed) -->
+                <button
+                  v-if="shift?.status === 'closed'"
+                  @click="$emit('download', shift.id)"
+                  class="btn-primary flex-[2] bg-emerald-600 hover:bg-emerald-500 shadow-emerald-500/20"
+                >
+                  <i class="pi pi-download mr-1.5" />
+                  {{ $t('common.download') }}
+                </button>
+
+                <!-- Submit (open) -->
+                <button
+                  v-else
+                  @click="handleSubmit"
+                  :disabled="submitDisabled"
+                  class="btn-primary flex-[2] bg-rose-600 hover:bg-rose-500 shadow-rose-500/20"
+                >
+                  <i v-if="loading" class="pi pi-spin pi-spinner mr-1.5" />
+                  <i v-else class="pi pi-lock mr-1.5" />
+                  {{ $t('pos.close_shift') }}
+                </button>
+              </div>
+            </div>
+          </template>
+
         </div>
       </div>
-
-      <!-- Closing Shift / Summary Section -->
-      <div v-else class="space-y-4">
-        <!-- Shift Meta Info -->
-        <div class="px-5 py-3.5 bg-slate-50 dark:bg-[#141b2d] rounded-2xl border border-slate-100 dark:border-[#1e293b]">
-           <div class="flex justify-between items-center text-[13px] font-bold">
-             <span class="text-slate-500 dark:text-slate-400">{{ $t('pos.opened_time') }}</span>
-             <span class="text-slate-800 dark:text-white">{{ formatDate(shift?.opened_at || shift?.start_time || shift?.created_at) }}</span>
-           </div>
-        </div>
-
-        <!-- Cash Details Grid -->
-        <div class="grid grid-cols-2 gap-3">
-          <div class="p-4 bg-slate-50 dark:bg-[#141b2d] rounded-2xl border border-slate-100 dark:border-[#1e293b] flex flex-col justify-center">
-            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">{{ $t('pos.final_cash') }}</span>
-            <span class="text-base font-black text-slate-800 dark:text-white font-outfit">
-              {{ formatCurrency(displayCash) }}
-            </span>
-          </div>
-          <div class="p-4 bg-slate-50 dark:bg-[#141b2d] rounded-2xl border border-slate-100 dark:border-[#1e293b] flex flex-col justify-center">
-            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">{{ $t('pos.cash_balance') }}</span>
-            <span class="text-base font-black text-slate-800 dark:text-white font-outfit">
-              {{ formatCurrency(displayNetIncome) }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Difference / Status Section (Faqat yopiq smenada) -->
-        <div v-if="(shift?.status === 'closed' || shift?.cash_difference !== null) && shift?.cash_difference !== undefined" class="animate-fadein">
-           <!-- Correct Cash -->
-           <div v-if="parseFloat(shift.cash_difference || 0) === 0" class="flex items-center gap-3 p-3.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl">
-              <i class="pi pi-check-circle text-emerald-500 text-lg"></i>
-              <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">✅ {{ $t('pos.cash_correct_no_diff') }}</span>
-           </div>
-           <!-- Shortage (Kamomad) -->
-           <div v-else-if="parseFloat(shift.cash_difference || 0) < 0" class="flex items-center gap-3 p-3.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-500/20 rounded-2xl">
-              <i class="pi pi-exclamation-triangle text-rose-500 text-lg"></i>
-              <span class="text-[12px] font-black text-rose-600 dark:text-rose-400 tracking-wider leading-tight">
-                ⚠️ {{ $t('pos.cashier_shortage', { amount: formatCurrency(Math.abs(shift.cash_difference)) }) }}
-              </span>
-           </div>
-           <!-- Extra (Ortiqcha) -->
-           <div v-else class="flex items-center gap-3 p-3.5 bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-500/20 rounded-2xl">
-              <i class="pi pi-info-circle text-amber-500 text-lg"></i>
-              <span class="text-[12px] font-black text-amber-600 dark:text-amber-400 tracking-wider leading-tight">
-                ℹ️ {{ $t('pos.cashier_surplus', { amount: formatCurrency(shift.cash_difference) }) }}
-              </span>
-           </div>
-        </div>
-
-        <!-- Money Input — faqat require_cash_count=true bo'lganda -->
-        <div v-if="shift?.status === 'open' && settingsStore.requireCashCount" class="space-y-2 mt-2 animate-fadein">
-          <div class="flex items-center justify-between mb-1">
-            <label class="text-[13px] font-bold text-slate-700 dark:text-slate-300">{{ $t('pos.counted_cash_in_register') }}</label>
-            <span class="text-[10px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-100 dark:border-rose-500/20">
-              Majburiy
-            </span>
-          </div>
-          <div class="p-1 bg-slate-50 dark:bg-[#141b2d] rounded-xl border border-slate-200 dark:border-[#1e293b]">
-            <InputNumber 
-              v-model="cashCounted" 
-              class="w-full text-xl font-bold bg-transparent border-none outline-none px-3 py-2 text-slate-800 dark:text-white dark:bg-transparent [&>input]:bg-transparent [&>input]:text-white [&>input]:border-none [&>input]:shadow-none"
-              :min="0"
-              placeholder="0"
-              autofocus
-            />
-          </div>
-        </div>
-
-        <!-- Discrepancy Reason -->
-        <div v-if="showReasonInput" class="space-y-2 mt-2 animate-fadein">
-          <div class="flex items-center justify-between mb-1">
-            <label class="text-[13px] font-bold text-rose-500">{{ $t('pos.discrepancy_reason') }}</label>
-            <span class="text-[10px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-100 dark:border-rose-500/20">
-              Majburiy
-            </span>
-          </div>
-          <div v-if="discrepancyError" class="p-3 mb-2 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-500 text-[13px] font-bold leading-relaxed">
-            {{ discrepancyError }}
-          </div>
-          <div class="p-1 bg-slate-50 dark:bg-[#141b2d] rounded-xl border border-slate-200 dark:border-[#1e293b]">
-            <textarea 
-              v-model="discrepancyReason" 
-              class="w-full text-sm font-medium bg-transparent border-none outline-none p-3 text-slate-800 dark:text-white resize-none placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-0"
-              rows="3" 
-              :placeholder="$t('pos.enter_discrepancy_reason')"
-            ></textarea>
-          </div>
-        </div>
-
-        <!-- require_cash_count=false bo'lganda info xabari -->
-        <div v-else-if="shift?.status === 'open' && !settingsStore.requireCashCount"
-             class="flex items-center gap-3 p-3.5 bg-slate-50 dark:bg-[#141b2d] rounded-2xl border border-slate-100 dark:border-[#1e293b] animate-fadein">
-          <i class="pi pi-info-circle text-slate-400 text-lg"></i>
-          <span class="text-[12px] font-bold text-slate-500 dark:text-slate-400 leading-tight">
-            {{ $t('pos.shift_will_close_without_count') }}
-          </span>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex gap-3 pt-3">
-        <button 
-          @click="$emit('update:visible', false)"
-          class="flex-[1] py-3.5 px-4 rounded-[14px] font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-[#1e293b] transition-all hover:bg-slate-200 dark:hover:bg-[#334155] active:scale-[0.98]"
-        >
-          {{ shift?.status === 'closed' ? $t('common.close') : 'Bekor qilish' }}
-        </button>
-        
-        <!-- Case: Success / Download for closed shift -->
-        <button 
-          v-if="isClosing && shift?.status === 'closed'"
-          @click="$emit('download', shift.id)"
-          class="flex-[1.5] py-3.5 px-4 rounded-[14px] font-bold text-white transition-all shadow-lg bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98]"
-        >
-           <i class="pi pi-download mr-2"></i>
-           {{ $t('common.download') }}
-        </button>
-
-        <!-- Case: Action for opening/closing -->
-        <button 
-          v-else
-          @click="handleSubmit"
-          :disabled="loading || (!isClosing && !hasBranchId) || (isClosing && settingsStore.requireCashCount && cashCounted === null) || (isClosing && showReasonInput && !discrepancyReason.trim())"
-          class="flex-[1.5] py-3.5 px-4 rounded-[14px] font-bold text-white transition-all shadow-lg disabled:opacity-50 active:scale-[0.98]"
-          :class="[
-             isClosing ? 'bg-[#9f1239] hover:bg-[#be123c]' : 'bg-[#10b981] hover:bg-[#059669]'
-          ]"
-        >
-           <i v-if="loading" class="pi pi-spin pi-spinner mr-2"></i>
-           {{ isClosing ? $t('pos.close_shift') : $t('pos.open_shift') }}
-        </button>
-      </div>
-    </div>
-  </Dialog>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup>
 import { ref, watch, computed } from 'vue'
-import Dialog from 'primevue/dialog'
+import { useI18n } from 'vue-i18n'
 import InputNumber from 'primevue/inputnumber'
-import { useAuthStore } from '@/store/auth'
-
+import { useAuthStore }     from '@/store/auth'
 import { useSettingsStore } from '@/store/settings'
 
+const { t }         = useI18n()
+const authStore     = useAuthStore()
 const settingsStore = useSettingsStore()
 
 const props = defineProps({
-  visible: Boolean,
-  isClosing: Boolean,
-  shift: Object,
-  xReport: Object, // Backend x-report ma'lumotlari
-  loading: Boolean,
-  discrepancyError: String
+  visible:          Boolean,
+  isClosing:        Boolean,
+  shift:            Object,
+  xReport:          Object,
+  loading:          Boolean,
+  discrepancyError: String,
 })
-
 const emit = defineEmits(['update:visible', 'update:discrepancyError', 'confirm', 'download'])
 
-const authStore = useAuthStore()
-const cashStart = ref(0)
-const cashCounted = ref(null)
+// ── State ─────────────────────────────────────────────────────────────────────
+const cashStart         = ref(0)
+const cashCounted       = ref(null)
 const discrepancyReason = ref('')
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
 const formatCurrency = (val) => settingsStore.formatPrice(val)
+const formatDate = (val) => {
+  if (!val) return ''
+  const d = new Date(String(val).replace('|', '').trim())
+  return isNaN(d.getTime()) ? val : d.toLocaleString('uz-UZ')
+}
 
-const hasBranchId = computed(() => !!(authStore.user?.branch_id || authStore.user?.worker?.branch || authStore.user?.branch))
-
-// Backend logic: cash_end bo'lmasa, x-report yoki shift dagi expected_cash ni ko'rsatamiz
+// ── Display values ────────────────────────────────────────────────────────────
 const displayCash = computed(() => {
-  if (props.shift?.status === 'closed' && props.shift?.cash_end !== null) {
-     return props.shift.cash_end
-  }
-  // xReport null bo'lsa → shift.expected_cash dan olamiz
-  return props.xReport?.expected_cash
-      ?? props.xReport?.cash_end
-      ?? props.xReport?.total_cash
-      ?? props.shift?.expected_cash
-      ?? props.shift?.cash_start
-      ?? 0
+  if (props.shift?.status === 'closed' && props.shift?.cash_end !== null) return props.shift.cash_end
+  return props.xReport?.expected_cash ?? props.xReport?.cash_end ?? props.xReport?.total_cash
+      ?? props.shift?.expected_cash ?? props.shift?.cash_start ?? 0
 })
 
-const expectedCash = computed(() => {
-  return props.xReport?.expected_cash
-      ?? props.shift?.expected_cash
-      ?? 0
-})
+const displayNetIncome = computed(() =>
+  props.xReport?.net_income ?? props.xReport?.total_income ?? props.xReport?.income
+  ?? props.shift?.net_income ?? props.shift?.expected_cash ?? 0
+)
 
+const expectedCash = computed(() =>
+  props.xReport?.expected_cash ?? props.shift?.expected_cash ?? 0
+)
+
+// ── Discrepancy ───────────────────────────────────────────────────────────────
 const needsReasonLocal = computed(() => {
   if (!settingsStore.requireCashCount || cashCounted.value === null) return false
-  const diff = Math.abs(cashCounted.value - parseFloat(expectedCash.value))
+  const diff      = Math.abs(cashCounted.value - parseFloat(expectedCash.value))
   const threshold = parseFloat(settingsStore.cashDiscrepancyThreshold || 0)
   return threshold > 0 && diff > threshold
 })
-
 const showReasonInput = computed(() => needsReasonLocal.value || !!props.discrepancyError)
 
-// net_income: xReport null bo'lsa shift dan olamiz
-const displayNetIncome = computed(() => {
-  return props.xReport?.net_income
-      ?? props.xReport?.total_income
-      ?? props.xReport?.income
-      ?? props.shift?.net_income
-      ?? props.shift?.expected_cash
-      ?? 0
+// ── Difference badge ──────────────────────────────────────────────────────────
+const diffClass = computed(() => {
+  const d = parseFloat(props.shift?.cash_difference || 0)
+  if (d === 0) return { wrap: 'bg-emerald-500/10 border-emerald-500/20', pi: 'pi pi-check-circle text-emerald-400', text: 'text-emerald-300' }
+  if (d < 0)  return { wrap: 'bg-rose-500/10 border-rose-500/20',        pi: 'pi pi-exclamation-triangle text-rose-400', text: 'text-rose-300' }
+  return              { wrap: 'bg-amber-500/10 border-amber-500/20',      pi: 'pi pi-info-circle text-amber-400',  text: 'text-amber-300' }
 })
+const diffMessage = computed(() => {
+  const d = parseFloat(props.shift?.cash_difference || 0)
+  if (d === 0) return t('pos.cash_correct_no_diff')     || 'Kassa to\'g\'ri, farq yo\'q'
+  if (d < 0)  return t('pos.cashier_shortage', { amount: formatCurrency(Math.abs(d)) }) || `Kamomad: ${formatCurrency(Math.abs(d))}`
+  return              t('pos.cashier_surplus',  { amount: formatCurrency(d) })           || `Ortiqcha: ${formatCurrency(d)}`
+})
+
+// ── Submit ────────────────────────────────────────────────────────────────────
+const hasBranchId    = computed(() => !!(authStore.user?.branch_id || authStore.user?.worker?.branch || authStore.user?.branch))
+const submitDisabled = computed(() => {
+  if (props.loading) return true
+  if (!props.isClosing) return !hasBranchId.value
+  if (settingsStore.requireCashCount && cashCounted.value === null) return true
+  if (showReasonInput.value && !discrepancyReason.value.trim()) return true
+  return false
+})
+
+const close = () => emit('update:visible', false)
 
 const handleSubmit = () => {
   emit('update:discrepancyError', '')
   if (props.isClosing) {
     const payload = {}
-    if (settingsStore.requireCashCount && cashCounted.value !== null) {
-      payload.cash_end = cashCounted.value
-    }
-    if (showReasonInput.value && discrepancyReason.value) {
-      payload.discrepancy_reason = discrepancyReason.value
-    }
+    if (settingsStore.requireCashCount && cashCounted.value !== null) payload.cash_end = cashCounted.value
+    if (showReasonInput.value && discrepancyReason.value) payload.discrepancy_reason = discrepancyReason.value
     emit('confirm', payload)
   } else {
-    const branchId = authStore.user?.branch_id || 
-                     authStore.user?.worker?.branch || 
-                     authStore.user?.branch;
-
-    if (!branchId) {
-      console.error('❌ FATAL: Branch ID not found in user profile');
-    }
-
-    emit('confirm', { 
-      branch: branchId, 
-      cash_start: cashStart.value 
+    emit('confirm', {
+      branch:     authStore.user?.branch_id || authStore.user?.worker?.branch || authStore.user?.branch,
+      cash_start: cashStart.value,
     })
   }
 }
 
-const formatDate = (val) => {
-  if (!val) return ''
-  // Sring formatni tekshiramiz: "2024-04-07 | 10:41" dagi "|" JSga xalaqit beradi
-  let dateStr = String(val).replace('|', '').trim()
-  const d = new Date(dateStr)
-  return isNaN(d.getTime()) ? val : d.toLocaleString('uz-UZ')
-}
-
-// Reset state when opening
-watch(() => props.visible, (newVal) => {
-  if (newVal && !props.isClosing) {
-    cashStart.value = 0
-  } else if (newVal && props.isClosing) {
-    cashCounted.value = null
-    discrepancyReason.value = ''
-    emit('update:discrepancyError', '')
-  }
+watch(() => props.visible, (val) => {
+  if (!val) return
+  if (!props.isClosing) { cashStart.value = 0 }
+  else { cashCounted.value = null; discrepancyReason.value = ''; emit('update:discrepancyError', '') }
 })
 </script>
 
 <style scoped>
-:deep(.shift-dialog) {
-  border-radius: 24px !important;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 40px 60px -20px rgb(0 0 0 / 0.5);
+/* ── Panel ───────────────────────────────────────────────── */
+.modal-panel {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 32px 64px -16px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03) inset;
 }
 
-:deep(.shift-dialog .p-dialog-header) {
-  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
-  background: white;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
-  font-size: 1.25rem;
+/* ── Close button ────────────────────────────────────────── */
+.close-btn {
+  width: 30px; height: 30px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: #64748b;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.close-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.close-btn:active { transform: scale(0.9); }
+
+/* ── Stat rows ───────────────────────────────────────────── */
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
 }
 
-:deep(.shift-dialog .p-dialog-content) {
-  padding: 0 1.5rem 1.5rem 1.5rem;
-  background: white;
+/* ── Badges ──────────────────────────────────────────────── */
+.badge-required {
+  font-size: 9px; font-weight: 900;
+  color: #f87171;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-/* Premium Dark Mode Styling */
-.dark :deep(.shift-dialog .p-dialog-header),
-.dark :deep(.shift-dialog .p-dialog-content) {
-  background: #1c1c1e;
+/* ── InputNumber ─────────────────────────────────────────── */
+:deep(.shift-input .p-inputnumber-input) {
+  width: 100%;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 14px !important;
+  padding: 12px 16px !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color .2s, background .2s;
+}
+:deep(.shift-input .p-inputnumber-input:focus) {
+  border-color: rgba(16,185,129,0.35) !important;
+  background: rgba(255,255,255,0.07) !important;
+}
+:deep(.shift-input .p-inputnumber-input::placeholder) { color: #374151 !important; font-weight: 700 !important; }
+
+/* ── Textarea ────────────────────────────────────────────── */
+.reason-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #e2e8f0;
+  resize: none;
+  outline: none;
+  transition: border-color .2s;
+}
+.reason-textarea:focus { border-color: rgba(239,68,68,0.4); }
+.reason-textarea::placeholder { color: #374151; }
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-cancel {
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-size: 13px; font-weight: 800;
+  color: #64748b;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: all .15s;
+}
+.btn-cancel:hover { background: rgba(255,255,255,0.08); color: #94a3b8; }
+.btn-cancel:active { transform: scale(0.98); }
+
+.btn-primary {
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-size: 13px; font-weight: 900;
   color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+  box-shadow: 0 4px 16px var(--tw-shadow-color, rgba(0,0,0,0.3));
 }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
 
-.dark :deep(.shift-dialog .p-dialog-header-icons button) {
-  color: #a1a1aa;
+/* ── Transition ──────────────────────────────────────────── */
+.modal-fade-enter-active { transition: opacity .25s ease; }
+.modal-fade-leave-active { transition: opacity .2s ease; }
+.modal-fade-enter-from,
+.modal-fade-leave-to     { opacity: 0; }
+
+.modal-fade-enter-active .modal-panel,
+.modal-fade-leave-active  .modal-panel {
+  transition: transform .28s cubic-bezier(0.22,1,0.36,1), opacity .25s ease;
 }
-.dark :deep(.shift-dialog .p-dialog-header-icons button:hover) {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-}
+.modal-fade-enter-from .modal-panel { transform: scale(0.95) translateY(10px); opacity: 0; }
+.modal-fade-leave-to  .modal-panel  { transform: scale(0.97) translateY(6px);  opacity: 0; }
+
+.font-outfit { font-family: 'Outfit', sans-serif; }
 </style>
-
-

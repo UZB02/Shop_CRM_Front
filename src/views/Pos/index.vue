@@ -317,7 +317,16 @@ const onShiftConfirm = async (data) => {
       : await openShift(data.branch, data.cash_start)
     if (success) showShiftModal.value = false
   } catch (err) {
-    if (err?.needsReason) shiftDiscrepancyError.value = err.message
+    if (err?.needsReason) {
+      // Backend xabar ichidagi -266700.00 kabi sonlarni formatlash
+      shiftDiscrepancyError.value = (err.message || '').replace(
+        /(-?\d[\d\s]*(?:\.\d+)?)/g,
+        (match) => {
+          const num = parseFloat(match.replace(/\s/g, ''))
+          return isNaN(num) ? match : settingsStore.formatNumber(Math.abs(num))
+        }
+      )
+    }
   }
 }
 
