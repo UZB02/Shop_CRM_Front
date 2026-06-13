@@ -1,94 +1,53 @@
 <template>
-  <div class="pos-workspace min-h-screen font-inter text-slate-900 dark:text-slate-100 flex flex-col pt-0 transition-colors duration-300">
-    <!-- RetailOS Style Header -->
-    <header class="bg-white dark:bg-[#0f172a] border-b border-slate-100 dark:border-slate-800/60 px-8 py-3 flex items-center justify-between gap-8 sticky top-0 z-50">
-      <div class="flex items-center flex-1 mr-4">
-        <!-- Logo removed as requested -->
+  <div class="pos-workspace min-h-screen font-inter text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-300">
 
-        <!-- Integrated Search -->
-        <div class="hidden lg:flex w-full max-w-[400px] relative group">
-          <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-emerald-500 transition-colors" />
-          <input 
-            ref="searchRef"
-            v-model="searchQueryGlobal" 
-            type="text" 
-            :placeholder="$t('pos.search_placeholder')" 
-            @keyup.enter="handleSearchEnter"
-            class="w-full bg-[#f4f7fa] dark:bg-slate-950/40 border-none rounded-2xl pl-12 pr-4 py-3.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 dark:focus:ring-emerald-500/10 placeholder:text-slate-300 dark:placeholder:text-slate-800 dark:text-slate-200"
-          />
-        </div>
-      </div>
+    <!-- ── Header ──────────────────────────────────────────────────────── -->
+    <PosHeader
+      v-model:search-query="searchQueryGlobal"
+      :active-shift="activeShift"
+      :is-shift-enabled="settingsStore.isShiftEnabled && settingsStore.hasPlanShift"
+      :worker-name="activeShift?.worker_open_name || authStore.user?.full_name || ''"
+      @search-enter="handleSearchEnter"
+      @search-ref="(el) => (searchRef = el)"
+      @shift-action="handleShiftAction"
+    >
+      <template #printer>
+        <PrinterStatusBar />
+      </template>
+    </PosHeader>
 
-      <!-- Center-Right Info Sections -->
-      <div class="flex items-center gap-8">
-        <!-- Do'kon Info -->
-        <div class="hidden xl:flex items-center gap-4 text-right">
-           <div class="flex flex-col">
-              <span class="text-[11px] font-black text-slate-400 tracking-widest leading-none mb-1">{{ $t('pos.store') }}</span>
-              <span class="text-xs font-black text-slate-800 dark:text-slate-200 truncate max-w-[120px]">
-                {{ activeShift?.branch_name || authStore.user?.branch_name || authStore.user?.worker?.branch_name || $t('pos.unselected') }}
-              </span>
-           </div>
-        </div>
+    <!-- ── Main: active shift OR shifts disabled ───────────────────────── -->
+    <main
+      v-if="activeShift || !settingsStore.isShiftEnabled || !settingsStore.hasPlanShift"
+      class="flex-1 overflow-hidden flex flex-col lg:flex-row"
+    >
+      <!-- Hidden barcode scanner input -->
+      <input
+        ref="barcodeInput"
+        type="text"
+        v-model="barcodeBuffer"
+        @keyup.enter="handleBarcodeScan"
+        class="opacity-0 absolute -top-8 left-0"
+      />
 
-        <!-- Xodim Info -->
-        <div class="hidden sm:flex items-center gap-3">
-           <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold transition-transform hover:scale-105">
-              {{ (activeShift?.worker_open_name || authStore.user?.full_name || 'U').charAt(0) }}
-           </div>
-           <div class="flex flex-col">
-              <span class="text-[11px] font-black text-slate-400 tracking-widest leading-none mb-1">{{ $t('pos.employee') }}</span>
-              <span class="text-xs font-black text-slate-800 dark:text-slate-200">
-                {{ activeShift?.worker_open_name || authStore.user?.full_name || $t('pos.user') }}
-              </span>
-           </div>
-        </div>
-
-        <!-- Vertical Divider -->
-        <div class="h-6 w-px bg-slate-100 dark:bg-slate-800"></div>
-
-        <!-- Shift & Actions -->
-        <div class="flex items-center gap-3">
-          <PrinterStatusBar />
-
-          <div class="h-6 w-px bg-slate-100 dark:bg-slate-800"></div>
-
-          <div v-if="activeShift && settingsStore.isShiftEnabled && settingsStore.hasPlanShift" class="px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl flex items-center gap-2 border border-emerald-100 dark:border-emerald-500/20">
-             <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-pulse"></span>
-             <span class="text-[12px] font-black text-emerald-600 dark:text-emerald-400 tracking-wider">{{ $t('pos.shift_number') }}{{ activeShift.id }}</span>
-          </div>
-
-          <button 
-            v-if="settingsStore.isShiftEnabled && settingsStore.hasPlanShift"
-            @click="handleShiftAction"
-            class="px-6 py-3.5 rounded-xl text-[12px] font-black transition-all shadow-xl active:scale-95"
-            :class="activeShift && activeShift.status === 'open' ? 'bg-[#151c2f] text-white hover:bg-[#0f1422]' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20'"
-          >
-            {{ activeShift && activeShift.status === 'open' ? $t('pos.close_shift') : (activeShift?.status === 'closed' ? $t('pos.shift_report') : $t('pos.open_shift')) }}
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Dynamic Layout -->
-    <main v-if="activeShift || !settingsStore.isShiftEnabled || !settingsStore.hasPlanShift" class="flex-1 overflow-hidden flex">
-      <!-- Left side: Product Library -->
-      <section class="flex-1 h-full relative overflow-hidden flex flex-col p-8">
-        <input ref="barcodeInput" type="text" v-model="barcodeBuffer" @keyup.enter="handleBarcodeScan" class="opacity-0 absolute -top-8 left-0"/>
-        
-        <PosCatalog 
+      <!-- Product Catalog (always visible) -->
+      <section class="flex-1 h-full relative overflow-hidden flex flex-col p-3 sm:p-5 lg:p-8">
+        <PosCatalog
           ref="catalogRef"
           :cart="cart"
           :active-shift="activeShift"
+          :external-search="searchQueryGlobal"
           @add-to-cart="addToCart"
           @focus-barcode="focusScanning"
-          :external-search="searchQueryGlobal"
         />
       </section>
 
-      <!-- Right side: Sidebar (Cart) -->
-      <section class="w-[340px] xl:w-[380px] flex-shrink-0 h-full border-l border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0f1422] z-10 shadow-lg flex flex-col overflow-hidden">
-        <PosCart 
+      <!-- Desktop Cart Sidebar (only mounted on lg+ screens) -->
+      <section
+        v-if="isDesktop"
+        class="w-[340px] xl:w-[380px] flex-shrink-0 h-full border-l border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0f1422] z-10 shadow-lg flex flex-col overflow-hidden"
+      >
+        <PosCart
           :cart="cart"
           :totals="cartTotals"
           :orders="orders"
@@ -104,17 +63,45 @@
           @remove-order="removeOrder"
         />
       </section>
+
+      <!-- Mobile: Sticky Bar + Bottom Sheet Drawer (only on small screens) -->
+      <MobileCartDrawer
+        v-if="!isDesktop"
+        v-model="mobileCartOpen"
+        :cart="cart"
+        :totals="cartTotals"
+        @open="mobileCartOpen = true"
+      >
+        <PosCart
+          :cart="cart"
+          :totals="cartTotals"
+          :orders="orders"
+          :active-order-index="activeOrderIndex"
+          @update-qty="updateQty"
+          @remove="removeFromCart"
+          @clear="clearCart"
+          @checkout="mobileCartOpen = false; showCheckout = true"
+          @update-discount="discountAmount = $event"
+          @update-item-discount="updateItemDiscount"
+          @new-order="createNewOrder"
+          @switch-order="switchOrder"
+          @remove-order="removeOrder"
+        />
+      </MobileCartDrawer>
     </main>
 
-    <!-- Closed State (Only if shifts are enabled but none is active AND plan allows shifts) -->
-    <div v-else-if="settingsStore.isShiftEnabled && settingsStore.hasPlanShift && !activeShift" class="flex-1 flex flex-col items-center justify-center py-20 px-8">
+    <!-- ── Closed state (shift required but not opened) ───────────────── -->
+    <div
+      v-else-if="settingsStore.isShiftEnabled && settingsStore.hasPlanShift && !activeShift"
+      class="flex-1 flex flex-col items-center justify-center py-20 px-8"
+    >
       <div class="w-24 h-24 rounded-[40px] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center shadow-xl">
-         <i class="pi pi-lock text-4xl text-slate-200 dark:text-slate-800"></i>
+        <i class="pi pi-lock text-4xl text-slate-200 dark:text-slate-800" />
       </div>
       <div class="text-center mt-12 space-y-4 max-w-sm px-6">
         <h2 class="text-2xl font-black text-slate-800 dark:text-white font-outfit tracking-tighter">{{ $t('pos.terminal_closed') }}</h2>
         <p class="text-slate-400 font-medium text-sm">{{ $t('pos.need_to_open_shift') }}</p>
-        <button 
+        <button
           @click="showShiftModal = true"
           class="inline-block px-10 py-5 bg-emerald-500 text-white rounded-2xl font-black text-[13px] tracking-widest shadow-2xl shadow-emerald-500/40 hover:bg-emerald-600 transition-all active:scale-95"
         >
@@ -123,213 +110,183 @@
       </div>
     </div>
 
-    <!-- Modals -->
-      <ShiftModal 
-        v-model:visible="showShiftModal" 
-        :is-closing="!!activeShift" 
-        :shift="activeShift" 
-        :x-report="activeXReport"
-        :loading="posLoading" 
-        :discrepancy-error="shiftDiscrepancyError"
-        @update:discrepancy-error="shiftDiscrepancyError = $event"
-        @confirm="onShiftConfirm"
-        @download="onDownloadShift"
-      />
-      <CheckoutModal 
-        v-model:visible="showCheckout" 
-        :total="cartTotals.finalTotal" 
-        :currency-code="cartTotals.currency"
-        :customers="customers"
-        :customer-groups="customerGroups"
-        v-model:selected-customer="selectedCustomer" 
-        :loading="posLoading" 
-        @search-customers="fetchCustomers"
-        @confirm="onCheckoutConfirm" 
-      />
-      <PosReceipt v-model:visible="showReceipt" :transaction="lastTransaction" @print="printReceipt" @download="downloadReceipt(lastTransaction.id)" />
-      
-      <!-- Tur Selection Modal -->
-      <Dialog 
-        v-model:visible="turDialog" 
-        :header="selectedProductForTur?.name" 
-        modal 
-        class="w-full max-w-lg"
-        :pt="{ 
-          root: { class: 'dark:bg-slate-900 border-none rounded-3xl shadow-2xl overflow-hidden' },
-          header: { class: 'px-8 pt-8 pb-4 dark:bg-slate-900 border-none font-black tracking-tighter text-xl' },
-          content: { class: 'px-8 pb-8 pt-2 dark:bg-slate-900' }
-        }"
-      >
-        <div v-if="loadingTurlar" class="flex flex-col gap-3 py-4">
-          <div v-for="i in 3" :key="i" class="h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
-        </div>
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3 py-4">
-          <button 
-            v-for="tur in turlar" 
-            :key="tur.id"
-            @click="selectTur(tur)"
-            class="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-emerald-500 hover:bg-emerald-50/30 dark:hover:bg-emerald-500/10 transition-all group relative overflow-hidden"
-          >
-            <span class="text-sm font-black text-slate-800 dark:text-slate-200 mb-1 tracking-tight">{{ tur.name }}</span>
-            <span v-if="tur.color" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ tur.color }}</span>
-            
-            <div class="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity">
-               <i class="pi pi-plus-circle text-emerald-500"></i>
-            </div>
-          </button>
-        </div>
-      </Dialog>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { useI18n } from 'vue-i18n'
-  import { usePOS } from '@/composables/usePOS'
-  import { useAuthStore } from '@/store/auth'
-  import { useSettingsStore } from '@/store/settings'
-  import { shiftsAPI } from '@/services/api' 
-  import { useToast } from 'primevue/usetoast'
-  import PosCatalog from './components/PosCatalog.vue'
-  import PosCart from './components/PosCart.vue'
-  import PosReceipt from './components/PosReceipt.vue'
-  import CheckoutModal from './components/CheckoutModal.vue'
-  import ShiftModal from './components/ShiftModal.vue'
-  import PrinterStatusBar from './components/PrinterStatusBar.vue'
-  import { usePrinter } from '@/composables/usePrinter'
-  
-  const authStore = useAuthStore()
-  const settingsStore = useSettingsStore()
-  const toast = useToast()
-  const { t } = useI18n()
-  const { print: qzPrint } = usePrinter()
-  
-  const {
-    activeShift,
-    activeXReport,
-    shiftLoading,
-    posLoading,
-    orders,
-    activeOrderIndex,
-    cart,
-    discountAmount,
-    selectedCustomer,
-    customers,
-    customerGroups,
-    cartTotals,
-    createNewOrder,
-    switchOrder,
-    removeOrder,
-    fetchShiftStatus,
-    openShift,
-    closeShift,
-    addToCart,
-    removeFromCart,
-    updateQty,
-    updateItemDiscount,
-    scanAndAdd,
-    clearCart,
-    fetchCustomers,
-    fetchCustomerGroups,
-    performCheckout,
-    downloadReceipt
-  } = usePOS()
+    <!-- ── Modals ──────────────────────────────────────────────────────── -->
+    <ShiftModal
+      v-model:visible="showShiftModal"
+      :is-closing="!!activeShift"
+      :shift="activeShift"
+      :x-report="activeXReport"
+      :loading="posLoading"
+      :discrepancy-error="shiftDiscrepancyError"
+      @update:discrepancy-error="shiftDiscrepancyError = $event"
+      @confirm="onShiftConfirm"
+      @download="onDownloadShift"
+    />
 
-  // ... (o'rta qismlar uzgarmaydi)
+    <CheckoutModal
+      v-model:visible="showCheckout"
+      :total="cartTotals.finalTotal"
+      :currency-code="cartTotals.currency"
+      :customers="customers"
+      :customer-groups="customerGroups"
+      v-model:selected-customer="selectedCustomer"
+      :loading="posLoading"
+      @search-customers="fetchCustomers"
+      @confirm="onCheckoutConfirm"
+    />
 
-  const onDownloadShift = async (shiftId) => {
-    try {
-      const res = await shiftsAPI.export(shiftId)
-      // Excel uchun blob yaratamiz
-      const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }))
-      const link = document.createElement('a')
-      link.href = url
-      link.setAttribute('download', `shift-report-${shiftId}.xlsx`) // .xlsx formatida yuklaymiz
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      toast.add({ severity: 'error', summary: t('common.error'), detail: t('pos.report_download_error'), life: 3000 })
-    }
-  }
+    <PosReceipt
+      v-model:visible="showReceipt"
+      :transaction="lastTransaction"
+      @print="printReceipt"
+      @download="downloadReceipt(lastTransaction.id)"
+    />
 
-const showShiftModal = ref(false)
+    <!-- Tur (Variant) Selection Modal -->
+    <TurSelectModal
+      :visible="turDialog"
+      :product="selectedProductForTur"
+      :turlar="turlar"
+      :loading="loadingTurlar"
+      @select="selectTur"
+      @close="turDialog = false"
+    />
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
+
+// Stores & composables
+import { useAuthStore }     from '@/store/auth'
+import { useSettingsStore } from '@/store/settings'
+import { usePOS }           from '@/composables/usePOS'
+import { shiftsAPI }        from '@/services/api'
+import { usePosReceipt }    from './composables/usePosReceipt'
+
+// Components
+import PosHeader         from './components/PosHeader.vue'
+import PosCatalog        from './components/PosCatalog.vue'
+import PosCart           from './components/PosCart.vue'
+import PosReceipt        from './components/PosReceipt.vue'
+import CheckoutModal     from './components/CheckoutModal.vue'
+import ShiftModal        from './components/ShiftModal.vue'
+import PrinterStatusBar  from './components/PrinterStatusBar.vue'
+import MobileCartDrawer  from './components/MobileCartDrawer.vue'
+import TurSelectModal    from './components/TurSelectModal.vue'
+
+// ─────────────────────────────────────────────────────────────────────────────
+const authStore     = useAuthStore()
+const settingsStore = useSettingsStore()
+const toast         = useToast()
+const { t }         = useI18n()
+
+// ── POS core ─────────────────────────────────────────────────────────────────
+const {
+  activeShift, activeXReport, posLoading,
+  orders, activeOrderIndex,
+  cart, discountAmount, selectedCustomer, customers, customerGroups, cartTotals,
+  createNewOrder, switchOrder, removeOrder,
+  fetchShiftStatus, openShift, closeShift,
+  addToCart, removeFromCart, updateQty, updateItemDiscount, scanAndAdd, clearCart,
+  fetchCustomers, fetchCustomerGroups,
+  performCheckout, downloadReceipt,
+} = usePOS()
+
+// ── Screen size: faqat bitta PosCart mount bo'lishi uchun ───────────────────
+const isDesktop = ref(window.innerWidth >= 1024)
+const onResize = () => { isDesktop.value = window.innerWidth >= 1024 }
+
+// ── UI state ──────────────────────────────────────────────────────────────────
+const showShiftModal       = ref(false)
 const shiftDiscrepancyError = ref('')
-const showCheckout = ref(false)
-const showReceipt = ref(false)
-const lastTransaction = ref(null)
-const barcodeBuffer = ref('')
-const barcodeInput = ref(null)
-const searchRef = ref(null)
-const searchQueryGlobal = ref('')
-const catalogRef = ref(null)
+const showCheckout         = ref(false)
+const showReceipt          = ref(false)
+const lastTransaction      = ref(null)
+const mobileCartOpen       = ref(false)
 
+// ── Barcode / search refs ─────────────────────────────────────────────────────
+const barcodeBuffer    = ref('')
+const barcodeInput     = ref(null)
+const searchRef        = ref(null)
+const searchQueryGlobal = ref('')
+const catalogRef       = ref(null)
+
+// ── Tur dialog state ──────────────────────────────────────────────────────────
+const turDialog             = ref(false)
+const selectedProductForTur = ref(null)
+const turlar                = ref([])
+const loadingTurlar         = ref(false)
+
+// ── Receipt composable ────────────────────────────────────────────────────────
+const { printReceipt } = usePosReceipt(showReceipt)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Lifecycle
+// ─────────────────────────────────────────────────────────────────────────────
 onMounted(async () => {
-  await Promise.all([
-    fetchShiftStatus(),
-    fetchCustomers(),
-    fetchCustomerGroups()
-  ])
+  window.addEventListener('resize', onResize)
+  await Promise.all([fetchShiftStatus(), fetchCustomers(), fetchCustomerGroups()])
   window.addEventListener('keydown', handleGlobalKey)
-  if (activeShift.value) {
-    setTimeout(() => searchRef.value?.focus(), 500)
-  }
+  if (activeShift.value) setTimeout(() => searchRef.value?.focus(), 500)
 })
 
-onBeforeUnmount(() => window.removeEventListener('keydown', handleGlobalKey))
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleGlobalKey)
+  window.removeEventListener('resize', onResize)
+})
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Keyboard shortcuts
+// ─────────────────────────────────────────────────────────────────────────────
 const handleGlobalKey = (e) => {
   if (e.key === 'F2') { e.preventDefault(); focusScanning() }
-  if (e.key === 'F4' && activeShift.value && cart.value.length > 0) { e.preventDefault(); showCheckout.value = true }
+  if (e.key === 'F4' && activeShift.value && cart.value.length > 0) {
+    e.preventDefault(); showCheckout.value = true
+  }
 }
 
 const focusScanning = () => barcodeInput.value?.focus()
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Barcode scanner
+// ─────────────────────────────────────────────────────────────────────────────
 const handleBarcodeScan = async () => {
   const code = barcodeBuffer.value.trim()
   if (!code) return
   const result = await scanAndAdd(code)
-  if (result === true) { 
-    barcodeBuffer.value = '' 
-  } else if (result && result.needs_tur) {
+  if (result === true) {
+    barcodeBuffer.value = ''
+  } else if (result?.needs_tur) {
     openTurDialog(result.product)
     barcodeBuffer.value = ''
-  } else { 
-    setTimeout(() => { barcodeBuffer.value = '' }, 500) 
+  } else {
+    setTimeout(() => { barcodeBuffer.value = '' }, 500)
   }
 }
 
 const handleSearchEnter = async () => {
   const query = searchQueryGlobal.value.trim()
   if (!query) return
-
   if (/^\d{5,18}$/.test(query)) {
     const result = await scanAndAdd(query)
-    if (result === true) {
-      searchQueryGlobal.value = ''
-      return
-    } else if (result && result.needs_tur) {
-      openTurDialog(result.product)
-      searchQueryGlobal.value = ''
-      return
-    }
+    if (result === true) { searchQueryGlobal.value = ''; return }
+    if (result?.needs_tur) { openTurDialog(result.product); searchQueryGlobal.value = ''; return }
   }
 }
 
-const turDialog = ref(false)
-const selectedProductForTur = ref(null)
-const turlar = ref([])
-const loadingTurlar = ref(false)
-
+// ─────────────────────────────────────────────────────────────────────────────
+// Tur (variant) selection
+// ─────────────────────────────────────────────────────────────────────────────
 const openTurDialog = async (product) => {
   selectedProductForTur.value = product
-  turDialog.value = true
+  turDialog.value    = true
   loadingTurlar.value = true
   try {
     const { productsAPI } = await import('@/services/api')
-    const res = await productsAPI.getTurlar(product.id)
-    turlar.value = res.data
+    turlar.value = (await productsAPI.getTurlar(product.id)).data
   } catch (err) {
     console.error('Fetch turlar error:', err)
   } finally {
@@ -342,14 +299,12 @@ const selectTur = (tur) => {
   turDialog.value = false
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
+// Shift actions
+// ─────────────────────────────────────────────────────────────────────────────
 const handleShiftAction = async () => {
   if (activeShift.value) {
-    try {
-      await fetchShiftStatus()
-    } catch (err) {
-      console.warn('Shift status update failed:', err)
-    }
+    try { await fetchShiftStatus() } catch { /* ignore */ }
   }
   showShiftModal.value = true
 }
@@ -357,149 +312,54 @@ const handleShiftAction = async () => {
 const onShiftConfirm = async (data) => {
   shiftDiscrepancyError.value = ''
   try {
-    let success = activeShift.value 
-      ? await closeShift(data) 
+    const success = activeShift.value
+      ? await closeShift(data)
       : await openShift(data.branch, data.cash_start)
-      
     if (success) showShiftModal.value = false
   } catch (err) {
-    if (err && err.needsReason) {
-      shiftDiscrepancyError.value = err.message
-    }
+    if (err?.needsReason) shiftDiscrepancyError.value = err.message
   }
 }
 
+const onDownloadShift = async (shiftId) => {
+  try {
+    const res  = await shiftsAPI.export(shiftId)
+    const url  = window.URL.createObjectURL(new Blob([res.data], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    }))
+    const link = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `shift-report-${shiftId}.xlsx`
+    })
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.URL.revokeObjectURL(url)
+  } catch {
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('pos.report_download_error'), life: 3000 })
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Checkout
+// ─────────────────────────────────────────────────────────────────────────────
 const onCheckoutConfirm = async (paymentData) => {
   try {
     const result = await performCheckout(paymentData)
     if (result) {
       lastTransaction.value = result
-      showCheckout.value = false
-      showReceipt.value = true
-      
-      // Refresh catalog to update stock levels
-      if (catalogRef.value) {
-        catalogRef.value.fetchProducts(searchQueryGlobal.value)
-      }
-      
-      // Darhol avtomatik chop etish
-      nextTick(() => {
-        printReceipt()
-      })
-    }
-  } catch (error) {
-    console.error('Checkout error:', error)
-  }
-}
-
-// ─── Chek HTML ni to'liq quradigan yordamchi ────────────────────────────────
-const buildReceiptHtml = () => {
-  const el = document.getElementById('printable-receipt')
-  if (!el) return null
-  return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"/><title>Savdo cheki</title>
-<style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:4px 6px;width:100%;max-width:80mm;margin:0 auto;}
-  body *{color:#000 !important;font-family:"Inter",system-ui,sans-serif !important;font-weight:bold !important;}
-  .font-black,.text-xl,.text-2xl,h2{font-weight:900 !important;}
-  .text-center{text-align:center;}
-  .text-slate-400,.text-slate-500,.text-slate-700,.text-slate-800,.text-slate-900,
-  .text-emerald-500,.text-emerald-600,.text-rose-400,.text-rose-500,.text-amber-500{color:#000 !important;}
-  .text-xs{font-size:11px;} .text-sm{font-size:13px;} .text-xl{font-size:20px;font-weight:900;} .text-2xl{font-size:24px;font-weight:900;}
-  .tracking-widest{letter-spacing:0.15em;} .tracking-tighter{letter-spacing:-0.02em;}
-  .flex{display:flex;} .justify-between{justify-content:space-between;} .items-center{align-items:center;}
-  .space-y-1>*+*{margin-top:2px;} .space-y-1\\.5>*+*{margin-top:3px;} .space-y-2\\.5>*+*{margin-top:6px;}
-  .border-b-2{border-bottom:1.5px dashed #000;} .border-t-2{border-top:1.5px dashed #000;}
-  .border-t{border-top:1px dashed #000;}
-  .py-4{padding:8px 0;} .pt-3{padding-top:6px;} .pt-2{padding-top:4px;} .pb-2{padding-bottom:4px;}
-  .mb-1{margin-bottom:2px;} .mb-2{margin-bottom:4px;} .mb-3{margin-bottom:8px;} .mt-0\\.5{margin-top:2px;}
-  .leading-none{line-height:1;} .leading-tight{line-height:1.25;} .leading-relaxed{line-height:1.5;}
-  .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .receipt-paper{border:none !important;box-shadow:none !important;padding:0 !important;}
-  img{display:block;margin:0 auto;max-width:100%;}
-</style>
-</head><body>${el.innerHTML}</body></html>`
-}
-
-// ─── Dialog fallback yordamchi ───────────────────────────────────────────────
-const browserPrintFallback = (htmlContent) => {
-  const iframe = document.createElement('iframe')
-  iframe.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:100%;max-width:80mm;border:none;visibility:hidden;`
-  document.body.appendChild(iframe)
-  const doc = iframe.contentDocument || iframe.contentWindow.document
-  doc.open(); doc.write(htmlContent); doc.close()
-  setTimeout(() => {
-    iframe.contentWindow.focus()
-    iframe.contentWindow.onafterprint = () => {
-      if (document.body.contains(iframe)) document.body.removeChild(iframe)
-    }
-    iframe.contentWindow.print()
-    setTimeout(() => {
-      if (document.body.contains(iframe)) document.body.removeChild(iframe)
-    }, 300000)
-  }, 300)
-}
-
-// ─── Asosiy chop etish: QZ ulangan → silent, aks holda → dialog ─────────────
-const printReceipt = async () => {
-  const htmlContent = buildReceiptHtml()
-  if (!htmlContent) return
-
-  try {
-    const result = await qzPrint({ htmlContent })
-    if (result.method === 'qz') {
-      toast.add({
-        severity: 'success',
-        summary: t('common.success'),
-        detail: 'Chek chop etishga yuborildi ✓',
-        life: 2500
-      })
-      
-      // Chek muvaffaqiyatli chop etilgach, biroz kutib modalni avtomatik yopamiz
-      setTimeout(() => {
-        showReceipt.value = false
-      }, 300)
-    }
-    // method === 'browser' bo'lsa brauzer dialogi o'zi ko'rinadi. 
-    // Uni yopish ham qo'shib qo'yamiz.
-    else if (result.method === 'browser') {
-      setTimeout(() => {
-        showReceipt.value = false
-      }, 1000)
+      showCheckout.value    = false
+      showReceipt.value     = true
+      catalogRef.value?.fetchProducts(searchQueryGlobal.value)
+      nextTick(() => printReceipt())
     }
   } catch (err) {
-    console.warn('[POS] QZ print xato, dialog fallbackga o\'tmoqda:', err)
-    toast.add({
-      severity: 'warn',
-      summary: 'Printer xatosi',
-      detail: 'Dialog orqali chop etilyapti...',
-      life: 2000
-    })
-    browserPrintFallback(htmlContent)
-    
-    // Fallback orqali dialog ochilsa ham, birozdan keyin orqadagi oynani yopamiz
-    setTimeout(() => {
-      showReceipt.value = false
-    }, 1000)
+    console.error('Checkout error:', err)
   }
 }
 </script>
 
 <style scoped>
 .font-outfit { font-family: 'Outfit', sans-serif; }
-.font-inter { font-family: 'Inter', sans-serif; }
-
-.shadow-pulse {
-  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-  70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
+.font-inter  { font-family: 'Inter',  sans-serif; }
 </style>
-
-

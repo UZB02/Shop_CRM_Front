@@ -41,14 +41,14 @@
        <p class="font-black text-[12px] tracking-widest">Ma'lumot topilmadi</p>
     </div>
 
-    <div v-else class="flex-1 overflow-y-auto pr-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start content-start custom-scrollbar">
+    <div v-else class="flex-1 overflow-y-auto pr-1 sm:pr-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 items-start content-start custom-scrollbar pb-20 lg:pb-4">
       <div 
         v-for="product in filteredProducts" 
         :key="product.id" 
         class="product-minimal-card"
         @click="handleProductClick(product)"
       >
-        <div class="relative bg-white dark:bg-[#0f172a] rounded-2xl overflow-hidden flex flex-col border transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.03)] dark:shadow-none hover:-translate-y-1 hover:shadow-lg cursor-pointer min-h-[220px]"
+        <div class="relative bg-white dark:bg-[#0f172a] rounded-2xl overflow-hidden flex flex-col border transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.03)] dark:shadow-none hover:-translate-y-1 hover:shadow-lg cursor-pointer min-h-[180px] sm:min-h-[200px] lg:min-h-[220px]"
              :class="[
                product.displayQuantity !== undefined && product.displayQuantity <= 0 ? 'opacity-40 grayscale border-slate-100 dark:border-slate-800' : 
                product.displayQuantity !== undefined && product.displayQuantity <= 5 ? 'bg-rose-50/30 dark:bg-rose-950/10 border-rose-200 dark:border-rose-900/40' : 
@@ -56,7 +56,7 @@
              ]">
           
           <!-- Image Section -->
-          <div class="h-36 w-full bg-white flex items-center justify-center relative overflow-hidden group-hover:opacity-95 transition-opacity p-3">
+          <div class="h-24 sm:h-28 lg:h-36 w-full bg-white flex items-center justify-center relative overflow-hidden group-hover:opacity-95 transition-opacity p-2 sm:p-3">
             <img v-if="product.image" :src="product.image" class="w-full h-full object-contain" :alt="product.name">
             <i v-else class="pi pi-box text-5xl text-slate-100"></i>
             
@@ -77,7 +77,7 @@
             <div class="p-4 flex flex-col flex-1 bg-white dark:bg-[#111827]">
               <div class="flex justify-between items-start mb-3">
                 <div class="flex flex-col gap-1">
-                  <h3 class="font-black text-[15px] text-slate-800 dark:text-white font-outfit tracking-tight line-clamp-2">
+                  <h3 class="font-black text-[13px] sm:text-[14px] lg:text-[15px] text-slate-800 dark:text-white font-outfit tracking-tight line-clamp-2">
                     {{ product.name }}
                   </h3>
                   <div v-if="product.has_tur || product.tur_name" class="flex items-center gap-1">

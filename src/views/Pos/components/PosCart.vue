@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col bg-white dark:bg-[#0b0f1a] overflow-hidden">
     <!-- Fixed Top Section: Tabs + Header -->
-    <div class="px-6 pt-6 flex-shrink-0">
+    <div class="px-3 sm:px-5 lg:px-6 pt-4 sm:pt-5 lg:pt-6 flex-shrink-0">
     <!-- Multi-Order Tabs -->
     <div class="flex items-center gap-2 mb-6 overflow-x-auto no-scrollbar pb-2 flex-shrink-0">
       <div 
@@ -44,7 +44,7 @@
     </div><!-- end fixed top -->
 
     <!-- Scrollable Cart Items -->
-    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-2 min-h-0">
+    <div class="flex-1 overflow-y-auto no-scrollbar px-3 sm:px-5 lg:px-6 pb-2 min-h-0">
       <div v-if="cart.length === 0" class="h-full flex flex-col items-center justify-center py-12 px-8 text-center border-2 border-dashed border-slate-50 dark:border-slate-800/40 rounded-[32px] opacity-30">
          <div class="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center mb-5">
             <i class="pi pi-shopping-bag text-2xl text-slate-300 dark:text-slate-700"></i>
@@ -128,7 +128,7 @@
     </div><!-- end scroll area -->
 
     <!-- Sticky Footer: Total + Checkout -->
-    <div class="flex-shrink-0 px-6 pb-6 pt-4 border-t border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0b0f1a]">
+    <div class="flex-shrink-0 px-3 sm:px-5 lg:px-6 pb-4 sm:pb-5 lg:pb-6 pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-800/40 bg-white dark:bg-[#0b0f1a]">
       <div class="flex items-center justify-between px-1 mb-4">
         <span class="text-[12px] font-black text-slate-400 dark:text-slate-700 tracking-widest">{{ $t('pos.total_caps') }}</span>
         <div class="flex items-baseline gap-1.5 text-right">

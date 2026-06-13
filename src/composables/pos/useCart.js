@@ -56,10 +56,15 @@ export function useCart() {
 
     // --- Order Tab Management ---
     const createNewOrder = () => {
-        const nextId = orders.value.length + 1
+        // Mavjud nomlardan eng katta raqamni topib +1 qilamiz
+        // (o'chirganda qayta nomlamaymiz, shuning uchun teshik qolishi mumkin)
+        const maxNum = orders.value.reduce((max, o) => {
+            const m = o.name?.match(/(\d+)$/)
+            return m ? Math.max(max, parseInt(m[1])) : max
+        }, 0)
         orders.value.push({
             id: Date.now(),
-            name: `Savat ${nextId}`,
+            name: `Savat ${maxNum + 1}`,
             cart: [],
             selectedCustomer: null,
             discountAmount: 0
@@ -79,6 +84,13 @@ export function useCart() {
             return
         }
         orders.value.splice(index, 1)
+
+        // Faqat bitta savat qolganda uni 'Savat 1' ga o'zgartiramiz.
+        // Ko'p savatlar qolganda nomlarini o'zgartirmaymiz — sotuvchi chalkashmasin.
+        if (orders.value.length === 1) {
+            orders.value[0].name = 'Savat 1'
+        }
+
         if (activeOrderIndex.value >= orders.value.length) {
             activeOrderIndex.value = orders.value.length - 1
         }
