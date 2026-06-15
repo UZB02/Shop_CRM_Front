@@ -18,7 +18,7 @@ export function useImport() {
      * Backend: CanAccess('mahsulotlar') → mahsulot import uchun
      */
     const isManagerOrAbove = () => {
-        return authStore.hasAccess('mahsulotlar')
+        return authStore.hasAccess('products')
     }
 
     /**
