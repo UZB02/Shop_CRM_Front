@@ -276,7 +276,15 @@ const diffMessage = computed(() => {
 })
 
 // ── Submit ────────────────────────────────────────────────────────────────────
-const hasBranchId    = computed(() => !!(authStore.user?.branch_id || authStore.user?.worker?.branch || authStore.user?.branch))
+const branchId = computed(() => {
+  const u = authStore.user
+  if (!u) return null
+  if (u.branch_id) return u.branch_id
+  if (u.worker?.branch) return u.worker.branch
+  if (u.branch) return typeof u.branch === 'object' ? u.branch.id : u.branch
+  return null
+})
+const hasBranchId    = computed(() => !!branchId.value)
 const submitDisabled = computed(() => {
   if (props.loading) return true
   if (!props.isClosing) return !hasBranchId.value
@@ -296,7 +304,7 @@ const handleSubmit = () => {
     emit('confirm', payload)
   } else {
     emit('confirm', {
-      branch:     authStore.user?.branch_id || authStore.user?.worker?.branch || authStore.user?.branch,
+      branch:     branchId.value,
       cash_start: cashStart.value,
     })
   }
