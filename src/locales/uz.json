@@ -2075,10 +2075,15 @@
       "dead_stock": "Sotilmayotgan tovar",
       "sold_out": "Tugagan tovar",
       "sales_trend": "Sotuv trendi",
-      "stockout_forecast": "Tugaydigan tovar"
+      "stockout_forecast": "Tugaydigan tovar",
+      "abc_analysis": "ABC Tahlil"
     },
     "col_rank": "#",
     "col_product": "Mahsulot",
+    "col_abc_revenue": "ABC (tushum)",
+    "col_abc_profit": "ABC (foyda)",
+    "col_abc_qty": "ABC (miqdor)",
+    "col_cumulative": "Kumulyativ %",
     "col_tur": "Turi",
     "col_sold_qty": "Sotildi (dona)",
     "col_revenue": "Tushum",
@@ -2149,6 +2154,23 @@
     "stockout": {
       "urgent": "Zudlik bilan",
       "days_left": "{n} kunda tugaydi"
+    },
+    "abc": {
+      "sort_by": "Saralash",
+      "sort_revenue": "Tushum bo'yicha",
+      "sort_profit": "Foyda bo'yicha",
+      "sort_quantity": "Miqdor bo'yicha",
+      "grade_label": "{grade} sinf",
+      "items": "ta tovar",
+      "share": "ulush",
+      "insight_trap": "Foyda tuzog'i",
+      "insight_gem": "Yashirin gavhar",
+      "info_a": "Eng muhim tovarlar — jami tushumning ~80% ini tashkil qiladi. Har doim stokda bo'lishi shart.",
+      "info_b": "O'rtacha ahamiyatli tovarlar — ~15% ulush. Muntazam kuzatilsin.",
+      "info_c": "Kam ta'sir qiluvchi tovarlar — ~5% ulush. Assortiment qayta ko'rib chiqilsin.",
+      "info_short_a": "Jami tushumning ~80% — stokda bo'lsin",
+      "info_short_b": "~15% ulush — muntazam kuzatilsin",
+      "info_short_c": "~5% ulush — assortiment ko'rib chiqilsin"
     }
   }
 }

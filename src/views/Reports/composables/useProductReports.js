@@ -1,4 +1,5 @@
 import { ref, reactive, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { reportsAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
@@ -11,10 +12,11 @@ export const REPORT_TABS = [
     { id: 'sold-out',          icon: 'pi pi-exclamation-triangle', color: 'rose' },
     { id: 'sales-trend',       icon: 'pi pi-chart-line',   color: 'blue' },
     { id: 'stockout-forecast', icon: 'pi pi-calendar-times', color: 'orange' },
+    { id: 'abc-analysis',      icon: 'pi pi-chart-pie',    color: 'teal' },
 ]
 
 // Tab'ga qarab sana filtri ko'rsatilsinmi?
-export const tabHasDateFilter = (tab) => ['top-selling', 'top-profitable', 'sold-out', 'sales-trend'].includes(tab)
+export const tabHasDateFilter = (tab) => ['top-selling', 'top-profitable', 'sold-out', 'sales-trend', 'abc-analysis'].includes(tab)
 
 // "tur" maydonini formatlash: null yoki bo'sh → "-", aks holda qiymatini ko'rsatish
 export function formatTur(tur) {
@@ -61,10 +63,15 @@ function downloadBlob(blob, filename) {
 
 // ─── Asosiy composable ────────────────────────────────────────────────────────
 export function useProductReports() {
-    const toast = useToast()
+    const toast  = useToast()
+    const route  = useRoute()
+    const router = useRouter()
 
-    // Aktiv tab
-    const activeTab = ref('top-selling')
+    const VALID_TABS = REPORT_TABS.map(t => t.id)
+
+    // URL'dagi ?tab= parametridan boshlang'ich qiymat
+    const initialTab = VALID_TABS.includes(route.query.tab) ? route.query.tab : 'top-selling'
+    const activeTab  = ref(initialTab)
 
     // Har tab uchun holat
     const state = reactive({
@@ -75,6 +82,7 @@ export function useProductReports() {
         'sold-out':          { loading: false, data: [], count: 0, page: 1 },
         'sales-trend':       { loading: false, data: [], count: 0, page: 1, summary: null },
         'stockout-forecast': { loading: false, data: [], count: 0, page: 1 },
+        'abc-analysis':      { loading: false, data: [], count: 0, page: 1, summary: null },
     })
 
     // Filtrlari
@@ -86,6 +94,7 @@ export function useProductReports() {
         'sold-out':          { date_from: '', date_to: '', branch: '', category: '' },
         'sales-trend':       { date_from: '', date_to: '', branch: '', category: '' },
         'stockout-forecast': { branch: '', category: '' },
+        'abc-analysis':      { date_from: '', date_to: '', branch: '', category: '', sort: 'revenue' },
     })
 
     const PAGE_SIZE = 20
@@ -105,6 +114,7 @@ export function useProductReports() {
         'sold-out':          reportsAPI.getSoldOut,
         'sales-trend':       reportsAPI.getSalesTrend,
         'stockout-forecast': reportsAPI.getStockoutForecast,
+        'abc-analysis':      reportsAPI.getAbcAnalysis,
     }
 
     const EXCEL_MAP = {
@@ -115,6 +125,7 @@ export function useProductReports() {
         'sold-out':          reportsAPI.exportSoldOut,
         'sales-trend':       reportsAPI.exportSalesTrend,
         'stockout-forecast': reportsAPI.exportStockoutForecast,
+        'abc-analysis':      reportsAPI.exportAbcAnalysis,
     }
 
     const EXCEL_NAMES = {
@@ -125,6 +136,7 @@ export function useProductReports() {
         'sold-out':          'tugagan-tovar.xlsx',
         'sales-trend':       'sotuv-trendi.xlsx',
         'stockout-forecast': 'stockout-bashorat.xlsx',
+        'abc-analysis':      'abc-tahlil.xlsx',
     }
 
     async function fetchReport(tab = null, page = 1) {
@@ -138,18 +150,18 @@ export function useProductReports() {
         try {
             const params = { page, page_size: PAGE_SIZE }
 
-            // Faqat top-2 uchun sana filtri
             if (tabHasDateFilter(t)) {
                 if (f.date_from) params.date_from = f.date_from
                 if (f.date_to)   params.date_to   = f.date_to
             }
             if (f.branch)   params.branch   = f.branch
             if (f.category) params.category = f.category
+            if (t === 'abc-analysis' && f.sort) params.sort = f.sort
 
             const res  = await API_MAP[t](params)
             s.data     = res.data?.results || []
             s.count    = res.data?.count   || 0
-            if (t === 'sales-trend') {
+            if (t === 'sales-trend' || t === 'abc-analysis') {
                 s.summary = res.data?.summary || null
             }
         } catch (err) {
@@ -165,9 +177,10 @@ export function useProductReports() {
         }
     }
 
-    // Aktiv tabni o'zgartirganda avtomatik fetch
+    // Aktiv tabni o'zgartirganda avtomatik fetch + URL yangilash
     async function switchTab(tab) {
         activeTab.value = tab
+        router.replace({ query: { ...route.query, tab } })
         if (state[tab].data.length === 0 && !state[tab].loading) {
             await fetchReport(tab, 1)
         }
@@ -189,6 +202,13 @@ export function useProductReports() {
     // Paginatsiya
     async function onPageChange(page) {
         await fetchReport(activeTab.value, page)
+    }
+
+    // ABC sort o'zgartirish
+    async function onSortChange(val) {
+        filters['abc-analysis'].sort = val
+        state['abc-analysis'].page = 1
+        await fetchReport('abc-analysis', 1)
     }
 
     // Excel yuklab olish
@@ -256,6 +276,7 @@ export function useProductReports() {
         applyFilters,
         clearFilters,
         onPageChange,
+        onSortChange,
         downloadExcel,
         fetchMini,
 

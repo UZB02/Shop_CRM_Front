@@ -78,5 +78,11 @@ export const reportsAPI = {
     exportStockoutForecast: (params) => api.get('/export/stockout-forecast/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
+
+    // 8. ABC tahlil
+    getAbcAnalysis: (params) => api.get('/export/abc-analysis/', { params }),
+    exportAbcAnalysis: (params) => api.get('/export/abc-analysis/', {
+        params: { ...params, export: 'excel' }, responseType: 'blob'
+    }),
 }
 
