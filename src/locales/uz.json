@@ -406,7 +406,7 @@
     },
     "permissions_list": {
       "boshqaruv": {
-        "label": "Boshqaruv",
+        "label": "Bosh sahifa",
         "desc": "Dashboard va statistikaga kirish"
       },
       "dokonlar": {
@@ -525,7 +525,7 @@
     }
   },
   "menu": {
-    "dashboard": "Boshqaruv",
+    "dashboard": "Bosh sahifa",
     "sales": "Sotuv (POS)",
     "stores": "Do'kon",
     "inventory": "Ombor",
@@ -1704,7 +1704,7 @@
     "worker_performance": "Xodimlar samaradorligi",
     "inventory_value": "Inventar qiymati",
     "tax_report": "Soliq hisoboti",
-    "revenue": "Sof tushum",
+    "revenue": "Umumiy tushum",
     "cogs": "Sotilgan tovar tan narxi",
     "gross_profit": "Yalpi foyda",
     "net_profit": "Sof foyda",
@@ -1890,7 +1890,7 @@
     "smena_live": "Smena live",
     "last_updated": "So'nggi yangilanish:",
     "tabs": {
-      "overview": "Boshqaruv",
+      "overview": "Umumiy",
       "sales": "Savdolar",
       "inventory": "Ombor",
       "customers": "Mijozlar",
@@ -1903,7 +1903,7 @@
       "smena": "Smena",
       "open": "ochiqligi",
       "open_count": "{count} ochiq",
-      "net_revenue": "Sof Tushum",
+      "net_revenue": "Umumiy tushum",
       "gross": "Yalpi",
       "sales_count": "{count} xarid",
       "avg_check": "O'rtacha chek",
@@ -1919,7 +1919,16 @@
       "new_customers": "+{count} yangi",
       "customer_base": "Mijozlar Bazasi",
       "active_sellers": "{count} ta faol sotuvchi",
-      "debt": "Nasiya"
+      "debt": "Nasiya",
+      "discount": "Chegirma",
+      "growth_tooltip": "Oldingi davrga nisbatan tushum farqi",
+      "return_rate_tooltip": "Jami xaridlarga nisbatan qaytarish darajasi",
+      "margin_tooltip": "Yalpi foydaning umumiy tushumdagi ulushi",
+      "expense_tooltip": "Umumiy tushumga nisbatan operatsion xarajatlar darajasi",
+      "cogs_tooltip": "Sotilgan tovarlarning umumiy tan narxi (COGS)",
+      "deficit_tooltip": "Omborda zaxirasi tugagan yoki kam qolgan mahsulotlar soni",
+      "new_customers_tooltip": "Tanlangan davr ichida qabul qilingan yangi mijozlar",
+      "active_sellers_tooltip": "Hozirgi vaqtda tizimga kirgan va faol ishlayotgan xodimlar"
     },
     "charts": {
       "sales_dynamics": "Savdo Dinamikasi",
@@ -2038,7 +2047,7 @@
       "immutable_warning": "To'lov qo'shilgandan so'ng uni tahrirlash yoki o'chirish mumkin emas — bu moliyaviy xavfsizlik sababli.",
       "save_btn": "To'lovni saqlash"
     },
-    "filters": {
+      "filters": {
       "has_debt": "Qarzli"
     },
     "messages": {
@@ -2049,6 +2058,74 @@
       "delete_header": "Tasdiqlash",
       "delete_error": "Yetkazuvchini o'chirishda xatolik",
       "payment_added": "To'lov muvaffaqiyatli qo'shildi. Qarz balansi yangilandi."
+    }
+  },
+  "reports": {
+    "title": "Hisobotlar va Analitika",
+    "subtitle": "Mahsulotlar bo'yicha batafsil tahlil va ko'rsatkichlar",
+    "profit_loss": "Foyda / Zarar",
+    "summary": "Xulosa",
+    "profit_loss_desc": "Kirim, chiqim va sof foyda tahlili",
+    "monthly_distribution": "Oylik taqsimot",
+    "debtors": "Qarzdorlar",
+    "tabs": {
+      "top_selling": "Eng ko'p sotilgan",
+      "top_profitable": "Eng foydali",
+      "slow_moving": "Sekin sotiladigan",
+      "dead_stock": "O'lik tovar"
+    },
+    "col_rank": "#",
+    "col_product": "Mahsulot",
+    "col_tur": "Turi",
+    "col_sold_qty": "Sotildi (dona)",
+    "col_revenue": "Tushum",
+    "col_profit": "Foyda",
+    "col_margin": "Margin %",
+    "col_stock": "Qoldiq",
+    "col_daily_sales": "Kunlik sotuv",
+    "col_days_stock": "Zaxira (kun)",
+    "col_idle_days": "Kutish (kun)",
+    "col_last_sale": "Oxirgi sotuv",
+    "col_frozen": "Muzlatilgan kapital",
+    "no_date_filter": "Sana filtri yo'q — davr SuperAdmin sozlamasidan olinadi",
+    "no_date_filter_hint": "Bu hisobotda sana oralig'i tanlab bo'lmaydi. Chegaralar tizim sozlamalaridan avtomatik olinadi.",
+    "excel_download": "Excel yuklab olish",
+    "excel_loading": "Yuklanmoqda...",
+    "never_sold": "Hech sotilmagan",
+    "dead_stock_alert": "{count} ta o'lik tovar",
+    "frozen_capital": "Muzlatilgan kapital",
+    "frozen_capital_total": "Jami muzlatilgan kapital",
+    "top5_title": "Eng ko'p sotilgan (Top 5)",
+    "top5_profitable_title": "Eng foydali (Top 5)",
+    "dead_stock_widget_title": "O'lik tovar holati",
+    "dead_stock_widget_desc": "{count} ta mahsulot sotilmayapti",
+    "view_full_report": "To'liq hisobot →",
+    "no_data": "Ma'lumotlar mavjud emas",
+    "no_data_desc": "Tanlangan filtrlar bo'yicha hech narsa topilmadi",
+    "loading": "Hisobot yuklanmoqda...",
+    "filters": {
+      "date_from": "Sanadan",
+      "date_to": "Sanagacha",
+      "branch": "Filial",
+      "category": "Kategoriya",
+      "all_branches": "Barcha filiallar",
+      "all_categories": "Barcha kategoriyalar",
+      "apply": "Qo'llash",
+      "reset": "Tozalash"
+    },
+    "pagination": {
+      "showing": "{from}–{to} dan {total} ta",
+      "prev": "Oldingi",
+      "next": "Keyingi"
+    },
+    "margin": {
+      "high": "Yuqori",
+      "mid": "O'rtacha",
+      "low": "Past"
+    },
+    "idle": {
+      "never": "Hech sotilmagan",
+      "days": "{n} kun"
     }
   }
 }

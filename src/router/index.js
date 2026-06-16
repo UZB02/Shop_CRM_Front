@@ -256,6 +256,12 @@ const routes = [
                 name: 'supplier-detail',
                 component: () => import('@/views/Suppliers/Detail.vue'),
                 meta: { permission: 'yetkazib_beruvchilar' }
+            },
+            {
+                path: 'reports',
+                name: 'reports',
+                component: () => import('@/views/Reports/index.vue'),
+                meta: { permission: 'moliya' }  // Owner va Manager ko'radi
             }
         ]
     }

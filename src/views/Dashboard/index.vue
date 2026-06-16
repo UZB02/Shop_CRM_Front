@@ -89,6 +89,9 @@
           :wastage-total="dashboardStore.products.wastage_total || 0"
         />
         
+        <!-- Product insights widget — Top-5 sotilgan + O'lik tovar ogohlantirish -->
+        <DashboardProductInsights v-if="isOwnerOrManager" />
+
         <!-- Branch rankings — API: branches -->
         <DashboardTopLists 
           :branches="dashboardStore.branches"
@@ -159,7 +162,8 @@ import DashboardAlerts       from './components/DashboardAlerts.vue'
 import DashboardTopLists     from './components/DashboardTopLists.vue'
 import DashboardMonthlyChart from './components/DashboardMonthlyChart.vue'
 import DashboardFinance      from './components/DashboardFinance.vue'
-import DashboardAuditLog     from './components/DashboardAuditLog.vue'
+import DashboardAuditLog          from './components/DashboardAuditLog.vue'
+import DashboardProductInsights  from './components/DashboardProductInsights.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -177,6 +181,13 @@ const isOwner = computed(() => {
   const u = authStore.user
   if (!u) return false
   return u.is_owner || u.role === 'owner' || u.worker?.role === 'owner' || u.is_superuser
+})
+
+const isOwnerOrManager = computed(() => {
+  const u = authStore.user
+  if (!u) return false
+  const role = (u.role || u.worker?.role || '').toLowerCase()
+  return u.is_owner || u.is_superuser || role === 'owner' || role === 'manager'
 })
 
 const hasAuditAccess = computed(() => {

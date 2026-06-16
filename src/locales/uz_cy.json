@@ -406,7 +406,7 @@
     },
     "permissions_list": {
       "boshqaruv": {
-        "label": "Бошқарув",
+        "label": "Бош саҳифа",
         "desc": "Дашборд ва статистикага кириш"
       },
       "dokonlar": {
@@ -435,7 +435,8 @@
       },
       "moliya": {
         "label": "Молия",
-        "desc": "Молия ва харажатлар"
+        "profit_desc": "Соф фойда барча харажатлардан кейин",
+        "total_outflow_desc": "Барча чиқимлар (Харид + Исроф + Харажат)"
       },
       "obuna": {
         "label": "Обуна",
@@ -524,7 +525,7 @@
     }
   },
   "menu": {
-    "dashboard": "Бошқарув",
+    "dashboard": "Бош саҳифа",
     "sales": "Сотув (POS)",
     "stores": "Дўконлар",
     "inventory": "Омбор",
@@ -1257,7 +1258,9 @@
       "cash_count_label": "Касса ҳисоби (смена ёпишда)",
       "cash_count_desc": "Смена тугаганда кассани ҳисоблашни талаб қилиш",
       "auto_pdf_label": "Автоматик PDF ҳисобот",
-      "auto_pdf_desc": "Смена ёпилганда ҳисоботни PDF шаклида тайёрлаш"
+      "auto_pdf_desc": "Смена ёпилганда ҳисоботни PDF шаклида тайёрлаш",
+      "promotion_label": "Акциялар (Promotion)",
+      "promotion_desc": "Маҳсулотларга вақтинчалик чегирма ва акциялар бериш"
     },
     "stock": {
       "title": "Кам қолдиқ огоҳлантириш",
@@ -1677,7 +1680,7 @@
     "worker_performance": "Ходимлар самарадорлиги",
     "inventory_value": "Инвентар қиймати",
     "tax_report": "Солиқ ҳисоботи",
-    "revenue": "Соф тушум",
+    "revenue": "Умумий тушум",
     "cogs": "Сотилган товар тан нархи",
     "gross_profit": "Ялпи фойда",
     "net_profit": "Соф фойда",
@@ -1887,7 +1890,7 @@
     "smena_live": "Смена live",
     "last_updated": "Сўнгги янгиланиш:",
     "tabs": {
-      "overview": "Бошқарув",
+      "overview": "Умумий",
       "sales": "Савдолар",
       "inventory": "Омбор",
       "customers": "Мижозлар",
@@ -1900,7 +1903,7 @@
       "smena": "Смена",
       "open": "очиқлиги",
       "open_count": "{count} очиқ",
-      "net_revenue": "Соф Тушум",
+      "net_revenue": "Умумий тушум",
       "gross": "Ялпи",
       "sales_count": "{count} харид",
       "avg_check": "Ўртача чек",
@@ -1916,7 +1919,16 @@
       "new_customers": "+{count} янги",
       "customer_base": "Мижозлар Базаси",
       "active_sellers": "{count} та фаол сотувчи",
-      "debt": "Насия"
+      "debt": "Насия",
+      "discount": "Чегирма",
+      "growth_tooltip": "Олдинги даврга нисбатан тушум фарқи",
+      "return_rate_tooltip": "Жами харидларга нисбатан қайтариш даражаси",
+      "margin_tooltip": "Ялпи фойданинг умумий тушумдаги улуши",
+      "expense_tooltip": "Умумий тушумга нисбатан операцион харажатлар даражаси",
+      "cogs_tooltip": "Сотилган товарларнинг умумий тан нархи (COGS)",
+      "deficit_tooltip": "Омборда захираси тугаган ёки кам қолган маҳсулотлар сони",
+      "new_customers_tooltip": "Танланган давр ичида қабул қилинган янги мижозлар",
+      "active_sellers_tooltip": "Ҳозирги вақтда тизимга кирган ва фаол ишлаётган ходимлар"
     },
     "charts": {
       "sales_dynamics": "Савдо Динамикаси",
@@ -2046,6 +2058,74 @@
       "delete_header": "Тасдиқлаш",
       "delete_error": "Етказувчини ўчиришда хатолик",
       "payment_added": "Тўлов муваффақиятли қўшилди. Қарз баланси янгиланди."
+    }
+  },
+  "reports": {
+    "title": "Ҳисоботлар ва Аналитика",
+    "subtitle": "Маҳсулотлар бўйича батафсил таҳлил ва кўрсаткичлар",
+    "profit_loss": "Фойда / Зарар",
+    "summary": "Хулоса",
+    "profit_loss_desc": "Кирим, чиқим ва соф фойда таҳлили",
+    "monthly_distribution": "Ойлик тақсимот",
+    "debtors": "Қарздорлар",
+    "tabs": {
+      "top_selling": "Энг кўп сотилган",
+      "top_profitable": "Энг фойдали",
+      "slow_moving": "Секин сотиладиган",
+      "dead_stock": "Ўлик товар"
+    },
+    "col_rank": "#",
+    "col_product": "Маҳсулот",
+    "col_tur": "Тури",
+    "col_sold_qty": "Сотилди (дона)",
+    "col_revenue": "Тушум",
+    "col_profit": "Фойда",
+    "col_margin": "Margin %",
+    "col_stock": "Қолдиқ",
+    "col_daily_sales": "Кунлик сотув",
+    "col_days_stock": "Захира (кун)",
+    "col_idle_days": "Кутиш (кун)",
+    "col_last_sale": "Охирги сотув",
+    "col_frozen": "Музлатилган капитал",
+    "no_date_filter": "Сана фильтри йўқ — давр SuperAdmin созламасидан олинади",
+    "no_date_filter_hint": "Бу ҳисоботда сана оралиғи танлаб бўлмайди. Чегаралар тизим созламаларидан автоматик олинади.",
+    "excel_download": "Excel юклаб олиш",
+    "excel_loading": "Юкланмоқда...",
+    "never_sold": "Ҳеч сотилмаган",
+    "dead_stock_alert": "{count} та ўлик товар",
+    "frozen_capital": "Музлатилган капитал",
+    "frozen_capital_total": "Жами музлатилган капитал",
+    "top5_title": "Энг кўп сотилган (Top 5)",
+    "top5_profitable_title": "Энг фойдали (Top 5)",
+    "dead_stock_widget_title": "Ўлик товар ҳолати",
+    "dead_stock_widget_desc": "{count} та маҳсулот сотилмаяпти",
+    "view_full_report": "Тўлиқ ҳисобот →",
+    "no_data": "Маълумотлар мавжуд эмас",
+    "no_data_desc": "Танланган фильтрлар бўйича ҳеч нарса топилмади",
+    "loading": "Ҳисобот юкланмоқда...",
+    "filters": {
+      "date_from": "Санадан",
+      "date_to": "Санагача",
+      "branch": "Филиал",
+      "category": "Категория",
+      "all_branches": "Барча филиаллар",
+      "all_categories": "Барча категориялар",
+      "apply": "Қўллаш",
+      "reset": "Тозалаш"
+    },
+    "pagination": {
+      "showing": "{from}–{to} дан {total} та",
+      "prev": "Олдинги",
+      "next": "Кейинги"
+    },
+    "margin": {
+      "high": "Юқори",
+      "mid": "Ўртача",
+      "low": "Паст"
+    },
+    "idle": {
+      "never": "Ҳеч сотилмаган",
+      "days": "{n} кун"
     }
   }
 }

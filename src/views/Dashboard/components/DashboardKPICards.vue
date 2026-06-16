@@ -12,7 +12,8 @@
         </div>
         <!-- vs_prev_period badge -->
         <div v-if="sales.vs_prev_period?.revenue_pct !== undefined"
-             :class="['flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border',
+             v-tooltip.bottom="$t('dashboard.metrics.growth_tooltip')"
+             :class="['flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border cursor-help',
                       sales.vs_prev_period.revenue_pct >= 0
                         ? 'text-emerald-500 bg-emerald-500/8 border-emerald-500/20'
                         : 'text-rose-500 bg-rose-500/8 border-rose-500/20']">
@@ -26,9 +27,11 @@
         <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">{{ $t('dashboard.metrics.net_revenue') }}</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ formatPrice(sales.total_revenue) }}</h2>
         <!-- Gross + discount -->
-        <div class="flex items-center gap-2 mt-1.5">
+        <div class="flex items-center gap-2 mt-1.5 flex-wrap">
           <span class="text-[10px] font-bold text-slate-400">{{ $t('dashboard.metrics.gross') }}: {{ formatPrice(sales.gross_revenue) }}</span>
-          <span v-if="sales.discount_total" class="text-[10px] font-bold text-rose-400">−{{ formatPrice(sales.discount_total) }}</span>
+          <span v-if="sales.discount_total" class="text-[10px] font-bold text-rose-400">
+            ({{ $t('dashboard.metrics.discount') }}: −{{ formatPrice(sales.discount_total) }})
+          </span>
         </div>
       </div>
 
@@ -48,7 +51,8 @@
       <!-- Return stats -->
       <div v-if="settingsStore.isSaleReturnEnabled && sales.return_stats?.count" class="flex items-center justify-between text-[10px] font-black">
         <span class="text-rose-400">{{ sales.return_stats.count }} {{ $t('dashboard.metrics.returns') }}</span>
-        <span :class="['px-1.5 py-0.5 rounded-md', sales.return_stats.return_rate > 5 ? 'bg-rose-500/10 text-rose-500' : 'bg-slate-100 dark:bg-slate-800 text-slate-500']">
+        <span v-tooltip.top="$t('dashboard.metrics.return_rate_tooltip')"
+              :class="['px-1.5 py-0.5 rounded-md cursor-help', sales.return_stats.return_rate > 5 ? 'bg-rose-500/10 text-rose-500' : 'bg-slate-100 dark:bg-slate-800 text-slate-500']">
           {{ sales.return_stats.return_rate }}%
         </span>
       </div>
@@ -62,7 +66,7 @@
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
           <i class="pi pi-chart-line text-sm"></i>
         </div>
-        <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-blue-500/20 bg-blue-500/8 text-blue-500">
+        <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-blue-500/20 bg-blue-500/8 text-blue-500 cursor-help" v-tooltip.bottom="$t('dashboard.metrics.margin_tooltip')">
           {{ parseFloat(sales.margin_percent || 0).toFixed(1) }}% {{ $t('dashboard.metrics.margin') }}
         </div>
       </div>
@@ -76,7 +80,7 @@
       <div class="space-y-1">
         <div class="flex justify-between text-[10px] font-black text-slate-400">
           <span>{{ $t('dashboard.metrics.net_profit') }}</span>
-          <span class="text-rose-400">{{ expenses.expense_ratio || 0 }}% {{ $t('dashboard.metrics.expense') }}</span>
+          <span class="text-rose-400 cursor-help" v-tooltip.top="$t('dashboard.metrics.expense_tooltip')">{{ expenses.expense_ratio || 0 }}% {{ $t('dashboard.metrics.expense') }}</span>
         </div>
         <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
           <div class="h-full bg-blue-500 rounded-l-full" :style="{ width: (100 - (expenses.expense_ratio || 0)) + '%' }"></div>
@@ -86,7 +90,7 @@
 
       <div class="pt-2 border-t border-slate-50 dark:border-slate-800/60 flex items-center justify-between">
         <span class="text-[11px] font-black text-slate-600 dark:text-slate-300">{{ $t('dashboard.metrics.net') }}: <span class="text-emerald-500">{{ formatPrice(expenses.net_profit) }}</span></span>
-        <span class="text-[10px] font-bold text-slate-400">COGS: {{ formatPrice(expenses.cogs) }}</span>
+        <span class="text-[10px] font-bold text-slate-400 cursor-help" v-tooltip.top="$t('dashboard.metrics.cogs_tooltip')">COGS: {{ formatPrice(expenses.cogs) }}</span>
       </div>
     </div>
 
@@ -99,7 +103,8 @@
           <i class="pi pi-box text-sm"></i>
         </div>
         <div v-if="products.low_stock_count"
-             class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-rose-500/20 bg-rose-500/8 text-rose-500 animate-pulse">
+             v-tooltip.bottom="$t('dashboard.metrics.deficit_tooltip')"
+             class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-rose-500/20 bg-rose-500/8 text-rose-500 animate-pulse cursor-help">
           ⚠ {{ products.low_stock_count }} {{ $t('dashboard.metrics.deficit') }}
         </div>
       </div>
@@ -123,7 +128,7 @@
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
           <i class="pi pi-users text-sm"></i>
         </div>
-        <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-amber-500/20 bg-amber-500/8 text-amber-600">
+        <div class="flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-black border border-amber-500/20 bg-amber-500/8 text-amber-600 cursor-help" v-tooltip.bottom="$t('dashboard.metrics.new_customers_tooltip')">
           {{ $t('dashboard.metrics.new_customers', { count: customers.new_count || 0 }) }}
         </div>
       </div>
@@ -131,7 +136,7 @@
       <div>
         <p class="text-[10px] font-black tracking-[0.2em] text-slate-400 mb-1">{{ $t('dashboard.metrics.customer_base') }}</p>
         <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">{{ customers.total || 0 }} {{ $t('common.count') }}</h2>
-        <p v-if="workers.total_active_workers" class="text-[10px] font-black text-emerald-500 mt-1 tracking-wider">
+        <p v-if="workers.total_active_workers" class="text-[10px] font-black text-emerald-500 mt-1 tracking-wider cursor-help" v-tooltip.top="$t('dashboard.metrics.active_sellers_tooltip')">
           {{ $t('dashboard.metrics.active_sellers', { count: workers.total_active_workers }) }}
         </p>
       </div>

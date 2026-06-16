@@ -36,5 +36,29 @@ export const reportsAPI = {
     importCustomers: (formData) => api.post('/export/customers/import/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }),
+
+    // ─── Mahsulot Hisobotlari (Owner/Manager) ─────────────────────────────
+    // 1. Eng ko'p sotilgan — paginatsiyali JSON
+    getTopSelling: (params) => api.get('/export/top-selling/', { params }),
+    // 2. Eng foydali — paginatsiyali JSON
+    getTopProfitable: (params) => api.get('/export/top-profitable/', { params }),
+    // 3. Sekin sotiladigan — paginatsiyali JSON (sana filtri yo'q)
+    getSlowMoving: (params) => api.get('/export/slow-moving/', { params }),
+    // 4. O'lik tovar — paginatsiyali JSON (sana filtri yo'q)
+    getDeadStock: (params) => api.get('/export/dead-stock/', { params }),
+
+    // Excel eksport variantlari (?export=excel → blob yuklab olish)
+    exportTopSelling: (params) => api.get('/export/top-selling/', {
+        params: { ...params, export: 'excel' }, responseType: 'blob'
+    }),
+    exportTopProfitable: (params) => api.get('/export/top-profitable/', {
+        params: { ...params, export: 'excel' }, responseType: 'blob'
+    }),
+    exportSlowMoving: (params) => api.get('/export/slow-moving/', {
+        params: { ...params, export: 'excel' }, responseType: 'blob'
+    }),
+    exportDeadStock: (params) => api.get('/export/dead-stock/', {
+        params: { ...params, export: 'excel' }, responseType: 'blob'
+    }),
 }
 

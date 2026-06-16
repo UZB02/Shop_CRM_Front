@@ -1,0 +1,251 @@
+import { ref, reactive, computed } from 'vue'
+import { reportsAPI } from '@/services/api'
+import { useToast } from 'primevue/usetoast'
+
+// Barcha 4 hisobot uchun tab identifikatorlari
+export const REPORT_TABS = [
+    { id: 'top-selling',    icon: 'pi pi-chart-bar',    color: 'emerald' },
+    { id: 'top-profitable', icon: 'pi pi-dollar',       color: 'violet' },
+    { id: 'slow-moving',    icon: 'pi pi-clock',        color: 'amber' },
+    { id: 'dead-stock',     icon: 'pi pi-ban',          color: 'rose' },
+]
+
+// Tab'ga qarab sana filtri ko'rsatilsinmi?
+export const tabHasDateFilter = (tab) => ['top-selling', 'top-profitable'].includes(tab)
+
+// "tur" maydonini formatlash: null yoki bo'sh → "-", aks holda qiymatini ko'rsatish
+export function formatTur(tur) {
+    if (!tur || tur.trim() === '') return '-'
+    return tur
+}
+
+// String Decimal → float konversiya (xatolikka chidamli)
+export function parseDecimal(value) {
+    if (value === null || value === undefined) return 0
+    const n = parseFloat(value)
+    return isNaN(n) ? 0 : n
+}
+
+// Sonni UZS formatida ko'rsatish
+export function formatMoney(value) {
+    const n = parseDecimal(value)
+    return new Intl.NumberFormat('uz-UZ', { maximumFractionDigits: 0 }).format(n) + " so'm"
+}
+
+// Sonni oddiy formatlash (dona, kun)
+export function formatNum(value) {
+    if (value === null || value === undefined) return '—'
+    return new Intl.NumberFormat('uz-UZ').format(parseDecimal(value))
+}
+
+// Margin foizini ranga aylantirish
+export function marginColor(pct) {
+    const v = parseDecimal(pct)
+    if (v >= 30) return 'text-emerald-500'
+    if (v >= 15) return 'text-amber-500'
+    return 'text-rose-500'
+}
+
+// Blob faylni yuklab olish (Excel)
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob)
+    const a   = document.createElement('a')
+    a.href     = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
+// ─── Asosiy composable ────────────────────────────────────────────────────────
+export function useProductReports() {
+    const toast = useToast()
+
+    // Aktiv tab
+    const activeTab = ref('top-selling')
+
+    // Har tab uchun holat
+    const state = reactive({
+        'top-selling':    { loading: false, data: [], count: 0, page: 1 },
+        'top-profitable': { loading: false, data: [], count: 0, page: 1 },
+        'slow-moving':    { loading: false, data: [], count: 0, page: 1 },
+        'dead-stock':     { loading: false, data: [], count: 0, page: 1 },
+    })
+
+    // Filtrlari (top-2 uchun + slow/dead uchun umumiy branch/category)
+    const filters = reactive({
+        'top-selling':    { date_from: '', date_to: '', branch: '', category: '' },
+        'top-profitable': { date_from: '', date_to: '', branch: '', category: '' },
+        'slow-moving':    { branch: '', category: '' },
+        'dead-stock':     { branch: '', category: '' },
+    })
+
+    const PAGE_SIZE = 20
+    const excelLoading = ref(false)
+
+    // Joriy tab uchun qisqartma getterlar
+    const currentState   = computed(() => state[activeTab.value])
+    const currentFilters = computed(() => filters[activeTab.value])
+
+    // ─── API so'rovlari ───────────────────────────────────────────────────────
+
+    const API_MAP = {
+        'top-selling':    reportsAPI.getTopSelling,
+        'top-profitable': reportsAPI.getTopProfitable,
+        'slow-moving':    reportsAPI.getSlowMoving,
+        'dead-stock':     reportsAPI.getDeadStock,
+    }
+
+    const EXCEL_MAP = {
+        'top-selling':    reportsAPI.exportTopSelling,
+        'top-profitable': reportsAPI.exportTopProfitable,
+        'slow-moving':    reportsAPI.exportSlowMoving,
+        'dead-stock':     reportsAPI.exportDeadStock,
+    }
+
+    const EXCEL_NAMES = {
+        'top-selling':    'eng-kop-sotilgan.xlsx',
+        'top-profitable': 'eng-foydali.xlsx',
+        'slow-moving':    'sekin-sotiladigan.xlsx',
+        'dead-stock':     'olik-tovar.xlsx',
+    }
+
+    async function fetchReport(tab = null, page = 1) {
+        const t = tab || activeTab.value
+        const s = state[t]
+        const f = filters[t]
+
+        s.loading = true
+        s.page    = page
+
+        try {
+            const params = { page, page_size: PAGE_SIZE }
+
+            // Faqat top-2 uchun sana filtri
+            if (tabHasDateFilter(t)) {
+                if (f.date_from) params.date_from = f.date_from
+                if (f.date_to)   params.date_to   = f.date_to
+            }
+            if (f.branch)   params.branch   = f.branch
+            if (f.category) params.category = f.category
+
+            const res  = await API_MAP[t](params)
+            s.data     = res.data?.results || []
+            s.count    = res.data?.count   || 0
+        } catch (err) {
+            console.error(`[useProductReports] ${t} fetch error:`, err)
+            toast.add({
+                severity: 'error',
+                summary:  'Xatolik',
+                detail:   "Hisobotni yuklashda xatolik yuz berdi",
+                life:     4000
+            })
+        } finally {
+            s.loading = false
+        }
+    }
+
+    // Aktiv tabni o'zgartirganda avtomatik fetch
+    async function switchTab(tab) {
+        activeTab.value = tab
+        if (state[tab].data.length === 0 && !state[tab].loading) {
+            await fetchReport(tab, 1)
+        }
+    }
+
+    // Filtrlarni qo'llaganda fetch
+    async function applyFilters() {
+        state[activeTab.value].page = 1
+        await fetchReport(activeTab.value, 1)
+    }
+
+    // Filtrlarni tozalash
+    async function clearFilters() {
+        const f = filters[activeTab.value]
+        Object.keys(f).forEach(k => { f[k] = '' })
+        await fetchReport(activeTab.value, 1)
+    }
+
+    // Paginatsiya
+    async function onPageChange(page) {
+        await fetchReport(activeTab.value, page)
+    }
+
+    // Excel yuklab olish
+    async function downloadExcel() {
+        const t = activeTab.value
+        const f = filters[t]
+        excelLoading.value = true
+        try {
+            const params = {}
+            if (tabHasDateFilter(t)) {
+                if (f.date_from) params.date_from = f.date_from
+                if (f.date_to)   params.date_to   = f.date_to
+            }
+            if (f.branch)   params.branch   = f.branch
+            if (f.category) params.category = f.category
+
+            const res = await EXCEL_MAP[t](params)
+            downloadBlob(res.data, EXCEL_NAMES[t])
+            toast.add({
+                severity: 'success',
+                summary:  'Muvaffaqiyatli',
+                detail:   `${EXCEL_NAMES[t]} yuklab olindi`,
+                life:     3000
+            })
+        } catch (err) {
+            console.error('[useProductReports] excel error:', err)
+            toast.add({
+                severity: 'error',
+                summary:  'Xatolik',
+                detail:   "Excel yuklab olishda xatolik yuz berdi",
+                life:     4000
+            })
+        } finally {
+            excelLoading.value = false
+        }
+    }
+
+    // Mini fetch dashboard widget uchun (faqat birinchi 5 yoki 1 ta)
+    async function fetchMini(tab, pageSize = 5) {
+        const f = API_MAP[tab]
+        try {
+            const res = await f({ page: 1, page_size: pageSize })
+            return {
+                results: res.data?.results || [],
+                count:   res.data?.count   || 0
+            }
+        } catch (e) {
+            console.error(`[useProductReports] mini fetch ${tab}:`, e)
+            return { results: [], count: 0 }
+        }
+    }
+
+    return {
+        // state
+        activeTab,
+        state,
+        filters,
+        currentState,
+        currentFilters,
+        excelLoading,
+
+        // actions
+        fetchReport,
+        switchTab,
+        applyFilters,
+        clearFilters,
+        onPageChange,
+        downloadExcel,
+        fetchMini,
+
+        // formatters (re-exported)
+        formatTur,
+        parseDecimal,
+        formatMoney,
+        formatNum,
+        marginColor,
+        tabHasDateFilter,
+        PAGE_SIZE,
+        REPORT_TABS,
+    }
+}
