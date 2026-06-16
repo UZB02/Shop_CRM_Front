@@ -2072,7 +2072,10 @@
       "top_selling": "Eng ko'p sotilgan",
       "top_profitable": "Eng foydali",
       "slow_moving": "Sekin sotiladigan",
-      "dead_stock": "O'lik tovar"
+      "dead_stock": "Sotilmayotgan tovar",
+      "sold_out": "Tugagan tovar",
+      "sales_trend": "Sotuv trendi",
+      "stockout_forecast": "Tugaydigan tovar"
     },
     "col_rank": "#",
     "col_product": "Mahsulot",
@@ -2086,18 +2089,25 @@
     "col_days_stock": "Zaxira (kun)",
     "col_idle_days": "Kutish (kun)",
     "col_last_sale": "Oxirgi sotuv",
+    "col_current_period": "Joriy davr",
+    "col_previous_period": "Oldingi davr",
+    "col_delta": "O'zgarish (Delta)",
+    "col_growth_pct": "O'sish (%)",
+    "col_avg_daily_sales": "Kunlik tezlik",
+    "col_days_until_stockout": "Qolgan kun",
+    "col_est_stockout_date": "Taxminiy tugash",
     "col_frozen": "Muzlatilgan kapital",
     "no_date_filter": "Sana filtri yo'q — davr SuperAdmin sozlamasidan olinadi",
     "no_date_filter_hint": "Bu hisobotda sana oralig'i tanlab bo'lmaydi. Chegaralar tizim sozlamalaridan avtomatik olinadi.",
     "excel_download": "Excel yuklab olish",
     "excel_loading": "Yuklanmoqda...",
     "never_sold": "Hech sotilmagan",
-    "dead_stock_alert": "{count} ta o'lik tovar",
+    "dead_stock_alert": "{count} ta sotilmayotgan tovar",
     "frozen_capital": "Muzlatilgan kapital",
     "frozen_capital_total": "Jami muzlatilgan kapital",
     "top5_title": "Eng ko'p sotilgan (Top 5)",
     "top5_profitable_title": "Eng foydali (Top 5)",
-    "dead_stock_widget_title": "O'lik tovar holati",
+    "dead_stock_widget_title": "Sotilmayotgan tovar holati",
     "dead_stock_widget_desc": "{count} ta mahsulot sotilmayapti",
     "view_full_report": "To'liq hisobot →",
     "no_data": "Ma'lumotlar mavjud emas",
@@ -2126,6 +2136,19 @@
     "idle": {
       "never": "Hech sotilmagan",
       "days": "{n} kun"
+    },
+    "trend": {
+      "up": "O'sish",
+      "down": "Tushish",
+      "flat": "O'zgarishsiz",
+      "new": "Yangi",
+      "revenue": "Tushum trendi",
+      "quantity": "Miqdor trendi",
+      "profit": "Foyda trendi"
+    },
+    "stockout": {
+      "urgent": "Zudlik bilan",
+      "days_left": "{n} kunda tugaydi"
     }
   }
 }

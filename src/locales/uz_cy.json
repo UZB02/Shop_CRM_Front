@@ -2072,7 +2072,10 @@
       "top_selling": "Энг кўп сотилган",
       "top_profitable": "Энг фойдали",
       "slow_moving": "Секин сотиладиган",
-      "dead_stock": "Ўлик товар"
+      "dead_stock": "Сотилмаётган товар",
+      "sold_out": "Тугаган товар",
+      "sales_trend": "Сотув тренди",
+      "stockout_forecast": "Тугайдиган товар"
     },
     "col_rank": "#",
     "col_product": "Маҳсулот",
@@ -2086,18 +2089,25 @@
     "col_days_stock": "Захира (кун)",
     "col_idle_days": "Кутиш (кун)",
     "col_last_sale": "Охирги сотув",
+    "col_current_period": "Жорий давр",
+    "col_previous_period": "Олдинги давр",
+    "col_delta": "Ўзгариш (Delta)",
+    "col_growth_pct": "Ўсиш (%)",
+    "col_avg_daily_sales": "Кунлик тезлик",
+    "col_days_until_stockout": "Қолган кун",
+    "col_est_stockout_date": "Тахминий тугаш",
     "col_frozen": "Музлатилган капитал",
     "no_date_filter": "Сана фильтри йўқ — давр SuperAdmin созламасидан олинади",
     "no_date_filter_hint": "Бу ҳисоботда сана оралиғи танлаб бўлмайди. Чегаралар тизим созламаларидан автоматик олинади.",
     "excel_download": "Excel юклаб олиш",
     "excel_loading": "Юкланмоқда...",
     "never_sold": "Ҳеч сотилмаган",
-    "dead_stock_alert": "{count} та ўлик товар",
+    "dead_stock_alert": "{count} та сотилмаётган товар",
     "frozen_capital": "Музлатилган капитал",
     "frozen_capital_total": "Жами музлатилган капитал",
     "top5_title": "Энг кўп сотилган (Top 5)",
     "top5_profitable_title": "Энг фойдали (Top 5)",
-    "dead_stock_widget_title": "Ўлик товар ҳолати",
+    "dead_stock_widget_title": "Сотилмаётган товар ҳолати",
     "dead_stock_widget_desc": "{count} та маҳсулот сотилмаяпти",
     "view_full_report": "Тўлиқ ҳисобот →",
     "no_data": "Маълумотлар мавжуд эмас",
@@ -2126,6 +2136,19 @@
     "idle": {
       "never": "Ҳеч сотилмаган",
       "days": "{n} кун"
+    },
+    "trend": {
+      "up": "Ўсиш",
+      "down": "Тушиш",
+      "flat": "Ўзгаришсиз",
+      "new": "Янги",
+      "revenue": "Тушум тренди",
+      "quantity": "Миқдор тренди",
+      "profit": "Фойда тренди"
+    },
+    "stockout": {
+      "urgent": "Зудлик билан",
+      "days_left": "{n} кунда тугайди"
     }
   }
 }

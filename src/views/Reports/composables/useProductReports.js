@@ -4,14 +4,17 @@ import { useToast } from 'primevue/usetoast'
 
 // Barcha 4 hisobot uchun tab identifikatorlari
 export const REPORT_TABS = [
-    { id: 'top-selling',    icon: 'pi pi-chart-bar',    color: 'emerald' },
-    { id: 'top-profitable', icon: 'pi pi-dollar',       color: 'violet' },
-    { id: 'slow-moving',    icon: 'pi pi-clock',        color: 'amber' },
-    { id: 'dead-stock',     icon: 'pi pi-ban',          color: 'rose' },
+    { id: 'top-selling',       icon: 'pi pi-chart-bar',    color: 'emerald' },
+    { id: 'top-profitable',    icon: 'pi pi-dollar',       color: 'violet' },
+    { id: 'slow-moving',       icon: 'pi pi-clock',        color: 'amber' },
+    { id: 'dead-stock',        icon: 'pi pi-ban',          color: 'rose' },
+    { id: 'sold-out',          icon: 'pi pi-exclamation-triangle', color: 'rose' },
+    { id: 'sales-trend',       icon: 'pi pi-chart-line',   color: 'blue' },
+    { id: 'stockout-forecast', icon: 'pi pi-calendar-times', color: 'orange' },
 ]
 
 // Tab'ga qarab sana filtri ko'rsatilsinmi?
-export const tabHasDateFilter = (tab) => ['top-selling', 'top-profitable'].includes(tab)
+export const tabHasDateFilter = (tab) => ['top-selling', 'top-profitable', 'sold-out', 'sales-trend'].includes(tab)
 
 // "tur" maydonini formatlash: null yoki bo'sh → "-", aks holda qiymatini ko'rsatish
 export function formatTur(tur) {
@@ -65,18 +68,24 @@ export function useProductReports() {
 
     // Har tab uchun holat
     const state = reactive({
-        'top-selling':    { loading: false, data: [], count: 0, page: 1 },
-        'top-profitable': { loading: false, data: [], count: 0, page: 1 },
-        'slow-moving':    { loading: false, data: [], count: 0, page: 1 },
-        'dead-stock':     { loading: false, data: [], count: 0, page: 1 },
+        'top-selling':       { loading: false, data: [], count: 0, page: 1 },
+        'top-profitable':    { loading: false, data: [], count: 0, page: 1 },
+        'slow-moving':       { loading: false, data: [], count: 0, page: 1 },
+        'dead-stock':        { loading: false, data: [], count: 0, page: 1 },
+        'sold-out':          { loading: false, data: [], count: 0, page: 1 },
+        'sales-trend':       { loading: false, data: [], count: 0, page: 1, summary: null },
+        'stockout-forecast': { loading: false, data: [], count: 0, page: 1 },
     })
 
-    // Filtrlari (top-2 uchun + slow/dead uchun umumiy branch/category)
+    // Filtrlari
     const filters = reactive({
-        'top-selling':    { date_from: '', date_to: '', branch: '', category: '' },
-        'top-profitable': { date_from: '', date_to: '', branch: '', category: '' },
-        'slow-moving':    { branch: '', category: '' },
-        'dead-stock':     { branch: '', category: '' },
+        'top-selling':       { date_from: '', date_to: '', branch: '', category: '' },
+        'top-profitable':    { date_from: '', date_to: '', branch: '', category: '' },
+        'slow-moving':       { branch: '', category: '' },
+        'dead-stock':        { branch: '', category: '' },
+        'sold-out':          { date_from: '', date_to: '', branch: '', category: '' },
+        'sales-trend':       { date_from: '', date_to: '', branch: '', category: '' },
+        'stockout-forecast': { branch: '', category: '' },
     })
 
     const PAGE_SIZE = 20
@@ -89,24 +98,33 @@ export function useProductReports() {
     // ─── API so'rovlari ───────────────────────────────────────────────────────
 
     const API_MAP = {
-        'top-selling':    reportsAPI.getTopSelling,
-        'top-profitable': reportsAPI.getTopProfitable,
-        'slow-moving':    reportsAPI.getSlowMoving,
-        'dead-stock':     reportsAPI.getDeadStock,
+        'top-selling':       reportsAPI.getTopSelling,
+        'top-profitable':    reportsAPI.getTopProfitable,
+        'slow-moving':       reportsAPI.getSlowMoving,
+        'dead-stock':        reportsAPI.getDeadStock,
+        'sold-out':          reportsAPI.getSoldOut,
+        'sales-trend':       reportsAPI.getSalesTrend,
+        'stockout-forecast': reportsAPI.getStockoutForecast,
     }
 
     const EXCEL_MAP = {
-        'top-selling':    reportsAPI.exportTopSelling,
-        'top-profitable': reportsAPI.exportTopProfitable,
-        'slow-moving':    reportsAPI.exportSlowMoving,
-        'dead-stock':     reportsAPI.exportDeadStock,
+        'top-selling':       reportsAPI.exportTopSelling,
+        'top-profitable':    reportsAPI.exportTopProfitable,
+        'slow-moving':       reportsAPI.exportSlowMoving,
+        'dead-stock':        reportsAPI.exportDeadStock,
+        'sold-out':          reportsAPI.exportSoldOut,
+        'sales-trend':       reportsAPI.exportSalesTrend,
+        'stockout-forecast': reportsAPI.exportStockoutForecast,
     }
 
     const EXCEL_NAMES = {
-        'top-selling':    'eng-kop-sotilgan.xlsx',
-        'top-profitable': 'eng-foydali.xlsx',
-        'slow-moving':    'sekin-sotiladigan.xlsx',
-        'dead-stock':     'olik-tovar.xlsx',
+        'top-selling':       'eng-kop-sotilgan.xlsx',
+        'top-profitable':    'eng-foydali.xlsx',
+        'slow-moving':       'sekin-sotiladigan.xlsx',
+        'dead-stock':        'sotilmayotgan-tovar.xlsx',
+        'sold-out':          'tugagan-tovar.xlsx',
+        'sales-trend':       'sotuv-trendi.xlsx',
+        'stockout-forecast': 'stockout-bashorat.xlsx',
     }
 
     async function fetchReport(tab = null, page = 1) {
@@ -131,6 +149,9 @@ export function useProductReports() {
             const res  = await API_MAP[t](params)
             s.data     = res.data?.results || []
             s.count    = res.data?.count   || 0
+            if (t === 'sales-trend') {
+                s.summary = res.data?.summary || null
+            }
         } catch (err) {
             console.error(`[useProductReports] ${t} fetch error:`, err)
             toast.add({

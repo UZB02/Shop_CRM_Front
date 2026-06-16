@@ -111,6 +111,37 @@
           :page-size="PAGE_SIZE"
           @page-change="onPageChange"
         />
+
+        <SoldOutTable
+          v-else-if="activeTab === 'sold-out'"
+          :items="state['sold-out'].data"
+          :loading="state['sold-out'].loading"
+          :total="state['sold-out'].count"
+          :page="state['sold-out'].page"
+          :page-size="PAGE_SIZE"
+          @page-change="onPageChange"
+        />
+
+        <SalesTrendTable
+          v-else-if="activeTab === 'sales-trend'"
+          :items="state['sales-trend'].data"
+          :summary="state['sales-trend'].summary"
+          :loading="state['sales-trend'].loading"
+          :total="state['sales-trend'].count"
+          :page="state['sales-trend'].page"
+          :page-size="PAGE_SIZE"
+          @page-change="onPageChange"
+        />
+
+        <StockoutForecastTable
+          v-else-if="activeTab === 'stockout-forecast'"
+          :items="state['stockout-forecast'].data"
+          :loading="state['stockout-forecast'].loading"
+          :total="state['stockout-forecast'].count"
+          :page="state['stockout-forecast'].page"
+          :page-size="PAGE_SIZE"
+          @page-change="onPageChange"
+        />
       </div>
     </div>
   </div>
@@ -128,6 +159,9 @@ import TopSellingTable    from './components/TopSellingTable.vue'
 import TopProfitableTable from './components/TopProfitableTable.vue'
 import SlowMovingTable    from './components/SlowMovingTable.vue'
 import DeadStockTable     from './components/DeadStockTable.vue'
+import SoldOutTable       from './components/SoldOutTable.vue'
+import SalesTrendTable    from './components/SalesTrendTable.vue'
+import StockoutForecastTable from './components/StockoutForecastTable.vue'
 
 const { t } = useI18n()
 
@@ -169,6 +203,9 @@ const TAB_ACTIVE = {
   'top-profitable': 'border-violet-500 text-violet-600 dark:text-violet-400 bg-violet-50/60 dark:bg-violet-900/10',
   'slow-moving':    'border-amber-500 text-amber-600 dark:text-amber-400 bg-amber-50/60 dark:bg-amber-900/10',
   'dead-stock':     'border-rose-500 text-rose-600 dark:text-rose-400 bg-rose-50/60 dark:bg-rose-900/10',
+  'sold-out':       'border-rose-500 text-rose-600 dark:text-rose-400 bg-rose-50/60 dark:bg-rose-900/10',
+  'sales-trend':    'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50/60 dark:bg-blue-900/10',
+  'stockout-forecast': 'border-orange-500 text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-900/10',
 }
 
 function tabActiveClass(id) {
@@ -180,6 +217,9 @@ const TAB_LABELS = {
   'top-profitable': () => t('reports.tabs.top_profitable'),
   'slow-moving':    () => t('reports.tabs.slow_moving'),
   'dead-stock':     () => t('reports.tabs.dead_stock'),
+  'sold-out':       () => t('reports.tabs.sold_out'),
+  'sales-trend':    () => t('reports.tabs.sales_trend'),
+  'stockout-forecast': () => t('reports.tabs.stockout_forecast'),
 }
 function tabLabel(id) { return TAB_LABELS[id]?.() || id }
 

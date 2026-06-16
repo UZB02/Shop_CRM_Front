@@ -60,5 +60,23 @@ export const reportsAPI = {
     exportDeadStock: (params) => api.get('/export/dead-stock/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
+    
+    // 5. Tugagan tovar
+    getSoldOut: (params) => api.get('/export/sold-out/', { params }),
+    exportSoldOut: (params) => api.get('/export/sold-out/', {
+        params: { ...params, export: 'excel' }, responseType: 'blob'
+    }),
+
+    // 6. Sotuv trendi
+    getSalesTrend: (params) => api.get('/export/sales-trend/', { params }),
+    exportSalesTrend: (params) => api.get('/export/sales-trend/', {
+        params: { ...params, export: 'excel' }, responseType: 'blob'
+    }),
+
+    // 7. Stock-out bashorat
+    getStockoutForecast: (params) => api.get('/export/stockout-forecast/', { params }),
+    exportStockoutForecast: (params) => api.get('/export/stockout-forecast/', {
+        params: { ...params, export: 'excel' }, responseType: 'blob'
+    }),
 }
 
