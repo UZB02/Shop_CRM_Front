@@ -36,6 +36,9 @@ export const reportsAPI = {
     importCustomers: (formData) => api.post('/export/customers/import/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }),
+    importSubcategories: (formData) => api.post('/export/subcategories/import/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
 
     // ─── Mahsulot Hisobotlari (Owner/Manager) ─────────────────────────────
     // 1. Eng ko'p sotilgan — paginatsiyali JSON

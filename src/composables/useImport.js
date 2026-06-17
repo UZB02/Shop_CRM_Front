@@ -72,6 +72,9 @@ export function useImport() {
                 case 'customers':
                     apiMethod = reportsAPI.importCustomers
                     break
+                case 'subcategories':
+                    apiMethod = reportsAPI.importSubcategories
+                    break
                 default:
                     throw new Error('Noto\'g\'ri import turi: ' + type)
             }

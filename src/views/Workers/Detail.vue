@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <!-- Header -->
-    <WorkerDetailPageHeader
+    <DetailHeader
       :worker="worker"
       @edit="handleEdit"
     />
@@ -42,7 +42,7 @@ import { useI18n } from 'vue-i18n'
 import { workersAPI } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
-import WorkerDetailPageHeader from './components/WorkerDetailPageHeader.vue'
+import DetailHeader from './components/detail/DetailHeader.vue'
 import WorkerTabsSidebar from './components/WorkerTabsSidebar.vue'
 
 // Tab components

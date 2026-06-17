@@ -38,7 +38,7 @@
     <!-- Quick Stats & Actions -->
     <div class="flex items-center gap-4 lg:gap-8 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 md:border-l pt-3 md:pt-0 md:pl-6 lg:pl-8 border-slate-100 dark:border-slate-800">
       <!-- Salary -->
-      <div class="text-left md:text-right">
+      <div v-if="!isManager" class="text-left md:text-right">
         <p class="text-[10px] font-black text-slate-400 tracking-widest mb-0.5">{{ $t('workers.salary') }}</p>
         <div class="flex items-center gap-2">
           <p class="text-xs font-black text-emerald-500 tracking-tight transition-all duration-300"
@@ -65,12 +65,19 @@
 import { ref, computed } from 'vue'
 import Button from 'primevue/button'
 import { useWorkerDetail } from '../../composables/useWorkerDetail'
+import { useAuthStore } from '@/store/auth'
 
 const props = defineProps({
   worker: Object
 })
 
 defineEmits(['edit'])
+
+const authStore = useAuthStore()
+const isManager = computed(() => {
+  const role = (authStore.user?.role || authStore.user?.worker?.role || '').toLowerCase()
+  return role === 'manager'
+})
 
 const showSalary = ref(false)
 const { getAvatarGradient, getInitials, getStatusStyles, formatCurrency } = useWorkerDetail()
