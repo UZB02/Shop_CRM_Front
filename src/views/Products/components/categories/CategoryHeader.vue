@@ -24,34 +24,6 @@
       </div>
       
       <button 
-        @click="$emit('download-template')"
-        :disabled="templateLoading"
-        class="h-9 px-3.5 rounded-lg text-xs font-medium text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50 bg-blue-50/30 dark:bg-blue-900/10 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center gap-1.5 whitespace-nowrap shadow-sm shrink-0 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <i :class="templateLoading ? 'pi pi-spin pi-spinner' : 'pi pi-download'" class="text-[12px]"></i>
-        <span>{{ $t('reports.download_template') }}</span>
-      </button>
-      
-      <!-- Import Button -->
-      <div v-if="canImport" class="relative">
-        <input 
-          type="file" 
-          accept=".xlsx" 
-          hidden 
-          ref="fileInput" 
-          @change="handleFileChange" 
-        />
-        <button
-          @click="triggerFileInput"
-          :disabled="importing"
-          class="h-9 px-3.5 rounded-lg text-xs font-medium text-violet-600 dark:text-violet-400 border border-violet-100 dark:border-violet-900/50 bg-violet-50/30 dark:bg-violet-900/10 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 shadow-sm"
-        >
-          <i :class="importing ? 'pi pi-spin pi-spinner' : 'pi pi-upload'" class="text-[12px]"></i>
-          <span>{{ $t('reports.import_btn') }}</span>
-        </button>
-      </div>
-      
-      <button 
         @click="$emit('add')"
         class="h-9 px-3.5 rounded-lg text-xs font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center gap-1.5 whitespace-nowrap shadow-sm shadow-emerald-500/20 shrink-0 active:scale-95"
       >
@@ -63,41 +35,22 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import InputText from 'primevue/inputtext'
 
 const props = defineProps({
   totalCategories: Number,
-  searchQuery: String,
-  templateLoading: { type: Boolean, default: false },
-  importing: { type: Boolean, default: false },
-  canImport: { type: Boolean, default: false }
+  searchQuery: String
 })
 
-const emit = defineEmits(['update:searchQuery', 'add', 'download-template', 'import'])
+const emit = defineEmits(['update:searchQuery', 'add'])
 const router = useRouter()
 
 const searchModel = computed({
   get: () => props.searchQuery,
   set: (val) => emit('update:searchQuery', val)
 })
-
-const fileInput = ref(null)
-
-const triggerFileInput = () => {
-  if (fileInput.value) {
-    fileInput.value.value = ''
-    fileInput.value.click()
-  }
-}
-
-const handleFileChange = (e) => {
-  const file = e.target.files?.[0]
-  if (file) {
-    emit('import', file)
-  }
-}
 </script>
 
 

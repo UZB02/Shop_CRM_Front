@@ -3,13 +3,8 @@
     <!-- Management Header -->
     <CategoryHeader 
       :total-categories="categories.length"
-      :templateLoading="templateLoading.subcategories"
       v-model:search-query="searchQuery"
-      :can-import="isManagerOrAbove()"
-      :importing="importing"
       @add="openAddMode"
-      @download-template="downloadTemplate('subcategories')"
-      @import="handleImport"
     />
 
     <!-- Main Content Area -->
@@ -74,12 +69,6 @@
       :saving="savingSub"
       @submit="handleSubSubmit"
     />
-
-    <ImportResultDialog
-      v-model:visible="showResultDialog"
-      :result="importResult"
-      @reload="loadData"
-    />
   </div>
 </template>
 
@@ -87,8 +76,6 @@
 import { onMounted } from 'vue'
 import { useCategoryManager } from './composables/useCategoryManager'
 import { useSettingsStore } from '@/store/settings'
-import { useTemplateDownload } from '@/composables/useTemplateDownload'
-import { useImport } from '@/composables/useImport'
 
 const settingsStore = useSettingsStore()
 
@@ -98,7 +85,6 @@ import CategoryCard from './components/categories/CategoryCard.vue'
 import SubcategoryList from './components/categories/SubcategoryList.vue'
 import CategorySlideOver from './components/categories/CategorySlideOver.vue'
 import SubcategorySlideOver from './components/categories/SubcategorySlideOver.vue'
-import ImportResultDialog from '@/components/ImportResultDialog.vue'
 
 const {
   loading, saving, categories, expandedId,
@@ -109,20 +95,6 @@ const {
   loadData, openAddMode, startEdit, handleCategorySubmit, confirmDeleteCategory,
   openAddSubMode, startEditSub, handleSubSubmit, confirmDeleteSub
 } = useCategoryManager()
-
-const { templateLoading, downloadTemplate } = useTemplateDownload()
-
-const {
-  importing,
-  importResult,
-  showResultDialog,
-  isManagerOrAbove,
-  importData
-} = useImport()
-
-const handleImport = async (file) => {
-  await importData('subcategories', file, loadData)
-}
 
 onMounted(loadData)
 </script>
