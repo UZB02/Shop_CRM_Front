@@ -97,7 +97,7 @@
     </div>
 
     <!-- MOBILE BOTTOM NAV -->
-    <MobileBottomNav @open-menu="sidebarOpen = true" />
+    <MobileBottomNav :filtered-menu="filteredMenu" @open-menu="sidebarOpen = true" />
   </div>
 </template>
 

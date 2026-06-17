@@ -126,6 +126,16 @@ export function useDashboardLayout() {
     return menuItems.value.filter(item => {
       // 1. Permission Check
       if (!authStore.hasAccess(item.key)) return false
+
+      // 2. Subscription Expiry Check (restrict everything except subscription and support when expired)
+      if (notificationStore.isSubscriptionExpired && item.key !== 'subscription' && item.key !== 'support') {
+        return false
+      }
+
+      // 3. Settings & Plan Checks
+      if (item.key === 'dashboard' && settingsStore.hasPlanDashboard === false) return false
+      if (item.key === 'yetkazib_beruvchilar' && settingsStore.hasPlanSupplier === false) return false
+
       return true
     })
   })
