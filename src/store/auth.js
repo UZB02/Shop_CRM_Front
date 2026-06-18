@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { authAPI, workersAPI, setApiToken, clearApiToken } from '../services/api'
+import { authAPI, workersAPI, setApiToken, clearApiToken, resetRefreshState } from '../services/api'
 import { useNotificationStore } from './notifications'
 
 const ALL_PERMISSIONS = [
@@ -196,6 +196,7 @@ export const useAuthStore = defineStore('auth', {
             this.userPermissions = []
             this.sessionVerified = false
             clearApiToken()
+            resetRefreshState()
 
             const preservedKeys = ['theme', 'lang']
             Object.keys(localStorage).forEach(key => {

@@ -8,6 +8,10 @@ let _memToken = null
 
 export const setApiToken = (token) => { _memToken = token }
 export const clearApiToken = () => { _memToken = null }
+export const resetRefreshState = () => {
+    isRefreshing = false
+    refreshQueue = []
+}
 
 let isRefreshing = false
 let refreshQueue = []

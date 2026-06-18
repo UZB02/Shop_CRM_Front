@@ -28,6 +28,7 @@ import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
 import { authAPI } from '@/services/auth'
+import { setApiToken } from '@/services/axios'
 
 const route = useRoute()
 const router = useRouter()
@@ -50,6 +51,7 @@ onMounted(async () => {
     
     // Update API client authorization headers
     authStore.token = accessToken
+    setApiToken(accessToken)
     
     // Validate session and retrieve permissions
     const success = await authStore.verifySession()

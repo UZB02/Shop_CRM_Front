@@ -1,4 +1,4 @@
-export { default as api, setApiToken, clearApiToken } from './axios'
+export { default as api, setApiToken, clearApiToken, resetRefreshState } from './axios'
 export { default } from './axios'
 export * from './auth'
 export * from './products'
