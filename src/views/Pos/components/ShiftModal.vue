@@ -43,6 +43,7 @@
                 </label>
                 <InputNumber
                   v-model="cashStart"
+                  @input="cashStart = $event.value"
                   class="shift-input w-full"
                   :min="0"
                   placeholder="0"
@@ -125,6 +126,7 @@
                 </div>
                 <InputNumber
                   v-model="cashCounted"
+                  @input="cashCounted = $event.value"
                   class="shift-input w-full"
                   :min="0"
                   placeholder="0"
@@ -151,11 +153,11 @@
                   <span class="badge-required">Majburiy</span>
                 </div>
                 <div
-                  v-if="discrepancyError"
+                  v-if="displayDiscrepancyError"
                   class="flex items-start gap-2 px-3.5 py-2.5 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20 text-[12px] font-bold text-rose-700 dark:text-rose-300"
                 >
                   <i class="pi pi-exclamation-triangle text-rose-500 dark:text-rose-400 flex-shrink-0 mt-px" />
-                  {{ discrepancyError }}
+                  {{ displayDiscrepancyError }}
                 </div>
                 <textarea
                   v-model="discrepancyReason"
@@ -257,8 +259,24 @@ const needsReasonLocal = computed(() => {
   if (!settingsStore.requireCashCount || cashCounted.value === null) return false
   const diff      = Math.abs(cashCounted.value - parseFloat(expectedCash.value))
   const threshold = parseFloat(settingsStore.cashDiscrepancyThreshold || 0)
-  return threshold > 0 && diff > threshold
+  return diff > threshold
 })
+
+const localDiscrepancyError = computed(() => {
+  if (!settingsStore.requireCashCount || cashCounted.value === null) return ''
+  const diff      = Math.abs(cashCounted.value - parseFloat(expectedCash.value))
+  const threshold = parseFloat(settingsStore.cashDiscrepancyThreshold || 0)
+  if (diff > threshold) {
+    return `Katta kassa farqi aniqlandi (${formatCurrency(diff)}). Davom etish uchun sababini kiriting.`
+  }
+  return ''
+})
+
+const displayDiscrepancyError = computed(() => {
+  if (localDiscrepancyError.value) return localDiscrepancyError.value
+  return props.discrepancyError
+})
+
 const showReasonInput = computed(() => needsReasonLocal.value || !!props.discrepancyError)
 
 // ── Difference badge ──────────────────────────────────────────────────────────
