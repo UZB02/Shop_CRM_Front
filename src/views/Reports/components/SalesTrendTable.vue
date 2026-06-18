@@ -3,50 +3,50 @@
     <!-- Top Summary Cards -->
     <div v-if="summary" class="grid grid-cols-1 md:grid-cols-3 gap-3">
       <!-- Tushum -->
-      <div class="bg-white dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/60 shadow-sm flex flex-col relative overflow-hidden">
-        <div class="flex items-center justify-between mb-2">
+      <div class="bg-white dark:bg-slate-800/85 rounded-xl p-3 border border-slate-100 dark:border-slate-700/60 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
           <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('reports.trend.revenue') }}</span>
-          <i class="pi pi-wallet text-emerald-500 text-lg"></i>
-        </div>
-        <div class="flex flex-col gap-1">
-          <span class="text-xl font-black text-slate-800 dark:text-white">{{ formatMoney(summary.current_period.revenue) }}</span>
-          <div class="flex items-center justify-between">
-            <span class="text-xs text-slate-500 font-semibold line-through decoration-slate-300 dark:decoration-slate-600">{{ formatMoney(summary.previous_period.revenue) }}</span>
+          <div class="flex items-center gap-1.5">
             <TrendBadge :pct="summary.growth.revenue_pct" />
+            <i class="pi pi-wallet text-emerald-500 text-sm"></i>
           </div>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between flex-wrap gap-x-2">
+          <span class="text-base font-black text-slate-800 dark:text-white leading-none">{{ formatMoney(summary.current_period.revenue) }}</span>
+          <span class="text-[11px] text-slate-400 dark:text-slate-500 font-semibold line-through decoration-slate-300 dark:decoration-slate-600 leading-none">{{ formatMoney(summary.previous_period.revenue) }}</span>
         </div>
       </div>
 
       <!-- Miqdor -->
-      <div class="bg-white dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/60 shadow-sm flex flex-col relative overflow-hidden">
-        <div class="flex items-center justify-between mb-2">
+      <div class="bg-white dark:bg-slate-800/85 rounded-xl p-3 border border-slate-100 dark:border-slate-700/60 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
           <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('reports.trend.quantity') }}</span>
-          <i class="pi pi-box text-blue-500 text-lg"></i>
-        </div>
-        <div class="flex flex-col gap-1">
-          <div class="flex items-baseline gap-1">
-            <span class="text-xl font-black text-slate-800 dark:text-white">{{ formatNum(summary.current_period.quantity) }}</span>
-            <span class="text-xs text-slate-400 font-semibold">dona</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-xs text-slate-500 font-semibold line-through decoration-slate-300 dark:decoration-slate-600">{{ formatNum(summary.previous_period.quantity) }} dona</span>
+          <div class="flex items-center gap-1.5">
             <TrendBadge :pct="summary.growth.quantity_pct" />
+            <i class="pi pi-box text-blue-500 text-sm"></i>
           </div>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between flex-wrap gap-x-2">
+          <span class="text-base font-black text-slate-800 dark:text-white leading-none">
+            {{ formatNum(summary.current_period.quantity) }}
+            <span class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">dona</span>
+          </span>
+          <span class="text-[11px] text-slate-400 dark:text-slate-500 font-semibold line-through decoration-slate-300 dark:decoration-slate-600 leading-none">{{ formatNum(summary.previous_period.quantity) }} dona</span>
         </div>
       </div>
 
       <!-- Foyda -->
-      <div class="bg-white dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/60 shadow-sm flex flex-col relative overflow-hidden">
-        <div class="flex items-center justify-between mb-2">
+      <div class="bg-white dark:bg-slate-800/85 rounded-xl p-3 border border-slate-100 dark:border-slate-700/60 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
           <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $t('reports.trend.profit') }}</span>
-          <i class="pi pi-chart-line text-violet-500 text-lg"></i>
-        </div>
-        <div class="flex flex-col gap-1">
-          <span class="text-xl font-black text-slate-800 dark:text-white">{{ formatMoney(summary.current_period.profit) }}</span>
-          <div class="flex items-center justify-between">
-            <span class="text-xs text-slate-500 font-semibold line-through decoration-slate-300 dark:decoration-slate-600">{{ formatMoney(summary.previous_period.profit) }}</span>
+          <div class="flex items-center gap-1.5">
             <TrendBadge :pct="summary.growth.profit_pct" />
+            <i class="pi pi-chart-line text-violet-500 text-sm"></i>
           </div>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between flex-wrap gap-x-2">
+          <span class="text-base font-black text-slate-800 dark:text-white leading-none">{{ formatMoney(summary.current_period.profit) }}</span>
+          <span class="text-[11px] text-slate-400 dark:text-slate-500 font-semibold line-through decoration-slate-300 dark:decoration-slate-600 leading-none">{{ formatMoney(summary.previous_period.profit) }}</span>
         </div>
       </div>
     </div>

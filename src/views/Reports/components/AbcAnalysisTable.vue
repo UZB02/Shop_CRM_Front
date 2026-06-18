@@ -27,88 +27,43 @@
         </div>
       </div>
 
-      <!-- ── DESKTOP: A/B/C kartalar (3 ustun) ──────────────────── -->
-      <div class="hidden md:grid grid-cols-3 gap-3 px-4 pb-4">
+      <!-- ── A/B/C kartalar (Ixcham va premium) ─────────────────── -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 px-4 pb-4">
         <div
           v-for="grade in ['A', 'B', 'C']"
           :key="grade"
-          :class="['rounded-xl p-3 border flex flex-col gap-2', gradeCardClass(grade)]"
+          :class="['rounded-xl p-3 border flex flex-col gap-2.5', gradeCardClass(grade)]"
         >
           <div class="flex items-center justify-between">
-            <AbcBadge :grade="grade" />
+            <div class="flex items-center gap-1.5">
+              <AbcBadge :grade="grade" />
+              <i
+                class="pi pi-info-circle text-[11px] text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400 cursor-help animate-pulse"
+                v-tooltip.top="$t(`reports.abc.info_${grade.toLowerCase()}`)"
+              />
+            </div>
             <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
               {{ $t('reports.abc.grade_label', { grade }) }}
             </span>
           </div>
-          <div>
-            <p class="text-sm font-black text-slate-800 dark:text-white">
-              {{ activeSummary(grade)?.count ?? '—' }} {{ $t('reports.abc.items') }}
-            </p>
-            <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400">
-              {{ activeSummary(grade)?.share_pct ?? '—' }}% {{ $t('reports.abc.share') }}
-            </p>
-          </div>
-          <div :class="['flex items-start gap-1.5 rounded-lg px-2 py-1.5', gradeInfoClass(grade)]">
-            <i class="pi pi-info-circle text-[11px] shrink-0 mt-px"></i>
-            <span class="text-[10px] font-semibold leading-snug">
-              {{ $t(`reports.abc.info_${grade.toLowerCase()}`) }}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── MOBILE: kompakt gorizontal stripe'lar ───────────────── -->
-      <div class="md:hidden flex flex-col gap-0 px-3 pb-3">
-        <div
-          v-for="(grade, gi) in ['A', 'B', 'C']"
-          :key="grade"
-          :class="[
-            'flex items-center gap-3 px-3 py-2.5 rounded-xl border',
-            gi > 0 ? 'mt-2' : '',
-            gradeCardClass(grade)
-          ]"
-        >
-          <!-- Badge -->
-          <AbcBadge :grade="grade" class="shrink-0" />
-
-          <!-- Markaziy ma'lumot -->
-          <div class="flex-grow min-w-0">
-            <div class="flex items-baseline gap-1.5 flex-wrap">
-              <span class="text-sm font-black text-slate-800 dark:text-white leading-tight">
-                {{ activeSummary(grade)?.count ?? '—' }}
-                <span class="text-xs font-bold text-slate-500 dark:text-slate-400">ta</span>
+          <div class="space-y-1">
+            <div class="flex items-baseline justify-between">
+              <span class="text-sm font-black text-slate-800 dark:text-white">
+                {{ activeSummary(grade)?.count ?? '—' }} {{ $t('reports.abc.items') }}
               </span>
-              <span :class="['text-xs font-black px-1.5 py-0.5 rounded-md', gradeShareBadge(grade)]">
-                {{ activeSummary(grade)?.share_pct ?? '—' }}%
+              <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                {{ activeSummary(grade)?.share_pct ?? '—' }}% {{ $t('reports.abc.share') }}
               </span>
             </div>
-            <!-- Qisqa info -->
-            <p class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mt-0.5 truncate">
-              {{ $t(`reports.abc.info_short_${grade.toLowerCase()}`) }}
-            </p>
+            <div class="w-full h-1 rounded-full bg-slate-200/50 dark:bg-slate-800/30 overflow-hidden">
+              <div
+                class="h-full rounded-full transition-all"
+                :class="gradeBarColor(grade)"
+                :style="{ width: (activeSummary(grade)?.share_pct ?? 0) + '%' }"
+              ></div>
+            </div>
           </div>
-
-          <!-- O'ng: info icon + tooltip trigger -->
-          <button
-            @click="toggleInfo(grade)"
-            :class="['shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all', gradeInfoIconClass(grade)]"
-          >
-            <i class="pi pi-info-circle text-[12px]"></i>
-          </button>
         </div>
-
-        <!-- Kengaytirilgan info panel (tap bilan ochiladi) -->
-        <Transition name="info-expand">
-          <div
-            v-if="openInfoGrade"
-            :class="['mt-2 rounded-xl px-3 py-2.5 flex items-start gap-2', gradeInfoClass(openInfoGrade)]"
-          >
-            <i class="pi pi-info-circle text-[12px] shrink-0 mt-0.5"></i>
-            <span class="text-[11px] font-semibold leading-snug">
-              {{ $t(`reports.abc.info_${openInfoGrade.toLowerCase()}`) }}
-            </span>
-          </div>
-        </Transition>
       </div>
     </div>
 
@@ -346,37 +301,13 @@ function gradeCardClass(grade) {
   return map[grade] || ''
 }
 
-function gradeInfoClass(grade) {
+function gradeBarColor(grade) {
   const map = {
-    A: 'bg-emerald-100/70 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300',
-    B: 'bg-amber-100/70 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300',
-    C: 'bg-slate-100 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400',
+    A: 'bg-emerald-500',
+    B: 'bg-amber-500',
+    C: 'bg-slate-400',
   }
-  return map[grade] || ''
-}
-
-function gradeShareBadge(grade) {
-  const map = {
-    A: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300',
-    B: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',
-    C: 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400',
-  }
-  return map[grade] || ''
-}
-
-function gradeInfoIconClass(grade) {
-  const map = {
-    A: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-900/60',
-    B: 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/60',
-    C: 'bg-slate-100 dark:bg-slate-700/60 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700',
-  }
-  return map[grade] || ''
-}
-
-// Mobile info panel toggle
-const openInfoGrade = ref(null)
-function toggleInfo(grade) {
-  openInfoGrade.value = openInfoGrade.value === grade ? null : grade
+  return map[grade] || 'bg-slate-400'
 }
 
 function cumulativeBarColor(pct) {

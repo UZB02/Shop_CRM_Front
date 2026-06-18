@@ -25,7 +25,7 @@
         <StoreTabsSidebar
           :tabs="tabs"
           :active="activeTab"
-          @select="activeTab = $event"
+          @select="setActiveTab"
         />
       </div>
 
@@ -114,7 +114,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStores } from './composables/useStores'
 import { storesAPI } from '@/services/api'
@@ -130,6 +131,8 @@ import { useSettingsStore } from '@/store/settings'
 import { useNotificationStore } from '@/store/notifications'
 
 const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
 const settingsStore = useSettingsStore()
 const notificationStore = useNotificationStore()
 
@@ -150,7 +153,30 @@ const {
 } = useStores()
 
 const storeDetail = ref(null)
-const activeTab   = ref('branches')
+
+// Initialize activeTab from URL query params (default: 'branches')
+const activeTab = ref(route.query.tab && ['branches', 'smenas'].includes(route.query.tab) ? route.query.tab : 'branches')
+
+// Keep activeTab in sync when browser query changes (e.g. back/forward navigation)
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    if (newTab && ['branches', 'smenas'].includes(newTab) && newTab !== activeTab.value) {
+      activeTab.value = newTab
+    }
+  }
+)
+
+// Update URL query parameter when activeTab changes
+const setActiveTab = (tabKey) => {
+  activeTab.value = tabKey
+  router.replace({
+    query: {
+      ...route.query,
+      tab: tabKey
+    }
+  })
+}
 
 const tabs = computed(() => {
   const list = [
