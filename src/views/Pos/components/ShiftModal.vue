@@ -16,11 +16,11 @@
             <!-- Header -->
             <div class="flex items-center justify-between px-5 pt-5 pb-4">
               <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-2xl bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center">
-                  <i class="pi pi-play text-emerald-400 text-sm" />
+                <div class="w-9 h-9 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/10 dark:border-emerald-500/20 flex items-center justify-center">
+                  <i class="pi pi-play text-emerald-500 dark:text-emerald-400 text-sm" />
                 </div>
                 <div>
-                  <h2 class="text-[15px] font-black text-white leading-none">{{ $t('pos.open_new_shift') }}</h2>
+                  <h2 class="text-[15px] font-black text-slate-900 dark:text-white leading-none">{{ $t('pos.open_new_shift') }}</h2>
                   <p class="text-[11px] text-slate-500 font-medium mt-0.5">{{ $t('pos.prepare_cash_register') }}</p>
                 </div>
               </div>
@@ -29,9 +29,9 @@
 
             <div class="px-5 pb-5 space-y-3">
               <!-- Branch -->
-              <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl bg-emerald-500/8 border border-emerald-500/12">
-                <i class="pi pi-map-marker text-emerald-400 text-sm flex-shrink-0" />
-                <span class="text-[13px] font-bold text-emerald-300 truncate">
+              <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/8 border border-emerald-500/10 dark:border-emerald-500/12">
+                <i class="pi pi-map-marker text-emerald-500 dark:text-emerald-400 text-sm flex-shrink-0" />
+                <span class="text-[13px] font-bold text-emerald-600 dark:text-emerald-300 truncate">
                   {{ authStore.user?.branch_name || authStore.user?.worker?.branch_name || $t('pos.unselected') }}
                 </span>
               </div>
@@ -72,11 +72,11 @@
             <!-- Header -->
             <div class="flex items-center justify-between px-5 pt-5 pb-4">
               <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-2xl bg-rose-500/15 border border-rose-500/20 flex items-center justify-center">
-                  <i class="pi pi-lock text-rose-400 text-sm" />
+                <div class="w-9 h-9 rounded-2xl bg-rose-500/10 dark:bg-rose-500/15 border border-rose-500/10 dark:border-rose-500/20 flex items-center justify-center">
+                  <i class="pi pi-lock text-rose-500 dark:text-rose-400 text-sm" />
                 </div>
                 <div>
-                  <h2 class="text-[15px] font-black text-white leading-none">{{ $t('pos.close_shift') }}</h2>
+                  <h2 class="text-[15px] font-black text-slate-900 dark:text-white leading-none">{{ $t('pos.close_shift') }}</h2>
                   <p class="text-[11px] text-slate-500 font-medium mt-0.5">
                     <i class="pi pi-clock mr-1" />
                     {{ formatDate(shift?.opened_at || shift?.start_time || shift?.created_at) }}
@@ -90,17 +90,17 @@
               <!-- Stats: horizontal compact row -->
               <div class="grid grid-cols-2 gap-2">
                 <div class="stat-row">
-                  <i class="pi pi-wallet text-emerald-400 text-sm" />
+                  <i class="pi pi-wallet text-emerald-500 dark:text-emerald-400 text-sm" />
                   <div>
                     <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{{ $t('pos.final_cash') }}</p>
-                    <p class="text-[13px] font-black text-white">{{ formatCurrency(displayCash) }}</p>
+                    <p class="text-[13px] font-black text-slate-900 dark:text-white">{{ formatCurrency(displayCash) }}</p>
                   </div>
                 </div>
                 <div class="stat-row">
-                  <i class="pi pi-chart-bar text-violet-400 text-sm" />
+                  <i class="pi pi-chart-bar text-violet-500 dark:text-violet-400 text-sm" />
                   <div>
                     <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{{ $t('pos.cash_balance') }}</p>
-                    <p class="text-[13px] font-black text-white">{{ formatCurrency(displayNetIncome) }}</p>
+                    <p class="text-[13px] font-black text-slate-900 dark:text-white">{{ formatCurrency(displayNetIncome) }}</p>
                   </div>
                 </div>
               </div>
@@ -118,7 +118,7 @@
               <!-- Cash count input -->
               <div v-if="shift?.status === 'open' && settingsStore.requireCashCount">
                 <div class="flex items-center justify-between mb-2">
-                  <label class="text-[11px] font-black text-slate-400 tracking-widest uppercase">
+                  <label class="text-[11px] font-black text-slate-500 dark:text-slate-400 tracking-widest uppercase">
                     {{ $t('pos.counted_cash_in_register') }}
                   </label>
                   <span class="badge-required">Majburiy</span>
@@ -136,25 +136,25 @@
               <!-- No count needed info -->
               <div
                 v-else-if="shift?.status === 'open' && !settingsStore.requireCashCount"
-                class="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-white/4 border border-white/8 text-[12px] font-medium text-slate-400"
+                class="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-white/4 border border-slate-100 dark:border-white/8 text-[12px] font-medium text-slate-600 dark:text-slate-400"
               >
-                <i class="pi pi-info-circle text-slate-500 flex-shrink-0" />
+                <i class="pi pi-info-circle text-slate-400 dark:text-slate-500 flex-shrink-0" />
                 {{ $t('pos.shift_will_close_without_count') }}
               </div>
 
               <!-- Discrepancy reason -->
               <div v-if="showReasonInput" class="space-y-2">
                 <div class="flex items-center justify-between">
-                  <label class="text-[11px] font-black text-rose-400 tracking-widest uppercase">
+                  <label class="text-[11px] font-black text-rose-500 dark:text-rose-400 tracking-widest uppercase">
                     {{ $t('pos.discrepancy_reason') }}
                   </label>
                   <span class="badge-required">Majburiy</span>
                 </div>
                 <div
                   v-if="discrepancyError"
-                  class="flex items-start gap-2 px-3.5 py-2.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-[12px] font-bold text-rose-300"
+                  class="flex items-start gap-2 px-3.5 py-2.5 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20 text-[12px] font-bold text-rose-700 dark:text-rose-300"
                 >
-                  <i class="pi pi-exclamation-triangle text-rose-400 flex-shrink-0 mt-px" />
+                  <i class="pi pi-exclamation-triangle text-rose-500 dark:text-rose-400 flex-shrink-0 mt-px" />
                   {{ discrepancyError }}
                 </div>
                 <textarea
@@ -264,9 +264,9 @@ const showReasonInput = computed(() => needsReasonLocal.value || !!props.discrep
 // ── Difference badge ──────────────────────────────────────────────────────────
 const diffClass = computed(() => {
   const d = parseFloat(props.shift?.cash_difference || 0)
-  if (d === 0) return { wrap: 'bg-emerald-500/10 border-emerald-500/20', pi: 'pi pi-check-circle text-emerald-400', text: 'text-emerald-300' }
-  if (d < 0)  return { wrap: 'bg-rose-500/10 border-rose-500/20',        pi: 'pi pi-exclamation-triangle text-rose-400', text: 'text-rose-300' }
-  return              { wrap: 'bg-amber-500/10 border-amber-500/20',      pi: 'pi pi-info-circle text-amber-400',  text: 'text-amber-300' }
+  if (d === 0) return { wrap: 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-100 dark:border-emerald-500/20', pi: 'pi pi-check-circle text-emerald-600 dark:text-emerald-400', text: 'text-emerald-700 dark:text-emerald-300' }
+  if (d < 0)  return { wrap: 'bg-rose-50 dark:bg-rose-500/10 border-rose-100 dark:border-rose-500/20',        pi: 'pi pi-exclamation-triangle text-rose-600 dark:text-rose-400', text: 'text-rose-700 dark:text-rose-300' }
+  return              { wrap: 'bg-amber-50 dark:bg-amber-500/10 border-amber-100 dark:border-amber-500/20',      pi: 'pi pi-info-circle text-amber-600 dark:text-amber-400',  text: 'text-amber-700 dark:text-amber-300' }
 })
 const diffMessage = computed(() => {
   const d = parseFloat(props.shift?.cash_difference || 0)
@@ -320,6 +320,11 @@ watch(() => props.visible, (val) => {
 <style scoped>
 /* ── Panel ───────────────────────────────────────────────── */
 .modal-panel {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 32px 64px -16px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.02) inset;
+}
+.dark .modal-panel {
   background: #111827;
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 32px 64px -16px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03) inset;
@@ -329,15 +334,22 @@ watch(() => props.visible, (val) => {
 .close-btn {
   width: 30px; height: 30px;
   border-radius: 10px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.08);
   display: flex; align-items: center; justify-content: center;
   color: #64748b;
   transition: all .15s;
   flex-shrink: 0;
 }
-.close-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.close-btn:hover { background: rgba(0,0,0,0.08); color: #0f172a; }
 .close-btn:active { transform: scale(0.9); }
+
+.dark .close-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #64748b;
+}
+.dark .close-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
 /* ── Stat rows ───────────────────────────────────────────── */
 .stat-row {
@@ -345,59 +357,85 @@ watch(() => props.visible, (val) => {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
+  background: rgba(0,0,0,0.02);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 16px;
+}
+.dark .stat-row {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 16px;
 }
 
 /* ── Badges ──────────────────────────────────────────────── */
 .badge-required {
   font-size: 9px; font-weight: 900;
-  color: #f87171;
-  background: rgba(239,68,68,0.1);
-  border: 1px solid rgba(239,68,68,0.2);
+  color: #ef4444;
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.15);
   padding: 2px 7px;
   border-radius: 6px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
+.dark .badge-required {
+  color: #f87171;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+}
 
 /* ── InputNumber ─────────────────────────────────────────── */
 :deep(.shift-input .p-inputnumber-input) {
   width: 100%;
-  background: rgba(255,255,255,0.05) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
+  background: rgba(0,0,0,0.03) !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
   border-radius: 14px !important;
   padding: 12px 16px !important;
   font-size: 18px !important;
   font-weight: 900 !important;
-  color: #fff !important;
+  color: #0f172a !important;
   outline: none !important;
   box-shadow: none !important;
   transition: border-color .2s, background .2s;
 }
 :deep(.shift-input .p-inputnumber-input:focus) {
   border-color: rgba(16,185,129,0.35) !important;
+  background: rgba(0,0,0,0.05) !important;
+}
+:deep(.shift-input .p-inputnumber-input::placeholder) { color: #94a3b8 !important; font-weight: 700 !important; }
+
+.dark :deep(.shift-input .p-inputnumber-input) {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #fff !important;
+}
+.dark :deep(.shift-input .p-inputnumber-input:focus) {
+  border-color: rgba(16,185,129,0.35) !important;
   background: rgba(255,255,255,0.07) !important;
 }
-:deep(.shift-input .p-inputnumber-input::placeholder) { color: #374151 !important; font-weight: 700 !important; }
+.dark :deep(.shift-input .p-inputnumber-input::placeholder) { color: #374151 !important; }
 
 /* ── Textarea ────────────────────────────────────────────── */
 .reason-textarea {
   width: 100%;
-  background: rgba(255,255,255,0.04);
+  background: rgba(0,0,0,0.02);
   border: 1px solid rgba(239,68,68,0.2);
   border-radius: 14px;
   padding: 10px 14px;
   font-size: 13px;
   font-weight: 500;
-  color: #e2e8f0;
+  color: #0f172a;
   resize: none;
   outline: none;
   transition: border-color .2s;
 }
 .reason-textarea:focus { border-color: rgba(239,68,68,0.4); }
-.reason-textarea::placeholder { color: #374151; }
+.reason-textarea::placeholder { color: #94a3b8; }
+
+.dark .reason-textarea {
+  background: rgba(255,255,255,0.04);
+  color: #e2e8f0;
+}
+.dark .reason-textarea::placeholder { color: #374151; }
 
 /* ── Buttons ─────────────────────────────────────────────── */
 .btn-cancel {
@@ -405,12 +443,19 @@ watch(() => props.visible, (val) => {
   border-radius: 14px;
   font-size: 13px; font-weight: 800;
   color: #64748b;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.06);
   transition: all .15s;
 }
-.btn-cancel:hover { background: rgba(255,255,255,0.08); color: #94a3b8; }
+.btn-cancel:hover { background: rgba(0,0,0,0.06); color: #475569; }
 .btn-cancel:active { transform: scale(0.98); }
+
+.dark .btn-cancel {
+  color: #94a3b8;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.dark .btn-cancel:hover { background: rgba(255,255,255,0.08); color: #cbd5e1; }
 
 .btn-primary {
   padding: 11px 16px;
