@@ -158,6 +158,40 @@
               </div>
             </div>
 
+            <!-- Barcode / QR Section -->
+            <div class="text-center border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 mb-3 print:border-black">
+              <!-- OFD ulangan holat: soliq QR kodi -->
+              <template v-if="t.ofd_status === 'sent' && t.qr_code_url">
+                <p class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 mb-2 print:text-black">
+                  SOLIQ QR KODI
+                </p>
+                <img
+                  :src="t.qr_code_url"
+                  alt="OFD QR"
+                  class="mx-auto w-24 h-24 print:w-24 print:h-24"
+                />
+              </template>
+
+              <!-- OFD o'chirilgan holat: bizning EAN-13 barcode -->
+              <template v-else-if="t.barcode_image_url">
+                <p class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 mb-2 print:text-black">
+                  QAYTARISH UCHUN BARCODE
+                </p>
+                <!-- Loading skeleton -->
+                <div v-if="barcodeLoading" class="mx-auto w-40 h-14 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
+                <!-- Loaded barcode blob -->
+                <img
+                  v-else-if="blobBarcodeUrl"
+                  :src="blobBarcodeUrl"
+                  alt="Chek barcode"
+                  class="mx-auto max-w-full h-14 object-contain print:h-14"
+                />
+                <p class="text-[9px] text-slate-400 dark:text-slate-600 mt-1 print:text-black">
+                  Kassir bu barkodni qaytarish uchun skanerlaydi
+                </p>
+              </template>
+            </div>
+
             <!-- Footer -->
             <div class="text-center border-t-2 border-dashed border-slate-300 dark:border-slate-600 pt-3 pb-2 print:border-black">
                <p v-if="settingsStore.receiptConfig.promo" class="text-sm font-black text-emerald-600 dark:text-emerald-400 mb-2 italic print:text-black print:font-black">
@@ -199,8 +233,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import { useSettingsStore } from '@/store/settings'
+import { salesAPI } from '@/services/api'
+import { usePrinter } from '@/composables/usePrinter'
 
 const props = defineProps({
   transaction: Object,
@@ -214,6 +250,7 @@ const handleStartNewSale = () => {
 }
 
 const settingsStore = useSettingsStore()
+const { paperSize } = usePrinter()
 
 // Safe numeric conversion (handles string values from backend)
 const num = (val) => parseFloat(val) || 0
@@ -223,6 +260,48 @@ const fmt = (val) => settingsStore.formatPrice(num(val))
 
 // Shorthand for cleaner template
 const t = computed(() => props.transaction || {})
+
+// ── Barcode blob loader ──────────────────────────────────────────────────────
+// <img src="..."> Bearer token yubora olmaydi — auth kerak bo'lgan endpoint
+// Shuning uchun salesAPI.getBarcode() orqali blob yuklaymiz va objectURL yaratamiz
+const blobBarcodeUrl = ref(null)
+const barcodeLoading = ref(false)
+
+const revokeBlobUrl = () => {
+  if (blobBarcodeUrl.value) {
+    URL.revokeObjectURL(blobBarcodeUrl.value)
+    blobBarcodeUrl.value = null
+  }
+}
+
+const fetchBarcodeBlob = async (saleId) => {
+  if (!saleId) return
+  revokeBlobUrl()
+  barcodeLoading.value = true
+  try {
+    const res = await salesAPI.getBarcode(saleId)
+    blobBarcodeUrl.value = URL.createObjectURL(res.data)
+  } catch (e) {
+    console.warn('Barcode yuklanmadi:', e)
+  } finally {
+    barcodeLoading.value = false
+  }
+}
+
+// Transaction o'zgarganda yoki visible bo'lganda barcode yuklash
+watch(
+  () => [props.transaction?.id, props.visible],
+  ([id, visible]) => {
+    if (visible && id && props.transaction?.barcode_image_url) {
+      fetchBarcodeBlob(id)
+    } else if (!visible) {
+      revokeBlobUrl()
+    }
+  },
+  { immediate: true }
+)
+
+onBeforeUnmount(revokeBlobUrl)
 </script>
 
 <style scoped>

@@ -3,9 +3,19 @@ import { customersAPI, branchesAPI, workersAPI, shiftsAPI } from '@/services/api
 import { useAuthStore } from '@/store/auth'
 import { useI18n } from 'vue-i18n'
 
-export function useTradeFilter(props, emit) {
+export function useTradeFilter(props, emit, customerAutocomplete = null) {
   const authStore = useAuthStore()
   const { t } = useI18n()
+
+  const hideAutocomplete = () => {
+    if (customerAutocomplete && customerAutocomplete.value) {
+      customerAutocomplete.value.hide?.()
+      const inputEl = customerAutocomplete.value.$el?.querySelector('input')
+      if (inputEl) {
+        inputEl.blur()
+      }
+    }
+  }
 
   const showFilters = ref(false)
   const selectedCustomer = ref(null)
@@ -73,6 +83,15 @@ export function useTradeFilter(props, emit) {
   }
 
   const searchCustomers = async (event) => {
+    const query = event.query?.trim()
+    if (query && /^9\d{12}$/.test(query)) {
+      emit('update:searchQuery', query)
+      selectedCustomer.value = null
+      customerSuggestions.value = []
+      hideAutocomplete()
+      return
+    }
+
     try {
       const res = await customersAPI.getAll({ search: event.query, limit: 15 })
       customerSuggestions.value = res.data.results || res.data || []
@@ -95,6 +114,16 @@ export function useTradeFilter(props, emit) {
   }
 
   watch(selectedCustomer, (newVal) => {
+    if (typeof newVal === 'string') {
+      const val = newVal.trim()
+      if (/^9\d{12}$/.test(val)) {
+        emit('update:searchQuery', val)
+        selectedCustomer.value = null
+        customerSuggestions.value = []
+        hideAutocomplete()
+        return
+      }
+    }
     if (!newVal) {
       emit('update:filter', { customer: '' })
       emit('search')

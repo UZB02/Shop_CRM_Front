@@ -136,7 +136,65 @@
       v-model:visible="displayCreateReturn"
       :initial-sale="returnInitialSale"
       @success="handleReturnSuccess"
+      @load-sale="handleLoadSale"
     />
+
+    <!-- Custom Barcode Error Modal -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div v-if="showBarcodeError" class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/60 backdrop-blur-md p-4">
+          <Transition
+            enter-active-class="transition duration-300 ease-out delay-75"
+            enter-from-class="opacity-0 translate-y-4 scale-95"
+            enter-to-class="opacity-100 translate-y-0 scale-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="opacity-100 translate-y-0 scale-100"
+            leave-to-class="opacity-0 translate-y-4 scale-95"
+          >
+            <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-2xl p-6 overflow-hidden">
+              <!-- Close button (top right) -->
+              <button 
+                @click="showBarcodeError = false"
+                class="absolute right-4 top-4 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-90"
+              >
+                <i class="pi pi-times text-xs" />
+              </button>
+
+              <div class="flex flex-col items-center text-center space-y-4 pt-3">
+                <!-- Icon with glowing back-ring -->
+                <div class="w-16 h-16 rounded-full bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center text-rose-500 border border-rose-100 dark:border-rose-500/20 shadow-sm">
+                  <i class="pi pi-exclamation-triangle text-2xl" />
+                </div>
+
+                <div class="space-y-1">
+                  <h3 class="text-base font-black text-slate-800 dark:text-white leading-tight">Chek topilmadi</h3>
+                </div>
+
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed px-2">
+                  {{ barcodeError }}
+                </p>
+
+                <div class="w-full pt-2">
+                  <button
+                    @click="showBarcodeError = false"
+                    class="w-full h-11 rounded-xl text-xs font-black tracking-widest bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/20 transition-all active:scale-95 uppercase"
+                  >
+                    Yopish
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Transition>
+        </div>
+      </Transition>
+    </Teleport>
     
     <!-- Loading Overlay for Detail Fetch -->
     <div v-if="loadingDetail || returnLoadingDetail" class="fixed inset-0 z-[110] bg-slate-900/10 backdrop-blur-[2px] flex items-center justify-center">
@@ -146,7 +204,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import Tabs from 'primevue/tabs'
@@ -191,8 +249,14 @@ const {
   onPageChange,
   loadTrades,
   exportLoadingType,
-  exportSales
+  exportSales,
+  barcodeError
 } = useTrades()
+
+const showBarcodeError = computed({
+  get: () => !!barcodeError.value,
+  set: (val) => { if (!val) barcodeError.value = null }
+})
 
 const {
   loading: returnLoading,
@@ -229,6 +293,11 @@ const handleReturnSuccess = () => {
   } else {
     loadTrades()
   }
+}
+
+// Barcode orqali topilgan savdoni initialSale sifatida yuklash
+const handleLoadSale = (saleData) => {
+  returnInitialSale.value = saleData
 }
 
 watch(activeTab, (newTab) => {

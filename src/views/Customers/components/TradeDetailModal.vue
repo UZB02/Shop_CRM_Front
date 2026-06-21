@@ -42,7 +42,7 @@
           </div>
 
           <!-- Layout Body -->
-          <div class="flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden flex-grow relative custom-scrollbar pb-6 lg:pb-0">
+          <div class="flex flex-col lg:flex-row flex-1 min-h-0 overflow-y-auto lg:overflow-hidden relative custom-scrollbar">
             
             <!-- Left Side: Product List -->
             <div class="flex-none lg:flex-grow flex flex-col min-h-0 lg:overflow-hidden">
@@ -111,86 +111,107 @@
             </div>
 
             <!-- Right Side: Sidebar -->
-            <div class="flex-none w-full lg:w-[320px] xl:w-[340px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0 lg:h-full">
-              <div class="flex flex-col lg:flex-grow lg:overflow-y-auto custom-scrollbar p-6 space-y-6">
-                
-                <!-- Summary Section -->
-                <div>
-                  <h3 class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-3 pl-1">{{ $t('common.payment_summary') }}</h3>
-                  
-                  <div class="space-y-2.5 px-1">
-                    <div class="flex justify-between items-center text-[13px] font-semibold">
-                      <span class="text-slate-500 dark:text-slate-400">Umumiy summa</span>
-                      <span class="text-slate-800 dark:text-slate-200">{{ formatCurrency(trade.total_price) }}</span>
+            <div class="flex-none w-full lg:w-[300px] xl:w-[320px] bg-[#f8fafc]/50 dark:bg-[#0c121e] border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-white/5 flex flex-col shrink-0 lg:h-full overflow-hidden">
+              
+              <!-- Scroll area -->
+              <div class="flex flex-col flex-1 min-h-0 overflow-y-auto custom-scrollbar p-4 space-y-3">
+
+                <!-- Jami summa (kompakt) -->
+                <div class="flex items-center justify-between px-1">
+                  <span class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest">JAMI SUMMA</span>
+                  <span class="text-[17px] font-black text-slate-900 dark:text-white tracking-tight">{{ formatCurrency(summary.finalTotal) }}</span>
+                </div>
+                <div v-if="summary.hasDiscount" class="flex items-center justify-between px-1">
+                  <span class="text-[11px] text-slate-400 dark:text-slate-500">Chegirma</span>
+                  <span class="text-[12px] font-bold text-emerald-500">-{{ formatCurrency(trade.discount_amount) }}</span>
+                </div>
+
+                <!-- Divider -->
+                <div class="border-t border-slate-100 dark:border-white/5"></div>
+
+                <!-- To'landi (kompakt inline) -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                      <i class="pi pi-check text-[10px] text-emerald-500"></i>
                     </div>
-                    <div v-if="summary.hasDiscount" class="flex justify-between items-center text-[13px] font-semibold">
-                      <span class="text-emerald-500">Chegirma</span>
-                      <span class="text-emerald-500">-{{ formatCurrency(trade.discount_amount) }}</span>
+                    <div>
+                      <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest leading-none">TO'LANDI</p>
+                      <p class="text-[13px] font-black text-emerald-500 leading-tight mt-0.5">{{ formatCurrency(trade.paid_amount) }}</p>
                     </div>
-                    
-                    <div class="pt-3 mt-1 border-t border-slate-200 dark:border-white/5">
-                      <div class="flex justify-between items-baseline">
-                        <span class="text-[11px] font-black text-slate-800 dark:text-slate-300 tracking-widest">Jami Summa</span>
-                        <span class="text-[18px] font-black text-slate-900 dark:text-white tracking-tighter">{{ formatCurrency(summary.finalTotal) }}</span>
-                      </div>
+                  </div>
+                  <TradeStatusBadge :status="trade.payment_type" :display-label="trade.payment_type_display" />
+                </div>
+
+                <!-- Qarz (agar mavjud bo'lsa, kompakt) -->
+                <div v-if="summary.hasDebt" class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center shrink-0">
+                      <i class="pi pi-exclamation-triangle text-[10px] text-rose-500"></i>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-black text-rose-400 tracking-widest leading-none">QARZ</p>
+                      <p class="text-[13px] font-black text-rose-500 leading-tight mt-0.5">{{ formatCurrency(trade.debt_amount) }}</p>
                     </div>
                   </div>
                 </div>
 
-                <!-- Payment Breakdown Cards -->
-                <div class="grid grid-cols-1 gap-3">
-                  <div class="p-4 bg-white dark:bg-[#131d31] rounded-[16px] border border-slate-200 dark:border-transparent shadow-sm relative overflow-hidden flex flex-col justify-between group min-h-[80px] h-auto">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-xl -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-500"></div>
-                    <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.15em] relative z-10 block mb-2">{{ $t('common.paid') }}</span>
-                    <div class="flex items-end justify-between relative z-10 mt-auto gap-3">
-                      <span class="text-[17px] font-black text-emerald-500 tracking-tight leading-none">{{ formatCurrency(trade.paid_amount) }}</span>
-                      <div class="scale-90 origin-bottom-right">
-                        <TradeStatusBadge :status="trade.payment_type" :display-label="trade.payment_type_display" />
-                      </div>
-                    </div>
-                  </div>
+                <!-- Divider -->
+                <div class="border-t border-slate-100 dark:border-white/5"></div>
 
-                  <div v-if="summary.hasDebt" class="p-4 bg-rose-50 dark:bg-rose-500/5 rounded-[16px] border border-rose-100 dark:border-transparent shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[80px] h-auto">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 rounded-full blur-xl -mr-12 -mt-12"></div>
-                    <span class="text-[10px] font-black text-rose-500/70 tracking-[0.15em] relative z-10 block mb-2">{{ $t('customers.details.debt') }}</span>
-                    <div class="flex items-end justify-between relative z-10 mt-auto gap-3">
-                      <span class="text-[17px] font-black text-rose-500 tracking-tight leading-none">{{ formatCurrency(trade.debt_amount) }}</span>
+                <!-- Xodim (kompakt inline) -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center shrink-0">
+                      <i class="pi pi-user text-[10px] text-slate-400"></i>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest leading-none">XODIM</p>
+                      <p class="text-[12px] font-bold text-slate-800 dark:text-slate-200 leading-tight mt-0.5">{{ trade.worker_name }}</p>
                     </div>
                   </div>
+                  <span v-if="trade.smena_id" class="text-[10px] font-black text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-white/5 px-1.5 py-1 rounded border border-slate-200 dark:border-white/5 leading-none">#{{ trade.smena_id }}</span>
                 </div>
 
-                <!-- Footer Info Blocks -->
-                <div class="space-y-3 pt-3 border-t border-slate-100 dark:border-white/5">
-                  <div class="flex items-center justify-between p-3 bg-white dark:bg-[#131d31] rounded-[14px] border border-slate-200 dark:border-transparent shadow-sm">
-                    <div class="flex flex-col gap-0.5">
-                      <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.15em]">{{ $t('shifts.workers.col_worker') }}</span>
-                      <span class="text-[13px] font-bold text-slate-800 dark:text-slate-200">{{ trade.worker_name }}</span>
-                    </div>
-                    <div v-if="trade.smena_id" class="px-2 py-1.5 bg-slate-100 dark:bg-white/5 rounded-md text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest border border-slate-200 dark:border-white/5 shadow-inner leading-none">
-                      SMENA #{{ trade.smena_id }}
-                    </div>
-                  </div>
-
-                  <div v-if="trade.ofd_status && trade.ofd_status !== 'disabled'" class="flex items-center justify-between px-2">
-                    <div class="flex items-center gap-1.5">
-                      <i class="pi pi-shield text-[11px] text-slate-400"></i>
-                      <span class="text-[11px] font-black text-slate-500 dark:text-slate-400 tracking-widest">Fiskal Holat</span>
-                    </div>
-                    <span v-if="trade.ofd_status === 'success'" class="text-[11px] font-black text-emerald-500 flex items-center gap-1"><i class="pi pi-check-circle text-[11px]"></i> Yuborildi</span>
-                    <span v-else class="text-[11px] font-black text-amber-500 flex items-center gap-1"><i class="pi pi-info-circle text-[11px]"></i> {{ trade.ofd_status }}</span>
-                  </div>
-                  <div v-else-if="trade.ofd_status === 'disabled'" class="flex items-center justify-between px-2">
-                     <div class="flex items-center gap-1.5">
-                      <i class="pi pi-shield text-[11px] text-slate-400"></i>
-                      <span class="text-[11px] font-black text-slate-500 dark:text-slate-400 tracking-widest">Fiskal Holat</span>
-                    </div>
-                    <span class="text-[11px] font-bold text-slate-400 flex items-center gap-1 opacity-60"><i class="pi pi-ban text-[11px]"></i> O'chirilgan</span>
-                  </div>
-
+                <!-- Barcode (OFD o'chirilgan holatda, aniq va skanerlashbop) -->
+                <div
+                  v-if="trade.barcode_image_url && trade.ofd_status !== 'sent'"
+                  class="p-3 bg-white dark:bg-[#131d31] rounded-[16px] border border-slate-200 dark:border-white/5 shadow-sm text-center"
+                >
+                  <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.15em] mb-2">QAYTARISH BARCODE</p>
+                  <div v-if="barcodeLoading" class="mx-auto w-[220px] h-20 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
+                  <img
+                    v-else-if="blobBarcodeUrl"
+                    :src="blobBarcodeUrl"
+                    alt="Sale barcode"
+                    class="mx-auto w-full max-w-[220px] h-20 object-contain bg-white p-1 rounded-lg"
+                  />
+                  <p class="text-[9px] text-slate-400 dark:text-slate-500 mt-2 leading-none">Skanerlash orqali tezkor qaytarish</p>
                 </div>
 
-                <!-- Main Actions Container -->
-                <div class="flex flex-col gap-2.5 pt-4 border-t border-slate-100 dark:border-white/5 mt-auto">
+                <!-- Fiskal holat (kompakt) -->
+                <div v-if="trade.ofd_status" class="flex items-center justify-between px-1">
+                  <div class="flex items-center gap-1.5">
+                    <i class="pi pi-shield text-[11px] text-slate-400"></i>
+                    <span class="text-[11px] font-black text-slate-400 dark:text-slate-500 tracking-widest">Fiskal</span>
+                  </div>
+                  <span v-if="trade.ofd_status === 'sent'" class="text-[11px] font-black text-emerald-500 flex items-center gap-1">
+                    <i class="pi pi-check-circle text-[11px]"></i> Yuborildi
+                  </span>
+                  <span v-else-if="trade.ofd_status === 'disabled'" class="text-[11px] font-bold text-slate-400 flex items-center gap-1 opacity-60">
+                    <i class="pi pi-ban text-[11px]"></i> O'chirilgan
+                  </span>
+                  <span v-else class="text-[11px] font-black text-amber-500 flex items-center gap-1">
+                    <i class="pi pi-info-circle text-[11px]"></i> {{ trade.ofd_status }}
+                  </span>
+                </div>
+
+              </div>
+              <!-- /scroll-area -->
+
+              <!-- Sidebar sticky footer: Actions (scroll area dan tashqarida, sidebar ichida) -->
+              <div class="flex-shrink-0 px-6 pb-6 pt-3 border-t border-slate-100 dark:border-white/5 bg-[#f8fafc]/50 dark:bg-[#0c121e]">
+                <div class="flex flex-col gap-2.5">
                   <template v-if="!showCancelConfirm">
                     <button 
                       v-if="canInitReturn" 
@@ -234,25 +255,30 @@
                   <button 
                     @click="printReceipt"
                     :disabled="isPrinting"
-                    class="w-full h-10 bg-white dark:bg-white text-slate-900 dark:text-slate-900 rounded-[12px] border border-slate-200 dark:border-transparent text-[13px] font-bold transition-all hover:bg-slate-50 hover:border-slate-300 dark:hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-1.5 disabled:opacity-50 mt-1 shadow-sm"
+                    class="w-full h-10 bg-white dark:bg-white text-slate-900 dark:text-slate-900 rounded-[12px] border border-slate-200 dark:border-transparent text-[13px] font-bold transition-all hover:bg-slate-50 hover:border-slate-300 dark:hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-sm"
                   >
                     <i v-if="isPrinting" class="pi pi-spinner pi-spin text-[14px]"></i>
                     <i v-else class="pi pi-print text-[14px]"></i>
                     CHOP ETISH
                   </button>
                 </div>
-                
               </div>
+              <!-- /sticky footer -->
+
             </div>
+            <!-- /sidebar -->
           </div>
+          <!-- /modal body -->
         </div>
+        <!-- /modal wrapper -->
       </div>
+      <!-- /v-if visible -->
     </Transition>
   </Teleport>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import TradeStatusBadge from '@/views/Customers/components/TradeStatusBadge.vue'
 import TurBadge from '@/components/common/TurBadge.vue'
@@ -274,6 +300,45 @@ const toast = useToast()
 const isCancelling = ref(false)
 const isPrinting = ref(false)
 const showCancelConfirm = ref(false)
+
+// ── Barcode blob loader ──────────────────────────────────────────────────────
+const blobBarcodeUrl = ref(null)
+const barcodeLoading = ref(false)
+
+const revokeBlobUrl = () => {
+  if (blobBarcodeUrl.value) {
+    URL.revokeObjectURL(blobBarcodeUrl.value)
+    blobBarcodeUrl.value = null
+  }
+}
+
+const fetchBarcodeBlob = async (saleId) => {
+  if (!saleId) return
+  revokeBlobUrl()
+  barcodeLoading.value = true
+  try {
+    const res = await salesAPI.getBarcode(saleId)
+    blobBarcodeUrl.value = URL.createObjectURL(res.data)
+  } catch (e) {
+    console.warn('Barcode yuklanmadi:', e)
+  } finally {
+    barcodeLoading.value = false
+  }
+}
+
+watch(
+  () => [props.trade?.id, props.visible],
+  ([id, visible]) => {
+    if (visible && id && props.trade?.barcode_image_url && props.trade?.ofd_status !== 'sent') {
+      fetchBarcodeBlob(id)
+    } else if (!visible) {
+      revokeBlobUrl()
+    }
+  },
+  { immediate: true }
+)
+
+onBeforeUnmount(revokeBlobUrl)
 
 // Data Parsing & Computation - Optimized for Speed
 const processedItems = computed(() => {

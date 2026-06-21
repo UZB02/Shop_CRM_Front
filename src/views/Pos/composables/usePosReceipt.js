@@ -67,7 +67,9 @@ export function usePosReceipt(showReceipt) {
 
     try {
       const result = await qzPrint({ htmlContent })
+
       if (result.method === 'qz') {
+        // ✅ QZ Tray orqali chop etildi — modal yopiladi
         toast.add({
           severity: 'success',
           summary: t('common.success'),
@@ -75,9 +77,19 @@ export function usePosReceipt(showReceipt) {
           life: 2500
         })
         setTimeout(() => { showReceipt.value = false }, 300)
+
       } else if (result.method === 'browser') {
-        setTimeout(() => { showReceipt.value = false }, 1000)
+        // 🖨️ Brauzer dialog orqali chop etilmoqda
+        // Modal YOPILMAYDI — kassir chekni ko'rib turishida dialog ochiladi
+        toast.add({
+          severity: 'info',
+          summary: 'Chop etish',
+          detail: 'Brauzer dialog orqali chop etilmoqda...',
+          life: 2000
+        })
+        // Modal ochiq qoladi — kassir xohlasa yana bosishi mumkin
       }
+
     } catch (err) {
       console.warn('[POS] QZ print xato, dialog fallbackga o\'tmoqda:', err)
       toast.add({
@@ -87,7 +99,7 @@ export function usePosReceipt(showReceipt) {
         life: 2000
       })
       browserPrintFallback(htmlContent)
-      setTimeout(() => { showReceipt.value = false }, 1000)
+      // Xato holatda ham modal ochiq qoladi
     }
   }
 

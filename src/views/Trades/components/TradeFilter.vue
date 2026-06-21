@@ -4,6 +4,7 @@
     <div class="flex items-center gap-3 w-full">
       <div class="relative flex-1">
         <AutoComplete 
+          ref="customerAutocomplete"
           v-model="selectedCustomer"
           :suggestions="customerSuggestions"
           @complete="searchCustomers"
@@ -277,6 +278,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import AutoComplete from 'primevue/autocomplete'
 import Select from 'primevue/select'
 import DatePicker from 'primevue/datepicker'
@@ -289,6 +291,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:searchQuery', 'update:filter', 'search', 'reset'])
+
+const customerAutocomplete = ref(null)
 
 const {
   showFilters,
@@ -308,7 +312,7 @@ const {
   onCustomerSelect,
   onCustomerClear,
   onReset
-} = useTradeFilter(props, emit)
+} = useTradeFilter(props, emit, customerAutocomplete)
 </script>
 
 <style scoped>

@@ -163,6 +163,7 @@ import { useToast } from 'primevue/usetoast'
 import { useAuthStore }     from '@/store/auth'
 import { useSettingsStore } from '@/store/settings'
 import { usePOS }           from '@/composables/usePOS'
+import { usePrinter }       from '@/composables/usePrinter'
 import { shiftsAPI }        from '@/services/api'
 import { usePosReceipt }    from './composables/usePosReceipt'
 
@@ -222,6 +223,7 @@ const loadingTurlar         = ref(false)
 
 // ── Receipt composable ────────────────────────────────────────────────────────
 const { printReceipt } = usePosReceipt(showReceipt)
+const { isConnected: isPrinterConnected } = usePrinter()
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Lifecycle
@@ -360,7 +362,13 @@ const onCheckoutConfirm = async (paymentData) => {
       showCheckout.value    = false
       showReceipt.value     = true
       catalogRef.value?.fetchProducts(searchQueryGlobal.value)
-      nextTick(() => printReceipt())
+      nextTick(() => {
+        // Faqat QZ Tray ulangan bo'lsa avtomatik chop etish
+        // Ulanmagan bo'lsa kassir chekni ko'rib, o'zi "Chop etish" tugmasini bosadi
+        if (isPrinterConnected.value) {
+          printReceipt()
+        }
+      })
     }
   } catch (err) {
     console.error('Checkout error:', err)

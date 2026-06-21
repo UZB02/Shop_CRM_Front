@@ -15,6 +15,12 @@ export const salesAPI = {
     cancel: (id) => api.patch(`/sales/${id}/cancel/`),
     getReceipt: (id) => api.get(`/sales/${id}/receipt/`, { responseType: 'blob' }),
     scanProduct: (barcode) => api.get(`/warehouse/products/scan/`, { params: { code: barcode } }),
+    getBarcode: (id, format = 'png') =>
+        api.get(`/sales/${id}/barcode/`, {
+            params: format !== 'png' ? { format } : {},
+            responseType: 'blob'
+        }),
+    lookupBarcode: (code) => api.get('/sales/lookup-barcode/', { params: { code } }),
     export: (params) => api.get('/export/sales/', { params, responseType: 'blob' })
 }
 

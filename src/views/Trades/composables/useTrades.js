@@ -68,8 +68,33 @@ export function useTrades() {
     loadTrades()
   }
 
+  const barcodeError = ref(null)
+
   let searchTimeout = null
-  watch(searchQuery, () => {
+  watch(searchQuery, async (newVal) => {
+    const val = newVal?.trim()
+    // EAN-13 format starting with 9 (receipt barcode)
+    if (val && /^9\d{12}$/.test(val)) {
+      if (searchTimeout) clearTimeout(searchTimeout)
+      searchQuery.value = '' // Inputni tozalash
+      
+      // Savdo modalini avtomatik ochish
+      loadingDetail.value = true
+      try {
+        const lookupRes = await salesAPI.lookupBarcode(val)
+        const saleId = lookupRes.data.id
+        const response = await salesAPI.getById(saleId)
+        selectedTrade.value = response.data
+        displayDetail.value = true
+      } catch (error) {
+        console.error('Barcode trade lookup failed:', error)
+        barcodeError.value = 'Ushbu barcode bo\'yicha savdo topilmadi yoki yuklanmadi.'
+      } finally {
+        loadingDetail.value = false
+      }
+      return
+    }
+
     if (searchTimeout) clearTimeout(searchTimeout)
     searchTimeout = setTimeout(() => {
       page.value = 1
@@ -222,7 +247,8 @@ export function useTrades() {
     viewTrade,
     onPageChange,
     exportLoadingType,
-    exportSales
+    exportSales,
+    barcodeError
   }
 }
 
