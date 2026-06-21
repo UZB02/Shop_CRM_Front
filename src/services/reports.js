@@ -42,49 +42,49 @@ export const reportsAPI = {
 
     // ─── Mahsulot Hisobotlari (Owner/Manager) ─────────────────────────────
     // 1. Eng ko'p sotilgan — paginatsiyali JSON
-    getTopSelling: (params) => api.get('/export/top-selling/', { params }),
+    getTopSelling: (params) => api.get('/reports/top-selling/', { params }),
     // 2. Eng foydali — paginatsiyali JSON
-    getTopProfitable: (params) => api.get('/export/top-profitable/', { params }),
+    getTopProfitable: (params) => api.get('/reports/top-profitable/', { params }),
     // 3. Sekin sotiladigan — paginatsiyali JSON (sana filtri yo'q)
-    getSlowMoving: (params) => api.get('/export/slow-moving/', { params }),
+    getSlowMoving: (params) => api.get('/reports/slow-moving/', { params }),
     // 4. O'lik tovar — paginatsiyali JSON (sana filtri yo'q)
-    getDeadStock: (params) => api.get('/export/dead-stock/', { params }),
+    getDeadStock: (params) => api.get('/reports/dead-stock/', { params }),
 
     // Excel eksport variantlari (?export=excel → blob yuklab olish)
-    exportTopSelling: (params) => api.get('/export/top-selling/', {
+    exportTopSelling: (params) => api.get('/reports/top-selling/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
-    exportTopProfitable: (params) => api.get('/export/top-profitable/', {
+    exportTopProfitable: (params) => api.get('/reports/top-profitable/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
-    exportSlowMoving: (params) => api.get('/export/slow-moving/', {
+    exportSlowMoving: (params) => api.get('/reports/slow-moving/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
-    exportDeadStock: (params) => api.get('/export/dead-stock/', {
+    exportDeadStock: (params) => api.get('/reports/dead-stock/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
     
     // 5. Tugagan tovar
-    getSoldOut: (params) => api.get('/export/sold-out/', { params }),
-    exportSoldOut: (params) => api.get('/export/sold-out/', {
+    getSoldOut: (params) => api.get('/reports/sold-out/', { params }),
+    exportSoldOut: (params) => api.get('/reports/sold-out/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
 
     // 6. Sotuv trendi
-    getSalesTrend: (params) => api.get('/export/sales-trend/', { params }),
-    exportSalesTrend: (params) => api.get('/export/sales-trend/', {
+    getSalesTrend: (params) => api.get('/reports/sales-trend/', { params }),
+    exportSalesTrend: (params) => api.get('/reports/sales-trend/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
 
     // 7. Stock-out bashorat
-    getStockoutForecast: (params) => api.get('/export/stockout-forecast/', { params }),
-    exportStockoutForecast: (params) => api.get('/export/stockout-forecast/', {
+    getStockoutForecast: (params) => api.get('/reports/stockout-forecast/', { params }),
+    exportStockoutForecast: (params) => api.get('/reports/stockout-forecast/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
 
     // 8. ABC tahlil
-    getAbcAnalysis: (params) => api.get('/export/abc-analysis/', { params }),
-    exportAbcAnalysis: (params) => api.get('/export/abc-analysis/', {
+    getAbcAnalysis: (params) => api.get('/reports/abc-analysis/', { params }),
+    exportAbcAnalysis: (params) => api.get('/reports/abc-analysis/', {
         params: { ...params, export: 'excel' }, responseType: 'blob'
     }),
 }
