@@ -64,6 +64,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const hasPlanAuditLog        = computed(() => planFeatures.value.has_audit_log        !== false)
   const hasPlanExport          = computed(() => planFeatures.value.has_export           !== false)
   const hasPlanPromotion       = computed(() => planFeatures.value.has_promotion        !== false)
+  const hasPlanReports         = computed(() => planFeatures.value.has_reports          !== false && planFeatures.value.hisobotlar !== false)
 
   // Payment methods
   const allowCash     = computed(() => settings.value?.allow_cash !== false)
@@ -244,6 +245,7 @@ export const useSettingsStore = defineStore('settings', () => {
     hasPlanAuditLog,
     hasPlanExport,
     hasPlanPromotion,
+    hasPlanReports,
 
     // actions
     fetchSettings,

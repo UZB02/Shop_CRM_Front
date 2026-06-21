@@ -102,7 +102,7 @@ export function useDashboardLayout() {
       { label: t('menu.sales'), icon: 'pi pi-calculator', to: '/dashboard/pos', key: 'pos' },
       { label: t('menu.trades'), icon: 'pi pi-shopping-cart', to: '/dashboard/trades', key: 'trades' },
       { label: t('menu.finance'), icon: 'pi pi-wallet', to: '/dashboard/finance', key: 'moliya' },
-      { label: t('menu.reports'), icon: 'pi pi-chart-bar', to: '/dashboard/reports', key: 'moliya' },
+      { label: t('menu.reports'), icon: 'pi pi-chart-bar', to: '/dashboard/reports', key: 'reports' },
 
       // 3. Tovar boshqaruvi
       { label: t('menu.products'), icon: 'pi pi-tag', to: '/dashboard/products', key: 'products' },
@@ -135,6 +135,7 @@ export function useDashboardLayout() {
       // 3. Settings & Plan Checks
       if (item.key === 'dashboard' && settingsStore.hasPlanDashboard === false) return false
       if (item.key === 'yetkazib_beruvchilar' && settingsStore.hasPlanSupplier === false) return false
+      if (item.key === 'reports' && settingsStore.hasPlanReports === false) return false
 
       return true
     })

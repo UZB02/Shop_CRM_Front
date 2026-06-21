@@ -453,6 +453,10 @@
       "yetkazib_beruvchilar": {
         "label": "Yetkazib beruvchilar",
         "desc": "Yetkazib beruvchilar bo'limini ko'rish"
+      },
+      "hisobotlar": {
+        "label": "Hisobotlar",
+        "desc": "Hisobotlar va tahlillarni ko'rish"
       }
     },
     "messages": {

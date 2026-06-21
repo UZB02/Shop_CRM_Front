@@ -261,7 +261,7 @@ const routes = [
                 path: 'reports',
                 name: 'reports',
                 component: () => import('@/views/Reports/index.vue'),
-                meta: { permission: 'moliya' }  // Owner va Manager ko'radi
+                meta: { permission: 'reports' }
             }
         ]
     }
@@ -338,7 +338,7 @@ router.beforeEach(async (to, from, next) => {
     const settingsStore = (await import('@/store/settings')).useSettingsStore()
     
     // Ensure settings are loaded before making a decision on module routes
-    if (to.path.includes('/shifts') || to.path.includes('/workers/kpi')) {
+    if (to.path.includes('/shifts') || to.path.includes('/workers/kpi') || to.path.includes('/reports')) {
         if (!settingsStore.initialized) await settingsStore.fetchSettings()
         
         if (to.path.includes('/shifts') && (!settingsStore.isShiftEnabled || !settingsStore.hasPlanShift)) {
@@ -348,6 +348,11 @@ router.beforeEach(async (to, from, next) => {
 
         if (to.path.includes('/workers/kpi') && (!settingsStore.isKpiEnabled || !settingsStore.hasPlanKpi)) {
             next({ name: 'workers' })
+            return
+        }
+
+        if (to.path.includes('/reports') && !settingsStore.hasPlanReports) {
+            next({ name: 'dashboard' })
             return
         }
     }
