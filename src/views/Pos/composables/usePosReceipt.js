@@ -38,7 +38,7 @@ export function usePosReceipt(showReceipt) {
   .receipt-paper{border:none !important;box-shadow:none !important;padding:0 !important;}
   img{display:block;margin:0 auto;max-width:100%;}
   img[alt="OFD QR"]{width:96px;height:96px;}
-  img[alt="Chek barcode"]{height:80px;max-width:100%;object-fit:contain;}
+  img[alt="Chek barcode"]{height:112px;max-width:100%;object-fit:contain;}
   .print-hidden{display:none !important;}
 </style>
 </head><body>${el.innerHTML}</body></html>`

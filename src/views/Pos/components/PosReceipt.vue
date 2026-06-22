@@ -174,21 +174,15 @@
 
               <!-- OFD o'chirilgan holat: bizning EAN-13 barcode -->
               <template v-else-if="t.barcode_image_url">
-                <p class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 mb-2 print:text-black print-hidden">
-                  QAYTARISH UCHUN BARCODE
-                </p>
                 <!-- Loading skeleton -->
-                <div v-if="barcodeLoading" class="mx-auto w-40 h-20 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
+                <div v-if="barcodeLoading" class="mx-auto w-40 h-28 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
                 <!-- Loaded barcode blob -->
                 <img
                   v-else-if="blobBarcodeUrl"
                   :src="blobBarcodeUrl"
                   alt="Chek barcode"
-                  class="mx-auto max-w-full h-20 object-contain print:h-20"
+                  class="mx-auto max-w-full h-28 object-contain print:h-28"
                 />
-                <p class="text-[9px] text-slate-400 dark:text-slate-600 mt-1 print:text-black print-hidden">
-                  Kassir bu barkodni qaytarish uchun skanerlaydi
-                </p>
               </template>
             </div>
 
