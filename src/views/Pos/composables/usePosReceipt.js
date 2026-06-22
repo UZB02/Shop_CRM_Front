@@ -37,6 +37,9 @@ export function usePosReceipt(showReceipt) {
   .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .receipt-paper{border:none !important;box-shadow:none !important;padding:0 !important;}
   img{display:block;margin:0 auto;max-width:100%;}
+  img[alt="OFD QR"]{width:96px;height:96px;}
+  img[alt="Chek barcode"]{height:80px;max-width:100%;object-fit:contain;}
+  .print-hidden{display:none !important;}
 </style>
 </head><body>${el.innerHTML}</body></html>`
   }
@@ -62,6 +65,23 @@ export function usePosReceipt(showReceipt) {
 
   // ─── Asosiy chop etish: QZ ulangan → silent, aks holda → dialog ───────────
   const printReceipt = async () => {
+    const el = document.getElementById('printable-receipt')
+    if (!el) return
+
+    // Barcode yoki boshqa rasmlar yuklanishini kutamiz (maksimal 3 soniya)
+    let attempts = 0
+    while (attempts < 30) {
+      const skeletons = el.querySelectorAll('.animate-pulse')
+      const images = el.querySelectorAll('img')
+      const allImagesLoaded = Array.from(images).every(img => img.src && img.complete)
+      
+      if (skeletons.length === 0 && allImagesLoaded) {
+        break
+      }
+      await new Promise(resolve => setTimeout(resolve, 100))
+      attempts++
+    }
+
     const htmlContent = buildReceiptHtml()
     if (!htmlContent) return
 

@@ -174,19 +174,19 @@
 
               <!-- OFD o'chirilgan holat: bizning EAN-13 barcode -->
               <template v-else-if="t.barcode_image_url">
-                <p class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 mb-2 print:text-black">
+                <p class="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 mb-2 print:text-black print-hidden">
                   QAYTARISH UCHUN BARCODE
                 </p>
                 <!-- Loading skeleton -->
-                <div v-if="barcodeLoading" class="mx-auto w-40 h-14 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
+                <div v-if="barcodeLoading" class="mx-auto w-40 h-20 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
                 <!-- Loaded barcode blob -->
                 <img
                   v-else-if="blobBarcodeUrl"
                   :src="blobBarcodeUrl"
                   alt="Chek barcode"
-                  class="mx-auto max-w-full h-14 object-contain print:h-14"
+                  class="mx-auto max-w-full h-20 object-contain print:h-20"
                 />
-                <p class="text-[9px] text-slate-400 dark:text-slate-600 mt-1 print:text-black">
+                <p class="text-[9px] text-slate-400 dark:text-slate-600 mt-1 print:text-black print-hidden">
                   Kassir bu barkodni qaytarish uchun skanerlaydi
                 </p>
               </template>
@@ -263,24 +263,24 @@ const t = computed(() => props.transaction || {})
 
 // ── Barcode blob loader ──────────────────────────────────────────────────────
 // <img src="..."> Bearer token yubora olmaydi — auth kerak bo'lgan endpoint
-// Shuning uchun salesAPI.getBarcode() orqali blob yuklaymiz va objectURL yaratamiz
+// Shuning uchun salesAPI.getBarcode() orqali blob yuklaymiz va Base64 formatga o'tkazamiz
+// QZ Tray (ayri Java jarayoni) blob: URL-larni o'qiy olmaydi, shuning uchun Base64 ishlatiladi
 const blobBarcodeUrl = ref(null)
 const barcodeLoading = ref(false)
 
-const revokeBlobUrl = () => {
-  if (blobBarcodeUrl.value) {
-    URL.revokeObjectURL(blobBarcodeUrl.value)
-    blobBarcodeUrl.value = null
-  }
-}
-
 const fetchBarcodeBlob = async (saleId) => {
   if (!saleId) return
-  revokeBlobUrl()
+  blobBarcodeUrl.value = null
   barcodeLoading.value = true
   try {
     const res = await salesAPI.getBarcode(saleId)
-    blobBarcodeUrl.value = URL.createObjectURL(res.data)
+    const base64Data = await new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.onerror = reject
+      reader.readAsDataURL(res.data)
+    })
+    blobBarcodeUrl.value = base64Data
   } catch (e) {
     console.warn('Barcode yuklanmadi:', e)
   } finally {
@@ -295,13 +295,11 @@ watch(
     if (visible && id && props.transaction?.barcode_image_url) {
       fetchBarcodeBlob(id)
     } else if (!visible) {
-      revokeBlobUrl()
+      blobBarcodeUrl.value = null
     }
   },
   { immediate: true }
 )
-
-onBeforeUnmount(revokeBlobUrl)
 </script>
 
 <style scoped>
@@ -387,6 +385,10 @@ onBeforeUnmount(revokeBlobUrl)
     border-color: #000 !important;
     border-style: dashed !important;
     border-width: 2px !important;
+  }
+
+  #printable-receipt .print-hidden {
+    display: none !important;
   }
 }
 </style>

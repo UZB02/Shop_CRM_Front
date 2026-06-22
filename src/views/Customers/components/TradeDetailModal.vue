@@ -8,7 +8,7 @@
       leave-from-class="opacity-100 translate-y-0 sm:scale-100"
       leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
     >
-      <div v-if="visible" class="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4">
+      <div v-if="visible" class="fixed inset-0 z-[1000] flex items-center justify-center p-3 sm:p-4">
         <!-- Minimalist Backdrop -->
         <div 
           class="absolute inset-0 bg-slate-900/60 dark:bg-[#040814]/80 backdrop-blur-sm transition-opacity"
@@ -176,17 +176,15 @@
                 <!-- Barcode (OFD o'chirilgan holatda, aniq va skanerlashbop) -->
                 <div
                   v-if="trade.barcode_image_url && trade.ofd_status !== 'sent'"
-                  class="p-3 bg-white dark:bg-[#131d31] rounded-[16px] border border-slate-200 dark:border-white/5 shadow-sm text-center"
+                  class="p-2.5 bg-white dark:bg-[#131d31] rounded-[16px] border border-slate-200 dark:border-white/5 shadow-sm text-center"
                 >
-                  <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.15em] mb-2">QAYTARISH BARCODE</p>
-                  <div v-if="barcodeLoading" class="mx-auto w-[220px] h-20 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
+                  <div v-if="barcodeLoading" class="mx-auto w-full max-w-[280px] h-28 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
                   <img
                     v-else-if="blobBarcodeUrl"
                     :src="blobBarcodeUrl"
                     alt="Sale barcode"
-                    class="mx-auto w-full max-w-[220px] h-20 object-contain bg-white p-1 rounded-lg"
+                    class="mx-auto w-full max-w-[280px] h-28 object-contain bg-white p-1 rounded-lg"
                   />
-                  <p class="text-[9px] text-slate-400 dark:text-slate-500 mt-2 leading-none">Skanerlash orqali tezkor qaytarish</p>
                 </div>
 
                 <!-- Fiskal holat (kompakt) -->
@@ -305,20 +303,19 @@ const showCancelConfirm = ref(false)
 const blobBarcodeUrl = ref(null)
 const barcodeLoading = ref(false)
 
-const revokeBlobUrl = () => {
-  if (blobBarcodeUrl.value) {
-    URL.revokeObjectURL(blobBarcodeUrl.value)
-    blobBarcodeUrl.value = null
-  }
-}
-
 const fetchBarcodeBlob = async (saleId) => {
   if (!saleId) return
-  revokeBlobUrl()
+  blobBarcodeUrl.value = null
   barcodeLoading.value = true
   try {
     const res = await salesAPI.getBarcode(saleId)
-    blobBarcodeUrl.value = URL.createObjectURL(res.data)
+    const base64Data = await new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.onerror = reject
+      reader.readAsDataURL(res.data)
+    })
+    blobBarcodeUrl.value = base64Data
   } catch (e) {
     console.warn('Barcode yuklanmadi:', e)
   } finally {
@@ -332,13 +329,11 @@ watch(
     if (visible && id && props.trade?.barcode_image_url && props.trade?.ofd_status !== 'sent') {
       fetchBarcodeBlob(id)
     } else if (!visible) {
-      revokeBlobUrl()
+      blobBarcodeUrl.value = null
     }
   },
   { immediate: true }
 )
-
-onBeforeUnmount(revokeBlobUrl)
 
 // Data Parsing & Computation - Optimized for Speed
 const processedItems = computed(() => {
