@@ -1977,8 +1977,8 @@
     "open_caps": "OCHIQ",
     "closed_caps": "YOPILGAN",
     "opened_time": "Ochilgan vaqt:",
-    "final_cash": "Yakuniy Kassa",
-    "cash_balance": "Naqd Qoldiq",
+    "final_cash": "Yakuniy kassa",
+    "cash_balance": "Naqd tushum",
     "cash_correct_no_diff": "Kassa to'g'ri (Farq yo'q)",
     "cashier_shortage": "Kassir {amount} kam",
     "cashier_surplus": "Kassir {amount} ortiqcha",
@@ -2156,7 +2156,7 @@
       "immutable_warning": "To'lov qo'shilgandan so'ng uni tahrirlash yoki o'chirish mumkin emas — bu moliyaviy xavfsizlik sababli.",
       "save_btn": "To'lovni saqlash"
     },
-      "filters": {
+    "filters": {
       "has_debt": "Qarzli"
     },
     "messages": {

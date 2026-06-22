@@ -157,7 +157,7 @@ export function usePrinter() {
 
       // 10 soniya timeout bilan ulanish urinish
       await withTimeout(
-        qz.websocket.connect({ retries: 3, delay: 0.5 }),
+        qz.websocket.connect({ host: '127.0.0.1', retries: 3, delay: 0.5 }),
         10000
       )
 
