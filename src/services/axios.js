@@ -101,14 +101,17 @@ api.interceptors.response.use(
                 refreshQueue.forEach(p => p.reject(refreshError))
                 refreshQueue = []
 
-                clearApiToken()
-                const preservedKeys = ['theme', 'lang']
-                Object.keys(localStorage).forEach(key => {
-                    if (!preservedKeys.includes(key)) localStorage.removeItem(key)
-                })
+                const status = refreshError.response?.status
+                if (status === 400 || status === 401) {
+                    clearApiToken()
+                    const preservedKeys = ['theme', 'lang']
+                    Object.keys(localStorage).forEach(key => {
+                        if (!preservedKeys.includes(key)) localStorage.removeItem(key)
+                    })
 
-                const router = (await import('@/router')).default
-                router.push({ name: 'login' })
+                    const router = (await import('@/router')).default
+                    router.push({ name: 'login' })
+                }
                 return Promise.reject(refreshError)
             } finally {
                 isRefreshing = false
