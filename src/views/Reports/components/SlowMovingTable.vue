@@ -61,7 +61,7 @@
             <td class="px-4 py-3 text-right">
               <div class="flex items-center justify-end gap-1">
                 <span class="font-black text-slate-800 dark:text-slate-100">{{ formatNum(item.current_stock) }}</span>
-                <span class="text-[11px] text-slate-400">dona</span>
+                <span class="text-[11px] text-slate-400">{{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
               </div>
             </td>
 
@@ -120,7 +120,7 @@
               <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('reports.col_stock') }}</span>
               <div class="flex items-baseline gap-1">
                 <span class="font-black text-slate-800 dark:text-slate-100 text-sm">{{ formatNum(item.current_stock) }}</span>
-                <span class="text-[9px] text-slate-400">dona</span>
+                <span class="text-[9px] text-slate-400">{{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
               </div>
             </div>
             <div class="flex flex-col text-right">

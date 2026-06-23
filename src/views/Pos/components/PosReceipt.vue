@@ -175,13 +175,15 @@
               <!-- OFD o'chirilgan holat: bizning EAN-13 barcode -->
               <template v-else-if="t.barcode_image_url">
                 <!-- Loading skeleton -->
-                <div v-if="barcodeLoading" class="mx-auto w-40 h-28 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
+                <div v-if="barcodeLoading" class="mx-auto w-40 h-12 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
                 <!-- Loaded barcode blob -->
                 <img
                   v-else-if="blobBarcodeUrl"
                   :src="blobBarcodeUrl"
                   alt="Chek barcode"
-                  class="mx-auto max-w-full h-28 object-contain print:h-28"
+                  width="130"
+                  class="mx-auto receipt-barcode"
+                  style="width: 130px !important; max-width: 130px !important; height: auto !important; margin: 0 auto !important; display: block !important; object-fit: contain !important;"
                 />
               </template>
             </div>
@@ -383,6 +385,14 @@ watch(
 
   #printable-receipt .print-hidden {
     display: none !important;
+  }
+
+  #printable-receipt .receipt-barcode {
+    width: 130px !important;
+    max-width: 130px !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto !important;
   }
 }
 </style>

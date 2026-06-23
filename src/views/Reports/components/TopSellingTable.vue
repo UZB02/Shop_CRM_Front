@@ -59,7 +59,7 @@
             <td class="px-4 py-3 text-right">
               <div class="flex items-center justify-end gap-1">
                 <span class="font-black text-slate-800 dark:text-slate-100">{{ formatNum(item.sold_quantity) }}</span>
-                <span class="text-[11px] text-slate-400 font-semibold">dona</span>
+                <span class="text-[11px] text-slate-400 font-semibold">{{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
               </div>
             </td>
 
@@ -104,7 +104,7 @@
               <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('reports.col_sold_qty') }}</span>
               <div class="flex items-baseline gap-1">
                 <span class="font-black text-slate-800 dark:text-slate-100 text-base">{{ formatNum(item.sold_quantity) }}</span>
-                <span class="text-[10px] text-slate-400 font-semibold">dona</span>
+                <span class="text-[10px] text-slate-400 font-semibold">{{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
               </div>
             </div>
             <div class="flex flex-col text-right">

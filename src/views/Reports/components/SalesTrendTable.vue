@@ -29,9 +29,9 @@
         <div class="mt-2 flex items-baseline justify-between flex-wrap gap-x-2">
           <span class="text-base font-black text-slate-800 dark:text-white leading-none">
             {{ formatNum(summary.current_period.quantity) }}
-            <span class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">dona</span>
+            <span class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">{{ $t('common.count') }}</span>
           </span>
-          <span class="text-[11px] text-slate-400 dark:text-slate-500 font-semibold line-through decoration-slate-300 dark:decoration-slate-600 leading-none">{{ formatNum(summary.previous_period.quantity) }} dona</span>
+          <span class="text-[11px] text-slate-400 dark:text-slate-500 font-semibold line-through decoration-slate-300 dark:decoration-slate-600 leading-none">{{ formatNum(summary.previous_period.quantity) }} {{ $t('common.count') }}</span>
         </div>
       </div>
 
@@ -90,19 +90,19 @@
               <td class="px-4 py-3 text-right">
                 <div class="flex flex-col">
                   <span class="font-black text-slate-800 dark:text-slate-100">{{ formatMoney(item.current_revenue) }}</span>
-                  <span class="text-[10px] text-slate-500">{{ formatNum(item.current_quantity) }} dona</span>
+                  <span class="text-[10px] text-slate-500">{{ formatNum(item.current_quantity) }} {{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
                 </div>
               </td>
               <td class="px-4 py-3 text-right">
                 <div class="flex flex-col">
                   <span class="text-xs text-slate-500 font-semibold">{{ formatMoney(item.previous_revenue) }}</span>
-                  <span class="text-[10px] text-slate-400">{{ formatNum(item.previous_quantity) }} dona</span>
+                  <span class="text-[10px] text-slate-400">{{ formatNum(item.previous_quantity) }} {{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
                 </div>
               </td>
               <td class="px-4 py-3 text-right">
                 <div class="flex flex-col">
                   <span :class="deltaColor(item.direction)" class="font-bold text-sm">{{ formatMoney(item.delta_revenue) }}</span>
-                  <span class="text-[10px] text-slate-400">{{ item.delta_quantity > 0 ? '+' : '' }}{{ formatNum(item.delta_quantity) }} dona</span>
+                  <span class="text-[10px] text-slate-400">{{ item.delta_quantity > 0 ? '+' : '' }}{{ formatNum(item.delta_quantity) }} {{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
                 </div>
               </td>
               <td class="px-4 py-3 text-right">
@@ -147,7 +147,7 @@
             <div class="flex flex-col">
               <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('reports.col_previous_period') }}</span>
               <span class="text-xs text-slate-500 font-semibold">{{ formatMoney(item.previous_revenue) }}</span>
-              <span class="text-[9px] text-slate-400">{{ formatNum(item.previous_quantity) }} dona</span>
+              <span class="text-[9px] text-slate-400">{{ formatNum(item.previous_quantity) }} {{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
             </div>
             
             <div class="flex flex-col items-center">
@@ -157,7 +157,7 @@
             <div class="flex flex-col text-right">
               <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $t('reports.col_current_period') }}</span>
               <span class="font-black text-slate-800 dark:text-slate-100 text-sm">{{ formatMoney(item.current_revenue) }}</span>
-              <span class="text-[10px] text-slate-500">{{ formatNum(item.current_quantity) }} dona</span>
+              <span class="text-[10px] text-slate-500">{{ formatNum(item.current_quantity) }} {{ item.birlik || item.unit_display || item.unit || 'dona' }}</span>
             </div>
           </div>
         </div>
