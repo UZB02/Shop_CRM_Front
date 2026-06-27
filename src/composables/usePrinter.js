@@ -169,12 +169,14 @@ export function usePrinter() {
       const isHttps = window.location.protocol === 'https:'
       const qzHost = isHttps ? 'localhost.qz.io' : 'localhost'
 
-      console.log(`[usePrinter] QZ Tray ulanish urinilmoqda → wss://${qzHost}:8182`)
+      const securePort = isHttps ? 8181 : 8182
+      console.log(`[usePrinter] QZ Tray ulanish urinilmoqda → ${isHttps ? 'wss' : 'ws'}://${qzHost}:${securePort}`)
 
       await withTimeout(
         qz.websocket.connect({
           host: qzHost,
-          port: { secure: [8182, 8282, 8383, 8484], insecure: [8182, 8282, 8383, 8484] },
+          // QZ Tray v2.x: securePort=8181 (WSS), insecurePort=8182 (WS)
+          port: { secure: [8181, 8281, 8381, 8481], insecure: [8182, 8282, 8382, 8482] },
           usingSecure: isHttps,
           retries: 3,
           delay: 1
