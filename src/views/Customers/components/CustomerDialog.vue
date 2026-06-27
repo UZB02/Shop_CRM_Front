@@ -9,7 +9,7 @@
       leave-from-class="opacity-100" 
       leave-to-class="opacity-0"
     >
-      <div v-if="visible" @click="$emit('update:visible', false)" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-[999]"></div>
+      <div v-if="visible" @click="$emit('update:visible', false)" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-[2000]"></div>
     </Transition>
 
     <!-- Slide-over Panel -->
@@ -21,7 +21,7 @@
       leave-from-class="translate-x-0" 
       leave-to-class="translate-x-full"
     >
-      <div v-if="visible" class="fixed top-0 right-0 h-full w-full max-w-[420px] bg-white dark:bg-slate-900 border-l border-slate-100 dark:border-slate-800 shadow-[-20px_0_50px_-12px_rgba(0,0,0,0.1)] z-[1000] flex flex-col">
+      <div v-if="visible" class="fixed top-0 right-0 h-full w-full max-w-[420px] bg-white dark:bg-slate-900 border-l border-slate-100 dark:border-slate-800 shadow-[-20px_0_50px_-12px_rgba(0,0,0,0.1)] z-[2001] flex flex-col">
         <!-- Panel Header -->
         <div class="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
           <div class="flex flex-col">

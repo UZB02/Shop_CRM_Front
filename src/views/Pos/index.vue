@@ -132,6 +132,7 @@
       v-model:selected-customer="selectedCustomer"
       :loading="posLoading"
       @search-customers="fetchCustomers"
+      @customer-added="customers.unshift($event)"
       @confirm="onCheckoutConfirm"
     />
 
