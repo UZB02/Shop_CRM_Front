@@ -133,6 +133,16 @@ function setupQZCallbacks() {
 export function usePrinter() {
 
   // ─── QZ Tray bilan ulanish ────────────────────────────────────────────────
+  //
+  // HTTPS saytdan ws://localhost ulanishi brauzer tomonidan "Mixed Content"
+  // sababli bloklanadi. Yechim: QZ Tray localhost.qz.io domenini taqdim etadi.
+  // Bu domen 127.0.0.1 ga resolve bo'ladi va QZ Tray o'z CA sertifikati bilan
+  // imzolangan — shuning uchun brauzer wss:// ulanishiga ishonadi.
+  //
+  // Muhit:
+  //   HTTPS (production) → localhost.qz.io (port 8182, wss)
+  //   HTTP  (local dev)  → localhost       (port 8182, ws yoki wss)
+  //
   const connect = async () => {
     // Allaqachon ulangan
     if (isConnected.value) return true
@@ -150,15 +160,26 @@ export function usePrinter() {
       // Allaqachon WebSocket ochiq bo'lsa — ulanish kerak emas
       if (qz.websocket.isActive()) {
         isConnected.value = true
-        // Printerlar ro'yxatini yangilaymiz
         await loadPrinters()
         return true
       }
 
-      // 10 soniya timeout bilan ulanish urinish
+      // HTTPS muhitda localhost.qz.io, HTTP muhitda localhost
+      // localhost.qz.io → 127.0.0.1 (QZ Tray CA sertifikati bilan)
+      const isHttps = window.location.protocol === 'https:'
+      const qzHost = isHttps ? 'localhost.qz.io' : 'localhost'
+
+      console.log(`[usePrinter] QZ Tray ulanish urinilmoqda → wss://${qzHost}:8182`)
+
       await withTimeout(
-        qz.websocket.connect({ host: 'localhost', retries: 3, delay: 0.5 }),
-        10000
+        qz.websocket.connect({
+          host: qzHost,
+          port: { secure: [8182, 8282, 8383, 8484], insecure: [8182, 8282, 8383, 8484] },
+          usingSecure: isHttps,
+          retries: 3,
+          delay: 1
+        }),
+        15000
       )
 
       isConnected.value = true
@@ -167,12 +188,16 @@ export function usePrinter() {
 
     } catch (err) {
       const msg = err?.message || String(err)
-      // Brauzer QZ Tray ni topmaganda aniq xabar
-      if (msg.includes('Timeout') || msg.includes('connect') || msg.includes('refused')) {
-        qzError.value = 'QZ Tray ishlamayapti. Dastur ishga tushirilganini tekshiring.'
+      console.warn('[usePrinter] Ulanish xatosi:', msg)
+
+      if (msg.includes('Timeout') || msg.includes('connect') || msg.includes('refused') || msg.includes('ECONNREFUSED')) {
+        qzError.value = 'QZ Tray ishlamayapti yoki o\'rnatilmagan. Iltimos, QZ Tray dasturini ishga tushiring.'
+      } else if (msg.includes('certificate') || msg.includes('SSL') || msg.includes('ERR_CERT')) {
+        qzError.value = 'QZ Tray SSL sertifikati ishonchli emas. Brauzerda https://localhost.qz.io:8182 ni oching va sertifikatni qabul qiling.'
       } else {
         qzError.value = msg
       }
+
       isConnected.value = false
       return false
     } finally {
