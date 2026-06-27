@@ -67,6 +67,17 @@
 
     <!-- Right icons -->
     <div class="flex items-center gap-3 ml-auto flex-shrink-0">
+      <!-- Custom PWA Install Button -->
+      <button
+        v-if="showInstallBtn"
+        @click="triggerInstall"
+        class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black tracking-wider transition-all duration-300 active:scale-95 shadow-lg shadow-emerald-500/20 border-none cursor-pointer"
+        v-tooltip.bottom="'Dasturni kompyuterga o\'rnatish'"
+      >
+        <i class="pi pi-download text-xs" />
+        <span class="hidden md:inline">O'RNATISH</span>
+      </button>
+
       <!-- Language Switcher -->
       <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-inner">
         <button 
@@ -122,7 +133,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import NotificationBell from './NotificationBell.vue'
@@ -131,6 +142,50 @@ import { useNotificationStore } from '@/store/notifications'
 const router = useRouter()
 const isReloading = ref(false)
 const notificationStore = useNotificationStore()
+
+// PWA Install State & Event Handlers
+const showInstallBtn = ref(false)
+
+const checkInstallPrompt = () => {
+  if (window.deferredInstallPrompt) {
+    showInstallBtn.value = true
+  }
+}
+
+const handleAppInstalled = () => {
+  showInstallBtn.value = false
+}
+
+onMounted(() => {
+  // Avvalroq hodisa ushlangan bo'lsa darhol tekshirish
+  checkInstallPrompt()
+  
+  // Keyinchalik keladigan hodisalar uchun listenerlar
+  window.addEventListener('pwa-install-ready', checkInstallPrompt)
+  window.addEventListener('pwa-installed', handleAppInstalled)
+  
+  // Agar ilova allaqachon standalone rejimda ochilgan bo'lsa yashirish
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    showInstallBtn.value = false
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('pwa-install-ready', checkInstallPrompt)
+  window.removeEventListener('pwa-installed', handleAppInstalled)
+})
+
+const triggerInstall = async () => {
+  const promptEvent = window.deferredInstallPrompt
+  if (!promptEvent) return
+  
+  promptEvent.prompt()
+  const { outcome } = await promptEvent.userChoice
+  if (outcome === 'accepted') {
+    showInstallBtn.value = false
+    window.deferredInstallPrompt = null
+  }
+}
 
 const bonusDays = computed(() => notificationStore.subscription?.bonus_days || 0)
 const tooltipText = computed(() => {

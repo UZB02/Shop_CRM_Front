@@ -48,4 +48,14 @@ app.mount('#app')
 // Ensure initial overlay hides even if no API calls were triggered
 setTimeout(() => { if (window.stopLoader) window.stopLoader(); }, 2000);
 
-
+// Global PWA Install Handler
+window.deferredInstallPrompt = null
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault()
+  window.deferredInstallPrompt = e
+  window.dispatchEvent(new CustomEvent('pwa-install-ready'))
+})
+window.addEventListener('appinstalled', () => {
+  window.deferredInstallPrompt = null
+  window.dispatchEvent(new CustomEvent('pwa-installed'))
+})
