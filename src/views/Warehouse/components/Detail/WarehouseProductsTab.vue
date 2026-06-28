@@ -20,6 +20,12 @@
             <span class="text-xs font-black text-emerald-600 dark:text-emerald-400 font-outfit">{{ settingsStore.formatPrice(totalStockValue) }}</span>
           </div>
 
+          <!-- Jami sotish qiymati -->
+          <div class="flex items-center gap-2 px-3 py-1 bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 rounded-xl">
+            <span class="text-[9px] font-black text-blue-600/70 dark:text-blue-400/60 uppercase tracking-[0.12em]">Sotish qiymati</span>
+            <span class="text-xs font-black text-blue-600 dark:text-blue-400 font-outfit">{{ settingsStore.formatPrice(totalSaleValue) }}</span>
+          </div>
+
           <div class="text-[12px] font-bold text-slate-400 tracking-widest pl-1">
             {{ products.length }} / {{ totalProducts }} {{ $t('products.title') }}
           </div>
@@ -241,6 +247,14 @@ const settingsStore = useSettingsStore()
 const totalStockValue = computed(() => {
   if (!props.products) return 0
   return props.products.reduce((acc, p) => acc + ((parseFloat(p.purchase_price) || 0) * (parseFloat(p.quantity) || 0)), 0)
+})
+
+const totalSaleValue = computed(() => {
+  if (!props.products) return 0
+  return props.products.reduce((acc, p) => {
+    const price = p.active_promotion ? (parseFloat(p.active_promotion.discounted_price) || 0) : (parseFloat(p.sale_price) || 0)
+    return acc + (price * (parseFloat(p.quantity) || 0))
+  }, 0)
 })
 </script>
 
