@@ -2,6 +2,7 @@ import { ref, computed, watch } from 'vue'
 import { salesAPI, customersAPI, customerGroupsAPI } from '@/services/api'
 import { getErrorMessage } from '@/services/axios'
 import { useToast } from 'primevue/usetoast'
+import { useSettingsStore } from '@/store/settings'
 
 export function useCart() {
     const toast = useToast()
@@ -133,7 +134,7 @@ export function useCart() {
                 tur_name: tName,
                 tur_color: tColor,
                 sale_price: effectivePrice,
-                original_sale_price: product.sale_price,
+                original_sale_price: effectivePrice,
                 qty: 1,
                 item_discount_pct: 0,
                 stock_available: availableStock
@@ -165,6 +166,27 @@ export function useCart() {
     const updateItemDiscount = (cartItemId, pct) => {
         const item = cart.value.find(item => item.cartItemId === cartItemId)
         if (item) item.item_discount_pct = Math.min(100, Math.max(0, pct))
+    }
+
+    const updateItemPrice = (cartItemId, newPrice) => {
+        const item = cart.value.find(item => item.cartItemId === cartItemId)
+        if (item) {
+            const price = Math.max(0, parseFloat(newPrice) || 0)
+            const settingsStore = useSettingsStore()
+            const originalPrice = parseFloat(item.original_sale_price || item.price || 0)
+
+            if (!settingsStore.allowPriceMarkup && price > originalPrice) {
+                toast.add({
+                    severity: 'warn',
+                    summary: 'Cheklov',
+                    detail: "Narxni katalog narxidan oshirish uchun do'kon sozlamalaridan ruxsat berilgan bo'lishi lozim.",
+                    life: 3000
+                })
+                item.sale_price = originalPrice
+            } else {
+                item.sale_price = price
+            }
+        }
     }
 
     const clearCart = () => {
@@ -277,6 +299,7 @@ export function useCart() {
         removeFromCart,
         updateQty,
         updateItemDiscount,
+        updateItemPrice,
         clearCart,
         scanAndAdd,
         fetchCustomers,

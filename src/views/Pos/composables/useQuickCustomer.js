@@ -14,11 +14,12 @@ export function useQuickCustomer(emit) {
     name: '',
     phone: '',
     group: null,
-    address: ''
+    address: '',
+    initial_debt: null
   })
 
   const openAddCustomer = () => {
-    newCustomer.value = { name: '', phone: '', group: null, address: '' }
+    newCustomer.value = { name: '', phone: '', group: null, address: '', initial_debt: null }
     customerSubmitted.value = false
     customerDialogVisible.value = true
   }
@@ -41,6 +42,10 @@ export function useQuickCustomer(emit) {
 
       if (newCustomer.value.group) {
         payload.group = newCustomer.value.group
+      }
+
+      if (newCustomer.value.initial_debt && parseFloat(newCustomer.value.initial_debt) !== 0) {
+        payload.initial_debt = newCustomer.value.initial_debt.toString()
       }
 
       const response = await customersAPI.create(payload)

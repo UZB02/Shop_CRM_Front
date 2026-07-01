@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
     <!-- Breadcrumb + Title -->
     <div class="min-w-0">
       <div class="flex items-center gap-2 mb-1">
@@ -24,9 +24,9 @@
     </div>
 
     <!-- Actions -->
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+    <div class="flex flex-wrap items-center gap-3">
       <!-- Search -->
-      <div class="relative group/search w-full md:w-[240px]">
+      <div class="relative group/search w-full sm:w-[240px]">
         <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-[12px] transition-colors group-focus-within/search:text-emerald-500" />
         <input
           :value="searchQuery"
@@ -61,7 +61,7 @@
           : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-700 dark:hover:bg-slate-800'"
       >
         <i class="pi" :class="hasDebtFilter ? 'pi-filter-slash text-[11px]' : 'pi-filter text-[11px]'" />
-        <span class="hidden sm:inline">{{ $t('suppliers.filters.has_debt') }}</span>
+        <span>{{ $t('suppliers.filters.has_debt') }}</span>
       </button>
 
       <!-- Export -->
@@ -71,7 +71,7 @@
           class="h-9 px-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-1.5 whitespace-nowrap"
         >
           <i class="pi pi-download text-[12px]" />
-          <span class="hidden sm:inline">{{ $t('common.export') }}</span>
+          <span>{{ $t('common.export') }}</span>
         </button>
         <Transition name="dropdown">
           <div

@@ -57,6 +57,7 @@ export function usePOS() {
         removeFromCart:     cart.removeFromCart,
         updateQty:          cart.updateQty,
         updateItemDiscount: cart.updateItemDiscount,
+        updateItemPrice:    cart.updateItemPrice,
         clearCart:          cart.clearCart,
         scanAndAdd:         cart.scanAndAdd,
         fetchCustomers:     cart.fetchCustomers,

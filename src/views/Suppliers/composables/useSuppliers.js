@@ -40,7 +40,8 @@ export function useSuppliers() {
         phone: '',
         company: '',
         address: '',
-        description: ''
+        description: '',
+        initial_debt: null
     })
 
     const paymentForm = ref({
@@ -126,6 +127,9 @@ export function useSuppliers() {
                     life: 3000
                 })
             } else {
+                if (supplierForm.value.initial_debt && parseFloat(supplierForm.value.initial_debt) !== 0) {
+                    payload.initial_debt = supplierForm.value.initial_debt.toString()
+                }
                 await suppliersAPI.create(payload)
                 toast.add({
                     severity: 'success',
@@ -240,7 +244,7 @@ export function useSuppliers() {
     // ── Dialog Helpers ────────────────────────────────────────────────────
     const openNew = () => {
         supplier.value = null
-        supplierForm.value = { name: '', phone: '', company: '', address: '', description: '' }
+        supplierForm.value = { name: '', phone: '', company: '', address: '', description: '', initial_debt: null }
         submitted.value = false
         supplierDialog.value = true
     }

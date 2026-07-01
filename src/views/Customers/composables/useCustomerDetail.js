@@ -118,7 +118,13 @@ export function useCustomerDetail() {
   }
 
   const editCustomer = () => {
-    customerToEdit.value = { ...customer.value }
+    const custData = { ...customer.value }
+    if (custData.debt_reminder_date) {
+      custData.debt_reminder_date = new Date(custData.debt_reminder_date)
+    } else {
+      custData.debt_reminder_date = null
+    }
+    customerToEdit.value = custData
     editDialog.value = true
   }
 
@@ -131,7 +137,17 @@ export function useCustomerDetail() {
         name: customerToEdit.value.name,
         phone: customerToEdit.value.phone,
         address: customerToEdit.value.address,
-        group: customerToEdit.value.group
+        group: customerToEdit.value.group,
+        debt_reminder_date: null
+      }
+      if (customerToEdit.value.debt_reminder_date) {
+        const dateObj = new Date(customerToEdit.value.debt_reminder_date)
+        if (!isNaN(dateObj.getTime())) {
+          const year = dateObj.getFullYear()
+          const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+          const day = String(dateObj.getDate()).padStart(2, '0')
+          payload.debt_reminder_date = `${year}-${month}-${day}`
+        }
       }
       await customersAPI.update(customerToEdit.value.id, payload)
       toast.add({ severity: 'success', summary: t('common.success'), detail: t('common.updated'), life: 5000 })
@@ -141,6 +157,34 @@ export function useCustomerDetail() {
       toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error'), life: 5000 })
     } finally {
       saving.value = false
+    }
+  }
+
+  const updateReminderDate = async (newDate) => {
+    try {
+      const id = route.params.id
+      if (!id) return
+      
+      let formattedDate = null
+      if (newDate) {
+        const dateObj = new Date(newDate)
+        if (!isNaN(dateObj.getTime())) {
+          const year = dateObj.getFullYear()
+          const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+          const day = String(dateObj.getDate()).padStart(2, '0')
+          formattedDate = `${year}-${month}-${day}`
+        }
+      }
+
+      await customersAPI.update(id, { debt_reminder_date: formattedDate })
+      toast.add({ severity: 'success', summary: t('common.success'), detail: t('common.updated'), life: 3000 })
+      
+      if (customer.value) {
+        customer.value.debt_reminder_date = formattedDate
+      }
+    } catch (error) {
+      console.error('Error updating reminder date:', error)
+      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error'), life: 4000 })
     }
   }
 
@@ -156,7 +200,7 @@ export function useCustomerDetail() {
     selectedTrade, displayTradeDetail,
     lastTrades, purchaseSummary, debtSummary,
     loadCustomerData, loadPurchases, loadDebts, loadGroups,
-    handleFilters, editCustomer, saveUpdate, showTradeDetail
+    handleFilters, editCustomer, saveUpdate, updateReminderDate, showTradeDetail
   }
 }
 

@@ -36,6 +36,21 @@
         <span class="text-xs font-black text-slate-400">%</span>
       </div>
     </div>
+
+    <SettingRow
+      v-model="form.allow_price_markup"
+      :label="$t('settings.payment.allow_price_markup_label')"
+      :desc="$t('settings.payment.allow_price_markup_desc')"
+      :disabled="readonly"
+      :is-dirty="isFieldDirty('allow_price_markup')"
+    />
+    <div v-if="form.allow_price_markup" class="mx-4 mb-4 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/15 border border-amber-200/50 dark:border-amber-800/30 flex items-start gap-2.5 animate-fadein">
+      <i class="pi pi-exclamation-triangle text-amber-500 mt-0.5 text-sm" />
+      <div class="flex-1">
+        <p class="text-[11px] font-black text-amber-800 dark:text-amber-400 uppercase tracking-wider m-0">{{ $t('common.warning') }}</p>
+        <p class="text-xs text-amber-600 dark:text-amber-500 m-0 mt-1 leading-normal font-medium">{{ $t('settings.payment.allow_price_markup_warning') }}</p>
+      </div>
+    </div>
   </div>
 </template>
 

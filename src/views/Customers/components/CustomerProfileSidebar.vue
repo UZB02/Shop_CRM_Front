@@ -25,6 +25,25 @@
             <span class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-widest leading-none">{{ $t('customers.details.registered') }}</span>
             <span class="text-[11px] font-black text-slate-700 dark:text-slate-300">{{ customer.created_on || '-' }}</span>
         </div>
+        
+        <!-- Qarz eslatma sanasi (Fast Edit) -->
+        <div class="pt-2 border-t border-slate-100 dark:border-white/5">
+          <label class="text-[9px] font-black text-slate-400 dark:text-slate-500 tracking-widest block mb-1">
+            {{ $t('customers.details.debt_reminder') || 'QARZ ESLATMA SANASI' }}
+          </label>
+          <div class="relative group/input mt-1">
+            <i class="pi pi-calendar absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 group-focus-within/input:text-emerald-500 transition-colors z-10 pointer-events-none"></i>
+            <DatePicker 
+              :modelValue="parsedReminderDate" 
+              @update:modelValue="onReminderDateChange"
+              dateFormat="yy-mm-dd" 
+              :placeholder="$t('customers.form.debt_reminder_date_placeholder') || 'YYYY-MM-DD'" 
+              class="sidebar-reminder-datepicker w-full"
+              appendTo="body"
+              showButtonBar
+            />
+          </div>
+        </div>
       </div>
 
       <button 
@@ -41,6 +60,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import DatePicker from 'primevue/datepicker'
 
 const props = defineProps({
   customer: {
@@ -49,7 +69,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['payDebt'])
+const emit = defineEmits(['payDebt', 'updateReminderDate'])
 
 const initials = computed(() => {
   if (!props.customer.name) return '?'
@@ -57,6 +77,61 @@ const initials = computed(() => {
   if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase()
   return parts[0].slice(0, 2).toUpperCase()
 })
+
+const parsedReminderDate = computed(() => {
+  return props.customer?.debt_reminder_date ? new Date(props.customer.debt_reminder_date) : null
+})
+
+const onReminderDateChange = (val) => {
+  emit('updateReminderDate', val)
+}
 </script>
+
+<style>
+/* Sidebar reminder datepicker styling */
+.sidebar-reminder-datepicker {
+  width: 100% !important;
+}
+
+.sidebar-reminder-datepicker .p-datepicker-input,
+.sidebar-reminder-datepicker input {
+  width: 100% !important;
+  height: 2.25rem !important;
+  padding-left: 2.25rem !important;
+  padding-right: 0.75rem !important;
+  border-radius: 0.75rem !important;
+  background-color: rgba(248, 250, 252, 1) !important;
+  border: 1px solid transparent !important;
+  color: rgb(30 41 59) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+}
+
+.dark .sidebar-reminder-datepicker .p-datepicker-input,
+.dark .sidebar-reminder-datepicker input {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  color: #f1f5f9 !important;
+}
+
+.sidebar-reminder-datepicker .p-datepicker-input:focus,
+.sidebar-reminder-datepicker input:focus {
+  background-color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.05) !important;
+}
+
+.dark .sidebar-reminder-datepicker .p-datepicker-input:focus,
+.dark .sidebar-reminder-datepicker input:focus {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+.sidebar-reminder-datepicker .p-datepicker-input::placeholder,
+.sidebar-reminder-datepicker input::placeholder {
+  color: #94a3b8 !important;
+}
+</style>
 
 

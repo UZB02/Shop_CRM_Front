@@ -63,6 +63,7 @@
               :customer="customer"
               class="lg:col-span-4"
               @pay-debt="payDebtDialog = true"
+              @update-reminder-date="updateReminderDate"
             />
           </div>
 
@@ -149,7 +150,7 @@ const {
   selectedTrade, displayTradeDetail,
   lastTrades, purchaseSummary, debtSummary,
   loadCustomerData, loadPurchases, loadDebts, loadGroups,
-  handleFilters, editCustomer, saveUpdate, showTradeDetail
+  handleFilters, editCustomer, saveUpdate, updateReminderDate, showTradeDetail
 } = useCustomerDetail()
 
 const displayCreateReturn = ref(false)

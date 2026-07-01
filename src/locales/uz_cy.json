@@ -117,6 +117,7 @@
     "print": "Чоп этиш",
     "general": "Умумий",
     "clear": "Тозалаш",
+    "clear_all": "Тозалаш",
     "required": "Мажбурий",
     "remove": "Олиб ташлаш",
     "quantity": "Миқдор",
@@ -1287,6 +1288,9 @@
       "max_discount_label": "Максимал чегирма фоизи",
       "max_discount_desc": "Сотувчи бера оладиган энг юқори чегирма",
       "unlimited_discount": "Чегараланмаган чегирма",
+      "allow_price_markup_label": "Нархни ошириб сотиш (markup)",
+      "allow_price_markup_desc": "Ёқилганда сотувчилар маҳсулотни каталог нархидан юқори нархда сотиши мумкин бўлади.",
+      "allow_price_markup_warning": "Диққат: Ушбу созлама ёқилганда сотувчилар маҳсулот нархини чексиз миқдорда оширишлари мумкин бўлади. Бу молиявий назоратга таъсир қилади!",
       "error_at_least_one": "Камида битта тўлов усули (нақд ёки карта) ёқилган бўлиши шарт"
     },
     "currency": {
@@ -1371,6 +1375,9 @@
     "subtitle": "Содиқ мижозларингиз билан ишлаш ва гуруҳларни бошқариш",
     "tab_all": "Мижозлар",
     "tab_debtors": "Қарздорлар",
+    "tab_reminder_today": "Бугунги эслатмалар",
+    "tab_reminder_upcoming": "Кутилаётган эслатмалар",
+    "tab_reminder_overdue": "Муддати ўтган эслатмалар",
     "total_debt_label": "Умумий қарздорлик",
     "regular_customer": "Оддий мижоз",
     "search_placeholder": "Мижоз исми ёки телефон рақами бўйича қидириш...",
@@ -1388,7 +1395,11 @@
       "total_spent_label": "Жами харид",
       "history_tooltip": "Харидлар тарихи",
       "edit_tooltip": "Таҳрирлаш",
-      "delete_tooltip": "Ўчириш"
+      "delete_tooltip": "Ўчириш",
+      "reminder": "Эслатма",
+      "days_overdue": "{days} кун ўтиб кетган",
+      "contact_today": "Бугун боғланиш керак",
+      "days_left": "{days} кундан кейин"
     },
     "form": {
       "edit": "Мижозни таҳрирлаш",
@@ -1401,7 +1412,11 @@
       "group": "Мижоз гуруҳи",
       "group_placeholder": "Гуруҳни танланг",
       "address": "Манзил",
-      "address_placeholder": "Яшаш манзили"
+      "address_placeholder": "Яшаш манзили",
+      "initial_debt_label": "Бошлаңғич қарз",
+      "initial_debt_placeholder": "Масалан: 500000",
+      "debt_reminder_date": "Қарз эслатма санаси",
+      "debt_reminder_date_placeholder": "YYYY-MM-DD"
     },
     "groups": {
       "manage_title": "Мижоз гуруҳлари",
@@ -1444,7 +1459,8 @@
       "loyalty_points": "Кэшбек баллари",
       "full_info": "Тўлиқ маълумотлар",
       "group": "Мижоз гуруҳи",
-      "payments_history_desc": "Тўловлар тарихи тез кунда қўшилади. Ҳозирча барча операцияларни \"савдолар\" табида кўришингиз мумкин."
+      "payments_history_desc": "Тўловлар тарихи тез кунда қўшилади. Ҳозирча барча операцияларни \"савдолар\" табида кўришингиз мумкин.",
+      "debt_reminder": "Қарз эслатма санаси"
     },
     "trades": {
       "title": "Харидлар тарихи",
@@ -1983,7 +1999,10 @@
     "counted_cash_in_register": "Кассада саналган пул",
     "shift_will_close_without_count": "Смена нақд санашсиз ёпилади",
     "discrepancy_reason": "Касса фарқи сабаби",
-    "enter_discrepancy_reason": "Фарқ нима сабабдан келиб чиққанини батафсил ёзинг..."
+    "enter_discrepancy_reason": "Фарқ нима сабабдан келиб чиққанини батафсил ёзинг...",
+    "price": "Нарх",
+    "qty": "Сони",
+    "markup": "Оширилди"
   },
   "dashboard": {
     "center_title": "Бошқарув Маркази",
@@ -2140,6 +2159,8 @@
       "description": "Изоҳ",
       "description_ph": "Қўшимча маълумот...",
       "current_debt": "Жорий қарз",
+      "initial_debt": "Бошлаңғич қарз",
+      "initial_debt_ph": "Масалан: 1200000",
       "add_btn": "Қўшиш"
     },
     "payment": {

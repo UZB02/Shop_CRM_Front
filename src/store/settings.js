@@ -72,6 +72,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const allowDebt     = computed(() => !!settings.value?.allow_debt)
   const allowDiscount = computed(() => !!settings.value?.allow_discount && hasPlanDiscount.value)
   const maxDiscount   = computed(() => parseFloat(settings.value?.max_discount_percent || 0))
+  const allowPriceMarkup = computed(() => !!settings.value?.allow_price_markup)
 
   // Currency
   const currency      = computed(() => settings.value?.default_currency || 'UZS')
@@ -216,6 +217,7 @@ export const useSettingsStore = defineStore('settings', () => {
     allowDebt,
     allowDiscount,
     maxDiscount,
+    allowPriceMarkup,
     currency,
     showUsd,
     showRub,

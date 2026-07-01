@@ -98,6 +98,23 @@
         />
       </div>
 
+      <!-- Initial Debt -->
+      <div v-if="!isEdit">
+        <label class="block text-[12px] font-bold text-slate-500 dark:text-slate-400 mb-1.5">
+          {{ $t('suppliers.form.initial_debt') }}
+        </label>
+        <div class="relative group/input">
+          <i class="pi pi-dollar absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-emerald-500 transition-colors z-10"></i>
+          <InputNumber
+            id="initial_debt"
+            v-model="modelForm.initial_debt"
+            :min="0"
+            :placeholder="$t('suppliers.form.initial_debt_ph')"
+            class="initial-debt-input w-full"
+          />
+        </div>
+      </div>
+
       <!-- Description -->
       <div>
         <label class="block text-[12px] font-bold text-slate-500 dark:text-slate-400 mb-1.5">
@@ -147,6 +164,7 @@
 
 <script setup>
 import Dialog from 'primevue/dialog'
+import InputNumber from 'primevue/inputnumber'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -216,3 +234,43 @@ const onPhoneInput = (e) => {
   props.modelForm.phone = '+' + digits
 }
 </script>
+
+<style>
+.initial-debt-input {
+  width: 100% !important;
+}
+
+.initial-debt-input .p-inputtext {
+  width: 100% !important;
+  height: 2.75rem !important;
+  padding-left: 2.5rem !important;
+  padding-right: 1rem !important;
+  border-radius: 1rem !important;
+  background-color: rgba(248, 250, 252, 1) !important;
+  border: 1px solid transparent !important;
+  color: rgb(30 41 59) !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  transition: all 0.2s ease !important;
+}
+
+.dark .initial-debt-input .p-inputtext {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  color: #f1f5f9 !important;
+}
+
+.initial-debt-input .p-inputtext:focus {
+  background-color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.05) !important;
+}
+
+.dark .initial-debt-input .p-inputtext:focus {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+.initial-debt-input .p-inputtext::placeholder {
+  color: #94a3b8 !important;
+}
+</style>

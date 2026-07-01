@@ -58,6 +58,7 @@
           @checkout="showCheckout = true"
           @update-discount="discountAmount = $event"
           @update-item-discount="updateItemDiscount"
+          @update-item-price="updateItemPrice"
           @new-order="createNewOrder"
           @switch-order="switchOrder"
           @remove-order="removeOrder"
@@ -83,6 +84,7 @@
           @checkout="mobileCartOpen = false; showCheckout = true"
           @update-discount="discountAmount = $event"
           @update-item-discount="updateItemDiscount"
+          @update-item-price="updateItemPrice"
           @new-order="createNewOrder"
           @switch-order="switchOrder"
           @remove-order="removeOrder"
@@ -192,7 +194,7 @@ const {
   cart, discountAmount, selectedCustomer, customers, customerGroups, cartTotals,
   createNewOrder, switchOrder, removeOrder,
   fetchShiftStatus, openShift, closeShift,
-  addToCart, removeFromCart, updateQty, updateItemDiscount, scanAndAdd, clearCart,
+  addToCart, removeFromCart, updateQty, updateItemDiscount, updateItemPrice, scanAndAdd, clearCart,
   fetchCustomers, fetchCustomerGroups,
   performCheckout, downloadReceipt,
 } = usePOS()

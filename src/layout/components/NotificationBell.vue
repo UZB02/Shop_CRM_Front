@@ -88,7 +88,7 @@
                                     <i class="pi pi-clock text-[10px]" />
                                     {{ item.time }}
                                 </span>
-                                <span v-if="item.link" class="text-[11px] font-bold text-emerald-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span v-if="item.link || item.type === 'customer_debt_reminder'" class="text-[11px] font-bold text-emerald-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     Ko'rish <i class="pi pi-arrow-right text-[9px]" />
                                 </span>
                             </div>
@@ -174,8 +174,8 @@
                         <!-- Action Button -->
                         <div class="mt-8 flex flex-col gap-3">
                             <button 
-                                v-if="selectedNotification.link"
-                                @click="router.push(selectedNotification.link); showDetailModal = false; op.hide()"
+                                v-if="selectedNotification.link || selectedNotification.type === 'customer_debt_reminder'"
+                                @click="router.push(selectedNotification.link || '/dashboard/customers?tab=reminder_today'); showDetailModal = false; op.hide()"
                                 class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-black text-sm shadow-[0_12px_24px_-6px_rgba(16,185,129,0.3)] transition-all active:scale-[0.98] flex items-center justify-center gap-3"
                             >
                                 <i class="pi pi-external-link" />
@@ -222,7 +222,7 @@ const getSeverity = (item) => {
     // 1. Tizim Bildirishnomalari (Notification)
     if (item.source === 'notification') {
         if (item.type === 'subscription_expired' || item.type === 'cash_discrepancy') return 'error'
-        if (item.type === 'subscription_expiry' || item.type === 'low_stock') return 'warn'
+        if (item.type === 'subscription_expiry' || item.type === 'low_stock' || item.type === 'customer_debt_reminder') return 'warn'
     } 
     
     // 2. Announcement (Admin xabarlari)
@@ -247,18 +247,19 @@ const getSeverityClass = (sev) => {
 const getIcon = (type) => {
     switch(type) {
         // Tizim
-        case 'low_stock':            return 'pi pi-exclamation-triangle'
-        case 'subscription_expiry':  return 'pi pi-clock'
-        case 'subscription_expired': return 'pi pi-ban'
-        case 'cash_discrepancy':     return 'pi pi-exclamation-circle'
+        case 'low_stock':              return 'pi pi-exclamation-triangle'
+        case 'subscription_expiry':    return 'pi pi-clock'
+        case 'subscription_expired':   return 'pi pi-ban'
+        case 'cash_discrepancy':       return 'pi pi-exclamation-circle'
+        case 'customer_debt_reminder': return 'pi pi-calendar-plus'
         
         // Announcement
-        case 'info':                 return 'pi pi-info-circle'
-        case 'warning':              return 'pi pi-megaphone'
-        case 'maintenance':          return 'pi pi-wrench'
-        case 'new_feature':          return 'pi pi-sparkles'
+        case 'info':                   return 'pi pi-info-circle'
+        case 'warning':                return 'pi pi-megaphone'
+        case 'maintenance':            return 'pi pi-wrench'
+        case 'new_feature':            return 'pi pi-sparkles'
         
-        default:                     return 'pi pi-bell'
+        default:                       return 'pi pi-bell'
     }
 }
 

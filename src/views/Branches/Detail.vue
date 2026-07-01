@@ -37,12 +37,12 @@
           <BranchWorkersTab 
             v-if="activeTab === 'workers'" 
             key="workers" 
-            :workers="branch?.workers" 
+            :workers="Array.isArray(branch?.workers) ? branch.workers : (branch?.workers?.results || [])" 
           />
           <BranchProductsTab 
             v-else-if="activeTab === 'products'" 
             key="products" 
-            :products="branch?.products" 
+            :products="Array.isArray(branch?.products) ? branch.products : (branch?.products?.results || [])" 
             @create-wastage="openWastageModal"
           />
           <TransfersTab 
@@ -51,12 +51,12 @@
             :source-id="branch?.id || branch?._id"
             source-type="branch"
             :source-name="branch?.name"
-            :available-products="branch?.products"
+            :available-products="Array.isArray(branch?.products) ? branch.products : (branch?.products?.results || [])"
           />
           <BranchCustomersTab 
             v-else-if="activeTab === 'customers'"
             key="customers" 
-            :customers="branch?.customers" 
+            :customers="Array.isArray(branch?.customers) ? branch.customers : (branch?.customers?.results || [])" 
           />
 
           <BranchIncomingTab 
@@ -170,10 +170,17 @@ const openNewTransferHandler = () => {
 }
 
 // Prepare tabs with counts and icons
+const getCount = (val) => {
+  if (!val) return 0
+  if (Array.isArray(val)) return val.length
+  if (typeof val === 'object') return val.count ?? val.results?.length ?? 0
+  return 0
+}
+
 const navTabs = computed(() => {
   const tabs = [
-    { id: 'products', label: t('menu.products'), icon: 'pi pi-box', count: branch.value?.products?.length },
-    { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: branch.value?.workers?.length },
+    { id: 'products', label: t('menu.products'), icon: 'pi pi-box', count: getCount(branch.value?.products) },
+    { id: 'workers', label: t('menu.workers'), icon: 'pi pi-users', count: getCount(branch.value?.workers) },
     { id: 'transfers', label: t('warehouse.detail.transfers'), icon: 'pi pi-arrow-right-arrow-left' },
     { id: 'incoming', label: t('warehouse.detail.incoming_history'), icon: 'pi pi-history' },
   ]
@@ -182,7 +189,7 @@ const navTabs = computed(() => {
     tabs.push({ id: 'wastages', label: t('warehouse.wastage.title'), icon: 'pi pi-exclamation-triangle' })
   }
 
-  tabs.push({ id: 'customers', label: t('menu.customers'), icon: 'pi pi-user', count: branch.value?.customers?.length })
+  tabs.push({ id: 'customers', label: t('menu.customers'), icon: 'pi pi-user', count: getCount(branch.value?.customers) })
   
   return tabs
 })

@@ -8,7 +8,7 @@
             <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter hidden sm:table-cell">{{ $t('customers.table.contact_address') }}</th>
             <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-center font-inter hidden md:table-cell">{{ $t('customers.table.trades') }}</th>
             <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 font-inter text-right sm:text-left">
-              {{ mode === 'debtors' ? ($t('customers.table.debt_label') || 'Qarz Miqdori') : $t('customers.table.total_spent') }}
+              {{ isDebtorsMode ? ($t('customers.table.debt_label') || 'Qarz Miqdori') : $t('customers.table.total_spent') }}
             </th>
             <th class="px-4 py-3 text-[12px] font-black tracking-widest text-slate-500 dark:text-slate-400 text-right font-inter">{{ $t('customers.table.actions') }}</th>
           </tr>
@@ -54,11 +54,20 @@
                 </div>
                 <div class="min-w-0">
                   <p class="text-[14px] font-black text-slate-800 dark:text-slate-200 tracking-tight group-hover/name:text-emerald-500 transition-colors truncate">{{ data.name }}</p>
-                  <div class="flex items-center gap-1.5 mt-0.5">
+                  <div class="flex flex-wrap items-center gap-1.5 mt-0.5">
                     <span v-if="data.group_name" class="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-[10px] font-black text-amber-600 dark:text-amber-400 tracking-widest border border-amber-500/20 truncate">
                       {{ data.group_name }}
                     </span>
                     <span class="sm:hidden text-[12px] text-slate-400 font-medium truncate">{{ data.phone }}</span>
+                  </div>
+                  <!-- Reminder info -->
+                  <div 
+                    v-if="getReminderStatus(data.debt_reminder_date, data.debt_balance)" 
+                    class="flex items-center gap-1 mt-1 text-[11px]"
+                    :class="getReminderStatus(data.debt_reminder_date, data.debt_balance).class"
+                  >
+                    <i class="pi pi-calendar text-[10px]" />
+                    <span>{{ $t('customers.table.reminder') }}: {{ getReminderStatus(data.debt_reminder_date, data.debt_balance).text }}</span>
                   </div>
                 </div>
               </div>
@@ -100,12 +109,12 @@
               <div class="flex flex-col">
                 <span 
                   class="text-[14px] font-black tracking-tighter"
-                  :class="mode === 'debtors' ? 'text-rose-500' : 'text-emerald-600 dark:text-emerald-400'"
+                  :class="isDebtorsMode ? 'text-rose-500' : 'text-emerald-600 dark:text-emerald-400'"
                 >
-                  {{ formatCurrency(mode === 'debtors' ? data.debt_balance : data.total_purchases_amount) }}
+                  {{ formatCurrency(isDebtorsMode ? data.debt_balance : data.total_purchases_amount) }}
                 </span>
                 <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 mt-0.5">
-                  {{ mode === 'debtors' ? ($t('customers.table.debt_status') || 'To\'lanmagan') : $t('customers.table.total_spent_label') }}
+                  {{ isDebtorsMode ? ($t('customers.table.debt_status') || 'To\'lanmagan') : $t('customers.table.total_spent_label') }}
                 </span>
               </div>
             </td>
@@ -167,6 +176,9 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   customers: { type: Array, default: () => [] },
@@ -187,6 +199,8 @@ const currentPage = computed({
   }
 })
 
+const isDebtorsMode = computed(() => props.mode === 'debtors' || props.mode.startsWith('reminder_'))
+
 const totalPages = computed(() => Math.ceil(props.totalRecords / props.pageSize))
 
 const displayedPages = computed(() => {
@@ -203,6 +217,39 @@ const formatCurrency = (val) => {
     currency: 'UZS', 
     maximumFractionDigits: 0 
   }).format(val || 0)
+}
+
+const getReminderStatus = (reminderDateStr, debtBalance) => {
+  if (!reminderDateStr || Number(debtBalance) <= 0) return null
+
+  const reminderDate = new Date(reminderDateStr)
+  reminderDate.setHours(0,0,0,0)
+  
+  const today = new Date()
+  today.setHours(0,0,0,0)
+  
+  const diffTime = today.getTime() - reminderDate.getTime()
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+
+  const parts = reminderDateStr.split('-')
+  const formattedDate = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : reminderDateStr
+
+  if (diffDays > 0) {
+    return {
+      text: `${formattedDate} (${t('customers.table.days_overdue', { days: diffDays })})`,
+      class: 'text-rose-600 dark:text-rose-400 font-bold'
+    }
+  } else if (diffDays === 0) {
+    return {
+      text: `${formattedDate} (${t('customers.table.contact_today')})`,
+      class: 'text-amber-600 dark:text-amber-400 font-bold animate-pulse'
+    }
+  } else {
+    return {
+      text: `${formattedDate} (${t('customers.table.days_left', { days: Math.abs(diffDays) })})`,
+      class: 'text-sky-600 dark:text-sky-400 font-semibold'
+    }
+  }
 }
 </script>
 

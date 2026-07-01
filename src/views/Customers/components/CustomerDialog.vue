@@ -90,6 +90,34 @@
                 <InputText id="address" v-model="customer.address" :placeholder="$t('customers.form.address_placeholder')" class="!h-11 !pl-10 !text-sm !font-bold !rounded-2xl !bg-slate-50 dark:!bg-slate-800/40 !border-transparent focus:!bg-white dark:focus:!bg-slate-900 focus:!ring-8 focus:!ring-emerald-500/5 transition-all w-full" />
               </div>
             </div>
+
+            <!-- Initial Debt -->
+            <div v-if="!customer.id" class="field">
+              <label for="initial_debt" class="text-[12px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">{{ $t('customers.form.initial_debt_label') }}</label>
+              <div class="relative group/input">
+                <i class="pi pi-dollar absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-emerald-500 transition-colors z-10"></i>
+                <InputNumber id="initial_debt" v-model="customer.initial_debt" :min="0" :placeholder="$t('customers.form.initial_debt_placeholder')" class="initial-debt-input w-full" />
+              </div>
+            </div>
+
+            <!-- Qarz eslatma sanasi -->
+            <div class="field">
+              <label for="debt_reminder_date" class="text-[12px] font-black tracking-widest text-slate-400 ml-1 mb-1.5 block">
+                {{ $t('customers.form.debt_reminder_date') || 'Qarz eslatma sanasi' }}
+              </label>
+              <div class="relative group/input">
+                <i class="pi pi-calendar absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 group-focus-within/input:text-emerald-500 transition-colors z-10 pointer-events-none"></i>
+                <DatePicker 
+                  id="debt_reminder_date" 
+                  v-model="customer.debt_reminder_date" 
+                  dateFormat="yy-mm-dd" 
+                  :placeholder="$t('customers.form.debt_reminder_date_placeholder') || 'YYYY-MM-DD'" 
+                  class="debt-reminder-datepicker w-full"
+                  appendTo="body"
+                  showButtonBar
+                />
+              </div>
+            </div>
           </div>
 
         </div>
@@ -121,6 +149,8 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import InputMask from 'primevue/inputmask'
 import Select from 'primevue/select'
+import InputNumber from 'primevue/inputnumber'
+import DatePicker from 'primevue/datepicker'
 
 const props = defineProps({
   visible: Boolean,
@@ -136,6 +166,97 @@ const emit = defineEmits(['update:visible', 'save', 'hide'])
 <style scoped>
 :deep(.p-inputtext), :deep(.p-inputmask) {
   border-color: transparent !important;
+}
+</style>
+
+<style>
+.initial-debt-input {
+  width: 100% !important;
+}
+
+.initial-debt-input .p-inputtext {
+  width: 100% !important;
+  height: 2.75rem !important;
+  padding-left: 2.5rem !important;
+  padding-right: 1rem !important;
+  border-radius: 1rem !important;
+  background-color: rgba(248, 250, 252, 1) !important;
+  border: 1px solid transparent !important;
+  color: rgb(30 41 59) !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  transition: all 0.2s ease !important;
+}
+
+.dark .initial-debt-input .p-inputtext {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  color: #f1f5f9 !important;
+}
+
+.initial-debt-input .p-inputtext:focus {
+  background-color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.05) !important;
+}
+
+.dark .initial-debt-input .p-inputtext:focus {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+.initial-debt-input .p-inputtext::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Debt reminder datepicker styling */
+.debt-reminder-datepicker {
+  width: 100% !important;
+}
+
+.debt-reminder-datepicker .p-datepicker-input,
+.debt-reminder-datepicker input {
+  width: 100% !important;
+  height: 2.75rem !important;
+  padding-left: 2.5rem !important;
+  padding-right: 1rem !important;
+  border-radius: 1rem !important;
+  background-color: rgba(248, 250, 252, 1) !important;
+  border: 1px solid transparent !important;
+  color: rgb(30 41 59) !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+}
+
+.dark .debt-reminder-datepicker .p-datepicker-input,
+.dark .debt-reminder-datepicker input {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  color: #f1f5f9 !important;
+}
+
+.debt-reminder-datepicker .p-datepicker-input:focus,
+.debt-reminder-datepicker input:focus {
+  background-color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.05) !important;
+}
+
+.dark .debt-reminder-datepicker .p-datepicker-input:focus,
+.dark .debt-reminder-datepicker input:focus {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+.debt-reminder-datepicker .p-datepicker-input::placeholder,
+.debt-reminder-datepicker input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Datepicker panel z-index override to show on top of slide-over dialog (z-2001) */
+.p-datepicker-panel,
+.p-datepicker {
+  z-index: 3000 !important;
 }
 </style>
 

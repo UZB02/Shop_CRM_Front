@@ -10,7 +10,7 @@ const FORM_FIELDS = [
     'stock_audit_enabled', 'kpi_enabled', 'promotion_enabled',
     'default_currency', 'show_usd_price', 'show_rub_price', 'show_eur_price', 'show_cny_price',
     'allow_cash', 'allow_card', 'allow_debt', 'allow_discount',
-    'max_discount_percent', 'receipt_header', 'receipt_footer',
+    'max_discount_percent', 'allow_price_markup', 'receipt_header', 'receipt_footer',
     'receipt_address', 'receipt_phone', 'receipt_promo_text',
     'show_store_logo', 'show_worker_name', 'low_stock_enabled',
     'low_stock_threshold', 'shift_enabled', 'shifts_per_day',
@@ -24,7 +24,7 @@ const FORM_FIELDS = [
 export const TAB_FIELDS = {
     modules: ['subcategory_enabled', 'sale_return_enabled', 'wastage_enabled', 'stock_audit_enabled', 'kpi_enabled', 'promotion_enabled', 'shift_enabled', 'shifts_per_day', 'require_cash_count', 'auto_pdf_on_smena_close', 'cash_discrepancy_threshold'],
     stock: ['low_stock_enabled', 'low_stock_threshold'],
-    payment: ['allow_cash', 'allow_card', 'allow_debt', 'allow_discount', 'max_discount_percent'],
+    payment: ['allow_cash', 'allow_card', 'allow_debt', 'allow_discount', 'max_discount_percent', 'allow_price_markup'],
     currency: ['default_currency', 'show_usd_price', 'show_rub_price', 'show_eur_price', 'show_cny_price'],
     receipt: ['receipt_header', 'receipt_footer', 'receipt_address', 'receipt_phone', 'receipt_promo_text', 'show_store_logo', 'show_worker_name', 'show_name_on_barcode', 'show_price_on_barcode', 'show_tur_on_barcode'],
     tax: ['tax_enabled', 'tax_percent', 'ofd_enabled', 'ofd_token', 'ofd_device_id', 'tin', 'ofd_provider'],

@@ -20,9 +20,13 @@ export function useCustomers() {
 
   // Initialize activeTab from URL query params (default: 'no_debt')
   const activeTab = ref(route.query.tab || 'no_debt')
+  const reminderCounts = ref({ today: 0, upcoming: 0, overdue: 0 })
   const groupedData = ref({
     debtors: { count: 0, results: [], total_debt_balance: 0, current_page: 1 },
-    no_debt: { count: 0, results: [], current_page: 1 }
+    no_debt: { count: 0, results: [], current_page: 1 },
+    reminder_today: { count: 0, results: [], current_page: 1 },
+    reminder_upcoming: { count: 0, results: [], current_page: 1 },
+    reminder_overdue: { count: 0, results: [], current_page: 1 }
   })
 
   const page = ref(1)
@@ -37,12 +41,17 @@ export function useCustomers() {
     group: null,
     branch: '',
     address: '',
-    notes: ''
+    notes: '',
+    initial_debt: null,
+    debt_reminder_date: null
   })
 
   const customerTabs = computed(() => [
     { id: 'no_debt', label: t('customers.tab_all') || 'Mijozlar', icon: 'pi pi-users', count: groupedData.value.no_debt.count },
-    { id: 'debtors', label: t('customers.tab_debtors') || 'Qarzdorlar', icon: 'pi pi-exclamation-circle', count: groupedData.value.debtors.count }
+    { id: 'debtors', label: t('customers.tab_debtors') || 'Qarzdorlar', icon: 'pi pi-exclamation-circle', count: groupedData.value.debtors.count },
+    { id: 'reminder_today', label: t('customers.tab_reminder_today') || 'Bugun', icon: 'pi pi-phone', count: reminderCounts.value.today },
+    { id: 'reminder_upcoming', label: t('customers.tab_reminder_upcoming') || 'Yaqinlashayotgan', icon: 'pi pi-calendar-plus', count: reminderCounts.value.upcoming },
+    { id: 'reminder_overdue', label: t('customers.tab_reminder_overdue') || 'Muddati o\'tgan', icon: 'pi pi-calendar-times', count: reminderCounts.value.overdue }
   ])
 
   const activeCustomers = computed(() => groupedData.value[activeTab.value]?.results || [])
@@ -76,17 +85,53 @@ export function useCustomers() {
     }
   })
 
+  const loadReminderCounts = async () => {
+    try {
+      const [todayRes, upcomingRes, overdueRes] = await Promise.all([
+        customersAPI.getAll({ limit: 1, reminder: 'today' }),
+        customersAPI.getAll({ limit: 1, reminder: 'upcoming' }),
+        customersAPI.getAll({ limit: 1, reminder: 'overdue' })
+      ])
+      reminderCounts.value.today = todayRes.data.count || 0
+      reminderCounts.value.upcoming = upcomingRes.data.count || 0
+      reminderCounts.value.overdue = overdueRes.data.count || 0
+    } catch (error) {
+      console.error('Error loading reminder counts:', error)
+    }
+  }
+
   const loadCustomers = async () => {
     loading.value = true
     try {
-      const params = { 
-        page: page.value, 
-        limit: pageSize.value,
-        search: searchQuery.value || undefined,
-        min_debt: activeTab.value === 'debtors' ? minDebt.value : undefined
+      const isReminderTab = activeTab.value.startsWith('reminder_')
+      if (isReminderTab) {
+        const reminderType = activeTab.value.replace('reminder_', '')
+        const params = {
+          page: page.value,
+          limit: pageSize.value,
+          search: searchQuery.value || undefined,
+          reminder: reminderType
+        }
+        const response = await customersAPI.getAll(params)
+        groupedData.value[activeTab.value] = {
+          count: response.data.count || 0,
+          results: response.data.results || []
+        }
+      } else {
+        const params = { 
+          page: page.value, 
+          limit: pageSize.value,
+          search: searchQuery.value || undefined,
+          min_debt: activeTab.value === 'debtors' ? minDebt.value : undefined
+        }
+        const response = await customersAPI.getGrouped(params)
+        groupedData.value = {
+          ...groupedData.value,
+          debtors: response.data.debtors,
+          no_debt: response.data.no_debt
+        }
       }
-      const response = await customersAPI.getGrouped(params)
-      groupedData.value = response.data
+      await loadReminderCounts()
     } catch (error) {
       console.error('Error loading customers:', error)
       toast.add({ severity: 'error', summary: t('common.error'), detail: t('customers.messages.load_error'), life: 5000 })
@@ -113,7 +158,7 @@ export function useCustomers() {
   }
 
   const openNew = () => {
-    customer.value = { name: '', phone: '', group: null, branch: '', address: '', notes: '' }
+    customer.value = { name: '', phone: '', group: null, branch: '', address: '', notes: '', initial_debt: null, debt_reminder_date: null }
     submitted.value = false
     customerDialog.value = true
   }
@@ -121,7 +166,13 @@ export function useCustomers() {
   const editCustomer = async (data) => {
     try {
       const response = await customersAPI.getById(data.id)
-      customer.value = { ...response.data }
+      const custData = response.data
+      if (custData.debt_reminder_date) {
+        custData.debt_reminder_date = new Date(custData.debt_reminder_date)
+      } else {
+        custData.debt_reminder_date = null
+      }
+      customer.value = custData
       customerDialog.value = true
     } catch (error) {
       console.error('Error fetching customer details:', error)
@@ -143,13 +194,27 @@ export function useCustomers() {
         name: customer.value.name,
         phone: customer.value.phone,
         address: customer.value.address,
-        group: customer.value.group
+        group: customer.value.group,
+        debt_reminder_date: null
+      }
+
+      if (customer.value.debt_reminder_date) {
+        const dateObj = new Date(customer.value.debt_reminder_date)
+        if (!isNaN(dateObj.getTime())) {
+          const year = dateObj.getFullYear()
+          const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+          const day = String(dateObj.getDate()).padStart(2, '0')
+          payload.debt_reminder_date = `${year}-${month}-${day}`
+        }
       }
 
       if (customer.value.id) {
         await customersAPI.update(customer.value.id, payload)
         toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.updated'), life: 5000 })
       } else {
+        if (customer.value.initial_debt && parseFloat(customer.value.initial_debt) !== 0) {
+          payload.initial_debt = customer.value.initial_debt.toString()
+        }
         await customersAPI.create(payload)
         toast.add({ severity: 'success', summary: t('common.success'), detail: t('customers.messages.added'), life: 5000 })
       }

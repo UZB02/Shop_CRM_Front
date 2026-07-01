@@ -117,6 +117,7 @@
     "print": "Chop etish",
     "general": "Umumiy",
     "clear": "Tozalash",
+    "clear_all": "Tozalash",
     "required": "Majburiy",
     "remove": "Olib tashlash",
     "quantity": "Miqdor",
@@ -1287,6 +1288,9 @@
       "max_discount_label": "Maksimal chegirma foizi",
       "max_discount_desc": "Sotuvchi bera oladigan eng yuqori chegirma",
       "unlimited_discount": "Chegaralanmagan chegirma",
+      "allow_price_markup_label": "Narxni oshirib sotish (markup)",
+      "allow_price_markup_desc": "Yoqilganda sotuvchilar mahsulotni katalog narxidan yuqori narxda sotishi mumkin bo'ladi.",
+      "allow_price_markup_warning": "Diqqat: Ushbu sozlama yoqilganda sotuvchilar mahsulot narxini cheksiz miqdorda oshirishlari mumkin bo'ladi. Bu moliyaviy nazoratga ta'sir qiladi!",
       "error_at_least_one": "Kamida bitta to'lov usuli (naqd yoki karta) yoqilgan bo'lishi shart"
     },
     "currency": {
@@ -1371,6 +1375,9 @@
     "customer_count": "{Count} ta mijoz",
     "tab_all": "Mijozlar",
     "tab_debtors": "Qarzdorlar",
+    "tab_reminder_today": "Bugungi eslatmalar",
+    "tab_reminder_upcoming": "Kutilayotgan eslatmalar",
+    "tab_reminder_overdue": "Muddati o'tgan eslatmalar",
     "total_debt_label": "Umumiy qarzdorlik",
     "regular_customer": "Oddiy mijoz",
     "search_placeholder": "Mijoz ismi yoki telefon raqami bo'yicha qidirish...",
@@ -1388,7 +1395,11 @@
       "total_spent_label": "Jami xarid",
       "history_tooltip": "Xaridlar tarixi",
       "edit_tooltip": "Tahrirlash",
-      "delete_tooltip": "O'chirish"
+      "delete_tooltip": "O'chirish",
+      "reminder": "Eslatma",
+      "days_overdue": "{days} kun o'tib ketgan",
+      "contact_today": "Bugun bog'lanish kerak",
+      "days_left": "{days} kundan keyin"
     },
     "form": {
       "edit": "Mijozni tahrirlash",
@@ -1401,7 +1412,11 @@
       "group": "Mijoz guruhi",
       "group_placeholder": "Guruhni tanlang",
       "address": "Manzil",
-      "address_placeholder": "Yashash manzili"
+      "address_placeholder": "Yashash manzili",
+      "initial_debt_label": "Boshlang'ich qarz",
+      "initial_debt_placeholder": "Masalan: 500000",
+      "debt_reminder_date": "Qarz eslatma sanasi",
+      "debt_reminder_date_placeholder": "YYYY-MM-DD"
     },
     "groups": {
       "manage_title": "Mijoz guruhlari",
@@ -1444,7 +1459,8 @@
       "loyalty_points": "Cashback ballari",
       "full_info": "To'liq ma'lumotlar",
       "group": "Mijoz guruhi",
-      "payments_history_desc": "To'lovlar tarixi tez kunda qo'shiladi. Hozircha barcha operatsiyalarni \"savdolar\" tabida ko'rishingiz mumkin."
+      "payments_history_desc": "To'lovlar tarixi tez kunda qo'shiladi. Hozircha barcha operatsiyalarni \"savdolar\" tabida ko'rishingiz mumkin.",
+      "debt_reminder": "Qarz eslatma sanasi"
     },
     "trades": {
       "title": "Xaridlar tarixi",
@@ -1985,7 +2001,10 @@
     "counted_cash_in_register": "Kassada sanalgan pul",
     "shift_will_close_without_count": "Smena naqd sanashsiz yopiladi",
     "discrepancy_reason": "Kassa farqi sababi",
-    "enter_discrepancy_reason": "Farq nima sababdan kelib chiqqanini batafsil yozing..."
+    "enter_discrepancy_reason": "Farq nima sababdan kelib chiqqanini batafsil yozing...",
+    "price": "Narx",
+    "qty": "Soni",
+    "markup": "Oshirildi"
   },
   "dashboard": {
     "center_title": "Boshqaruv Markazi",
@@ -2142,6 +2161,8 @@
       "description": "Izoh",
       "description_ph": "Qo'shimcha ma'lumot...",
       "current_debt": "Joriy qarz",
+      "initial_debt": "Boshlang'ich qarz",
+      "initial_debt_ph": "Masalan: 1200000",
       "add_btn": "Qo'shish"
     },
     "payment": {

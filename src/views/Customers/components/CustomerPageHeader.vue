@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+  <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
     <div class="min-w-0">
       <div class="flex items-center gap-2 mb-1">
         <router-link to="/dashboard" class="text-[12px] font-bold text-slate-400 hover:text-emerald-500 transition-colors tracking-widest flex items-center gap-1">
@@ -14,7 +14,7 @@
     </div>
     
     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-      <div class="relative group/search w-full md:w-[260px]">
+      <div class="relative group/search w-full xl:w-[260px]">
         <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-[12px] transition-colors group-focus-within/search:text-emerald-500"></i>
         <input 
           :value="searchQuery" 
