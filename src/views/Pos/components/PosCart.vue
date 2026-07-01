@@ -277,8 +277,7 @@
         <div class="w-14 h-14 rounded-full bg-amber-500/10 flex items-center justify-center mb-4">
           <i class="pi pi-exclamation-triangle text-amber-500 text-2xl"></i>
         </div>
-        <p class="text-center text-[15px] font-medium text-slate-700 dark:text-slate-300 mb-4 px-2">
-          Savatchada narxi <span class="text-rose-500 font-bold">0</span> bo'lgan mahsulotlar mavjud. To'lovni davom ettirmoqchimisiz?
+        <p class="text-center text-[15px] font-medium text-slate-700 dark:text-slate-300 mb-4 px-2" v-html="$t('pos.zero_price_warning') || `Savatchada narxi <span class='text-rose-500 font-bold'>0</span> bo'lgan mahsulotlar mavjud. To'lovni davom ettirmoqchimisiz?`">
         </p>
 
         <div class="w-full max-h-40 overflow-y-auto flex flex-col gap-1.5 no-scrollbar mb-2 px-1">
@@ -304,7 +303,7 @@
             
             <div class="flex-1 min-w-0 flex flex-col justify-center">
               <p class="text-[12px] font-bold text-slate-700 dark:text-slate-300 truncate leading-tight">{{ item.name }}</p>
-              <p class="text-[9px] text-slate-400 font-medium">Miqdor: {{ item.qty }}</p>
+              <p class="text-[9px] text-slate-400 font-medium">{{ $t('pos.qty') || 'Miqdor' }}: {{ item.qty }}</p>
             </div>
           </div>
         </div>
@@ -321,7 +320,7 @@
             @click="confirmCheckout"
             class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/30 transition-all font-bold text-[13px]"
           >
-            Davom etish
+            {{ $t('pos.proceed') || 'Davom etish' }}
           </button>
         </div>
       </template>

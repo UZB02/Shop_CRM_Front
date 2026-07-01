@@ -2004,7 +2004,9 @@
     "enter_discrepancy_reason": "Farq nima sababdan kelib chiqqanini batafsil yozing...",
     "price": "Narx",
     "qty": "Soni",
-    "markup": "Oshirildi"
+    "markup": "Oshirildi",
+    "zero_price_warning": "Savatchada narxi <span class='text-rose-500 font-bold'>0</span> bo'lgan mahsulotlar mavjud. To'lovni davom ettirmoqchimisiz?",
+    "proceed": "Davom etish"
   },
   "dashboard": {
     "center_title": "Boshqaruv Markazi",

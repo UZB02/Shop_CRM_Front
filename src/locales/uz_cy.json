@@ -2002,7 +2002,9 @@
     "enter_discrepancy_reason": "Фарқ нима сабабдан келиб чиққанини батафсил ёзинг...",
     "price": "Нарх",
     "qty": "Сони",
-    "markup": "Оширилди"
+    "markup": "Оширилди",
+    "zero_price_warning": "Саватчада нархи <span class='text-rose-500 font-bold'>0</span> бўлган маҳсулотлар мавжуд. Тўловни давом эттирмоқчимисиз?",
+    "proceed": "Давом этиш"
   },
   "dashboard": {
     "center_title": "Бошқарув Маркази",
