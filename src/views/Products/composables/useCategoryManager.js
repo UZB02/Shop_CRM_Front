@@ -9,6 +9,24 @@ export function useCategoryManager() {
   const confirm = useConfirmStore()
   const { t } = useI18n()
 
+  const handleError = (error) => {
+    console.error(error)
+    const data = error.response?.data
+    let detail = t('common.error_message')
+    if (data) {
+      if (typeof data === 'string') detail = data
+      else if (data.detail) detail = data.detail
+      else if (data.message) detail = data.message
+      else if (typeof data === 'object') {
+        const fieldErrors = Object.values(data)
+          .map((errs) => Array.isArray(errs) ? errs.join(', ') : errs)
+          .join('\n')
+        if (fieldErrors) detail = fieldErrors
+      }
+    }
+    toast.add({ severity: 'error', summary: t('common.error'), detail, life: 6000 })
+  }
+
   // Reactive State
   const loading = ref(false)
   const saving = ref(false)
@@ -75,8 +93,7 @@ export function useCategoryManager() {
       categories.value = catRes.data.results || catRes.data || []
       subcategories.value = subRes.data.results || subRes.data || []
     } catch (error) {
-      console.error('Error loading data:', error)
-      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
+      handleError(error)
     } finally {
       loading.value = false
     }
@@ -123,7 +140,7 @@ export function useCategoryManager() {
       panelVisible.value = false
       await loadData()
     } catch (error) {
-      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
+      handleError(error)
     } finally { saving.value = false }
   }
 
@@ -141,7 +158,7 @@ export function useCategoryManager() {
           toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('categories.messages.deleted'), life: 5000 })
           loadData()
         } catch (error) {
-          toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
+          handleError(error)
         }
       }
     })
@@ -191,7 +208,7 @@ export function useCategoryManager() {
       subPanelVisible.value = false
       await loadData()
     } catch (error) {
-      toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
+      handleError(error)
     } finally { savingSub.value = false }
   }
 
@@ -209,7 +226,7 @@ export function useCategoryManager() {
           toast.add({ severity: 'success', summary: t('common.deleted'), detail: t('subcategories.messages.deleted'), life: 5000 })
           loadData()
         } catch (error) {
-          toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.error_message'), life: 5000 })
+          handleError(error)
         }
       }
     })

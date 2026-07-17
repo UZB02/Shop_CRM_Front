@@ -3,7 +3,7 @@
     <!-- Header Section -->
     <ProfileHeader 
       :profile="currentWorker" 
-      @edit="isEditingMode = !isEditingMode"
+      @edit="toggleEditMode"
       @logout="handleLogoutConfirm"
     />
 
@@ -43,7 +43,7 @@
             :is-editing="isEditingMode"
             :form="editForm"
             :saving="saving"
-            @toggle-edit="isEditingMode = !isEditingMode"
+            @toggle-edit="toggleEditMode"
             @save="handleSave"
           />
           
@@ -105,7 +105,8 @@ const {
   saving,
   editForm,
   fetchMe,
-  saveChanges
+  saveChanges,
+  startEditing
 } = useUserProfile(ref(authStore.user))
 
 const navTabs = computed(() => {
@@ -127,6 +128,13 @@ const handleSave = async () => {
   await saveChanges()
   isEditingMode.value = false
   await fetchMe()
+}
+
+const toggleEditMode = () => {
+  if (!isEditingMode.value) {
+    startEditing()
+  }
+  isEditingMode.value = !isEditingMode.value
 }
 
 const handleLogoutConfirm = () => {

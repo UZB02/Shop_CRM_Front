@@ -58,6 +58,14 @@
             />
           </div>
         </div>
+
+        <!-- Row 2: Boshlang'ich qoldiq (faqat yangi mahsulotda) -->
+        <div v-if="!isEdit" class="lg:col-span-12">
+          <InitialStockCard
+            v-model="product.initialStock"
+            :submitted="submitted"
+          />
+        </div>
       </div>
     </div>
 
@@ -85,6 +93,7 @@ import ProductFormHeader from './components/form/ProductFormHeader.vue'
 import GeneralInfoCard from './components/form/GeneralInfoCard.vue'
 import PricingInventoryCard from './components/form/PricingInventoryCard.vue'
 import ImageUploadCard from './components/form/ImageUploadCard.vue'
+import InitialStockCard from './components/form/InitialStockCard.vue'
 
 const {
   loading,

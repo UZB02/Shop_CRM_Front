@@ -201,7 +201,7 @@
 
               <!-- Description -->
               <td class="py-3.5 px-5 max-w-[300px]">
-                <p class="text-xs font-bold text-slate-600 dark:text-slate-300 truncate" :title="log.description">
+                <p class="text-xs font-bold text-slate-600 dark:text-slate-300 whitespace-normal break-words" :title="log.description">
                   {{ log.description || '-' }}
                 </p>
               </td>

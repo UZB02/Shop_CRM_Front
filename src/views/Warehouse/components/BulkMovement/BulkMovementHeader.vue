@@ -40,6 +40,24 @@
           <i :class="templateLoading ? 'pi pi-spin pi-spinner' : 'pi pi-download'" class="text-[11px]"></i>
           {{ $t('reports.download_template') }}
         </button>
+        <!-- D: Mavjud mahsulotlarga Excel kirim/chiqim importi -->
+        <div class="relative">
+          <input
+            type="file"
+            accept=".xlsx"
+            hidden
+            ref="movImportRef"
+            @change="handleImportFile"
+          />
+          <button
+            @click="movImportRef?.click()"
+            :disabled="importing"
+            class="h-8 sm:h-9 px-4 sm:px-5 rounded-lg border border-violet-100 dark:border-violet-900/50 bg-violet-50/30 dark:bg-violet-900/10 text-violet-600 dark:text-violet-400 text-[11px] sm:text-[12px] font-black tracking-widest hover:bg-violet-50 transition-all active:scale-95 flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <i :class="importing ? 'pi pi-spin pi-spinner' : 'pi pi-upload'" class="text-[11px]"></i>
+            {{ $t('reports.import_btn') }}
+          </button>
+        </div>
         <button
           @click="$emit('back')"
           class="h-8 sm:h-9 px-4 sm:px-5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 text-[11px] sm:text-[12px] font-black tracking-widest hover:bg-slate-50 transition-all active:scale-95"
@@ -64,18 +82,28 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import Tag from 'primevue/tag'
 
-defineProps({
+const movImportRef = ref(null)
+
+const props = defineProps({
   warehouseName: String,
   validCount: Number,
   totalCount: Number,
   saving: Boolean,
   type: String,
-  templateLoading: { type: Boolean, default: false }
+  templateLoading: { type: Boolean, default: false },
+  importing: { type: Boolean, default: false }
 })
 
-defineEmits(['back', 'save', 'download-template'])
+const emit = defineEmits(['back', 'save', 'download-template', 'import'])
+
+const handleImportFile = (e) => {
+  const file = e.target.files?.[0]
+  if (file) {
+    emit('import', file)
+    e.target.value = '' // Reset — xuddi shu faylni qayta tanlaganda ham ishlaydi
+  }
+}
 </script>
-
-

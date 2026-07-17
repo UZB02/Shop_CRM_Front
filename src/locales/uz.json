@@ -1106,7 +1106,25 @@
       "select_category": "Kategoriyani tanlang",
       "pricing": "Narxlar",
       "inventory": "Inventar",
-      "image_tip": "Tavsiya: kvadrat yoki 16:9 o'lchamdagi yuqori sifatli surat. Max hajm: 5mb"
+      "image_tip": "Tavsiya: kvadrat yoki 16:9 o'lchamdagi yuqori sifatli surat. Max hajm: 5mb",
+      "initial_stock": {
+        "title": "Boshlang'ich qoldiq",
+        "hint": "Yangi mahsulot uchun boshlang'ich qoldiq kiritish",
+        "quantity": "Miqdor",
+        "quantity_unit": "dona",
+        "unit_cost": "Tannarx (birlik narxi)",
+        "location_type": "Joy turi",
+        "type_branch": "Filial",
+        "type_warehouse": "Ombor",
+        "location": "Joy",
+        "location_default": "Birlamchi joy",
+        "location_hint": "Bo'sh qoldirsangiz, birlamchi fililingizga qo'shiladi",
+        "supplier": "Yetkazib beruvchi",
+        "supplier_placeholder": "Yetkazib beruvchi tanlang",
+        "supplier_debt_hint": "Yetkazib beruvchi tanlanganda qarz avtomatik qo'shiladi",
+        "info_atomic": "Mahsulot va kirim bir vaqtda saqlanadi. Xatolik bo'lsa hech narsa saqlanmaydi.",
+        "tur_warning": "Turli ko'rinishga ega mahsulot uchun kirimni Ombor bo'limida qiling"
+      }
     },
     "promotions": {
       "title": "Aksiyalar Boshqaruvi",
@@ -1791,6 +1809,8 @@
     "import_permission_denied": "Import uchun manager yoki owner huquqi talab qilinadi",
     "import_invalid_file": "Noto'g'ri fayl formati. Faqat .xlsx qabul qilinadi",
     "import_reload": "Mahsulotlarni yangilash",
+    "import_turs_created": "Turlar yaratildi",
+    "import_stock_added": "Kirim qilingan",
     "tabs": {
       "top_selling": "Eng ko'p sotilgan",
       "top_profitable": "Eng foydali",

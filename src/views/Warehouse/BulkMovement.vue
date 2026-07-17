@@ -8,7 +8,9 @@ import BulkMovementHeader from './components/BulkMovement/BulkMovementHeader.vue
 import BulkMovementCatalog from './components/BulkMovement/BulkMovementCatalog.vue'
 import BulkMovementCart from './components/BulkMovement/BulkMovementCart.vue'
 import { useTemplateDownload } from '@/composables/useTemplateDownload'
+import { useImport } from '@/composables/useImport'
 import { useAppConfirm as useConfirm } from '@/composables/useAppConfirm'
+import ImportResultDialog from '@/components/ImportResultDialog.vue'
 
 const toast = useToast()
 const confirm = useConfirm()
@@ -102,6 +104,19 @@ const executeSave = async () => {
 
 const { templateLoading, downloadTemplate } = useTemplateDownload()
 
+// D: Mavjud mahsulotlarga Excel kirim/chiqim importi
+const {
+  importing: movImporting,
+  importResult: movImportResult,
+  showResultDialog: showMovImportDialog,
+  importData,
+  closeResultDialog: closeMovImportDialog
+} = useImport()
+
+const handleMovImport = (file) => {
+  importData('stock_movements', file)
+}
+
 const turDialog = ref(false)
 const selectedProductForTur = ref(null)
 const turlar = ref([])
@@ -162,9 +177,11 @@ const selectTur = (tur) => {
       :saving="saving"
       :type="movement_type"
       :templateLoading="templateLoading.movements"
+      :importing="movImporting"
       @back="handleCancel"
       @save="promptSave"
       @download-template="downloadTemplate('movements')"
+      @import="handleMovImport"
     />
 
     <!-- Main Content Area: Responsive POS Layout -->
@@ -293,6 +310,13 @@ const selectTur = (tur) => {
       </div>
       <p class="text-[12px] font-black text-slate-900 dark:text-slate-100 tracking-widest">{{ $t('warehouse.bulk.saving') }}</p>
     </div>
+
+    <!-- D: Harakatlar importi natijasi -->
+    <ImportResultDialog
+      v-model:visible="showMovImportDialog"
+      :result="movImportResult"
+      @reload="() => {}"
+    />
     
     <!-- Tur Selection Modal -->
     <Dialog 

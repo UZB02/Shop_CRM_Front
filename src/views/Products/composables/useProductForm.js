@@ -29,7 +29,16 @@ export function useProductForm() {
         barcode: '',
         ikpu_code: null,
         marking_code: null,
-        imageUrl: ''
+        imageUrl: '',
+        // Boshlang'ich qoldiq (faqat yangi mahsulot uchun)
+        initialStock: {
+            enabled: false,
+            quantity: null,
+            unit_cost: null,
+            location_type: 'branch',
+            location_id: null,
+            supplier_id: null
+        }
     })
 
     const categories = ref([])
@@ -179,15 +188,39 @@ export function useProductForm() {
                 await productsAPI.update(route.params.id, formData)
                 toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Mahsulot yangilandi', life: 5000 })
             } else {
-                await productsAPI.create(formData)
-                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail: 'Yangi mahsulot qo\'shildi', life: 5000 })
+                // ─── Boshlang'ich qoldiq (faqat yangi mahsulotda) ───
+                const stock = product.value.initialStock
+                if (stock.enabled && stock.quantity && Number(stock.quantity) > 0) {
+                    formData.append('initial_quantity', stock.quantity.toString())
+                    if (stock.unit_cost && Number(stock.unit_cost) > 0) {
+                        formData.append('initial_unit_cost', stock.unit_cost.toString())
+                    }
+                    formData.append('location_type', stock.location_type || 'branch')
+                    if (stock.location_id) {
+                        formData.append('location_id', stock.location_id.toString())
+                    }
+                    if (stock.supplier_id) {
+                        formData.append('initial_supplier', stock.supplier_id.toString())
+                    }
+                }
+
+                const res = await productsAPI.create(formData)
+                const stockAdded = stock.enabled && stock.quantity > 0 && res.data?.stock_total > 0
+                const detail = stockAdded
+                    ? `Mahsulot va ${Number(stock.quantity).toLocaleString('ru-RU')} dona kirim qo'shildi ✅`
+                    : 'Yangi mahsulot qo\'shildi'
+                toast.add({ severity: 'success', summary: 'Muvaffaqiyatli', detail, life: 5000 })
                 // Refresh subscription limits
                 notificationStore.fetchSubscription()
             }
             router.push('/dashboard/products')
         } catch (err) {
             console.error('Save error:', err)
-            toast.add({ severity: 'error', summary: 'Xatolik', detail: getErrorMessage(err), life: 5000 })
+            const errData = err.response?.data
+            const locationErr = errData?.location_id?.[0] || errData?.location_id
+            const supplierErr = errData?.initial_supplier?.[0] || errData?.initial_supplier
+            const detail = locationErr || supplierErr || getErrorMessage(err)
+            toast.add({ severity: 'error', summary: 'Xatolik', detail, life: 6000 })
         } finally {
             saving.value = false
         }

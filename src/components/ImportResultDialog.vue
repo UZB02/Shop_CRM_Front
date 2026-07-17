@@ -4,7 +4,7 @@
     @update:visible="$emit('update:visible', $event)"
     modal
     :header="$t('reports.import_result_title')"
-    :style="{ width: '520px', maxWidth: '95vw' }"
+    :style="{ width: '560px', maxWidth: '95vw' }"
     :pt="{
       root: { class: 'dark:bg-slate-900 border-none rounded-2xl shadow-2xl overflow-hidden' },
       header: { class: 'px-6 pt-6 pb-4 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800' },
@@ -13,9 +13,54 @@
     }"
   >
     <template v-if="result">
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-3 gap-3 mb-5">
-        <!-- Qo'shildi -->
+
+      <!-- ─── Stats Grid ──────────────────────────────────────────── -->
+      <!-- A format (products/import) → 4 kartochka -->
+      <div v-if="isProductImport" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+        <!-- Yaratildi -->
+        <div class="flex flex-col items-center justify-center p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/50">
+          <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400 leading-none">
+            {{ result.created ?? 0 }}
+          </span>
+          <span class="text-[10px] font-bold text-emerald-500 dark:text-emerald-400 mt-1.5 tracking-wide text-center">
+            {{ $t('reports.import_created') }}
+          </span>
+        </div>
+
+        <!-- Turlar yaratildi -->
+        <div class="flex flex-col items-center justify-center p-3.5 rounded-xl bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-800/50">
+          <span class="text-2xl font-black text-violet-600 dark:text-violet-400 leading-none">
+            {{ result.turs_created ?? 0 }}
+          </span>
+          <span class="text-[10px] font-bold text-violet-500 dark:text-violet-400 mt-1.5 tracking-wide text-center">
+            {{ $t('reports.import_turs_created') }}
+          </span>
+        </div>
+
+        <!-- Kirim qilingan -->
+        <div class="flex flex-col items-center justify-center p-3.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50">
+          <span class="text-2xl font-black text-blue-600 dark:text-blue-400 leading-none">
+            {{ result.stock_added ?? 0 }}
+          </span>
+          <span class="text-[10px] font-bold text-blue-500 dark:text-blue-400 mt-1.5 tracking-wide text-center">
+            {{ $t('reports.import_stock_added') }}
+          </span>
+        </div>
+
+        <!-- O'tkazib yuborildi -->
+        <div class="flex flex-col items-center justify-center p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+          <span class="text-2xl font-black text-slate-500 dark:text-slate-400 leading-none">
+            {{ result.skipped ?? 0 }}
+          </span>
+          <span class="text-[10px] font-bold text-slate-400 mt-1.5 tracking-wide text-center">
+            {{ $t('reports.import_skipped') }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Eski format (customers/subcategories/movements) → 3 kartochka -->
+      <div v-else class="grid grid-cols-3 gap-3 mb-5">
+        <!-- Yaratildi -->
         <div class="flex flex-col items-center justify-center p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/50">
           <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400 leading-none">
             {{ result.created ?? 0 }}
@@ -25,7 +70,7 @@
           </span>
         </div>
 
-        <!-- Yangilandi -->
+        <!-- Yangilandi (mavjud bo'lsa) -->
         <div class="flex flex-col items-center justify-center p-3.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50">
           <span class="text-2xl font-black text-blue-600 dark:text-blue-400 leading-none">
             {{ result.updated ?? 0 }}
@@ -46,7 +91,7 @@
         </div>
       </div>
 
-      <!-- Errors Section -->
+      <!-- ─── Errors Section ──────────────────────────────────────── -->
       <div class="mt-2">
         <div class="flex items-center gap-2 mb-2.5">
           <div
@@ -96,10 +141,10 @@
                 :class="idx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-amber-50/30 dark:bg-amber-900/10'"
               >
                 <td class="px-3 py-2 font-mono font-black text-slate-700 dark:text-slate-300">
-                  #{{ err.row }}
+                  #{{ err.row ?? (idx + 2) }}
                 </td>
                 <td class="px-3 py-2 text-slate-600 dark:text-slate-400">
-                  {{ err.reason || err.error || err.message || 'Noma\'lum xatolik' }}
+                  {{ err.error || err.reason || err.message || 'Noma\'lum xatolik' }}
                 </td>
               </tr>
             </tbody>
@@ -114,7 +159,7 @@
           @click="$emit('update:visible', false)"
           class="h-9 px-5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95"
         >
-          {{ $t('common.close') || 'Yopish' }}
+          {{ $t('common.close') }}
         </button>
         <button
           @click="handleReload"
@@ -137,7 +182,9 @@ const props = defineProps({
   result: {
     type: Object,
     default: null
-    // { created: Number, updated: Number, skipped: Number, errors: [{row, reason}] }
+    // Eski format: { created, updated, skipped, errors: [{row, reason}] }
+    // A format:   { created, turs_created, stock_added, skipped, errors: [{row, error}] }
+    // D format:   { created, errors: [{row, error}] }
   }
 })
 
@@ -145,6 +192,12 @@ const emit = defineEmits(['update:visible', 'reload'])
 
 const hasErrors = computed(() =>
   Array.isArray(props.result?.errors) && props.result.errors.length > 0
+)
+
+// A (birlashgan products/import) formati: turs_created yoki stock_added mavjud
+const isProductImport = computed(() =>
+  props.result?.turs_created !== null && props.result?.turs_created !== undefined
+  || props.result?.stock_added !== null && props.result?.stock_added !== undefined
 )
 
 const handleReload = () => {

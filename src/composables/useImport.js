@@ -75,12 +75,24 @@ export function useImport() {
                 case 'subcategories':
                     apiMethod = reportsAPI.importSubcategories
                     break
+                // D: Mavjud mahsulotlarga kirim/chiqim importi
+                case 'stock_movements':
+                    apiMethod = reportsAPI.importStockMovements
+                    break
                 default:
                     throw new Error('Noto\'g\'ri import turi: ' + type)
             }
 
             const res = await apiMethod(formData)
-            importResult.value = res.data  // { created, skipped, updated, errors }
+            // Natijani normalizatsiya qilish (A format va eski format uchun)
+            importResult.value = {
+                created:      res.data?.created      ?? 0,
+                updated:      res.data?.updated      ?? null,
+                skipped:      res.data?.skipped      ?? 0,
+                turs_created: res.data?.turs_created ?? null,  // A format (products/import)
+                stock_added:  res.data?.stock_added  ?? null,  // A format (products/import)
+                errors:       Array.isArray(res.data?.errors) ? res.data.errors : []
+            }
             showResultDialog.value = true
 
             // Callback chaqirish (masalan: mahsulotlar ro'yxatini yangilash)

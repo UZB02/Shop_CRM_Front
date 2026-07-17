@@ -332,7 +332,7 @@ watch(
   #printable-receipt {
     position: absolute;
     left: 0; top: 0;
-    width: var(--receipt-width, 80mm);
+    width: 100%;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;

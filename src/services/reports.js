@@ -39,6 +39,10 @@ export const reportsAPI = {
     importSubcategories: (formData) => api.post('/export/subcategories/import/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }),
+    // D: Mavjud mahsulotlarga Excel kirim/chiqim (FIFO/tur qo'llab-quvvatlaydi)
+    importStockMovements: (formData) => api.post('/export/stock-movements/import/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
 
     // ─── Mahsulot Hisobotlari (Owner/Manager) ─────────────────────────────
     // 1. Eng ko'p sotilgan — paginatsiyali JSON
