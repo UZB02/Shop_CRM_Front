@@ -55,6 +55,14 @@ export function useAppUpdate() {
         downloading.value = false
       }
     })
+
+    // Listener'lar tayyor bo'lgach tekshiramiz — main process startidagi
+    // tekshiruv banner UI tayyor bo'lishidan oldin o'tib ketishi (race) mumkin.
+    check()
+    // Kun davomida yangilanish chiqsa ham topilishi uchun davriy tekshiruv (20 daq)
+    setInterval(() => {
+      if (!downloading.value && !downloaded.value) check()
+    }, 20 * 60 * 1000)
   }
 
   const download = async () => {
