@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { authAPI, workersAPI, setApiToken, clearApiToken, resetRefreshState } from '../services/api'
 import { useNotificationStore } from './notifications'
+import { isElectron } from '@/utils/platform'
 
 const ALL_PERMISSIONS = [
     'dashboard', 'stores', 'warehouse', 'products',
@@ -204,7 +205,15 @@ export const useAuthStore = defineStore('auth', {
                 if (!preservedKeys.includes(key)) localStorage.removeItem(key)
             })
 
-            window.location.href = '/login'
+            // Electron'da hash history + file:// protokoli — absolute '/login'
+            // file:///login ga ketib oq sahifa ochiladi. Hash orqali yo'naltirib,
+            // toza holat uchun qayta yuklaymiz. Web'da avvalgidek to'liq redirect.
+            if (isElectron()) {
+                window.location.hash = '#/login'
+                window.location.reload()
+            } else {
+                window.location.href = '/login'
+            }
         }
     }
 })
