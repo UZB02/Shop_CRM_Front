@@ -124,6 +124,14 @@
           @click.stop="$emit('logout')"
         />
       </div>
+
+      <!-- Dastur versiyasi (build paytida package.json'dan) -->
+      <p
+        v-if="!desktopCollapsed"
+        class="mt-2 text-center text-[10px] font-medium text-slate-300 dark:text-slate-600 tracking-wider select-none"
+      >
+        v{{ appVersion }}
+      </p>
     </div>
   </aside>
 </template>
@@ -134,6 +142,9 @@ import Avatar from 'primevue/avatar'
 import Button from 'primevue/button'
 
 const route = useRoute()
+
+// Dastur versiyasi — vite define orqali build paytida package.json'dan olinadi
+const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : ''
 
 defineProps({
   sidebarOpen: Boolean,
