@@ -14,8 +14,9 @@ win:
   target: nsis
   icon: build/icon.ico
 nsis:
-  oneClick: false
-  allowToChangeInstallationDirectory: true
+  # Telegram/Chrome uslubi: jim o'rnatadi, wizard'siz, o'zi qayta ochiladi
+  oneClick: true
+  perMachine: false # har foydalanuvchi uchun (%LOCALAPPDATA%) — admin/UAC kerak emas
 publish:
   - provider: github
     owner: UZB02
