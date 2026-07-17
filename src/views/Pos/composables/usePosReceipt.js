@@ -18,8 +18,9 @@ export function usePosReceipt(showReceipt) {
     return `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"/><title>Savdo cheki</title>
 <style>
+  @page { margin: 0; size: auto; }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:4px 6px;width:100%;max-width:80mm;margin:0 auto;}
+  body{font-family:"Inter",system-ui,sans-serif;font-size:12px;color:#000;background:#fff;padding:4px 6px;width:100%;margin:0;}
   body *{color:#000 !important;font-family:"Inter",system-ui,sans-serif !important;font-weight:bold !important;}
   .font-black,.text-xl,.text-2xl,h2{font-weight:900 !important;}
   .text-center{text-align:center;}
@@ -47,7 +48,7 @@ export function usePosReceipt(showReceipt) {
   // ─── Brauzer dialog orqali chop etish ─────────────────────────────────────
   const browserPrintFallback = (htmlContent) => {
     const iframe = document.createElement('iframe')
-    iframe.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:100%;max-width:80mm;border:none;visibility:hidden;`
+    iframe.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:100%;border:none;visibility:hidden;`
     document.body.appendChild(iframe)
     const doc = iframe.contentDocument || iframe.contentWindow.document
     doc.open(); doc.write(htmlContent); doc.close()
@@ -74,7 +75,7 @@ export function usePosReceipt(showReceipt) {
       const skeletons = el.querySelectorAll('.animate-pulse')
       const images = el.querySelectorAll('img')
       const allImagesLoaded = Array.from(images).every(img => img.src && img.complete)
-      
+
       if (skeletons.length === 0 && allImagesLoaded) {
         break
       }
@@ -88,8 +89,8 @@ export function usePosReceipt(showReceipt) {
     try {
       const result = await qzPrint({ htmlContent })
 
-      if (result.method === 'qz') {
-        // ✅ QZ Tray orqali chop etildi — modal yopiladi
+      if (result.method === 'qz' || result.method === 'electron') {
+        // ✅ QZ Tray yoki Electron native chop etildi — modal yopiladi
         toast.add({
           severity: 'success',
           summary: t('common.success'),

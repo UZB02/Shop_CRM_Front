@@ -9,6 +9,7 @@ import Dialog from 'primevue/dialog'
 import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
+import { isElectron } from './utils/platform'
 
 import './assets/styles/main.css'
 import 'primeicons/primeicons.css'
@@ -48,14 +49,16 @@ app.mount('#app')
 // Ensure initial overlay hides even if no API calls were triggered
 setTimeout(() => { if (window.stopLoader) window.stopLoader(); }, 2000);
 
-// Global PWA Install Handler
-window.deferredInstallPrompt = null
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault()
-  window.deferredInstallPrompt = e
-  window.dispatchEvent(new CustomEvent('pwa-install-ready'))
-})
-window.addEventListener('appinstalled', () => {
+// Global PWA Install Handler — Electron'da kerak emas, ilova allaqachon native o'rnatilgan
+if (!isElectron()) {
   window.deferredInstallPrompt = null
-  window.dispatchEvent(new CustomEvent('pwa-installed'))
-})
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault()
+    window.deferredInstallPrompt = e
+    window.dispatchEvent(new CustomEvent('pwa-install-ready'))
+  })
+  window.addEventListener('appinstalled', () => {
+    window.deferredInstallPrompt = null
+    window.dispatchEvent(new CustomEvent('pwa-installed'))
+  })
+}

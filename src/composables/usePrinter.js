@@ -16,12 +16,20 @@
 
 import { ref, readonly } from 'vue'
 import qz from 'qz-tray'
+import { isElectron } from '@/utils/platform'
 
 // Singleton: barcha komponentlar uchun bitta holat
 const isConnected = ref(false)
 const isConnecting = ref(false)
 const printers = ref([])
 const defaultPrinter = ref(null)
+// Barcode/label uchun alohida printer (Electron)
+const barcodePrinter = ref(localStorage.getItem('pos_barcode_printer') || null)
+// Barcode yorlig'i o'lchami (mm) — die-cut label uchun aniq o'lcham kerak
+const barcodeLabelW = ref(localStorage.getItem('pos_barcode_w') || '57')
+const barcodeLabelH = ref(localStorage.getItem('pos_barcode_h') || '35')
+// Barcode yo'nalishi: 'horizontal' yoki 'vertical'
+const barcodeOrient = ref(localStorage.getItem('pos_barcode_orient') || 'horizontal')
 const qzError = ref(null)
 
 // Qog'oz o'lchami holati (80 yoki 58)
@@ -150,6 +158,13 @@ export function usePrinter() {
     // Ulanish jarayonida — yangi urinish emas
     if (isConnecting.value) return false
 
+    // Electron desktop — native chop etish, QZ Tray'ga umuman ehtiyoj yo'q
+    if (isElectron()) {
+      isConnected.value = true
+      await loadPrinters()
+      return true
+    }
+
     isConnecting.value = true
     qzError.value = null
 
@@ -210,12 +225,19 @@ export function usePrinter() {
   // ─── Printerlar ro'yxatini yuklash ───────────────────────────────────────
   const loadPrinters = async () => {
     try {
-      const list = await qz.printers.find()
+      const list = isElectron()
+        ? (await window.electronAPI.listPrinters()).map((p) => p.name)
+        : await qz.printers.find()
       printers.value = Array.isArray(list) ? list.filter(Boolean) : (list ? [list] : [])
 
       const saved = localStorage.getItem('pos_default_printer')
       if (saved && printers.value.includes(saved)) {
         defaultPrinter.value = saved
+      } else if (isElectron()) {
+        defaultPrinter.value = printers.value[0] || null
+        if (defaultPrinter.value) {
+          localStorage.setItem('pos_default_printer', defaultPrinter.value)
+        }
       } else {
         try {
           const def = await qz.printers.getDefault()
@@ -234,11 +256,13 @@ export function usePrinter() {
 
   // ─── Uzilish ─────────────────────────────────────────────────────────────
   const disconnect = async () => {
-    try {
-      if (qz.websocket.isActive()) {
-        await qz.websocket.disconnect()
-      }
-    } catch (_) {}
+    if (!isElectron()) {
+      try {
+        if (qz.websocket.isActive()) {
+          await qz.websocket.disconnect()
+        }
+      } catch (_) {}
+    }
     isConnected.value = false
     isConnecting.value = false
     printers.value = []
@@ -257,13 +281,54 @@ export function usePrinter() {
     localStorage.setItem('pos_paper_size', size)
   }
 
-  // ─── HTML chekni QZ Tray orqali chop etish ────────────────────────────────
+  // ─── Barcode printerini saqlash ───────────────────────────────────────────
+  const setBarcodePrinter = (printerName) => {
+    barcodePrinter.value = printerName
+    localStorage.setItem('pos_barcode_printer', printerName)
+  }
+
+  // ─── Barcode yorlig'i o'lchamini saqlash (mm) ─────────────────────────────
+  const setBarcodeLabelSize = (widthMm, heightMm) => {
+    barcodeLabelW.value = String(widthMm)
+    barcodeLabelH.value = String(heightMm)
+    localStorage.setItem('pos_barcode_w', String(widthMm))
+    localStorage.setItem('pos_barcode_h', String(heightMm))
+  }
+
+  // ─── Barcode yo'nalishini saqlash ─────────────────────────────────────────
+  const setBarcodeOrientation = (orient) => {
+    barcodeOrient.value = orient
+    localStorage.setItem('pos_barcode_orient', orient)
+  }
+
+  // ─── Electron native chop etish (QZ Tray'siz) ─────────────────────────────
+  // labelWidthMm/labelHeightMm berilsa — barcode rejimi (PDF aynan yorliq o'lchamida)
+  const printWithElectron = async (htmlContent, { printerName = null, labelWidthMm = null, labelHeightMm = null, copies = 1 } = {}) => {
+    const result = await window.electronAPI.print({
+      html: htmlContent,
+      printerName: printerName || defaultPrinter.value || undefined,
+      paperSize: paperSize.value,
+      labelWidthMm,
+      labelHeightMm,
+      copies,
+    })
+    if (!result?.success) throw new Error(result?.error || 'Electron chop etishda xato')
+    return true
+  }
+
   const printWithQZ = async (htmlContent, printerName = null) => {
     const printer = printerName || defaultPrinter.value
     if (!printer) throw new Error('Printer tanlanmagan')
 
+    const paperWidthMm = parseFloat(paperSize.value) || 80
+    // QZ HTML ni shu pixel kenglikda render qilib, keyin paperWidthMm ga masshtablaydi.
+    // 80mm uchun 560px ≈ 178 DPI — termal printer uchun optimal.
+    // 58mm uchun 406px ≈ 178 DPI.
+    const pageWidth = paperWidthMm <= 60 ? 406 : 560
+
     const config = qz.configs.create(printer, {
-      margins: { top: 0, right: 2, bottom: 0, left: 2 },
+      size: { width: paperWidthMm, height: null }, // null = o'zgaruvchan uzunlik
+      margins: 0,
       units: 'mm',
       colorType: 'blackwhite',
       duplex: false,
@@ -276,7 +341,10 @@ export function usePrinter() {
       format: 'html',
       flavor: 'plain',
       data: htmlContent,
-      options: { language: 'UTF-8' }
+      options: {
+        language: 'UTF-8',
+        pageWidth: pageWidth  // HTML render viewport kengligi (px)
+      }
     }]
 
     await qz.print(config, printData)
@@ -296,7 +364,7 @@ export function usePrinter() {
   // ─── Fallback: Brauzer dialog orqali chop etish ───────────────────────────
   const printWithBrowserDialog = (htmlContent) => {
     const iframe = document.createElement('iframe')
-    iframe.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:${paperSize.value}mm;height:auto;border:none;visibility:hidden;`
+    iframe.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:100%;max-width:${paperSize.value}mm;height:auto;border:none;visibility:hidden;`
     document.body.appendChild(iframe)
 
     const doc = iframe.contentDocument || iframe.contentWindow.document
@@ -314,8 +382,14 @@ export function usePrinter() {
   }
 
   // ─── Asosiy chop etish funksiyasi (avtomatik usulni tanlaydi) ─────────────
-  const print = async ({ htmlContent, printerName = null } = {}) => {
+  const print = async ({ htmlContent, printerName = null, labelWidthMm = null, labelHeightMm = null, copies = 1 } = {}) => {
     if (!htmlContent) return false
+
+    // Electron desktop — native chop etish, QZ umuman ishlatilmaydi
+    if (isElectron()) {
+      await printWithElectron(htmlContent, { printerName, labelWidthMm, labelHeightMm, copies })
+      return { method: 'electron', success: true }
+    }
 
     // Agar QZ faol bo'lsa
     if (isConnected.value && qz.websocket.isActive()) {
@@ -352,6 +426,10 @@ export function usePrinter() {
     isConnecting: readonly(isConnecting),
     printers: readonly(printers),
     defaultPrinter: readonly(defaultPrinter),
+    barcodePrinter: readonly(barcodePrinter),
+    barcodeLabelW: readonly(barcodeLabelW),
+    barcodeLabelH: readonly(barcodeLabelH),
+    barcodeOrient: readonly(barcodeOrient),
     qzError: readonly(qzError),
     paperSize: readonly(paperSize),
 
@@ -360,6 +438,9 @@ export function usePrinter() {
     disconnect,
     setDefaultPrinter,
     setPaperSize,
+    setBarcodePrinter,
+    setBarcodeLabelSize,
+    setBarcodeOrientation,
     print,
     printWithQZ,
     printRaw,

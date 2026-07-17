@@ -138,6 +138,7 @@ import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import NotificationBell from './NotificationBell.vue'
 import { useNotificationStore } from '@/store/notifications'
+import { isElectron } from '@/utils/platform'
 
 const router = useRouter()
 const isReloading = ref(false)
@@ -147,6 +148,8 @@ const notificationStore = useNotificationStore()
 const showInstallBtn = ref(false)
 
 const checkInstallPrompt = () => {
+  // Electron desktop ilovasi allaqachon native o'rnatilgan — PWA install taklifi kerak emas
+  if (isElectron()) return
   if (window.deferredInstallPrompt) {
     showInstallBtn.value = true
   }

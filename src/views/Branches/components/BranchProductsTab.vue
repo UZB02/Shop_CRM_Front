@@ -57,8 +57,8 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
-              <tr v-for="(product, index) in filteredProducts" :key="product.id" class="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-colors group">
-                <td class="px-4 py-2 text-[12px] text-slate-400">{{ index + 1 }}</td>
+              <tr v-for="(product, index) in paginatedProducts" :key="product.id" class="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-colors group">
+                <td class="px-4 py-2 text-[12px] text-slate-400">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
                 <td class="px-4 py-2">
                   <div class="flex items-center gap-2.5">
                     <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
@@ -131,7 +131,7 @@
         <!-- Mobile Cards -->
         <div class="md:hidden flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
           <div 
-            v-for="(product, index) in filteredProducts" 
+            v-for="(product, index) in paginatedProducts" 
             :key="`mob-${product.id}`" 
             class="p-4 bg-white dark:bg-slate-900 transition-colors"
           >
@@ -200,6 +200,16 @@
           </div>
         </div>
       </div>
+
+      <!-- Pagination Footer -->
+      <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+        <TablePagination 
+          :currentPage="currentPage" 
+          :totalRecords="filteredProducts.length" 
+          :rowsPerPage="itemsPerPage" 
+          @page-change="onPageChange"
+        />
+      </div>
     </div>
 
     <!-- Barcode Dialog -->
@@ -263,10 +273,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import Dialog from 'primevue/dialog'
 import { useSettingsStore } from '@/store/settings'
 import TurBadge from '@/components/common/TurBadge.vue'
+import TablePagination from '@/components/TablePagination.vue'
+import { useBarcodePrint } from '@/composables/useBarcodePrint'
 
 const props = defineProps({
   products: Array
@@ -275,6 +287,7 @@ const props = defineProps({
 const emit = defineEmits(['create-wastage'])
 
 const settingsStore = useSettingsStore()
+const { printBarcode: doPrintBarcode } = useBarcodePrint()
 const barcodeVisible = ref(false)
 const selectedProduct = ref(null)
 const searchQuery = ref('')
@@ -299,6 +312,22 @@ const filteredProducts = computed(() => {
     (p.category_name || '').toLowerCase().includes(q)
   ) || []
 })
+
+const currentPage = ref(1)
+const itemsPerPage = ref(20)
+
+watch(searchQuery, () => {
+  currentPage.value = 1
+})
+
+const paginatedProducts = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredProducts.value.slice(start, start + itemsPerPage.value)
+})
+
+const onPageChange = (event) => {
+  currentPage.value = event.page + 1
+}
 
 const showBarcode = (product) => {
   selectedProduct.value = product
@@ -325,42 +354,7 @@ const downloadBarcode = async () => {
 }
 
 const printBarcode = (product) => {
-  if (!product) return
-  const printWindow = window.open('', '_blank')
-  const barcodeImgUrl = product.barcode_image_url
-
-  printWindow.document.write(`
-    <html>
-      <head>
-        <title>Shtrix-kod</title>
-        <style>
-          body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #fff;
-          }
-          img {
-            max-width: 100%;
-            max-height: 100vh;
-            object-fit: contain;
-          }
-        </style>
-      </head>
-      <body>
-        <img src="\${barcodeImgUrl}" />
-        <script>
-          window.onload = function() {
-            window.print();
-            setTimeout(function() { window.close(); }, 500);
-          }
-        <\/script>
-      </body>
-    </html>
-  `)
-  printWindow.document.close()
+  if (!product?.barcode_image_url) return
+  doPrintBarcode(product.barcode_image_url)
 }
 </script>

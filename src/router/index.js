@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
+import { isElectron } from '@/utils/platform'
 
 const routes = [
     {
@@ -268,7 +269,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: isElectron() ? createWebHashHistory() : createWebHistory(),
     routes
 })
 

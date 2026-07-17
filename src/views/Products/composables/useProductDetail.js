@@ -3,12 +3,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { productsAPI } from '@/services/api'
+import { useBarcodePrint } from '@/composables/useBarcodePrint'
 
 export function useProductDetail() {
   const route = useRoute()
   const router = useRouter()
   const toast = useToast()
   const confirm = useConfirm()
+  const { printBarcode: doPrintBarcode } = useBarcodePrint()
 
   const product = ref(null)
   const loading = ref(true)
@@ -46,40 +48,7 @@ export function useProductDetail() {
 
   const printBarcode = () => {
     if (!product.value?.barcode_image_url) return
-    const win = window.open('', '_blank')
-    win.document.write(`
-      <html>
-        <head>
-          <title>Shtrix-kod</title>
-          <style>
-            body {
-              margin: 0;
-              padding: 0;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              min-height: 100vh;
-              background-color: #fff;
-            }
-            img {
-              max-width: 100%;
-              max-height: 100vh;
-              object-fit: contain;
-            }
-          </style>
-        </head>
-        <body>
-          <img src="${product.value.barcode_image_url}" />
-          <script>
-            window.onload = function() {
-              window.print();
-              setTimeout(function() { window.close(); }, 500);
-            }
-          <\/script>
-        </body>
-      </html>
-    `)
-    win.document.close()
+    doPrintBarcode(product.value.barcode_image_url)
   }
 
   const confirmDelete = () => {

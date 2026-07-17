@@ -212,6 +212,7 @@ import { getErrorMessage } from '@/services/axios'
 import { useI18n } from 'vue-i18n'
 import ProductBarcodeModal from '../ProductBarcodeModal.vue'
 import { useSettingsStore } from '@/store/settings'
+import { useBarcodePrint } from '@/composables/useBarcodePrint'
 
 const props = defineProps({
   product: { type: Object, required: true }
@@ -290,9 +291,11 @@ const downloadBarcode = () => {
   document.body.removeChild(link)
 }
 
-const printBarcode = () => {
+const { printBarcode: doPrintBarcode } = useBarcodePrint()
+
+const printBarcode = (copies = 1) => {
   if (selectedTurForBarcode.value?.barcode_image_url) {
-    window.open(selectedTurForBarcode.value.barcode_image_url, '_blank')
+    doPrintBarcode(selectedTurForBarcode.value.barcode_image_url, copies)
   }
 }
 

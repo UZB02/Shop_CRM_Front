@@ -59,6 +59,7 @@
 
 <script setup>
 import Dialog from 'primevue/dialog'
+import { useBarcodePrint } from '@/composables/useBarcodePrint'
 
 defineProps({
   visible: { type: Boolean, required: true },
@@ -67,43 +68,10 @@ defineProps({
 
 defineEmits(['update:visible', 'download'])
 
-const printBarcode = (prod) => {
-  if (!prod) return
-  const printWindow = window.open('', '_blank')
-  const barcodeImgUrl = prod.barcode_image_url
+const { printBarcode: doPrintBarcode } = useBarcodePrint()
 
-  printWindow.document.write(`
-    <html>
-      <head>
-        <title>Shtrix-kod</title>
-        <style>
-          body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #fff;
-          }
-          img {
-            max-width: 100%;
-            max-height: 100vh;
-            object-fit: contain;
-          }
-        </style>
-      </head>
-      <body>
-        <img src="${barcodeImgUrl}" />
-        <script>
-          window.onload = function() {
-            window.print();
-            setTimeout(function() { window.close(); }, 500);
-          }
-        <\/script>
-      </body>
-    </html>
-  `)
-  printWindow.document.close()
+const printBarcode = (prod) => {
+  if (!prod?.barcode_image_url) return
+  doPrintBarcode(prod.barcode_image_url)
 }
 </script>

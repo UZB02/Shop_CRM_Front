@@ -71,9 +71,9 @@
           </p>
         </div>
 
-        <!-- Printer Tanlash -->
+        <!-- Chek Printeri Tanlash -->
         <div v-if="isConnected && printers.length" class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
-          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Default Printer</p>
+          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Chek Printeri</p>
           <div class="space-y-1 max-h-36 overflow-y-auto pr-1">
             <button
               v-for="p in printers"
@@ -88,6 +88,86 @@
               <span class="flex-1 truncate">{{ p }}</span>
               <i v-if="defaultPrinter === p" class="pi pi-check text-xs text-emerald-500" />
             </button>
+          </div>
+        </div>
+
+        <!-- Barcode Printeri Tanlash (label qog'ozi uchun alohida) -->
+        <div v-if="isConnected && printers.length" class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Barcode Printeri</p>
+          <div class="space-y-1 max-h-36 overflow-y-auto pr-1">
+            <button
+              v-for="p in printers"
+              :key="'bc-' + p"
+              @click="selectBarcodePrinter(p)"
+              class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-[11px] font-bold transition-all"
+              :class="barcodePrinter === p
+                ? 'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800'
+                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'"
+            >
+              <i class="pi pi-qrcode text-xs" :class="barcodePrinter === p ? 'text-indigo-500' : 'text-slate-400'" />
+              <span class="flex-1 truncate">{{ p }}</span>
+              <i v-if="barcodePrinter === p" class="pi pi-check text-xs text-indigo-500" />
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-2 leading-tight">
+            * Barcode label qog'ozi uchun alohida printer tanlang (masalan Xprinter-Barcode)
+          </p>
+
+          <!-- Yorliq o'lchami (mm) -->
+          <div class="mt-3">
+            <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Yorliq o'lchami (mm)</p>
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                <label class="text-[10px] text-slate-400">Kenglik</label>
+                <input
+                  v-model="labelW"
+                  @change="applyLabelSize"
+                  type="number" min="10" max="120" step="1"
+                  class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[12px] font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:border-indigo-400"
+                />
+              </div>
+              <span class="text-slate-400 mt-4">×</span>
+              <div class="flex-1">
+                <label class="text-[10px] text-slate-400">Balandlik</label>
+                <input
+                  v-model="labelH"
+                  @change="applyLabelSize"
+                  type="number" min="10" max="200" step="1"
+                  class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[12px] font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:border-indigo-400"
+                />
+              </div>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1.5 leading-tight">
+              * Yorlig'ingizni o'lchab kiriting. Drayver material o'lchami ham shunga mos bo'lsin.
+            </p>
+          </div>
+
+          <!-- Barcode yo'nalishi -->
+          <div class="mt-3">
+            <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Yo'nalish</p>
+            <div class="flex gap-2">
+              <button
+                @click="setBarcodeOrientation('horizontal')"
+                class="flex-1 py-2 rounded-xl text-[11px] font-black tracking-wider transition-all border flex items-center justify-center gap-1.5"
+                :class="barcodeOrient === 'horizontal'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 border-indigo-100 dark:border-indigo-800'
+                  : 'text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'"
+              >
+                <i class="pi pi-arrows-h text-xs" /> Gorizontal
+              </button>
+              <button
+                @click="setBarcodeOrientation('vertical')"
+                class="flex-1 py-2 rounded-xl text-[11px] font-black tracking-wider transition-all border flex items-center justify-center gap-1.5"
+                :class="barcodeOrient === 'vertical'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 border-indigo-100 dark:border-indigo-800'
+                  : 'text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'"
+              >
+                <i class="pi pi-arrows-v text-xs" /> Vertikal
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1.5 leading-tight">
+              * Agar barcode teskari (burilib) chiqsa, boshqa yo'nalishni tanlang.
+            </p>
           </div>
         </div>
 
@@ -145,16 +225,34 @@ const {
   isConnecting,
   printers,
   defaultPrinter,
+  barcodePrinter,
+  barcodeLabelW,
+  barcodeLabelH,
+  barcodeOrient,
   qzError,
   connect,
   disconnect,
   setDefaultPrinter,
+  setBarcodePrinter,
+  setBarcodeLabelSize,
+  setBarcodeOrientation,
   print,
   loadPrinters
 } = usePrinter()
 
 const showPanel = ref(false)
 const isPrinting = ref(false)
+
+// Yorliq o'lchami inputlari (usePrinter'dagi qiymatlar bilan boshlanadi)
+const labelW = ref(barcodeLabelW.value)
+const labelH = ref(barcodeLabelH.value)
+const applyLabelSize = () => {
+  const w = Math.min(120, Math.max(10, Number(labelW.value) || 58))
+  const h = Math.min(200, Math.max(10, Number(labelH.value) || 40))
+  labelW.value = w
+  labelH.value = h
+  setBarcodeLabelSize(w, h)
+}
 
 const togglePanel = () => { showPanel.value = !showPanel.value }
 const closePanel = () => { showPanel.value = false }
@@ -205,6 +303,10 @@ const handleDisconnect = async () => {
 
 const selectPrinter = (printerName) => {
   setDefaultPrinter(printerName)
+}
+
+const selectBarcodePrinter = (printerName) => {
+  setBarcodePrinter(printerName)
 }
 
 // Test chek

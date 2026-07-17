@@ -1,9 +1,11 @@
 import { ref, watch } from 'vue'
 import api from '@/services/api'
 import { useSettingsStore } from '@/store/settings'
+import { useBarcodePrint } from '@/composables/useBarcodePrint'
 
 export function useProductTable(products) {
   const settingsStore = useSettingsStore()
+  const { printBarcode: doPrintBarcode } = useBarcodePrint()
   const imageErrors = ref({})
   
   const handleImageError = (id) => {
@@ -67,42 +69,9 @@ export function useProductTable(products) {
     a.click()
   }
   
-  const printBarcode = () => {
+  const printBarcode = (copies = 1) => {
     if (!barcodeUrl.value) return
-    const win = window.open('', '_blank')
-    win.document.write(`
-      <html>
-        <head>
-          <title>Shtrix-kod</title>
-          <style>
-            body {
-              margin: 0;
-              padding: 0;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              min-height: 100vh;
-              background-color: #fff;
-            }
-            img {
-              max-width: 100%;
-              max-height: 100vh;
-              object-fit: contain;
-            }
-          </style>
-        </head>
-        <body>
-          <img src="${barcodeUrl.value}" />
-          <script>
-            window.onload = function() {
-              window.print();
-              setTimeout(function() { window.close(); }, 500);
-            }
-          <\/script>
-        </body>
-      </html>
-    `)
-    win.document.close()
+    doPrintBarcode(barcodeUrl.value, copies)
   }
   
   return {

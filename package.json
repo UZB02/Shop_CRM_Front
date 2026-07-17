@@ -1,18 +1,25 @@
 {
   "name": "shop-searem-startup",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:electron:renderer": "vite build --config vite.config.electron.js",
+    "electron:dev": "npm run build:electron:renderer && electron .",
+    "electron:pack": "npm run build:electron:renderer && electron-builder",
+    "electron:publish": "npm run build:electron:renderer && electron-builder --publish always"
   },
   "dependencies": {
     "@primevue/themes": "^4.5.4",
     "autoprefixer": "^10.4.24",
     "axios": "^1.13.4",
     "chart.js": "^4.5.1",
+    "electron-updater": "^6.8.9",
+    "pdf-to-printer": "^5.8.0",
     "pinia": "^3.0.4",
     "postcss": "^8.5.6",
     "primeicons": "^7.0.0",
@@ -26,6 +33,8 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "@vitejs/plugin-vue": "^6.0.1",
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3",
     "node-forge": "^1.4.0",
     "vite": "^7.2.4",
     "vite-plugin-pwa": "^1.3.0"
