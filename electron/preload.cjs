@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
   print: (payload) => ipcRenderer.invoke('printer:print', payload),
+  printPdf: (payload) => ipcRenderer.invoke('printer:printPdf', payload),
   printRaw: (payload) => ipcRenderer.invoke('printer:printRaw', payload),
   testTspl: (payload) => ipcRenderer.invoke('printer:testTspl', payload),
   listPrinters: () => ipcRenderer.invoke('printer:list'),

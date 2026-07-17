@@ -283,6 +283,7 @@ import TurBadge from '@/components/common/TurBadge.vue'
 import { useTradeUtils } from '@/views/Customers/composables/useTradeUtils'
 import { useSettingsStore } from '@/store/settings'
 import { salesAPI } from '@/services/api'
+import { isElectron } from '@/utils/platform'
 
 const props = defineProps({
   visible: Boolean,
@@ -384,16 +385,33 @@ const printReceipt = async () => {
   try {
     isPrinting.value = true
     const response = await salesAPI.getReceipt(props.trade.id)
+
+    if (isElectron()) {
+      // Electron desktop — tayyor PDF'ni jimgina, to'g'ridan-to'g'ri printerga yuboramiz
+      const pdfBase64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result.split(',')[1])
+        reader.onerror = reject
+        reader.readAsDataURL(response.data)
+      })
+      const printerName = localStorage.getItem('pos_default_printer') || undefined
+      const result = await window.electronAPI.printPdf({ pdfBase64, printerName })
+      if (!result?.success) throw new Error(result?.error || 'Chop etishda xato')
+      toast.add({ severity: 'success', summary: 'Chek', detail: 'Chop etishga yuborildi ✓', life: 2500 })
+      return
+    }
+
+    // Brauzer/PWA — PDF oynasi orqali chop etish
     const file = new Blob([response.data], { type: 'application/pdf' })
     const fileURL = URL.createObjectURL(file)
-    
+
     const printWindow = window.open(fileURL, '_blank')
     if (printWindow) {
       toast.add({ severity: 'info', summary: 'Chek', detail: 'Chop etishga tayyorlanmoqda...', life: 2000 })
     } else {
       toast.add({ severity: 'warn', summary: 'Diqqat', detail: 'Popup bloklangan bo\'lishi mumkin', life: 4000 })
     }
-    
+
     // cleanup
     setTimeout(() => URL.revokeObjectURL(fileURL), 5000)
   } catch (error) {

@@ -211,6 +211,30 @@ async function printHtml({ html, printerName, paperSize = '80', labelWidthMm = n
   }
 }
 
+// Backenddan tayyor kelgan PDF'ni to'g'ridan-to'g'ri chop etish
+// (HTML→PDF bosqichisiz — receipt allaqachon PDF ko'rinishida).
+async function printPdfBuffer({ pdfBuffer, printerName, copies = 1 }) {
+  const stamp = Date.now()
+  const tmpPdf = path.join(os.tmpdir(), `sirius-receipt-pdf-${stamp}.pdf`)
+  await fs.writeFile(tmpPdf, pdfBuffer)
+
+  try {
+    const options = { scale: 'fit' }
+    if (printerName && printerName.trim()) options.printer = printerName.trim()
+    const n = Math.max(1, Math.min(100, parseInt(copies, 10) || 1))
+    if (n > 1) options.copies = n
+    const sumatra = getSumatraPath()
+    if (sumatra) options.sumatraPdfPath = sumatra
+
+    console.log('[printer.js] printPdfBuffer options:', JSON.stringify(options))
+    await printPdf(tmpPdf, options)
+    console.log('[printer.js] ✅ (tayyor PDF) chop etishga yuborildi')
+    return { success: true }
+  } finally {
+    setTimeout(() => fs.unlink(tmpPdf).catch(() => {}), 15000)
+  }
+}
+
 export function registerPrinterHandlers() {
   // Printerlar ro'yxatini qaytaradi
   ipcMain.handle('printer:list', async () => {
@@ -251,6 +275,21 @@ export function registerPrinterHandlers() {
       return await sendRawToPrinter(printerName, buffer)
     } catch (error) {
       console.error('[printer.js] printRaw xato:', error.message)
+      return { success: false, error: error.message }
+    }
+  })
+
+  // Tayyor PDF'ni (backenddan kelgan) to'g'ridan-to'g'ri chop etish
+  //   payload: { pdfBase64, printerName?, copies? }
+  ipcMain.handle('printer:printPdf', async (_event, payload = {}) => {
+    console.log('[printer.js] printer:printPdf payload:', payload?.printerName)
+    try {
+      const { pdfBase64, printerName, copies } = payload
+      if (!pdfBase64) throw new Error('PDF chop etish uchun pdfBase64 kerak')
+      const pdfBuffer = Buffer.from(pdfBase64, 'base64')
+      return await printPdfBuffer({ pdfBuffer, printerName, copies })
+    } catch (error) {
+      console.error('[printer.js] printPdfBuffer xato:', error.message)
       return { success: false, error: error.message }
     }
   })
