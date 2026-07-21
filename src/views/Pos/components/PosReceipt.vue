@@ -55,6 +55,10 @@
 
             <!-- Meta Info -->
             <div class="space-y-1 text-xs mb-3 print:text-xs print:text-black">
+              <div v-if="t.id" class="flex justify-between">
+                <span class="text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold">{{ $t('pos.receipt_id') }}</span>
+                <span class="text-slate-700 dark:text-slate-300 font-black print:text-black print:font-black">#{{ t.id }}</span>
+              </div>
               <div class="flex justify-between">
                 <span class="text-slate-400 dark:text-slate-500 font-bold print:text-black print:font-bold">{{ $t('pos.date') }}</span>
                 <span class="text-slate-700 dark:text-slate-300 font-black print:text-black print:font-black">{{ t.created_on || '—' }}</span>
