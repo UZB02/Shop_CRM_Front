@@ -48,12 +48,9 @@ export function useAppUpdate() {
     })
 
     window.electronAPI.onUpdateError?.((e) => {
-      // Startdagi jimlik xatolarini (internet yo'q, reliz yo'q) ko'rsatmaymiz —
-      // faqat foydalanuvchi yuklashni boshlaganda xatoni ko'rsatamiz.
-      if (downloading.value) {
-        errorMsg.value = e?.message || 'Yangilanishda xato yuz berdi'
-        downloading.value = false
-      }
+      errorMsg.value = e?.message || 'Yangilanishda xato yuz berdi'
+      downloading.value = false
+      console.error('[updater] error:', e)
     })
 
     // Listener'lar tayyor bo'lgach tekshiramiz — main process startidagi

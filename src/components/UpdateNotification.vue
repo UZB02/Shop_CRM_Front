@@ -9,13 +9,13 @@
           <!-- Header -->
           <div class="flex items-start gap-3 p-4">
             <div class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
-              <i :class="downloaded ? 'pi pi-check-circle' : 'pi pi-download'" class="text-emerald-500 text-sm"></i>
+              <i :class="downloaded ? 'pi pi-check-circle' : (!available && errorMsg ? 'pi pi-exclamation-triangle' : 'pi pi-download')" class="text-emerald-500 text-sm"></i>
             </div>
             <div class="min-w-0 flex-1">
               <h4 class="text-sm font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                {{ downloaded ? 'Yangilanish tayyor' : 'Yangi versiya mavjud' }}
+                {{ downloaded ? 'Yangilanish tayyor' : (!available && errorMsg ? 'Yangilanishni tekshirishda xato' : 'Yangi versiya mavjud') }}
               </h4>
-              <p class="text-[11px] text-slate-400 mt-0.5 leading-snug">
+              <p v-if="available" class="text-[11px] text-slate-400 mt-0.5 leading-snug">
                 <span v-if="info?.version" class="font-bold text-slate-500 dark:text-slate-300">v{{ info.version }}</span>
                 <span v-if="!downloaded && !downloading"> — yangilash uchun yuklab oling</span>
                 <span v-else-if="downloading"> — yuklanmoqda {{ progress }}%</span>
@@ -42,7 +42,7 @@
           <p v-if="errorMsg" class="px-4 text-[11px] text-rose-500 leading-snug">{{ errorMsg }}</p>
 
           <!-- Actions -->
-          <div class="px-4 pb-4 pt-2">
+          <div v-if="available" class="px-4 pb-4 pt-2">
             <button
               v-if="!downloaded && !downloading"
               @click="download"
@@ -80,7 +80,7 @@ const { available, info, downloading, progress, downloaded, errorMsg, dismissed,
 
 onMounted(() => init())
 
-const show = computed(() => isElectron() && available.value && !dismissed.value)
+const show = computed(() => isElectron() && (available.value || !!errorMsg.value) && !dismissed.value)
 </script>
 
 <style scoped>
