@@ -47,7 +47,8 @@
           
           <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
             <p class="text-[12px] text-slate-400 font-medium tracking-widest">
-              Texnik yordam: +998 (XX) XXX-XX-XX
+              Texnik yordam: +998 (33) 133-63-65 yoki +998 (33) 133-63-68 
+              
             </p>
           </div>
         </div>
