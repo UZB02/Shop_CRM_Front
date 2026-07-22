@@ -32,3 +32,35 @@ jobs:
         run: npm run electron:publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # electron-builder katta .exe faylni yuklashda ba'zan tarmoq nosozligi
+      # tufayli jim tugaydi (exit 0), lekin .exe/latest.yml relizga yetib
+      # bormaydi (faqat kichik .blockmap yuklanadi). Shu holatni CI'da
+      # darhol aniqlab, workflow'ni "failed" qilib ko'rsatamiz.
+      - name: Verify release assets
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          $tag = "v$version"
+          Write-Host "Tekshirilmoqda: $tag relizi"
+          $maxAttempts = 5
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            try {
+              $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$env:GITHUB_REPOSITORY/releases/tags/$tag" -Headers @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
+              $assetNames = $release.assets.name
+              $hasExe = $assetNames | Where-Object { $_ -like "*.exe" }
+              $hasYml = $assetNames | Where-Object { $_ -eq "latest.yml" }
+              if ($hasExe -and $hasYml) {
+                Write-Host "OK: barcha kerakli fayllar mavjud: $($assetNames -join ', ')"
+                exit 0
+              }
+              Write-Host "Hali to'liq emas (urinish $i/$maxAttempts): $($assetNames -join ', ')"
+            } catch {
+              Write-Host "Reliz hali topilmadi (urinish $i/$maxAttempts)"
+            }
+            Start-Sleep -Seconds 15
+          }
+          Write-Error "XATO: $tag relizida .exe yoki latest.yml topilmadi! Fayllar to'liq yuklanmagan (masalan tarmoq uzilishi tufayli). GitHub Actions'da ushbu workflow'ni 'Re-run all jobs' bilan qayta ishga tushiring."
+          exit 1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
